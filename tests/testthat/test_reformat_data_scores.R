@@ -1,0 +1,96 @@
+context("Reformat scores for evaluation")
+# Test .rank_scores(arg:scores, arg:na.last, arg:ties.method)
+
+test_that("arg:scores takes an numeric vector", {
+  expect_err_msg <- function(scores) {
+    err_msg <- "'scores' must be a numeric vector"
+    eval(bquote(expect_error(.rank_scores(scores), err_msg)))
+  }
+
+  expect_err_msg(c("1", "0"))
+  expect_err_msg(NULL)
+})
+
+test_that("Length of arg:scores must be >=1", {
+  expect_err_msg <- function(scores) {
+    err_msg <- "'scores' must be length >= 1"
+    eval(bquote(expect_error(.rank_scores(scores), err_msg)))
+  }
+
+  expect_err_msg(as.numeric())
+})
+
+test_that("arg:na.last should be TRUE or FALSE", {
+  expect_err_msg <- function(na.last) {
+    scores <- c(1.1, 2.2)
+    err_msg <- "'na.last' should be one of FALSE, TRUE"
+    eval(bquote(expect_error(.rank_scores(scores, na.last = na.last),
+                             err_msg)))
+  }
+
+  expect_err_msg("T")
+  expect_err_msg(NA)
+  expect_err_msg("keep")
+})
+
+test_that("arg:ties.method should be one of the three options", {
+  expect_err_msg <- function(ties.method) {
+    scores <- c(1, 2)
+    choices = c("average", "random", "first")
+    err_msg <- gettextf("'ties.method' should be one of %s",
+                        paste(dQuote(choices), collapse = ", "))
+    eval(bquote(expect_error(.rank_scores(scores, ties.method = ties.method),
+                             err_msg)))
+  }
+
+  expect_err_msg(c("average", "first"))
+  expect_err_msg(c("avg"))
+  expect_err_msg(c("max"))
+  })
+
+test_that("rank_scores() reterns a numeric vector", {
+  ranks <- .rank_scores(c(1.0, 0.1, 3.2))
+
+  expect_true(is.atomic(ranks))
+  expect_true(is.numeric(ranks))
+})
+
+test_that("rank_scores() reterns a vector with the same length as input", {
+  expect_equal_length <- function(scores, len) {
+    eval(bquote(expect_equal(length(.rank_scores(scores)), len)))
+  }
+
+  expect_equal_length(c(-1.2, 1.0), 2)
+  expect_equal_length(c(-1.2, 1.0, -1.2), 3)
+})
+
+test_that("NAs in arg:scores should be controlled by arg:na.last", {
+  expect_equal_ranks <- function(scores, na.last, ranks) {
+    eval(bquote(expect_equal(.rank_scores(scores, na.last = na.last), ranks)))
+  }
+
+  na1_scores <- c(NA, 0.2, 0.1)
+  na2_scores <- c(0.2, NA, 0.1)
+  na3_scores <- c(0.2, 0.1, NA)
+
+  expect_equal_ranks(na1_scores, TRUE, c(3, 2, 1))
+  expect_equal_ranks(na1_scores, FALSE, c(1, 3, 2))
+
+  expect_equal_ranks(na2_scores, TRUE, c(2, 3, 1))
+  expect_equal_ranks(na2_scores, FALSE, c(3, 1, 2))
+
+  expect_equal_ranks(na3_scores, TRUE, c(2, 1, 3))
+  expect_equal_ranks(na3_scores, FALSE, c(3, 2, 1))
+})
+
+test_that("Ties should be controlled by arg:ties.method", {
+  expect_equal_ranks <- function(ties.method, ranks) {
+    scores <- c(0.1, 0.2, 0.2, 0.2, 0.3)
+    eval(bquote(expect_equal(.rank_scores(scores, ties.method = ties.method),
+                             ranks)))
+  }
+
+  expect_equal_ranks("average", c(1, 3, 3, 3, 5))
+  expect_equal_ranks("first", c(1, 2, 3, 4, 5))
+})
+
