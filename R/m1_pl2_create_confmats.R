@@ -35,10 +35,19 @@ create_confmats <- function(fmdat, scores = NULL, obslabs = NULL, ...) {
   .check_cpp_func_error(cmats, "create_confusion_matrices")
 
   # === Create an S3 object ===
+  cpp_errmsg <- cmats[["errmsg"]]
   cmats[["errmsg"]] <- NULL
-  cmats[["fmdat"]] <- fmdat
-  cmats[["validated"]] <- FALSE
+  s3obj <- structure(cmats, class = "cmats")
 
-  # Call .validate.confmats()
-  .validate(structure(cmats, class = "cmats"))
+  # Set attributes
+  attr(s3obj, "model_name") <- attr(fmdat, "model_name")
+  attr(s3obj, "nn") <- attr(fmdat, "nn")
+  attr(s3obj, "np") <- attr(fmdat, "np")
+  attr(s3obj, "args") <- list(...)
+  attr(s3obj, "cpp_errmsg") <- cpp_errmsg
+  attr(s3obj, "src") <- fmdat
+  attr(s3obj, "validated") <- FALSE
+
+  # Call .validate.cmats()
+  .validate(s3obj)
 }

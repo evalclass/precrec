@@ -1,4 +1,4 @@
-context("Reformat scores for evaluation")
+context("M1 PL1: Reformat scores for evaluation")
 # Test .rank_scores(arg:scores, arg:na.last, arg:ties.method)
 
 test_that("arg:scores takes an numeric vector", {
@@ -8,6 +8,11 @@ test_that("arg:scores takes an numeric vector", {
   }
 
   expect_err_msg(c("1", "0"))
+  expect_err_msg(list(1))
+  expect_err_msg(data.frame(1))
+  expect_err_msg(array(1))
+  expect_err_msg(matrix(1))
+  expect_err_msg(factor(1))
   expect_err_msg(NULL)
 })
 
@@ -30,6 +35,10 @@ test_that("arg:na.last should be TRUE or FALSE", {
 
   expect_err_msg("T")
   expect_err_msg(NA)
+  expect_err_msg(list(c(TRUE, FALSE)))
+  expect_err_msg(data.frame(c(TRUE, FALSE)))
+  expect_err_msg(array(c(TRUE, FALSE)))
+  expect_err_msg(matrix(c(TRUE, FALSE)))
   expect_err_msg("keep")
 })
 
@@ -52,16 +61,20 @@ test_that("rank_scores() reterns a numeric vector", {
   ranks <- .rank_scores(c(1.0, 0.1, 3.2))
 
   expect_true(is.atomic(ranks))
+  expect_true(is.vector(ranks))
   expect_true(is.numeric(ranks))
 })
 
 test_that("rank_scores() reterns a vector with the same length as input", {
-  expect_equal_length <- function(scores, len) {
-    eval(bquote(expect_equal(length(.rank_scores(scores)), len)))
+  expect_equal_length <- function(scores) {
+    eval(bquote(expect_equal(length(.rank_scores(scores)), length(scores))))
   }
 
-  expect_equal_length(c(-1.2, 1.0), 2)
-  expect_equal_length(c(-1.2, 1.0, -1.2), 3)
+  scores1 <- c(-1.2, 1.0)
+  scores2 <- c(-1.2, 1.0, -1.2)
+
+  expect_equal_length(scores1)
+  expect_equal_length(scores2)
 })
 
 test_that("NAs in arg:scores should be controlled by arg:na.last", {
@@ -92,5 +105,13 @@ test_that("Ties should be controlled by arg:ties.method", {
 
   expect_equal_ranks("average", c(1, 3, 3, 3, 5))
   expect_equal_ranks("first", c(1, 2, 3, 4, 5))
+
+  scores2 <- c(0.1, 0.2, 0.2, 0.3)
+  r0 <- .rank_scores(scores2, ties.method = "random")
+
+  r1 <- c(1, 2, 3, 4)
+  r2 <- c(1, 3, 2, 4)
+
+  expect_true(any(r0 == r1, r0 == r2))
 })
 

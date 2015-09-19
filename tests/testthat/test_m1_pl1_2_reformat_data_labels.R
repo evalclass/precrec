@@ -1,5 +1,5 @@
-context("Reformat labels for evaluation")
-# Test .factor_labels(args:obslabs, args:levels)
+context("M1 PL1: Reformat labels for evaluation")
+# Test .factor_labels(args:obslabs, args:obslevels)
 
 test_that("args:obslabs takes an numeric vector", {
   expect_err_msg <- function(obslbs) {
@@ -8,39 +8,49 @@ test_that("args:obslabs takes an numeric vector", {
   }
 
   expect_err_msg(c("1", "0"))
+  expect_err_msg(list(1))
+  expect_err_msg(data.frame(1))
+  expect_err_msg(array(1))
+  expect_err_msg(matrix(1))
   expect_err_msg(NULL)
 })
 
-test_that("args:obslabs takes two unique labels", {
+test_that("args:obslabs takes one or two unique labels", {
   expect_err_msg <- function(obslbs) {
     err_msg <- "'obslabs' cotains the invalid number of unique labels"
     eval(bquote(expect_error(.factor_labels(obslbs), err_msg)))
   }
 
-  expect_err_msg(c(0, 0))
+  expect_err_msg(c(0, 0, 1, 2, 3))
   expect_err_msg(c(-1, 0, -1, 2))
 })
 
-test_that("args:levels takes a character vector or a factor", {
-  expect_err_msg <- function(levels) {
+test_that("args:obslevels takes a character vector or a factor", {
+  expect_err_msg <- function(obslevels) {
     obslbs <- c(-1, 1)
-    err_msg <- "'levels' must be a charactor vector"
-    eval(bquote(expect_error(.factor_labels(obslbs, levels = levels), err_msg)))
+    err_msg <- "'obslevels' must be a charactor vector"
+    eval(bquote(expect_error(.factor_labels(obslbs, obslevels = obslevels),
+                             err_msg)))
   }
 
   expect_err_msg(c(0, 1))
+  expect_err_msg(list("1"))
+  expect_err_msg(data.frame("1"))
+  expect_err_msg(array("1"))
+  expect_err_msg(matrix("1"))
   expect_err_msg(c(TRUE, FALSE))
 })
 
-test_that("args:levels takes two unique labels", {
-  expect_err_msg <- function(levels) {
+test_that("args:obslevels takes one or two unique labels", {
+  expect_err_msg <- function(obslevels) {
     obslbs <- c(0, 1)
-    err_msg <- "'levels' cotains the invalid number of unique labels"
-    eval(bquote(expect_error(.factor_labels(obslbs, levels = levels), err_msg)))
+    err_msg <- "'obslevels' cotains the invalid number of unique labels"
+    eval(bquote(expect_error(.factor_labels(obslbs, obslevels = obslevels),
+                             err_msg)))
   }
 
-  expect_err_msg(c("positive", "positive"))
-  expect_err_msg(c("negative"))
+  expect_err_msg(c())
+  expect_err_msg(c("negative", "n", "p"))
 })
 
 test_that("factor_labels() reterns an ordered factor", {

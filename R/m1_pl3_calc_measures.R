@@ -38,10 +38,19 @@ calc_measures <- function(cmats, scores = NULL, obslabs = NULL, ...) {
   .check_cpp_func_error(evals, "calc_basic_measures")
 
   # === Create an S3 object ===
+  cpp_errmsg <- evals[["errmsg"]]
   evals[["errmsg"]] <- NULL
-  evals[["cmats"]] <- cmats
-  evals[["validated"]] <- FALSE
+  s3obj <- structure(evals, class = "evals")
 
-  # Call .validate.evalvals()
-  .validate(structure(evals, class = "evals"))
+  # Set attributes
+  attr(s3obj, "model_name") <- attr(cmats, "model_name")
+  attr(s3obj, "nn") <- attr(cmats, "nn")
+  attr(s3obj, "np") <- attr(cmats, "np")
+  attr(s3obj, "args") <- list(...)
+  attr(s3obj, "cpp_errmsg") <- cpp_errmsg
+  attr(s3obj, "src") <- cmats
+  attr(s3obj, "validated") <- FALSE
+
+  # Call .validate.cmats()
+  .validate(s3obj)
 }

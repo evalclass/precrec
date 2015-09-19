@@ -1,4 +1,4 @@
-context("Create confusion matrices")
+context("M1 PL2: Create confusion matrices")
 # Test create_confmats(arg:fmdat, arg:scores, arg:obslabs)
 
 test_that("arg:fmdat must be a 'fmdat' object", {
@@ -21,16 +21,67 @@ test_that("create_confmats() can directly take scores and labels", {
 })
 
 test_that("create_confmats() can take arguments for reformat_data()", {
-  fmdat <- reformat_data(c(0.1, 0.2, 0.2, 0), c(1, 0, 1, 1),
-                         ties.method = "first")
-  cmats1 <- create_confmats(fmdat)
-  cmats2 <- create_confmats(scores = c(0.1, 0.2, 0.2, 0),
-                            obslabs = c(1, 0, 1, 1), ties.method = "first")
-
-  expect_equal(cmats1, cmats2)
-
   err_msg <- "Invalid arguments: na.rm"
-  expect_error(create_confmats(fmdat, na.rm = TRUE), err_msg)
+  expect_error(create_confmats(scores = c(0.1, 0.2, 0.2, 0),
+                               obslabs = c(1, 0, 1, 1), na.rm = TRUE),
+               err_msg)
+
+  cmats <- create_confmats(scores = c(0.1, 0.2, 0),
+                           obslabs = c(1, 0, 1),
+                           na.last = TRUE,
+                           ties.method = "first")
+
+  expect_equal(.get_obj_arg(cmats, "fmdat", "na.last"), TRUE)
+  expect_equal(.get_obj_arg(cmats, "fmdat", "ties.method"), "first")
+})
+
+test_that("create_confmats() can take na.last argument", {
+  expect_equal_ranks <- function(scores, na.last, ranks) {
+    cmats <- create_confmats(scores = scores,
+                             obslabs = c(1, 0, 1),
+                             na.last = na.last)
+
+    fmdat <- .get_obj(cmats, "fmdat")
+
+    eval(bquote(expect_equal(.get_obj_arg(cmats, NULL, "na.last"), na.last)))
+    eval(bquote(expect_equal(.get_obj_arg(fmdat, NULL, "na.last"), na.last)))
+    eval(bquote(expect_equal(fmdat[["ranks"]], ranks)))
+    eval(bquote(expect_equal(.rank_scores(scores, na.last = na.last), ranks)))
+  }
+
+  na1_scores <- c(NA, 0.2, 0.1)
+  na2_scores <- c(0.2, NA, 0.1)
+  na3_scores <- c(0.2, 0.1, NA)
+
+  expect_equal_ranks(na1_scores, TRUE, c(3, 2, 1))
+  expect_equal_ranks(na1_scores, FALSE, c(1, 3, 2))
+
+  expect_equal_ranks(na2_scores, TRUE, c(2, 3, 1))
+  expect_equal_ranks(na2_scores, FALSE, c(3, 1, 2))
+
+  expect_equal_ranks(na3_scores, TRUE, c(2, 1, 3))
+  expect_equal_ranks(na3_scores, FALSE, c(3, 2, 1))
+})
+
+test_that("create_confmats() can take ties.method argument", {
+
+  expect_equal_ranks <- function(ties.method, ranks) {
+    cmats <- create_confmats(scores = c(0.1, 0.2, 0.2, 0.2, 0.3),
+                              obslabs = c(1, 0, 1, 1, 1),
+                              ties.method = ties.method)
+
+    fmdat <- .get_obj(cmats, "fmdat")
+
+    eval(bquote(expect_equal(.get_obj_arg(cmats, NULL, "ties.method"),
+                             ties.method)))
+    eval(bquote(expect_equal(.get_obj_arg(fmdat, NULL, "ties.method"),
+                             ties.method)))
+    eval(bquote(expect_equal(fmdat[["ranks"]], ranks)))
+  }
+
+  expect_equal_ranks("average", c(1, 3, 3, 3, 5))
+  expect_equal_ranks("first", c(1, 2, 3, 4, 5))
+
 })
 
 test_that("create_confmats() reterns a 'cmats' object", {
@@ -39,11 +90,11 @@ test_that("create_confmats() reterns a 'cmats' object", {
   expect_equal(class(cmats), "cmats")
 })
 
-test_that("'cmats' contains a list with 9 items", {
+test_that("'cmats' contains a list with 7 items", {
   cmats <- create_confmats(scores = c(0.1, 0.2, 0), obslabs = c(1, 0, 1))
 
   expect_true(is.list(cmats))
-  expect_equal(length(cmats), 9)
+  expect_equal(length(cmats), 7)
 })
 
 test_that("TPs, FNs, FPs, and TNs must be the same length", {

@@ -1,17 +1,18 @@
-# General function for creating ROC and Precision-Recall curves
+# Create either a ROC or a Precision-Recall curve
 .create_curve <- function(x_name, y_name, func, func_name, class_name,
                           evals, x_interval = 0.001, scores = NULL,
                           obslabs = NULL, ...) {
+
   # === Validate input arguments ===
-  .validate_create_curves_args(evals, "evals", x_interval, scores, obslabs,
-                               ...)
   # Create evals from scores and obslabs if it's missing
   evals <- .create_by_scores_and_labels(evals, "evals", calc_measures,
                                         scores, obslabs, ...)
 
+  .validate_create_curves_args(x_interval, ...)
+
   # === Create a curve ===
   # Calculate a curve
-  crv <- func(evals[["cmats"]][["tp"]], evals[["cmats"]][["fp"]],
+  crv <- func(attr(evals, "src")[["tp"]], attr(evals, "src")[["fp"]],
               evals[[x_name]], evals[[y_name]], x_interval)
   .check_cpp_func_error(crv, func_name)
 
@@ -24,22 +25,28 @@
   }
 
   # === Create an S3 object ===
+  cpp_errmsg1 <- crv[["errmsg"]]
+  cpp_errmsg2 <- auc[["errmsg"]]
   crv[["errmsg"]] <- NULL
-  crv[["pos_num"]] <- evals[["pos_num"]]
-  crv[["neg_num"]] <- evals[["neg_num"]]
-  crv[["auc"]] <- auc[["auc"]]
-  crv[["auc2"]] <- NA
-  crv[["clipped"]] <- FALSE
-  crv[["x_limits"]] <- c(0, 1)
-  crv[["y_limits"]] <- c(0, 1)
-  crv[["smoothed"]] <- FALSE
-  crv[["smooth_method"]] <- NA
-  crv[["orig_curve"]] <- NA
-  crv[["evals"]] <- evals
-  crv[["validated"]] <- FALSE
+  s3obj <- structure(crv, class = class_name)
+
+  # Set attributes
+  attr(s3obj, "model_name") <- attr(evals, "model_name")
+  attr(s3obj, "nn") <- attr(evals, "nn")
+  attr(s3obj, "np") <- attr(evals, "np")
+  attr(s3obj, "auc") <- auc[["auc"]]
+  attr(s3obj, "auc2") <- NA
+  attr(s3obj, "partial") <- FALSE
+  attr(s3obj, "x_limits") <- c(0, 1)
+  attr(s3obj, "y_limits") <- c(0, 1)
+  attr(s3obj, "args") <- c(list(x_interval = x_interval), list(...))
+  attr(s3obj, "cpp_errmsg1") <- cpp_errmsg1
+  attr(s3obj, "cpp_errmsg2") <- cpp_errmsg2
+  attr(s3obj, "src") <- evals
+  attr(s3obj, "validated") <- FALSE
 
   # Call .validate.roc_curve() or .validate.prc_curve()
-  .validate(structure(crv, class = class_name))
+  .validate(s3obj)
 }
 
 #' Create a ROC curve.
@@ -142,21 +149,28 @@ create_prc <- function(evals, x_interval = 0.001, scores = NULL,
 create_curves <- function(evals, x_interval = 0.001, scores = NULL,
                           obslabs = NULL, ...) {
   # === Validate input arguments ===
-  .validate_create_curves_args(evals, "evals", x_interval,
-                               scores, obslabs,  ...)
-
   # Create evals from scores and obslabs if it's missing
   evals <- .create_by_scores_and_labels(evals, "evals", calc_measures,
                                         scores, obslabs, ...)
 
+  .validate_create_curves_args(x_interval, ...)
+
   # === Create ROC and Precision-Recall curves ===
   roc_curve <- create_roc(evals, x_interval)
   prc_curve <- create_prc(evals, x_interval)
+  curves <- list(roc = roc_curve, prc = prc_curve)
 
   # === Create an S3 object ===
-  curves <- list(roc = roc_curve, prc = prc_curve)
-  curves[["validated"]] <- FALSE
+  s3obj <- structure(curves, class = "curves")
+
+  # Set attributes
+  attr(s3obj, "model_name") <- attr(evals, "model_name")
+  attr(s3obj, "nn") <- attr(evals, "nn")
+  attr(s3obj, "np") <- attr(evals, "np")
+  attr(s3obj, "args") <- c(list(x_interval = x_interval), list(...))
+  attr(s3obj, "src") <- evals
+  attr(s3obj, "validated") <- FALSE
 
   # Call .validate.curves()
-  .validate(structure(curves, class = "curves"))
+  .validate(s3obj)
 }
