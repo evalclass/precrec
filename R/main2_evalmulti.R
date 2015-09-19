@@ -43,15 +43,15 @@
 #' mdat <- create_mdat(mscores, mobslabs)
 #'
 #' mcurves <- evalmulti(mdat, model_names = model_names)
-evalmulti <- function(mdat, mscores = NULL, mobslabs = NULL,
+evalmulti <- function(mfmdat, mscores = NULL, mobslabs = NULL,
                       x_interval = 0.001, model_names = NULL, na.last = FALSE,
                       ties.method = "average",
-                      levels = c("negative", "positive")) {
+                      obslevels = c("negative", "positive")) {
 
   .validate_evalmulti_args(x_interval, model_names, na.last, ties.method,
-                           levels)
+                           obslevels)
 
-  create_mcurves(mdat, mscores, mobslabs, x_interval = x_interval,
+  create_mcurves(mfmdat, mscores, mobslabs, x_interval = x_interval,
                  model_names = model_names, na.last = na.last,
-                 ties.method = ties.method, levels = levels)
+                 ties.method = ties.method, obslevels = obslevels)
 }

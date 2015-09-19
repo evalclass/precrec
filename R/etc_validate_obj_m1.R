@@ -2,7 +2,7 @@
 .validate.fmdat <- function(fmdat) {
   # Need to validate only once
   if (class(fmdat) == "fmdat" && attr(fmdat, "validated")) {
-    return
+    return(fmdat)
   }
 
   # Validate class items and attributes
@@ -37,7 +37,7 @@
 .validate.cmats <- function(cmats) {
   # Need to validate only once
   if (class(cmats) == "cmats" && attr(cmats, "validated")) {
-    return
+    return(cmats)
   }
 
   # Validate class items and attributes
@@ -75,7 +75,7 @@
 .validate.evals <- function(evals) {
   # Need to validate only once
   if (class(evals) == "evals" && attr(evals, "validated")) {
-    return
+    return(evals)
   }
 
   # Validate class items and attributes
@@ -152,7 +152,7 @@
 .validate.roc_curve <- function(roc_curve) {
   # Need to validate only once
   if (class(roc_curve) == "roc_curve" && attr(roc_curve, "validated")) {
-    return
+    return(roc_curve)
   }
 
   # Validate class items and attributes
@@ -166,7 +166,7 @@
 .validate.prc_curve <- function(prc_curve) {
   # Need to validate only once
   if (class(prc_curve) == "prc_curve" && attr(prc_curve, "validated")) {
-    return
+    return(prc_curve)
   }
 
   # Validate class items and attributes
@@ -180,7 +180,7 @@
 .validate.curves <- function(curves) {
   # Need to validate only once
   if (class(curves) == "curves" && attr(curves, "validated")) {
-    return
+    return(curves)
   }
 
   # Validate class items and attributes

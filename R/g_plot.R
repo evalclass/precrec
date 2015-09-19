@@ -134,10 +134,10 @@ plot.curves <- function(object, curvetype = c("ROC", "PRC"), ...) {
   .validate(object)
 
   # === Create a plot ===
-  np <- object[["curves"]][[1]][["pos_num"]]
-  nn <- object[["curves"]][[1]][["neg_num"]]
+  np <- attr(object[[1]], "np")
+  nn <- attr(object[[1]], "nn")
 
-  mats <- .make_matplot_mats(object[["curves"]])
+  mats <- .make_matplot_mats(object)
 
   matplot(mats[["x"]], mats[["y"]], type = "l", lty = 1,
           col = rainbow(ncol(mats[["x"]])),
@@ -156,8 +156,7 @@ plot.curves <- function(object, curvetype = c("ROC", "PRC"), ...) {
 # show legend
 .show_legend <- function(object, show_legend) {
   if (show_legend) {
-    model_names <- names(object[["curves"]])
-    print(model_names)
+    model_names <- names(object)
     par(mar = c(0, 0, 0, 0))
     par(pty = "m")
     plot(1, type = "n", axes = FALSE, xlab = "", ylab = "")
@@ -193,8 +192,8 @@ plot.mprc_curves <- function(object, show_legend = TRUE, ...) {
   .prepare_layout(show_legend)
 
   # === Create a plot ===
-  np <- object[["curves"]][[1]][["pos_num"]]
-  nn <- object[["curves"]][[1]][["neg_num"]]
+  np <- attr(object[[1]], "np")
+  nn <- attr(object[[1]], "nn")
 
   .matplot_wrapper(object, "Precision-Recall", "Recall", "Precision")
   abline(h = np / (np + nn), col = "grey", lty = 3)
@@ -229,9 +228,9 @@ plot.mprc_curves <- function(object, show_legend = TRUE, ...) {
 #' l3 <- c(0, 1, 0, 1)
 #' mobslabs <- combine_obslbs(l1, l2, l3)
 #'
-#' mdat <- create_mdat(mscores, mobslabs)
+#' mfmdat <- reformat_mdata(mscores, mobslabs)
 #'
-#' mcurves <- evalmulti(mdat)
+#' mcurves <- evalmulti(mfmdat)
 #' plot(mcurves)
 plot.mcurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
   old_mar <- par("mar")

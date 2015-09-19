@@ -189,7 +189,7 @@ combine_obslbs <- function(..., byrow = FALSE, prefix = NULL) {
 #'   observed binary labels.
 #' @param model_names Names of the models/classifiers to be evaluated.
 #' @param ... Other arguments passed to other methods (ignored).
-#' @return \code{reformat_data} returns an \code{fmdat} S3 object that
+#' @return \code{reformat_data} returns an \code{mfmdat} S3 object that
 #'   contains formatted labels and score ranks.
 #'
 #' @examples
@@ -208,7 +208,7 @@ combine_obslbs <- function(..., byrow = FALSE, prefix = NULL) {
 reformat_mdata <- function(mscores, mobslabs, na.last = FALSE,
                            ties.method = "average",
                            obslevels = c("negative", "positive"),
-                           model_names = as.character(NA), ...) {
+                           model_names = list(as.character(NA)), ...) {
 
   # === Combine datasets ===
   lscores <- combine_scores(mscores)
@@ -231,13 +231,7 @@ reformat_mdata <- function(mscores, mobslabs, na.last = FALSE,
 
   # Defined a function for lapply
   func_fmdat <- function(i) {
-    if (single_obslabs) {
-      obslabs <- llabels[[1]]
-    } else {
-      obslabs <- llabels[[i]]
-    }
-
-    reformat_data(lscores[[i]], obslabs, na.last = na.last,
+    reformat_data(lscores[[i]], llabels[[i]], na.last = na.last,
                   ties.method = ties.method, obslevels = obslevels,
                   model_name = model_names[[i]], ...)
   }

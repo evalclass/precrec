@@ -30,27 +30,10 @@ test_that("create_curves_for_multi() directly takes mscores and mobslabs", {
   l3 <- c(0, 1, 0, 1)
   mobslabs <- combine_obslbs(l1, l2, l3)
 
-  mdat <- create_mdat(mscores, mobslabs)
+  mfmdat <- reformat_mdata(mscores, mobslabs)
 
-  list_curves1 <- .create_list_curves(mdat)
+  list_curves1 <- .create_list_curves(mfmdat)
   list_curves2 <- .create_list_curves(mscores = mscores, mobslabs = mobslabs)
 
   lapply(1:3, vfunc)
 })
-
-test_that(".create_list_curves() takes arguments for reformat_data", {
-  s = c(0.1, 0.2, 0.2, 0)
-  l = c(1, 0, 1, 1)
-  fmdat <- reformat_data(s, l, ties.method = "first")
-  cmats <- create_confmats(fmdat)
-  evals <- calc_measures(cmats)
-  curves <- create_curves(evals)
-
-#   list_curves <- .create_list_curves(mscores = mscores, mobslabs = mobslabs,
-#                                      ties.method = "first")
-#
-#   expect_equal(curves[["roc"]][["auc"]], list_curves[[1]][["roc"]][["auc"]])
-#   expect_equal(curves[["prc"]][["auc"]], list_curves[[1]][["prc"]][["auc"]])
-})
-
-

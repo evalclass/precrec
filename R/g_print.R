@@ -98,9 +98,9 @@ print.curves <- function(x, show_test_data = FALSE, ...) {
   .validate(x)
 
   # === Print summary ===
-  for (nm in names(x[["curves"]])) {
+  for (nm in names(x)) {
     cat("    Model name:", nm, "\n")
-    cat("      AUC:",  x[["curves"]][[nm]][["auc"]], "\n\n")
+    cat("      AUC:", attr(x[[nm]], "auc"), "\n\n")
   }
 }
 
@@ -108,10 +108,10 @@ print.curves <- function(x, show_test_data = FALSE, ...) {
 .print_testdat_info <- function(x, ...) {
   # === Print summary ===
   cat("\n  Test data\n\n")
-  for (nm in names(x[["curves"]])) {
+  for (nm in names(x)) {
     cat("    Model name:", nm, "\n")
-    cat("      # of positives:", x[["curves"]][[nm]][["pos_num"]], "\n")
-    cat("      # of negatives:", x[["curves"]][[nm]][["neg_num"]], "\n\n")
+    cat("      # of positives:", attr(x[[nm]], "np"), "\n")
+    cat("      # of negatives:", attr(x[[nm]], "nn"), "\n\n")
   }
 }
 
@@ -148,9 +148,9 @@ print.mprc_curves <- function(x, ...) {
 #' l3 <- c(0, 1, 0, 1)
 #' mobslabs <- combine_obslbs(l1, l2, l3)
 #'
-#' mdat <- create_mdat(mscores, mobslabs)
+#' mfmdat <- reformat_mdata(mscores, mobslabs)
 #'
-#' mcurves <- evalmulti(mdat)
+#' mcurves <- evalmulti(mfmdat)
 #' print(mcurves)
 print.mcurves <- function(x, show_test_data = FALSE, ...) {
   # === Validate input arguments ===

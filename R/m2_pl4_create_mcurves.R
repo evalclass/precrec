@@ -4,14 +4,17 @@
   mc <- list()
   for (i in seq_along(mcurves)) {
     curves <- mcurves[[i]][[curve_type]]
-    mn <- curves[["evals"]][["cmats"]][["fmdat"]][["model_name"]]
-    mc[[mn]] <- curves
+    mc[[attr(curves, "model_name")]] <- curves
   }
 
-  # Call .validate.'class_name'()
-  .validate(structure(list(curves = mc,
-                           validated = FALSE),
-                      class = class_name))
+  # === Create an S3 object ===
+  s3obj <- structure(mc, class = class_name)
+
+  # Set attributes
+  attr(s3obj, "validated") <- FALSE
+
+  # Call .validate.class_name()
+  .validate(s3obj)
 }
 
 # Get model names from mdat
@@ -40,26 +43,28 @@
 }
 
 # Create a list of ROC and Precision-Recall curves for multiple models.
-.create_list_curves <- function(mdat, mscores, mobslabs, x_interval = 0.001,
+.create_list_curves <- function(mfmdat, mscores, mobslabs, x_interval = 0.001,
                                 model_names = NULL, ...) {
 
   # Create mdat from mscores and mobslabs if it's missing
-  mdat <- .create_by_mscores_and_mlabels(mdat, mscores, mobslabs)
+  mfmdat <- .create_by_mscores_and_mlabels(mfmdat, mscores, mobslabs)
 
   # Set model names
-  model_names <- .get_mdat_model_names(mdat, model_names)
+  model_names <- .get_mdat_model_names(mfmdat, model_names)
 
   # Validation
   .validate_create_mcurves_args(x_interval, model_names, ...)
 
   # Define a function for a single model
   mkfunc <- function(s) {
-    create_curves(scores = mdat[["mdat"]][[s]][["sdat"]][["scores"]],
-                  obslabs = mdat[["mdat"]][[s]][["sdat"]][["obslabs"]],
-                  x_interval = x_interval, model_name = model_names[s], ...)
+    cdat <- create_confmats(mfmdat[[s]])
+    evals <- calc_measures(cdat)
+    curves <- create_curves(evals, x_interval = x_interval,
+                            model_name = model_names[s])
+    curves
   }
 
-  list_curves <- mapply(mkfunc, seq(length(mdat[["mdat"]])), SIMPLIFY = FALSE)
+  list_curves <- lapply(seq_along(mfmdat), mkfunc)
   .validate_list_curves(list_curves)
 }
 
@@ -116,6 +121,7 @@ create_mroc_curves <- function(mdat, mscores = NULL, mobslabs = NULL,
                                      model_names = model_names,  ...)
 
   mroc_curves <- .get_mrocprc_curves(list_curves, "roc", "mroc_curves")
+  mroc_curves
 }
 
 #' Create Precision-Recall curves for multiple models.
@@ -171,7 +177,8 @@ create_mprc_curves <- function(mdat, mscores = NULL, mobslabs = NULL,
                                      x_interval = x_interval,
                                      model_names = model_names,  ...)
 
-  mroc_curves <- .get_mrocprc_curves(list_curves, "prc", "mprc_curves")
+  mprc_curves <- .get_mrocprc_curves(list_curves, "prc", "mprc_curves")
+  mprc_curves
 }
 
 #' Create ROC and Precision-Recall curves for multiple models.
@@ -193,7 +200,7 @@ create_mprc_curves <- function(mdat, mscores = NULL, mobslabs = NULL,
 #'
 #' @param list_curves A list of  \code{curves} objects created by
 #'   \code{\link{create_curves_for_multi}}.
-#' @param mdat An \code{mdat} object created by \code{\link{create_mdat}}.
+#' @param mfmdat An \code{mfmdat} object created by \code{\link{create_mdat}}.
 #' @param mscores A dataset of predicted scores.
 #' @param mobslabs A dataset of of observed labels.
 #' @param x_interval A numeric value to specifiy an interval of the
@@ -214,16 +221,14 @@ create_mprc_curves <- function(mdat, mscores = NULL, mobslabs = NULL,
 #' l3 <- c(0, 1, 0, 1)
 #' mobslabs <- combine_obslbs(l1, l2, l3)
 #'
-#' mdat <- create_mdat(mscores, mobslabs)
-#' list_curves <- create_curves_for_multi(mdat)
-#'
-#' mcurves <- create_mcurves(list_curves)
+#' mfmdat <- reformat_mdata(mscores, mobslabs)
+#' mcurves <- create_mcurves(mfmdat)
 #' mcurves
-create_mcurves <- function(mdat, mscores = NULL, mobslabs = NULL,
+create_mcurves <- function(mfmdat, mscores = NULL, mobslabs = NULL,
                            x_interval = 0.001, model_names = NULL, ...) {
 
   # Make list_curves
-  list_curves <- .create_list_curves(mdat, mscores = mscores,
+  list_curves <- .create_list_curves(mfmdat, mscores = mscores,
                                      mobslabs = mobslabs,
                                      x_interval = x_interval,
                                      model_names = model_names,  ...)
@@ -232,8 +237,12 @@ create_mcurves <- function(mdat, mscores = NULL, mobslabs = NULL,
   mprc_curves <- .get_mrocprc_curves(list_curves, "prc", "mprc_curves")
 
   # === Create an S3 object ===
-  # Call .validate.mcurves()
-  .validate(structure(list(mroc_curves = mroc_curves,
-                           mprc_curves = mprc_curves,
-                           validated = FALSE), class = "mcurves"))
+  s3obj <- structure(list(mroc_curves = mroc_curves,
+                          mprc_curves = mprc_curves), class = "mcurves")
+
+  # Set attributes
+  attr(s3obj, "validated") <- FALSE
+
+  # Call .validate.mfmdat()
+  .validate(s3obj)
 }

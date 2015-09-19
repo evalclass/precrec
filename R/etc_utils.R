@@ -103,7 +103,7 @@
     } else if (is.null(mscores) && is.null(mobslabs)) {
       stop("'mdat' must be specified")
     } else {
-      mdat <- create_mdat(mscores = mscores, mobslabs = mobslabs)
+      mdat <- reformat_mdata(mscores = mscores, mobslabs = mobslabs)
     }
   } else {
     mdat <- .validate(mdat)

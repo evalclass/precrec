@@ -50,17 +50,6 @@
     obj <- .validate(obj)
   }
 
-  # Args are ignored when the first argument is specified
-  arglist <- list(...)
-  if (!missing(obj) && !is.null(obj) && !is.null(arglist)) {
-    if (length(arglist) == 1L) {
-      warning("Argument (", arglist, ") is ignored", sep="")
-    } else {
-      warning(paste("Auguments (", paste(arglist, collapse = ", "),
-                    ") are ignored"), sep = "")
-    }
-  }
-
   obj
 }
 
@@ -142,21 +131,25 @@
 .validate_reformat_mdata_args <- function(obj, obj_name, lscores, llabels,
                                           model_names, ...) {
 
-  if (length(llabels) != 1 || length(lscores) != length(llabels)) {
+  if (length(llabels) != 1 && length(lscores) != length(llabels)) {
     stop(paste0("'mscores' and 'mobslabs' should be of the same size, or ",
                 "the length of 'mobslabs' should be 1"))
   }
 
-  if (!.is_char_vec(model_names) || length(model_names) != length(lscores)) {
+  if (length(model_names) != length(lscores)) {
     stop("Invalid model names")
+  }
+
+  if (!all(unlist(lapply(model_names, .is_char_vec)))) {
+    stop("Model name must be a character vector")
   }
 
   vfunc <- function(i) {
     .validate_reformat_data_args(obj, obj_name, lscores[[i]], llabels[[i]],
-                                 model_name = model_names[[i]]...)
+                                 model_name = model_names[[i]], ...)
   }
 
-  mfmdat <- lapply(seq_along(mscores), vfunc)
+  mfmdat <- lapply(seq_along(lscores), vfunc)
 
 }
 

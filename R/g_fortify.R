@@ -231,12 +231,11 @@ fortify.mroc_curves <- function(model, data = NULL, ...) {
   .validate(model)
 
   # === Prepare a data frame for ggplot2 ===
-  curves = model[["curves"]]
   df <- NULL
-  for (nm in names(curves)) {
-    x = curves[[nm]][["x"]]
-    y = curves[[nm]][["y"]]
-    model_name = factor(rep(nm, length(x)), levels = names(curves))
+  for (nm in names(model)) {
+    x = model[[nm]][["x"]]
+    y = model[[nm]][["y"]]
+    model_name = factor(rep(nm, length(x)), levels = names(model))
     df <- rbind(df, data.frame(x = x, y = y, model_name = model_name))
   }
 
@@ -272,9 +271,9 @@ fortify.mprc_curves <- function(model, data = NULL, ...) {
 #' l3 <- c(0, 1, 0, 1)
 #' mobslabs <- combine_obslbs(l1, l2, l3)
 #'
-#' mdat <- create_mdat(mscores, mobslabs)
+#' mfmdat <- reformat_mdata(mscores, mobslabs)
 #'
-#' mcurves <- evalmulti(mdat)
+#' mcurves <- evalmulti(mfmdat)
 #' df <- fortify(mcurves)
 #'
 #' df_roc <- subset(df, group == "ROC")
