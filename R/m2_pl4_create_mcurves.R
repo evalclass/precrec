@@ -58,8 +58,8 @@
   # Define a function for a single model
   mkfunc <- function(s) {
     cdat <- create_confmats(mfmdat[[s]])
-    evals <- calc_measures(cdat)
-    curves <- create_curves(evals, x_interval = x_interval,
+    pevals <- calc_measures(cdat)
+    curves <- create_curves(pevals, x_interval = x_interval,
                             model_name = model_names[s])
     curves
   }

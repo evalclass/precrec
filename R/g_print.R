@@ -24,8 +24,8 @@
 #'
 #' @examples
 #' data(B500)
-#' roc_curve <- create_roc(scores = B500$good_er_scores,
-#'                         obslabs = B500$labels)
+#' roc_curve <- create_roc(pscores = B500$good_er_scores,
+#'                         olabs = B500$labels)
 #' print(roc_curve)
 print.roc_curve <- function(x, show_test_data = FALSE, ...) {
   # === Validate input arguments ===
@@ -49,8 +49,8 @@ print.roc_curve <- function(x, show_test_data = FALSE, ...) {
 #'
 #' @examples
 #' data(B500)
-#' prc_curve <- create_prc(scores = B500$good_er_scores,
-#'                         obslabs = B500$labels)
+#' prc_curve <- create_prc(pscores = B500$good_er_scores,
+#'                         olabs = B500$labels)
 #' print(prc_curve)
 print.prc_curve <- function(x, show_test_data = FALSE, ...) {
   # === Validate input arguments ===
@@ -73,8 +73,8 @@ print.prc_curve <- function(x, show_test_data = FALSE, ...) {
 #'
 #' @examples
 #' data(B500)
-#' curves <- create_curves(scores = B500$good_er_scores,
-#'                         obslabs = B500$labels)
+#' curves <- create_curves(pscores = B500$good_er_scores,
+#'                         olabs = B500$labels)
 #' print(curves)
 print.curves <- function(x, show_test_data = FALSE, ...) {
   # === Validate input arguments ===

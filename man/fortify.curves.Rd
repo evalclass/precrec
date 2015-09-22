@@ -26,8 +26,8 @@ and convert it to a data frame .
 \examples{
 library(ggplot2)
 data(B500)
-curves <- create_curves(scores = B500$good_er_scores,
-                        obslabs = B500$labels)
+curves <- create_curves(pscores = B500$good_er_scores,
+                        olabs = B500$labels)
 df <- fortify(curves)
 p_roc <- ggplot2::ggplot(subset(df, group == "ROC"), aes(x = x, y = y))
 p_roc <- p_roc + geom_line()

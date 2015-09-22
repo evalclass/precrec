@@ -25,8 +25,8 @@ fortify.roc_curve(model, data = NULL, ...)
 \examples{
 library(ggplot2)
 data(B500)
-roc_curve <- create_roc(scores = B500$good_er_scores,
-                        obslabs = B500$labels)
+roc_curve <- create_roc(pscores = B500$good_er_scores,
+                        olabs = B500$labels)
 df <- fortify(roc_curve)
 p <- ggplot2::ggplot(df, aes(x = x, y = y))
 p <- p + geom_line()

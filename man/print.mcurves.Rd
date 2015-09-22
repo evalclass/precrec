@@ -27,9 +27,9 @@ l2 <- c(1, 1, 0, 0)
 l3 <- c(0, 1, 0, 1)
 mobslabs <- combine_obslbs(l1, l2, l3)
 
-mdat <- create_mdat(mscores, mobslabs)
+mfmdat <- reformat_mdata(mscores, mobslabs)
 
-mcurves <- evalmulti(mdat)
+mcurves <- evalmulti(mfmdat)
 print(mcurves)
 }
 

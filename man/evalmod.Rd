@@ -4,14 +4,14 @@
 \alias{evalmod}
 \title{Evaluate a single model}
 \usage{
-evalmod(scores, obslabs, x_interval = 0.001, na.last = FALSE,
-  ties.method = "average", levels = c("negative", "positive"),
-  model_name = as.character(NA))
+evalmod(pscores, olabs, x_interval = 0.001, na.last = FALSE,
+  ties.method = "average", olevs = c("negative", "positive"),
+  model_name = as.character(NA), data_no = 1L)
 }
 \arguments{
-\item{scores}{A numeric vector of predicted scores.}
+\item{pscores}{A numeric vector of predicted scores.}
 
-\item{obslabs}{A numeric vector or a factor of observed labels.}
+\item{olabs}{A numeric vector or a factor of observed labels.}
 
 \item{x_interval}{A numeric value to specifiy an interval of the
 x-axis (TPRs for ROC and recall for Precision-Recall).}
@@ -26,7 +26,7 @@ method results in a permutation with increasing values at each index
 set of ties. The "random" method puts these in random order whereas
 the default, "average", replaces them by their mean.}
 
-\item{levels}{A character vector to overide the levels of the factor for
+\item{olevs}{A character vector to overide the levels of the factor for
 observed binary labels.}
 
 \item{model_name}{The name of the model/classifier to be evaluated.}

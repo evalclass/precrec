@@ -6,7 +6,7 @@
 with multiple models.}
 \usage{
 reformat_mdata(mscores, mobslabs, na.last = FALSE, ties.method = "average",
-  obslevels = c("negative", "positive"), model_names = as.character(NA),
+  olevs = c("negative", "positive"), model_names = list(as.character(NA)),
   ...)
 }
 \arguments{
@@ -24,7 +24,7 @@ method results in a permutation with increasing values at each index
 set of ties. The "random" method puts these in random order whereas
 the default, "average", replaces them by their mean.}
 
-\item{obslevels}{A character vector to overide the levels of the factor for
+\item{olevs}{A character vector to overide the levels of the factor for
 observed binary labels.}
 
 \item{model_names}{Names of the models/classifiers to be evaluated.}
@@ -32,7 +32,7 @@ observed binary labels.}
 \item{...}{Other arguments passed to other methods (ignored).}
 }
 \value{
-\code{reformat_data} returns an \code{fmdat} S3 object that
+\code{reformat_data} returns an \code{mfmdat} S3 object that
   contains formatted labels and score ranks.
 }
 \description{

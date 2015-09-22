@@ -25,8 +25,8 @@ fortify.prc_curve(model, data = NULL, ...)
 \examples{
 library(ggplot2)
 data(B500)
-prc_curve <- create_prc(scores = B500$good_er_scores,
-                        obslabs = B500$labels)
+prc_curve <- create_prc(pscores = B500$good_er_scores,
+                        olabs = B500$labels)
 df <- fortify(prc_curve)
 p <- ggplot2::ggplot(df, aes(x = x, y = y))
 p <- p + geom_line()

@@ -25,8 +25,8 @@ fortify.cmats(model, data = NULL, ...)
 \examples{
 library(ggplot2)
 data(B500)
-cmat <- create_confmats(scores = B500$good_er_scores,
-                        obslabs = B500$labels)
+cmat <- create_confmats(pscores = B500$good_er_scores,
+                        olabs = B500$labels)
 df <- fortify(cmat)
 p <- ggplot2::ggplot(df, aes(x = x, y = y, color = group))
 p <- p + geom_line()

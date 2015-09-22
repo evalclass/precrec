@@ -74,17 +74,17 @@
   }
 }
 
-# Use scores and obslabs to create obj
-.create_by_scores_and_labels <- function(obj, obj_name, func,
-                                         scores, obslabs, ...) {
+# Use scores and labels to create obj
+.create_by_scores_and_labels <- function(obj, obj_name, func, pscores, olabs,
+                                         ...) {
   if (missing(obj)) {
-    if (!is.null(scores) && !is.null(obslabs)) {
-      obj <- func(scores = scores, obslabs = obslabs, ...)
+    if (!is.null(pscores) && !is.null(olabs)) {
+      obj <- func(pscores = pscores, olabs = olabs, ...)
     } else {
       stop("The first argument must be specified.")
     }
   } else {
-    obj <- .validate_reformat_data_args(obj, obj_name, scores, obslabs, ...)
+    obj <- .validate_reformat_data_args(obj, obj_name, pscores, olabs, ...)
   }
 
   obj
@@ -93,7 +93,7 @@
 # Use mscores and mobslabs to create mdat
 .create_by_mscores_and_mlabels <- function(mdat, mscores, mobslabs) {
 
-  # Check if scores and obslabs are specified.
+  # Check if scores and olabs are specified.
   # Validate the 'mdat' argument otherwise
   if (missing(mdat)) {
     if(is.null(mscores) && !is.null(mobslabs)) {

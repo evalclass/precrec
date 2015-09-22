@@ -185,7 +185,7 @@ combine_obslbs <- function(..., byrow = FALSE, prefix = NULL) {
 #'   method results in a permutation with increasing values at each index
 #'   set of ties. The "random" method puts these in random order whereas
 #'   the default, "average", replaces them by their mean.
-#' @param obslevels A character vector to overide the levels of the factor for
+#' @param olevs A character vector to overide the levels of the factor for
 #'   observed binary labels.
 #' @param model_names Names of the models/classifiers to be evaluated.
 #' @param ... Other arguments passed to other methods (ignored).
@@ -207,7 +207,7 @@ combine_obslbs <- function(..., byrow = FALSE, prefix = NULL) {
 #' mfmdat
 reformat_mdata <- function(mscores, mobslabs, na.last = FALSE,
                            ties.method = "average",
-                           obslevels = c("negative", "positive"),
+                           olevs = c("negative", "positive"),
                            model_names = list(as.character(NA)), ...) {
 
   # === Combine datasets ===
@@ -225,14 +225,14 @@ reformat_mdata <- function(mscores, mobslabs, na.last = FALSE,
   # Validate arguments and variables
   .validate_reformat_mdata_args(NULL, NULL, lscores, llabels, model_names,
                                 na.last = na.last, ties.method = ties.method,
-                                obslevels = obslevels, ...)
+                                olevs = olevs, ...)
 
   # === Reformat input data ===
 
   # Defined a function for lapply
   func_fmdat <- function(i) {
     reformat_data(lscores[[i]], llabels[[i]], na.last = na.last,
-                  ties.method = ties.method, obslevels = obslevels,
+                  ties.method = ties.method, olevs = olevs,
                   model_name = model_names[[i]], ...)
   }
 
@@ -245,7 +245,7 @@ reformat_mdata <- function(mscores, mobslabs, na.last = FALSE,
   attr(s3obj, "model_names") <- model_names
   attr(s3obj, "args") <- list(na.last = na.last,
                               ties.method = ties.method,
-                              obslevels = obslevels,
+                              olevs = olevs,
                               model_names = model_names)
   attr(s3obj, "validated") <- FALSE
 

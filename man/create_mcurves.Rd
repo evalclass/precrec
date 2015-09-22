@@ -4,11 +4,11 @@
 \alias{create_mcurves}
 \title{Create ROC and Precision-Recall curves for multiple models.}
 \usage{
-create_mcurves(mdat, mscores = NULL, mobslabs = NULL, x_interval = 0.001,
-  model_names = NULL, ...)
+create_mcurves(mfmdat, mscores = NULL, mobslabs = NULL,
+  x_interval = 0.001, model_names = NULL, ...)
 }
 \arguments{
-\item{mdat}{An \code{mdat} object created by \code{\link{create_mdat}}.}
+\item{mfmdat}{An \code{mfmdat} object created by \code{\link{create_mdat}}.}
 
 \item{mscores}{A dataset of predicted scores.}
 
@@ -55,10 +55,8 @@ l2 <- c(1, 1, 0, 0)
 l3 <- c(0, 1, 0, 1)
 mobslabs <- combine_obslbs(l1, l2, l3)
 
-mdat <- create_mdat(mscores, mobslabs)
-list_curves <- create_curves_for_multi(mdat)
-
-mcurves <- create_mcurves(list_curves)
+mfmdat <- reformat_mdata(mscores, mobslabs)
+mcurves <- create_mcurves(mfmdat)
 mcurves
 }
 

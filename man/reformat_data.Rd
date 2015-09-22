@@ -4,13 +4,14 @@
 \alias{reformat_data}
 \title{Reformat input data for Precision-Recall and ROC evaluation.}
 \usage{
-reformat_data(scores, obslabs, na.last = FALSE, ties.method = "average",
-  obslevels = c("negative", "positive"), model_name = as.character(NA), ...)
+reformat_data(pscores, olabs, na.last = FALSE, ties.method = "average",
+  olevs = c("negative", "positive"), model_name = as.character(NA),
+  data_no = 1L, ...)
 }
 \arguments{
-\item{scores}{A numeric vector of predicted scores.}
+\item{pscores}{A numeric vector of predicted scores.}
 
-\item{obslabs}{A numeric vector or a factor of observed labels.}
+\item{olabs}{A numeric vector or a factor of observed labels.}
 
 \item{na.last}{Passed to \code{\link[base]{rank}} for controlling the
 treatment of NAs. The value can be TRUE or FALSE. If TRUE, missing values
@@ -22,7 +23,7 @@ method results in a permutation with increasing values at each index
 set of ties. The "random" method puts these in random order whereas
 the default, "average", replaces them by their mean.}
 
-\item{obslevels}{A character vector to overide the levels of the factor for
+\item{olevs}{A character vector to overide the levels of the factor for
 observed binary labels.}
 
 \item{model_name}{The name of the model/classifier to be evaluated.}

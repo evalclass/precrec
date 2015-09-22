@@ -26,8 +26,8 @@ Threshold IDs are automatically generated.
 library(ggplot2)
 
 data(B500)
-cmat <- create_confmats(scores = B500$good_er_scores,
-                        obslabs = B500$labels)
+cmat <- create_confmats(pscores = B500$good_er_scores,
+                        olabs = B500$labels)
 autoplot(cmat)
 }
 

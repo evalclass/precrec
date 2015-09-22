@@ -4,13 +4,11 @@
 \alias{evalmulti}
 \title{Evaluate multiple models}
 \usage{
-evalmulti(mdat, mscores = NULL, mobslabs = NULL, x_interval = 0.001,
+evalmulti(mfmdat, mscores = NULL, mobslabs = NULL, x_interval = 0.001,
   model_names = NULL, na.last = FALSE, ties.method = "average",
-  levels = c("negative", "positive"))
+  obslevels = c("negative", "positive"))
 }
 \arguments{
-\item{mdat}{An \code{mdat} object created by \code{\link{create_mdat}}.}
-
 \item{mscores}{A dataset of predicted scores.}
 
 \item{mobslabs}{A dataset of of observed labels.}
@@ -29,6 +27,8 @@ scores. The value can be "average", "random", or "first". The "first"
 method results in a permutation with increasing values at each index
 set of ties. The "random" method puts these in random order whereas
 the default, "average", replaces them by their mean.}
+
+\item{mdat}{An \code{mdat} object created by \code{\link{create_mdat}}.}
 
 \item{levels}{A character vector to overide the levels of the factor for
 observed binary labels.}

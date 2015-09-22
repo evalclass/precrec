@@ -9,8 +9,8 @@
 #'
 #' @examples
 #' data(B500)
-#' roc_curve <- create_roc(scores = B500$good_er_scores,
-#'                         obslabs = B500$labels)
+#' roc_curve <- create_roc(pscores = B500$good_er_scores,
+#'                         olabs = B500$labels)
 #' plot(roc_curve)
 plot.roc_curve <- function(object, ...) {
   old_pty <- par(pty = "s")
@@ -41,8 +41,8 @@ plot.roc_curve <- function(object, ...) {
 #'
 #' @examples
 #' data(B500)
-#' prc_curve <- create_prc(scores = B500$good_er_scores,
-#'                         obslabs = B500$labels)
+#' prc_curve <- create_prc(pscores = B500$good_er_scores,
+#'                         olabs = B500$labels)
 #' plot(prc_curve)
 plot.prc_curve <- function(object, ...) {
   old_pty <- par(pty = "s")
@@ -74,8 +74,8 @@ plot.prc_curve <- function(object, ...) {
 #'
 #' @examples
 #' data(B500)
-#' curves <- create_curves(scores = B500$good_er_scores,
-#'                         obslabs = B500$labels)
+#' curves <- create_curves(pscores = B500$good_er_scores,
+#'                         olabs = B500$labels)
 #' plot(curves)
 plot.curves <- function(object, curvetype = c("ROC", "PRC"), ...) {
   old_mfrow <- NULL

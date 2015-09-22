@@ -1,10 +1,10 @@
 context("M1 PL1: Reformat scores for evaluation")
-# Test .rank_scores(arg:scores, arg:na.last, arg:ties.method)
+# Test .rank_scores(arg:pscores, arg:na.last, arg:ties.method)
 
-test_that("arg:scores takes an numeric vector", {
-  expect_err_msg <- function(scores) {
-    err_msg <- "'scores' must be a numeric vector"
-    eval(bquote(expect_error(.rank_scores(scores), err_msg)))
+test_that("arg:pscores takes an numeric vector", {
+  expect_err_msg <- function(pscores) {
+    err_msg <- "'pscores' must be a numeric vector"
+    eval(bquote(expect_error(.rank_scores(pscores), err_msg)))
   }
 
   expect_err_msg(c("1", "0"))
@@ -16,10 +16,10 @@ test_that("arg:scores takes an numeric vector", {
   expect_err_msg(NULL)
 })
 
-test_that("Length of arg:scores must be >=1", {
-  expect_err_msg <- function(scores) {
-    err_msg <- "'scores' must be length >= 1"
-    eval(bquote(expect_error(.rank_scores(scores), err_msg)))
+test_that("Length of arg:pscores must be >=1", {
+  expect_err_msg <- function(pscores) {
+    err_msg <- "'pscores' must be length >= 1"
+    eval(bquote(expect_error(.rank_scores(pscores), err_msg)))
   }
 
   expect_err_msg(as.numeric())
@@ -27,9 +27,9 @@ test_that("Length of arg:scores must be >=1", {
 
 test_that("arg:na.last should be TRUE or FALSE", {
   expect_err_msg <- function(na.last) {
-    scores <- c(1.1, 2.2)
+    pscores <- c(1.1, 2.2)
     err_msg <- "'na.last' should be one of FALSE, TRUE"
-    eval(bquote(expect_error(.rank_scores(scores, na.last = na.last),
+    eval(bquote(expect_error(.rank_scores(pscores, na.last = na.last),
                              err_msg)))
   }
 
@@ -66,48 +66,48 @@ test_that("rank_scores() reterns a numeric vector", {
 })
 
 test_that("rank_scores() reterns a vector with the same length as input", {
-  expect_equal_length <- function(scores) {
-    eval(bquote(expect_equal(length(.rank_scores(scores)), length(scores))))
+  expect_equal_length <- function(pscores) {
+    eval(bquote(expect_equal(length(.rank_scores(pscores)), length(pscores))))
   }
 
-  scores1 <- c(-1.2, 1.0)
-  scores2 <- c(-1.2, 1.0, -1.2)
+  pscores1 <- c(-1.2, 1.0)
+  pscores2 <- c(-1.2, 1.0, -1.2)
 
-  expect_equal_length(scores1)
-  expect_equal_length(scores2)
+  expect_equal_length(pscores1)
+  expect_equal_length(pscores2)
 })
 
 test_that("NAs in arg:scores should be controlled by arg:na.last", {
-  expect_equal_ranks <- function(scores, na.last, ranks) {
-    eval(bquote(expect_equal(.rank_scores(scores, na.last = na.last), ranks)))
+  expect_equal_ranks <- function(pscores, na.last, ranks) {
+    eval(bquote(expect_equal(.rank_scores(pscores, na.last = na.last), ranks)))
   }
 
-  na1_scores <- c(NA, 0.2, 0.1)
-  na2_scores <- c(0.2, NA, 0.1)
-  na3_scores <- c(0.2, 0.1, NA)
+  na1_pscores <- c(NA, 0.2, 0.1)
+  na2_pscores <- c(0.2, NA, 0.1)
+  na3_pscores <- c(0.2, 0.1, NA)
 
-  expect_equal_ranks(na1_scores, TRUE, c(3, 2, 1))
-  expect_equal_ranks(na1_scores, FALSE, c(1, 3, 2))
+  expect_equal_ranks(na1_pscores, TRUE, c(3, 2, 1))
+  expect_equal_ranks(na1_pscores, FALSE, c(1, 3, 2))
 
-  expect_equal_ranks(na2_scores, TRUE, c(2, 3, 1))
-  expect_equal_ranks(na2_scores, FALSE, c(3, 1, 2))
+  expect_equal_ranks(na2_pscores, TRUE, c(2, 3, 1))
+  expect_equal_ranks(na2_pscores, FALSE, c(3, 1, 2))
 
-  expect_equal_ranks(na3_scores, TRUE, c(2, 1, 3))
-  expect_equal_ranks(na3_scores, FALSE, c(3, 2, 1))
+  expect_equal_ranks(na3_pscores, TRUE, c(2, 1, 3))
+  expect_equal_ranks(na3_pscores, FALSE, c(3, 2, 1))
 })
 
 test_that("Ties should be controlled by arg:ties.method", {
   expect_equal_ranks <- function(ties.method, ranks) {
-    scores <- c(0.1, 0.2, 0.2, 0.2, 0.3)
-    eval(bquote(expect_equal(.rank_scores(scores, ties.method = ties.method),
+    pscores <- c(0.1, 0.2, 0.2, 0.2, 0.3)
+    eval(bquote(expect_equal(.rank_scores(pscores, ties.method = ties.method),
                              ranks)))
   }
 
   expect_equal_ranks("average", c(1, 3, 3, 3, 5))
   expect_equal_ranks("first", c(1, 2, 3, 4, 5))
 
-  scores2 <- c(0.1, 0.2, 0.2, 0.3)
-  r0 <- .rank_scores(scores2, ties.method = "random")
+  pscores2 <- c(0.1, 0.2, 0.2, 0.3)
+  r0 <- .rank_scores(pscores2, ties.method = "random")
 
   r1 <- c(1, 2, 3, 4)
   r2 <- c(1, 3, 2, 4)

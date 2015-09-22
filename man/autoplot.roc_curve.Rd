@@ -25,8 +25,8 @@ autoplot.roc_curve(object, ...)
 library(ggplot2)
 
 data(B500)
-roc_curve <- create_roc(scores = B500$good_er_scores,
-                        obslabs = B500$labels)
+roc_curve <- create_roc(pscores = B500$good_er_scores,
+                        olabs = B500$labels)
 autoplot(roc_curve)
 }
 

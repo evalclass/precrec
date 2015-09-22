@@ -4,7 +4,7 @@ context("M2 PL4: Create a list of ROC and Precision curves")
 
 test_that("arg:mdat must be an 'mdat' object", {
   expect_err_msg <- function(mdat) {
-    err_msg <- "An object of unknown class is specified"
+    err_msg <- "Unrecognized class for .validate()"
     eval(bquote(expect_error(.create_list_curves(mdat), err_msg)))
   }
 

@@ -28,8 +28,8 @@ library(ggplot2)
 library(gridExtra)
 
 data(B500)
-curves <- create_curves(scores = B500$good_er_scores,
-                        obslabs = B500$labels)
+curves <- create_curves(pscores = B500$good_er_scores,
+                        olabs = B500$labels)
 autoplot(curves)
 }
 
