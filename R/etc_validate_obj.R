@@ -18,19 +18,24 @@
   # Check class items
   ditems <- setdiff(item_names, names(obj))
   if (!is.null(item_names) && length(ditems) > 0) {
-    stop(paste0("Missing items in '", class_name, "': ", ditems))
+    stop(paste0("Missing items in '", class_name, "': ",
+                paste(ditems, collapse = ", ")))
   }
 
   # Check attributes
   ditems <- setdiff(attr_names, names(attributes(obj)))
   if (!is.null(attr_names) && length(ditems) > 0) {
-    stop(paste0("Missing items in '", class_name, "' attributes: ", ditems))
+    print(attributes(obj))
+    print(ditems)
+    print(paste(ditems))
+    stop(paste0("Missing items in '", class_name, "' attributes: ",
+                paste(ditems, collapse = ", ")))
   }
 
   # Check args
   ditems <- setdiff(names(attr(obj, "args")), arg_names)
   if (!is.null(arg_names) && length(ditems) > 0) {
     stop(paste0("Invalid items in 'args' attribute of '", class_name, "': ",
-                ditems))
+                paste(ditems, collapse = ", ")))
   }
 }

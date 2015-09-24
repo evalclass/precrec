@@ -1,21 +1,21 @@
-# Get ROC or Precision-Recall curves from mcurves
-.get_mrocprc_curves <- function(mcurves, curve_type, class_name) {
-  # Group ROC or PRC curves
-  mc <- list()
-  for (i in seq_along(mcurves)) {
-    curves <- mcurves[[i]][[curve_type]]
-    mc[[attr(curves, "model_name")]] <- curves
-  }
-
-  # === Create an S3 object ===
-  s3obj <- structure(mc, class = class_name)
-
-  # Set attributes
-  attr(s3obj, "validated") <- FALSE
-
-  # Call .validate.class_name()
-  .validate(s3obj)
-}
+# # Get ROC or Precision-Recall curves from mcurves
+# .get_mrocprc_curves <- function(mcurves, curve_type, class_name) {
+#   # Group ROC or PRC curves
+#   mc <- list()
+#   for (i in seq_along(mcurves)) {
+#     curves <- mcurves[[i]][[curve_type]]
+#     mc[[attr(curves, "model_name")]] <- curves
+#   }
+#
+#   # === Create an S3 object ===
+#   s3obj <- structure(mc, class = class_name)
+#
+#   # Set attributes
+#   attr(s3obj, "validated") <- FALSE
+#
+#   # Call .validate.class_name()
+#   .validate(s3obj)
+# }
 
 # Get model names from mdat
 .get_mdat_model_names <- function(mdat, model_names) {

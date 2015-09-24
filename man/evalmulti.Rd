@@ -4,19 +4,19 @@
 \alias{evalmulti}
 \title{Evaluate multiple models}
 \usage{
-evalmulti(mfmdat, mscores = NULL, mobslabs = NULL, x_interval = 0.001,
-  model_names = NULL, na.last = FALSE, ties.method = "average",
-  obslevels = c("negative", "positive"))
+evalmulti(mfmdat, mscores = NULL, mobslabs = NULL, model_names = NULL,
+  data_nos = NULL, x_interval = 0.001, na.last = FALSE,
+  ties.method = "average", olevs = c("negative", "positive"))
 }
 \arguments{
 \item{mscores}{A dataset of predicted scores.}
 
 \item{mobslabs}{A dataset of of observed labels.}
 
+\item{model_names}{Names of the models/classifiers to be evaluated.}
+
 \item{x_interval}{A numeric value to specifiy an interval of the
 x-axis (TPRs for ROC and recall for Precision-Recall).}
-
-\item{model_names}{Names of the models/classifiers to be evaluated.}
 
 \item{na.last}{Passed to \code{\link[base]{rank}} for controlling the
 treatment of NAs. The value can be TRUE or FALSE. If TRUE, missing values

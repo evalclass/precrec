@@ -1,42 +1,3 @@
-# Factor labels
-.factor_labels <- function(olabs, olevs = c("negative", "positive"),
-                           validate = TRUE) {
-  # === Validate input arguments ===
-  if (validate) {
-    .validate_olabs(olabs)
-    .validate_olevs(olevs)
-  }
-
-  # === Generate label factors ===
-  if (!is.factor(olabs)) {
-    flabs <- factor(olabs, ordered = TRUE)
-  } else {
-    flabs <- rep(olabs)
-  }
-
-  if (nlevels(flabs) != length(olevs)) {
-    stop("'olevs' cotains the invalid number of unique labels")
-  }
-  levels(flabs) <- olevs
-
-  flabs
-}
-
-# Rank scores
-.rank_scores <- function(pscores, na.last = FALSE, ties.method = "average",
-                         validate = TRUE) {
-
-  # === Validate input arguments ===
-  if (validate) {
-    .validate_pscores((pscores))
-    .validate_na_last(na.last)
-    .validate_ties_method(ties.method)
-  }
-
-  # === Create ranks ===
-  ranks <- rank(pscores, na.last, ties.method)
-}
-
 #' Reformat input data for Precision-Recall and ROC evaluation.
 #'
 #' \code{reformat_data} takes predicted scores from a model and binary lables
@@ -110,4 +71,43 @@ reformat_data <- function(pscores, olabs, na.last = FALSE,
 
   # Call .validate.fmdat()
   .validate(s3obj)
+}
+
+# Factor labels
+.factor_labels <- function(olabs, olevs = c("negative", "positive"),
+                           validate = TRUE) {
+  # === Validate input arguments ===
+  if (validate) {
+    .validate_olabs(olabs)
+    .validate_olevs(olevs)
+  }
+
+  # === Generate label factors ===
+  if (!is.factor(olabs)) {
+    flabs <- factor(olabs, ordered = TRUE)
+  } else {
+    flabs <- rep(olabs)
+  }
+
+  if (nlevels(flabs) != length(olevs)) {
+    stop("'olevs' cotains the invalid number of unique labels")
+  }
+  levels(flabs) <- olevs
+
+  flabs
+}
+
+# Rank scores
+.rank_scores <- function(pscores, na.last = FALSE, ties.method = "average",
+                         validate = TRUE) {
+
+  # === Validate input arguments ===
+  if (validate) {
+    .validate_pscores((pscores))
+    .validate_na_last(na.last)
+    .validate_ties_method(ties.method)
+  }
+
+  # === Create ranks ===
+  ranks <- rank(pscores, na.last, ties.method)
 }

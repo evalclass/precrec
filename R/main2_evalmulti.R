@@ -44,14 +44,17 @@
 #'
 #' mcurves <- evalmulti(mdat, model_names = model_names)
 evalmulti <- function(mfmdat, mscores = NULL, mobslabs = NULL,
-                      x_interval = 0.001, model_names = NULL, na.last = FALSE,
-                      ties.method = "average",
-                      obslevels = c("negative", "positive")) {
+                      model_names = NULL, data_nos = NULL, x_interval = 0.001,
+                      na.last = FALSE, ties.method = "average",
+                      olevs = c("negative", "positive")) {
 
   .validate_evalmulti_args(x_interval, model_names, na.last, ties.method,
                            obslevels)
 
-  create_mcurves(mfmdat, mscores, mobslabs, x_interval = x_interval,
-                 model_names = model_names, na.last = na.last,
-                 ties.method = ties.method, obslevels = obslevels)
+  mm <- mmdat(pscores, olabs, model_names = model_names, data_nos = data_nos,
+              na.last = na.last, ties.method = ties.method, olevs = olevs)
+
+  pl_main(mm, model_type = "multiple", data_type = "single",
+          x_interval =x_interval)
+
 }

@@ -96,12 +96,12 @@
   # Check if scores and olabs are specified.
   # Validate the 'mdat' argument otherwise
   if (missing(mdat)) {
-    if(is.null(mscores) && !is.null(mobslabs)) {
-      stop("Invalid argument: mscores")
-    } else if(!is.null(mscores) && is.null(mobslabs)) {
-      stop("Invalid argument: mobslabs")
-    } else if (is.null(mscores) && is.null(mobslabs)) {
+    if (is.null(mscores) && is.null(mobslabs)) {
       stop("'mdat' must be specified")
+    } else if(is.null(mscores)) {
+      stop("Invalid argument: mscores")
+    } else if(is.null(mobslabs)) {
+      stop("Invalid argument: mobslabs")
     } else {
       mdat <- reformat_mdata(mscores = mscores, mobslabs = mobslabs)
     }

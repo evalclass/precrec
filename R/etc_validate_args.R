@@ -108,6 +108,62 @@
   }
 }
 
+# Validate model_names
+.validate_model_names <- function(model_names, veclen) {
+  if (!is.null(model_names)) {
+    if (length(model_names) != veclen) {
+      stop("Invalid model names")
+    }
+
+    lapply(model_names, .validate_model_name)
+  }
+}
+
+# Validate data_nos
+.validate_data_nos <- function(data_nos, veclen) {
+  if (!is.null(data_nos)) {
+    if (length(data_nos) != veclen) {
+      stop("Invalid data numbers (data_nos)")
+    }
+
+    lapply(data_nos, .validate_data_no)
+  }
+}
+
+# Validate x_interval
+.validate_x_interval <- function(x_interval) {
+  if (!is.atomic(x_interval) || !is.vector(x_interval)
+      || !is.numeric(x_interval) || length(x_interval) != 1L){
+    stop("x_interval must be a numeric value")
+  }
+
+  if (x_interval <= 0L|| x_interval > 1L) {
+    stop("x_interval must be (0, 1]")
+  }
+}
+
+# Validate model type
+.validate_model_type <- function(model_type) {
+  if (!is.null(model_type)) {
+    if (!.is_char_vec(model_type) || length(model_type) != 1L) {
+      stop("'model_type' must be a string")
+    } else if (model_type != "single" && model_type != "multiple") {
+      stop("'model_type' must be either 'single' or 'multiple'")
+    }
+  }
+}
+
+# Validate data type
+.validate_data_type <- function(data_type) {
+  if (!is.null(data_type)) {
+    if (!.is_char_vec(data_type) || length(data_type) != 1L) {
+      stop("'data_type' must be a string")
+    } else if (data_type != "single" && data_type != "multiple") {
+      stop("'data_type' must be either 'single' or 'multiple'")
+    }
+  }
+}
+
 # Validate arguments of reformat_data()
 .validate_reformat_data_args <- function(obj, obj_name, scores, olabs, ...) {
 
@@ -141,31 +197,70 @@
   .validate_pscores_and_olabs(obj, obj_name, scores, olabs, ...)
 }
 
-# Validate arguments of reformat_mdata()
-.validate_reformat_mdata_args <- function(obj, obj_name, lscores, llabels,
-                                          model_names, ...) {
+# Validate arguments of mmdata()
+.validate_mmdata_args <- function(lpscores, lolabs, model_names, data_nos,
+                                  ...) {
 
-  if (length(llabels) != 1 && length(lscores) != length(llabels)) {
-    stop(paste0("'mscores' and 'mobslabs' should be of the same size, or ",
-                "the length of 'mobslabs' should be 1"))
+  # Check lpscores and lolabs
+  if (length(lolabs) != 1 && length(lpscores) != length(lolabs)) {
+    stop(paste0("'pscores' and 'olabs' should be of the same size, or ",
+                "the size of 'olabs' should be 1"))
   }
 
-  if (length(model_names) != length(lscores)) {
-    stop("Invalid model names")
-  }
+  # Check model names
+  .validate_model_names(model_names, length(lpscores))
 
-  if (!all(unlist(lapply(model_names, .is_char_vec)))) {
-    stop("Model name must be a character vector")
-  }
-
-  vfunc <- function(i) {
-    .validate_reformat_data_args(obj, obj_name, lscores[[i]], llabels[[i]],
-                                 model_name = model_names[[i]], ...)
-  }
-
-  mfmdat <- lapply(seq_along(lscores), vfunc)
+  # Check data numbers
+  .validate_data_nos(data_nos, length(lpscores))
 
 }
+
+# Validate arguments of pl_main()
+.validate_pl_main_args <- function(mdat, model_type, data_type, x_interval) {
+
+  # Check model type
+  .validate_model_type(model_type)
+  if (model_type == "single"
+      && length(unique(attr(mdat, "model_names"))) != 1) {
+    stop("'mdat' contains scores and labels for multiple modeles")
+  }
+
+  # Check data type
+  .validate_data_type(data_type)
+  if (data_type == "single" && length(unique(attr(mdat, "data_nos"))) != 1) {
+    stop("'mdat' contains scores and labels of multiple test sets")
+  }
+
+  # Check model names
+  .validate_x_interval(x_interval)
+
+}
+
+# # Validate arguments of reformat_mdata()
+# .validate_reformat_mdata_args <- function(obj, obj_name, lscores, llabels,
+#                                           model_names, ...) {
+#
+#   if (length(llabels) != 1 && length(lscores) != length(llabels)) {
+#     stop(paste0("'mscores' and 'mobslabs' should be of the same size, or ",
+#                 "the length of 'mobslabs' should be 1"))
+#   }
+#
+#   if (length(model_names) != length(lscores)) {
+#     stop("Invalid model names")
+#   }
+#
+#   if (!all(unlist(lapply(model_names, .is_char_vec)))) {
+#     stop("Model name must be a character vector")
+#   }
+#
+#   vfunc <- function(i) {
+#     .validate_reformat_data_args(obj, obj_name, lscores[[i]], llabels[[i]],
+#                                  model_name = model_names[[i]], ...)
+#   }
+#
+#   mfmdat <- lapply(seq_along(lscores), vfunc)
+#
+# }
 
 # Validate arguments of create_curves()
 .validate_create_curves_args <- function(x_interval, ...) {
