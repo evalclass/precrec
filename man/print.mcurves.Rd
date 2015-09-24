@@ -20,16 +20,14 @@
 s1 <- c(1, 2, 3, 4)
 s2 <- c(5, 6, 7, 8)
 s3 <- c(2, 4, 6, 8)
-mscores <- combine_scores(s1, s2, s3)
+mscores <- join_scores(s1, s2, s3)
 
 l1 <- c(1, 0, 1, 1)
 l2 <- c(1, 1, 0, 0)
 l3 <- c(0, 1, 0, 1)
-mobslabs <- combine_obslbs(l1, l2, l3)
+molabs <- join_labels(l1, l2, l3)
 
-mfmdat <- reformat_mdata(mscores, mobslabs)
-
-mcurves <- evalmulti(mfmdat)
+mcurves <- evalmulti(mscores, molabs)
 print(mcurves)
 }
 

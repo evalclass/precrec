@@ -23,7 +23,7 @@
 #'
 #' mdat <- mmdata(pscores, olabs)
 #' pl_main(mdat)
-pl_main <- function(mdat, model_type = "multiple", datpa_type = "single",
+pl_main <- function(mdat, model_type = "multiple", data_type = "single",
                     x_interval = 0.001) {
 
   # === Validation ===
@@ -40,9 +40,9 @@ pl_main <- function(mdat, model_type = "multiple", datpa_type = "single",
 
   # Create curves
   lcurves <- lapply(seq_along(mdat), plfunc)
-  pf <- make_prefix(model_type, data_type)
-  rocs <- group_curves(lcurves, "roc", paste0(pf, "roc"))
-  prcs <- group_curves(lcurves, "prc", paste0(pf, "prc"))
+  pf <- .make_prefix(model_type, data_type)
+  rocs <- .group_curves(lcurves, "roc", paste0(pf, "roc"), mdat)
+  prcs <- .group_curves(lcurves, "prc", paste0(pf, "prc"), mdat)
 
   # === Create an S3 object ===
   s3obj <- structure(list(rocs = rocs, prcs = prcs),
@@ -63,7 +63,7 @@ pl_main <- function(mdat, model_type = "multiple", datpa_type = "single",
 }
 
 # Make prefix
-make_prefix <- function(model_type, data_type) {
+.make_prefix <- function(model_type, data_type) {
   if (model_type == "single") {
     mt <- "s"
   } else {
@@ -80,7 +80,7 @@ make_prefix <- function(model_type, data_type) {
 }
 
 # Get ROC or Precision-Recall curves from mcurves
-group_curves <- function(lcurves, curve_type, class_name) {
+.group_curves <- function(lcurves, curve_type, class_name, mdat) {
   # Group ROC or PRC curves
   mc <- lapply(seq_along(lcurves), function(s) lcurves[[s]][[curve_type]])
 
@@ -88,11 +88,9 @@ group_curves <- function(lcurves, curve_type, class_name) {
   s3obj <- structure(mc, class = class_name)
 
   # Set attributes
-  attr(s3obj, "model_type") <- attr(s3obj, "model_type")
-  attr(s3obj, "data_type") <- attr(s3obj, "data_type")
-  attr(s3obj, "model_names") <- attr(s3obj, "model_names")
-  attr(s3obj, "data_nos") <- attr(s3obj, "data_nos")
-  attr(s3obj, "src") <- lcurves
+  attr(s3obj, "model_names") <- attr(mdat, "model_names")
+  attr(s3obj, "data_nos") <- attr(mdat, "data_nos")
+  attr(s3obj, "src") <- mdat
   attr(s3obj, "validated") <- FALSE
 
   # Call .validate.class_name()

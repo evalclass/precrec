@@ -25,11 +25,11 @@ test_that("arg:pscores and arg:olabs should be the same length", {
   s1 <- c(1, 2, 3, 4)
   s2 <- c(5, 6, 7, 8)
   s3 <- c(2, 4, 6, 8)
-  pscores <- join_pscores(s1, s2, s3)
+  pscores <- join_scores(s1, s2, s3)
 
   l1 <- c(1, 0, 1, 1)
   l2 <- c(1, 1, 0, 0)
-  olabs <- join_olabs(l1, l2)
+  olabs <- join_labels(l1, l2)
 
   expect_err_msg(pscores, olabs)
 })
@@ -51,12 +51,12 @@ test_that("'mdat' contains a list with 3 items", {
   s1 <- c(1, 2, 3, 4)
   s2 <- c(5, 6, 7, 8)
   s3 <- c(2, 4, 6, 8)
-  pscores <- join_pscores(s1, s2, s3)
+  pscores <- join_scores(s1, s2, s3)
 
   l1 <- c(1, 0, 1, 1)
   l2 <- c(1, 1, 0, 0)
   l3 <- c(0, 1, 0, 1)
-  olabs <- join_olabs(l1, l2, l3)
+  olabs <- join_labels(l1, l2, l3)
 
   mdat <- mmdata(pscores, olabs)
 
@@ -68,10 +68,10 @@ test_that("mmdata() can take only one 'olabs' dataset", {
   s1 <- c(1, 2, 3, 4)
   s2 <- c(5, 6, 7, 8)
   s3 <- c(2, 4, 6, 8)
-  pscores <- join_pscores(s1, s2, s3)
+  pscores <- join_scores(s1, s2, s3)
 
   l1 <- c(2, 1, 2, 2)
-  olabs <- join_olabs(l1)
+  olabs <- join_labels(l1)
 
   mdat <- mmdata(pscores, olabs)
 
@@ -93,12 +93,12 @@ test_that("All items in 'pscores' and 'olabs' must be of the same length", {
   s1 <- c(1, 2, 3, 4)
   s2 <- c(5, 6, 7, 8)
   s3 <- c(2, 4, 6, 8)
-  pscores <- join_pscores(s1, s2, s3)
+  pscores <- join_scores(s1, s2, s3)
 
   l1 <- c(1, 0, 1)
   l2 <- c(1, 1, 0)
   l3 <- c(0, 1, 0)
-  olabs <- join_olabs(l1, l2, l3)
+  olabs <- join_labels(l1, l2, l3)
 
   expect_err_msg(pscores, olabs)
 })

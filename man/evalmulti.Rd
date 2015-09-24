@@ -4,11 +4,13 @@
 \alias{evalmulti}
 \title{Evaluate multiple models}
 \usage{
-evalmulti(mfmdat, mscores = NULL, mobslabs = NULL, model_names = NULL,
+evalmulti(mdat, mscores = NULL, mobslabs = NULL, model_names = NULL,
   data_nos = NULL, x_interval = 0.001, na.last = FALSE,
   ties.method = "average", olevs = c("negative", "positive"))
 }
 \arguments{
+\item{mdat}{An \code{mdat} object created by \code{\link{create_mdat}}.}
+
 \item{mscores}{A dataset of predicted scores.}
 
 \item{mobslabs}{A dataset of of observed labels.}
@@ -27,8 +29,6 @@ scores. The value can be "average", "random", or "first". The "first"
 method results in a permutation with increasing values at each index
 set of ties. The "random" method puts these in random order whereas
 the default, "average", replaces them by their mean.}
-
-\item{mdat}{An \code{mdat} object created by \code{\link{create_mdat}}.}
 
 \item{levels}{A character vector to overide the levels of the factor for
 observed binary labels.}
@@ -55,12 +55,12 @@ s4 <- IB500$excel_scores
 s5 <- IB500$perf_scores
 l1 <- IB500$labels
 
-model_names <- ("Random", "Poor ER", "Good ER", "Excellent", "Perfect")
+model_names <- c("Random", "Poor ER", "Good ER", "Excellent", "Perfect")
 
-mscores <- combine_scores(s1, s2, s3, s4, s5)
+mscores <- join_scores(s1, s2, s3, s4, s5)
 mobslabs <- l1
-mdat <- create_mdat(mscores, mobslabs)
+mdat <- mmdata(mscores, mobslabs, model_names = model_names)
 
-mcurves <- evalmulti(mdat, model_names = model_names)
+mcurves <- evalmulti(mdat)
 }
 

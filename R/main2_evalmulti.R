@@ -36,25 +36,30 @@
 #' s5 <- IB500$perf_scores
 #' l1 <- IB500$labels
 #'
-#' model_names <- ("Random", "Poor ER", "Good ER", "Excellent", "Perfect")
+#' model_names <- c("Random", "Poor ER", "Good ER", "Excellent", "Perfect")
 #'
-#' mscores <- combine_scores(s1, s2, s3, s4, s5)
+#' mscores <- join_scores(s1, s2, s3, s4, s5)
 #' mobslabs <- l1
-#' mdat <- create_mdat(mscores, mobslabs)
+#' mdat <- mmdata(mscores, mobslabs, model_names = model_names)
 #'
-#' mcurves <- evalmulti(mdat, model_names = model_names)
-evalmulti <- function(mfmdat, mscores = NULL, mobslabs = NULL,
+#' mcurves <- evalmulti(mdat)
+evalmulti <- function(mdat, mscores = NULL, mobslabs = NULL,
                       model_names = NULL, data_nos = NULL, x_interval = 0.001,
                       na.last = FALSE, ties.method = "average",
                       olevs = c("negative", "positive")) {
 
   .validate_evalmulti_args(x_interval, model_names, na.last, ties.method,
-                           obslevels)
+                           olevs)
 
-  mm <- mmdat(pscores, olabs, model_names = model_names, data_nos = data_nos,
-              na.last = na.last, ties.method = ties.method, olevs = olevs)
+  if (!missing(mdat)) {
+    .validate(mdat)
+  } else {
+    mdat <- mmdata(mscores, mobslabs,
+                   model_names = model_names, data_nos = data_nos,
+                   na.last = na.last, ties.method = ties.method, olevs = olevs)
+  }
 
-  pl_main(mm, model_type = "multiple", data_type = "single",
-          x_interval =x_interval)
+  pl_main(mdat, model_type = "multiple", data_type = "single",
+          x_interval = x_interval)
 
 }

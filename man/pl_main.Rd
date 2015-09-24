@@ -4,7 +4,7 @@
 \alias{pl_main}
 \title{Control the main pipeline iterations.}
 \usage{
-pl_main(mmdt, model_type = "multiple", datpa_type = "single",
+pl_main(mdat, model_type = "multiple", data_type = "single",
   x_interval = 0.001)
 }
 \arguments{
@@ -34,7 +34,7 @@ l2 <- c(1, 1, 0, 0)
 l3 <- c(0, 1, 0, 1)
 olabs <- combine_olabs(l1, l2, l3)
 
-mmdt <- mmdata(pscores, olabs)
-pl_main(mmdt)
+mdat <- mmdata(pscores, olabs)
+pl_main(mdat)
 }
 

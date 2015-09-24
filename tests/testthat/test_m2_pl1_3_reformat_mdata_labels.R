@@ -1,15 +1,15 @@
 context("M2 PL1: Join label datasets")
-# Test join_olabs(arg:..., arg:byrow)
+# Test join_labels(arg:..., arg:byrow)
 
 test_that("arg:... must be specified", {
   err_msg <- "No datasets specified"
-  expect_error(join_olabs(), err_msg)
+  expect_error(join_labels(), err_msg)
 })
 
 test_that("arg:byrow should be TRUE or FALSE", {
   expect_err_msg <- function(byrow) {
     err_msg <- "'byrow' should be one of FALSE, TRUE"
-    eval(bquote(expect_error(join_olabs(c(0), byrow = byrow), err_msg)))
+    eval(bquote(expect_error(join_labels(c(0), byrow = byrow), err_msg)))
   }
 
   expect_err_msg("T")
@@ -20,16 +20,16 @@ test_that("arg:byrow should be TRUE or FALSE", {
   expect_err_msg(matrix(c(TRUE, FALSE)))
 })
 
-test_that("join_olabs() returns a list", {
-  cdat <- join_olabs(c(0, 1))
+test_that("join_labels() returns a list", {
+  cdat <- join_labels(c(0, 1))
 
   expect_true(is.list(cdat))
 })
 
-test_that("join_olabs() only accepts numeric vector or factors", {
+test_that("join_labels() only accepts numeric vector or factors", {
   expect_err_msg <- function(vec1, vec2) {
     err_msg <- "Invalid type of label data"
-    eval(bquote(expect_error(join_olabs(vec1, vec2), err_msg)))
+    eval(bquote(expect_error(join_labels(vec1, vec2), err_msg)))
   }
 
   vec1 <- c(1, 2)
@@ -42,10 +42,10 @@ test_that("join_olabs() only accepts numeric vector or factors", {
 
 })
 
-test_that("join_olabs() accepts two unique labels", {
+test_that("join_labels() accepts two unique labels", {
   expect_err_msg <- function(vec1, vec2) {
     err_msg <- "Invalid number of labels"
-    eval(bquote(expect_error(join_olabs(vec1, vec2), err_msg)))
+    eval(bquote(expect_error(join_labels(vec1, vec2), err_msg)))
   }
 
   vec1 <- c(1, 2, 1)

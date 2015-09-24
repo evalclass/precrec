@@ -1,23 +1,23 @@
 #' Join scores of multiple models into a list.
 #'
-#' \code{join_pscores} takes predicted scores from multiple models and
+#' \code{join_scores} takes predicted scores from multiple models and
 #' converst multiple to a list. It takes several types of datasets, such as
 #' vectors, arrays, data frames, and lists.
 #'
 #' @param ... Multiple datasets. They can be vectors, arrays, data frames,
 #'   and lists.
 #' @param byrow Column vectors are used when matrix, data.frame, or array is used.
-#' @return \code{join_pscores} returns a list that
+#' @return \code{join_scores} returns a list that
 #'   contains all combined datasets.
 #'
 #' @examples
 #' s1 <- c(1, 2, 3, 4)
 #' s2 <- c(5, 6, 7, 8)
 #' s3 <- c(2, 4, 6, 8)
-#' mscores <- join_pscores(s1, s2, s3)
+#' mscores <- join_scores(s1, s2, s3)
 #'
 #' mscores
-join_pscores <- function(..., byrow = FALSE) {
+join_scores <- function(..., byrow = FALSE) {
   .join_datasets(..., byrow = byrow)
 }
 
@@ -104,7 +104,7 @@ join_pscores <- function(..., byrow = FALSE) {
 
 #' Join observed labels of multiple models into a list.
 #'
-#' \code{join_olabs} takes observed labels and converts them to a list.
+#' \code{join_labels} takes observed labels and converts them to a list.
 #' It takes several types of datasets, such as vectors, arrays, data frames,
 #' and lists.
 #'
@@ -113,17 +113,17 @@ join_pscores <- function(..., byrow = FALSE) {
 #' @param byrow Column vectors are used when matrix, data.frame, or array is used.
 #' @param prefix Prefix used to name models/classifiers. Serial numbers are
 #'   automatically added to prefix to make unique names.
-#' @return \code{join_olabs} returns a list that
+#' @return \code{join_labels} returns a list that
 #'   contains all combined datasets.
 #'
 #' @examples
 #' l1 <- c(1, 0, 1, 1)
 #' l2 <- c(1, 1, 0, 0)
 #' l3 <- c(0, 1, 0, 1)
-#' molabs <- join_olabs(l1, l2, l3)
+#' molabs <- join_labels(l1, l2, l3)
 #'
 #' molabs
-join_olabs <- function(..., byrow = FALSE) {
+join_labels <- function(..., byrow = FALSE) {
   efunc_vtype <- function(v) {
     if (!is.atomic(v) || ((!is.vector(v) || !is.numeric(v))
                           && !is.factor(v))) {
@@ -166,22 +166,24 @@ join_olabs <- function(..., byrow = FALSE) {
 #' s1 <- c(1, 2, 3, 4)
 #' s2 <- c(5, 6, 7, 8)
 #' s3 <- c(2, 4, 6, 8)
-#' pscores <- join_pscores(s1, s2, s3)
+#' pscores <- join_scores(s1, s2, s3)
 #'
 #' l1 <- c(1, 0, 1, 1)
 #' l2 <- c(1, 1, 0, 0)
 #' l3 <- c(0, 1, 0, 1)
-#' olabs <- join_olabs(l1, l2, l3)
+#' olabs <- join_labels(l1, l2, l3)
 #'
-#' mdat <- mmdata(pscores, olabs)
+#' model_names <- c("t1", "t2", "t3")
+#'
+#' mdat <- mmdata(pscores, olabs, model_names = model_names)
 #' mdat
 mmdata <- function(pscores, olabs, model_names = NULL, data_nos = NULL,
                    na.last = FALSE, ties.method = "average",
                    olevs = c("negative", "positive"), ...) {
 
   # === Join datasets ===
-  lpscores <- join_pscores(pscores)
-  lolabs <- join_olabs(olabs)
+  lpscores <- join_scores(pscores)
+  lolabs <- join_labels(olabs)
 
   # === Validate arguments and variables ===
   .validate_mmdata_args(lpscores, lolabs, model_names, data_nos,
@@ -194,35 +196,9 @@ mmdata <- function(pscores, olabs, model_names = NULL, data_nos = NULL,
   }
 
   # === Model names and data set numbers ===
-  if (!is.null(model_names) && !is.null(data_nos)) {
-    if ((length(model_names) == length(lpscores)
-         &&  length(data_nos)) == length(lpscores)) {
-      new_model_names <- model_names
-      new_data_nos <- data_nos
-    } else if ((length(model_names) * length(data_nos)) == length(lpscores)) {
-      new_model_names <- rep(model_names, each = length(data_nos))
-      new_data_nos <- rep(data_nos, length(model_names))
-    } else {
-      stop("Invalid 'model_names' & 'data_nos'")
-    }
-  } else if (!is.null(model_names)) {
-    if (length(model_names) != length(lpscores)) {
-      stop("Invalid 'model_names'")
-    }
-    new_model_names <- model_names
-    new_data_nos <- rep(1, length(lpscores))
-
-  } else if (!is.null(data_nos)) {
-    if (length(data_nos) != length(lpscores)) {
-      stop("Invalid 'data_nos'")
-    }
-    new_model_names <- rep("m1", length(lpscores))
-    new_data_nos <- data_nos
-
-  } else {
-    new_model_names <- paste0("m", seq(length(lpscores)))
-    new_data_nos <- rep(1, length(lpscores))
-  }
+  mnames <- .get_modnames(length(lpscores), model_names, data_nos)
+  new_model_names <- mnames[["mn"]]
+  new_data_nos <- mnames[["dn"]]
 
   # === Reformat input data ===y
   func_fmdat <- function(i) {
@@ -246,4 +222,50 @@ mmdata <- function(pscores, olabs, model_names = NULL, data_nos = NULL,
 
   # Call .validate.mmdat()
   .validate(s3obj)
+}
+
+# Get model names and data numbers
+.get_modnames <- function(dlen, model_names, data_nos) {
+  len_mn <- length(model_names)
+  len_dn <- length(data_nos)
+  is_null_mn <- is.null(model_names)
+  is_null_dn <- is.null(data_nos)
+
+  modnames <- list(mn = model_names, dn = data_nos)
+
+  # === Reformat model names and data numbers ===
+  # No reformat
+  if (len_mn == dlen && len_dn == dlen) {
+    return(modnames)
+  }
+
+  # Assign a single data number
+  if (len_mn == dlen && is_null_dn) {
+    modnames[["dn"]] <- rep(1, dlen)
+    return(modnames)
+  }
+
+  # Assign a single model name
+  if (is_null_mn && len_dn == dlen) {
+    modnames[["mn"]] <- rep("m1", dlen)
+    return(modnames)
+  }
+
+  # Expand both model names and data numbers
+  if (len_mn * len_dn == dlen) {
+    modnames[["mn"]] <- rep(model_names, each = len_dn)
+    modnames[["dn"]] <- rep(data_nos, len_mn)
+    return(modnames)
+  }
+
+  # Expand model names and assign a single data number
+  if (is_null_mn && is_null_dn) {
+    modnames[["mn"]] <- paste0("m", seq(dlen))
+    modnames[["dn"]] <- rep(1, dlen)
+    return(modnames)
+  }
+
+  # === Error handling ===
+  stop("Invalid 'model_names' & 'data_nos'")
+
 }

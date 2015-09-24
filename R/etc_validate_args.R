@@ -289,7 +289,7 @@
 
 # Validate arguments of evalmulti()
 .validate_evalmulti_args <- function(x_interval, model_names, na.last,
-                                     ties.method, levels) {
+                                     ties.method, olevs) {
 
   .validate_create_mcurves_args(x_interval, model_names)
 
@@ -308,9 +308,9 @@
   }
 
   # Check levels
-  if (!is.atomic(levels) || !is.character(levels)) {
-    stop("'levels' must be a charactor vector")
-  } else if (length(unique(levels)) != 2L) {
-    stop("'levels' cotains the invalid number of unique labels")
+  if (!is.atomic(olevs) || !is.character(olevs)) {
+    stop("'olevs' must be a charactor vector")
+  } else if (length(unique(olevs)) != 2L) {
+    stop("'olevs' cotains the invalid number of unique labels")
   }
 }

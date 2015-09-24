@@ -23,26 +23,20 @@
 #'
 #' @examples
 #' data(P10N10)
-#' curves <- evalmod(P10N10$scores, P10N10$labels)
+#' curves <- evalmod(pscores = P10N10$scores, olabs = P10N10$labels)
 #' curves
-#'
-#' plot(curves)
-evalmod <- function(pscores, olabs, x_interval = 0.001, na.last = FALSE,
+evalmod <- function(mdat, pscores, olabs, model_name = as.character(NA),
+                    data_no = 1L, x_interval = 0.001, na.last = FALSE,
                     ties.method = "average",
-                    olevs = c("negative", "positive"),
-                    model_name = as.character(NA), data_no = 1L) {
+                    olevs = c("negative", "positive")) {
 
-  # Format input data
-  fmdat <- reformat_data(pscores, olabs, na.last = na.last,
-                         ties.method = ties.method, olevs = olevs,
-                         model_name = model_name, data_no = data_no)
+  if (!missing(mdat)) {
+    .validate(mdat)
+  } else {
+    mdat <- mmdata(pscores, olabs, model_names = model_name, data_nos = data_no,
+                   na.last = na.last, ties.method = ties.method, olevs = olevs)
+  }
 
-  # Create confusion matrices for all threshold values
-  cdat <- create_confmats(fmdat)
-
-  # Calculate evaluation measures
-  pevals <- calc_measures(cdat)
-
-  # Create ROC and Precisio-Recall curves
-  curves <- create_curves(pevals, x_interval = x_interval)
+  pl_main(mdat, model_type = "single", data_type = "single",
+          x_interval =x_interval)
 }

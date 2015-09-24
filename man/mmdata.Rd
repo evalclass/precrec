@@ -46,14 +46,16 @@ evaluation pipeline.
 s1 <- c(1, 2, 3, 4)
 s2 <- c(5, 6, 7, 8)
 s3 <- c(2, 4, 6, 8)
-pscores <- join_pscores(s1, s2, s3)
+pscores <- join_scores(s1, s2, s3)
 
 l1 <- c(1, 0, 1, 1)
 l2 <- c(1, 1, 0, 0)
 l3 <- c(0, 1, 0, 1)
-olabs <- join_olabs(l1, l2, l3)
+olabs <- join_labels(l1, l2, l3)
 
-mdat <- mmdata(pscores, olabs)
+model_names <- c("t1", "t2", "t3")
+
+mdat <- mmdata(pscores, olabs, model_names = model_names)
 mdat
 }
 

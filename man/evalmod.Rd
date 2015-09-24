@@ -4,14 +4,16 @@
 \alias{evalmod}
 \title{Evaluate a single model}
 \usage{
-evalmod(pscores, olabs, x_interval = 0.001, na.last = FALSE,
-  ties.method = "average", olevs = c("negative", "positive"),
-  model_name = as.character(NA), data_no = 1L)
+evalmod(mdat, pscores, olabs, model_name = as.character(NA), data_no = 1L,
+  x_interval = 0.001, na.last = FALSE, ties.method = "average",
+  olevs = c("negative", "positive"))
 }
 \arguments{
 \item{pscores}{A numeric vector of predicted scores.}
 
 \item{olabs}{A numeric vector or a factor of observed labels.}
+
+\item{model_name}{The name of the model/classifier to be evaluated.}
 
 \item{x_interval}{A numeric value to specifiy an interval of the
 x-axis (TPRs for ROC and recall for Precision-Recall).}
@@ -28,8 +30,6 @@ the default, "average", replaces them by their mean.}
 
 \item{olevs}{A character vector to overide the levels of the factor for
 observed binary labels.}
-
-\item{model_name}{The name of the model/classifier to be evaluated.}
 }
 \value{
 \code{evalmod} returns a \code{curves} S3 object that
@@ -41,9 +41,7 @@ from an observed dataset and calculates ROC and Precision-Recall curves.
 }
 \examples{
 data(P10N10)
-curves <- evalmod(P10N10$scores, P10N10$labels)
+curves <- evalmod(pscores = P10N10$scores, olabs = P10N10$labels)
 curves
-
-plot(curves)
 }
 

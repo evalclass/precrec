@@ -108,11 +108,14 @@ autoplot.pevals <- function(object, ...) {
 #'
 #' @examples
 #' library(ggplot2)
+#' data(P10N10)
+#' curves <- evalmod(pscores = P10N10$scores, olabs = P10N10$labels)
 #'
-#' data(B500)
-#' roc_curve <- create_roc(pscores = B500$good_er_scores,
-#'                         olabs = B500$labels)
-#' autoplot(roc_curve)
+#' autoplot(curves[["rocs"]])
+autoplot.ssroc <- function(object, ...) {
+  ggplot2::autoplot(object[[1]], ...)
+}
+
 autoplot.roc_curve <- function(object, ...) {
   df <- .prepare_autoplot(object)
 
@@ -137,11 +140,14 @@ autoplot.roc_curve <- function(object, ...) {
 #'
 #' @examples
 #' library(ggplot2)
+#' data(P10N10)
+#' curves <- evalmod(pscores = P10N10$scores, olabs = P10N10$labels)
 #'
-#' data(B500)
-#' prc_curve <- create_prc(pscores = B500$good_er_scores,
-#'                         olabs = B500$labels)
-#' autoplot(prc_curve)
+#' autoplot(curves[["prcs"]])
+autoplot.ssprc <- function(object, ...) {
+  ggplot2::autoplot(object[[1]], ...)
+}
+
 autoplot.prc_curve <- function(object, ...) {
   df <- .prepare_autoplot(object)
 
@@ -169,12 +175,11 @@ autoplot.prc_curve <- function(object, ...) {
 #' @examples
 #' library(ggplot2)
 #' library(gridExtra)
+#' data(P10N10)
+#' curves <- evalmod(pscores = P10N10$scores, olabs = P10N10$labels)
 #'
-#' data(B500)
-#' curves <- create_curves(pscores = B500$good_er_scores,
-#'                         olabs = B500$labels)
 #' autoplot(curves)
-autoplot.curves <- function(object, curvetype = c("ROC", "PRC"), ...) {
+autoplot.sscurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
   # === Check package availability  ===
   .load_ggplot2()
   .load_gridExtra()
@@ -183,11 +188,11 @@ autoplot.curves <- function(object, curvetype = c("ROC", "PRC"), ...) {
 
   # === Create a ggplot object for ROC&PRC, ROC, or PRC ===
   if ("ROC" %in% curvetype) {
-    p_roc <- ggplot2::autoplot(object[["roc"]])
+    p_roc <- ggplot2::autoplot(object[["rocs"]])
   }
 
   if ("PRC" %in% curvetype) {
-    p_prc <- ggplot2::autoplot(object[["prc"]])
+    p_prc <- ggplot2::autoplot(object[["prcs"]])
   }
 
   if ("ROC" %in% curvetype && "PRC" %in% curvetype) {
@@ -197,26 +202,6 @@ autoplot.curves <- function(object, curvetype = c("ROC", "PRC"), ...) {
   } else if ("ROC" %in% curvetype) {
     p_roc
   }
-}
-
-# Plot ROC curves for multiple models
-autoplot.mroc_curves <- function(object, ...) {
-  df <- .prepare_autoplot(object)
-
-  # === Create a ggplot object ===
-  p <- ggplot2::ggplot(df, aes(x = x, y = y, color = model_name))
-  p <- .geom_roc_line_wrapper(p, object[["curves"]][[1]])
-}
-
-# Plot Precision-Recall curves for multiple models
-autoplot.mprc_curves <- function(object, ...) {
-  df <- .prepare_autoplot(object)
-
-  # === Create a ggplot object ===
-  p <- ggplot2::ggplot(df, aes(x = x, y = y, color = model_name))
-  p <- .geom_prc_line_wrapper(p, object[["curves"]][[1]])
-
-  p
 }
 
 #' Plot ROC and Precision-Recall curves for multiple models.
@@ -235,22 +220,22 @@ autoplot.mprc_curves <- function(object, ...) {
 #' @examples
 #' library(ggplot2)
 #' library(gridExtra)
-#'
 #' s1 <- c(1, 2, 3, 4)
 #' s2 <- c(5, 6, 7, 8)
 #' s3 <- c(2, 4, 6, 8)
-#' mscores <- combine_scores(s1, s2, s3)
+#' mscores <- join_scores(s1, s2, s3)
 #'
 #' l1 <- c(1, 0, 1, 1)
 #' l2 <- c(1, 1, 0, 0)
 #' l3 <- c(0, 1, 0, 1)
-#' mobslabs <- combine_obslbs(l1, l2, l3)
+#' mobslabs <- join_labels(l1, l2, l3)
 #'
-#' mfmdat <- reformat_mdata(mscores, mobslabs)
+#' model_names <- c("t1", "t2", "t3")
+#' mdat <- mmdata(mscores, mobslabs)
+#' mcurves <- evalmulti(mdat, model_names = model_names)
 #'
-#' mcurves <- evalmulti(mfmdat)
 #' autoplot(mcurves)
-autoplot.mcurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
+autoplot.mscurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
   # === Check package availability  ===
   .load_ggplot2()
   .load_grid()
@@ -260,11 +245,11 @@ autoplot.mcurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
 
   # === Create a ggplot object for ROC&PRC, ROC, or PRC ===
   if ("ROC" %in% curvetype) {
-    p_roc <- ggplot2::autoplot(object[["mroc_curves"]])
+    p_roc <- ggplot2::autoplot(object[["rocs"]])
   }
 
   if ("PRC" %in% curvetype) {
-    p_prc <- ggplot2::autoplot(object[["mprc_curves"]])
+    p_prc <- ggplot2::autoplot(object[["prcs"]])
   }
 
   if ("ROC" %in% curvetype && "PRC" %in% curvetype) {
@@ -274,4 +259,25 @@ autoplot.mcurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
   } else if ("ROC" %in% curvetype) {
     p_roc
   }
+}
+
+
+# Plot ROC curves for multiple models
+autoplot.msroc <- function(object, ...) {
+  df <- .prepare_autoplot(object)
+
+  # === Create a ggplot object ===
+  p <- ggplot2::ggplot(df, aes(x = x, y = y, color = model_name))
+  p <- .geom_roc_line_wrapper(p, object[[1]])
+}
+
+# Plot Precision-Recall curves for multiple models
+autoplot.msprc <- function(object, ...) {
+  df <- .prepare_autoplot(object)
+
+  # === Create a ggplot object ===
+  p <- ggplot2::ggplot(df, aes(x = x, y = y, color = model_name))
+  p <- .geom_prc_line_wrapper(p, object[[1]])
+
+  p
 }
