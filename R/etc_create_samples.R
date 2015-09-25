@@ -21,7 +21,7 @@ create_test_samples <- function(np, nn) {
 rep_test_all_levels <- function(n, np, nn) {
   labels <- c(rep(1, np), rep(0, nn))
 
-  rfunc <- function() {
+  rfunc <- function(np, nn) {
     samp <- create_test_samples(np, nn)
     list(random_scores = samp[["random_scores"]],
          poor_er_scores = samp[["poor_er_scores"]],
@@ -29,5 +29,7 @@ rep_test_all_levels <- function(n, np, nn) {
          excel_scores = samp[["excel_scores"]],
          perf_scores = samp[["perf_scores"]])
   }
-  replicate(n, rfunc(), simplify = FALSE)
+  scores <- replicate(n, rfunc(np, nn), simplify = FALSE)
+
+  list(scores = scores, labels = labels)
 }

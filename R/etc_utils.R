@@ -25,6 +25,15 @@
   }
 }
 
+# Check if it's a string
+.is_single_string <- function(v) {
+  if (!.is_char_vec(v) || length(v) != 1) {
+    return(FALSE)
+  } else {
+    return(TRUE)
+  }
+}
+
 # Check if it's a logical vector
 .is_logical_vec <- function(v) {
   if (!is.atomic(v) || !is.vector(v) || !is.logical(v)) {
