@@ -21,9 +21,43 @@ join_scores <- function(..., byrow = FALSE) {
   .join_datasets(..., byrow = byrow)
 }
 
+#' Join observed labels of multiple models into a list.
+#'
+#' \code{join_labels} takes observed labels and converts them to a list.
+#' It takes several types of datasets, such as vectors, arrays, data frames,
+#' and lists.
+#'
+#' @param ... Multiple datasets. They can be vectors, arrays, data frames,
+#'   and lists.
+#' @param byrow Column vectors are used when matrix, data.frame, or array is used.
+#' @param prefix Prefix used to name models/classifiers. Serial numbers are
+#'   automatically added to prefix to make unique names.
+#' @return \code{join_labels} returns a list that
+#'   contains all combined datasets.
+#'
+#' @examples
+#' l1 <- c(1, 0, 1, 1)
+#' l2 <- c(1, 1, 0, 0)
+#' l3 <- c(0, 1, 0, 1)
+#' molabs <- join_labels(l1, l2, l3)
+#'
+#' molabs
+join_labels <- function(..., byrow = FALSE) {
+  efunc_vtype <- function(v) {
+    if (!is.atomic(v) || ((!is.vector(v) || !is.numeric(v))
+                          && !is.factor(v))) {
+      stop("Invalid type of label data")
+    } else if (length(unique(v)) > 2L) {
+      stop("Invalid number of labels")
+    }
+  }
+
+  .join_datasets(..., efunc_vtype = efunc_vtype, byrow = byrow)
+}
+
 # Join datasets
 .join_datasets <- function(..., efunc_vtype = NULL, efunc_nrow = NULL,
-                              byrow = FALSE) {
+                           byrow = FALSE) {
   # Get '...'
   arglist <- list(...)
   if (length(arglist) == 0) {
@@ -100,38 +134,4 @@ join_scores <- function(..., byrow = FALSE) {
   lapply(cdat, efuncs)
 
   cdat
-}
-
-#' Join observed labels of multiple models into a list.
-#'
-#' \code{join_labels} takes observed labels and converts them to a list.
-#' It takes several types of datasets, such as vectors, arrays, data frames,
-#' and lists.
-#'
-#' @param ... Multiple datasets. They can be vectors, arrays, data frames,
-#'   and lists.
-#' @param byrow Column vectors are used when matrix, data.frame, or array is used.
-#' @param prefix Prefix used to name models/classifiers. Serial numbers are
-#'   automatically added to prefix to make unique names.
-#' @return \code{join_labels} returns a list that
-#'   contains all combined datasets.
-#'
-#' @examples
-#' l1 <- c(1, 0, 1, 1)
-#' l2 <- c(1, 1, 0, 0)
-#' l3 <- c(0, 1, 0, 1)
-#' molabs <- join_labels(l1, l2, l3)
-#'
-#' molabs
-join_labels <- function(..., byrow = FALSE) {
-  efunc_vtype <- function(v) {
-    if (!is.atomic(v) || ((!is.vector(v) || !is.numeric(v))
-                          && !is.factor(v))) {
-      stop("Invalid type of label data")
-    } else if (length(unique(v)) > 2L) {
-      stop("Invalid number of labels")
-    }
-  }
-
-  .join_datasets(..., efunc_vtype = efunc_vtype, byrow = byrow)
 }

@@ -40,7 +40,8 @@
 #' mdat <- mmdata(pscores, olabs, model_names = model_names)
 #' mdat
 mmdata <- function(pscores, olabs, model_names = NULL, data_nos = NULL,
-                   na.last = FALSE, ties.method = "average",
+                   group_by = "model_name",  na.last = FALSE,
+                   ties.method = "average",
                    olevs = c("negative", "positive"), ...) {
 
   # === Join datasets ===
@@ -48,7 +49,7 @@ mmdata <- function(pscores, olabs, model_names = NULL, data_nos = NULL,
   lolabs <- join_labels(olabs)
 
   # === Validate arguments and variables ===
-  .validate_mmdata_args(lpscores, lolabs, model_names, data_nos,
+  .validate_mmdata_args(lpscores, lolabs, model_names, data_nos, group_by,
                         na.last = na.last, ties.method = ties.method,
                         olevs = olevs, ...)
 
@@ -58,7 +59,7 @@ mmdata <- function(pscores, olabs, model_names = NULL, data_nos = NULL,
   }
 
   # === Model names and data set numbers ===
-  mnames <- .get_modnames(length(lpscores), model_names, data_nos)
+  mnames <- .get_modnames(length(lpscores), model_names, data_nos, group_by)
   new_model_names <- mnames[["mn"]]
   new_data_nos <- mnames[["dn"]]
 
@@ -87,7 +88,7 @@ mmdata <- function(pscores, olabs, model_names = NULL, data_nos = NULL,
 }
 
 # Get model names and data numbers
-.get_modnames <- function(dlen, model_names, data_nos) {
+.get_modnames <- function(dlen, model_names, data_nos, group_by) {
   len_mn <- length(model_names)
   len_dn <- length(data_nos)
   is_null_mn <- is.null(model_names)
@@ -115,15 +116,27 @@ mmdata <- function(pscores, olabs, model_names = NULL, data_nos = NULL,
 
   # Expand both model names and data numbers
   if (len_mn * len_dn == dlen) {
-    modnames[["mn"]] <- rep(model_names, each = len_dn)
-    modnames[["dn"]] <- rep(data_nos, len_mn)
+    if (group_by == "data_no") {
+      modnames[["mn"]] <- rep(model_names, len_dn)
+      modnames[["dn"]] <- rep(data_nos, each = len_mn)
+    } else if (group_by == "model_name") {
+      modnames[["mn"]] <- rep(model_names, each = len_dn)
+      modnames[["dn"]] <- rep(data_nos, len_mn)
+    }
+
     return(modnames)
   }
 
   # Expand model names and assign a single data number
   if (is_null_mn && is_null_dn) {
-    modnames[["mn"]] <- paste0("m", seq(dlen))
-    modnames[["dn"]] <- rep(1, dlen)
+    if (group_by == "data_no") {
+      modnames[["mn"]] <- paste0("m", seq(dlen))
+      modnames[["dn"]] <- rep(1, dlen)
+    } else if (group_by == "model_name") {
+      modnames[["mn"]] <- rep("m1", dlen)
+      modnames[["dn"]] <- seq(dlen)
+    }
+
     return(modnames)
   }
 

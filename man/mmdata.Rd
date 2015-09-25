@@ -6,8 +6,8 @@
 with multiple models.}
 \usage{
 mmdata(pscores, olabs, model_names = NULL, data_nos = NULL,
-  na.last = FALSE, ties.method = "average", olevs = c("negative",
-  "positive"), ...)
+  group_by = "model", na.last = FALSE, ties.method = "average",
+  olevs = c("negative", "positive"), ...)
 }
 \arguments{
 \item{model_names}{Names of the models/classifiers to be evaluated.}
