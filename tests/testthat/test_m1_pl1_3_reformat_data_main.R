@@ -1,20 +1,20 @@
 context("M1 PL1: Reformat input data for evaluation")
-# Test reformat_data(arg:scores, arg:obslabs,
+# Test reformat_data(arg:pscores, arg:olabs,
 #                    arg:na.last, arg:ties.method, arg:levels, arg:model_name)
 
-test_that("arg:scores and arg:obslabs must be specified", {
-  expect_err_msg <- function(scores, obslabs, err_msg) {
-    eval(bquote(expect_error(reformat_data(scores, obslabs), err_msg)))
+test_that("arg:pscores and arg:olabs must be specified", {
+  expect_err_msg <- function(pscores, olabs, err_msg) {
+    eval(bquote(expect_error(reformat_data(pscores, olabs), err_msg)))
   }
 
-  expect_err_msg(NULL, c(0), "Invalid 'scores'")
-  expect_err_msg(c(0), NULL, "Invalid 'obslabs'")
+  expect_err_msg(NULL, c(0), "Invalid 'pscores'")
+  expect_err_msg(c(0), NULL, "Invalid 'olabs'")
 })
 
-test_that("arg:scores and arg:obslabs should be the same length", {
-  expect_err_msg <- function(scores, obslabs) {
-    err_msg <- "'scores' and 'obslabs' must be of the same length"
-    eval(bquote(expect_error(reformat_data(scores, obslabs), err_msg)))
+test_that("arg:pscores and arg:olabs should be the same length", {
+  expect_err_msg <- function(pscores, olabs) {
+    err_msg <- "'pscores' and 'olabs' must be of the same length"
+    eval(bquote(expect_error(reformat_data(pscores, olabs), err_msg)))
   }
 
   expect_err_msg(c(0.1, 0.2), c(1, 0, 0))
@@ -55,17 +55,17 @@ test_that("reformat_data() reterns a 'fmdat' object", {
   expect_equal(class(fmdat), "fmdat")
 })
 
-test_that("'fmdat' contains a list with 8 items", {
+test_that("'fmdat' contains a list with 3 items", {
   fmdat <- reformat_data(c(0.1, 0.2, 0), c(1, 0, 1))
 
   expect_true(is.list(fmdat))
   expect_equal(length(fmdat), 3)
 })
 
-test_that("obslabs, ranks, and rank_idx must be the same length", {
+test_that("olabs, ranks, and rank_idx must be the same length", {
   fmdat <- reformat_data(c(0.1, 0.2, 0), c(1, 0, 1))
 
-  expect_true(length(fmdat[["obslabs"]]) != 0)
-  expect_equal(length(fmdat[["obslabs"]]), length(fmdat[["ranks"]]))
-  expect_equal(length(fmdat[["obslabs"]]), length(fmdat[["rank_idx"]]))
+  expect_true(length(fmdat[["olabs"]]) != 0)
+  expect_equal(length(fmdat[["olabs"]]), length(fmdat[["ranks"]]))
+  expect_equal(length(fmdat[["olabs"]]), length(fmdat[["rank_idx"]]))
 })

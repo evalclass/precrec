@@ -3,7 +3,7 @@
 #include <string>
 
 // Prototypes
-void calc_tp_fp(const Rcpp::IntegerVector& obslabs,
+void calc_tp_fp(const Rcpp::IntegerVector& olabs,
                 const Rcpp::NumericVector& ranks,
                 const Rcpp::IntegerVector& rank_idx,
                 int n, int& np, int& nn,
@@ -15,14 +15,14 @@ void solve_ties(std::vector<double>& tp, std::vector<double>& fp,
 
 // Calculate confusion matrices for all possible threshold values
 // [[Rcpp::export]]
-Rcpp::List create_confusion_matrices(const Rcpp::IntegerVector& obslabs,
+Rcpp::List create_confusion_matrices(const Rcpp::IntegerVector& olabs,
                                      const Rcpp::NumericVector& ranks,
                                      const Rcpp::IntegerVector& rank_idx) {
 
   // Variables
   Rcpp::List ret_val;
   std::string errmsg = "";
-  int n = obslabs.size();                 // Input data size
+  int n = olabs.size();                   // Input data size
   int np;                                 // # of positive
   int nn;                                 // # of negatives
   std::vector<double> tp(n+1);            // TPs
@@ -32,7 +32,7 @@ Rcpp::List create_confusion_matrices(const Rcpp::IntegerVector& obslabs,
   std::vector<double> sorted_ranks(n+1);  // Ranks
 
   // Calculate TPs and FPs
-  calc_tp_fp(obslabs, ranks, rank_idx, n, np, nn, tp, fp, sorted_ranks);
+  calc_tp_fp(olabs, ranks, rank_idx, n, np, nn, tp, fp, sorted_ranks);
 
   // Calculate TNs and FNs
   for (int i = 0; i < n+1; ++i) {
@@ -54,7 +54,7 @@ Rcpp::List create_confusion_matrices(const Rcpp::IntegerVector& obslabs,
 }
 
 // Calculate TPs and FPs
-void calc_tp_fp(const Rcpp::IntegerVector& obslabs,
+void calc_tp_fp(const Rcpp::IntegerVector& olabs,
                 const Rcpp::NumericVector& ranks,
                 const Rcpp::IntegerVector& rank_idx,
                 int n, int& np, int& nn,
@@ -74,8 +74,8 @@ void calc_tp_fp(const Rcpp::IntegerVector& obslabs,
   for (int i = 0; i < n; ++i) {
     int idx = rank_idx[i] - 1;
 
-    // obslabs is an ordered factor - positive: 2, negative: 1
-    if (obslabs[idx] == 2) {
+    // olabs is an ordered factor - positive: 2, negative: 1
+    if (olabs[idx] == 2) {
       ++np;
     } else {
       ++nn;

@@ -34,15 +34,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // create_confusion_matrices
-Rcpp::List create_confusion_matrices(const Rcpp::IntegerVector& obslabs, const Rcpp::NumericVector& ranks, const Rcpp::IntegerVector& rank_idx);
-RcppExport SEXP precrec_create_confusion_matrices(SEXP obslabsSEXP, SEXP ranksSEXP, SEXP rank_idxSEXP) {
+Rcpp::List create_confusion_matrices(const Rcpp::IntegerVector& olabs, const Rcpp::NumericVector& ranks, const Rcpp::IntegerVector& rank_idx);
+RcppExport SEXP precrec_create_confusion_matrices(SEXP olabsSEXP, SEXP ranksSEXP, SEXP rank_idxSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type obslabs(obslabsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type olabs(olabsSEXP);
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type ranks(ranksSEXP);
     Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type rank_idx(rank_idxSEXP);
-    __result = Rcpp::wrap(create_confusion_matrices(obslabs, ranks, rank_idx));
+    __result = Rcpp::wrap(create_confusion_matrices(olabs, ranks, rank_idx));
     return __result;
 END_RCPP
 }

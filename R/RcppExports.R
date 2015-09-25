@@ -9,8 +9,8 @@ calc_basic_measures <- function(np, nn, tps, fps, tns, fns) {
     .Call('precrec_calc_basic_measures', PACKAGE = 'precrec', np, nn, tps, fps, tns, fns)
 }
 
-create_confusion_matrices <- function(obslabs, ranks, rank_idx) {
-    .Call('precrec_create_confusion_matrices', PACKAGE = 'precrec', obslabs, ranks, rank_idx)
+create_confusion_matrices <- function(olabs, ranks, rank_idx) {
+    .Call('precrec_create_confusion_matrices', PACKAGE = 'precrec', olabs, ranks, rank_idx)
 }
 
 create_prc_curve <- function(tps, fps, sn, pr, x_interval) {
