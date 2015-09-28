@@ -1,7 +1,7 @@
-context("M1 PL4: Create a ROC curve")
-# Test create_roc(arg:pevals, arg:x.interval, arg:pscores, arg:olabs)
+context("PL6: Create a ROC curve")
+# Test create_roc(pevals, x.interval, pscores, olabs)
 
-test_that("arg:pevals must be an 'pevals' object", {
+test_that("'pevals' must be an 'pevals' object", {
   expect_err_msg <- function(pevals) {
     err_msg <- "Unrecognized class for .validate()"
     eval(bquote(expect_error(create_roc(pevals), err_msg)))

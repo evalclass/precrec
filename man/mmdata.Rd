@@ -6,7 +6,7 @@
 with multiple models.}
 \usage{
 mmdata(pscores, olabs, model_names = NULL, data_nos = NULL,
-  group_by = "model", na.last = FALSE, ties.method = "average",
+  exp_priority = "model_names", na.last = FALSE, ties.method = "average",
   olevs = c("negative", "positive"), ...)
 }
 \arguments{

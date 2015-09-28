@@ -4,7 +4,7 @@
 \alias{join_scores}
 \title{Join scores of multiple models into a list.}
 \usage{
-join_scores(..., byrow = FALSE)
+join_scores(..., byrow = FALSE, chklen = TRUE)
 }
 \arguments{
 \item{...}{Multiple datasets. They can be vectors, arrays, data frames,

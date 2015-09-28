@@ -7,6 +7,15 @@
   }
 }
 
+# Check if it's a number
+.is_a_number <- function(v) {
+  if (!.is_numeric_vec(v) || length(v) != 1) {
+    return(FALSE)
+  } else {
+    return(TRUE)
+  }
+}
+
 # Check if it's an integer vector
 .is_int_vec <- function(v) {
   if (!is.atomic(v) || !is.vector(v) || !is.integer(v)) {

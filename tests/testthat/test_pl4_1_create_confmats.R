@@ -1,7 +1,7 @@
-context("M1 PL2: Create confusion matrices")
-# Test create_confmats(arg:fmdat, arg:pscores, arg:olabs)
+context("PL4: Create confusion matrices")
+# Test create_confmats(fmdat, pscores, olabs)
 
-test_that("arg:fmdat must be a 'fmdat' object", {
+test_that("'fmdat' must be a 'fmdat' object", {
   expect_err_msg <- function(fmdat) {
     err_msg <- "Unrecognized class for .validate()"
     eval(bquote(expect_error(create_confmats(fmdat), err_msg)))

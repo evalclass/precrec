@@ -17,8 +17,16 @@
 #' mscores <- join_scores(s1, s2, s3)
 #'
 #' mscores
-join_scores <- function(..., byrow = FALSE) {
-  .join_datasets(..., byrow = byrow)
+join_scores <- function(..., byrow = FALSE, chklen = TRUE) {
+  # Set a function to check the vector values
+  if (chklen) {
+    efunc_nrow <- NULL
+  } else {
+    efunc_nrow <- function(m, vlen) NULL
+  }
+
+  # Call join datasets
+  .join_datasets(..., efunc_nrow = efunc_nrow, byrow = byrow)
 }
 
 #' Join observed labels of multiple models into a list.
@@ -42,27 +50,38 @@ join_scores <- function(..., byrow = FALSE) {
 #' molabs <- join_labels(l1, l2, l3)
 #'
 #' molabs
-join_labels <- function(..., byrow = FALSE) {
+join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
+  # Set a function to check the vector values
   efunc_vtype <- function(v) {
     if (!is.atomic(v) || ((!is.vector(v) || !is.numeric(v))
                           && !is.factor(v))) {
       stop("Invalid type of label data")
-    } else if (length(unique(v)) > 2L) {
-      stop("Invalid number of labels")
+    } else if (length(unique(v)) != 2L) {
+      stop("The number of unique labels must be 2")
     }
   }
 
-  .join_datasets(..., efunc_vtype = efunc_vtype, byrow = byrow)
+  # Set a function to check the number of vectors
+  if (chklen) {
+    efunc_nrow <- NULL
+  } else {
+    efunc_nrow <- function(m, vlen) NULL
+  }
+
+  # Call join datasets
+  .join_datasets(..., efunc_vtype = efunc_vtype, efunc_nrow = efunc_nrow,
+                 byrow = byrow)
 }
 
+#
 # Join datasets
+#
 .join_datasets <- function(..., efunc_vtype = NULL, efunc_nrow = NULL,
                            byrow = FALSE) {
-  # Get '...'
-  arglist <- list(...)
-  if (length(arglist) == 0) {
-    stop("No datasets specified")
-  }
+
+  # Validate arguments
+  .validate_join_datasets_args(..., efunc_vtype = efunc_vtype,
+                               efunc_nrow = efunc_nrow, byrow = byrow)
 
   # Set a default error function for checking values
   if (is.null(efunc_vtype)) {
@@ -71,9 +90,6 @@ join_labels <- function(..., byrow = FALSE) {
         stop("All vectors must be numeric")
       }
     }
-  } else if (class(efunc_vtype) != "function"
-             || length(as.list(formals(efunc_vtype))) != 1) {
-    stop("'efunc_vtype' must be a function with 1 argument")
   }
 
   # Set a default error function for checking the # of rows
@@ -83,19 +99,10 @@ join_labels <- function(..., byrow = FALSE) {
         stop("All vectors must be of the same size")
       }
     }
-  } else if (class(efunc_nrow) != "function"
-             || length(as.list(formals(efunc_nrow))) != 2) {
-    stop("'efunc_nrow' must be a function with 2 arguments")
-  }
-
-  # Check byrow
-  choices = c(FALSE, TRUE)
-  if (length(byrow) != 1L || !(byrow %in% choices)) {
-    stop(gettextf("'byrow' should be one of %s",
-                  paste(choices, collapse = ", ")))
   }
 
   # Make a list
+  arglist <- list(...)
   cdat <- list()
   for (ds in arglist) {
     if(is.atomic(ds) && (is.vector(ds) || is.factor(ds))) {
@@ -119,19 +126,33 @@ join_labels <- function(..., byrow = FALSE) {
         stop("Array must be 1 or 2 dimensions")
       }
     } else if (is.list(ds)) {
-      cdat <- c(cdat, ds)
+      if (any(unlist(lapply(ds, is.list)))) {
+        f_unlist <- function(ds2) {
+          new_list <- list()
+          for (i in 1:length(ds2)) {
+            if (is.list(ds2[[i]])) {
+              new_list <- c(new_list, f_unlist(ds2[[i]]))
+            } else {
+              new_list <- c(new_list, list(ds2[[i]]))
+            }
+          }
+          new_list
+        }
+        cdat <- c(cdat, f_unlist(ds))
+      } else {
+        cdat <- c(cdat, ds)
+      }
     } else {
-      stop("Incorrect type of data")
+      stop("Cannot join this type of data")
     }
   }
 
   # Validate cdat with efunc_vtype and efunc_nrow
   m <- length(cdat[[1]])
-  efuncs <- function(obj) {
-    efunc_vtype(obj)
-    efunc_nrow(m, length(obj))
+  for (i in 1:length(cdat)) {
+    efunc_vtype(cdat[[i]])
+    efunc_nrow(m, length(cdat[[i]]))
   }
-  lapply(cdat, efuncs)
 
   cdat
 }

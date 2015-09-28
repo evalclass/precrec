@@ -1,7 +1,7 @@
-context("M1 PL4: Create ROC and Precision-Recall curves")
-# Test create_curves(arg:pevals, arg:x.interval, arg:pscores, arg:olabs)
+context("PL6: Create ROC and Precision-Recall curves")
+# Test create_curves(pevals, x.interval, pscores, olabs)
 
-test_that("arg:pevals must be an 'pevals' object", {
+test_that("'pevals' must be an 'pevals' object", {
   expect_err_msg <- function(pevals) {
     err_msg <- "Unrecognized class for .validate()"
     eval(bquote(expect_error(create_curves(pevals), err_msg)))

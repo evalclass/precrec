@@ -4,7 +4,7 @@
 \alias{pl_main}
 \title{Control the main pipeline iterations.}
 \usage{
-pl_main(mdat, model_type = "multiple", data_type = "single",
+pl_main(mdat, model_type = "single", data_type = "single",
   x_interval = 0.001)
 }
 \arguments{

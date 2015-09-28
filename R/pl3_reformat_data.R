@@ -90,7 +90,7 @@ reformat_data <- function(pscores, olabs, na.last = FALSE,
   }
 
   if (nlevels(flabs) != length(olevs)) {
-    stop("'olevs' cotains the invalid number of unique labels")
+    stop("'olevs' must cotain two unique labels")
   }
   levels(flabs) <- olevs
 

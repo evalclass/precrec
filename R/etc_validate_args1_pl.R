@@ -19,9 +19,41 @@
 
 }
 
+# Validate arguments of .join_datasets()
+.validate_join_datasets_args <- function(..., efunc_vtype, efunc_nrow, byrow) {
+
+  # Check ...
+  arglist <- list(...)
+  if (length(arglist) == 0) {
+    stop("No datasets specified")
+  }
+
+  # Check efunc_vtype
+  if (!is.null(efunc_vtype)
+      && (class(efunc_vtype) != "function"
+          || length(as.list(formals(efunc_vtype))) != 1)) {
+    stop("'efunc_vtype' must be a function with 1 argument")
+  }
+
+  # Check efunc_nrow
+  if (!is.null(efunc_nrow)
+      && (class(efunc_nrow) != "function"
+          || length(as.list(formals(efunc_nrow))) != 2)) {
+    stop("'efunc_nrow' must be a function with 2 arguments")
+  }
+
+  # Check byrow
+  choices = c(FALSE, TRUE)
+  if (length(byrow) != 1L || !(byrow %in% choices)) {
+    stop(gettextf("'byrow' should be one of %s",
+                  paste(choices, collapse = ", ")))
+  }
+
+}
+
 # Validate arguments of mmdata()
 .validate_mmdata_args <- function(lpscores, lolabs, model_names, data_nos,
-                                  group_by, ...) {
+                                  exp_priority, na.last, ties.method, olevs) {
 
   # Check lpscores and lolabs
   if (length(lolabs) != 1 && length(lpscores) != length(lolabs)) {
@@ -34,6 +66,18 @@
 
   # Check data numbers
   .validate_data_nos(data_nos, length(lpscores))
+
+  # Check exp_priority
+  .validate_exp_priority(exp_priority)
+
+  # Check na.last
+  .validate_na_last(na.last)
+
+  # Check ties.method
+  .validate_ties_method(ties.method)
+
+  # Check levels
+  .validate_olevs(olevs)
 
 }
 

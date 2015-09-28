@@ -1,12 +1,12 @@
-context("M2 PL1: Join datasets")
-# Test .join_datasets(arg:..., arg:efunc_vtype, arg:efunc_nrow, arg:byrow)
+context("PL1: Join datasets")
+# Test .join_datasets(..., efunc_vtype, efunc_nrow, byrow)
 
-test_that("arg:... must be specified", {
+test_that("'...' must be specified", {
   err_msg <- "No datasets specified"
   expect_error(.join_datasets(), err_msg)
 })
 
-test_that("arg:efunc_vtype must be a function with 1 argument", {
+test_that("'efunc_vtype' must be a function with 1 argument", {
   expect_err_msg <- function(efunc_vtype) {
     err_msg <- "'efunc_vtype' must be a function with 1 argument"
     eval(bquote(expect_error(.join_datasets(c(0), efunc_vtype = efunc_vtype),
@@ -17,7 +17,7 @@ test_that("arg:efunc_vtype must be a function with 1 argument", {
   expect_err_msg(function() print())
 })
 
-test_that("arg:efunc_nrow must be a function with 2 arguments", {
+test_that("'efunc_nrow' must be a function with 2 arguments", {
   expect_err_msg <- function(efunc_nrow) {
     err_msg <- "'efunc_nrow' must be a function with 2 arguments"
     eval(bquote(expect_error(.join_datasets(c(0), efunc_nrow = efunc_nrow),
@@ -28,7 +28,7 @@ test_that("arg:efunc_nrow must be a function with 2 arguments", {
   expect_err_msg(function() print())
 })
 
-test_that("arg:byrow should be TRUE or FALSE", {
+test_that("'byrow' should be TRUE or FALSE", {
   expect_err_msg <- function(byrow) {
     err_msg <- "'byrow' should be one of FALSE, TRUE"
     eval(bquote(expect_error(.join_datasets(c(0), byrow = byrow), err_msg)))
@@ -50,7 +50,7 @@ test_that(".join_datasets() returns a list", {
 
 test_that(".join_datasets() only accepts basic data types", {
   expect_err_msg <- function(dat) {
-    err_msg <- "Incorrect type of data"
+    err_msg <- "Cannot join this type of data"
     eval(bquote(expect_error(.join_datasets(dat), err_msg)))
   }
 
@@ -169,6 +169,32 @@ test_that(".join_datasets() accepts lists", {
   expect_equal(cdat_list[[2]], c(4, 5, 6))
   expect_equal(cdat_list[[3]], c(7, 8, 9))
 })
+
+test_that(".join_datasets() accepts lists with two levels", {
+  list1 = list(a = 1:3)
+  list2 = list(b = 4:6, c = list(d = 7:9, e = 10:12))
+  cdat_list <- .join_datasets(list1, list2)
+
+  expect_equal(length(cdat_list), 4)
+  expect_equal(cdat_list[[1]], c(1, 2, 3))
+  expect_equal(cdat_list[[2]], c(4, 5, 6))
+  expect_equal(cdat_list[[3]], c(7, 8, 9))
+  expect_equal(cdat_list[[4]], c(10, 11, 12))
+})
+
+test_that(".join_datasets() accepts lists with multiple levels", {
+  list1 = list(a = 1:3)
+  list2 = list(b = 4:6, c = list(d = list(e = 7:9, f = 10:12), g = 13:15))
+  cdat_list <- .join_datasets(list1, list2)
+
+  expect_equal(length(cdat_list), 5)
+  expect_equal(cdat_list[[1]], c(1, 2, 3))
+  expect_equal(cdat_list[[2]], c(4, 5, 6))
+  expect_equal(cdat_list[[3]], c(7, 8, 9))
+  expect_equal(cdat_list[[4]], c(10, 11, 12))
+  expect_equal(cdat_list[[5]], c(13, 14, 15))
+})
+
 
 test_that(".join_datasets() accepts various data types", {
   vec1 <- 1:3

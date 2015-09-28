@@ -40,7 +40,7 @@
 #' mdat <- mmdata(pscores, olabs, model_names = model_names)
 #' mdat
 mmdata <- function(pscores, olabs, model_names = NULL, data_nos = NULL,
-                   group_by = "model_name",  na.last = FALSE,
+                   exp_priority = "model_names",  na.last = FALSE,
                    ties.method = "average",
                    olevs = c("negative", "positive"), ...) {
 
@@ -49,9 +49,10 @@ mmdata <- function(pscores, olabs, model_names = NULL, data_nos = NULL,
   lolabs <- join_labels(olabs)
 
   # === Validate arguments and variables ===
-  .validate_mmdata_args(lpscores, lolabs, model_names, data_nos, group_by,
-                        na.last = na.last, ties.method = ties.method,
-                        olevs = olevs, ...)
+  exp_priority <- .pmatch_exp_priority(exp_priority)
+  .validate_mmdata_args(lpscores, lolabs, model_names, data_nos,
+                        exp_priority = "model_names", na.last = na.last,
+                        ties.method = ties.method, olevs = olevs)
 
   # Replicate olabs
   if (length(lpscores) != 1 && length(lolabs) == 1) {
@@ -59,7 +60,8 @@ mmdata <- function(pscores, olabs, model_names = NULL, data_nos = NULL,
   }
 
   # === Model names and data set numbers ===
-  mnames <- .get_modnames(length(lpscores), model_names, data_nos, group_by)
+  mnames <- .create_modnames(length(lpscores), model_names, data_nos,
+                             exp_priority)
   new_model_names <- mnames[["mn"]]
   new_data_nos <- mnames[["dn"]]
 
@@ -87,8 +89,59 @@ mmdata <- function(pscores, olabs, model_names = NULL, data_nos = NULL,
   .validate(s3obj)
 }
 
+#
+# Check partial match - exp_priority
+#
+.pmatch_exp_priority <- function(val) {
+  if (.is_single_string(val)) {
+    if (val == "data_nos" || val == "model_names") {
+      return(val)
+    }
+
+    if (!is.na(pmatch(val, "data_nos"))) {
+      return("data_nos")
+    }
+
+    if (!is.na(pmatch(val, "model_names"))) {
+      return("model_names")
+    }
+  }
+
+  val
+}
+
+#
+# Check partial match - ties method
+#
+.pmatch_tiesmethod <- function(val) {
+  if (.is_single_string(val)) {
+    choices = c("average", "random", "first")
+    if (val %in% choices) {
+      return(val)
+    }
+
+    if (!is.na(pmatch(val, "average"))) {
+      return("average")
+    }
+
+    if (!is.na(pmatch(val, "random"))) {
+      return("random")
+    }
+
+    if (!is.na(pmatch(val, "first"))) {
+      return("first")
+    }
+
+  }
+
+  val
+}
+
+#
 # Get model names and data numbers
-.get_modnames <- function(dlen, model_names, data_nos, group_by) {
+#
+.create_modnames <- function(dlen, model_names, data_nos,
+                             exp_priority = "data_nos") {
   len_mn <- length(model_names)
   len_dn <- length(data_nos)
   is_null_mn <- is.null(model_names)
@@ -116,10 +169,10 @@ mmdata <- function(pscores, olabs, model_names = NULL, data_nos = NULL,
 
   # Expand both model names and data numbers
   if (len_mn * len_dn == dlen) {
-    if (group_by == "data_no") {
+    if (exp_priority == "model_names") {
       modnames[["mn"]] <- rep(model_names, len_dn)
       modnames[["dn"]] <- rep(data_nos, each = len_mn)
-    } else if (group_by == "model_name") {
+    } else if (exp_priority == "data_nos") {
       modnames[["mn"]] <- rep(model_names, each = len_dn)
       modnames[["dn"]] <- rep(data_nos, len_mn)
     }
@@ -129,10 +182,10 @@ mmdata <- function(pscores, olabs, model_names = NULL, data_nos = NULL,
 
   # Expand model names and assign a single data number
   if (is_null_mn && is_null_dn) {
-    if (group_by == "data_no") {
+    if (exp_priority == "model_names") {
       modnames[["mn"]] <- paste0("m", seq(dlen))
       modnames[["dn"]] <- rep(1, dlen)
-    } else if (group_by == "model_name") {
+    } else if (exp_priority == "data_nos") {
       modnames[["mn"]] <- rep("m1", dlen)
       modnames[["dn"]] <- seq(dlen)
     }
@@ -141,6 +194,6 @@ mmdata <- function(pscores, olabs, model_names = NULL, data_nos = NULL,
   }
 
   # === Error handling ===
-  stop("Invalid 'model_names' & 'data_nos'")
+  stop("Invalid 'model_names' and/or 'data_nos'")
 
 }

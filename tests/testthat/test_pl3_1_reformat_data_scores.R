@@ -1,7 +1,7 @@
-context("M1 PL1: Reformat scores for evaluation")
-# Test .rank_scores(arg:pscores, arg:na.last, arg:ties.method)
+context("PL3: Reformat scores for evaluation")
+# Test .rank_scores(pscores, na.last, ties.method)
 
-test_that("arg:pscores takes an numeric vector", {
+test_that("'pscores' takes an numeric vector", {
   expect_err_msg <- function(pscores) {
     err_msg <- "'pscores' must be a numeric vector"
     eval(bquote(expect_error(.rank_scores(pscores), err_msg)))
@@ -16,7 +16,7 @@ test_that("arg:pscores takes an numeric vector", {
   expect_err_msg(NULL)
 })
 
-test_that("Length of arg:pscores must be >=1", {
+test_that("Length of 'pscores' must be >=1", {
   expect_err_msg <- function(pscores) {
     err_msg <- "'pscores' must be length >= 1"
     eval(bquote(expect_error(.rank_scores(pscores), err_msg)))
@@ -25,10 +25,10 @@ test_that("Length of arg:pscores must be >=1", {
   expect_err_msg(as.numeric())
 })
 
-test_that("arg:na.last should be TRUE or FALSE", {
+test_that("'na.last' should be TRUE or FALSE", {
   expect_err_msg <- function(na.last) {
     pscores <- c(1.1, 2.2)
-    err_msg <- "'na.last' should be one of FALSE, TRUE"
+    err_msg <- "'na.last' must be either FALSE or TRUE"
     eval(bquote(expect_error(.rank_scores(pscores, na.last = na.last),
                              err_msg)))
   }
@@ -42,10 +42,10 @@ test_that("arg:na.last should be TRUE or FALSE", {
   expect_err_msg("keep")
 })
 
-test_that("arg:ties.method should be one of the three options", {
+test_that("'ties.method' should be one of the three options", {
   expect_err_msg <- function(ties.method) {
     scores <- c(1, 2)
-    choices = c("average", "random", "first")
+    choices <- c("average", "random", "first")
     err_msg <- gettextf("'ties.method' should be one of %s",
                         paste(dQuote(choices), collapse = ", "))
     eval(bquote(expect_error(.rank_scores(scores, ties.method = ties.method),
@@ -77,7 +77,7 @@ test_that("rank_scores() reterns a vector with the same length as input", {
   expect_equal_length(pscores2)
 })
 
-test_that("NAs in arg:scores should be controlled by arg:na.last", {
+test_that("NAs in 'scores' should be controlled by 'na.last'", {
   expect_equal_ranks <- function(pscores, na.last, ranks) {
     eval(bquote(expect_equal(.rank_scores(pscores, na.last = na.last), ranks)))
   }
@@ -96,7 +96,7 @@ test_that("NAs in arg:scores should be controlled by arg:na.last", {
   expect_equal_ranks(na3_pscores, FALSE, c(3, 2, 1))
 })
 
-test_that("Ties should be controlled by arg:ties.method", {
+test_that("Ties should be controlled by 'ties.method'", {
   expect_equal_ranks <- function(ties.method, ranks) {
     pscores <- c(0.1, 0.2, 0.2, 0.2, 0.3)
     eval(bquote(expect_equal(.rank_scores(pscores, ties.method = ties.method),

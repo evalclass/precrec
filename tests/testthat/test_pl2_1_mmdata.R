@@ -1,10 +1,21 @@
-context("M2 PL1: Create mmdata")
-# Test mmdata(arg:pscores, arg:olabs, arg:model_names, arg:data_nos,
-#             arg:na.last, arg:ties.method, arg:olevs, arg:...)
+context("PL2: Create mmdata")
+# Test .pmatch_tiesmethod(val),
+#      mmdata(pscores, olabs, model_names, data_nos,
+#             na.last, ties.method, olevs, ...)
 
-test_that("arg:pscores and arg:olabs must be specified", {
+test_that(".pmatch_tiesmethod() returns 'average', 'random', 'first'", {
+  expect_equal(.pmatch_tiesmethod("a"), "average")
+  expect_equal(.pmatch_tiesmethod("r"), "random")
+  expect_equal(.pmatch_tiesmethod("f"), "first")
+
+  expect_equal(.pmatch_tiesmethod("A"), "A")
+  expect_equal(.pmatch_tiesmethod(1), 1)
+  expect_equal(.pmatch_tiesmethod(NULL), NULL)
+})
+
+test_that("'pscores' and 'olabs' must be specified", {
   expect_err_msg <- function(pscores, olabs) {
-    err_msg <- "Incorrect type of data"
+    err_msg <- "Cannot join this type of data"
     eval(bquote(expect_error(mmdata(pscores, olabs), err_msg)))
   }
 
@@ -14,7 +25,7 @@ test_that("arg:pscores and arg:olabs must be specified", {
   expect_err_msg(pscores, olabs)
 })
 
-test_that("arg:pscores and arg:olabs should be the same length", {
+test_that("'pscores' and 'olabs' should be the same length", {
   expect_err_msg <- function(pscores, olabs) {
     err_msg <- paste0("'pscores' and 'olabs' should be ",
                       "of the same size, or ",
@@ -34,7 +45,7 @@ test_that("arg:pscores and arg:olabs should be the same length", {
   expect_err_msg(pscores, olabs)
 })
 
-test_that("mmdata() reterns a 'mmdata' object", {
+test_that("mmdata() reterns a 'mdat' object", {
   mdat <- mmdata(c(0.1, 0.2, 0), c(1, 0, 1))
 
   expect_equal(class(mdat), "mdat")
@@ -102,3 +113,119 @@ test_that("All items in 'pscores' and 'olabs' must be of the same length", {
 
   expect_err_msg(pscores, olabs)
 })
+
+test_that("mmdata() accepts 'model_names'", {
+  s1 <- c(1, 2, 3, 4)
+  l1 <- c(1, 0, 1, 0)
+
+  mdat <- mmdata(s1, l1, model_names = "model1")
+  expect_equal(attr(mdat[[1]], "args")[["model_name"]], "model1")
+
+  expect_err_msg <- function(s1, l1, model_names) {
+    err_msg <- "Invalid model names"
+    eval(bquote(expect_error(mmdata(s1, l1, model_names = model_names),
+                             err_msg)))
+  }
+
+  expect_err_msg(s1, l1, c("A", "B"))
+  expect_err_msg(s1, l1, NA)
+
+})
+
+test_that("mmdata() accepts 'data_nos'", {
+  s1 <- c(1, 2, 3, 4)
+  l1 <- c(1, 0, 1, 0)
+
+  mdat <- mmdata(s1, l1, data_nos = 10)
+  expect_equal(attr(mdat[[1]], "args")[["data_no"]], 10)
+
+  expect_err_msg <- function(s1, l1, data_nos) {
+    err_msg <- "Invalid data numbers"
+    eval(bquote(expect_error(mmdata(s1, l1, data_nos = data_nos), err_msg)))
+  }
+
+  expect_err_msg(s1, l1, c("A", "B"))
+  expect_err_msg(s1, l1, NA)
+
+})
+
+test_that("mmdata() accepts 'na.last'", {
+  s1 <- c(1, 2, 3, 4)
+  l1 <- c(1, 0, 1, 0)
+
+  mdat <- mmdata(s1, l1, na.last = FALSE)
+  expect_equal(attr(mdat[[1]], "args")[["na.last"]], FALSE)
+
+  mdat <- mmdata(s1, l1, na.last = TRUE)
+  expect_equal(attr(mdat[[1]], "args")[["na.last"]], TRUE)
+
+  expect_err_msg <- function(s1, l1, na.last) {
+    err_msg <- "'na.last' must be either FALSE or TRUE"
+    eval(bquote(expect_error(mmdata(s1, l1, na.last = na.last), err_msg)))
+  }
+  expect_err_msg(s1, l1, as.logical(NA))
+  expect_err_msg(s1, l1, NA)
+
+})
+
+test_that("mmdata() accepts 'ties.method'", {
+  s1 <- c(1, 2, 3, 4)
+  l1 <- c(1, 0, 1, 0)
+
+  mdat <- mmdata(s1, l1, ties.method = "average")
+  expect_equal(attr(mdat[[1]], "args")[["ties.method"]], "average")
+
+  mdat <- mmdata(s1, l1, ties.method = "random")
+  expect_equal(attr(mdat[[1]], "args")[["ties.method"]], "random")
+
+  mdat <- mmdata(s1, l1, ties.method = "first")
+  expect_equal(attr(mdat[[1]], "args")[["ties.method"]], "first")
+
+  expect_err_msg <- function(s1, l1, ties.method) {
+    err_msg <- "'ties.method' should be one of "
+    eval(bquote(expect_error(mmdata(s1, l1, ties.method = ties.method),
+                             err_msg)))
+  }
+  expect_err_msg(s1, l1, "min")
+  expect_err_msg(s1, l1, "max")
+
+})
+
+test_that("mmdata() accepts 'olevs'", {
+  s1 <- c(1, 2, 3, 4)
+  l1 <- c(1, 0, 1, 0)
+
+  mdat <- mmdata(s1, l1, olevs = c("N", "P"))
+  expect_equal(attr(mdat[[1]], "args")[["olevs"]], c("N", "P"))
+
+  expect_err_msg <- function(s1, l1, olevs) {
+    err_msg <- "'olevs' must"
+    eval(bquote(expect_error(mmdata(s1, l1, olevs = olevs), err_msg)))
+  }
+  expect_err_msg(s1, l1, c(0, 1))
+  expect_err_msg(s1, l1, c("N", "P", "P2"))
+
+})
+
+test_that("mmdata() accepts 'exp_priority", {
+  s1 <- c(1, 2, 3, 4)
+  s2 <- c(5, 6, 7, 8)
+  s3 <- c(2, 4, 6, 8)
+  pscores <- join_scores(s1, s2, s3)
+
+  l1 <- c(1, 0, 1, 1)
+  l2 <- c(1, 1, 0, 1)
+  l3 <- c(0, 1, 0, 1)
+  olabs <- join_labels(l1, l2, l3)
+
+  dlen <- 3
+
+  mdat1 <- mmdata(pscores, olabs, exp_priority = "model_names")
+  expect_equal(attr(mdat1, "model_names"), c("m1", "m2", "m3"))
+  expect_equal(attr(mdat1, "data_nos"), rep(1, 3))
+
+  mdat2 <- mmdata(pscores, olabs, exp_priority = "data_nos")
+  expect_equal(attr(mdat2, "model_names"), rep("m1", 3))
+  expect_equal(attr(mdat2, "data_nos"), seq(3))
+})
+

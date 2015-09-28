@@ -1,7 +1,7 @@
-context("M1 PL3: Calculate evaluation measures")
-# Test calc_measures(arg:cmats, arg:pscores, arg:olabs)
+context("PL5: Calculate evaluation measures")
+# Test calc_measures(cmats, pscores, olabs)
 
-test_that("arg:cmats must be a 'cmats' object", {
+test_that("'cmats' must be a 'cmats' object", {
   expect_err_msg <- function(cmats) {
     err_msg <- "Unrecognized class for .validate()"
     eval(bquote(expect_error(calc_measures(cmats), err_msg)))

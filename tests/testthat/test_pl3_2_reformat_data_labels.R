@@ -1,7 +1,7 @@
-context("M1 PL1: Reformat labels for evaluation")
-# Test .factor_labels(args:olabs, args:olevs)
+context("PL3: Reformat labels for evaluation")
+# Test .factor_labels(olabs, olevs)
 
-test_that("args:olabs takes an numeric vector", {
+test_that("'olabs' takes an numeric vector", {
   expect_err_msg <- function(olabs) {
     err_msg <- "'olabs' must be either a numeric vector or a factor"
     eval(bquote(expect_error(.factor_labels(olabs), err_msg)))
@@ -15,9 +15,9 @@ test_that("args:olabs takes an numeric vector", {
   expect_err_msg(NULL)
 })
 
-test_that("args:olabs takes one or two unique labels", {
+test_that("'olabs' takes two unique labels", {
   expect_err_msg <- function(olabs) {
-    err_msg <- "'olabs' cotains the invalid number of unique labels"
+    err_msg <- "'olabs' must cotain two unique labels"
     eval(bquote(expect_error(.factor_labels(olabs), err_msg)))
   }
 
@@ -25,7 +25,7 @@ test_that("args:olabs takes one or two unique labels", {
   expect_err_msg(c(-1, 0, -1, 2))
 })
 
-test_that("args:olevs takes a character vector or a factor", {
+test_that("'olevs' takes a character vector or a factor", {
   expect_err_msg <- function(olevs) {
     olabs <- c(-1, 1)
     err_msg <- "'olevs' must be a charactor vector"
@@ -40,10 +40,10 @@ test_that("args:olevs takes a character vector or a factor", {
   expect_err_msg(c(TRUE, FALSE))
 })
 
-test_that("args:olevs takes one or two unique labels", {
+test_that("'olevs' takes two unique labels", {
   expect_err_msg <- function(olevs) {
     olabs <- c(0, 1)
-    err_msg <- "'olevs' cotains the invalid number of unique labels"
+    err_msg <- "'olevs' must cotain two unique labels"
     eval(bquote(expect_error(.factor_labels(olabs, olevs = olevs), err_msg)))
   }
 

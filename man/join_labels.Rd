@@ -4,7 +4,7 @@
 \alias{join_labels}
 \title{Join observed labels of multiple models into a list.}
 \usage{
-join_labels(..., byrow = FALSE)
+join_labels(..., byrow = FALSE, chklen = TRUE)
 }
 \arguments{
 \item{...}{Multiple datasets. They can be vectors, arrays, data frames,
