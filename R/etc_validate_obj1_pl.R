@@ -168,7 +168,7 @@
 .validate_curve <- function(obj, class_name, func_name) {
   # Validate class items and attributes
   item_names <- c("x", "y", "orig_points")
-  attr_names <- c("model_name", "data_no", "nn", "np", "auc", "auc2", "partial",
+  attr_names <- c("model_name", "data_no", "nn", "np", "auc", "partial", "pauc",
                   "x_limits", "y_limits", "args", "cpp_errmsg1", "cpp_errmsg2",
                   "src", "validated")
   arg_names <- c("x_interval", "na.last", "ties.method", "olevs",
@@ -186,8 +186,8 @@
 
   # Check values of class attributes
   stopifnot((attr(obj, "auc") >= 0) && (attr(obj, "auc") <= 1),
-            (is.na(attr(obj, "auc2"))
-             || (attr(obj, "auc2") >= 0 && attr(obj, "auc2") <= 1)),
+            (is.na(attr(obj, "pauc"))
+             || (attr(obj, "pauc") >= 0 && attr(obj, "pauc") <= 1)),
             .is_logical_vec(attr(obj, "partial")),
             .is_numeric_vec(attr(obj, "x_limits")),
             length(attr(obj, "x_limits")) == 2,

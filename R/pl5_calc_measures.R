@@ -30,6 +30,7 @@ calc_measures <- function(cmats, pscores = NULL, olabs = NULL, ...) {
   # Create cmats from scores and labels if cmats is missing
   cmats <- .create_by_scores_and_labels(cmats, "cmats", create_confmats,
                                         pscores, olabs, ...)
+  .validate(cmats)
 
   # === Create confusion matrices for all possible threshold values ===
   # Call a cpp function via Rcpp interface

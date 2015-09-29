@@ -25,9 +25,6 @@
   # Check attributes
   ditems <- setdiff(attr_names, names(attributes(obj)))
   if (!is.null(attr_names) && length(ditems) > 0) {
-    print(attributes(obj))
-    print(ditems)
-    print(paste(ditems))
     stop(paste0("Missing items in '", class_name, "' attributes: ",
                 paste(ditems, collapse = ", ")))
   }

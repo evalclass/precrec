@@ -113,11 +113,3 @@
 
   .validate_pscores_and_olabs(obj, obj_name, scores, olabs, ...)
 }
-
-# Validate arguments of create_curves()
-.validate_create_curves_args <- function(x_interval, ...) {
-
-  # Check x_interval
-  .validate_x_interval(x_interval)
-
-}

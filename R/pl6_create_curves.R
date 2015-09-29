@@ -31,8 +31,8 @@ create_curves <- function(pevals, x_interval = 0.001, pscores = NULL,
   # Create pevals from scores and labels if pevals is missing
   pevals <- .create_by_scores_and_labels(pevals, "pevals", calc_measures,
                                          pscores, olabs, ...)
-
-  .validate_create_curves_args(x_interval, ...)
+  .validate_x_interval(x_interval)
+  .validate(pevals)
 
   # === Create ROC and Precision-Recall curves ===
   roc_curve <- create_roc(pevals, x_interval)
@@ -125,7 +125,9 @@ create_prc <- function(pevals, x_interval = 0.001, pscores = NULL, olabs = NULL,
                 pscores, olabs, ...)
 }
 
+#
 # Create either a ROC or a Precision-Recall curve
+#
 .create_curve <- function(x_name, y_name, func, func_name, class_name,
                           pevals, x_interval = 0.001, pscores = NULL,
                           olabs = NULL, ...) {
@@ -134,8 +136,8 @@ create_prc <- function(pevals, x_interval = 0.001, pscores = NULL, olabs = NULL,
   # Create pevals from scores and labels if pevals us missing
   pevals <- .create_by_scores_and_labels(pevals, "pevals", calc_measures,
                                          pscores, olabs, ...)
-
-  .validate_create_curves_args(x_interval, ...)
+  .validate_x_interval(x_interval)
+  .validate(pevals)
 
   # === Create a curve ===
   # Calculate a curve
@@ -163,8 +165,8 @@ create_prc <- function(pevals, x_interval = 0.001, pscores = NULL, olabs = NULL,
   attr(s3obj, "nn") <- attr(pevals, "nn")
   attr(s3obj, "np") <- attr(pevals, "np")
   attr(s3obj, "auc") <- auc[["auc"]]
-  attr(s3obj, "auc2") <- NA
   attr(s3obj, "partial") <- FALSE
+  attr(s3obj, "pauc") <- NA
   attr(s3obj, "x_limits") <- c(0, 1)
   attr(s3obj, "y_limits") <- c(0, 1)
   attr(s3obj, "args") <- c(list(x_interval = x_interval), list(...))

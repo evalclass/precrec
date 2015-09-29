@@ -27,6 +27,7 @@ create_confmats <- function(fmdat, pscores = NULL, olabs = NULL, ...) {
   # Create fmdat from scores and labels if fmdat is missing
   fmdat <- .create_by_scores_and_labels(fmdat, "fmdat", reformat_data,
                                         pscores, olabs, ...)
+  .validate(fmdat)
 
   # === Create confusion matrices for all possible threshold values ===
   # Call a cpp function via Rcpp interface

@@ -102,7 +102,11 @@
       stop("The first argument must be specified.")
     }
   } else {
-    obj <- .validate_reformat_data_args(obj, obj_name, pscores, olabs, ...)
+    arglist <- list(...)
+    if (length(arglist) != 0) {
+      warning(gettextf("%s are ignored",
+                       paste(dQuote(choices), collapse = ", ")))
+    }
   }
 
   obj
