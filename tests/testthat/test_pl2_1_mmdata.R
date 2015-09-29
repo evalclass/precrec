@@ -1,6 +1,6 @@
 context("PL2: Create mmdata")
 # Test .pmatch_tiesmethod(val),
-#      mmdata(pscores, olabs, model_names, data_nos,
+#      mmdata(scores, olabs, model_names, data_nos,
 #             na.last, ties.method, olevs, ...)
 
 test_that(".pmatch_tiesmethod() returns 'average', 'random', 'first'", {
@@ -13,36 +13,36 @@ test_that(".pmatch_tiesmethod() returns 'average', 'random', 'first'", {
   expect_equal(.pmatch_tiesmethod(NULL), NULL)
 })
 
-test_that("'pscores' and 'olabs' must be specified", {
-  expect_err_msg <- function(pscores, olabs) {
+test_that("'scores' and 'olabs' must be specified", {
+  expect_err_msg <- function(scores, olabs) {
     err_msg <- "Cannot join this type of data"
-    eval(bquote(expect_error(mmdata(pscores, olabs), err_msg)))
+    eval(bquote(expect_error(mmdata(scores, olabs), err_msg)))
   }
 
-  pscores <- NULL
+  scores <- NULL
   olabs <- c(0)
 
-  expect_err_msg(pscores, olabs)
+  expect_err_msg(scores, olabs)
 })
 
-test_that("'pscores' and 'olabs' should be the same length", {
-  expect_err_msg <- function(pscores, olabs) {
-    err_msg <- paste0("'pscores' and 'olabs' should be ",
+test_that("'scores' and 'olabs' should be the same length", {
+  expect_err_msg <- function(scores, olabs) {
+    err_msg <- paste0("'scores' and 'olabs' should be ",
                       "of the same size, or ",
                       "the size of 'olabs' should be 1")
-    eval(bquote(expect_error(mmdata(pscores, olabs), err_msg)))
+    eval(bquote(expect_error(mmdata(scores, olabs), err_msg)))
   }
 
   s1 <- c(1, 2, 3, 4)
   s2 <- c(5, 6, 7, 8)
   s3 <- c(2, 4, 6, 8)
-  pscores <- join_scores(s1, s2, s3)
+  scores <- join_scores(s1, s2, s3)
 
   l1 <- c(1, 0, 1, 1)
   l2 <- c(1, 1, 0, 0)
   olabs <- join_labels(l1, l2)
 
-  expect_err_msg(pscores, olabs)
+  expect_err_msg(scores, olabs)
 })
 
 test_that("mmdata() reterns a 'mdat' object", {
@@ -62,14 +62,14 @@ test_that("'mdat' contains a list with 3 items", {
   s1 <- c(1, 2, 3, 4)
   s2 <- c(5, 6, 7, 8)
   s3 <- c(2, 4, 6, 8)
-  pscores <- join_scores(s1, s2, s3)
+  scores <- join_scores(s1, s2, s3)
 
   l1 <- c(1, 0, 1, 1)
   l2 <- c(1, 1, 0, 0)
   l3 <- c(0, 1, 0, 1)
   olabs <- join_labels(l1, l2, l3)
 
-  mdat <- mmdata(pscores, olabs)
+  mdat <- mmdata(scores, olabs)
 
   expect_true(is.list(mdat))
   expect_equal(length(mdat), 3)
@@ -79,12 +79,12 @@ test_that("mmdata() can take only one 'olabs' dataset", {
   s1 <- c(1, 2, 3, 4)
   s2 <- c(5, 6, 7, 8)
   s3 <- c(2, 4, 6, 8)
-  pscores <- join_scores(s1, s2, s3)
+  scores <- join_scores(s1, s2, s3)
 
   l1 <- c(2, 1, 2, 2)
   olabs <- join_labels(l1)
 
-  mdat <- mmdata(pscores, olabs)
+  mdat <- mmdata(scores, olabs)
 
   m1l1 <- mdat[[1]][["olabs"]]
   m2l1 <- mdat[[2]][["olabs"]]
@@ -95,23 +95,23 @@ test_that("mmdata() can take only one 'olabs' dataset", {
   expect_equal(l1, as.numeric(m3l1))
 })
 
-test_that("All items in 'pscores' and 'olabs' must be of the same length", {
-  expect_err_msg <- function(pscores, olabs) {
-    err_msg <- "'pscores' and 'olabs' must be of the same length"
-    eval(bquote(expect_error(mmdata(pscores, olabs), err_msg)))
+test_that("All items in 'scores' and 'olabs' must be of the same length", {
+  expect_err_msg <- function(scores, olabs) {
+    err_msg <- "scores and olabs must be of the same length"
+    eval(bquote(expect_error(mmdata(scores, olabs), err_msg)))
   }
 
   s1 <- c(1, 2, 3, 4)
   s2 <- c(5, 6, 7, 8)
   s3 <- c(2, 4, 6, 8)
-  pscores <- join_scores(s1, s2, s3)
+  scores <- join_scores(s1, s2, s3)
 
   l1 <- c(1, 0, 1)
   l2 <- c(1, 1, 0)
   l3 <- c(0, 1, 0)
   olabs <- join_labels(l1, l2, l3)
 
-  expect_err_msg(pscores, olabs)
+  expect_err_msg(scores, olabs)
 })
 
 test_that("mmdata() accepts 'model_names'", {
@@ -218,7 +218,7 @@ test_that("mmdata() accepts 'exp_priority", {
   s1 <- c(1, 2, 3, 4)
   s2 <- c(5, 6, 7, 8)
   s3 <- c(2, 4, 6, 8)
-  pscores <- join_scores(s1, s2, s3)
+  scores <- join_scores(s1, s2, s3)
 
   l1 <- c(1, 0, 1, 1)
   l2 <- c(1, 1, 0, 1)
@@ -227,11 +227,11 @@ test_that("mmdata() accepts 'exp_priority", {
 
   dlen <- 3
 
-  mdat1 <- mmdata(pscores, olabs, exp_priority = "model_names")
+  mdat1 <- mmdata(scores, olabs, exp_priority = "model_names")
   expect_equal(attr(mdat1, "model_names"), c("m1", "m2", "m3"))
   expect_equal(attr(mdat1, "data_nos"), rep(1, 3))
 
-  mdat2 <- mmdata(pscores, olabs, exp_priority = "data_nos")
+  mdat2 <- mmdata(scores, olabs, exp_priority = "data_nos")
   expect_equal(attr(mdat2, "model_names"), rep("m1", 3))
   expect_equal(attr(mdat2, "data_nos"), seq(3))
 })

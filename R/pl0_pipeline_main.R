@@ -14,14 +14,14 @@
 #' s1 <- c(1, 2, 3, 4)
 #' s2 <- c(5, 6, 7, 8)
 #' s3 <- c(2, 4, 6, 8)
-#' pscores <- combine_pscores(s1, s2, s3)
+#' scores <- join_scores(s1, s2, s3)
 #'
 #' l1 <- c(1, 0, 1, 1)
 #' l2 <- c(1, 1, 0, 0)
 #' l3 <- c(0, 1, 0, 1)
 #' olabs <- combine_olabs(l1, l2, l3)
 #'
-#' mdat <- mmdata(pscores, olabs)
+#' mdat <- mmdata(scores, olabs)
 #' pl_main(mdat)
 pl_main <- function(mdat, model_type = "single", data_type = "single",
                     x_interval = 0.001) {

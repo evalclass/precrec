@@ -5,7 +5,7 @@
 \title{Reformat input data for Precision-Recall and ROC evaluation
 with multiple models.}
 \usage{
-mmdata(pscores, olabs, model_names = NULL, data_nos = NULL,
+mmdata(scores, olabs, model_names = NULL, data_nos = NULL,
   exp_priority = "model_names", na.last = FALSE, ties.method = "average",
   olevs = c("negative", "positive"), ...)
 }
@@ -46,7 +46,7 @@ evaluation pipeline.
 s1 <- c(1, 2, 3, 4)
 s2 <- c(5, 6, 7, 8)
 s3 <- c(2, 4, 6, 8)
-pscores <- join_scores(s1, s2, s3)
+scores <- join_scores(s1, s2, s3)
 
 l1 <- c(1, 0, 1, 1)
 l2 <- c(1, 1, 0, 0)
@@ -55,7 +55,7 @@ olabs <- join_labels(l1, l2, l3)
 
 model_names <- c("t1", "t2", "t3")
 
-mdat <- mmdata(pscores, olabs, model_names = model_names)
+mdat <- mmdata(scores, olabs, model_names = model_names)
 mdat
 }
 

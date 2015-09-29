@@ -26,7 +26,7 @@ and convert it to a data frame .
 \examples{
 library(ggplot2)
 data(P10N10)
-curves <- evalmod(pscores = P10N10$scores, olabs = P10N10$labels)
+curves <- evalmod(scores = P10N10$scores, olabs = P10N10$labels)
 
 df <- fortify(curves)
 p_roc <- ggplot2::ggplot(subset(df, group == "ROC"), aes(x = x, y = y))

@@ -18,7 +18,7 @@
 }
 \examples{
 data(B500)
-roc_curve <- create_roc(pscores = B500$good_er_scores,
+roc_curve <- create_roc(scores = B500$good_er_scores,
                         olabs = B500$labels)
 print(roc_curve)
 }

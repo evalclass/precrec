@@ -6,7 +6,7 @@
 #' by a subsequent function, \code{\link{create_confmats}}, in the perforamcne
 #' evaluation pipeline.
 #'
-#' @param pscores A numeric vector of predicted scores.
+#' @param scores A numeric vector of predicted scores.
 #' @param olabs A numeric vector or a factor of observed labels.
 #' @param na.last Passed to \code{\link[base]{rank}} for controlling the
 #'   treatment of NAs. The value can be TRUE or FALSE. If TRUE, missing values
@@ -26,19 +26,19 @@
 #' @examples
 #' reformat_data(c(0.1, 0.2, 0.3), c(0, 1, 1))
 #' reformat_data(c(0.3, 0.1, 0.2), c(-1, -1, 1))
-reformat_data <- function(pscores, olabs, na.last = FALSE,
+reformat_data <- function(scores, olabs, na.last = FALSE,
                           ties.method = "average",
                           olevs = c("negative", "positive"),
                           model_name = as.character(NA), data_no = 1L, ...) {
 
   # === Validate input arguments ===
-  .validate_reformat_data_args(NULL, NULL, pscores, olabs, na.last = na.last,
+  .validate_reformat_data_args(NULL, NULL, scores, olabs, na.last = na.last,
                                ties.method = ties.method, olevs = olevs,
                                model_name = model_name, data_no = data_no, ...)
 
   # === Reformat input data ===
   # Get score ranks and sorted indices
-  ranks <- .rank_scores(pscores, na.last, ties.method, validate = FALSE)
+  ranks <- .rank_scores(scores, na.last, ties.method, validate = FALSE)
   rank_idx <- order(ranks, decreasing = TRUE)
 
   # Get a factor with "positive" and "negative"
@@ -98,16 +98,16 @@ reformat_data <- function(pscores, olabs, na.last = FALSE,
 }
 
 # Rank scores
-.rank_scores <- function(pscores, na.last = FALSE, ties.method = "average",
+.rank_scores <- function(scores, na.last = FALSE, ties.method = "average",
                          validate = TRUE) {
 
   # === Validate input arguments ===
   if (validate) {
-    .validate_pscores((pscores))
+    .validate_scores((scores))
     .validate_na_last(na.last)
     .validate_ties_method(ties.method)
   }
 
   # === Create ranks ===
-  ranks <- rank(pscores, na.last, ties.method)
+  ranks <- rank(scores, na.last, ties.method)
 }

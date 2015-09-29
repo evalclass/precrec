@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' data(P10N10)
-#' curves <- evalmod(pscores = P10N10$scores, olabs = P10N10$labels)
+#' curves <- evalmod(scores = P10N10$scores, olabs = P10N10$labels)
 #'
 #' plot(curves)
 plot.sscurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
@@ -49,7 +49,7 @@ plot.sscurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
 #'
 #' @examples
 #' data(P10N10)
-#' curves <- evalmod(pscores = P10N10$scores, olabs = P10N10$labels)
+#' curves <- evalmod(scores = P10N10$scores, olabs = P10N10$labels)
 #'
 #' plot(curves[["rocs"]])
 plot.ssroc <- function(object, ...) {
@@ -67,7 +67,7 @@ plot.ssroc <- function(object, ...) {
 #'
 #' @examples
 #' data(P10N10)
-#' curves <- evalmod(pscores = P10N10$scores, olabs = P10N10$labels)
+#' curves <- evalmod(scores = P10N10$scores, olabs = P10N10$labels)
 #'
 #' plot(curves[["prcs"]])
 plot.ssprc <- function(object, ...) {

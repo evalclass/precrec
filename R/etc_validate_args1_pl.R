@@ -50,20 +50,20 @@
 }
 
 # Validate arguments of mmdata()
-.validate_mmdata_args <- function(lpscores, lolabs, model_names, data_nos,
+.validate_mmdata_args <- function(lscores, lolabs, model_names, data_nos,
                                   exp_priority, na.last, ties.method, olevs) {
 
-  # Check lpscores and lolabs
-  if (length(lolabs) != 1 && length(lpscores) != length(lolabs)) {
-    stop(paste0("'pscores' and 'olabs' should be of the same size, or ",
+  # Check lscores and lolabs
+  if (length(lolabs) != 1 && length(lscores) != length(lolabs)) {
+    stop(paste0("'scores' and 'olabs' should be of the same size, or ",
                 "the size of 'olabs' should be 1"))
   }
 
   # Check model names
-  .validate_model_names(model_names, length(lpscores))
+  .validate_model_names(model_names, length(lscores))
 
   # Check data numbers
-  .validate_data_nos(data_nos, length(lpscores))
+  .validate_data_nos(data_nos, length(lscores))
 
   # Check exp_priority
   .validate_exp_priority(exp_priority)
@@ -109,5 +109,5 @@
 
   }
 
-  .validate_pscores_and_olabs(obj, obj_name, scores, olabs, ...)
+  .validate_scores_and_olabs(obj, obj_name, scores, olabs, ...)
 }

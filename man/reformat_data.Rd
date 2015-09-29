@@ -4,12 +4,12 @@
 \alias{reformat_data}
 \title{Reformat input data for Precision-Recall and ROC evaluation.}
 \usage{
-reformat_data(pscores, olabs, na.last = FALSE, ties.method = "average",
+reformat_data(scores, olabs, na.last = FALSE, ties.method = "average",
   olevs = c("negative", "positive"), model_name = as.character(NA),
   data_no = 1L, ...)
 }
 \arguments{
-\item{pscores}{A numeric vector of predicted scores.}
+\item{scores}{A numeric vector of predicted scores.}
 
 \item{olabs}{A numeric vector or a factor of observed labels.}
 

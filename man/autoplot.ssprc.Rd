@@ -24,7 +24,7 @@ autoplot.ssprc(object, ...)
 \examples{
 library(ggplot2)
 data(P10N10)
-curves <- evalmod(pscores = P10N10$scores, olabs = P10N10$labels)
+curves <- evalmod(scores = P10N10$scores, olabs = P10N10$labels)
 
 autoplot(curves[["prcs"]])
 }

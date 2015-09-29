@@ -1,7 +1,7 @@
-# Validate pscores
-.validate_pscores <- function(pscores) {
-  assertthat::assert_that(is.atomic(pscores), is.vector(pscores),
-                          is.numeric(pscores), length(pscores) > 0L)
+# Validate scores
+.validate_scores <- function(scores) {
+  assertthat::assert_that(is.atomic(scores), is.vector(scores),
+                          is.numeric(scores), length(scores) > 0L)
 }
 
 # Validate olabs
@@ -12,33 +12,33 @@
                           length(unique(olabs)) == 2L)
 }
 
-# Validate pscores and olabs
-.validate_pscores_and_olabs <- function(obj, obj_name, pscores, olabs, ...) {
+# Validate scores and olabs
+.validate_scores_and_olabs <- function(obj, obj_name, scores, olabs, ...) {
 
   if (missing(obj) || is.null(obj)) {
 
-    # Check if pscores and olabs are specified
-    if(is.null(pscores) && !is.null(olabs)) {
-      stop("Invalid 'pscores'")
-    } else if(!is.null(pscores) && is.null(olabs)) {
+    # Check if scores and olabs are specified
+    if(is.null(scores) && !is.null(olabs)) {
+      stop("Invalid 'scores'")
+    } else if(!is.null(scores) && is.null(olabs)) {
       stop("Invalid 'olabs'")
-    } else if (is.null(pscores) && is.null(olabs)) {
+    } else if (is.null(scores) && is.null(olabs)) {
       if (is.null(obj)) {
-        stop("Invalid 'pscores' & 'olabs'")
+        stop("Invalid 'scores' & 'olabs'")
       } else {
         stop(paste0("Missing '", obj_name, "'."))
       }
     }
 
-    # Check pscores
-    .validate_pscores(pscores)
+    # Check scores
+    .validate_scores(scores)
 
     # Check olabs
     .validate_olabs(olabs)
 
-    # Check length of pscores and olabs
-    if (length(olabs) != length(pscores)) {
-      stop("'pscores' and 'olabs' must be of the same length")
+    # Check length of scores and olabs
+    if (length(olabs) != length(scores)) {
+      stop("scores and olabs must be of the same length")
     }
 
   } else if (!is.null(obj)) {

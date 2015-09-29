@@ -25,7 +25,7 @@ fortify.ssprc(model, data = NULL, ...)
 \examples{
 library(ggplot2)
 data(P10N10)
-curves <- evalmod(pscores = P10N10$scores, olabs = P10N10$labels)
+curves <- evalmod(scores = P10N10$scores, olabs = P10N10$labels)
 
 df <- fortify(curves[["prcs"]])
 p <- ggplot2::ggplot(df, aes(x = x, y = y))

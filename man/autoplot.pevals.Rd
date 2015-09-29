@@ -27,7 +27,7 @@ Threshold IDs are automatically generated.
 library(ggplot2)
 
 data(B500)
-pevals <- calc_measures(pscores = B500$good_er_scores,
+pevals <- calc_measures(scores = B500$good_er_scores,
                         olabs = B500$labels)
 autoplot(pevals)
 }

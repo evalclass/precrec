@@ -1,20 +1,20 @@
 context("PL3: Reformat input data for evaluation")
-# Test reformat_data(pscores, olabs,
+# Test reformat_data(scores, olabs,
 #                    na.last, ties.method, levels, model_name)
 
-test_that("'pscores' and 'olabs' must be specified", {
-  expect_err_msg <- function(pscores, olabs, err_msg) {
-    eval(bquote(expect_error(reformat_data(pscores, olabs), err_msg)))
+test_that("'scores' and 'olabs' must be specified", {
+  expect_err_msg <- function(scores, olabs, err_msg) {
+    eval(bquote(expect_error(reformat_data(scores, olabs), err_msg)))
   }
 
-  expect_err_msg(NULL, c(0), "Invalid 'pscores'")
+  expect_err_msg(NULL, c(0), "Invalid 'scores'")
   expect_err_msg(c(0), NULL, "Invalid 'olabs'")
 })
 
-test_that("'pscores' and 'olabs' should be the same length", {
-  expect_err_msg <- function(pscores, olabs) {
-    err_msg <- "'pscores' and 'olabs' must be of the same length"
-    eval(bquote(expect_error(reformat_data(pscores, olabs), err_msg)))
+test_that("'scores' and 'olabs' should be the same length", {
+  expect_err_msg <- function(scores, olabs) {
+    err_msg <- "scores and olabs must be of the same length"
+    eval(bquote(expect_error(reformat_data(scores, olabs), err_msg)))
   }
 
   expect_err_msg(c(0.1, 0.2), c(1, 0, 0))
@@ -63,24 +63,24 @@ test_that("olabs, ranks, and rank_idx must be the same length", {
 })
 
 test_that("reformat_data() accepts 'na.last'", {
-  expect_equal_ranks <- function(pscores, olabs, na.last, ranks) {
-    fmdat <- reformat_data(pscores, olabs, na.last = na.last)
+  expect_equal_ranks <- function(scores, olabs, na.last, ranks) {
+    fmdat <- reformat_data(scores, olabs, na.last = na.last)
     eval(bquote(expect_equal(fmdat[["ranks"]], ranks)))
   }
 
-  pscores <- c(NA, 0.2, 0.1)
+  scores <- c(NA, 0.2, 0.1)
   olabs <- c(1, 1, 0)
 
-  expect_equal_ranks(pscores, olabs, TRUE, c(3, 2, 1))
-  expect_equal_ranks(pscores, olabs, FALSE, c(1, 3, 2))
+  expect_equal_ranks(scores, olabs, TRUE, c(3, 2, 1))
+  expect_equal_ranks(scores, olabs, FALSE, c(1, 3, 2))
 
 })
 
 test_that("reformat_data() accepts 'ties.method'", {
   expect_equal_ranks <- function(ties.method, ranks) {
-    pscores <- c(0.1, 0.2, 0.2, 0.2, 0.3)
+    scores <- c(0.1, 0.2, 0.2, 0.2, 0.3)
     olabs <- c(1, 0, 1, 0, 1)
-    fmdat <- reformat_data(pscores, olabs, ties.method = ties.method)
+    fmdat <- reformat_data(scores, olabs, ties.method = ties.method)
     eval(bquote(expect_equal(fmdat[["ranks"]], ranks)))
   }
 

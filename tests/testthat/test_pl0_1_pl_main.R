@@ -74,13 +74,13 @@ test_that("pl_main() accepts 'x_interval'", {
 test_that("pl_main() returns 'mscurves'", {
   s1 <- c(1, 2, 3, 4)
   s2 <- c(5, 6, 7, 8)
-  pscores <- join_scores(s1, s2)
+  scores <- join_scores(s1, s2)
 
   l1 <- c(1, 0, 1, 0)
   l2 <- c(1, 1, 0, 0)
   olabs <- join_labels(l1, l2)
 
-  mdat <- mmdata(pscores, olabs)
+  mdat <- mmdata(scores, olabs)
   pl <- pl_main(mdat, model_type = "multiple")
 
   expect_equal(class(pl), "mscurves")
@@ -89,13 +89,13 @@ test_that("pl_main() returns 'mscurves'", {
 test_that("'mscurves' contains 'msrocs' and 'msprcs'", {
   s1 <- c(1, 2, 3, 4)
   s2 <- c(5, 6, 7, 8)
-  pscores <- join_scores(s1, s2)
+  scores <- join_scores(s1, s2)
 
   l1 <- c(1, 0, 1, 0)
   l2 <- c(1, 1, 0, 0)
   olabs <- join_labels(l1, l2)
 
-  mdat <- mmdata(pscores, olabs)
+  mdat <- mmdata(scores, olabs)
   pl <- pl_main(mdat, model_type = "multiple")
 
   expect_equal(length(pl[["rocs"]]), 2)

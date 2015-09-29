@@ -1,5 +1,5 @@
 context("PL5: Calculate evaluation measures")
-# Test calc_measures(cmats, pscores, olabs)
+# Test calc_measures(cmats, scores, olabs)
 
 test_that("'cmats' must be a 'cmats' object", {
   expect_err_msg <- function(cmats) {
@@ -12,10 +12,10 @@ test_that("'cmats' must be a 'cmats' object", {
 })
 
 test_that("calc_measures() can directly take scores and labels", {
-  cmats <- create_confmats(pscores = c(0.1, 0.2, 0.2, 0),
+  cmats <- create_confmats(scores = c(0.1, 0.2, 0.2, 0),
                            olabs = c(1, 0, 1, 1))
   pevals1 <- calc_measures(cmats)
-  pevals2 <- calc_measures(pscores = c(0.1, 0.2, 0.2, 0),
+  pevals2 <- calc_measures(scores = c(0.1, 0.2, 0.2, 0),
                           olabs = c(1, 0, 1, 1))
 
   expect_equal(pevals1, pevals2)
@@ -23,11 +23,11 @@ test_that("calc_measures() can directly take scores and labels", {
 
 test_that("calc_measures() can take arguments for reformat_data()", {
   err_msg <- "Invalid arguments: na.rm"
-  expect_error(calc_measures(pscores = c(0.1, 0.2, 0.2, 0),
+  expect_error(calc_measures(scores = c(0.1, 0.2, 0.2, 0),
                              olabs = c(1, 0, 1, 1), na.rm = TRUE),
                err_msg)
 
-  pevals <- calc_measures(pscores = c(0.1, 0.2, 0),
+  pevals <- calc_measures(scores = c(0.1, 0.2, 0),
                           olabs = c(1, 0, 1),
                           na.last = TRUE,
                           ties.method = "first")
@@ -38,8 +38,8 @@ test_that("calc_measures() can take arguments for reformat_data()", {
 
 
 test_that("calc_measures() can take na.last argument", {
-  expect_equal_ranks <- function(pscores, na.last, ranks) {
-    pevals <- calc_measures(pscores = pscores,
+  expect_equal_ranks <- function(scores, na.last, ranks) {
+    pevals <- calc_measures(scores = scores,
                             olabs = c(1, 0, 1),
                             na.last = na.last)
 
@@ -48,27 +48,27 @@ test_that("calc_measures() can take na.last argument", {
     eval(bquote(expect_equal(.get_obj_arg(pevals, NULL, "na.last"), na.last)))
     eval(bquote(expect_equal(.get_obj_arg(fmdat, NULL, "na.last"), na.last)))
     eval(bquote(expect_equal(fmdat[["ranks"]], ranks)))
-    eval(bquote(expect_equal(.rank_scores(pscores, na.last = na.last), ranks)))
+    eval(bquote(expect_equal(.rank_scores(scores, na.last = na.last), ranks)))
   }
 
-  na1_pscores <- c(NA, 0.2, 0.1)
-  na2_pscores <- c(0.2, NA, 0.1)
-  na3_pscores <- c(0.2, 0.1, NA)
+  na1_scores <- c(NA, 0.2, 0.1)
+  na2_scores <- c(0.2, NA, 0.1)
+  na3_scores <- c(0.2, 0.1, NA)
 
-  expect_equal_ranks(na1_pscores, TRUE, c(3, 2, 1))
-  expect_equal_ranks(na1_pscores, FALSE, c(1, 3, 2))
+  expect_equal_ranks(na1_scores, TRUE, c(3, 2, 1))
+  expect_equal_ranks(na1_scores, FALSE, c(1, 3, 2))
 
-  expect_equal_ranks(na2_pscores, TRUE, c(2, 3, 1))
-  expect_equal_ranks(na2_pscores, FALSE, c(3, 1, 2))
+  expect_equal_ranks(na2_scores, TRUE, c(2, 3, 1))
+  expect_equal_ranks(na2_scores, FALSE, c(3, 1, 2))
 
-  expect_equal_ranks(na3_pscores, TRUE, c(2, 1, 3))
-  expect_equal_ranks(na3_pscores, FALSE, c(3, 2, 1))
+  expect_equal_ranks(na3_scores, TRUE, c(2, 1, 3))
+  expect_equal_ranks(na3_scores, FALSE, c(3, 2, 1))
 })
 
 test_that("calc_measures() can take ties.method argument", {
 
   expect_equal_ranks <- function(ties.method, ranks) {
-    pevals <- calc_measures(pscores = c(0.1, 0.2, 0.2, 0.2, 0.3),
+    pevals <- calc_measures(scores = c(0.1, 0.2, 0.2, 0.2, 0.3),
                             olabs = c(1, 0, 1, 1, 1),
                             ties.method = ties.method)
 
@@ -87,20 +87,20 @@ test_that("calc_measures() can take ties.method argument", {
 })
 
 test_that("calc_measures() reterns an 'pevals' object", {
-  pevals <- calc_measures(pscores = c(0.1, 0.2, 0), olabs = c(1, 0, 1))
+  pevals <- calc_measures(scores = c(0.1, 0.2, 0), olabs = c(1, 0, 1))
 
   expect_equal(class(pevals), "pevals")
 })
 
 test_that("'pevals' contains a list with 7 items", {
-  pevals <- calc_measures(pscores = c(0.1, 0.2, 0), olabs = c(1, 0, 1))
+  pevals <- calc_measures(scores = c(0.1, 0.2, 0), olabs = c(1, 0, 1))
 
   expect_true(is.list(pevals))
   expect_equal(length(pevals), 7)
 })
 
 test_that("calc_measures() reterns correct evaluation values", {
-  pevals <- calc_measures(pscores = c(0.1, 0.2, 0, 0.3),
+  pevals <- calc_measures(scores = c(0.1, 0.2, 0, 0.3),
                           olabs = c(1, 0, 0, 1))
 
   expect_equal(pevals[["pos_num"]], 2)

@@ -9,7 +9,7 @@
 #'   \code{\link{calc_measures}}.
 #' @param x_interval A numeric value to specifiy an interval of the
 #'   x-axis (TPRs for ROC and recall for Precision-Recall).
-#' @param pscores A numeric vector of predicted scores.
+#' @param scores A numeric vector of predicted scores.
 #'   Ignored when \code{cmats} is set.
 #' @param olabs A numeric vector or a factor of observed labels.
 #'   Ignored when \code{cmats} is set.
@@ -24,13 +24,13 @@
 #' cdat <- create_confmats(fmdat)
 #' pevals <- calc_measures(cdat)
 #' create_curves(pevals)
-#' create_curves(pscores = P10N10$scores, olabs = P10N10$labels)
-create_curves <- function(pevals, x_interval = 0.001, pscores = NULL,
+#' create_curves(scores = P10N10$scores, olabs = P10N10$labels)
+create_curves <- function(pevals, x_interval = 0.001, scores = NULL,
                           olabs = NULL, ...) {
   # === Validate input arguments ===
   # Create pevals from scores and labels if pevals is missing
   pevals <- .create_by_scores_and_labels(pevals, "pevals", calc_measures,
-                                         pscores, olabs, ...)
+                                         scores, olabs, ...)
   .validate_x_interval(x_interval)
   .validate(pevals)
 
@@ -66,7 +66,7 @@ create_curves <- function(pevals, x_interval = 0.001, pscores = NULL,
 #'   \code{\link{calc_measures}}.
 #' @param x_interval A numeric value to specifiy an interval of the
 #'   x-axis (TPRs).
-#' @param pscores A numeric vector of predicted scores.
+#' @param scores A numeric vector of predicted scores.
 #'   Ignored when \code{cmats} is set.
 #' @param olabs A numeric vector or a factor of observed labels.
 #'   Ignored when \code{cmats} is set.
@@ -81,13 +81,13 @@ create_curves <- function(pevals, x_interval = 0.001, pscores = NULL,
 #' cdat <- create_confmats(fmdat)
 #' pevals <- calc_measures(cdat)
 #' create_roc(pevals)
-#' create_roc(pscores = P10N10$scores, olabs = P10N10$labels)
-create_roc <- function(pevals, x_interval = 0.001, pscores = NULL, olabs = NULL,
+#' create_roc(scores = P10N10$scores, olabs = P10N10$labels)
+create_roc <- function(pevals, x_interval = 0.001, scores = NULL, olabs = NULL,
                        ...) {
   # === Create a ROC curve ===
   .create_curve("specificity", "sensitivity", create_roc_curve,
                 "create_roc_curve", "roc_curve", pevals, x_interval,
-                pscores, olabs, ...)
+                scores, olabs, ...)
 }
 
 #' Create a Precision-Recall curve.
@@ -101,7 +101,7 @@ create_roc <- function(pevals, x_interval = 0.001, pscores = NULL, olabs = NULL,
 #'   \code{\link{calc_measures}}.
 #' @param x_interval A numeric value to specifiy an interval of the
 #'   x-axis (recall).
-#' @param pscores A numeric vector of predicted scores.
+#' @param scores A numeric vector of predicted scores.
 #'   Ignored when \code{cmats} is set.
 #' @param olabs A numeric vector or a factor of observed labels.
 #'   Ignored when \code{cmats} is set.
@@ -116,26 +116,26 @@ create_roc <- function(pevals, x_interval = 0.001, pscores = NULL, olabs = NULL,
 #' cdat <- create_confmats(fmdat)
 #' pevals <- calc_measures(cdat)
 #' create_roc(pevals)
-#' create_roc(pscores = P10N10$scores, olabs = P10N10$labels)
-create_prc <- function(pevals, x_interval = 0.001, pscores = NULL, olabs = NULL,
+#' create_roc(scores = P10N10$scores, olabs = P10N10$labels)
+create_prc <- function(pevals, x_interval = 0.001, scores = NULL, olabs = NULL,
                        ...) {
   # === Create a Precision-Recall curve ===
   .create_curve("sensitivity", "precision", create_prc_curve,
                 "create_prc_curve", "prc_curve", pevals, x_interval,
-                pscores, olabs, ...)
+                scores, olabs, ...)
 }
 
 #
 # Create either a ROC or a Precision-Recall curve
 #
 .create_curve <- function(x_name, y_name, func, func_name, class_name,
-                          pevals, x_interval = 0.001, pscores = NULL,
+                          pevals, x_interval = 0.001, scores = NULL,
                           olabs = NULL, ...) {
 
   # === Validate input arguments ===
   # Create pevals from scores and labels if pevals us missing
   pevals <- .create_by_scores_and_labels(pevals, "pevals", calc_measures,
-                                         pscores, olabs, ...)
+                                         scores, olabs, ...)
   .validate_x_interval(x_interval)
   .validate(pevals)
 

@@ -28,7 +28,7 @@
 #' s1 <- c(1, 2, 3, 4)
 #' s2 <- c(5, 6, 7, 8)
 #' s3 <- c(2, 4, 6, 8)
-#' pscores <- join_scores(s1, s2, s3)
+#' scores <- join_scores(s1, s2, s3)
 #'
 #' l1 <- c(1, 0, 1, 1)
 #' l2 <- c(1, 1, 0, 0)
@@ -37,42 +37,42 @@
 #'
 #' model_names <- c("t1", "t2", "t3")
 #'
-#' mdat <- mmdata(pscores, olabs, model_names = model_names)
+#' mdat <- mmdata(scores, olabs, model_names = model_names)
 #' mdat
-mmdata <- function(pscores, olabs, model_names = NULL, data_nos = NULL,
+mmdata <- function(scores, olabs, model_names = NULL, data_nos = NULL,
                    exp_priority = "model_names",  na.last = FALSE,
                    ties.method = "average",
                    olevs = c("negative", "positive"), ...) {
 
   # === Join datasets ===
-  lpscores <- join_scores(pscores)
+  lscores <- join_scores(scores)
   lolabs <- join_labels(olabs)
 
   # === Validate arguments and variables ===
   exp_priority <- .pmatch_exp_priority(exp_priority)
-  .validate_mmdata_args(lpscores, lolabs, model_names, data_nos,
+  .validate_mmdata_args(lscores, lolabs, model_names, data_nos,
                         exp_priority = "model_names", na.last = na.last,
                         ties.method = ties.method, olevs = olevs)
 
   # Replicate olabs
-  if (length(lpscores) != 1 && length(lolabs) == 1) {
-    lolabs <- replicate(length(lpscores), lolabs[[1]], simplify = FALSE)
+  if (length(lscores) != 1 && length(lolabs) == 1) {
+    lolabs <- replicate(length(lscores), lolabs[[1]], simplify = FALSE)
   }
 
   # === Model names and data set numbers ===
-  mnames <- .create_modnames(length(lpscores), model_names, data_nos,
+  mnames <- .create_modnames(length(lscores), model_names, data_nos,
                              exp_priority)
   new_model_names <- mnames[["mn"]]
   new_data_nos <- mnames[["dn"]]
 
   # === Reformat input data ===y
   func_fmdat <- function(i) {
-    reformat_data(lpscores[[i]], lolabs[[i]], na.last = na.last,
+    reformat_data(lscores[[i]], lolabs[[i]], na.last = na.last,
                   ties.method = ties.method, olevs = olevs,
                   model_name = new_model_names[i], data_no = new_data_nos[i],
                   ...)
   }
-  mmdat <- lapply(seq_along(lpscores), func_fmdat)
+  mmdat <- lapply(seq_along(lscores), func_fmdat)
 
   # === Create an S3 object ===
   s3obj <- structure(mmdat, class = "mdat")

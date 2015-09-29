@@ -19,7 +19,7 @@ curve.
 }
 \examples{
 data(B500)
-prc_curve <- create_prc(pscores = B500$good_er_scores,
+prc_curve <- create_prc(scores = B500$good_er_scores,
                         olabs = B500$labels)
 print(prc_curve)
 }
