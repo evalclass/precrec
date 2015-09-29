@@ -121,14 +121,16 @@ test_that("mmdata() accepts 'model_names'", {
   mdat <- mmdata(s1, l1, model_names = "model1")
   expect_equal(attr(mdat[[1]], "args")[["model_name"]], "model1")
 
-  expect_err_msg <- function(s1, l1, model_names) {
-    err_msg <- "Invalid model names"
+  expect_err_msg <- function(err_msg, s1, l1, model_names) {
     eval(bquote(expect_error(mmdata(s1, l1, model_names = model_names),
                              err_msg)))
   }
 
-  expect_err_msg(s1, l1, c("A", "B"))
-  expect_err_msg(s1, l1, NA)
+  err_msg <- "not equal to datalen"
+  expect_err_msg(err_msg, s1, l1, c("A", "B"))
+
+  err_msg <- "model_names is not a character vector"
+  expect_err_msg(err_msg, s1, l1, NA)
 
 })
 
@@ -139,13 +141,15 @@ test_that("mmdata() accepts 'data_nos'", {
   mdat <- mmdata(s1, l1, data_nos = 10)
   expect_equal(attr(mdat[[1]], "args")[["data_no"]], 10)
 
-  expect_err_msg <- function(s1, l1, data_nos) {
-    err_msg <- "Invalid data numbers"
+  expect_err_msg <- function(err_msg, s1, l1, data_nos) {
     eval(bquote(expect_error(mmdata(s1, l1, data_nos = data_nos), err_msg)))
   }
 
-  expect_err_msg(s1, l1, c("A", "B"))
-  expect_err_msg(s1, l1, NA)
+  err_msg <- "not equal to datalen"
+  expect_err_msg(err_msg, s1, l1, c("A", "B"))
+
+  err_msg <- "is not TRUE"
+  expect_err_msg(err_msg, s1, l1, NA)
 
 })
 
@@ -160,7 +164,7 @@ test_that("mmdata() accepts 'na.last'", {
   expect_equal(attr(mdat[[1]], "args")[["na.last"]], TRUE)
 
   expect_err_msg <- function(s1, l1, na.last) {
-    err_msg <- "'na.last' must be either FALSE or TRUE"
+    err_msg <- "na.last contains 1 missing values"
     eval(bquote(expect_error(mmdata(s1, l1, na.last = na.last), err_msg)))
   }
   expect_err_msg(s1, l1, as.logical(NA))
@@ -182,7 +186,7 @@ test_that("mmdata() accepts 'ties.method'", {
   expect_equal(attr(mdat[[1]], "args")[["ties.method"]], "first")
 
   expect_err_msg <- function(s1, l1, ties.method) {
-    err_msg <- "'ties.method' should be one of "
+    err_msg <- "ties.method should be one of "
     eval(bquote(expect_error(mmdata(s1, l1, ties.method = ties.method),
                              err_msg)))
   }
@@ -198,12 +202,15 @@ test_that("mmdata() accepts 'olevs'", {
   mdat <- mmdata(s1, l1, olevs = c("N", "P"))
   expect_equal(attr(mdat[[1]], "args")[["olevs"]], c("N", "P"))
 
-  expect_err_msg <- function(s1, l1, olevs) {
-    err_msg <- "'olevs' must"
+  expect_err_msg <- function(err_msg, s1, l1, olevs) {
     eval(bquote(expect_error(mmdata(s1, l1, olevs = olevs), err_msg)))
   }
-  expect_err_msg(s1, l1, c(0, 1))
-  expect_err_msg(s1, l1, c("N", "P", "P2"))
+
+  err_msg <- "olevs is not a character vector"
+  expect_err_msg(err_msg, s1, l1, c(0, 1))
+
+  err_msg <- "not equal to 2L"
+  expect_err_msg(err_msg, s1, l1, c("N", "P", "P2"))
 
 })
 

@@ -22,31 +22,23 @@ test_that("'pscores' and 'olabs' should be the same length", {
 })
 
 test_that("'model_name' must be a character vector", {
-  expect_err_msg <- function(model_name) {
-    err_msg <- "'model_name' must be a single string"
+  expect_err_msg <- function(err_msg, model_name) {
     eval(bquote(expect_error(reformat_data(c(0, 1), c(0, 1),
                                            model_name = model_name),
                              err_msg)))
   }
 
-  expect_err_msg(c(0.1, 0.2))
-  expect_err_msg(list("1"))
-  expect_err_msg(data.frame("1"))
-  expect_err_msg(array("1"))
-  expect_err_msg(matrix("1"))
-  expect_err_msg(factor(c(0.1, 0.2)))
-})
+  err_msg <- "model_name is not a string"
+  expect_err_msg(err_msg, c(0.1, 0.2))
+  expect_err_msg(err_msg, c("1", "2"))
+  expect_err_msg(err_msg, as.character())
 
-test_that("'model_name' must be a single string", {
-  expect_err_msg <- function(model_name) {
-    err_msg <- "'model_name' must be a single string"
-    eval(bquote(expect_error(reformat_data(c(0), c(0),
-                                           model_name = model_name),
-                             err_msg)))
-  }
-
-  expect_err_msg(c("1", "2"))
-  expect_err_msg(as.character())
+  err_msg <- "model_name is not an atomic vector"
+  expect_err_msg(err_msg, factor(c(0.1, 0.2)))
+  expect_err_msg(err_msg, list("1"))
+  expect_err_msg(err_msg, data.frame("1"))
+  expect_err_msg(err_msg, array("1"))
+  expect_err_msg(err_msg, matrix("1"))
 })
 
 test_that("reformat_data() reterns a 'fmdat' object", {

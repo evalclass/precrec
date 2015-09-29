@@ -12,6 +12,10 @@ Description: precrec is a package for calculating accuate Precision-Recall
     relathiship between ROC and Precision-Recall spaces.
 License: GPL-3
 LazyData: TRUE
-Suggests: testthat
+Suggests: testthat,
+          ggplot2,
+          grid,
+          gridExtra
 LinkingTo: Rcpp
-Imports: Rcpp
+Imports: Rcpp,
+         assertthat

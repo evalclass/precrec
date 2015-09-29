@@ -7,17 +7,19 @@ test_that("'...' must be specified", {
 })
 
 test_that("'byrow' should be TRUE or FALSE", {
-  expect_err_msg <- function(byrow) {
-    err_msg <- "'byrow' should be one of FALSE, TRUE"
+  expect_err_msg <- function(err_msg, byrow) {
     eval(bquote(expect_error(join_labels(c(0), byrow = byrow), err_msg)))
   }
 
-  expect_err_msg("T")
-  expect_err_msg(NA)
-  expect_err_msg(list(c(TRUE, FALSE)))
-  expect_err_msg(data.frame(c(TRUE, FALSE)))
-  expect_err_msg(array(c(TRUE, FALSE)))
-  expect_err_msg(matrix(c(TRUE, FALSE)))
+  err_msg <- "byrow contains 1 missing values"
+  expect_err_msg(err_msg, NA)
+
+  err_msg <- "byrow is not a flag"
+  expect_err_msg(err_msg, "T")
+  expect_err_msg(err_msg, list(c(TRUE, FALSE)))
+  expect_err_msg(err_msg, data.frame(c(TRUE, FALSE)))
+  expect_err_msg(err_msg, array(c(TRUE, FALSE)))
+  expect_err_msg(err_msg, matrix(c(TRUE, FALSE)))
 })
 
 test_that("All vectors should have the same length", {

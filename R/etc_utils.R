@@ -1,64 +1,42 @@
 # Check if it's a numeric vector
-.is_numeric_vec <- function(v) {
-  if (!is.atomic(v) || !is.vector(v) || !is.numeric(v)) {
-    return(FALSE)
-  } else {
-    return(TRUE)
-  }
+.assert_numeric_vec <- function(v) {
+  assertthat::assert_that(is.atomic(v), is.vector(v), is.numeric(v))
+}
+
+# Check if it's a numeric or factor vector
+.assert_numeric_factor_vec <- function(v) {
+  assertthat::assert_that(is.atomic(v),
+                          ((is.vector(v) && is.numeric(v)) || is.factor(v)))
 }
 
 # Check if it's a number
-.is_a_number <- function(v) {
-  if (!.is_numeric_vec(v) || length(v) != 1) {
-    return(FALSE)
-  } else {
-    return(TRUE)
-  }
+.assert_number <- function(v) {
+  assertthat::assert_that(assertthat::is.number(v))
 }
 
 # Check if it's an integer vector
-.is_int_vec <- function(v) {
-  if (!is.atomic(v) || !is.vector(v) || !is.integer(v)) {
-    return(FALSE)
-  } else {
-    return(TRUE)
-  }
+.assert_int_vec <- function(v) {
+  assertthat::assert_that(is.atomic(v), is.vector(v), is.integer(v))
 }
 
 # Check if it's a character vector
-.is_char_vec <- function(v) {
-  if (!is.atomic(v) || !is.vector(v) || !is.character(v)) {
-    return(FALSE)
-  } else {
-    return(TRUE)
-  }
+.assert_char_vec <- function(v) {
+  assertthat::assert_that(is.atomic(v), is.vector(v), is.character(v))
 }
 
 # Check if it's a string
-.is_single_string <- function(v) {
-  if (!.is_char_vec(v) || length(v) != 1) {
-    return(FALSE)
-  } else {
-    return(TRUE)
-  }
+.assert_single_string <- function(v) {
+  assertthat::assert_that(assertthat::is.string(v))
 }
 
 # Check if it's a logical vector
-.is_logical_vec <- function(v) {
-  if (!is.atomic(v) || !is.vector(v) || !is.logical(v)) {
-    return(FALSE)
-  } else {
-    return(TRUE)
-  }
+.assert_logical_vec <- function(v) {
+  assertthat::assert_that(is.atomic(v), is.vector(v), is.logical(v))
 }
 
 # Check if it's a factor vector
-.is_factor_vec <- function(v) {
-  if (!is.atomic(v) || !is.factor(v)) {
-    return(FALSE)
-  } else {
-    return(TRUE)
-  }
+.assert_factor_vec <- function(v) {
+  assertthat::assert_that(is.atomic(v), is.factor(v))
 }
 
 # Check if an internal Rcpp function returns en error

@@ -68,7 +68,7 @@ pl_main <- function(mdat, model_type = "single", data_type = "single",
 # Check partial match
 #
 .pmatch_model_data_types <- function(val) {
-  if (.is_single_string(val)) {
+  if (assertthat::is.string(val)) {
     if (val == "single" || val == "multiple") {
       return(val)
     }

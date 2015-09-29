@@ -58,13 +58,16 @@ test_that("pl_main() accepts 'x_interval'", {
   expect_equal(attr(pl[["rocs"]][[1]], "args")[["x_interval"]], 0.1)
   expect_equal(attr(pl[["rocs"]][[1]], "args")[["x_interval"]], 0.1)
 
-  expect_err_msg <- function(mdat, x_interval) {
-    err_msg <- "x_interval must be"
+  expect_err_msg <- function(err_msg, mdat, x_interval) {
     eval(bquote(expect_error(pl_main(mdat, x_interval = x_interval), err_msg)))
   }
-  expect_err_msg(mdat, c(0.1, 0.2))
-  expect_err_msg(mdat, 0)
-  expect_err_msg(mdat, 1.1)
+
+  err_msg <- "x_interval is not a number"
+  expect_err_msg(err_msg, mdat, c(0.1, 0.2))
+
+  err_msg <- "is not TRUE"
+  expect_err_msg(err_msg, mdat, 0)
+  expect_err_msg(err_msg, mdat, 1.1)
 
 })
 

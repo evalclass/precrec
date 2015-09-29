@@ -1,7 +1,7 @@
 create_sim_samples <- function(n_repeat, np, nn, score_names = "random") {
   # === Validate input arguments ===
   choices <- c("random", "poor_er", "good_er", "excel", "perf")
-  if (.is_single_string(score_names) && score_names == "all") {
+  if (assertthat::is.string(score_names) && score_names == "all") {
     score_names <- choices
   } else if (!.is_char_vec(score_names) || !(score_names %in% choices)) {
     stop(gettextf("'score_names' should be one of %s",

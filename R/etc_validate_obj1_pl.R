@@ -43,16 +43,20 @@
       || length(fmdat[["olabs"]]) != length(fmdat[["rank_idx"]])) {
     stop("Items in 'fmdat' must be of the same length")
   }
-  if (!is.ordered(fmdat[["olabs"]])
-      || length(levels(fmdat[["olabs"]])) > 2) {
-    stop("'olabs' in 'fmdat' must be an ordered factor with one or two levels")
-  }
-  if (!.is_numeric_vec(fmdat[["ranks"]])) {
-    stop("'ranks' in 'fmdat' must be a numeric vector")
-  }
-  if (!.is_int_vec(fmdat[["rank_idx"]])) {
-    stop("'rank_idx' in 'fmdat' must be a vector of integer")
-  }
+
+  # Labels
+  assertthat::assert_that(is.ordered(fmdat[["olabs"]]),
+                          length(levels(fmdat[["olabs"]])) == 2)
+
+  # Ranks
+  assertthat::assert_that(is.atomic(fmdat[["ranks"]]),
+                          is.vector(fmdat[["ranks"]]),
+                          is.numeric(fmdat[["ranks"]]))
+
+  # Rank index
+  assertthat::assert_that(is.atomic(fmdat[["rank_idx"]]),
+                          is.vector(fmdat[["rank_idx"]]),
+                          is.integer(fmdat[["rank_idx"]]))
 
   attr(fmdat, "validated") <- TRUE
   fmdat
@@ -79,18 +83,34 @@
       || length(cmats[["fn"]]) != n) {
     stop("tp, fp, tn, and fn in 'cmats' must be the same length")
   }
-  stopifnot(.is_numeric_vec(cmats[["tp"]]),
-            cmats[["tp"]][1] == 0,
-            cmats[["tp"]][n] == cmats[["pos_num"]],
-            .is_numeric_vec(cmats[["fp"]]),
-            cmats[["fp"]][1] == 0,
-            cmats[["fp"]][n] == cmats[["neg_num"]],
-            .is_numeric_vec(cmats[["fn"]]),
-            cmats[["fn"]][1] == cmats[["pos_num"]],
-            cmats[["fn"]][n] == 0,
-            .is_numeric_vec(cmats[["tn"]]),
-            cmats[["tn"]][1] == cmats[["neg_num"]],
-            cmats[["tn"]][n] == 0)
+
+  # TP
+  assertthat::assert_that(is.atomic(cmats[["tp"]]),
+                          is.vector(cmats[["tp"]]),
+                          is.numeric(cmats[["tp"]]),
+                          cmats[["tp"]][1] == 0,
+                          cmats[["tp"]][n] == cmats[["pos_num"]])
+
+  # FP
+  assertthat::assert_that(is.atomic(cmats[["fp"]]),
+                          is.vector(cmats[["fp"]]),
+                          is.numeric(cmats[["fp"]]),
+                          cmats[["fp"]][1] == 0,
+                          cmats[["fp"]][n] == cmats[["neg_num"]])
+
+  # FN
+  assertthat::assert_that(is.atomic(cmats[["fn"]]),
+                          is.vector(cmats[["fn"]]),
+                          is.numeric(cmats[["fn"]]),
+                          cmats[["fn"]][1] == cmats[["pos_num"]],
+                          cmats[["fn"]][n] == 0)
+
+  # TN
+  assertthat::assert_that(is.atomic(cmats[["tn"]]),
+                          is.vector(cmats[["tn"]]),
+                          is.numeric(cmats[["tn"]]),
+                          cmats[["tn"]][1] == cmats[["neg_num"]],
+                          cmats[["tn"]][n] == 0)
 
   attr(cmats, "validated") <- TRUE
   cmats
@@ -119,18 +139,40 @@
       || length(pevals[["precision"]]) != n) {
     stop("All evaluation vectors must be the same length")
   }
-  stopifnot(.is_numeric_vec(pevals[["error"]]),
-            .is_numeric_vec(pevals[["accuracy"]]),
-            pevals[["error"]][1] + pevals[["accuracy"]][1] == 1,
-            pevals[["error"]][n] + pevals[["accuracy"]][n] ==1,
-            .is_numeric_vec(pevals[["specificity"]]),
-            pevals[["specificity"]][1] == 1,
-            pevals[["specificity"]][n] == 0,
-            .is_numeric_vec(pevals[["sensitivity"]]),
-            pevals[["sensitivity"]][1] == 0,
-            pevals[["sensitivity"]][n] == 1,
-            .is_numeric_vec(pevals[["precision"]]),
-            pevals[["precision"]][1] == pevals[["precision"]][2])
+
+  # Error rate
+  assertthat::assert_that(is.atomic(pevals[["error"]]),
+            is.vector(pevals[["error"]]),
+            is.numeric(pevals[["error"]]))
+
+  # Accuracy
+  assertthat::assert_that(is.atomic(pevals[["accuracy"]]),
+            is.vector(pevals[["accuracy"]]),
+            is.numeric(pevals[["accuracy"]]))
+
+  # Error rate & Arruracy
+  assertthat::assert_that(pevals[["error"]][1] + pevals[["accuracy"]][1] == 1,
+                          pevals[["error"]][n] + pevals[["accuracy"]][n] ==1)
+
+  # SP
+  assertthat::assert_that(is.atomic(pevals[["specificity"]]),
+                          is.vector(pevals[["specificity"]]),
+                          is.numeric(pevals[["specificity"]]),
+                          pevals[["specificity"]][1] == 1,
+                          pevals[["specificity"]][n] == 0)
+
+  # SN
+  assertthat::assert_that(is.atomic(pevals[["sensitivity"]]),
+                          is.vector(pevals[["sensitivity"]]),
+                          is.numeric(pevals[["sensitivity"]]),
+                          pevals[["sensitivity"]][1] == 0,
+                          pevals[["sensitivity"]][n] == 1)
+
+  # PREC
+  assertthat::assert_that(is.atomic(pevals[["precision"]]),
+                          is.vector(pevals[["precision"]]),
+                          is.numeric(pevals[["precision"]]),
+                          pevals[["precision"]][1] == pevals[["precision"]][2])
 
   attr(pevals, "validated") <- TRUE
   pevals
@@ -185,20 +227,37 @@
   }
 
   # Check values of class attributes
-  stopifnot((attr(obj, "auc") >= 0) && (attr(obj, "auc") <= 1),
-            (is.na(attr(obj, "pauc"))
-             || (attr(obj, "pauc") >= 0 && attr(obj, "pauc") <= 1)),
-            .is_logical_vec(attr(obj, "partial")),
-            .is_numeric_vec(attr(obj, "x_limits")),
-            length(attr(obj, "x_limits")) == 2,
-            attr(obj, "x_limits")[1] >= 0 && attr(obj, "x_limits")[1] <= 1,
-            attr(obj, "x_limits")[2] >= 0 && attr(obj, "x_limits")[2] <= 1,
-            attr(obj, "x_limits")[1] < attr(obj, "x_limits")[2],
-            .is_numeric_vec(attr(obj, "x_limits")),
-            length(attr(obj, "y_limits")) == 2,
-            attr(obj, "y_limits")[1] >= 0 && attr(obj, "y_limits")[1] <= 1,
-            attr(obj, "y_limits")[2] >= 0 && attr(obj, "y_limits")[2] <= 1,
-            attr(obj, "y_limits")[1] < attr(obj, "y_limits")[2])
+  # AUC
+  assertthat::assert_that((attr(obj, "auc") >= 0) && (attr(obj, "auc") <= 1))
+
+  # Partial AUC
+  assertthat::assert_that(is.atomic(attr(obj, "partial")),
+                          is.logical(attr(obj, "partial")),
+                          (is.na(attr(obj, "pauc"))
+                           || (attr(obj, "pauc") >= 0
+                               && attr(obj, "pauc") <= 1)))
+
+  # X limits
+  assertthat::assert_that(is.atomic(attr(obj, "x_limits")),
+                          is.vector(attr(obj, "x_limits")),
+                          is.numeric(attr(obj, "x_limits")),
+                          length(attr(obj, "x_limits")) == 2,
+                          (attr(obj, "x_limits")[1] >= 0
+                           && attr(obj, "x_limits")[1] <= 1),
+                          (attr(obj, "x_limits")[2] >= 0
+                           && attr(obj, "x_limits")[2] <= 1),
+                          attr(obj, "x_limits")[1] < attr(obj, "x_limits")[2])
+
+  # Y limits
+  assertthat::assert_that(is.atomic(attr(obj, "y_limits")),
+                          is.vector(attr(obj, "y_limits")),
+                          is.numeric(attr(obj, "y_limits")),
+                          length(attr(obj, "y_limits")) == 2,
+                          (attr(obj, "y_limits")[1] >= 0
+                           && attr(obj, "y_limits")[1] <= 1),
+                          (attr(obj, "y_limits")[2] >= 0
+                           && attr(obj, "y_limits")[2] <= 1),
+                          attr(obj, "y_limits")[1] < attr(obj, "y_limits")[2])
 }
 
 # Validate 'curves' object generated by create_curves()

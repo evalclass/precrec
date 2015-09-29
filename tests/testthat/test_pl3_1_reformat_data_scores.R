@@ -1,24 +1,26 @@
 context("PL3: Reformat scores for evaluation")
 # Test .rank_scores(pscores, na.last, ties.method)
 
-test_that("'pscores' takes an numeric vector", {
-  expect_err_msg <- function(pscores) {
-    err_msg <- "'pscores' must be a numeric vector"
+test_that("'pscores' is an numeric vector", {
+  expect_err_msg <- function(err_msg, pscores) {
     eval(bquote(expect_error(.rank_scores(pscores), err_msg)))
   }
 
-  expect_err_msg(c("1", "0"))
-  expect_err_msg(list(1))
-  expect_err_msg(data.frame(1))
-  expect_err_msg(array(1))
-  expect_err_msg(matrix(1))
-  expect_err_msg(factor(1))
-  expect_err_msg(NULL)
+  err_msg <- "pscores is not a numeric or integer vector"
+  expect_err_msg(err_msg, c("1", "0"))
+
+  err_msg <- "pscores is not an atomic vector"
+  expect_err_msg(err_msg, list(1))
+  expect_err_msg(err_msg, data.frame(1))
+  expect_err_msg(err_msg, array(1))
+  expect_err_msg(err_msg, matrix(1))
+  expect_err_msg(err_msg, factor(1))
+  expect_err_msg(err_msg, NULL)
 })
 
 test_that("Length of 'pscores' must be >=1", {
   expect_err_msg <- function(pscores) {
-    err_msg <- "'pscores' must be length >= 1"
+    err_msg <- "not greater than 0L"
     eval(bquote(expect_error(.rank_scores(pscores), err_msg)))
   }
 
@@ -26,35 +28,40 @@ test_that("Length of 'pscores' must be >=1", {
 })
 
 test_that("'na.last' should be TRUE or FALSE", {
-  expect_err_msg <- function(na.last) {
+  expect_err_msg <- function(err_msg, na.last) {
     pscores <- c(1.1, 2.2)
-    err_msg <- "'na.last' must be either FALSE or TRUE"
     eval(bquote(expect_error(.rank_scores(pscores, na.last = na.last),
                              err_msg)))
   }
 
-  expect_err_msg("T")
-  expect_err_msg(NA)
-  expect_err_msg(list(c(TRUE, FALSE)))
-  expect_err_msg(data.frame(c(TRUE, FALSE)))
-  expect_err_msg(array(c(TRUE, FALSE)))
-  expect_err_msg(matrix(c(TRUE, FALSE)))
-  expect_err_msg("keep")
+  err_msg <- "na.last contains 1 missing values"
+  expect_err_msg(err_msg, NA)
+
+  err_msg <- "na.last is not an atomic vector"
+  expect_err_msg(err_msg, list(c(TRUE, FALSE)))
+  expect_err_msg(err_msg, data.frame(c(TRUE, FALSE)))
+
+  err_msg <- "na.last is not a flag"
+  expect_err_msg(err_msg, "T")
+  expect_err_msg(err_msg, array(c(TRUE, FALSE)))
+  expect_err_msg(err_msg, matrix(c(TRUE, FALSE)))
+  expect_err_msg(err_msg, "keep")
 })
 
 test_that("'ties.method' should be one of the three options", {
-  expect_err_msg <- function(ties.method) {
+  expect_err_msg <- function(err_msg, ties.method) {
     scores <- c(1, 2)
     choices <- c("average", "random", "first")
-    err_msg <- gettextf("'ties.method' should be one of %s",
-                        paste(dQuote(choices), collapse = ", "))
     eval(bquote(expect_error(.rank_scores(scores, ties.method = ties.method),
                              err_msg)))
   }
 
-  expect_err_msg(c("average", "first"))
-  expect_err_msg(c("avg"))
-  expect_err_msg(c("max"))
+  err_msg <- "ties.method is not a string"
+  expect_err_msg(err_msg, c("average", "first"))
+
+  err_msg <- "ties.method should be one of"
+  expect_err_msg(err_msg, c("avg"))
+  expect_err_msg(err_msg, c("max"))
   })
 
 test_that("rank_scores() reterns a numeric vector", {

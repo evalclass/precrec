@@ -3,16 +3,17 @@
 
   # Check model type
   .validate_model_type(model_type)
-  if (model_type == "single"
-      && length(unique(attr(mdat, "model_names"))) != 1) {
-    stop("'mdat' contains scores and labels for multiple modeles")
-  }
+
+  model_names <- attr(mdat, "model_names")
+  assertthat::assert_that(model_type != "single"
+                          || (model_type == "single"
+                              && length(unique(model_names)) == 1L))
 
   # Check data type
-  .validate_data_type(data_type)
-  if (data_type == "single" && length(unique(attr(mdat, "data_nos"))) != 1) {
-    stop("'mdat' contains scores and labels of multiple test sets")
-  }
+  data_nos <- attr(mdat, "data_nos")
+  assertthat::assert_that(data_type != "single"
+                          || (data_type == "single"
+                              && length(unique(data_nos)) == 1L))
 
   # Check x_interval
   .validate_x_interval(x_interval)
@@ -43,11 +44,8 @@
   }
 
   # Check byrow
-  choices = c(FALSE, TRUE)
-  if (length(byrow) != 1L || !(byrow %in% choices)) {
-    stop(gettextf("'byrow' should be one of %s",
-                  paste(choices, collapse = ", ")))
-  }
+  assertthat::assert_that(assertthat::is.flag(byrow),
+                          assertthat::noNA(byrow))
 
 }
 

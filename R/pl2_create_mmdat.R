@@ -93,7 +93,7 @@ mmdata <- function(pscores, olabs, model_names = NULL, data_nos = NULL,
 # Check partial match - exp_priority
 #
 .pmatch_exp_priority <- function(val) {
-  if (.is_single_string(val)) {
+  if (assertthat::is.string(val)) {
     if (val == "data_nos" || val == "model_names") {
       return(val)
     }
@@ -114,7 +114,7 @@ mmdata <- function(pscores, olabs, model_names = NULL, data_nos = NULL,
 # Check partial match - ties method
 #
 .pmatch_tiesmethod <- function(val) {
-  if (.is_single_string(val)) {
+  if (assertthat::is.string(val)) {
     choices = c("average", "random", "first")
     if (val %in% choices) {
       return(val)
