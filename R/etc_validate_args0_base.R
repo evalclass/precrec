@@ -71,12 +71,12 @@
   }
 }
 
-# Validate olevs
-.validate_olevs <- function(olevs) {
-  if (!is.null(olevs)) {
-    assertthat::assert_that(is.atomic(olevs),
-                            is.character(olevs),
-                            length(unique(olevs)) == 2L)
+# Validate levels
+.validate_levels <- function(levels) {
+  if (!is.null(levels)) {
+    assertthat::assert_that(is.atomic(levels),
+                            is.character(levels),
+                            length(unique(levels)) == 2L)
   }
 }
 

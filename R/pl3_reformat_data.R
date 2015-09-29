@@ -16,7 +16,7 @@
 #'   method results in a permutation with increasing values at each index
 #'   set of ties. The "random" method puts these in random order whereas
 #'   the default, "average", replaces them by their mean.
-#' @param olevs A character vector to overide the levels of the factor for
+#' @param levels A character vector to overide the levels of the factor for
 #'   observed binary labels.
 #' @param model_name The name of the model/classifier to be evaluated.
 #' @param ... Other arguments passed to other methods (ignored).
@@ -28,12 +28,12 @@
 #' reformat_data(c(0.3, 0.1, 0.2), c(-1, -1, 1))
 reformat_data <- function(scores, labels, na.last = FALSE,
                           ties.method = "average",
-                          olevs = c("negative", "positive"),
+                          levels = c("negative", "positive"),
                           model_name = as.character(NA), data_no = 1L, ...) {
 
   # === Validate input arguments ===
   .validate_reformat_data_args(NULL, NULL, scores, labels, na.last = na.last,
-                               ties.method = ties.method, olevs = olevs,
+                               ties.method = ties.method, levels = levels,
                                model_name = model_name, data_no = data_no, ...)
 
   # === Reformat input data ===
@@ -42,14 +42,14 @@ reformat_data <- function(scores, labels, na.last = FALSE,
   rank_idx <- order(ranks, decreasing = TRUE)
 
   # Get a factor with "positive" and "negative"
-  fmtlabs <- .factor_labels(labels, olevs, validate = FALSE)
+  fmtlabs <- .factor_labels(labels, levels, validate = FALSE)
   num_labs <- table(fmtlabs)
   if (nlevels(fmtlabs) == 2) {
-    nn <- num_labs[[olevs[1]]]
-    np <- num_labs[[olevs[2]]]
+    nn <- num_labs[[levels[1]]]
+    np <- num_labs[[levels[2]]]
   } else {
     nn <- 0
-    np <- num_labs[[olevs[1]]]
+    np <- num_labs[[levels[1]]]
   }
 
 
@@ -65,7 +65,7 @@ reformat_data <- function(scores, labels, na.last = FALSE,
   attr(s3obj, "nn") <- nn
   attr(s3obj, "np") <- np
   attr(s3obj, "args") <- list(na.last = na.last, ties.method = ties.method,
-                              olevs = olevs, model_name = model_name,
+                              levels = levels, model_name = model_name,
                               data_no = data_no)
   attr(s3obj, "validated") <- FALSE
 
@@ -74,12 +74,12 @@ reformat_data <- function(scores, labels, na.last = FALSE,
 }
 
 # Factor labels
-.factor_labels <- function(labels, olevs = c("negative", "positive"),
+.factor_labels <- function(labels, levels = c("negative", "positive"),
                            validate = TRUE) {
   # === Validate input arguments ===
   if (validate) {
     .validate_labels(labels)
-    .validate_olevs(olevs)
+    .validate_levels(levels)
   }
 
   # === Generate label factors ===
@@ -89,10 +89,10 @@ reformat_data <- function(scores, labels, na.last = FALSE,
     flabs <- rep(labels)
   }
 
-  if (nlevels(flabs) != length(olevs)) {
-    stop("olevs must cotain two unique labels")
+  if (nlevels(flabs) != length(levels)) {
+    stop("levels must cotain two unique labels")
   }
-  levels(flabs) <- olevs
+  levels(flabs) <- levels
 
   flabs
 }

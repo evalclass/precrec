@@ -27,7 +27,7 @@ autoplot.sscurves(object, curvetype = c("ROC", "PRC"), ...)
 library(ggplot2)
 library(gridExtra)
 data(P10N10)
-curves <- evalmod(scores = P10N10$scores, olabs = P10N10$labels)
+curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 
 autoplot(curves)
 }

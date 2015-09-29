@@ -15,7 +15,7 @@
 #'   method results in a permutation with increasing values at each index
 #'   set of ties. The "random" method puts these in random order whereas
 #'   the default, "average", replaces them by their mean.
-#' @param olevs A character vector to overide the levels of the factor for
+#' @param levels A character vector to overide the levels of the factor for
 #'   observed binary labels.
 #' @param model_name The name of the model/classifier to be evaluated.
 #' @return \code{evalmod} returns a \code{curves} S3 object that
@@ -28,13 +28,13 @@
 evalmod <- function(mdat, scores, labels, model_name = as.character(NA),
                     data_no = 1L, x_interval = 0.001, na.last = FALSE,
                     ties.method = "average",
-                    olevs = c("negative", "positive")) {
+                    levels = c("negative", "positive")) {
 
   if (!missing(mdat)) {
     .validate(mdat)
   } else {
     mdat <- mmdata(scores, labels, model_names = model_name, data_nos = data_no,
-                   na.last = na.last, ties.method = ties.method, olevs = olevs)
+                   na.last = na.last, ties.method = ties.method, levels = levels)
   }
 
   pl_main(mdat, model_type = "single", data_type = "single",

@@ -26,7 +26,7 @@ fortify.pevals(model, data = NULL, ...)
 library(ggplot2)
 data(B500)
 pevals <- calc_measures(scores = B500$good_er_scores,
-                        olabs = B500$labels)
+                        labels = B500$labels)
 df <- fortify(pevals)
 p <- ggplot(df, aes(x = x, y = y))
 p <- p + facet_wrap(~ group, ncol = 2)

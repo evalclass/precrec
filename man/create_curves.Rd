@@ -4,7 +4,7 @@
 \alias{create_curves}
 \title{Create ROC and Precision-Recall curves.}
 \usage{
-create_curves(pevals, x_interval = 0.001, scores = NULL, olabs = NULL,
+create_curves(pevals, x_interval = 0.001, scores = NULL, labels = NULL,
   ...)
 }
 \arguments{
@@ -17,7 +17,7 @@ x-axis (TPRs for ROC and recall for Precision-Recall).}
 \item{scores}{A numeric vector of predicted scores.
 Ignored when \code{cmats} is set.}
 
-\item{olabs}{A numeric vector or a factor of observed labels.
+\item{labels}{A numeric vector or a factor of observed labels.
 Ignored when \code{cmats} is set.}
 
 \item{...}{Other arguments passed to \code{\link{reformat_data}} via
@@ -39,6 +39,6 @@ fmdat <- reformat_data(P10N10$scores, P10N10$labels)
 cdat <- create_confmats(fmdat)
 pevals <- calc_measures(cdat)
 create_curves(pevals)
-create_curves(scores = P10N10$scores, olabs = P10N10$labels)
+create_curves(scores = P10N10$scores, labels = P10N10$labels)
 }
 

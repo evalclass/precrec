@@ -1,6 +1,6 @@
 # Validate arguments of evalmulti()
 .validate_evalmulti_args <- function(x_interval, model_names, na.last,
-                                     ties.method, olevs) {
+                                     ties.method, levels) {
 
   # Check x_interval
   .validate_x_interval(x_interval)
@@ -15,5 +15,5 @@
   .validate_ties_method(ties.method)
 
   # Check levels
-  .validate_olevs(olevs)
+  .validate_levels(levels)
 }

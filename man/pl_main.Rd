@@ -32,9 +32,9 @@ scores <- join_scores(s1, s2, s3)
 l1 <- c(1, 0, 1, 1)
 l2 <- c(1, 1, 0, 0)
 l3 <- c(0, 1, 0, 1)
-olabs <- combine_olabs(l1, l2, l3)
+labels <- combine_labels(l1, l2, l3)
 
-mdat <- mmdata(scores, olabs)
+mdat <- mmdata(scores, labels)
 pl_main(mdat)
 }
 

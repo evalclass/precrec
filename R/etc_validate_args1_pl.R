@@ -51,7 +51,7 @@
 
 # Validate arguments of mmdata()
 .validate_mmdata_args <- function(lscores, llabels, model_names, data_nos,
-                                  exp_priority, na.last, ties.method, olevs) {
+                                  exp_priority, na.last, ties.method, levels) {
 
   # Check lscores and llabels
   if (length(llabels) != 1 && length(lscores) != length(llabels)) {
@@ -75,7 +75,7 @@
   .validate_ties_method(ties.method)
 
   # Check levels
-  .validate_olevs(olevs)
+  .validate_levels(levels)
 
 }
 
@@ -86,7 +86,7 @@
   arglist <- list(...)
   if (!is.null(names(arglist))){
     invalid_list <- setdiff(names(arglist), c("na.last", "ties.method",
-                                              "olevs", "model_name",
+                                              "levels", "model_name",
                                               "data_no"))
     if (length(invalid_list) > 0L) {
       stop(paste("Invalid arguments:", paste(invalid_list, collapse = ", ")))
@@ -99,7 +99,7 @@
     .validate_ties_method(arglist[["ties.method"]])
 
     # Check levels
-    .validate_olevs(arglist[["olevs"]])
+    .validate_levels(arglist[["levels"]])
 
     # Check model_name
     .validate_model_name(arglist[["model_name"]])

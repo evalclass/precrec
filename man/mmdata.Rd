@@ -5,9 +5,9 @@
 \title{Reformat input data for Precision-Recall and ROC evaluation
 with multiple models.}
 \usage{
-mmdata(scores, olabs, model_names = NULL, data_nos = NULL,
+mmdata(scores, labels, model_names = NULL, data_nos = NULL,
   exp_priority = "model_names", na.last = FALSE, ties.method = "average",
-  olevs = c("negative", "positive"), ...)
+  levels = c("negative", "positive"), ...)
 }
 \arguments{
 \item{model_names}{Names of the models/classifiers to be evaluated.}
@@ -22,7 +22,7 @@ method results in a permutation with increasing values at each index
 set of ties. The "random" method puts these in random order whereas
 the default, "average", replaces them by their mean.}
 
-\item{olevs}{A character vector to overide the levels of the factor for
+\item{levels}{A character vector to overide the levels of the factor for
 observed binary labels.}
 
 \item{...}{Other arguments passed to other methods (ignored).}
@@ -51,11 +51,11 @@ scores <- join_scores(s1, s2, s3)
 l1 <- c(1, 0, 1, 1)
 l2 <- c(1, 1, 0, 0)
 l3 <- c(0, 1, 0, 1)
-olabs <- join_labels(l1, l2, l3)
+labels <- join_labels(l1, l2, l3)
 
 model_names <- c("t1", "t2", "t3")
 
-mdat <- mmdata(scores, olabs, model_names = model_names)
+mdat <- mmdata(scores, labels, model_names = model_names)
 mdat
 }
 

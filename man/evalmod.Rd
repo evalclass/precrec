@@ -4,14 +4,14 @@
 \alias{evalmod}
 \title{Evaluate a single model}
 \usage{
-evalmod(mdat, scores, olabs, model_name = as.character(NA), data_no = 1L,
+evalmod(mdat, scores, labels, model_name = as.character(NA), data_no = 1L,
   x_interval = 0.001, na.last = FALSE, ties.method = "average",
-  olevs = c("negative", "positive"))
+  levels = c("negative", "positive"))
 }
 \arguments{
 \item{scores}{A numeric vector of predicted scores.}
 
-\item{olabs}{A numeric vector or a factor of observed labels.}
+\item{labels}{A numeric vector or a factor of observed labels.}
 
 \item{model_name}{The name of the model/classifier to be evaluated.}
 
@@ -28,7 +28,7 @@ method results in a permutation with increasing values at each index
 set of ties. The "random" method puts these in random order whereas
 the default, "average", replaces them by their mean.}
 
-\item{olevs}{A character vector to overide the levels of the factor for
+\item{levels}{A character vector to overide the levels of the factor for
 observed binary labels.}
 }
 \value{
@@ -41,7 +41,7 @@ from an observed dataset and calculates ROC and Precision-Recall curves.
 }
 \examples{
 data(P10N10)
-curves <- evalmod(scores = P10N10$scores, olabs = P10N10$labels)
+curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 curves
 }
 

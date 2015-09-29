@@ -1,5 +1,5 @@
 context("PL3: Reformat labels for evaluation")
-# Test .factor_labels(labels, olevs)
+# Test .factor_labels(labels, levels)
 
 test_that("'labels' takes an numeric vector", {
   expect_err_msg <- function(err_msg, labels) {
@@ -27,17 +27,17 @@ test_that("'labels' takes two unique labels", {
   expect_err_msg(c(-1, 0, -1, 2))
 })
 
-test_that("'olevs' takes a character vector or a factor", {
-  expect_err_msg <- function(err_msg, olevs) {
+test_that("'levels' takes a character vector or a factor", {
+  expect_err_msg <- function(err_msg, levels) {
     labels <- c(-1, 1)
-    eval(bquote(expect_error(.factor_labels(labels, olevs = olevs), err_msg)))
+    eval(bquote(expect_error(.factor_labels(labels, levels = levels), err_msg)))
   }
 
-  err_msg <- "olevs is not a character vector"
+  err_msg <- "levels is not a character vector"
   expect_err_msg(err_msg, c(0, 1))
   expect_err_msg(err_msg, c(TRUE, FALSE))
 
-  err_msg <- "olevs is not an atomic vector"
+  err_msg <- "levels is not an atomic vector"
   expect_err_msg(err_msg, list("1"))
   expect_err_msg(err_msg, data.frame("1"))
 
@@ -46,13 +46,13 @@ test_that("'olevs' takes a character vector or a factor", {
   expect_err_msg(err_msg, matrix("1"))
 })
 
-test_that("'olevs' takes two unique labels", {
-  expect_err_msg <- function(err_msg, olevs) {
+test_that("'levels' takes two unique labels", {
+  expect_err_msg <- function(err_msg, levels) {
     labels <- c(0, 1)
-    eval(bquote(expect_error(.factor_labels(labels, olevs = olevs), err_msg)))
+    eval(bquote(expect_error(.factor_labels(labels, levels = levels), err_msg)))
   }
 
-  err_msg <- "olevs must cotain two unique labels"
+  err_msg <- "levels must cotain two unique labels"
   expect_err_msg(err_msg, c())
 
   err_msg <- "not equal to 2L"

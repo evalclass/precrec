@@ -17,7 +17,7 @@
 #'   method results in a permutation with increasing values at each index
 #'   set of ties. The "random" method puts these in random order whereas
 #'   the default, "average", replaces them by their mean.
-#' @param olevs A character vector to overide the levels of the factor for
+#' @param levels A character vector to overide the levels of the factor for
 #'   observed binary labels.
 #' @param model_names Names of the models/classifiers to be evaluated.
 #' @param ... Other arguments passed to other methods (ignored).
@@ -42,7 +42,7 @@
 mmdata <- function(scores, labels, model_names = NULL, data_nos = NULL,
                    exp_priority = "model_names",  na.last = FALSE,
                    ties.method = "average",
-                   olevs = c("negative", "positive"), ...) {
+                   levels = c("negative", "positive"), ...) {
 
   # === Join datasets ===
   lscores <- join_scores(scores)
@@ -52,7 +52,7 @@ mmdata <- function(scores, labels, model_names = NULL, data_nos = NULL,
   exp_priority <- .pmatch_exp_priority(exp_priority)
   .validate_mmdata_args(lscores, llabels, model_names, data_nos,
                         exp_priority = "model_names", na.last = na.last,
-                        ties.method = ties.method, olevs = olevs)
+                        ties.method = ties.method, levels = levels)
 
   # Replicate labels
   if (length(lscores) != 1 && length(llabels) == 1) {
@@ -65,10 +65,10 @@ mmdata <- function(scores, labels, model_names = NULL, data_nos = NULL,
   new_model_names <- mnames[["mn"]]
   new_data_nos <- mnames[["dn"]]
 
-  # === Reformat input data ===y
+  # === Reformat input data ===
   func_fmdat <- function(i) {
     reformat_data(lscores[[i]], llabels[[i]], na.last = na.last,
-                  ties.method = ties.method, olevs = olevs,
+                  ties.method = ties.method, levels = levels,
                   model_name = new_model_names[i], data_no = new_data_nos[i],
                   ...)
   }
@@ -82,7 +82,7 @@ mmdata <- function(scores, labels, model_names = NULL, data_nos = NULL,
   attr(s3obj, "data_nos") <- new_data_nos
   attr(s3obj, "args") <- list(na.last = na.last,
                               ties.method = ties.method,
-                              olevs = olevs)
+                              levels = levels)
   attr(s3obj, "validated") <- FALSE
 
   # Call .validate.mdat()

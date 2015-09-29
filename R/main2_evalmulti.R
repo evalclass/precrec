@@ -46,17 +46,17 @@
 evalmulti <- function(mdat, mscores = NULL, mobslabs = NULL,
                       model_names = NULL, data_nos = NULL, x_interval = 0.001,
                       na.last = FALSE, ties.method = "average",
-                      olevs = c("negative", "positive")) {
+                      levels = c("negative", "positive")) {
 
   .validate_evalmulti_args(x_interval, model_names, na.last, ties.method,
-                           olevs)
+                           levels)
 
   if (!missing(mdat)) {
     .validate(mdat)
   } else {
     mdat <- mmdata(mscores, mobslabs,
                    model_names = model_names, data_nos = data_nos,
-                   na.last = na.last, ties.method = ties.method, olevs = olevs)
+                   na.last = na.last, ties.method = ties.method, levels = levels)
   }
 
   pl_main(mdat, model_type = "multiple", data_type = "single",

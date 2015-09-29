@@ -25,7 +25,7 @@ fortify.ssroc(model, data = NULL, ...)
 \examples{
 library(ggplot2)
 data(P10N10)
-curves <- evalmod(scores = P10N10$scores, olabs = P10N10$labels)
+curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 
 df <- fortify(curves[["rocs"]])
 p <- ggplot2::ggplot(df, aes(x = x, y = y))

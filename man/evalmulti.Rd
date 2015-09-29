@@ -6,7 +6,7 @@
 \usage{
 evalmulti(mdat, mscores = NULL, mobslabs = NULL, model_names = NULL,
   data_nos = NULL, x_interval = 0.001, na.last = FALSE,
-  ties.method = "average", olevs = c("negative", "positive"))
+  ties.method = "average", levels = c("negative", "positive"))
 }
 \arguments{
 \item{mdat}{An \code{mdat} object created by \code{\link{create_mdat}}.}

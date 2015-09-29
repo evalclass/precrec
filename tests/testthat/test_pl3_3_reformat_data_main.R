@@ -89,10 +89,10 @@ test_that("reformat_data() accepts 'ties.method'", {
 
 })
 
-test_that("reformat_data() accepts 'olevs'", {
-  olevs <- c("N", "P")
-  fmdat <- reformat_data(c(0.1, 0.2, 0), c(1, 0, 1), olevs = olevs)
+test_that("reformat_data() accepts 'levels'", {
+  levels <- c("N", "P")
+  fmdat <- reformat_data(c(0.1, 0.2, 0), c(1, 0, 1), levels = levels)
 
-  expect_equal(levels(fmdat[["labels"]]), olevs)
+  expect_equal(levels(fmdat[["labels"]]), levels)
 
 })

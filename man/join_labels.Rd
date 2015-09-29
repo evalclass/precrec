@@ -28,8 +28,8 @@ and lists.
 l1 <- c(1, 0, 1, 1)
 l2 <- c(1, 1, 0, 0)
 l3 <- c(0, 1, 0, 1)
-molabs <- join_labels(l1, l2, l3)
+mlabels <- join_labels(l1, l2, l3)
 
-molabs
+mlabels
 }
 
