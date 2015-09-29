@@ -31,22 +31,22 @@
   }
 
   # Validate class items and attributes
-  item_names <- c("olabs", "ranks", "rank_idx")
+  item_names <- c("labels", "ranks", "rank_idx")
   attr_names <- c("model_name", "data_no", "nn", "np", "args", "validated")
   arg_names <- c("na.last", "ties.method", "olevs", "model_name", "data_no")
   .validate_basic(fmdat, "fmdat", "reformat_data", item_names, attr_names,
                   arg_names)
 
   # Check values of class items
-  if (length(fmdat[["olabs"]]) == 0
-      || length(fmdat[["olabs"]]) != length(fmdat[["ranks"]])
-      || length(fmdat[["olabs"]]) != length(fmdat[["rank_idx"]])) {
+  if (length(fmdat[["labels"]]) == 0
+      || length(fmdat[["labels"]]) != length(fmdat[["ranks"]])
+      || length(fmdat[["labels"]]) != length(fmdat[["rank_idx"]])) {
     stop("Items in 'fmdat' must be of the same length")
   }
 
   # Labels
-  assertthat::assert_that(is.ordered(fmdat[["olabs"]]),
-                          length(levels(fmdat[["olabs"]])) == 2)
+  assertthat::assert_that(is.ordered(fmdat[["labels"]]),
+                          length(levels(fmdat[["labels"]])) == 2)
 
   # Ranks
   assertthat::assert_that(is.atomic(fmdat[["ranks"]]),

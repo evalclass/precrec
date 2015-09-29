@@ -1,5 +1,5 @@
 context("PL6: Create a ROC curve")
-# Test create_roc(pevals, x.interval, scores, olabs)
+# Test create_roc(pevals, x.interval, scores, labels)
 
 test_that("'pevals' must be an 'pevals' object", {
   expect_err_msg <- function(pevals) {
@@ -13,10 +13,10 @@ test_that("'pevals' must be an 'pevals' object", {
 
 test_that("create_roc() directly takes scores and labels", {
   pevals <- calc_measures(scores = c(0.1, 0.2, 0.2, 0),
-                          olabs = c(1, 0, 1, 1))
+                          labels = c(1, 0, 1, 1))
   roc_curve1 <- create_roc(pevals)
   roc_curve2 <- create_roc(scores = c(0.1, 0.2, 0.2, 0),
-                           olabs = c(1, 0, 1, 1))
+                           labels = c(1, 0, 1, 1))
 
   expect_equal(roc_curve1[["auc"]], roc_curve2[["auc"]])
 })
@@ -24,11 +24,11 @@ test_that("create_roc() directly takes scores and labels", {
 test_that("create_roc() can take arguments for reformat_data()", {
   err_msg <- "Invalid arguments: na.rm"
   expect_error(create_roc(scores = c(0.1, 0.2, 0.2, 0),
-                          olabs = c(1, 0, 1, 1), na.rm = TRUE),
+                          labels = c(1, 0, 1, 1), na.rm = TRUE),
                err_msg)
 
   roc_curve <- create_roc(scores = c(0.1, 0.2, 0),
-                          olabs = c(1, 0, 1),
+                          labels = c(1, 0, 1),
                           na.last = TRUE,
                           ties.method = "first")
 
@@ -39,7 +39,7 @@ test_that("create_roc() can take arguments for reformat_data()", {
 
 test_that("create_roc() can take na.last argument", {
   expect_equal_ranks <- function(scores, na.last, ranks) {
-    roc_curve <- create_roc(scores = scores, olabs = c(1, 0, 1),
+    roc_curve <- create_roc(scores = scores, labels = c(1, 0, 1),
                             na.last = na.last)
 
     fmdat <- .get_obj(roc_curve, "fmdat")
@@ -69,7 +69,7 @@ test_that("create_roc() can take ties.method argument", {
 
   expect_equal_ranks <- function(ties.method, ranks) {
     roc_curve <- create_roc(scores = c(0.1, 0.2, 0.2, 0.2, 0.3),
-                            olabs = c(1, 0, 1, 1, 1),
+                            labels = c(1, 0, 1, 1, 1),
                             ties.method = ties.method)
 
     fmdat <- .get_obj(roc_curve, "fmdat")
@@ -87,14 +87,14 @@ test_that("create_roc() can take ties.method argument", {
 })
 
 test_that("create_roc() reterns a 'roc_curve' object", {
-  roc_curve <- create_roc(scores = c(0.1, 0.2, 0), olabs = c(1, 0, 1))
+  roc_curve <- create_roc(scores = c(0.1, 0.2, 0), labels = c(1, 0, 1))
 
   expect_equal(class(roc_curve), "roc_curve")
 })
 
 test_that("create_roc() reterns a correct ROC curve", {
   roc_curve <- create_roc(scores = c(0.6, 0.5, 0.4, 0.3, 0.2, 0.1),
-                          olabs = c(0, 1, 0, 1, 0, 1), x_interval = 0.1)
+                          labels = c(0, 1, 0, 1, 0, 1), x_interval = 0.1)
 
   expect_equal(attr(roc_curve, "np"), 3)
   expect_equal(attr(roc_curve, "nn"), 3)
@@ -111,7 +111,7 @@ test_that("create_roc() reterns a correct ROC curve", {
 
 test_that("create_roc() reterns a correct ROC AUC", {
   roc_curve <- create_roc(scores = c(0.6, 0.5, 0.4, 0.3, 0.2, 0.1),
-                          olabs = c(0, 1, 0, 1, 0, 1), x_interval = 0.01)
+                          labels = c(0, 1, 0, 1, 0, 1), x_interval = 0.01)
 
   expect_equal(attr(roc_curve, "auc"), 1/3, tolerance = 1e-3)
 })

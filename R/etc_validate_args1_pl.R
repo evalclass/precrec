@@ -50,13 +50,13 @@
 }
 
 # Validate arguments of mmdata()
-.validate_mmdata_args <- function(lscores, lolabs, model_names, data_nos,
+.validate_mmdata_args <- function(lscores, llabels, model_names, data_nos,
                                   exp_priority, na.last, ties.method, olevs) {
 
-  # Check lscores and lolabs
-  if (length(lolabs) != 1 && length(lscores) != length(lolabs)) {
-    stop(paste0("'scores' and 'olabs' should be of the same size, or ",
-                "the size of 'olabs' should be 1"))
+  # Check lscores and llabels
+  if (length(llabels) != 1 && length(lscores) != length(llabels)) {
+    stop(paste0("'scores' and 'labels' should be of the same size, or ",
+                "the size of 'labels' should be 1"))
   }
 
   # Check model names
@@ -80,7 +80,7 @@
 }
 
 # Validate arguments of reformat_data()
-.validate_reformat_data_args <- function(obj, obj_name, scores, olabs, ...) {
+.validate_reformat_data_args <- function(obj, obj_name, scores, labels, ...) {
 
   # Check '...'
   arglist <- list(...)
@@ -109,5 +109,5 @@
 
   }
 
-  .validate_scores_and_olabs(obj, obj_name, scores, olabs, ...)
+  .validate_scores_and_labels(obj, obj_name, scores, labels, ...)
 }

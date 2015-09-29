@@ -30,11 +30,11 @@
 }
 
 # Use scores and labels to create obj
-.create_by_scores_and_labels <- function(obj, obj_name, func, scores, olabs,
+.create_by_scores_and_labels <- function(obj, obj_name, func, scores, labels,
                                          ...) {
   if (missing(obj)) {
-    if (!is.null(scores) && !is.null(olabs)) {
-      obj <- func(scores = scores, olabs = olabs, ...)
+    if (!is.null(scores) && !is.null(labels)) {
+      obj <- func(scores = scores, labels = labels, ...)
     } else {
       stop("The first argument must be specified.")
     }
@@ -52,7 +52,7 @@
 # Use mscores and mobslabs to create mdat
 .create_by_mscores_and_mlabels <- function(mdat, mscores, mobslabs) {
 
-  # Check if scores and olabs are specified.
+  # Check if scores and labels are specified.
   # Validate the 'mdat' argument otherwise
   if (missing(mdat)) {
     if (is.null(mscores) && is.null(mobslabs)) {

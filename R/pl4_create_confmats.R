@@ -11,7 +11,7 @@
 #'   \code{\link{reformat_data}}.
 #' @param scores A numeric vector of predicted scores.
 #'   Ignored when \code{fmdat} is set.
-#' @param olabs A numeric vector or a factor of observed labels.
+#' @param labels A numeric vector or a factor of observed labels.
 #'   Ignored when \code{fmdat} is set.
 #' @param ... Other arguments passed to \code{\link{reformat_data}}.
 #' @return \code{create_confmats} returns a \code{cmats} S3 object that
@@ -21,17 +21,17 @@
 #' data(P10N10)
 #' fmdat <- reformat_data(P10N10$scores, P10N10$labels)
 #' create_confmats(fmdat)
-#' create_confmats(scores = P10N10$scores, olabs = P10N10$labels)
-create_confmats <- function(fmdat, scores = NULL, olabs = NULL, ...) {
+#' create_confmats(scores = P10N10$scores, labels = P10N10$labels)
+create_confmats <- function(fmdat, scores = NULL, labels = NULL, ...) {
   # === Validate input arguments ===
   # Create fmdat from scores and labels if fmdat is missing
   fmdat <- .create_by_scores_and_labels(fmdat, "fmdat", reformat_data,
-                                        scores, olabs, ...)
+                                        scores, labels, ...)
   .validate(fmdat)
 
   # === Create confusion matrices for all possible threshold values ===
   # Call a cpp function via Rcpp interface
-  cmats <- create_confusion_matrices(fmdat[["olabs"]], fmdat[["ranks"]],
+  cmats <- create_confusion_matrices(fmdat[["labels"]], fmdat[["ranks"]],
                                      fmdat[["rank_idx"]])
   .check_cpp_func_error(cmats, "create_confusion_matrices")
 

@@ -4,27 +4,27 @@
                           is.numeric(scores), length(scores) > 0L)
 }
 
-# Validate olabs
-.validate_olabs <- function(olabs) {
-  assertthat::assert_that(is.atomic(olabs),
-                          ((is.vector(olabs) && is.numeric(olabs))
-                           || is.factor(olabs)),
-                          length(unique(olabs)) == 2L)
+# Validate labels
+.validate_labels <- function(labels) {
+  assertthat::assert_that(is.atomic(labels),
+                          ((is.vector(labels) && is.numeric(labels))
+                           || is.factor(labels)),
+                          length(unique(labels)) == 2L)
 }
 
-# Validate scores and olabs
-.validate_scores_and_olabs <- function(obj, obj_name, scores, olabs, ...) {
+# Validate scores and labels
+.validate_scores_and_labels <- function(obj, obj_name, scores, labels, ...) {
 
   if (missing(obj) || is.null(obj)) {
 
-    # Check if scores and olabs are specified
-    if(is.null(scores) && !is.null(olabs)) {
+    # Check if scores and labels are specified
+    if(is.null(scores) && !is.null(labels)) {
       stop("Invalid 'scores'")
-    } else if(!is.null(scores) && is.null(olabs)) {
-      stop("Invalid 'olabs'")
-    } else if (is.null(scores) && is.null(olabs)) {
+    } else if(!is.null(scores) && is.null(labels)) {
+      stop("Invalid 'labels'")
+    } else if (is.null(scores) && is.null(labels)) {
       if (is.null(obj)) {
-        stop("Invalid 'scores' & 'olabs'")
+        stop("Invalid 'scores' & 'labels'")
       } else {
         stop(paste0("Missing '", obj_name, "'."))
       }
@@ -33,12 +33,12 @@
     # Check scores
     .validate_scores(scores)
 
-    # Check olabs
-    .validate_olabs(olabs)
+    # Check labels
+    .validate_labels(labels)
 
-    # Check length of scores and olabs
-    if (length(olabs) != length(scores)) {
-      stop("scores and olabs must be of the same length")
+    # Check length of scores and labels
+    if (length(labels) != length(scores)) {
+      stop("scores and labels must be of the same length")
     }
 
   } else if (!is.null(obj)) {

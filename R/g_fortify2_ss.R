@@ -14,7 +14,7 @@
 #' @examples
 #' library(ggplot2)
 #' data(P10N10)
-#' curves <- evalmod(scores = P10N10$scores, olabs = P10N10$labels)
+#' curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 #'
 #' df <- fortify(curves)
 #' p_roc <- ggplot2::ggplot(subset(df, group == "ROC"), aes(x = x, y = y))
@@ -56,7 +56,7 @@ fortify.sscurves <- function(model, data = NULL, ...) {
 #' @examples
 #' library(ggplot2)
 #' data(P10N10)
-#' curves <- evalmod(scores = P10N10$scores, olabs = P10N10$labels)
+#' curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 #'
 #' df <- fortify(curves[["rocs"]])
 #' p <- ggplot2::ggplot(df, aes(x = x, y = y))
@@ -81,7 +81,7 @@ fortify.ssroc <- function(model, data = NULL, ...) {
 #' @examples
 #' library(ggplot2)
 #' data(P10N10)
-#' curves <- evalmod(scores = P10N10$scores, olabs = P10N10$labels)
+#' curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 #'
 #' df <- fortify(curves[["prcs"]])
 #' p <- ggplot2::ggplot(df, aes(x = x, y = y))

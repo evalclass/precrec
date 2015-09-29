@@ -33,30 +33,30 @@
 #' l1 <- c(1, 0, 1, 1)
 #' l2 <- c(1, 1, 0, 0)
 #' l3 <- c(0, 1, 0, 1)
-#' olabs <- join_labels(l1, l2, l3)
+#' labels <- join_labels(l1, l2, l3)
 #'
 #' model_names <- c("t1", "t2", "t3")
 #'
-#' mdat <- mmdata(scores, olabs, model_names = model_names)
+#' mdat <- mmdata(scores, labels, model_names = model_names)
 #' mdat
-mmdata <- function(scores, olabs, model_names = NULL, data_nos = NULL,
+mmdata <- function(scores, labels, model_names = NULL, data_nos = NULL,
                    exp_priority = "model_names",  na.last = FALSE,
                    ties.method = "average",
                    olevs = c("negative", "positive"), ...) {
 
   # === Join datasets ===
   lscores <- join_scores(scores)
-  lolabs <- join_labels(olabs)
+  llabels <- join_labels(labels)
 
   # === Validate arguments and variables ===
   exp_priority <- .pmatch_exp_priority(exp_priority)
-  .validate_mmdata_args(lscores, lolabs, model_names, data_nos,
+  .validate_mmdata_args(lscores, llabels, model_names, data_nos,
                         exp_priority = "model_names", na.last = na.last,
                         ties.method = ties.method, olevs = olevs)
 
-  # Replicate olabs
-  if (length(lscores) != 1 && length(lolabs) == 1) {
-    lolabs <- replicate(length(lscores), lolabs[[1]], simplify = FALSE)
+  # Replicate labels
+  if (length(lscores) != 1 && length(llabels) == 1) {
+    llabels <- replicate(length(lscores), llabels[[1]], simplify = FALSE)
   }
 
   # === Model names and data set numbers ===
@@ -67,7 +67,7 @@ mmdata <- function(scores, olabs, model_names = NULL, data_nos = NULL,
 
   # === Reformat input data ===y
   func_fmdat <- function(i) {
-    reformat_data(lscores[[i]], lolabs[[i]], na.last = na.last,
+    reformat_data(lscores[[i]], llabels[[i]], na.last = na.last,
                   ties.method = ties.method, olevs = olevs,
                   model_name = new_model_names[i], data_no = new_data_nos[i],
                   ...)

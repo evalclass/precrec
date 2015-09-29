@@ -78,9 +78,9 @@ test_that("pl_main() returns 'mscurves'", {
 
   l1 <- c(1, 0, 1, 0)
   l2 <- c(1, 1, 0, 0)
-  olabs <- join_labels(l1, l2)
+  labels <- join_labels(l1, l2)
 
-  mdat <- mmdata(scores, olabs)
+  mdat <- mmdata(scores, labels)
   pl <- pl_main(mdat, model_type = "multiple")
 
   expect_equal(class(pl), "mscurves")
@@ -93,9 +93,9 @@ test_that("'mscurves' contains 'msrocs' and 'msprcs'", {
 
   l1 <- c(1, 0, 1, 0)
   l2 <- c(1, 1, 0, 0)
-  olabs <- join_labels(l1, l2)
+  labels <- join_labels(l1, l2)
 
-  mdat <- mmdata(scores, olabs)
+  mdat <- mmdata(scores, labels)
   pl <- pl_main(mdat, model_type = "multiple")
 
   expect_equal(length(pl[["rocs"]]), 2)

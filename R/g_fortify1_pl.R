@@ -27,7 +27,7 @@ fortify.fmdat <- function(model, data = NULL, ...) {
   .validate(model)
 
   # === Prepare a data frame for ggplot2 ===
-  df <- data.frame(x = model[["olabs"]],
+  df <- data.frame(x = model[["labels"]],
                    y = model[["ranks"]])
 }
 
@@ -47,7 +47,7 @@ fortify.fmdat <- function(model, data = NULL, ...) {
 #' library(ggplot2)
 #' data(B500)
 #' cmat <- create_confmats(scores = B500$good_er_scores,
-#'                         olabs = B500$labels)
+#'                         labels = B500$labels)
 #' df <- fortify(cmat)
 #' p <- ggplot2::ggplot(df, aes(x = x, y = y, color = group))
 #' p <- p + geom_line()
@@ -87,7 +87,7 @@ fortify.cmats <- function(model, data = NULL, ...) {
 #' library(ggplot2)
 #' data(B500)
 #' pevals <- calc_measures(scores = B500$good_er_scores,
-#'                         olabs = B500$labels)
+#'                         labels = B500$labels)
 #' df <- fortify(pevals)
 #' p <- ggplot(df, aes(x = x, y = y))
 #' p <- p + facet_wrap(~ group, ncol = 2)

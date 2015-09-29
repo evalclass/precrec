@@ -1,12 +1,12 @@
 context("PL3: Reformat labels for evaluation")
-# Test .factor_labels(olabs, olevs)
+# Test .factor_labels(labels, olevs)
 
-test_that("'olabs' takes an numeric vector", {
-  expect_err_msg <- function(err_msg, olabs) {
-    eval(bquote(expect_error(.factor_labels(olabs), err_msg)))
+test_that("'labels' takes an numeric vector", {
+  expect_err_msg <- function(err_msg, labels) {
+    eval(bquote(expect_error(.factor_labels(labels), err_msg)))
   }
 
-  err_msg <- "olabs is not an atomic vector"
+  err_msg <- "labels is not an atomic vector"
   expect_err_msg(err_msg, list(1))
   expect_err_msg(err_msg, data.frame(1))
 
@@ -17,10 +17,10 @@ test_that("'olabs' takes an numeric vector", {
   expect_err_msg(err_msg, NULL)
 })
 
-test_that("'olabs' takes two unique labels", {
-  expect_err_msg <- function(olabs) {
+test_that("'labels' takes two unique labels", {
+  expect_err_msg <- function(labels) {
     err_msg <- "not equal to 2L"
-    eval(bquote(expect_error(.factor_labels(olabs), err_msg)))
+    eval(bquote(expect_error(.factor_labels(labels), err_msg)))
   }
 
   expect_err_msg(c(0, 0, 1, 2, 3))
@@ -29,8 +29,8 @@ test_that("'olabs' takes two unique labels", {
 
 test_that("'olevs' takes a character vector or a factor", {
   expect_err_msg <- function(err_msg, olevs) {
-    olabs <- c(-1, 1)
-    eval(bquote(expect_error(.factor_labels(olabs, olevs = olevs), err_msg)))
+    labels <- c(-1, 1)
+    eval(bquote(expect_error(.factor_labels(labels, olevs = olevs), err_msg)))
   }
 
   err_msg <- "olevs is not a character vector"
@@ -48,8 +48,8 @@ test_that("'olevs' takes a character vector or a factor", {
 
 test_that("'olevs' takes two unique labels", {
   expect_err_msg <- function(err_msg, olevs) {
-    olabs <- c(0, 1)
-    eval(bquote(expect_error(.factor_labels(olabs, olevs = olevs), err_msg)))
+    labels <- c(0, 1)
+    eval(bquote(expect_error(.factor_labels(labels, olevs = olevs), err_msg)))
   }
 
   err_msg <- "olevs must cotain two unique labels"
@@ -68,8 +68,8 @@ test_that("factor_labels() reterns an ordered factor", {
 })
 
 test_that("factor_labels() returns a factor with two levels", {
-  expect_equal_length <- function(olabs, len) {
-    eval(bquote(expect_equal(length(levels(.factor_labels(olabs))), len)))
+  expect_equal_length <- function(labels, len) {
+    eval(bquote(expect_equal(length(levels(.factor_labels(labels))), len)))
   }
 
   expect_equal_length(c(-1, 1), 2)

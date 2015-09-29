@@ -1,5 +1,5 @@
 context("PL6: Create a Precision-Recall curve")
-# Test create_prc(pevals, x.interval, scores, olabs)
+# Test create_prc(pevals, x.interval, scores, labels)
 
 test_that("'pevals' must be an 'pevals' object", {
   expect_err_msg <- function(pevals) {
@@ -13,10 +13,10 @@ test_that("'pevals' must be an 'pevals' object", {
 
 test_that("create_prc() directly takes scores and labels", {
   pevals <- calc_measures(scores = c(0.1, 0.2, 0.2, 0),
-                          olabs = c(1, 0, 1, 1))
+                          labels = c(1, 0, 1, 1))
   prc_curve1 <- create_prc(pevals)
   prc_curve2 <- create_prc(scores = c(0.1, 0.2, 0.2, 0),
-                           olabs = c(1, 0, 1, 1))
+                           labels = c(1, 0, 1, 1))
 
   expect_equal(prc_curve1[["auc"]], prc_curve2[["auc"]])
 })
@@ -25,11 +25,11 @@ test_that("create_prc() directly takes scores and labels", {
 test_that("create_prc() can take arguments for reformat_data()", {
   err_msg <- "Invalid arguments: na.rm"
   expect_error(create_prc(scores = c(0.1, 0.2, 0.2, 0),
-                          olabs = c(1, 0, 1, 1), na.rm = TRUE),
+                          labels = c(1, 0, 1, 1), na.rm = TRUE),
                err_msg)
 
   prc_curve <- create_prc(scores = c(0.1, 0.2, 0),
-                          olabs = c(1, 0, 1),
+                          labels = c(1, 0, 1),
                           na.last = TRUE,
                           ties.method = "first")
 
@@ -39,7 +39,7 @@ test_that("create_prc() can take arguments for reformat_data()", {
 
 test_that("create_prc() can take na.last argument", {
   expect_equal_ranks <- function(scores, na.last, ranks) {
-    prc_curve <- create_prc(scores = scores, olabs = c(1, 0, 1),
+    prc_curve <- create_prc(scores = scores, labels = c(1, 0, 1),
                             na.last = na.last)
 
     fmdat <- .get_obj(prc_curve, "fmdat")
@@ -69,7 +69,7 @@ test_that("create_prc() can take ties.method argument", {
 
   expect_equal_ranks <- function(ties.method, ranks) {
     prc_curve <- create_prc(scores = c(0.1, 0.2, 0.2, 0.2, 0.3),
-                            olabs = c(1, 0, 1, 1, 1),
+                            labels = c(1, 0, 1, 1, 1),
                             ties.method = ties.method)
 
     fmdat <- .get_obj(prc_curve, "fmdat")
@@ -87,14 +87,14 @@ test_that("create_prc() can take ties.method argument", {
 })
 
 test_that("create_prc() reterns a 'prc_curve' object", {
-  prc_curve <- create_prc(scores = c(0.1, 0.2, 0), olabs = c(1, 0, 1))
+  prc_curve <- create_prc(scores = c(0.1, 0.2, 0), labels = c(1, 0, 1))
 
   expect_equal(class(prc_curve), "prc_curve")
 })
 
 test_that("create_prc() reterns a correct Precision-Recall curve", {
   prc_curve <- create_prc(scores = c(0.6, 0.5, 0.4, 0.3, 0.2, 0.1),
-                          olabs = c(0, 1, 0, 1, 0, 1), x_interval = 0.1)
+                          labels = c(0, 1, 0, 1, 0, 1), x_interval = 0.1)
 
   expect_equal(attr(prc_curve, "np"), 3)
   expect_equal(attr(prc_curve, "nn"), 3)
@@ -113,14 +113,14 @@ test_that("create_prc() reterns a correct Precision-Recall curve", {
 
 test_that("create_prc() reterns correct a PRC AUC with 1st point (0, 0)", {
   prc_curve <- create_prc(scores = c(0.6, 0.5, 0.4, 0.3, 0.2, 0.1),
-                          olabs = c(0, 1, 0, 1, 0, 1), x_interval = 0.01)
+                          labels = c(0, 1, 0, 1, 0, 1), x_interval = 0.01)
 
   expect_equal(attr(prc_curve, "auc"), 0.395, tolerance = 1e-3)
 })
 
 test_that("create_prc() reterns correct a PRC AUC with 1st point (0, 1)", {
   prc_curve <- create_prc(scores = c(0.6, 0.5, 0.4, 0.3, 0.2, 0.1),
-                          olabs = c(1, 1, 0, 1, 0, 0), x_interval = 0.01)
+                          labels = c(1, 1, 0, 1, 0, 0), x_interval = 0.01)
 
   expect_equal(attr(prc_curve, "auc"), 0.904, tolerance = 1e-3)
 })

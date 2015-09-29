@@ -1,5 +1,5 @@
 context("PL6: Create ROC and Precision-Recall curves")
-# Test create_curves(pevals, x.interval, scores, olabs)
+# Test create_curves(pevals, x.interval, scores, labels)
 
 test_that("'pevals' must be an 'pevals' object", {
   expect_err_msg <- function(pevals) {
@@ -13,10 +13,10 @@ test_that("'pevals' must be an 'pevals' object", {
 
 test_that("create_curves() directly takes scores and labels", {
   pevals <- calc_measures(scores = c(0.1, 0.2, 0.2, 0),
-                         olabs = c(1, 0, 1, 1))
+                         labels = c(1, 0, 1, 1))
   curves1 <- create_curves(pevals)
   curves2 <- create_curves(scores = c(0.1, 0.2, 0.2, 0),
-                           olabs = c(1, 0, 1, 1))
+                           labels = c(1, 0, 1, 1))
 
   expect_equal(attr(curves1[["roc"]], "auc"),
                attr(curves2[["roc"]], "auc"))
@@ -25,11 +25,11 @@ test_that("create_curves() directly takes scores and labels", {
 test_that("create_curves() can take arguments for reformat_data()", {
   err_msg <- "Invalid arguments: na.rm"
   expect_error(create_curves(scores = c(0.1, 0.2, 0.2, 0),
-                             olabs = c(1, 0, 1, 1), na.rm = TRUE),
+                             labels = c(1, 0, 1, 1), na.rm = TRUE),
                err_msg)
 
   curves <- create_curves(scores = c(0.1, 0.2, 0),
-                          olabs = c(1, 0, 1),
+                          labels = c(1, 0, 1),
                           na.last = TRUE,
                           ties.method = "first")
 
@@ -39,7 +39,7 @@ test_that("create_curves() can take arguments for reformat_data()", {
 
 test_that("create_curves() can take na.last argument", {
   expect_equal_ranks <- function(scores, na.last, ranks) {
-    curves <- create_curves(scores = scores, olabs = c(1, 0, 1),
+    curves <- create_curves(scores = scores, labels = c(1, 0, 1),
                             na.last = na.last)
 
     fmdat <- .get_obj(curves, "fmdat")
@@ -68,7 +68,7 @@ test_that("create_curves() can take ties.method argument", {
 
   expect_equal_ranks <- function(ties.method, ranks) {
     curves <- create_curves(scores = c(0.1, 0.2, 0.2, 0.2, 0.3),
-                            olabs = c(1, 0, 1, 1, 1),
+                            labels = c(1, 0, 1, 1, 1),
                             ties.method = ties.method)
 
     fmdat <- .get_obj(curves, "fmdat")
@@ -86,13 +86,13 @@ test_that("create_curves() can take ties.method argument", {
 })
 
 test_that("create_curves() reterns a 'curves' object", {
-  curves <- create_curves(scores = c(0.1, 0.2, 0), olabs = c(1, 0, 1))
+  curves <- create_curves(scores = c(0.1, 0.2, 0), labels = c(1, 0, 1))
 
   expect_equal(class(curves), "curves")
 })
 
 test_that("'curves' contains a list with 2 items", {
-  curves <- create_curves(scores = c(0.1, 0.2, 0), olabs = c(1, 0, 1))
+  curves <- create_curves(scores = c(0.1, 0.2, 0), labels = c(1, 0, 1))
 
   expect_true(is.list(curves))
   expect_equal(length(curves), 2)
@@ -100,7 +100,7 @@ test_that("'curves' contains a list with 2 items", {
 
 test_that("create_curves() reterns a correct ROC curve", {
   curves <- create_curves(scores = c(0.6, 0.5, 0.4, 0.3, 0.2, 0.1),
-                          olabs = c(0, 1, 0, 1, 0, 1), x_interval = 0.1)
+                          labels = c(0, 1, 0, 1, 0, 1), x_interval = 0.1)
 
   expect_equal(attr(curves[["roc"]], "np"), 3)
   expect_equal(attr(curves[["roc"]], "nn"), 3)
@@ -117,7 +117,7 @@ test_that("create_curves() reterns a correct ROC curve", {
 
 test_that("create_curves() reterns correct a Precision-Recall curve", {
   curves <- create_curves(scores = c(0.6, 0.5, 0.4, 0.3, 0.2, 0.1),
-                          olabs = c(0, 1, 0, 1, 0, 1), x_interval = 0.1)
+                          labels = c(0, 1, 0, 1, 0, 1), x_interval = 0.1)
 
   expect_equal(attr(curves[["prc"]], "np"), 3)
   expect_equal(attr(curves[["prc"]], "np"), 3)
@@ -137,21 +137,21 @@ test_that("create_curves() reterns correct a Precision-Recall curve", {
 
 test_that("create_curves() reterns a correct ROC AUC", {
   curves <- create_curves(scores = c(0.6, 0.5, 0.4, 0.3, 0.2, 0.1),
-                          olabs = c(0, 1, 0, 1, 0, 1), x_interval = 0.01)
+                          labels = c(0, 1, 0, 1, 0, 1), x_interval = 0.01)
 
   expect_equal(attr(curves[["roc"]], "auc"), 1/3, tolerance = 1e-3)
 })
 
 test_that("create_curves() reterns correct a PRC AUC with 1st point (0, 0)", {
   curves <- create_curves(scores = c(0.6, 0.5, 0.4, 0.3, 0.2, 0.1),
-                          olabs = c(0, 1, 0, 1, 0, 1), x_interval = 0.01)
+                          labels = c(0, 1, 0, 1, 0, 1), x_interval = 0.01)
 
   expect_equal(attr(curves[["prc"]], "auc"), 0.395, tolerance = 1e-3)
 })
 
 test_that("create_curves() reterns correct a PRC AUC with 1st point (0, 1)", {
   curves <- create_curves(scores = c(0.6, 0.5, 0.4, 0.3, 0.2, 0.1),
-                          olabs = c(1, 1, 0, 1, 0, 0), x_interval = 0.01)
+                          labels = c(1, 1, 0, 1, 0, 0), x_interval = 0.01)
 
   expect_equal(attr(curves[["prc"]], "auc"), 0.904, tolerance = 1e-3)
 })

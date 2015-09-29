@@ -1,5 +1,5 @@
 context("PL4: Create confusion matrices")
-# Test create_confmats(fmdat, scores, olabs)
+# Test create_confmats(fmdat, scores, labels)
 
 test_that("'fmdat' must be a 'fmdat' object", {
   expect_err_msg <- function(fmdat) {
@@ -15,7 +15,7 @@ test_that("create_confmats() can directly take scores and labels", {
   fmdat <- reformat_data(c(0.1, 0.2, 0.2, 0), c(1, 0, 1, 1))
   cmats1 <- create_confmats(fmdat)
   cmats2 <- create_confmats(scores = c(0.1, 0.2, 0.2, 0),
-                            olabs = c(1, 0, 1, 1))
+                            labels = c(1, 0, 1, 1))
 
   expect_equal(cmats1, cmats2)
 })
@@ -23,11 +23,11 @@ test_that("create_confmats() can directly take scores and labels", {
 test_that("create_confmats() can take arguments for reformat_data()", {
   err_msg <- "Invalid arguments: na.rm"
   expect_error(create_confmats(scores = c(0.1, 0.2, 0.2, 0),
-                               olabs = c(1, 0, 1, 1), na.rm = TRUE),
+                               labels = c(1, 0, 1, 1), na.rm = TRUE),
                err_msg)
 
   cmats <- create_confmats(scores = c(0.1, 0.2, 0),
-                           olabs = c(1, 0, 1),
+                           labels = c(1, 0, 1),
                            na.last = TRUE,
                            ties.method = "first")
 
@@ -38,7 +38,7 @@ test_that("create_confmats() can take arguments for reformat_data()", {
 test_that("create_confmats() can take na.last argument", {
   expect_equal_ranks <- function(scores, na.last, ranks) {
     cmats <- create_confmats(scores = scores,
-                             olabs = c(1, 0, 1),
+                             labels = c(1, 0, 1),
                              na.last = na.last)
 
     fmdat <- .get_obj(cmats, "fmdat")
@@ -67,7 +67,7 @@ test_that("create_confmats() can take ties.method argument", {
 
   expect_equal_ranks <- function(ties.method, ranks) {
     cmats <- create_confmats(scores = c(0.1, 0.2, 0.2, 0.2, 0.3),
-                             olabs = c(1, 0, 1, 1, 1),
+                             labels = c(1, 0, 1, 1, 1),
                              ties.method = ties.method)
 
     fmdat <- .get_obj(cmats, "fmdat")
@@ -85,20 +85,20 @@ test_that("create_confmats() can take ties.method argument", {
 })
 
 test_that("create_confmats() reterns a 'cmats' object", {
-  cmats <- create_confmats(scores = c(0.1, 0.2, 0), olabs = c(1, 0, 1))
+  cmats <- create_confmats(scores = c(0.1, 0.2, 0), labels = c(1, 0, 1))
 
   expect_equal(class(cmats), "cmats")
 })
 
 test_that("'cmats' contains a list with 7 items", {
-  cmats <- create_confmats(scores = c(0.1, 0.2, 0), olabs = c(1, 0, 1))
+  cmats <- create_confmats(scores = c(0.1, 0.2, 0), labels = c(1, 0, 1))
 
   expect_true(is.list(cmats))
   expect_equal(length(cmats), 7)
 })
 
 test_that("TPs, FNs, FPs, and TNs must be the same length", {
-  cmats <- create_confmats(scores = c(0.1, 0.2, 0), olabs = c(1, 0, 1))
+  cmats <- create_confmats(scores = c(0.1, 0.2, 0), labels = c(1, 0, 1))
   vec_size <- length(cmats[["ranks"]])
 
   expect_true(vec_size != 0)
@@ -109,7 +109,7 @@ test_that("TPs, FNs, FPs, and TNs must be the same length", {
 })
 
 test_that("'cmats' contains correct items", {
-  cmats <- create_confmats(scores = c(0.1, 0.2, 0), olabs = c(1, 0, 1))
+  cmats <- create_confmats(scores = c(0.1, 0.2, 0), labels = c(1, 0, 1))
   np <- cmats[["pos_num"]]
   nn <- cmats[["neg_num"]]
   vec_size <- length(cmats[["ranks"]])
@@ -127,7 +127,7 @@ test_that("'cmats' contains correct items", {
 
 test_that("create_confmats() reterns correct matrices", {
   cmats <- create_confmats(scores = c(0.1, 0.2, 0, 0.3),
-                           olabs = c(1, 0, 0, 1))
+                           labels = c(1, 0, 0, 1))
 
   expect_equal(cmats[["pos_num"]], 2)
   expect_equal(cmats[["neg_num"]], 2)
@@ -139,14 +139,14 @@ test_that("create_confmats() reterns correct matrices", {
 
 test_that("create_confmats() handles tied scores 1", {
   cmats <- create_confmats(scores = c(0.3, 0.2, 0.2, 0.2, 0.2, 0.1),
-                           olabs = c(0, 1, 0, 1, 0, 1))
+                           labels = c(0, 1, 0, 1, 0, 1))
   expect_equal(cmats[["tp"]], c(0, 0, 0.5, 1, 1.5, 2, 3))
   expect_equal(cmats[["fp"]], c(0, 1, 1.5, 2, 2.5, 3, 3))
 })
 
 test_that("create_confmats() handles tied scores 2", {
   cmats <- create_confmats(scores = c(0.3, 0.2, 0.2, 0.2, 0.2),
-                           olabs = c(0, 1, 0, 1, 0))
+                           labels = c(0, 1, 0, 1, 0))
   expect_equal(cmats[["tp"]], c(0, 0, 0.5, 1, 1.5, 2))
   expect_equal(cmats[["fp"]], c(0, 1, 1.5, 2, 2.5, 3))
 })

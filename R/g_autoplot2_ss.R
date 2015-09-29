@@ -16,7 +16,7 @@
 #' library(ggplot2)
 #' library(gridExtra)
 #' data(P10N10)
-#' curves <- evalmod(scores = P10N10$scores, olabs = P10N10$labels)
+#' curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 #'
 #' autoplot(curves)
 autoplot.sscurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
@@ -59,7 +59,7 @@ autoplot.sscurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
 #' @examples
 #' library(ggplot2)
 #' data(P10N10)
-#' curves <- evalmod(scores = P10N10$scores, olabs = P10N10$labels)
+#' curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 #'
 #' autoplot(curves[["rocs"]])
 autoplot.ssroc <- function(object, ...) {
@@ -81,7 +81,7 @@ autoplot.ssroc <- function(object, ...) {
 #' @examples
 #' library(ggplot2)
 #' data(P10N10)
-#' curves <- evalmod(scores = P10N10$scores, olabs = P10N10$labels)
+#' curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 #'
 #' autoplot(curves[["prcs"]])
 autoplot.ssprc <- function(object, ...) {

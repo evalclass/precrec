@@ -46,7 +46,7 @@ autoplot.fmdat <- function(object, ...) {
 #'
 #' data(B500)
 #' cmat <- create_confmats(scores = B500$good_er_scores,
-#'                         olabs = B500$labels)
+#'                         labels = B500$labels)
 #' autoplot(cmat)
 autoplot.cmats <- function(object, ...) {
   df <- .prepare_autoplot(object)
@@ -79,7 +79,7 @@ autoplot.cmats <- function(object, ...) {
 #'
 #' data(B500)
 #' pevals <- calc_measures(scores = B500$good_er_scores,
-#'                         olabs = B500$labels)
+#'                         labels = B500$labels)
 #' autoplot(pevals)
 autoplot.pevals <- function(object, ...) {
   df <- .prepare_autoplot(object)

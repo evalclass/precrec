@@ -11,7 +11,7 @@
 #'   \code{\link{create_confmats}}.
 #' @param scores A numeric vector of predicted scores.
 #'   Ignored when \code{cmats} is set.
-#' @param olabs A numeric vector or a factor of observed labels.
+#' @param labels A numeric vector or a factor of observed labels.
 #'   Ignored when \code{cmats} is set.
 #' @param ... Other arguments passed to \code{\link{reformat_data}} via
 #'   \code{\link{create_confmats}}.
@@ -24,12 +24,12 @@
 #' fmdat <- reformat_data(P10N10$scores, P10N10$labels)
 #' cmats <- create_confmats(fmdat)
 #' calc_measures(cmats)
-#' calc_measures(scores = P10N10$scores, olabs = P10N10$labels)
-calc_measures <- function(cmats, scores = NULL, olabs = NULL, ...) {
+#' calc_measures(scores = P10N10$scores, labels = P10N10$labels)
+calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
   # === Validate input arguments ===
   # Create cmats from scores and labels if cmats is missing
   cmats <- .create_by_scores_and_labels(cmats, "cmats", create_confmats,
-                                        scores, olabs, ...)
+                                        scores, labels, ...)
   .validate(cmats)
 
   # === Create confusion matrices for all possible threshold values ===

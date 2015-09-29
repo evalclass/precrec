@@ -1,5 +1,5 @@
 context("PL5: Calculate evaluation measures")
-# Test calc_measures(cmats, scores, olabs)
+# Test calc_measures(cmats, scores, labels)
 
 test_that("'cmats' must be a 'cmats' object", {
   expect_err_msg <- function(cmats) {
@@ -13,10 +13,10 @@ test_that("'cmats' must be a 'cmats' object", {
 
 test_that("calc_measures() can directly take scores and labels", {
   cmats <- create_confmats(scores = c(0.1, 0.2, 0.2, 0),
-                           olabs = c(1, 0, 1, 1))
+                           labels = c(1, 0, 1, 1))
   pevals1 <- calc_measures(cmats)
   pevals2 <- calc_measures(scores = c(0.1, 0.2, 0.2, 0),
-                          olabs = c(1, 0, 1, 1))
+                          labels = c(1, 0, 1, 1))
 
   expect_equal(pevals1, pevals2)
 })
@@ -24,11 +24,11 @@ test_that("calc_measures() can directly take scores and labels", {
 test_that("calc_measures() can take arguments for reformat_data()", {
   err_msg <- "Invalid arguments: na.rm"
   expect_error(calc_measures(scores = c(0.1, 0.2, 0.2, 0),
-                             olabs = c(1, 0, 1, 1), na.rm = TRUE),
+                             labels = c(1, 0, 1, 1), na.rm = TRUE),
                err_msg)
 
   pevals <- calc_measures(scores = c(0.1, 0.2, 0),
-                          olabs = c(1, 0, 1),
+                          labels = c(1, 0, 1),
                           na.last = TRUE,
                           ties.method = "first")
 
@@ -40,7 +40,7 @@ test_that("calc_measures() can take arguments for reformat_data()", {
 test_that("calc_measures() can take na.last argument", {
   expect_equal_ranks <- function(scores, na.last, ranks) {
     pevals <- calc_measures(scores = scores,
-                            olabs = c(1, 0, 1),
+                            labels = c(1, 0, 1),
                             na.last = na.last)
 
     fmdat <- .get_obj(pevals, "fmdat")
@@ -69,7 +69,7 @@ test_that("calc_measures() can take ties.method argument", {
 
   expect_equal_ranks <- function(ties.method, ranks) {
     pevals <- calc_measures(scores = c(0.1, 0.2, 0.2, 0.2, 0.3),
-                            olabs = c(1, 0, 1, 1, 1),
+                            labels = c(1, 0, 1, 1, 1),
                             ties.method = ties.method)
 
     fmdat <- .get_obj(pevals, "fmdat")
@@ -87,13 +87,13 @@ test_that("calc_measures() can take ties.method argument", {
 })
 
 test_that("calc_measures() reterns an 'pevals' object", {
-  pevals <- calc_measures(scores = c(0.1, 0.2, 0), olabs = c(1, 0, 1))
+  pevals <- calc_measures(scores = c(0.1, 0.2, 0), labels = c(1, 0, 1))
 
   expect_equal(class(pevals), "pevals")
 })
 
 test_that("'pevals' contains a list with 7 items", {
-  pevals <- calc_measures(scores = c(0.1, 0.2, 0), olabs = c(1, 0, 1))
+  pevals <- calc_measures(scores = c(0.1, 0.2, 0), labels = c(1, 0, 1))
 
   expect_true(is.list(pevals))
   expect_equal(length(pevals), 7)
@@ -101,7 +101,7 @@ test_that("'pevals' contains a list with 7 items", {
 
 test_that("calc_measures() reterns correct evaluation values", {
   pevals <- calc_measures(scores = c(0.1, 0.2, 0, 0.3),
-                          olabs = c(1, 0, 0, 1))
+                          labels = c(1, 0, 0, 1))
 
   expect_equal(pevals[["pos_num"]], 2)
   expect_equal(pevals[["neg_num"]], 2)
