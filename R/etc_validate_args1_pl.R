@@ -1,4 +1,6 @@
+#
 # Validate arguments of pl_main()
+#
 .validate_pl_main_args <- function(mdat, model_type, data_type, x_interval) {
 
   # Check model type
@@ -20,7 +22,9 @@
 
 }
 
+#
 # Validate arguments of .join_datasets()
+#
 .validate_join_datasets_args <- function(..., efunc_vtype, efunc_nrow, byrow) {
 
   # Check ...
@@ -49,7 +53,9 @@
 
 }
 
+#
 # Validate arguments of mmdata()
+#
 .validate_mmdata_args <- function(lscores, llabels, model_names, data_nos,
                                   exp_priority, na.last, ties.method, levels) {
 
@@ -79,7 +85,9 @@
 
 }
 
+#
 # Validate arguments of reformat_data()
+#
 .validate_reformat_data_args <- function(obj, obj_name, scores, labels, ...) {
 
   # Check '...'

@@ -1,12 +1,18 @@
+#
 # A generic to validate data
+#
 .validate <- function(x) UseMethod(".validate")
 
+#
 # Default .validate
+#
 .validate.default <- function(x) {
   stop(paste0("Unrecognized class for .validate(): '", class(x), "'"))
 }
 
+#
 # Validate class items and attributes
+#
 .validate_basic <- function(obj, class_name, func_name, item_names, attr_names,
                             arg_names) {
   # Check class

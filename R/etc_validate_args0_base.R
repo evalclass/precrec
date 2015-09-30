@@ -1,10 +1,14 @@
+#
 # Validate scores
+#
 .validate_scores <- function(scores) {
   assertthat::assert_that(is.atomic(scores), is.vector(scores),
                           is.numeric(scores), length(scores) > 0L)
 }
 
+#
 # Validate labels
+#
 .validate_labels <- function(labels) {
   assertthat::assert_that(is.atomic(labels),
                           ((is.vector(labels) && is.numeric(labels))
@@ -12,7 +16,9 @@
                           length(unique(labels)) == 2L)
 }
 
+#
 # Validate scores and labels
+#
 .validate_scores_and_labels <- function(obj, obj_name, scores, labels, ...) {
 
   if (missing(obj) || is.null(obj)) {
@@ -49,7 +55,9 @@
   obj
 }
 
+#
 # Validate na.last
+#
 .validate_na_last <- function(na.last) {
   if (!is.null(na.last)) {
     assertthat::assert_that(is.atomic(na.last),
@@ -58,7 +66,9 @@
   }
 }
 
+#
 # Validate ties.method
+#
 .validate_ties_method <- function(ties.method) {
   if (!is.null(ties.method)) {
     assertthat::assert_that(assertthat::is.string(ties.method))
@@ -71,7 +81,9 @@
   }
 }
 
+#
 # Validate levels
+#
 .validate_levels <- function(levels) {
   if (!is.null(levels)) {
     assertthat::assert_that(is.atomic(levels),
@@ -80,7 +92,9 @@
   }
 }
 
+#
 # Validate model_name
+#
 .validate_model_name <- function(model_name) {
   if (!is.null(model_name)) {
     assertthat::assert_that(is.atomic(model_name),
@@ -89,7 +103,9 @@
   }
 }
 
+#
 # Validate data_no
+#
 .validate_data_no <- function(data_no) {
   if (!is.null(data_no)) {
     assertthat::assert_that(assertthat::is.number(data_no)
@@ -97,7 +113,9 @@
   }
 }
 
+#
 # Validate exp_priority
+#
 .validate_exp_priority <- function(exp_priority) {
   if (!is.null(exp_priority)) {
     assertthat::assert_that(is.atomic(exp_priority), is.vector(exp_priority),
@@ -107,14 +125,14 @@
   }
 }
 
-
+#
 # Validate model_names
+#
 .validate_model_names <- function(model_names, datalen = NULL) {
   if (!is.null(model_names)) {
 
     assertthat::assert_that(is.atomic(model_names), is.vector(model_names),
                             is.character(model_names),
-                            assertthat::noNA(model_names),
                             length(model_names) == datalen)
 
     for (i in 1:length(model_names)) {
@@ -123,7 +141,9 @@
   }
 }
 
+#
 # Validate data_nos
+#
 .validate_data_nos <- function(data_nos, datalen = NULL) {
   if (!is.null(data_nos)) {
 
@@ -138,7 +158,9 @@
   }
 }
 
+#
 # Validate x_interval
+#
 .validate_x_interval <- function(x_interval) {
   if (!is.null(x_interval)) {
     assertthat::assert_that(assertthat::is.number(x_interval),
@@ -146,7 +168,9 @@
   }
 }
 
+#
 # Validate model type
+#
 .validate_model_type <- function(model_type) {
   if (!is.null(model_type)) {
     assertthat::assert_that(assertthat::is.string(model_type),
@@ -155,7 +179,9 @@
   }
 }
 
+#
 # Validate data type
+#
 .validate_data_type <- function(data_type) {
   if (!is.null(data_type)) {
     assertthat::assert_that(assertthat::is.string(data_type),

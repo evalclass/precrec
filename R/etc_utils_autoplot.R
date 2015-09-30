@@ -21,7 +21,9 @@
     ncol = 1)
 }
 
+#
 # Load ggplot2
+#
 .load_ggplot2 <- function() {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
     stop(paste("This function should not be called directly,",
@@ -31,7 +33,9 @@
   }
 }
 
+#
 # Load grid
+#
 .load_grid <- function() {
   if (!requireNamespace("grid", quietly = TRUE)) {
     stop("grid needed for this function to work. Please install it.",
@@ -39,7 +43,9 @@
   }
 }
 
+#
 # Load gridExtra
+#
 .load_gridExtra <- function() {
   if (!requireNamespace("gridExtra", quietly = TRUE)) {
     stop("gridExtra needed for this function to work. Please install it.",
@@ -47,7 +53,9 @@
   }
 }
 
+#
 # Prepare autoplot and return a data frame
+#
 .prepare_autoplot <- function(object) {
   # === Check package availability  ===
   .load_ggplot2()
@@ -59,7 +67,9 @@
   df <- ggplot2::fortify(object)
 }
 
+#
 # Geom basic
+#
 .geom_basic <- function(p, main, xlab, ylab) {
   p <- p + ggplot2::theme_bw()
   p <- p + ggplot2::ggtitle(main)
@@ -69,7 +79,9 @@
   p
 }
 
+#
 # Geom_line wrapper
+#
 .geom_line_wrapper <- function(p, main, xlab, ylab) {
   p <- p + ggplot2::geom_line()
   p <- .geom_basic(p, main, xlab, ylab)
@@ -77,7 +89,9 @@
   p
 }
 
+#
 # Geom_line wrapper for ROC and Precision-Recall
+#
 .geom_rocprc_line_wrapper <- function(p, main, xlab, ylab) {
   p <- .geom_line_wrapper(p, main, xlab, ylab)
   p <- p + ggplot2::coord_fixed(ratio = 1)
@@ -86,7 +100,9 @@
   p
 }
 
+#
 # Make main titile
+#
 .make_rocprc_title <- function(object, pt) {
   np <- attr(object, "np")
   nn <- attr(object, "nn")
@@ -94,7 +110,9 @@
   main <- paste0(pt, " - P: ", np, ", N: ", nn)
 }
 
+#
 # Geom_line for ROC
+#
 .geom_roc_line_wrapper <- function(p, object) {
   main <- .make_rocprc_title(object, "ROC")
 
@@ -107,7 +125,9 @@
   p
 }
 
+#
 # Geom_line for Precision-Recall
+#
 .geom_prc_line_wrapper <- function(p, object) {
   main <- .make_rocprc_title(object, "Precision-Recall")
   np <- attr(object, "np")
@@ -123,7 +143,9 @@
   p
 }
 
+#
 # Check curve types
+#
 .check_curvetype <- function(curvetype) {
   if (!is.atomic(curvetype) || !is.character(curvetype)
       || length(curvetype) > 2

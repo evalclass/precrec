@@ -121,7 +121,9 @@ fortify.pevals <- function(model, data = NULL, ...) {
                                              "precision")))
 }
 
+#
 # Convert a roc_curve object to a data frame for ggplot2
+#
 fortify.roc_curve <- function(model, data = NULL, ...) {
   # === Check package availability  ===
   .load_ggplot2()
@@ -134,7 +136,9 @@ fortify.roc_curve <- function(model, data = NULL, ...) {
 
 }
 
+#
 # Convert a prc_curve object to a data frame for ggplot2
+#
 fortify.prc_curve <- function(model, data = NULL, ...) {
   fortify.roc_curve(model, data, ...)
 }

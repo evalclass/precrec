@@ -1,7 +1,8 @@
 create_sim_samples <- function(n_repeat, np, nn, score_names = "random") {
   # === Validate input arguments ===
   choices <- c("random", "poor_er", "good_er", "excel", "perf")
-  if (assertthat::is.string(score_names) && score_names == "all") {
+  if (assertthat::see_if(assertthat::is.string(score_names))
+      && score_names == "all") {
     score_names <- choices
   } else if (!.is_char_vec(score_names) || !(score_names %in% choices)) {
     stop(gettextf("'score_names' should be one of %s",
@@ -34,6 +35,9 @@ create_sim_samples <- function(n_repeat, np, nn, score_names = "random") {
        data_nos = seq(n_repeat))
 }
 
+#
+# Sample random data for five different levels
+#
 sample_rnd5levs <- function(np, nn) {
   labels <- c(rep(1, np), rep(0, nn))
 
@@ -54,6 +58,9 @@ sample_rnd5levs <- function(np, nn) {
   )
 }
 
+#
+# Replicate samples for one level
+#
 rep_one_level <- function(n, score_name, np, nn) {
   labels <- c(rep(1, np), rep(0, nn))
 
@@ -66,6 +73,9 @@ rep_one_level <- function(n, score_name, np, nn) {
   list(scores = scores, labels = labels)
 }
 
+#
+# Replicate samples for several levels
+#
 rep_all_levels <- function(n, np, nn) {
   labels <- c(rep(1, np), rep(0, nn))
 

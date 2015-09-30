@@ -40,7 +40,7 @@
 #' mdat <- mmdata(scores, labels, model_names = model_names)
 #' mdat
 mmdata <- function(scores, labels, model_names = NULL, data_nos = NULL,
-                   exp_priority = "model_names",  na.last = FALSE,
+                   exp_priority = "model_names", na.last = FALSE,
                    ties.method = "average",
                    levels = c("negative", "positive"), ...) {
 

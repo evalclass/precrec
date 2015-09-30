@@ -55,8 +55,9 @@ autoplot.mscurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
   }
 }
 
-
+#
 # Plot ROC curves for multiple models
+#
 autoplot.msroc <- function(object, ...) {
   df <- .prepare_autoplot(object)
 
@@ -65,7 +66,9 @@ autoplot.msroc <- function(object, ...) {
   p <- .geom_roc_line_wrapper(p, object[[1]])
 }
 
+#
 # Plot Precision-Recall curves for multiple models
+#
 autoplot.msprc <- function(object, ...) {
   df <- .prepare_autoplot(object)
 

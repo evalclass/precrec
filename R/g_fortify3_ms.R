@@ -56,7 +56,9 @@ fortify.mscurves <- function(model, data = NULL, ...) {
   df <-data.frame(x = x, y = y, group = group, model_name = model_name)
 }
 
+#
 # Convert a mroc_curves object to a data frame for ggplot2.
+#
 fortify.msroc <- function(model, data = NULL, ...) {
   # === Check package availability  ===
   .load_ggplot2()
@@ -77,7 +79,9 @@ fortify.msroc <- function(model, data = NULL, ...) {
   df
 }
 
+#
 # Convert a mprc_curves object to a data frame for ggplot2.
+#
 fortify.msprc <- function(model, data = NULL, ...) {
   fortify.msroc(model, data = NULL, ...)
 }

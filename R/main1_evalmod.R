@@ -3,6 +3,7 @@
 #' \code{evalmod} takes predicted scores from a model and binary lables
 #' from an observed dataset and calculates ROC and Precision-Recall curves.
 #'
+#' @param mdat An \code{mdat} object created by \code{\link{mmdata}}.
 #' @param scores A numeric vector of predicted scores.
 #' @param labels A numeric vector or a factor of observed labels.
 #' @param x_interval A numeric value to specifiy an interval of the
@@ -18,7 +19,7 @@
 #' @param levels A character vector to overide the levels of the factor for
 #'   observed binary labels.
 #' @param model_name The name of the model/classifier to be evaluated.
-#' @return \code{evalmod} returns a \code{curves} S3 object that
+#' @return \code{evalmod} returns an \code{sscurves} S3 object that
 #'   contains ROC and Precision-Recall curves.
 #'
 #' @examples

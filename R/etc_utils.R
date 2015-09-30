@@ -1,4 +1,6 @@
+#
 # Check if an internal Rcpp function returns en error
+#
 .check_cpp_func_error <- function(obj, func_name) {
 
   if (obj[["errmsg"]] != "") {
@@ -7,7 +9,9 @@
   }
 }
 
+#
 # Get a specified object
+#
 .get_obj <- function(obj, obj_name) {
   if (is.null(obj_name) || is.null(obj) || class(obj) == obj_name) {
     obj
@@ -16,7 +20,9 @@
   }
 }
 
+#
 # Get an argument of the specified source object
+#
 .get_obj_arg <- function(obj, obj_name, arg_name) {
   if (!is.null(obj_name) && !is.na(obj_name)) {
     obj <- .get_obj(obj, obj_name)
@@ -29,7 +35,9 @@
   }
 }
 
+#
 # Use scores and labels to create obj
+#
 .create_by_scores_and_labels <- function(obj, obj_name, func, scores, labels,
                                          ...) {
   if (missing(obj)) {
@@ -49,7 +57,9 @@
   obj
 }
 
+#
 # Use mscores and mobslabs to create mdat
+#
 .create_by_mscores_and_mlabels <- function(mdat, mscores, mobslabs) {
 
   # Check if scores and labels are specified.

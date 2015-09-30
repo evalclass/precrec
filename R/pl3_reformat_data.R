@@ -73,7 +73,9 @@ reformat_data <- function(scores, labels, na.last = FALSE,
   .validate(s3obj)
 }
 
+#
 # Factor labels
+#
 .factor_labels <- function(labels, levels = c("negative", "positive"),
                            validate = TRUE) {
   # === Validate input arguments ===
@@ -97,7 +99,9 @@ reformat_data <- function(scores, labels, na.last = FALSE,
   flabs
 }
 
+#
 # Rank scores
+#
 .rank_scores <- function(scores, na.last = FALSE, ties.method = "average",
                          validate = TRUE) {
 

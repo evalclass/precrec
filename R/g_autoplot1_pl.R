@@ -94,7 +94,9 @@ autoplot.pevals <- function(object, ...) {
   p
 }
 
+#
 # Plot a ROC curve
+#
 autoplot.roc_curve <- function(object, ...) {
   df <- .prepare_autoplot(object)
 
@@ -105,7 +107,9 @@ autoplot.roc_curve <- function(object, ...) {
   p
 }
 
+#
 # Plot a Precision-Recall curve
+#
 autoplot.prc_curve <- function(object, ...) {
   df <- .prepare_autoplot(object)
 

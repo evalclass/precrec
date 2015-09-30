@@ -1,8 +1,8 @@
-#' Evaluate multiple models
+#' Evaluate a single model with multiple datasets
 #'
 #' \code{evalmod} takes predicted scores from a model and binary lables
 #' from an observed dataset and calculates ROC and Precision-Recall curves
-#' for multiple models.
+#' for a single models with multiple datasets.
 #'
 #' @param mdat An \code{mdat} object created by \code{\link{mmdata}}.
 #' @param scores A numeric vector of predicted scores.
@@ -40,23 +40,23 @@
 #' mdat <- mmdata(scores, labels, model_names = model_names)
 #'
 #' curves <- evalmulti(mdat)
-evalmulti <- function(mdat, scores = NULL, labels = NULL,
-                      model_names = NULL, data_nos = NULL, x_interval = 0.001,
-                      na.last = FALSE, ties.method = "average",
-                      levels = c("negative", "positive")) {
+evalcv <- function(mdat, mscores = NULL, mobslabs = NULL,
+                   model_names = NULL, data_nos = NULL, x_interval = 0.001,
+                   na.last = FALSE, ties.method = "average",
+                   levels = c("negative", "positive")) {
 
-  .validate_evalmulti_args(x_interval, model_names, na.last, ties.method,
-                           levels)
+  .validate_evasv_args(x_interval, model_names, na.last, ties.method,
+                       levels)
 
   if (!missing(mdat)) {
     .validate(mdat)
   } else {
-    mdat <- mmdata(mscores, mlabels,
+    mdat <- mmdata(mscores, mobslabs,
                    model_names = model_names, data_nos = data_nos,
                    na.last = na.last, ties.method = ties.method, levels = levels)
   }
 
-  pl_main(mdat, model_type = "multiple", data_type = "single",
+  pl_main(mdat, model_type = "single", data_type = "multiple",
           x_interval = x_interval)
 
 }

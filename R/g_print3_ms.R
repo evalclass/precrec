@@ -32,20 +32,26 @@ print.mscurves <- function(x, show_test_data = FALSE, ...) {
   }
 }
 
+#
 # Print msroc
+#
 print.msroc <- function(x, ...) {
   cat("\n  ROC curves\n\n")
   .print_mmcurves_base(x, ...)
 }
 
+#
 # Print msprc
+#
 print.msprc <- function(x, ...) {
   # === Print summary ===
   cat("\n  Precision-Recall curves\n\n")
   .print_mmcurves_base(x, ...)
 }
 
+#
 # Print test data
+#
 .print_testdat_ms <- function(x, ...) {
   # === Print summary ===
   cat("\n  Test data\n\n")
@@ -59,7 +65,9 @@ print.msprc <- function(x, ...) {
   invisible(NULL)
 }
 
+#
 # Print mmcurves
+#
 .print_mmcurves_base <- function(x, ...) {
   # === Validate input arguments ===
   .validate(x)

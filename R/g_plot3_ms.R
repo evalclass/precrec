@@ -57,7 +57,9 @@ plot.mscurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
   }
 }
 
+#
 # Plot ROC curves
+#
 plot.msroc <- function(object, show_legend = TRUE, ...) {
   old_pty <- par(pty = "s")
   on.exit(par(old_pty), add = TRUE)
@@ -72,7 +74,9 @@ plot.msroc <- function(object, show_legend = TRUE, ...) {
 
 }
 
+#
 # Plot Precision-Recall curves
+#
 plot.msprc <- function(object, show_legend = TRUE, ...) {
   old_pty <- par(pty = "s")
   on.exit(par(old_pty), add = TRUE)
@@ -97,7 +101,9 @@ plot.msprc <- function(object, show_legend = TRUE, ...) {
   }
 }
 
-# show legend
+#
+# Show legend
+#
 .show_legend <- function(object, show_legend) {
   if (show_legend) {
     old_mar <- par(mar = c(0, 0, 0, 0))
@@ -114,7 +120,9 @@ plot.msprc <- function(object, show_legend = TRUE, ...) {
   }
 }
 
+#
 # matplot wrapper
+#
 .matplot_wrapper <- function(object, curve_name, xlab, ylab) {
   # === Validate input arguments ===
   .validate(object)
@@ -131,7 +139,9 @@ plot.msprc <- function(object, show_legend = TRUE, ...) {
           xlab = xlab, ylab = ylab)
 }
 
+#
 # Make matrices for matplot
+#
 .make_matplot_mats <- function(obj) {
   ncol <- length(obj)
 
@@ -147,4 +157,3 @@ plot.msprc <- function(object, show_legend = TRUE, ...) {
 
   list(x = x, y = y)
 }
-

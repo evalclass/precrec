@@ -1,4 +1,6 @@
+#
 # Print model name and data size
+#
 .print_basic_curve_info <- function(x, indent_space = " ",
                                     show_test_data = FALSE) {
 

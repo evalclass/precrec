@@ -126,7 +126,7 @@ create_prc <- function(pevals, x_interval = 0.001, scores = NULL, labels = NULL,
 }
 
 #
-# Create either a ROC or a Precision-Recall curve
+# Create ROC or Precision-Recall curve
 #
 .create_curve <- function(x_name, y_name, func, func_name, class_name,
                           pevals, x_interval = 0.001, scores = NULL,

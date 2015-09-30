@@ -1,3 +1,6 @@
+#
+# Print sscurves
+#
 print.sscurves <- function(x, show_test_data = FALSE, ...) {
   # === Validate input arguments ===
   .validate(x)
@@ -10,20 +13,26 @@ print.sscurves <- function(x, show_test_data = FALSE, ...) {
   }
 }
 
+#
 # Print ssroc
+#
 print.ssroc <- function(x, ...) {
   cat("\n  ROC curve\n\n")
   cat("    AUC:", attr(x[[1]], "auc"), "\n\n")
 }
 
+#
 # Print ssprc
+#
 print.ssprc <- function(x, ...) {
   # === Print summary ===
   cat("\n  Precision-Recall curve\n\n")
   cat("    AUC:", attr(x[[1]], "auc"), "\n\n")
 }
 
+#
 # Print test data
+#
 .print_testdat_ss <- function(x, ...) {
   # === Print summary ===
   cat("\n  Test data\n\n")
