@@ -14,8 +14,7 @@ LazyData: TRUE
 Suggests: testthat,
     ggplot2,
     grid,
-    gridExtra,
-    pryr
+    gridExtra
 LinkingTo: Rcpp
 Imports: Rcpp,
     assertthat
