@@ -115,8 +115,8 @@ create_roc <- function(pevals, x_interval = 0.001, scores = NULL, labels = NULL,
 #' fmdat <- reformat_data(P10N10$scores, P10N10$labels)
 #' cdat <- create_confmats(fmdat)
 #' pevals <- calc_measures(cdat)
-#' create_roc(pevals)
-#' create_roc(scores = P10N10$scores, labels = P10N10$labels)
+#' create_prc(pevals)
+#' create_prc(scores = P10N10$scores, labels = P10N10$labels)
 create_prc <- function(pevals, x_interval = 0.001, scores = NULL, labels = NULL,
                        ...) {
   # === Create a Precision-Recall curve ===

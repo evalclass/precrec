@@ -1,4 +1,6 @@
-context("PL0: Pipeline main")
+library(precrec)
+
+context("PL 0: Pipeline main")
 # Test .pmatch_model_data_types(val),
 #      .make_prefix(model_type, data_type), and
 #      pl_main(mdat, model_type, data_type, x_interval)
@@ -32,20 +34,19 @@ test_that("pl_main() returns 'sscurves'", {
   expect_equal(class(pl), "sscurves")
 })
 
-test_that("'sscurves' contains 'ssrocs' and 'ssprcs'", {
+test_that("pl_main() returns 'mscurves'", {
   s1 <- c(1, 2, 3, 4)
+  s2 <- c(5, 6, 7, 8)
+  scores <- join_scores(s1, s2)
+
   l1 <- c(1, 0, 1, 0)
+  l2 <- c(1, 1, 0, 0)
+  labels <- join_labels(l1, l2)
 
-  mdat <- mmdata(s1, l1)
-  pl <- pl_main(mdat)
+  mdat <- mmdata(scores, labels)
+  pl <- pl_main(mdat, model_type = "multiple")
 
-  expect_equal(length(pl[["rocs"]]), 1)
-  expect_equal(class(pl[["rocs"]]), "ssroc")
-  expect_equal(class(pl[["rocs"]][[1]]), "roc_curve")
-
-  expect_equal(length(pl[["prcs"]]), 1)
-  expect_equal(class(pl[["prcs"]]), "ssprc")
-  expect_equal(class(pl[["prcs"]][[1]]), "prc_curve")
+  expect_equal(class(pl), "mscurves")
 })
 
 test_that("pl_main() accepts 'x_interval'", {
@@ -71,19 +72,20 @@ test_that("pl_main() accepts 'x_interval'", {
 
 })
 
-test_that("pl_main() returns 'mscurves'", {
+test_that("'sscurves' contains 'ssrocs' and 'ssprcs'", {
   s1 <- c(1, 2, 3, 4)
-  s2 <- c(5, 6, 7, 8)
-  scores <- join_scores(s1, s2)
-
   l1 <- c(1, 0, 1, 0)
-  l2 <- c(1, 1, 0, 0)
-  labels <- join_labels(l1, l2)
 
-  mdat <- mmdata(scores, labels)
-  pl <- pl_main(mdat, model_type = "multiple")
+  mdat <- mmdata(s1, l1)
+  pl <- pl_main(mdat)
 
-  expect_equal(class(pl), "mscurves")
+  expect_equal(length(pl[["rocs"]]), 1)
+  expect_equal(class(pl[["rocs"]]), "ssroc")
+  expect_equal(class(pl[["rocs"]][[1]]), "roc_curve")
+
+  expect_equal(length(pl[["prcs"]]), 1)
+  expect_equal(class(pl[["prcs"]]), "ssprc")
+  expect_equal(class(pl[["prcs"]][[1]]), "prc_curve")
 })
 
 test_that("'mscurves' contains 'msrocs' and 'msprcs'", {

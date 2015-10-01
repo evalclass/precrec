@@ -27,14 +27,12 @@
 #' mcurves <- evalmulti(mdat, model_names = model_names)
 #'
 #' plot(mcurves)
-plot.mscurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
-  if ("ROC" %in% curvetype && "PRC" %in% curvetype) {
-    m <- matrix(c(1, 2, 3, 3), nrow = 2, ncol = 2, byrow = TRUE)
-    layout(mat = m, heights = c(0.85, 0.15))
-  }
+plot.mscurves <- function(x, y = NULL, curvetype = c("ROC", "PRC"),
+                          show_legend = TRUE, ...) {
 
   # === Validate input arguments ===
-  .validate(object)
+  .check_show_legend(show_legend)
+  .validate(x)
 
   if (!is.atomic(curvetype) || !is.character(curvetype)
       || length(curvetype) > 2
@@ -44,74 +42,87 @@ plot.mscurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
   }
 
   # === Create a plot ===
+  show_legend2 <- show_legend
+  if ("ROC" %in% curvetype && "PRC" %in% curvetype) {
+    if (show_legend) {
+      m <- matrix(c(1, 2, 3, 3), nrow = 2, ncol = 2, byrow = TRUE)
+      layout(mat = m, heights = c(0.85, 0.15))
+    } else {
+      m <- matrix(c(1, 2), nrow = 1, ncol = 2)
+      layout(mat = m)
+    }
+    on.exit(layout(1), add = TRUE)
+    show_legend2 <- FALSE
+  }
+
   if ("ROC" %in% curvetype) {
-    plot(object[["rocs"]], show_legend = FALSE)
+    plot(x[["rocs"]], show_legend = show_legend2)
   }
 
   if ("PRC" %in% curvetype) {
-    plot(object[["prcs"]], show_legend = FALSE)
+    plot(x[["prcs"]], show_legend = show_legend2)
   }
 
   if ("ROC" %in% curvetype && "PRC" %in% curvetype) {
-    .show_legend(object, TRUE)
+    .show_legend(x, show_legend)
   }
 }
 
 #
 # Plot ROC curves
 #
-plot.msroc <- function(object, show_legend = TRUE, ...) {
+plot.msroc <- function(x, y = NULL, show_legend = TRUE, ...) {
   old_pty <- par(pty = "s")
   on.exit(par(old_pty), add = TRUE)
 
-  .prepare_layout(show_legend)
+  if (show_legend) {
+    m <- matrix(c(1, 2), nrow = 2, ncol = 1)
+    layout(mat = m, heights = c(0.85, 0.15))
+    on.exit(layout(1), add = TRUE)
+  }
 
   # === Create a plot ===
-  .matplot_wrapper(object, "ROC", "1 - Specificity", "Sensitivity")
+  .matplot_wrapper(x, "ROC", "1 - Specificity", "Sensitivity")
   abline(a = 0, b = 1, col = "grey", lty = 3)
 
-  .show_legend(object, show_legend)
+  .show_legend(x, show_legend)
 
 }
 
 #
 # Plot Precision-Recall curves
 #
-plot.msprc <- function(object, show_legend = TRUE, ...) {
+plot.msprc <- function(x, y = NULL, show_legend = TRUE, ...) {
   old_pty <- par(pty = "s")
   on.exit(par(old_pty), add = TRUE)
 
-  .prepare_layout(show_legend)
-
-  # === Create a plot ===
-  np <- attr(object[[1]], "np")
-  nn <- attr(object[[1]], "nn")
-
-  .matplot_wrapper(object, "Precision-Recall", "Recall", "Precision")
-  abline(h = np / (np + nn), col = "grey", lty = 3)
-
-  .show_legend(object, show_legend)
-}
-
-# prepare layout for legend
-.prepare_layout <- function(show_legend) {
   if (show_legend) {
     m <- matrix(c(1, 2), nrow = 2, ncol = 1)
     layout(mat = m, heights = c(0.85, 0.15))
+    on.exit(layout(1), add = TRUE)
   }
+
+  # === Create a plot ===
+  np <- attr(x[[1]], "np")
+  nn <- attr(x[[1]], "nn")
+
+  .matplot_wrapper(x, "Precision-Recall", "Recall", "Precision")
+  abline(h = np / (np + nn), col = "grey", lty = 3)
+
+  .show_legend(x, show_legend)
 }
 
 #
 # Show legend
 #
-.show_legend <- function(object, show_legend) {
+.show_legend <- function(obj, show_legend) {
   if (show_legend) {
     old_mar <- par(mar = c(0, 0, 0, 0))
     on.exit(par(old_mar), add = TRUE)
     old_pty <- par(pty = "m")
     on.exit(par(old_pty), add = TRUE)
 
-    model_names <- attr(object, "model_names")
+    model_names <- attr(obj, "model_names")
     plot(1, type = "n", axes = FALSE, xlab = "", ylab = "")
     legend(x = "top", lty = 1,
            legend = model_names,
@@ -123,20 +134,21 @@ plot.msprc <- function(object, show_legend = TRUE, ...) {
 #
 # matplot wrapper
 #
-.matplot_wrapper <- function(object, curve_name, xlab, ylab) {
+.matplot_wrapper <- function(obj, curve_name, xlab, ylab) {
   # === Validate input arguments ===
-  .validate(object)
+  .validate(obj)
 
   # === Create a plot ===
-  np <- attr(object[[1]], "np")
-  nn <- attr(object[[1]], "nn")
+  np <- attr(obj[[1]], "np")
+  nn <- attr(obj[[1]], "nn")
 
-  mats <- .make_matplot_mats(object)
+  mats <- .make_matplot_mats(obj)
 
   matplot(mats[["x"]], mats[["y"]], type = "l", lty = 1,
           col = rainbow(ncol(mats[["x"]])),
           main = paste0(curve_name, " - P: ", np, ", N: ", nn),
-          xlab = xlab, ylab = ylab)
+          xlab = xlab, ylab = ylab,
+          ylim = c(0, 1), xlim = c(0, 1))
 }
 
 #

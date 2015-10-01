@@ -1,5 +1,21 @@
-context("PL5: Calculate evaluation measures")
+library(precrec)
+
+context("PL 5: Calculate evaluation measures")
 # Test calc_measures(cmats, scores, labels)
+
+test_that("calc_measures() reterns an 'pevals' object", {
+  pevals1 <- calc_measures(scores = c(0.1, 0.2, 0), labels = c(1, 0, 1))
+
+  data(P10N10)
+  fmdat <- reformat_data(P10N10$scores, P10N10$labels)
+  cmats <- create_confmats(fmdat)
+  pevals2 <- calc_measures(cmats)
+  pevals3 <- calc_measures(scores = P10N10$scores, labels = P10N10$labels)
+
+  expect_equal(class(pevals1), "pevals")
+  expect_equal(class(pevals2), "pevals")
+  expect_equal(class(pevals3), "pevals")
+})
 
 test_that("'cmats' must be a 'cmats' object", {
   expect_err_msg <- function(cmats) {
@@ -84,12 +100,6 @@ test_that("calc_measures() can take ties.method argument", {
   expect_equal_ranks("average", c(1, 3, 3, 3, 5))
   expect_equal_ranks("first", c(1, 2, 3, 4, 5))
 
-})
-
-test_that("calc_measures() reterns an 'pevals' object", {
-  pevals <- calc_measures(scores = c(0.1, 0.2, 0), labels = c(1, 0, 1))
-
-  expect_equal(class(pevals), "pevals")
 })
 
 test_that("'pevals' contains a list with 7 items", {

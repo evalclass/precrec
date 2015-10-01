@@ -1,6 +1,18 @@
-context("PL3: Reformat input data for evaluation")
+library(precrec)
+
+context("PL 3: Reformat input data for evaluation")
 # Test reformat_data(scores, labels,
 #                    na.last, ties.method, levels, model_name)
+
+test_that("reformat_data() reterns a 'fmdat' object", {
+  fmdat1 <- reformat_data(c(0.1, 0.2, 0), c(1, 0, 1))
+  fmdat2 <- reformat_data(c(0.1, 0.2, 0.3), c(0, 1, 1))
+  fmdat3 <- reformat_data(c(0.3, 0.1, 0.2), c(-1, -1, 1))
+
+  expect_equal(class(fmdat1), "fmdat")
+  expect_equal(class(fmdat2), "fmdat")
+  expect_equal(class(fmdat3), "fmdat")
+})
 
 test_that("'scores' and 'labels' must be specified", {
   expect_err_msg <- function(scores, labels, err_msg) {
@@ -39,19 +51,6 @@ test_that("'model_name' must be a character vector", {
   expect_err_msg(err_msg, data.frame("1"))
   expect_err_msg(err_msg, array("1"))
   expect_err_msg(err_msg, matrix("1"))
-})
-
-test_that("reformat_data() reterns a 'fmdat' object", {
-  fmdat <- reformat_data(c(0.1, 0.2, 0), c(1, 0, 1))
-
-  expect_equal(class(fmdat), "fmdat")
-})
-
-test_that("'fmdat' contains a list with 3 items", {
-  fmdat <- reformat_data(c(0.1, 0.2, 0), c(1, 0, 1))
-
-  expect_true(is.list(fmdat))
-  expect_equal(length(fmdat), 3)
 })
 
 test_that("labels, ranks, and rank_idx must be the same length", {
@@ -96,3 +95,11 @@ test_that("reformat_data() accepts 'levels'", {
   expect_equal(levels(fmdat[["labels"]]), levels)
 
 })
+
+test_that("'fmdat' contains a list with 3 items", {
+  fmdat <- reformat_data(c(0.1, 0.2, 0), c(1, 0, 1))
+
+  expect_true(is.list(fmdat))
+  expect_equal(length(fmdat), 3)
+})
+

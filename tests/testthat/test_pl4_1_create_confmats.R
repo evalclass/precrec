@@ -1,5 +1,20 @@
-context("PL4: Create confusion matrices")
+library(precrec)
+
+context("PL 4: Create confusion matrices")
 # Test create_confmats(fmdat, scores, labels)
+
+test_that("create_confmats() reterns a 'cmats' object", {
+  cmats1 <- create_confmats(scores = c(0.1, 0.2, 0), labels = c(1, 0, 1))
+
+  data(P10N10)
+  fmdat <- reformat_data(P10N10$scores, P10N10$labels)
+  cmats2 <- create_confmats(fmdat)
+  cmats3 <- create_confmats(scores = P10N10$scores, labels = P10N10$labels)
+
+  expect_equal(class(cmats1), "cmats")
+  expect_equal(class(cmats2), "cmats")
+  expect_equal(class(cmats3), "cmats")
+})
 
 test_that("'fmdat' must be a 'fmdat' object", {
   expect_err_msg <- function(fmdat) {
@@ -82,12 +97,6 @@ test_that("create_confmats() can take ties.method argument", {
   expect_equal_ranks("average", c(1, 3, 3, 3, 5))
   expect_equal_ranks("first", c(1, 2, 3, 4, 5))
 
-})
-
-test_that("create_confmats() reterns a 'cmats' object", {
-  cmats <- create_confmats(scores = c(0.1, 0.2, 0), labels = c(1, 0, 1))
-
-  expect_equal(class(cmats), "cmats")
 })
 
 test_that("'cmats' contains a list with 7 items", {

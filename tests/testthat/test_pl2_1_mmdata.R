@@ -1,4 +1,6 @@
-context("PL2: Create mmdata")
+library(precrec)
+
+context("PL 2: Create mmdata")
 # Test .pmatch_tiesmethod(val),
 #      mmdata(scores, labels, model_names, data_nos,
 #             na.last, ties.method, levels, ...)
@@ -11,6 +13,24 @@ test_that(".pmatch_tiesmethod() returns 'average', 'random', 'first'", {
   expect_equal(.pmatch_tiesmethod("A"), "A")
   expect_equal(.pmatch_tiesmethod(1), 1)
   expect_equal(.pmatch_tiesmethod(NULL), NULL)
+})
+
+test_that("mmdata() returns an 'mdat' object", {
+  s1 <- c(1, 2, 3, 4)
+  s2 <- c(5, 6, 7, 8)
+  s3 <- c(2, 4, 6, 8)
+  scores <- join_scores(s1, s2, s3)
+
+  l1 <- c(1, 0, 1, 1)
+  l2 <- c(1, 1, 0, 0)
+  l3 <- c(0, 1, 0, 1)
+  labels <- join_labels(l1, l2, l3)
+
+  mdat <- mmdata(scores, labels)
+
+  expect_equal(class(mdat), "mdat")
+  expect_equal(length(mdat), 3)
+
 })
 
 test_that("'scores' and 'labels' must be specified", {
@@ -41,75 +61,6 @@ test_that("'scores' and 'labels' should be the same length", {
   l1 <- c(1, 0, 1, 1)
   l2 <- c(1, 1, 0, 0)
   labels <- join_labels(l1, l2)
-
-  expect_err_msg(scores, labels)
-})
-
-test_that("mmdata() reterns a 'mdat' object", {
-  mdat <- mmdata(c(0.1, 0.2, 0), c(1, 0, 1))
-
-  expect_equal(class(mdat), "mdat")
-})
-
-test_that("'mdat' contains a list", {
-  mdat <- mmdata(c(0.1, 0.2, 0), c(1, 0, 1))
-
-  expect_true(is.list(mdat))
-  expect_equal(length(mdat), 1)
-})
-
-test_that("'mdat' contains a list with 3 items", {
-  s1 <- c(1, 2, 3, 4)
-  s2 <- c(5, 6, 7, 8)
-  s3 <- c(2, 4, 6, 8)
-  scores <- join_scores(s1, s2, s3)
-
-  l1 <- c(1, 0, 1, 1)
-  l2 <- c(1, 1, 0, 0)
-  l3 <- c(0, 1, 0, 1)
-  labels <- join_labels(l1, l2, l3)
-
-  mdat <- mmdata(scores, labels)
-
-  expect_true(is.list(mdat))
-  expect_equal(length(mdat), 3)
-})
-
-test_that("mmdata() can take only one 'labels' dataset", {
-  s1 <- c(1, 2, 3, 4)
-  s2 <- c(5, 6, 7, 8)
-  s3 <- c(2, 4, 6, 8)
-  scores <- join_scores(s1, s2, s3)
-
-  l1 <- c(2, 1, 2, 2)
-  labels <- join_labels(l1)
-
-  mdat <- mmdata(scores, labels)
-
-  m1l1 <- mdat[[1]][["labels"]]
-  m2l1 <- mdat[[2]][["labels"]]
-  m3l1 <- mdat[[3]][["labels"]]
-
-  expect_equal(l1, as.numeric(m1l1))
-  expect_equal(l1, as.numeric(m2l1))
-  expect_equal(l1, as.numeric(m3l1))
-})
-
-test_that("All items in 'scores' and 'labels' must be of the same length", {
-  expect_err_msg <- function(scores, labels) {
-    err_msg <- "scores and labels must be of the same length"
-    eval(bquote(expect_error(mmdata(scores, labels), err_msg)))
-  }
-
-  s1 <- c(1, 2, 3, 4)
-  s2 <- c(5, 6, 7, 8)
-  s3 <- c(2, 4, 6, 8)
-  scores <- join_scores(s1, s2, s3)
-
-  l1 <- c(1, 0, 1)
-  l2 <- c(1, 1, 0)
-  l3 <- c(0, 1, 0)
-  labels <- join_labels(l1, l2, l3)
 
   expect_err_msg(scores, labels)
 })
@@ -235,4 +186,69 @@ test_that("mmdata() accepts 'exp_priority", {
   expect_equal(attr(mdat2, "model_names"), rep("m1", 3))
   expect_equal(attr(mdat2, "data_nos"), seq(3))
 })
+
+test_that("'mdat' contains a list", {
+  mdat <- mmdata(c(0.1, 0.2, 0), c(1, 0, 1))
+
+  expect_true(is.list(mdat))
+  expect_equal(length(mdat), 1)
+})
+
+test_that("'mdat' contains a list with 3 items", {
+  s1 <- c(1, 2, 3, 4)
+  s2 <- c(5, 6, 7, 8)
+  s3 <- c(2, 4, 6, 8)
+  scores <- join_scores(s1, s2, s3)
+
+  l1 <- c(1, 0, 1, 1)
+  l2 <- c(1, 1, 0, 0)
+  l3 <- c(0, 1, 0, 1)
+  labels <- join_labels(l1, l2, l3)
+
+  mdat <- mmdata(scores, labels)
+
+  expect_true(is.list(mdat))
+  expect_equal(length(mdat), 3)
+})
+
+test_that("mmdata() can take only one 'labels' dataset", {
+  s1 <- c(1, 2, 3, 4)
+  s2 <- c(5, 6, 7, 8)
+  s3 <- c(2, 4, 6, 8)
+  scores <- join_scores(s1, s2, s3)
+
+  l1 <- c(2, 1, 2, 2)
+  labels <- join_labels(l1)
+
+  mdat <- mmdata(scores, labels)
+
+  m1l1 <- mdat[[1]][["labels"]]
+  m2l1 <- mdat[[2]][["labels"]]
+  m3l1 <- mdat[[3]][["labels"]]
+
+  expect_equal(l1, as.numeric(m1l1))
+  expect_equal(l1, as.numeric(m2l1))
+  expect_equal(l1, as.numeric(m3l1))
+})
+
+test_that("All items in 'scores' and 'labels' must be of the same length", {
+  expect_err_msg <- function(scores, labels) {
+    err_msg <- "scores and labels must be of the same length"
+    eval(bquote(expect_error(mmdata(scores, labels), err_msg)))
+  }
+
+  s1 <- c(1, 2, 3, 4)
+  s2 <- c(5, 6, 7, 8)
+  s3 <- c(2, 4, 6, 8)
+  scores <- join_scores(s1, s2, s3)
+
+  l1 <- c(1, 0, 1)
+  l2 <- c(1, 1, 0)
+  l3 <- c(0, 1, 0)
+  labels <- join_labels(l1, l2, l3)
+
+  expect_err_msg(scores, labels)
+})
+
+
 

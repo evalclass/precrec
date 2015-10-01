@@ -39,7 +39,7 @@
 #' labels <- l1
 #' mdat <- mmdata(scores, labels, model_names = model_names)
 #'
-#' curves <- evalmulti(mdat)
+#' curves <- evalcv(mdat)
 evalcv <- function(mdat, mscores = NULL, mobslabs = NULL,
                    model_names = NULL, data_nos = NULL, x_interval = 0.001,
                    na.last = FALSE, ties.method = "average",

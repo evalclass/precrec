@@ -14,9 +14,8 @@
 #' s1 <- c(1, 2, 3, 4)
 #' s2 <- c(5, 6, 7, 8)
 #' s3 <- c(2, 4, 6, 8)
-#' mscores <- join_scores(s1, s2, s3)
+#' scores <- join_scores(s1, s2, s3)
 #'
-#' mscores
 join_scores <- function(..., byrow = FALSE, chklen = TRUE) {
   # Set a function to check the vector values
   if (chklen) {
@@ -47,9 +46,8 @@ join_scores <- function(..., byrow = FALSE, chklen = TRUE) {
 #' l1 <- c(1, 0, 1, 1)
 #' l2 <- c(1, 1, 0, 0)
 #' l3 <- c(0, 1, 0, 1)
-#' mlabels <- join_labels(l1, l2, l3)
+#' labels <- join_labels(l1, l2, l3)
 #'
-#' mlabels
 join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
   # Set a function to check the vector values
   efunc_vtype <- function(v) {

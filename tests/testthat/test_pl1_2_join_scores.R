@@ -1,5 +1,18 @@
-context("PL1: Join score datasets")
+library(precrec)
+
+context("PL 1: Join score datasets")
 # Test join_scores(..., byrow, chklen)
+
+test_that("join_scores() combines muliple score datasets", {
+  s1 <- c(1, 2, 3, 4)
+  s2 <- c(5, 6, 7, 8)
+  s3 <- c(2, 4, 6, 8)
+  scores <- join_scores(s1, s2, s3)
+
+  expect_equal(scores[[1]], s1)
+  expect_equal(scores[[2]], s2)
+  expect_equal(scores[[3]], s3)
+})
 
 test_that("'...' must be specified", {
   err_msg <- "No datasets specified"

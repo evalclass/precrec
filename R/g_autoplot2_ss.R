@@ -19,12 +19,13 @@
 #' curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 #'
 #' autoplot(curves)
-autoplot.sscurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
+autoplot.sscurves <- function(object, curvetype = c("ROC", "PRC"),
+                              ret_grob = FALSE, ...) {
   # === Check package availability  ===
   .load_ggplot2()
-  .load_gridExtra()
   .validate(object)
   .check_curvetype(curvetype)
+  .check_ret_grob(ret_grob)
 
   # === Create a ggplot object for ROC&PRC, ROC, or PRC ===
   if ("ROC" %in% curvetype) {
@@ -36,7 +37,15 @@ autoplot.sscurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
   }
 
   if ("ROC" %in% curvetype && "PRC" %in% curvetype) {
-    gridExtra::grid.arrange(p_roc, p_prc, ncol=2)
+    .load_grid()
+    .load_gridExtra()
+
+    grobframe <- gridExtra::arrangeGrob(p_roc, p_prc, ncol = 2)
+    if (ret_grob) {
+      grobframe
+    } else {
+      grid::grid.draw(grobframe)
+    }
   } else if ("PRC" %in% curvetype) {
     p_prc
   } else if ("ROC" %in% curvetype) {

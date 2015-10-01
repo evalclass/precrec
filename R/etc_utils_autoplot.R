@@ -14,7 +14,7 @@
   fncol <- function (...) gridExtra::arrangeGrob(..., ncol = main_ncol)
   fnolegend <- function(x) x + ggplot2::theme(legend.position = "none")
 
-  gridExtra::grid.arrange(
+  gridExtra::arrangeGrob(
     do.call(fncol, lapply(plots, fnolegend)),
     legend,
     heights = grid::unit.c(grid::unit(1, "npc") - lheight, lheight),
@@ -49,6 +49,16 @@
 .load_gridExtra <- function() {
   if (!requireNamespace("gridExtra", quietly = TRUE)) {
     stop("gridExtra needed for this function to work. Please install it.",
+         call. = FALSE)
+  }
+}
+
+#
+# Load pryr
+#
+.load_pryr <- function() {
+  if (!requireNamespace("pryr", quietly = TRUE)) {
+    stop("pryr needed for this function to work. Please install it.",
          call. = FALSE)
   }
 }
@@ -95,7 +105,7 @@
 .geom_rocprc_line_wrapper <- function(p, main, xlab, ylab) {
   p <- .geom_line_wrapper(p, main, xlab, ylab)
   p <- p + ggplot2::coord_fixed(ratio = 1)
-  p <- p + ggplot2::theme(legend.title = element_blank())
+  p <- p + ggplot2::theme(legend.title = ggplot2::element_blank())
 
   p
 }
@@ -113,14 +123,17 @@
 #
 # Geom_line for ROC
 #
-.geom_roc_line_wrapper <- function(p, object) {
+.geom_roc_line_wrapper <- function(p, object, show_legend = TRUE) {
   main <- .make_rocprc_title(object, "ROC")
 
   p <- .geom_rocprc_line_wrapper(p, main, "1 - Specificity", "Sensitivity")
   p <- p + ggplot2::geom_abline(intercept = 0, slope = 1, colour = "grey",
                                 linetype = 3)
   p <- p + ggplot2::coord_fixed(ratio = 1)
-  p <- p + ggplot2::theme(legend.title = element_blank())
+  p <- p + ggplot2::theme(legend.title = ggplot2::element_blank())
+  if (!show_legend) {
+    p <- p + ggplot2::theme(legend.position = "none")
+  }
 
   p
 }
@@ -128,7 +141,7 @@
 #
 # Geom_line for Precision-Recall
 #
-.geom_prc_line_wrapper <- function(p, object) {
+.geom_prc_line_wrapper <- function(p, object, show_legend = TRUE) {
   main <- .make_rocprc_title(object, "Precision-Recall")
   np <- attr(object, "np")
   nn <- attr(object, "nn")
@@ -138,7 +151,10 @@
                                linetype = 3)
   p <- p + ggplot2::scale_y_continuous(limits = c(0.0, 1.0))
   p <- p + ggplot2::coord_fixed(ratio = 1)
-  p <- p + ggplot2::theme(legend.title = element_blank())
+  p <- p + ggplot2::theme(legend.title = ggplot2::element_blank())
+  if (!show_legend) {
+    p <- p + ggplot2::theme(legend.position = "none")
+  }
 
   p
 }
@@ -152,4 +168,22 @@
       || length(setdiff(curvetype, c("ROC", "PRC"))) != 0) {
     stop("Invalid 'curvetype' value")
   }
+}
+
+#
+# Check ret_grob
+#
+.check_ret_grob <- function(ret_grob) {
+  assertthat::assert_that(is.atomic(ret_grob),
+                          assertthat::is.flag(ret_grob),
+                          assertthat::noNA(ret_grob))
+}
+
+#
+# Check show_legend
+#
+.check_show_legend <- function(show_legend) {
+  assertthat::assert_that(is.atomic(show_legend),
+                          assertthat::is.flag(show_legend),
+                          assertthat::noNA(show_legend))
 }

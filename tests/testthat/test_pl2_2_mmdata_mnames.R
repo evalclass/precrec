@@ -1,4 +1,6 @@
-context("PL2: Create model names")
+library(precrec)
+
+context("PL 2: Create model names")
 # Test .pmatch_exp_priority(val),
 #      .create_modnames(dlen, model_names, data_nos, exp_priority)
 
@@ -22,7 +24,6 @@ test_that("model names and data numbers are unchanged", {
   expect_equal(mnames[["dn"]], data_nos)
 
 })
-
 
 test_that("a single data number is assigned", {
   dlen <- 3

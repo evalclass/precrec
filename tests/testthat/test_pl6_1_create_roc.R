@@ -1,5 +1,22 @@
-context("PL6: Create a ROC curve")
+library(precrec)
+
+context("PL 6: Create a ROC curve")
 # Test create_roc(pevals, x.interval, scores, labels)
+
+test_that("create_roc() reterns a 'roc_curve' object", {
+  roc_curve1 <- create_roc(scores = c(0.1, 0.2, 0), labels = c(1, 0, 1))
+
+  data(P10N10)
+  fmdat <- reformat_data(P10N10$scores, P10N10$labels)
+  cdat <- create_confmats(fmdat)
+  pevals <- calc_measures(cdat)
+  roc_curve2 <- create_roc(pevals)
+  roc_curve3 <- create_roc(scores = P10N10$scores, labels = P10N10$labels)
+
+  expect_equal(class(roc_curve1), "roc_curve")
+  expect_equal(class(roc_curve2), "roc_curve")
+  expect_equal(class(roc_curve3), "roc_curve")
+})
 
 test_that("'pevals' must be an 'pevals' object", {
   expect_err_msg <- function(pevals) {
@@ -84,12 +101,6 @@ test_that("create_roc() can take ties.method argument", {
   expect_equal_ranks("average", c(1, 3, 3, 3, 5))
   expect_equal_ranks("first", c(1, 2, 3, 4, 5))
 
-})
-
-test_that("create_roc() reterns a 'roc_curve' object", {
-  roc_curve <- create_roc(scores = c(0.1, 0.2, 0), labels = c(1, 0, 1))
-
-  expect_equal(class(roc_curve), "roc_curve")
 })
 
 test_that("create_roc() reterns a correct ROC curve", {

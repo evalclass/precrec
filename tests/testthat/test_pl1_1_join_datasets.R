@@ -1,5 +1,13 @@
-context("PL1: Join datasets")
+library(precrec)
+
+context("PL 1: Join datasets")
 # Test .join_datasets(..., efunc_vtype, efunc_nrow, byrow)
+
+test_that(".join_datasets() returns a list", {
+  cdat <- .join_datasets(c(0))
+
+  expect_true(is.list(cdat))
+})
 
 test_that("'...' must be specified", {
   err_msg <- "No datasets specified"
@@ -43,12 +51,6 @@ test_that("'byrow' should be TRUE or FALSE", {
   expect_err_msg(err_msg, data.frame(c(TRUE, FALSE)))
   expect_err_msg(err_msg, array(c(TRUE, FALSE)))
   expect_err_msg(err_msg, matrix(c(TRUE, FALSE)))
-})
-
-test_that(".join_datasets() returns a list", {
-  cdat <- .join_datasets(c(0))
-
-  expect_true(is.list(cdat))
 })
 
 test_that(".join_datasets() only accepts basic data types", {

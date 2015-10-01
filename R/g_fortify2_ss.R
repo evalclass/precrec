@@ -32,8 +32,8 @@ fortify.sscurves <- function(model, data = NULL, ...) {
   .validate(model)
 
   # === Prepare a data frame for ggplot2 ===
-  roc_df <- fortify(model[["rocs"]])
-  prc_df <- fortify(model[["prcs"]])
+  roc_df <- ggplot2::fortify(model[["rocs"]])
+  prc_df <- ggplot2::fortify(model[["prcs"]])
   x <- c(roc_df[["x"]], prc_df[["x"]])
   y <- c(roc_df[["y"]], prc_df[["y"]])
   group = factor(c(rep("ROC", length(roc_df[["x"]])),
@@ -63,7 +63,7 @@ fortify.sscurves <- function(model, data = NULL, ...) {
 #' p <- p + geom_line()
 #' p
 fortify.ssroc <- function(model, data = NULL, ...) {
-  fortify(model[[1]])
+  ggplot2::fortify(model[[1]])
 }
 
 #' Convert a prc_curve object to a data frame for ggplot2.
@@ -88,5 +88,5 @@ fortify.ssroc <- function(model, data = NULL, ...) {
 #' p <- p + geom_line()
 #' p
 fortify.ssprc <- function(model, data = NULL, ...) {
-  fortify(model[[1]])
+  ggplot2::fortify(model[[1]])
 }

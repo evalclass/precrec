@@ -45,8 +45,8 @@ evalmulti <- function(mdat, scores = NULL, labels = NULL,
                       na.last = FALSE, ties.method = "average",
                       levels = c("negative", "positive")) {
 
-  .validate_evalmulti_args(x_interval, model_names, na.last, ties.method,
-                           levels)
+  .validate_evalmulti_args(x_interval, model_names, data_nos, na.last,
+                           ties.method, levels)
 
   if (!missing(mdat)) {
     .validate(mdat)

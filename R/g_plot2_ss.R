@@ -12,14 +12,14 @@
 #' curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 #'
 #' plot(curves)
-plot.sscurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
+plot.sscurves <- function(x, y = NULL, curvetype = c("ROC", "PRC"), ...) {
   if ("ROC" %in% curvetype && "PRC" %in% curvetype) {
     old_mfrow <- par(mfrow = c(1, 2))
     on.exit(par(old_mfrow), add = TRUE)
   }
 
   # === Validate input arguments ===
-  .validate(object)
+  .validate(x)
 
   if (!is.atomic(curvetype) || !is.character(curvetype)
       || length(curvetype) > 2
@@ -30,11 +30,11 @@ plot.sscurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
 
   # === Create a plot ===
   if ("ROC" %in% curvetype) {
-    plot(object[["rocs"]], ...)
+    plot(x[["rocs"]], ...)
   }
 
   if ("PRC" %in% curvetype) {
-    plot(object[["prcs"]], ...)
+    plot(x[["prcs"]], ...)
   }
 }
 
@@ -52,8 +52,8 @@ plot.sscurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
 #' curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 #'
 #' plot(curves[["rocs"]])
-plot.ssroc <- function(object, ...) {
-  plot(object[[1]], ...)
+plot.ssroc <- function(x, y = NULL, ...) {
+  plot(x[[1]], ...)
 }
 
 #' Plot a Precision-Recall curve.
@@ -70,6 +70,6 @@ plot.ssroc <- function(object, ...) {
 #' curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 #'
 #' plot(curves[["prcs"]])
-plot.ssprc <- function(object, ...) {
-  plot(object[[1]], ...)
+plot.ssprc <- function(x, y = NULL, ...) {
+  plot(x[[1]], ...)
 }

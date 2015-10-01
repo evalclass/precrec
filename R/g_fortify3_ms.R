@@ -44,8 +44,8 @@ fortify.mscurves <- function(model, data = NULL, ...) {
   .validate(model)
 
   # === Prepare a data frame for ggplot2 ===
-  roc_df <- fortify(model[["rocs"]])
-  prc_df <- fortify(model[["prcs"]])
+  roc_df <- ggplot2::fortify(model[["rocs"]])
+  prc_df <- ggplot2::fortify(model[["prcs"]])
   x <- c(roc_df[["x"]], prc_df[["x"]])
   y <- c(roc_df[["y"]], prc_df[["y"]])
   model_name <- factor(c(roc_df[["model_name"]], prc_df[["model_name"]]),
@@ -53,7 +53,7 @@ fortify.mscurves <- function(model, data = NULL, ...) {
   group = factor(c(rep("ROC", length(roc_df[["x"]])),
                    rep("PRC", length(prc_df[["x"]]))))
 
-  df <-data.frame(x = x, y = y, group = group, model_name = model_name)
+  df <- data.frame(x = x, y = y, group = group, model_name = model_name)
 }
 
 #

@@ -1,5 +1,18 @@
-context("PL1: Join label datasets")
+library(precrec)
+
+context("PL 1: Join label datasets")
 # Test join_labels(..., byrow, chklen)
+
+test_that("join_labels() combines muliple label datasets", {
+  l1 <- c(1, 0, 1, 1)
+  l2 <- c(1, 1, 0, 0)
+  l3 <- c(0, 1, 0, 1)
+  labels <- join_labels(l1, l2, l3)
+
+  expect_equal(labels[[1]], l1)
+  expect_equal(labels[[2]], l2)
+  expect_equal(labels[[3]], l3)
+})
 
 test_that("'...' must be specified", {
   err_msg <- "No datasets specified"

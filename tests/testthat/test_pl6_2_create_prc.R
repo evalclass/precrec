@@ -1,5 +1,22 @@
-context("PL6: Create a Precision-Recall curve")
+library(precrec)
+
+context("PL 6: Create a Precision-Recall curve")
 # Test create_prc(pevals, x.interval, scores, labels)
+
+test_that("create_prc() reterns a 'prc_curve' object", {
+  prc_curve1 <- create_prc(scores = c(0.1, 0.2, 0), labels = c(1, 0, 1))
+
+  data(P10N10)
+  fmdat <- reformat_data(P10N10$scores, P10N10$labels)
+  cdat <- create_confmats(fmdat)
+  pevals <- calc_measures(cdat)
+  prc_curve2 <- create_prc(pevals)
+  prc_curve3 <- create_prc(scores = P10N10$scores, labels = P10N10$labels)
+
+  expect_equal(class(prc_curve1), "prc_curve")
+  expect_equal(class(prc_curve2), "prc_curve")
+  expect_equal(class(prc_curve3), "prc_curve")
+})
 
 test_that("'pevals' must be an 'pevals' object", {
   expect_err_msg <- function(pevals) {
@@ -84,12 +101,6 @@ test_that("create_prc() can take ties.method argument", {
   expect_equal_ranks("average", c(1, 3, 3, 3, 5))
   expect_equal_ranks("first", c(1, 2, 3, 4, 5))
 
-})
-
-test_that("create_prc() reterns a 'prc_curve' object", {
-  prc_curve <- create_prc(scores = c(0.1, 0.2, 0), labels = c(1, 0, 1))
-
-  expect_equal(class(prc_curve), "prc_curve")
 })
 
 test_that("create_prc() reterns a correct Precision-Recall curve", {

@@ -128,7 +128,7 @@
 #
 # Validate model_names
 #
-.validate_model_names <- function(model_names, datalen = NULL) {
+.validate_model_names <- function(model_names, datalen) {
   if (!is.null(model_names)) {
 
     assertthat::assert_that(is.atomic(model_names), is.vector(model_names),
@@ -144,7 +144,7 @@
 #
 # Validate data_nos
 #
-.validate_data_nos <- function(data_nos, datalen = NULL) {
+.validate_data_nos <- function(data_nos, datalen) {
   if (!is.null(data_nos)) {
 
     assertthat::assert_that(is.atomic(data_nos), is.vector(data_nos),

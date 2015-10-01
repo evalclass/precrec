@@ -1,5 +1,27 @@
-context("PL3: Reformat scores for evaluation")
+library(precrec)
+
+context("PL 3: Reformat scores for evaluation")
 # Test .rank_scores(scores, na.last, ties.method)
+
+test_that("rank_scores() reterns a numeric vector", {
+  ranks <- .rank_scores(c(1.0, 0.1, 3.2))
+
+  expect_true(is.atomic(ranks))
+  expect_true(is.vector(ranks))
+  expect_true(is.numeric(ranks))
+})
+
+test_that("rank_scores() reterns a vector with the same length as input", {
+  expect_equal_length <- function(scores) {
+    eval(bquote(expect_equal(length(.rank_scores(scores)), length(scores))))
+  }
+
+  scores1 <- c(-1.2, 1.0)
+  scores2 <- c(-1.2, 1.0, -1.2)
+
+  expect_equal_length(scores1)
+  expect_equal_length(scores2)
+})
 
 test_that("'scores' is an numeric vector", {
   expect_err_msg <- function(err_msg, scores) {
@@ -62,26 +84,6 @@ test_that("'ties.method' should be one of the three options", {
   err_msg <- "ties.method should be one of"
   expect_err_msg(err_msg, c("avg"))
   expect_err_msg(err_msg, c("max"))
-  })
-
-test_that("rank_scores() reterns a numeric vector", {
-  ranks <- .rank_scores(c(1.0, 0.1, 3.2))
-
-  expect_true(is.atomic(ranks))
-  expect_true(is.vector(ranks))
-  expect_true(is.numeric(ranks))
-})
-
-test_that("rank_scores() reterns a vector with the same length as input", {
-  expect_equal_length <- function(scores) {
-    eval(bquote(expect_equal(length(.rank_scores(scores)), length(scores))))
-  }
-
-  scores1 <- c(-1.2, 1.0)
-  scores2 <- c(-1.2, 1.0, -1.2)
-
-  expect_equal_length(scores1)
-  expect_equal_length(scores2)
 })
 
 test_that("NAs in 'scores' should be controlled by 'na.last'", {

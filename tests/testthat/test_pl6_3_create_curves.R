@@ -1,5 +1,22 @@
-context("PL6: Create ROC and Precision-Recall curves")
+library(precrec)
+
+context("PL 6: Create ROC and Precision-Recall curves")
 # Test create_curves(pevals, x.interval, scores, labels)
+
+test_that("create_curves() reterns a 'curves' object", {
+  curves1 <- create_curves(scores = c(0.1, 0.2, 0), labels = c(1, 0, 1))
+
+  data(P10N10)
+  fmdat <- reformat_data(P10N10$scores, P10N10$labels)
+  cdat <- create_confmats(fmdat)
+  pevals <- calc_measures(cdat)
+  curves2 <- create_curves(pevals)
+  curves3 <- create_curves(scores = P10N10$scores, labels = P10N10$labels)
+
+  expect_equal(class(curves1), "curves")
+  expect_equal(class(curves2), "curves")
+  expect_equal(class(curves3), "curves")
+})
 
 test_that("'pevals' must be an 'pevals' object", {
   expect_err_msg <- function(pevals) {
@@ -83,12 +100,6 @@ test_that("create_curves() can take ties.method argument", {
   expect_equal_ranks("average", c(1, 3, 3, 3, 5))
   expect_equal_ranks("first", c(1, 2, 3, 4, 5))
 
-})
-
-test_that("create_curves() reterns a 'curves' object", {
-  curves <- create_curves(scores = c(0.1, 0.2, 0), labels = c(1, 0, 1))
-
-  expect_equal(class(curves), "curves")
 })
 
 test_that("'curves' contains a list with 2 items", {

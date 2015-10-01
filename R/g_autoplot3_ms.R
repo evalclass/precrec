@@ -29,25 +29,39 @@
 #' mcurves <- evalmulti(mdat, model_names = model_names)
 #'
 #' autoplot(mcurves)
-autoplot.mscurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
+autoplot.mscurves <- function(object, curvetype = c("ROC", "PRC"),
+                              show_legend = TRUE, ret_grob = FALSE, ...) {
   # === Check package availability  ===
   .load_ggplot2()
-  .load_grid()
-  .load_gridExtra()
   .validate(object)
   .check_curvetype(curvetype)
+  .check_show_legend(show_legend)
+  .check_ret_grob(ret_grob)
 
   # === Create a ggplot object for ROC&PRC, ROC, or PRC ===
   if ("ROC" %in% curvetype) {
-    p_roc <- ggplot2::autoplot(object[["rocs"]])
+    p_roc <- ggplot2::autoplot(object[["rocs"]], show_legend = show_legend)
   }
 
   if ("PRC" %in% curvetype) {
-    p_prc <- ggplot2::autoplot(object[["prcs"]])
+    p_prc <- ggplot2::autoplot(object[["prcs"]], show_legend = show_legend)
   }
 
   if ("ROC" %in% curvetype && "PRC" %in% curvetype) {
-    .grid_arrange_shared_legend(p_roc, p_prc)
+    .load_grid()
+    .load_gridExtra()
+
+    if (show_legend) {
+      grobframe <- .grid_arrange_shared_legend(p_roc, p_prc)
+    } else {
+      grobframe <- gridExtra::arrangeGrob(p_roc, p_prc, ncol = 2)
+    }
+
+    if (ret_grob) {
+      grobframe
+    } else {
+      grid::grid.draw(grobframe)
+    }
   } else if ("PRC" %in% curvetype) {
     p_prc
   } else if ("ROC" %in% curvetype) {
@@ -58,23 +72,23 @@ autoplot.mscurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
 #
 # Plot ROC curves for multiple models
 #
-autoplot.msroc <- function(object, ...) {
+autoplot.msroc <- function(object, show_legend = TRUE, ...) {
   df <- .prepare_autoplot(object)
 
   # === Create a ggplot object ===
-  p <- ggplot2::ggplot(df, aes(x = x, y = y, color = model_name))
-  p <- .geom_roc_line_wrapper(p, object[[1]])
+  p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y, color = model_name))
+  p <- .geom_roc_line_wrapper(p, object[[1]], show_legend = show_legend)
 }
 
 #
 # Plot Precision-Recall curves for multiple models
 #
-autoplot.msprc <- function(object, ...) {
+autoplot.msprc <- function(object, show_legend = TRUE, ...) {
   df <- .prepare_autoplot(object)
 
   # === Create a ggplot object ===
-  p <- ggplot2::ggplot(df, aes(x = x, y = y, color = model_name))
-  p <- .geom_prc_line_wrapper(p, object[[1]])
+  p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y, color = model_name))
+  p <- .geom_prc_line_wrapper(p, object[[1]], show_legend = show_legend)
 
   p
 }
