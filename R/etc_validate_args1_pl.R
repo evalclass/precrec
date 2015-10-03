@@ -7,15 +7,15 @@
   .validate_model_type(model_type)
 
   model_names <- attr(mdat, "model_names")
-  assertthat::assert_that(model_type != "single"
-                          || (model_type == "single"
-                              && length(unique(model_names)) == 1L))
+  if (model_type == "single") {
+    assertthat::assert_that(length(unique(model_names)) == 1L)
+  }
 
   # Check data type
   data_nos <- attr(mdat, "data_nos")
-  assertthat::assert_that(data_type != "single"
-                          || (data_type == "single"
-                              && length(unique(data_nos)) == 1L))
+  if (model_type == "single") {
+    assertthat::assert_that(length(unique(data_nos)) == 1L)
+  }
 
   # Check x_interval
   .validate_x_interval(x_interval)

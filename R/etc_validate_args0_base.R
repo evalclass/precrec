@@ -25,14 +25,14 @@
 
     # Check if scores and labels are specified
     if(is.null(scores) && !is.null(labels)) {
-      stop("Invalid 'scores'")
+      stop("Invalid scores")
     } else if(!is.null(scores) && is.null(labels)) {
-      stop("Invalid 'labels'")
+      stop("Invalid labels")
     } else if (is.null(scores) && is.null(labels)) {
       if (is.null(obj)) {
-        stop("Invalid 'scores' & 'labels'")
+        stop("Invalid scores & labels")
       } else {
-        stop(paste0("Missing '", obj_name, "'."))
+        stop(paste0(obj_name, " must be specified"))
       }
     }
 

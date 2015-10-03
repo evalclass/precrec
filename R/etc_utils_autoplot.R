@@ -1,7 +1,9 @@
 #
-# Modified version of grid_arrange_shared_legend from RPubs
-# URL of the orignal version:
-#   http://rpubs.com/sjackman/grid_arrange_shared_legend
+# .grid_arrange_shared_legend
+#
+#   Modified version of grid_arrange_shared_legend from RPubs
+#   URL of the original version:
+#     http://rpubs.com/sjackman/grid_arrange_shared_legend
 #
 .grid_arrange_shared_legend <- function(..., main_ncol = 2) {
   plots <- list(...)
@@ -54,16 +56,6 @@
 }
 
 #
-# Load pryr
-#
-.load_pryr <- function() {
-  if (!requireNamespace("pryr", quietly = TRUE)) {
-    stop("pryr needed for this function to work. Please install it.",
-         call. = FALSE)
-  }
-}
-
-#
 # Prepare autoplot and return a data frame
 #
 .prepare_autoplot <- function(object) {
@@ -111,7 +103,7 @@
 }
 
 #
-# Make main titile
+# Make main title
 #
 .make_rocprc_title <- function(object, pt) {
   np <- attr(object, "np")

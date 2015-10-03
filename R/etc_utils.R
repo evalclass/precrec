@@ -4,8 +4,8 @@
 .check_cpp_func_error <- function(obj, func_name) {
 
   if (obj[["errmsg"]] != "") {
-    stop(paste("An internal function (", func_name, "()) failed: ",
-               obj[["errmsg"]]), sep = "")
+    stop(paste0("An internal function (", func_name, "()) failed: ",
+                obj[["errmsg"]]))
   }
 }
 
@@ -38,7 +38,7 @@
 #
 # Use scores and labels to create obj
 #
-.create_by_scores_and_labels <- function(obj, obj_name, func, scores, labels,
+.create_src_obj <- function(obj, obj_name, func, scores, labels,
                                          ...) {
   if (missing(obj)) {
     if (!is.null(scores) && !is.null(labels)) {
@@ -55,28 +55,4 @@
   }
 
   obj
-}
-
-#
-# Use mscores and mobslabs to create mdat
-#
-.create_by_mscores_and_mlabels <- function(mdat, mscores, mobslabs) {
-
-  # Check if scores and labels are specified.
-  # Validate the 'mdat' argument otherwise
-  if (missing(mdat)) {
-    if (is.null(mscores) && is.null(mobslabs)) {
-      stop("'mdat' must be specified")
-    } else if(is.null(mscores)) {
-      stop("Invalid argument: mscores")
-    } else if(is.null(mobslabs)) {
-      stop("Invalid argument: mobslabs")
-    } else {
-      mdat <- reformat_mdata(mscores = mscores, mobslabs = mobslabs)
-    }
-  } else {
-    mdat <- .validate(mdat)
-  }
-
-  mdat
 }

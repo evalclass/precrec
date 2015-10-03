@@ -1,6 +1,7 @@
 #
 # Print sscurves
 #
+#' @export
 print.sscurves <- function(x, show_test_data = FALSE, ...) {
   # === Validate input arguments ===
   .validate(x)

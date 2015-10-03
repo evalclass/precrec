@@ -1,16 +1,18 @@
-#' foo: A package for computating the notorious bar statistic.
+#' precrec: A package for computating accurate ROC and Precision-Recall curves
 #'
-#' The foo package provides three categories of important functions:
+#' The prec package provides three categories of important functions:
 #' foo, bar and baz.
 #'
-#' @section Foo functions:
-#' The foo functions ...
+#' @section precrec functions:
+#' The precrec functions ...
 #'
 #' @docType package
-#' @name foo
+#' @name precrec
 #'
 #' @useDynLib precrec
 #' @importFrom Rcpp sourceCpp
+#' @importFrom ggplot2 autoplot
+#' @importFrom ggplot2 fortify
 #'
 NULL
 

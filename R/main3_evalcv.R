@@ -1,62 +1,109 @@
 #' Evaluate a single model with multiple datasets
 #'
-#' \code{evalmod} takes predicted scores from a model and binary lables
-#' from an observed dataset and calculates ROC and Precision-Recall curves
-#' for a single models with multiple datasets.
+#' The \code{evalcv} function takes predicted scores and binary lables
+#'   and calculates ROC and Precision-Recall curves.
 #'
 #' @param mdat An \code{mdat} object created by \code{\link{mmdata}}.
-#' @param scores A numeric vector of predicted scores.
-#' @param labels A numeric vector or a factor of observed labels.
-#' @param x_interval A numeric value to specifiy an interval of the
-#'   x-axis (TPRs for ROC and recall for Precision-Recall).
-#' @param na.last Passed to \code{\link[base]{rank}} for controlling the
-#'   treatment of NAs. The value can be TRUE or FALSE. If TRUE, missing values
-#'   in the data are put last; if FALSE, they are put first.
-#' @param ties.method Passed to \code{\link[base]{rank}} for controlling tied
-#'   scores. The value can be "average", "random", or "first". The "first"
-#'   method results in a permutation with increasing values at each index
-#'   set of ties. The "random" method puts these in random order whereas
-#'   the default, "average", replaces them by their mean.
+#'   The following arguments are ignored when \code{mdat} is specified.
+#'   \itemize{
+#'     \item \code{scores}
+#'     \item \code{labels}
+#'     \item \code{model_names}
+#'     \item \code{data_nos}
+#'     \item \code{na.last}
+#'     \item \code{ties.method}
+#'   }
+#'
+#' @param x_interval A numeric value with the range (0, 1] to specifiy
+#'   an interval of the evaluation values on the x-axis.
+#'   No interpolation between two points is performed when it is set to 1.
+#'
+#' @param scores A numeric data of predicted scores. It can be a vector,
+#'   a matrix, an array, a data frame, or a list.
+#'
+#' @param labels A numeric or factor data of observed labels.
+#'   It can be a vector, a matrix, an array, a data frame, or a list.
+#'
+#' @param model_names A character vector as the names
+#'   of the models/classifiers.
+#'
+#' @param data_nos A numeric vector as dataset numbers.
+#'
+#' @param na.last A boolean value for controlling the treatment of NAs
+#'   in the scores.
+#'   \describe{
+#'     \item{TRUE}{NAs are treated as the highest score}
+#'     \item{FALSE}{NAs are treated as the lowest score}
+#'   }
+#'
+#' @param ties.method A string for controlling tied scores.
+#'   Ignored if mdat is set.
+#'   \describe{
+#'     \item{"equiv"}{Ties are equivalently ranked}
+#'     \item{"random"}{Ties are ranked in an incresing order as appeared}
+#'     \item{"first"}{ Ties are ranked in random order}
+#'   }
+#'
 #' @param levels A character vector to overide the levels of the factor for
-#'   observed binary labels.
-#' @param model_name The name of the model/classifier to be evaluated.
-#' @return \code{evalmod} returns an \code{mscurves} S3 object that
-#'   contains ROC and Precision-Recall curves.
+#'   the labels.
+#'
+#' @return The \code{evalcv} function returns an \code{smcurves} S3 object
+#'   that contains ROC and Precision-Recall curves.
+#'
+#' @seealso \code{\link{plot.smcurves}}, \code{\link{autoplot.smcurves}},
+#'   and \code{\link{fortify.smcurves}} for plotting curves.
+#'   \code{\link{join_scores}}, \code{\link{join_scores}},
+#'   and \code{\link{join_labels}} for formatting input data.
 #'
 #' @examples
-#' data(IB500)
 #'
-#' s1 <- IB500$random_scores
-#' s2 <- IB500$poor_er_scores
-#' s3 <- IB500$good_er_scores
-#' s4 <- IB500$excel_scores
-#' s5 <- IB500$perf_scores
-#' l1 <- IB500$labels
+#' ## Create sample datasets with 100 positives and 100 negatives
+#' samps <- create_sim_samples(10, 100, 100, "poor_er")
+#' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
+#'                model_names = samps[["model_names"]],
+#'                data_nos = samps[["data_nos"]])
 #'
-#' model_names <- c("Random", "Poor ER", "Good ER", "Excellent", "Perfect")
+#' ## Generate an mscurve object
+#' curves1 <- evalcv(mdat)
 #'
-#' scores <- join_scores(s1, s2, s3, s4, s5)
-#' labels <- l1
-#' mdat <- mmdata(scores, labels, model_names = model_names)
+#' ## Directly specifiy scores and labels
+#' curves2 <- evalcv(scores = samps[["scores"]], labels = samps[["labels"]],
+#'                   model_names = samps[["model_names"]],
+#'                   data_nos = samps[["data_nos"]])
 #'
-#' curves <- evalcv(mdat)
-evalcv <- function(mdat, mscores = NULL, mobslabs = NULL,
-                   model_names = NULL, data_nos = NULL, x_interval = 0.001,
-                   na.last = FALSE, ties.method = "average",
+#' ## Print the summary
+#' curves2
+#'
+#' ## Plot Precision-Recall
+#' plot(curves2, "PRC")
+#'
+#' ## Set x_interval = 0.1
+#' curves3 <- evalcv(mdat, x_interval = 0.1)
+#' plot(curves3, "PRC")
+#'
+#' ## No interpolation of Precsion-Recall curve
+#' curves4 <- evalcv(mdat, x_interval = NULL)
+#' plot(curves4, "PRC")
+#'
+#' @export
+evalcv <- function(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
+                   model_names = NULL, data_nos = NULL, na.last = FALSE,
+                   ties.method = "average",
                    levels = c("negative", "positive")) {
 
-  .validate_evasv_args(x_interval, model_names, na.last, ties.method,
-                       levels)
+  .validate_evalcv_args(x_interval, model_names, data_nos, na.last,
+                        ties.method, levels)
 
   if (!missing(mdat)) {
     .validate(mdat)
   } else {
-    mdat <- mmdata(mscores, mobslabs,
-                   model_names = model_names, data_nos = data_nos,
-                   na.last = na.last, ties.method = ties.method, levels = levels)
+    mdat <- mmdata(scores, labels, model_names = model_names,
+                   data_nos = data_nos, na.last = na.last,
+                   ties.method = ties.method, levels = levels)
   }
 
   pl_main(mdat, model_type = "single", data_type = "multiple",
           x_interval = x_interval)
 
 }
+

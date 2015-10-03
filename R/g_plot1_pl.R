@@ -1,7 +1,7 @@
 #
 # Plot a ROC curve
 #
-plot.roc_curve <- function(x, y = NULL, ...) {
+plot.roc_curve <- function(x, ...) {
   old_pty <- par(pty = "s")
   on.exit(par(old_pty), add = TRUE)
 
@@ -21,7 +21,7 @@ plot.roc_curve <- function(x, y = NULL, ...) {
 #
 # Plot a Precision-Recall curve
 #
-plot.prc_curve <- function(x, y = NULL, ...) {
+plot.prc_curve <- function(x, ...) {
   old_pty <- par(pty = "s")
   on.exit(par(old_pty), add = TRUE)
 

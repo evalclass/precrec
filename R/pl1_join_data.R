@@ -1,21 +1,40 @@
 #' Join scores of multiple models into a list.
 #'
-#' \code{join_scores} takes predicted scores from multiple models and
-#' converst multiple to a list. It takes several types of datasets, such as
-#' vectors, arrays, data frames, and lists.
+#' The \code{join_scores} function takes predicted scores from multiple models
+#'   and converst them to a list.
 #'
-#' @param ... Multiple datasets. They can be vectors, arrays, data frames,
-#'   and lists.
-#' @param byrow Column vectors are used when matrix, data.frame, or array is used.
-#' @return \code{join_scores} returns a list that
+#' @param ... Multiple datasets. They can be vectors, arrays, matrices,
+#'   data frames, and lists.
+#'
+#' @param byrow A boolean value to specify whether row vectors are used
+#'   for matrix, data.frame, and array.
+#'
+#' @param chklen A boolean value to specify whether all list items should be
+#'   of the same length.
+#'
+#' @return The \code{join_scores} function returns a list that
 #'   contains all combined datasets.
 #'
+#' @seealso \code{\link{join_labels}} for joining labels.
+#'   \code{\link{mmdata}} for formating input data.
+#'
 #' @examples
+#'
+#' ## Add three numberic vectors
 #' s1 <- c(1, 2, 3, 4)
 #' s2 <- c(5, 6, 7, 8)
 #' s3 <- c(2, 4, 6, 8)
-#' scores <- join_scores(s1, s2, s3)
+#' scores1 <- join_scores(s1, s2, s3)
 #'
+#' ## Add three numberic vectors
+#' a1 <- matrix(seq(8), 4, 2)
+#' scores2 <- join_scores(a1, s3)
+#'
+#' ## Use byrow
+#' a2 <- matrix(seq(8), 2, 4, byrow = TRUE)
+#' scores3 <- join_scores(a2, s3, byrow = TRUE)
+#'
+#' @export
 join_scores <- function(..., byrow = FALSE, chklen = TRUE) {
   # Set a function to check the vector values
   if (chklen) {
@@ -31,16 +50,21 @@ join_scores <- function(..., byrow = FALSE, chklen = TRUE) {
 #' Join observed labels of multiple models into a list.
 #'
 #' \code{join_labels} takes observed labels and converts them to a list.
-#' It takes several types of datasets, such as vectors, arrays, data frames,
-#' and lists.
 #'
-#' @param ... Multiple datasets. They can be vectors, arrays, data frames,
-#'   and lists.
-#' @param byrow Column vectors are used when matrix, data.frame, or array is used.
-#' @param prefix Prefix used to name models/classifiers. Serial numbers are
-#'   automatically added to prefix to make unique names.
-#' @return \code{join_labels} returns a list that
+#' @param ... Multiple datasets. They can be vectors, arrays, matrices,
+#'   data frames, and lists.
+#'
+#' @param byrow A boolean value to specify whether row vectors are used
+#'   for matrix, data.frame, and array.
+#'
+#' @param chklen A boolean value to specify whether all list items should be
+#'   of the same length.
+#'
+#' @return The \code{join_labels} function returns a list that
 #'   contains all combined datasets.
+#'
+#' @seealso \code{\link{join_scores}} for joining scores.
+#'   \code{\link{mmdata}} for formating input data.
 #'
 #' @examples
 #' l1 <- c(1, 0, 1, 1)
@@ -48,6 +72,39 @@ join_scores <- function(..., byrow = FALSE, chklen = TRUE) {
 #' l3 <- c(0, 1, 0, 1)
 #' labels <- join_labels(l1, l2, l3)
 #'
+#' Join observed labels of multiple models into a list.
+#'
+#' The \code{join_labels} function takes observed labels from multiple datasets
+#'   and converst them to a list.
+#'
+#' @param ... Multiple datasets. They can be vectors, arrays, matrices,
+#'   data frames, and lists.
+#'
+#' @param byrow A boolean value to specify whether row vectors are used
+#'   for matrix, data.frame, and array.
+#'
+#' @param chklen A boolean value to specify whether all list items should be
+#'   of the same length.
+#'
+#' @return \code{join_scores} returns a list that
+#'   contains all combined datasets.
+#'
+#' @examples
+#' ## Add three numberic vectors
+#' l1 <- c(1, 0, 1, 1)
+#' l2 <- c(1, 1, 0, 0)
+#' l3 <- c(0, 1, 0, 1)
+#' labels1 <- join_labels(l1, l2, l3)
+#'
+#' ## Add three numberic vectors
+#' a1 <- matrix(rep(c(1, 0), 4), 4, 2)
+#' labels2 <- join_labels(a1, l3)
+#'
+#' ## Use byrow
+#' a2 <- matrix(rep(c(1, 0), 4), 2, 4, byrow = TRUE)
+#' labels3 <- join_labels(a2, l3, byrow = TRUE)
+#'
+#' @export
 join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
   # Set a function to check the vector values
   efunc_vtype <- function(v) {

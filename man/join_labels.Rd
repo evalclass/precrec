@@ -7,29 +7,47 @@
 join_labels(..., byrow = FALSE, chklen = TRUE)
 }
 \arguments{
-\item{...}{Multiple datasets. They can be vectors, arrays, data frames,
-and lists.}
+\item{...}{Multiple datasets. They can be vectors, arrays, matrices,
+  data frames, and lists.}
 
-\item{byrow}{Column vectors are used when matrix, data.frame, or array is used.}
+\item{byrow}{A boolean value to specify whether row vectors are used
+  for matrix, data.frame, and array.}
 
-\item{prefix}{Prefix used to name models/classifiers. Serial numbers are
-automatically added to prefix to make unique names.}
+\item{chklen}{A boolean value to specify whether all list items should be
+  of the same length.}
+
+\item{...}{Multiple datasets. They can be vectors, arrays, matrices,
+  data frames, and lists.}
+
+\item{byrow}{A boolean value to specify whether row vectors are used
+  for matrix, data.frame, and array.}
+
+\item{chklen}{A boolean value to specify whether all list items should be
+  of the same length.}
 }
 \value{
-\code{join_labels} returns a list that
+The \code{join_labels} function returns a list that
+  contains all combined datasets.
+
+\code{join_scores} returns a list that
   contains all combined datasets.
 }
 \description{
 \code{join_labels} takes observed labels and converts them to a list.
-It takes several types of datasets, such as vectors, arrays, data frames,
-and lists.
 }
 \examples{
 l1 <- c(1, 0, 1, 1)
 l2 <- c(1, 1, 0, 0)
 l3 <- c(0, 1, 0, 1)
-mlabels <- join_labels(l1, l2, l3)
+labels <- join_labels(l1, l2, l3)
 
-mlabels
+Join observed labels of multiple models into a list.
+
+The \\code{join_labels} function takes observed labels from multiple datasets
+  and converst them to a list.
+}
+\seealso{
+\code{\link{join_scores}} for joining scores.
+  \code{\link{mmdata}} for formating input data.
 }
 

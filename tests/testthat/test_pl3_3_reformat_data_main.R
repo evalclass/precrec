@@ -19,8 +19,8 @@ test_that("'scores' and 'labels' must be specified", {
     eval(bquote(expect_error(reformat_data(scores, labels), err_msg)))
   }
 
-  expect_err_msg(NULL, c(0), "Invalid 'scores'")
-  expect_err_msg(c(0), NULL, "Invalid 'labels'")
+  expect_err_msg(NULL, c(0), "Invalid scores")
+  expect_err_msg(c(0), NULL, "Invalid labels")
 })
 
 test_that("'scores' and 'labels' should be the same length", {

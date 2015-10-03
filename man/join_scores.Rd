@@ -7,26 +7,40 @@
 join_scores(..., byrow = FALSE, chklen = TRUE)
 }
 \arguments{
-\item{...}{Multiple datasets. They can be vectors, arrays, data frames,
-and lists.}
+\item{...}{Multiple datasets. They can be vectors, arrays, matrices,
+  data frames, and lists.}
 
-\item{byrow}{Column vectors are used when matrix, data.frame, or array is used.}
+\item{byrow}{A boolean value to specify whether row vectors are used
+  for matrix, data.frame, and array.}
+
+\item{chklen}{A boolean value to specify whether all list items should be
+  of the same length.}
 }
 \value{
-\code{join_scores} returns a list that
+The \code{join_scores} function returns a list that
   contains all combined datasets.
 }
 \description{
-\code{join_scores} takes predicted scores from multiple models and
-converst multiple to a list. It takes several types of datasets, such as
-vectors, arrays, data frames, and lists.
+The \code{join_scores} function takes predicted scores from multiple models
+  and converst them to a list.
 }
 \examples{
+## Add three numberic vectors
 s1 <- c(1, 2, 3, 4)
 s2 <- c(5, 6, 7, 8)
 s3 <- c(2, 4, 6, 8)
-mscores <- join_scores(s1, s2, s3)
+scores1 <- join_scores(s1, s2, s3)
 
-mscores
+## Add three numberic vectors
+a1 <- matrix(seq(8), 4, 2)
+scores2 <- join_scores(a1, s3)
+
+## Use byrow
+a2 <- matrix(seq(8), 2, 4, byrow = TRUE)
+scores3 <- join_scores(a2, s3, byrow = TRUE)
+}
+\seealso{
+\code{\link{join_labels}} for joining labels.
+  \code{\link{mmdata}} for formating input data.
 }
 

@@ -1,10 +1,58 @@
+#' Create random samples for simulation
+#'
+#' The \code{create_sim_samples} function generates random samples
+#'   with different performance levels.
+#'
+#' @param n_repeat The number of iterations to make samples.
+#'
+#' @param np The number of positives in a sample.
+#'
+#' @param nn The number of negatives in a sample.
+#'
+#' @param score_names A character vector with the names of
+#'   the following performance levels.
+#'   \describe{
+#'     \item{"random"}{Random}
+#'     \item{"poor_er"}{Poor early retrieval}
+#'     \item{"good_er"}{Good early retrieval}
+#'     \item{"excel"}{Excellent}
+#'     \item{"perf"}{Perfect}
+#'     \item{"all"}{All of the above}
+#'   }
+#'
+#' @return The \code{create_sim_samples} function returns a list
+#'   with the following items.
+#'   \itemize{
+#'     \item scores: a list of numeric vectors
+#'     \item labels: a integer vector
+#'     \item model_names: a character vector of the model names
+#'     \item data_nos: a character vector of the data numbers
+#'   }
+#'
+#' @examples
+#'
+#' ## Create a set of samples with 10 positives and 10 negatives
+#' ## for the random perforamance level
+#' samps1 <- create_sim_samples(1, 10, 10, "random")
+#'
+#' ## Create two sets of samples with 10 positives and 20 negatives
+#' ## for the random and the poor early retrieval perforamance levels
+#' samps2 <- create_sim_samples(2, 10, 20, c("random", "poor_er"))
+#'
+#' ## Create 3 sets of samples with 5 positives and 5 negatives
+#' ## for all 5 levels
+#' samps3 <- create_sim_samples(3, 5, 5, "all")
+#'
+#' @export
 create_sim_samples <- function(n_repeat, np, nn, score_names = "random") {
+
   # === Validate input arguments ===
   choices <- c("random", "poor_er", "good_er", "excel", "perf")
   if (assertthat::see_if(assertthat::is.string(score_names))
       && score_names == "all") {
     score_names <- choices
-  } else if (!.is_char_vec(score_names) || !(score_names %in% choices)) {
+  } else if (!is.atomic(score_names) || !is.character(score_names)
+             || !(score_names %in% choices)) {
     stop(gettextf("'score_names' should be one of %s",
                   paste(dQuote(choices), collapse = ", ")))
   }
@@ -12,7 +60,7 @@ create_sim_samples <- function(n_repeat, np, nn, score_names = "random") {
 
   # === Sample random variables ===
   afunc <- function() {
-    simdat <- sample_rnd5levs(np, nn)
+    simdat <- .sample_rnd5levs(np, nn)
     ffunc <- function(i) {
       if (names(simdat[i]) %in% snames) {
         TRUE
@@ -25,20 +73,20 @@ create_sim_samples <- function(n_repeat, np, nn, score_names = "random") {
     names(sd) <- NULL
     sd
   }
-  mscreos <- replicate(n_repeat, afunc(), simplify = FALSE)
+  scores <- replicate(n_repeat, afunc(), simplify = FALSE)
   labels <- c(rep(1, np), rep(0, nn))
 
   # === Make a list ===
-  list(scores = mscreos,
+  list(scores = scores,
        labels = labels,
-       model_names = score_names,
-       data_nos = seq(n_repeat))
+       model_names = rep(score_names, n_repeat),
+       data_nos = rep(seq(n_repeat), each = length(score_names)))
 }
 
 #
 # Sample random data for five different levels
 #
-sample_rnd5levs <- function(np, nn) {
+.sample_rnd5levs <- function(np, nn) {
   labels <- c(rep(1, np), rep(0, nn))
 
   random_scores <- c(rnorm(np, 0, 1), rnorm(nn, 0, 1))
@@ -56,38 +104,4 @@ sample_rnd5levs <- function(np, nn) {
        excel_scores = excel_scores,
        perf_scores = perf_scores
   )
-}
-
-#
-# Replicate samples for one level
-#
-rep_one_level <- function(n, score_name, np, nn) {
-  labels <- c(rep(1, np), rep(0, nn))
-
-  rfunc <- function(np, nn) {
-    samp <- sample_rnd5levs(np, nn)
-    samp[[level_name]]
-  }
-  scores <- replicate(n, rfunc(np, nn), simplify = FALSE)
-
-  list(scores = scores, labels = labels)
-}
-
-#
-# Replicate samples for several levels
-#
-rep_all_levels <- function(n, np, nn) {
-  labels <- c(rep(1, np), rep(0, nn))
-
-  rfunc <- function(np, nn) {
-    samp <- sample_rnd5levs(np, nn)
-    list(random_scores = samp[["random_scores"]],
-         poor_er_scores = samp[["poor_er_scores"]],
-         good_er_scores = samp[["good_er_scores"]],
-         excel_scores = samp[["excel_scores"]],
-         perf_scores = samp[["perf_scores"]])
-  }
-  scores <- replicate(n, rfunc(np, nn), simplify = FALSE)
-
-  list(scores = scores, labels = labels)
 }
