@@ -25,13 +25,13 @@ The \code{join_scores} function takes predicted scores from multiple models
   and converst them to a list.
 }
 \examples{
-## Add three numberic vectors
+## Add three numeric vectors
 s1 <- c(1, 2, 3, 4)
 s2 <- c(5, 6, 7, 8)
 s3 <- c(2, 4, 6, 8)
 scores1 <- join_scores(s1, s2, s3)
 
-## Add three numberic vectors
+## Add three numeric vectors
 a1 <- matrix(seq(8), 4, 2)
 scores2 <- join_scores(a1, s3)
 

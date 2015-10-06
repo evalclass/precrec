@@ -5,7 +5,7 @@
 \title{Evaluate a single model with multiple datasets}
 \usage{
 evalcv(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
-  model_names = NULL, data_nos = NULL, na.last = FALSE,
+  model_names = NULL, setids = NULL, na.last = FALSE,
   ties.method = "average", levels = c("negative", "positive"))
 }
 \arguments{
@@ -15,7 +15,7 @@ evalcv(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
     \item \code{scores}
     \item \code{labels}
     \item \code{model_names}
-    \item \code{data_nos}
+    \item \code{setids}
     \item \code{na.last}
     \item \code{ties.method}
   }}
@@ -33,7 +33,7 @@ evalcv(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
 \item{model_names}{A character vector as the names
   of the models/classifiers.}
 
-\item{data_nos}{A numeric vector as dataset numbers.}
+\item{setids}{A numeric vector as dataset IDs.}
 
 \item{na.last}{A boolean value for controlling the treatment of NAs
   in the scores.
@@ -66,7 +66,7 @@ The \code{evalcv} function takes predicted scores and binary lables
 samps <- create_sim_samples(10, 100, 100, "poor_er")
 mdat <- mmdata(samps[["scores"]], samps[["labels"]],
                model_names = samps[["model_names"]],
-               data_nos = samps[["data_nos"]])
+               setids = samps[["setids"]])
 
 ## Generate an mscurve object
 curves1 <- evalcv(mdat)
@@ -74,7 +74,7 @@ curves1 <- evalcv(mdat)
 ## Directly specifiy scores and labels
 curves2 <- evalcv(scores = samps[["scores"]], labels = samps[["labels"]],
                   model_names = samps[["model_names"]],
-                  data_nos = samps[["data_nos"]])
+                  setids = samps[["setids"]])
 
 ## Print the summary
 curves2

@@ -24,7 +24,7 @@
 #' samps <- create_sim_samples(10, 100, 100, "poor_er")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 #'                model_names = samps[["model_names"]],
-#'                data_nos = samps[["data_nos"]])
+#'                setids = samps[["setids"]])
 #'
 #' ## Convert sscurve object to a data frame
 #' curves <- evalcv(mdat)
@@ -32,13 +32,13 @@
 #'
 #' ## Fortified data frame can be used for plotting a ROC curve
 #' df_roc <- subset(df, group == "ROC")
-#' p_roc <- ggplot(df_roc, aes(x = x, y = y, group = data_no))
+#' p_roc <- ggplot(df_roc, aes(x = x, y = y, group = setid))
 #' p_roc <- p_roc + geom_line()
 #' p_roc
 #'
 #' ## Fortified data frame can be used for plotting a Precision-Recall curve
 #' df_prc <- subset(df, group == "PRC")
-#' p_prc <- ggplot(df_prc, aes(x = x, y = y, group = data_no))
+#' p_prc <- ggplot(df_prc, aes(x = x, y = y, group = setid))
 #' p_prc <- p_prc + geom_line()
 #' p_prc
 #'
@@ -55,12 +55,12 @@ fortify.smcurves <- function(model, ...) {
   prc_df <- ggplot2::fortify(model[["prcs"]])
   x <- c(roc_df[["x"]], prc_df[["x"]])
   y <- c(roc_df[["y"]], prc_df[["y"]])
-  data_no <- factor(c(roc_df[["data_no"]], prc_df[["data_no"]]),
-                       labels = levels(roc_df[["data_no"]]))
+  setid <- factor(c(roc_df[["setid"]], prc_df[["setid"]]),
+                  labels = levels(roc_df[["setid"]]))
   group = factor(c(rep("ROC", length(roc_df[["x"]])),
                    rep("PRC", length(prc_df[["x"]]))))
 
-  df <- data.frame(x = x, y = y, group = group, data_no = data_no)
+  df <- data.frame(x = x, y = y, group = group, setid = setid)
 }
 
 #
@@ -75,12 +75,12 @@ fortify.smroc <- function(model, ...) {
 
   # === Prepare a data frame for ggplot2 ===
   df <- NULL
-  datanos <- attr(model, "data_nos")
+  setids <- attr(model, "setids")
   for (i in seq_along(model)) {
     x = model[[i]][["x"]]
     y = model[[i]][["y"]]
-    data_no = factor(rep(datanos[i], length(x)), levels = datanos)
-    df <- rbind(df, data.frame(x = x, y = y, data_no = data_no))
+    setid = factor(rep(setids[i], length(x)), levels = setids)
+    df <- rbind(df, data.frame(x = x, y = y, setid = setid))
   }
 
   df

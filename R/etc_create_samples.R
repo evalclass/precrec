@@ -26,7 +26,7 @@
 #'     \item scores: a list of numeric vectors
 #'     \item labels: a integer vector
 #'     \item model_names: a character vector of the model names
-#'     \item data_nos: a character vector of the data numbers
+#'     \item setids: a character vector of the dataset IDs
 #'   }
 #'
 #' @examples
@@ -80,7 +80,7 @@ create_sim_samples <- function(n_repeat, np, nn, score_names = "random") {
   list(scores = scores,
        labels = labels,
        model_names = rep(score_names, n_repeat),
-       data_nos = rep(seq(n_repeat), each = length(score_names)))
+       setids = rep(seq(n_repeat), each = length(score_names)))
 }
 
 #

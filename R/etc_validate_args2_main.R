@@ -1,7 +1,7 @@
 #
 # Validate arguments of evalmod()
 #
-.validate_evalmod_args <- function(x_interval, model_name, data_no,
+.validate_evalmod_args <- function(x_interval, model_name, setid,
                                    na.last, ties.method, levels) {
 
   # Check x_interval
@@ -10,8 +10,8 @@
   # Check model name
   .validate_model_name(model_name)
 
-  # Check data number
-  .validate_data_no(data_no)
+  # Check dataset ID
+  .validate_setid(setid)
 
   # Check na.last
   .validate_na_last(na.last)
@@ -26,7 +26,7 @@
 #
 # Validate arguments of evalmulti()
 #
-.validate_evalmulti_args <- function(x_interval, model_names, data_nos,
+.validate_evalmulti_args <- function(x_interval, model_names, setids,
                                      na.last, ties.method, levels) {
 
   # Check x_interval
@@ -35,8 +35,8 @@
   # Check model names
   .validate_model_names(model_names, length(model_names))
 
-  # Check data numbers
-  .validate_data_nos(data_nos, length(data_nos))
+  # Check dataset IDs
+  .validate_setids(setids, length(setids))
 
   # Check na.last
   .validate_na_last(na.last)
@@ -51,9 +51,9 @@
 #
 # Validate arguments of evalcv()
 #
-.validate_evalcv_args <- function(x_interval, model_names, data_nos,
+.validate_evalcv_args <- function(x_interval, model_names, setids,
                                   na.last, ties.method, levels) {
 
-  .validate_evalmulti_args(x_interval, model_names, data_nos,
+  .validate_evalmulti_args(x_interval, model_names, setids,
                            na.last, ties.method, levels)
 }

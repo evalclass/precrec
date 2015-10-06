@@ -9,7 +9,7 @@
 #'     \item \code{scores}
 #'     \item \code{labels}
 #'     \item \code{model_name}
-#'     \item \code{data_no}
+#'     \item \code{setid}
 #'     \item \code{na.last}
 #'     \item \code{ties.method}
 #'   }
@@ -24,7 +24,7 @@
 #'
 #' @param model_name A string as the name of the model/classifier.
 #'
-#' @param data_no A numeric value as a dataset number.
+#' @param setid A numeric value as a dataset ID.
 #'
 #' @param na.last A boolean value for controlling the treatment of NAs
 #'   in the scores.
@@ -80,17 +80,17 @@
 #'
 #' @export
 evalmod <- function(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
-                    model_name = as.character(NA), data_no = 1L,
+                    model_name = as.character(NA), setid = 1L,
                     na.last = FALSE, ties.method = "average",
                     levels = c("negative", "positive")) {
 
-  .validate_evalmod_args(x_interval, model_name, data_no, na.last,
+  .validate_evalmod_args(x_interval, model_name, setid, na.last,
                          ties.method, levels)
 
   if (!missing(mdat)) {
     .validate(mdat)
   } else {
-    mdat <- mmdata(scores, labels, model_names = model_name, data_nos = data_no,
+    mdat <- mmdata(scores, labels, model_names = model_name, setids = setid,
                    na.last = na.last, ties.method = ties.method, levels = levels)
   }
 

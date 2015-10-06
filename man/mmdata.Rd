@@ -4,7 +4,7 @@
 \alias{mmdata}
 \title{Reformat data for Precision-Recall and ROC evaluation}
 \usage{
-mmdata(scores, labels, model_names = NULL, data_nos = NULL,
+mmdata(scores, labels, model_names = NULL, setids = NULL,
   exp_priority = "model_names", na.last = FALSE, ties.method = "average",
   levels = c("negative", "positive"), ...)
 }
@@ -18,7 +18,7 @@ mmdata(scores, labels, model_names = NULL, data_nos = NULL,
 \item{model_names}{A character vector as the names
   of the models/classifiers.}
 
-\item{data_nos}{A numeric vector as dataset numbers.}
+\item{setids}{A numeric vector as dataset IDs.}
 
 \item{na.last}{A boolean value for controlling the treatment of NAs
   in the scores.

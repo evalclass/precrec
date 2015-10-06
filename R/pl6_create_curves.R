@@ -23,7 +23,7 @@ create_curves <- function(pevals, x_interval = 0.001, scores = NULL,
 
   # Set attributes
   attr(s3obj, "model_name") <- attr(pevals, "model_name")
-  attr(s3obj, "data_no") <- attr(pevals, "data_no")
+  attr(s3obj, "setid") <- attr(pevals, "setid")
   attr(s3obj, "nn") <- attr(pevals, "nn")
   attr(s3obj, "np") <- attr(pevals, "np")
   attr(s3obj, "args") <- c(list(x_interval = x_interval), list(...))
@@ -93,7 +93,7 @@ create_prc <- function(pevals, x_interval = 0.001, scores = NULL, labels = NULL,
 
   # Set attributes
   attr(s3obj, "model_name") <- attr(pevals, "model_name")
-  attr(s3obj, "data_no") <- attr(pevals, "data_no")
+  attr(s3obj, "setid") <- attr(pevals, "setid")
   attr(s3obj, "nn") <- attr(pevals, "nn")
   attr(s3obj, "np") <- attr(pevals, "np")
   attr(s3obj, "auc") <- auc[["auc"]]

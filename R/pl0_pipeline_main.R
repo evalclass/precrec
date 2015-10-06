@@ -32,7 +32,7 @@ pl_main <- function(mdat, model_type = "single", data_type = "single",
   attr(s3obj, "model_type") <- model_type
   attr(s3obj, "data_type") <- data_type
   attr(s3obj, "model_names") <- attr(mdat, "model_names")
-  attr(s3obj, "data_nos") <- attr(mdat, "data_nos")
+  attr(s3obj, "setids") <- attr(mdat, "setids")
   attr(s3obj, "ci") <- list()
   attr(s3obj, "args") <- list(x_interval = x_interval)
   attr(s3obj, "src") <- mdat
@@ -96,7 +96,7 @@ pl_main <- function(mdat, model_type = "single", data_type = "single",
 
   # Set attributes
   attr(s3obj, "model_names") <- attr(mdat, "model_names")
-  attr(s3obj, "data_nos") <- attr(mdat, "data_nos")
+  attr(s3obj, "setids") <- attr(mdat, "setids")
   attr(s3obj, "src") <- mdat
   attr(s3obj, "validated") <- FALSE
 

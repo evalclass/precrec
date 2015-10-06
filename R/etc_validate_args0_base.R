@@ -104,12 +104,12 @@
 }
 
 #
-# Validate data_no
+# Validate setid
 #
-.validate_data_no <- function(data_no) {
-  if (!is.null(data_no)) {
-    assertthat::assert_that(assertthat::is.number(data_no)
-                            || assertthat::is.string(data_no))
+.validate_setid <- function(setid) {
+  if (!is.null(setid)) {
+    assertthat::assert_that(assertthat::is.number(setid)
+                            || assertthat::is.string(setid))
   }
 }
 
@@ -121,7 +121,7 @@
     assertthat::assert_that(is.atomic(exp_priority), is.vector(exp_priority),
                             assertthat::is.string(exp_priority),
                             (exp_priority == "model_names"
-                             || exp_priority == "data_nos"))
+                             || exp_priority == "setids"))
   }
 }
 
@@ -142,18 +142,18 @@
 }
 
 #
-# Validate data_nos
+# Validate setids
 #
-.validate_data_nos <- function(data_nos, datalen) {
-  if (!is.null(data_nos)) {
+.validate_setids <- function(setids, datalen) {
+  if (!is.null(setids)) {
 
-    assertthat::assert_that(is.atomic(data_nos), is.vector(data_nos),
-                            (is.character(data_nos) || is.numeric(data_nos)),
-                            assertthat::noNA(data_nos),
-                            length(data_nos) == datalen)
+    assertthat::assert_that(is.atomic(setids), is.vector(setids),
+                            (is.character(setids) || is.numeric(setids)),
+                            assertthat::noNA(setids),
+                            length(setids) == datalen)
 
-    for (i in 1:length(data_nos)) {
-      .validate_data_no(data_nos[i])
+    for (i in 1:length(setids)) {
+      .validate_setid(setids[i])
     }
   }
 }

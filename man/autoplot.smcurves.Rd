@@ -40,7 +40,7 @@ library(gridExtra)
 samps <- create_sim_samples(10, 100, 100, "poor_er")
 mdat <- mmdata(samps[["scores"]], samps[["labels"]],
                model_names = samps[["model_names"]],
-               data_nos = samps[["data_nos"]])
+               setids = samps[["setids"]])
 
 ## Generate an mscurve object
 curves <- evalcv(mdat)

@@ -12,9 +12,9 @@
   }
 
   # Check data type
-  data_nos <- attr(mdat, "data_nos")
+  setids <- attr(mdat, "setids")
   if (data_type == "single") {
-    assertthat::assert_that(length(unique(data_nos)) == 1L)
+    assertthat::assert_that(length(unique(setids)) == 1L)
   }
 
   # Check x_interval
@@ -56,7 +56,7 @@
 #
 # Validate arguments of mmdata()
 #
-.validate_mmdata_args <- function(lscores, llabels, model_names, data_nos,
+.validate_mmdata_args <- function(lscores, llabels, model_names, setids,
                                   exp_priority, na.last, ties.method, levels) {
 
   # Check lscores and llabels
@@ -68,8 +68,8 @@
   # Check model names
   .validate_model_names(model_names, length(lscores))
 
-  # Check data numbers
-  .validate_data_nos(data_nos, length(lscores))
+  # Check dataset IDs
+  .validate_setids(setids, length(lscores))
 
   # Check exp_priority
   .validate_exp_priority(exp_priority)
@@ -95,7 +95,7 @@
   if (!is.null(names(arglist))){
     invalid_list <- setdiff(names(arglist), c("na.last", "ties.method",
                                               "levels", "model_name",
-                                              "data_no"))
+                                              "setid"))
     if (length(invalid_list) > 0L) {
       stop(paste("Invalid arguments:", paste(invalid_list, collapse = ", ")))
     }
@@ -112,8 +112,8 @@
     # Check model_name
     .validate_model_name(arglist[["model_name"]])
 
-    # Check data_no
-    .validate_data_no(arglist[["data_no"]])
+    # Check setid
+    .validate_setid(arglist[["setid"]])
 
   }
 

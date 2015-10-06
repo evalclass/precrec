@@ -31,7 +31,7 @@ The \code{create_sim_samples} function returns a list
     \item scores: a list of numeric vectors
     \item labels: a integer vector
     \item model_names: a character vector of the model names
-    \item data_nos: a character vector of the data numbers
+    \item setids: a character vector of the dataset IDs
   }
 }
 \description{

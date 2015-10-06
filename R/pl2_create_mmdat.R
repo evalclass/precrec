@@ -12,7 +12,7 @@
 #' @param model_names A character vector as the names
 #'   of the models/classifiers.
 #'
-#' @param data_nos A numeric vector as dataset numbers.
+#' @param setids A numeric vector as dataset IDs.
 #'
 #' @param na.last A boolean value for controlling the treatment of NAs
 #'   in the scores.
@@ -56,7 +56,7 @@
 #' mdat2 <- mmdata(scores, labels)
 #'
 #' @export
-mmdata <- function(scores, labels, model_names = NULL, data_nos = NULL,
+mmdata <- function(scores, labels, model_names = NULL, setids = NULL,
                    exp_priority = "model_names", na.last = FALSE,
                    ties.method = "average",
                    levels = c("negative", "positive"), ...) {
@@ -67,7 +67,7 @@ mmdata <- function(scores, labels, model_names = NULL, data_nos = NULL,
 
   # === Validate arguments and variables ===
   exp_priority <- .pmatch_exp_priority(exp_priority)
-  .validate_mmdata_args(lscores, llabels, model_names, data_nos,
+  .validate_mmdata_args(lscores, llabels, model_names, setids,
                         exp_priority = "model_names", na.last = na.last,
                         ties.method = ties.method, levels = levels)
 
@@ -76,17 +76,17 @@ mmdata <- function(scores, labels, model_names = NULL, data_nos = NULL,
     llabels <- replicate(length(lscores), llabels[[1]], simplify = FALSE)
   }
 
-  # === Model names and data set numbers ===
-  mnames <- .create_modnames(length(lscores), model_names, data_nos,
+  # === Model names and dataset IDs ===
+  mnames <- .create_modnames(length(lscores), model_names, setids,
                              exp_priority)
   new_model_names <- mnames[["mn"]]
-  new_data_nos <- mnames[["dn"]]
+  new_setids <- mnames[["dn"]]
 
   # === Reformat input data ===
   func_fmdat <- function(i) {
     reformat_data(lscores[[i]], llabels[[i]], na.last = na.last,
                   ties.method = ties.method, levels = levels,
-                  model_name = new_model_names[i], data_no = new_data_nos[i],
+                  model_name = new_model_names[i], setid = new_setids[i],
                   ...)
   }
   mmdat <- lapply(seq_along(lscores), func_fmdat)
@@ -96,7 +96,7 @@ mmdata <- function(scores, labels, model_names = NULL, data_nos = NULL,
 
   # Set attributes
   attr(s3obj, "model_names") <- new_model_names
-  attr(s3obj, "data_nos") <- new_data_nos
+  attr(s3obj, "setids") <- new_setids
   attr(s3obj, "args") <- list(na.last = na.last,
                               ties.method = ties.method,
                               levels = levels)
@@ -111,12 +111,12 @@ mmdata <- function(scores, labels, model_names = NULL, data_nos = NULL,
 #
 .pmatch_exp_priority <- function(val) {
   if (assertthat::is.string(val)) {
-    if (val == "data_nos" || val == "model_names") {
+    if (val == "setids" || val == "model_names") {
       return(val)
     }
 
-    if (!is.na(pmatch(val, "data_nos"))) {
-      return("data_nos")
+    if (!is.na(pmatch(val, "setids"))) {
+      return("setids")
     }
 
     if (!is.na(pmatch(val, "model_names"))) {
@@ -155,24 +155,24 @@ mmdata <- function(scores, labels, model_names = NULL, data_nos = NULL,
 }
 
 #
-# Get model names and data numbers
+# Get model names and dataset IDs
 #
-.create_modnames <- function(dlen, model_names, data_nos,
-                             exp_priority = "data_nos") {
+.create_modnames <- function(dlen, model_names, setids,
+                             exp_priority = "setids") {
   len_mn <- length(model_names)
-  len_dn <- length(data_nos)
+  len_dn <- length(setids)
   is_null_mn <- is.null(model_names)
-  is_null_dn <- is.null(data_nos)
+  is_null_dn <- is.null(setids)
 
-  modnames <- list(mn = model_names, dn = data_nos)
+  modnames <- list(mn = model_names, dn = setids)
 
-  # === Reformat model names and data numbers ===
+  # === Reformat model names and dataset IDs ===
   # No reformat
   if (len_mn == dlen && len_dn == dlen) {
     return(modnames)
   }
 
-  # Assign a single data number
+  # Assign a single dataset ID
   if (len_mn == dlen && is_null_dn) {
     modnames[["dn"]] <- rep(1, dlen)
     return(modnames)
@@ -184,25 +184,25 @@ mmdata <- function(scores, labels, model_names = NULL, data_nos = NULL,
     return(modnames)
   }
 
-  # Expand both model names and data numbers
+  # Expand both model names and dataset IDs
   if (len_mn * len_dn == dlen) {
     if (exp_priority == "model_names") {
       modnames[["mn"]] <- rep(model_names, len_dn)
-      modnames[["dn"]] <- rep(data_nos, each = len_mn)
-    } else if (exp_priority == "data_nos") {
+      modnames[["dn"]] <- rep(setids, each = len_mn)
+    } else if (exp_priority == "setids") {
       modnames[["mn"]] <- rep(model_names, each = len_dn)
-      modnames[["dn"]] <- rep(data_nos, len_mn)
+      modnames[["dn"]] <- rep(setids, len_mn)
     }
 
     return(modnames)
   }
 
-  # Expand model names and assign a single data number
+  # Expand model names and assign a single dataset ID
   if (is_null_mn && is_null_dn) {
     if (exp_priority == "model_names") {
       modnames[["mn"]] <- paste0("m", seq(dlen))
       modnames[["dn"]] <- rep(1, dlen)
-    } else if (exp_priority == "data_nos") {
+    } else if (exp_priority == "setids") {
       modnames[["mn"]] <- rep("m1", dlen)
       modnames[["dn"]] <- seq(dlen)
     }
@@ -211,6 +211,6 @@ mmdata <- function(scores, labels, model_names = NULL, data_nos = NULL,
   }
 
   # === Error handling ===
-  stop("Invalid 'model_names' and/or 'data_nos'")
+  stop("Invalid 'model_names' and/or 'setids'")
 
 }

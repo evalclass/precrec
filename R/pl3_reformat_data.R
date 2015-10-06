@@ -4,12 +4,12 @@
 reformat_data <- function(scores, labels, na.last = FALSE,
                           ties.method = "average",
                           levels = c("negative", "positive"),
-                          model_name = as.character(NA), data_no = 1L, ...) {
+                          model_name = as.character(NA), setid = 1L, ...) {
 
   # === Validate input arguments ===
   .validate_reformat_data_args(NULL, NULL, scores, labels, na.last = na.last,
                                ties.method = ties.method, levels = levels,
-                               model_name = model_name, data_no = data_no, ...)
+                               model_name = model_name, setid = setid, ...)
 
   # === Reformat input data ===
   # Get score ranks and sorted indices
@@ -36,12 +36,12 @@ reformat_data <- function(scores, labels, na.last = FALSE,
 
   # Set attributes
   attr(s3obj, "model_name") <- model_name
-  attr(s3obj, "data_no") <- data_no
+  attr(s3obj, "setid") <- setid
   attr(s3obj, "nn") <- nn
   attr(s3obj, "np") <- np
   attr(s3obj, "args") <- list(na.last = na.last, ties.method = ties.method,
                               levels = levels, model_name = model_name,
-                              data_no = data_no)
+                              setid = setid)
   attr(s3obj, "validated") <- FALSE
 
   # Call .validate.fmdat()

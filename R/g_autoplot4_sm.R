@@ -38,7 +38,7 @@
 #' samps <- create_sim_samples(10, 100, 100, "poor_er")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 #'                model_names = samps[["model_names"]],
-#'                data_nos = samps[["data_nos"]])
+#'                setids = samps[["setids"]])
 #'
 #' ## Generate an mscurve object
 #' curves <- evalcv(mdat)
@@ -101,7 +101,7 @@ autoplot.smroc <- function(object, ...) {
   df <- .prepare_autoplot(object)
 
   # === Create a ggplot object ===
-  p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y, group = data_no))
+  p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y, group = setid))
   p <- .geom_roc_line_wrapper(p, object[[1]], show_legend = FALSE)
 }
 
@@ -112,7 +112,7 @@ autoplot.smprc <- function(object, ...) {
   df <- .prepare_autoplot(object)
 
   # === Create a ggplot object ===
-  p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y, group = data_no))
+  p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y, group = setid))
   p <- .geom_prc_line_wrapper(p, object[[1]], show_legend = FALSE)
 
   p

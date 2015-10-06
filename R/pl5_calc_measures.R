@@ -22,7 +22,7 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
 
   # Set attributes
   attr(s3obj, "model_name") <- attr(cmats, "model_name")
-  attr(s3obj, "data_no") <- attr(cmats, "data_no")
+  attr(s3obj, "setid") <- attr(cmats, "setid")
   attr(s3obj, "nn") <- attr(cmats, "nn")
   attr(s3obj, "np") <- attr(cmats, "np")
   attr(s3obj, "args") <- list(...)

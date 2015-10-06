@@ -4,14 +4,11 @@
 #' @export
 print.mdat <- function(x, ...) {
 
-  model_names <- .get_obj_arg(x, NULL, "model_names")
-  data_nos <- .get_obj_arg(x, NULL, "data_nos")
-
   cat("\n  Reformated input data\n\n")
 
   for (i in seq(length(x))) {
     cat("    Model name:", attr(x[[i]], "model_name"), "\n")
-    cat("    Data number:",attr(x[[i]], "data_no"), "\n")
+    cat("    Dataset ID:", attr(x[[i]], "setid"), "\n")
     cat("    # of positives:", attr(x[[i]], "np"), "\n")
     cat("    # of negatives:", attr(x[[i]], "nn"), "\n")
     cat("    Score ranks:", head(x[[i]][["rank_idx"]]))

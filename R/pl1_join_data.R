@@ -20,13 +20,13 @@
 #'
 #' @examples
 #'
-#' ## Add three numberic vectors
+#' ## Add three numeric vectors
 #' s1 <- c(1, 2, 3, 4)
 #' s2 <- c(5, 6, 7, 8)
 #' s3 <- c(2, 4, 6, 8)
 #' scores1 <- join_scores(s1, s2, s3)
 #'
-#' ## Add three numberic vectors
+#' ## Add three numeric vectors
 #' a1 <- matrix(seq(8), 4, 2)
 #' scores2 <- join_scores(a1, s3)
 #'
@@ -90,13 +90,13 @@ join_scores <- function(..., byrow = FALSE, chklen = TRUE) {
 #'   contains all combined datasets.
 #'
 #' @examples
-#' ## Add three numberic vectors
+#' ## Add three numeric vectors
 #' l1 <- c(1, 0, 1, 1)
 #' l2 <- c(1, 1, 0, 0)
 #' l3 <- c(0, 1, 0, 1)
 #' labels1 <- join_labels(l1, l2, l3)
 #'
-#' ## Add three numberic vectors
+#' ## Add three numeric vectors
 #' a1 <- matrix(rep(c(1, 0), 4), 4, 2)
 #' labels2 <- join_labels(a1, l3)
 #'

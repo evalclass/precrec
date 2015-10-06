@@ -9,7 +9,7 @@
 #'     \item \code{scores}
 #'     \item \code{labels}
 #'     \item \code{model_names}
-#'     \item \code{data_nos}
+#'     \item \code{setids}
 #'     \item \code{na.last}
 #'     \item \code{ties.method}
 #'   }
@@ -27,7 +27,7 @@
 #' @param model_names A character vector as the names
 #'   of the models/classifiers.
 #'
-#' @param data_nos A numeric vector as dataset numbers.
+#' @param setids A numeric vector as dataset IDs.
 #'
 #' @param na.last A boolean value for controlling the treatment of NAs
 #'   in the scores.
@@ -61,7 +61,7 @@
 #' samps <- create_sim_samples(1, 100, 100, "all")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 #'                model_names = samps[["model_names"]],
-#'                data_nos = samps[["data_nos"]])
+#'                setids = samps[["setids"]])
 #'
 #' ## Generate an mscurve object
 #' curves1 <- evalmulti(mdat)
@@ -86,18 +86,18 @@
 #'
 #' @export
 evalmulti <- function(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
-                      model_names = NULL, data_nos = NULL, na.last = FALSE,
+                      model_names = NULL, setids = NULL, na.last = FALSE,
                       ties.method = "average",
                       levels = c("negative", "positive")) {
 
-  .validate_evalmulti_args(x_interval, model_names, data_nos, na.last,
+  .validate_evalmulti_args(x_interval, model_names, setids, na.last,
                            ties.method, levels)
 
   if (!missing(mdat)) {
     .validate(mdat)
   } else {
     mdat <- mmdata(scores, labels, model_names = model_names,
-                   data_nos = data_nos, na.last = na.last,
+                   setids = setids, na.last = na.last,
                    ties.method = ties.method, levels = levels)
   }
 
