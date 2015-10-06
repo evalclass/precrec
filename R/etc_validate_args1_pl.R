@@ -57,7 +57,7 @@
 # Validate arguments of mmdata()
 #
 .validate_mmdata_args <- function(lscores, llabels, model_names, setids,
-                                  exp_priority, na.last, ties.method, levels) {
+                                  expd_first, na.last, ties.method, levels) {
 
   # Check lscores and llabels
   if (length(llabels) != 1 && length(lscores) != length(llabels)) {
@@ -71,8 +71,8 @@
   # Check dataset IDs
   .validate_setids(setids, length(lscores))
 
-  # Check exp_priority
-  .validate_exp_priority(exp_priority)
+  # Check expd_first
+  .validate_expd_first(expd_first)
 
   # Check na.last
   .validate_na_last(na.last)

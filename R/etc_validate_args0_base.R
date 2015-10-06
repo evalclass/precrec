@@ -114,14 +114,14 @@
 }
 
 #
-# Validate exp_priority
+# Validate expd_first
 #
-.validate_exp_priority <- function(exp_priority) {
-  if (!is.null(exp_priority)) {
-    assertthat::assert_that(is.atomic(exp_priority), is.vector(exp_priority),
-                            assertthat::is.string(exp_priority),
-                            (exp_priority == "model_names"
-                             || exp_priority == "setids"))
+.validate_expd_first <- function(expd_first) {
+  if (!is.null(expd_first)) {
+    assertthat::assert_that(is.atomic(expd_first), is.vector(expd_first),
+                            assertthat::is.string(expd_first),
+                            (expd_first == "model_names"
+                             || expd_first == "setids"))
   }
 }
 

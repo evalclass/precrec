@@ -165,7 +165,7 @@ test_that("mmdata() accepts 'levels'", {
 
 })
 
-test_that("mmdata() accepts 'exp_priority", {
+test_that("mmdata() accepts 'expd_first", {
   s1 <- c(1, 2, 3, 4)
   s2 <- c(5, 6, 7, 8)
   s3 <- c(2, 4, 6, 8)
@@ -178,11 +178,11 @@ test_that("mmdata() accepts 'exp_priority", {
 
   dlen <- 3
 
-  mdat1 <- mmdata(scores, labels, exp_priority = "model_names")
+  mdat1 <- mmdata(scores, labels, expd_first = "model_names")
   expect_equal(attr(mdat1, "model_names"), c("m1", "m2", "m3"))
   expect_equal(attr(mdat1, "setids"), rep(1, 3))
 
-  mdat2 <- mmdata(scores, labels, exp_priority = "setids")
+  mdat2 <- mmdata(scores, labels, expd_first = "setids")
   expect_equal(attr(mdat2, "model_names"), rep("m1", 3))
   expect_equal(attr(mdat2, "setids"), seq(3))
 })

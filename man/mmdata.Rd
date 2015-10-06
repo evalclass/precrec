@@ -5,7 +5,7 @@
 \title{Reformat data for Precision-Recall and ROC evaluation}
 \usage{
 mmdata(scores, labels, model_names = NULL, setids = NULL,
-  exp_priority = "model_names", na.last = FALSE, ties.method = "average",
+  expd_first = "model_names", na.last = FALSE, ties.method = "average",
   levels = c("negative", "positive"), ...)
 }
 \arguments{
@@ -19,6 +19,16 @@ mmdata(scores, labels, model_names = NULL, setids = NULL,
   of the models/classifiers.}
 
 \item{setids}{A numeric vector as dataset IDs.}
+
+\item{expd_first}{Indicate which of the two vaiables - model names or dataset IDs
+  should be expaned first when they are automatically generated.
+
+  \describe{
+    \item{"model_names"}{Model names are expaned first. For example,
+           model_names: c("m1", "m2"), setids: c(1, 1)
+           when they are automaticlly generated."}
+    \item{"setids"}{Dataset IDs are expaned first}
+  }}
 
 \item{na.last}{A boolean value for controlling the treatment of NAs
   in the scores.

@@ -14,6 +14,18 @@
 #'
 #' @param setids A numeric vector as dataset IDs.
 #'
+#' @param expd_first Indicate which of the two vaiables - model names or dataset IDs
+#'   should be expanded first when they are automatically generated.
+#'
+#'   \describe{
+#'     \item{"model_names"}{Model names are expanded first. For example,
+#'            model_names: c("m1", "m2"), setids: c(1, 1)
+#'            when they are automaticlly generated.}
+#'     \item{"setids"}{Dataset IDs are expanded first. For example,
+#'            model_names: c("m1", "m1"), setids: c(1, 2)
+#'            when they are automaticlly generated.}
+#'   }
+#'
 #' @param na.last A boolean value for controlling the treatment of NAs
 #'   in the scores.
 #'   \describe{
@@ -57,7 +69,7 @@
 #'
 #' @export
 mmdata <- function(scores, labels, model_names = NULL, setids = NULL,
-                   exp_priority = "model_names", na.last = FALSE,
+                   expd_first = "model_names", na.last = FALSE,
                    ties.method = "average",
                    levels = c("negative", "positive"), ...) {
 
@@ -66,9 +78,9 @@ mmdata <- function(scores, labels, model_names = NULL, setids = NULL,
   llabels <- join_labels(labels)
 
   # === Validate arguments and variables ===
-  exp_priority <- .pmatch_exp_priority(exp_priority)
+  expd_first <- .pmatch_expd_first(expd_first)
   .validate_mmdata_args(lscores, llabels, model_names, setids,
-                        exp_priority = "model_names", na.last = na.last,
+                        expd_first = "model_names", na.last = na.last,
                         ties.method = ties.method, levels = levels)
 
   # Replicate labels
@@ -78,7 +90,7 @@ mmdata <- function(scores, labels, model_names = NULL, setids = NULL,
 
   # === Model names and dataset IDs ===
   mnames <- .create_modnames(length(lscores), model_names, setids,
-                             exp_priority)
+                             expd_first)
   new_model_names <- mnames[["mn"]]
   new_setids <- mnames[["dn"]]
 
@@ -107,9 +119,9 @@ mmdata <- function(scores, labels, model_names = NULL, setids = NULL,
 }
 
 #
-# Check partial match - exp_priority
+# Check partial match - expd_first
 #
-.pmatch_exp_priority <- function(val) {
+.pmatch_expd_first <- function(val) {
   if (assertthat::is.string(val)) {
     if (val == "setids" || val == "model_names") {
       return(val)
@@ -158,7 +170,7 @@ mmdata <- function(scores, labels, model_names = NULL, setids = NULL,
 # Get model names and dataset IDs
 #
 .create_modnames <- function(dlen, model_names, setids,
-                             exp_priority = "setids") {
+                             expd_first = "setids") {
   len_mn <- length(model_names)
   len_dn <- length(setids)
   is_null_mn <- is.null(model_names)
@@ -186,10 +198,10 @@ mmdata <- function(scores, labels, model_names = NULL, setids = NULL,
 
   # Expand both model names and dataset IDs
   if (len_mn * len_dn == dlen) {
-    if (exp_priority == "model_names") {
+    if (expd_first == "model_names") {
       modnames[["mn"]] <- rep(model_names, len_dn)
       modnames[["dn"]] <- rep(setids, each = len_mn)
-    } else if (exp_priority == "setids") {
+    } else if (expd_first == "setids") {
       modnames[["mn"]] <- rep(model_names, each = len_dn)
       modnames[["dn"]] <- rep(setids, len_mn)
     }
@@ -199,10 +211,10 @@ mmdata <- function(scores, labels, model_names = NULL, setids = NULL,
 
   # Expand model names and assign a single dataset ID
   if (is_null_mn && is_null_dn) {
-    if (exp_priority == "model_names") {
+    if (expd_first == "model_names") {
       modnames[["mn"]] <- paste0("m", seq(dlen))
       modnames[["dn"]] <- rep(1, dlen)
-    } else if (exp_priority == "setids") {
+    } else if (expd_first == "setids") {
       modnames[["mn"]] <- rep("m1", dlen)
       modnames[["dn"]] <- seq(dlen)
     }
