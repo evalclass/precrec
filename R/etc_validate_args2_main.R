@@ -47,3 +47,13 @@
   # Check levels
   .validate_levels(levels)
 }
+
+#
+# Validate arguments of evalcv()
+#
+.validate_evalcv_args <- function(x_interval, model_names, data_nos,
+                                  na.last, ties.method, levels) {
+
+  .validate_evalmulti_args(x_interval, model_names, data_nos,
+                           na.last, ties.method, levels)
+}

@@ -13,7 +13,7 @@
 
   # Check data type
   data_nos <- attr(mdat, "data_nos")
-  if (model_type == "single") {
+  if (data_type == "single") {
     assertthat::assert_that(length(unique(data_nos)) == 1L)
   }
 

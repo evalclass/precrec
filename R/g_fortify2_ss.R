@@ -59,12 +59,12 @@ fortify.sscurves <- function(model, ...) {
 # Convert a roc_curve object to a data frame for ggplot2
 #
 fortify.ssroc <- function(model, ...) {
-  ggplot2::fortify(model[[1]])
+  ggplot2::fortify(model[[1]], ...)
 }
 
 #
 # Convert a prc_curve object to a data frame for ggplot2
 #
 fortify.ssprc <- function(model, ...) {
-  ggplot2::fortify(model[[1]])
+  ggplot2::fortify(model[[1]], ...)
 }

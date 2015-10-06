@@ -20,10 +20,10 @@
 \item{...}{Not used by this method.}
 }
 \value{
-\code{plot} shows a plot and returns NULL.
+The \code{plot} function shows a plot and returns NULL.
 }
 \description{
-\code{plot} plots ROC and Precion-Recall curves.
+The \code{plot} function plots ROC and Precion-Recall curves.
 }
 \examples{
 ## Load a dataset with 10 positives and 10 negatives
