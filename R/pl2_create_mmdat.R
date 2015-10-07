@@ -92,7 +92,7 @@ mmdata <- function(scores, labels, model_names = NULL, setids = NULL,
   mnames <- .create_modnames(length(lscores), model_names, setids,
                              expd_first)
   new_model_names <- mnames[["mn"]]
-  new_setids <- mnames[["dn"]]
+  new_setids <- mnames[["ds"]]
 
   # === Reformat input data ===
   func_fmdat <- function(i) {
@@ -176,7 +176,7 @@ mmdata <- function(scores, labels, model_names = NULL, setids = NULL,
   is_null_mn <- is.null(model_names)
   is_null_dn <- is.null(setids)
 
-  modnames <- list(mn = model_names, dn = setids)
+  modnames <- list(mn = model_names, ds = setids)
 
   # === Reformat model names and dataset IDs ===
   # No reformat
@@ -186,7 +186,7 @@ mmdata <- function(scores, labels, model_names = NULL, setids = NULL,
 
   # Assign a single dataset ID
   if (len_mn == dlen && is_null_dn) {
-    modnames[["dn"]] <- rep(1, dlen)
+    modnames[["ds"]] <- rep(1, dlen)
     return(modnames)
   }
 
@@ -200,10 +200,10 @@ mmdata <- function(scores, labels, model_names = NULL, setids = NULL,
   if (len_mn * len_dn == dlen) {
     if (expd_first == "model_names") {
       modnames[["mn"]] <- rep(model_names, len_dn)
-      modnames[["dn"]] <- rep(setids, each = len_mn)
+      modnames[["ds"]] <- rep(setids, each = len_mn)
     } else if (expd_first == "setids") {
       modnames[["mn"]] <- rep(model_names, each = len_dn)
-      modnames[["dn"]] <- rep(setids, len_mn)
+      modnames[["ds"]] <- rep(setids, len_mn)
     }
 
     return(modnames)
@@ -213,10 +213,10 @@ mmdata <- function(scores, labels, model_names = NULL, setids = NULL,
   if (is_null_mn && is_null_dn) {
     if (expd_first == "model_names") {
       modnames[["mn"]] <- paste0("m", seq(dlen))
-      modnames[["dn"]] <- rep(1, dlen)
+      modnames[["ds"]] <- rep(1, dlen)
     } else if (expd_first == "setids") {
       modnames[["mn"]] <- rep("m1", dlen)
-      modnames[["dn"]] <- seq(dlen)
+      modnames[["ds"]] <- seq(dlen)
     }
 
     return(modnames)

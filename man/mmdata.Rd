@@ -21,13 +21,15 @@ mmdata(scores, labels, model_names = NULL, setids = NULL,
 \item{setids}{A numeric vector as dataset IDs.}
 
 \item{expd_first}{Indicate which of the two vaiables - model names or dataset IDs
-  should be expaned first when they are automatically generated.
+  should be expanded first when they are automatically generated.
 
   \describe{
-    \item{"model_names"}{Model names are expaned first. For example,
+    \item{"model_names"}{Model names are expanded first. For example,
            model_names: c("m1", "m2"), setids: c(1, 1)
-           when they are automaticlly generated."}
-    \item{"setids"}{Dataset IDs are expaned first}
+           when they are automaticlly generated.}
+    \item{"setids"}{Dataset IDs are expanded first. For example,
+           model_names: c("m1", "m1"), setids: c(1, 2)
+           when they are automaticlly generated.}
   }}
 
 \item{na.last}{A boolean value for controlling the treatment of NAs

@@ -1,6 +1,6 @@
 library(precrec)
 
-context("PT 2: Print sscurves")
+context("PR 2: Print sscurves")
 # Test print(x, ...)
 
 test_that("print sscurves", {

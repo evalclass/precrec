@@ -21,7 +21,7 @@ test_that("model names and dataset IDs are unchanged", {
   mnames <- .create_modnames(dlen, model_names, setids)
 
   expect_equal(mnames[["mn"]], model_names)
-  expect_equal(mnames[["dn"]], setids)
+  expect_equal(mnames[["ds"]], setids)
 
 })
 
@@ -33,7 +33,7 @@ test_that("a single dataset ID is assigned", {
   mnames <- .create_modnames(dlen, model_names, NULL)
 
   expect_equal(mnames[["mn"]], model_names)
-  expect_equal(mnames[["dn"]], setids)
+  expect_equal(mnames[["ds"]], setids)
 })
 
 test_that("a single model name is assigned", {
@@ -44,7 +44,7 @@ test_that("a single model name is assigned", {
   mnames <- .create_modnames(dlen, NULL, setids)
 
   expect_equal(mnames[["mn"]], model_names)
-  expect_equal(mnames[["dn"]], setids)
+  expect_equal(mnames[["ds"]], setids)
 })
 
 test_that("model names and dataset IDs are expanded 1", {
@@ -56,7 +56,7 @@ test_that("model names and dataset IDs are expanded 1", {
                              expd_first = "setids")
 
   expect_equal(mnames[["mn"]], c(rep("m1", 3), rep("m2", 3)))
-  expect_equal(mnames[["dn"]], rep(c(1, 2, 3), 2))
+  expect_equal(mnames[["ds"]], rep(c(1, 2, 3), 2))
 })
 
 test_that("model names and dataset IDs are expanded 2", {
@@ -68,7 +68,7 @@ test_that("model names and dataset IDs are expanded 2", {
                              expd_first = "model_names")
 
   expect_equal(mnames[["mn"]], rep(c("m1", "m2"), 3))
-  expect_equal(mnames[["dn"]], c(1, 1, 2, 2, 3, 3))
+  expect_equal(mnames[["ds"]], c(1, 1, 2, 2, 3, 3))
 })
 
 test_that("model names are expanded with a single dataset ID", {
@@ -80,7 +80,7 @@ test_that("model names are expanded with a single dataset ID", {
                              expd_first = "model_names")
 
   expect_equal(mnames[["mn"]], model_names)
-  expect_equal(mnames[["dn"]], setids)
+  expect_equal(mnames[["ds"]], setids)
 })
 
 test_that("dataset IDs are expanded with a single model name", {
@@ -92,5 +92,5 @@ test_that("dataset IDs are expanded with a single model name", {
                              expd_first = "setids")
 
   expect_equal(mnames[["mn"]], model_names)
-  expect_equal(mnames[["dn"]], setids)
+  expect_equal(mnames[["ds"]], setids)
 })

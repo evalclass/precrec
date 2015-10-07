@@ -1,6 +1,6 @@
 #' Evaluate a single model with multiple datasets
 #'
-#' The \code{evalcv} function takes predicted scores and binary lables
+#' The \code{evalmodm} function takes predicted scores and binary lables
 #'   and calculates ROC and Precision-Recall curves.
 #'
 #' @param mdat An \code{mdat} object created by \code{\link{mmdata}}.
@@ -47,7 +47,7 @@
 #' @param levels A character vector to overide the levels of the factor for
 #'   the labels.
 #'
-#' @return The \code{evalcv} function returns an \code{smcurves} S3 object
+#' @return The \code{evalmodm} function returns an \code{smcurves} S3 object
 #'   that contains ROC and Precision-Recall curves.
 #'
 #' @seealso \code{\link{plot.smcurves}}, \code{\link{autoplot.smcurves}},
@@ -64,12 +64,12 @@
 #'                setids = samps[["setids"]])
 #'
 #' ## Generate an mscurve object
-#' curves1 <- evalcv(mdat)
+#' curves1 <- evalmodm(mdat)
 #'
 #' ## Directly specifiy scores and labels
-#' curves2 <- evalcv(scores = samps[["scores"]], labels = samps[["labels"]],
-#'                   model_names = samps[["model_names"]],
-#'                   setids = samps[["setids"]])
+#' curves2 <- evalmodm(scores = samps[["scores"]], labels = samps[["labels"]],
+#'                     model_names = samps[["model_names"]],
+#'                     setids = samps[["setids"]])
 #'
 #' ## Print the summary
 #' curves2
@@ -78,21 +78,22 @@
 #' plot(curves2, "PRC")
 #'
 #' ## Set x_interval = 0.1
-#' curves3 <- evalcv(mdat, x_interval = 0.1)
+#' curves3 <- evalmodm(mdat, x_interval = 0.1)
 #' plot(curves3, "PRC")
 #'
 #' ## No interpolation of Precsion-Recall curve
-#' curves4 <- evalcv(mdat, x_interval = NULL)
+#' curves4 <- evalmodm(mdat, x_interval = NULL)
 #' plot(curves4, "PRC")
 #'
 #' @export
-evalcv <- function(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
-                   model_names = NULL, setids = NULL, na.last = FALSE,
-                   ties.method = "average",
-                   levels = c("negative", "positive")) {
+evalmodm <- function(mdat, x_interval = 0.001, calc_avg = TRUE,
+                     ci_level = 0.95, scores = NULL, labels = NULL,
+                     model_names = NULL, setids = NULL, na.last = FALSE,
+                     ties.method = "average",
+                     levels = c("negative", "positive")) {
 
-  .validate_evalcv_args(x_interval, model_names, setids, na.last,
-                        ties.method, levels)
+  .validate_evalmodm_args(x_interval, calc_avg, ci_level, model_names, setids,
+                          na.last, ties.method, levels)
 
   if (!missing(mdat)) {
     .validate(mdat)
@@ -103,7 +104,6 @@ evalcv <- function(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
   }
 
   pl_main(mdat, model_type = "single", data_type = "multiple",
-          x_interval = x_interval)
+          x_interval = x_interval, calc_avg = calc_avg, ci_level = ci_level)
 
 }
-

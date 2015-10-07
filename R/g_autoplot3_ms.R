@@ -56,7 +56,7 @@
 #' ## Hide the legend
 #' autoplot(curves, show_legend = FALSE)
 #'
-#' ## autoplot returns a grob object.
+#' ## autoplot returns a grob object
 #' pp2 <- autoplot(curves, ret_grob = TRUE)
 #' plot.new()
 #' grid.draw(pp2)
@@ -81,20 +81,7 @@ autoplot.mscurves <- function(object, curvetype = c("ROC", "PRC"),
   }
 
   if ("ROC" %in% curvetype && "PRC" %in% curvetype) {
-    .load_grid()
-    .load_gridExtra()
-
-    if (show_legend) {
-      grobframe <- .grid_arrange_shared_legend(p_roc, p_prc)
-    } else {
-      grobframe <- gridExtra::arrangeGrob(p_roc, p_prc, ncol = 2)
-    }
-
-    if (ret_grob) {
-      grobframe
-    } else {
-      grid::grid.draw(grobframe)
-    }
+    .combine_roc_prc(p_roc, p_prc, show_legend, ret_grob)
   } else if ("PRC" %in% curvetype) {
     p_prc
   } else if ("ROC" %in% curvetype) {
@@ -110,7 +97,8 @@ autoplot.msroc <- function(object, show_legend = TRUE, ...) {
 
   # === Create a ggplot object ===
   p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y, color = model_name))
-  p <- .geom_roc_line_wrapper(p, object[[1]], show_legend = show_legend)
+  p <- p + ggplot2::geom_line()
+  p <- .geom_basic_roc(p, object[[1]], show_legend = show_legend)
 }
 
 #
@@ -121,7 +109,6 @@ autoplot.msprc <- function(object, show_legend = TRUE, ...) {
 
   # === Create a ggplot object ===
   p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y, color = model_name))
-  p <- .geom_prc_line_wrapper(p, object[[1]], show_legend = show_legend)
-
-  p
+  p <- p + ggplot2::geom_line()
+  p <- .geom_basic_prc(p, object[[1]], show_legend = show_legend)
 }

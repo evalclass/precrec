@@ -33,7 +33,7 @@
 #'                setids = samps[["setids"]])
 #'
 #' ## Generate an mscurve object
-#' curves <- evalcv(mdat)
+#' curves <- evalmodm(mdat)
 #'
 #' ## Plot both ROC and Precision-Recall curves
 #' plot(curves)

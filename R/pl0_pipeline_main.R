@@ -2,13 +2,14 @@
 # Control the main pipeline iterations
 #
 pl_main <- function(mdat, model_type = "single", data_type = "single",
-                    x_interval = 0.001) {
+                    x_interval = 0.001, calc_avg = TRUE, ci_level = 0.95) {
 
   # === Validation ===
   .validate(mdat)
   model_type <- .pmatch_model_data_types(model_type)
   data_type <- .pmatch_model_data_types(data_type)
-  .validate_pl_main_args(mdat, model_type, data_type, x_interval)
+  .validate_pl_main_args(mdat, model_type, data_type, x_interval, calc_avg,
+                         ci_level)
 
   # === Create ROC and Precision-Recall curves ===
   # Define a function for each iteration
@@ -24,6 +25,17 @@ pl_main <- function(mdat, model_type = "single", data_type = "single",
   rocs <- .group_curves(lcurves, "roc", paste0(pf, "roc"), mdat)
   prcs <- .group_curves(lcurves, "prc", paste0(pf, "prc"), mdat)
 
+  # Calculate the average curves
+  if (data_type == "multiple" && calc_avg) {
+    model_names <- attr(mdat, "model_names")
+    setids <- attr(mdat, "setids")
+
+    attr(rocs, "avgcurves") <- calc_avg(rocs, model_names, setids,
+                                        x_interval, ci_level)
+    attr(prcs, "avgcurves") <- calc_avg(prcs, model_names, setids,
+                                        x_interval, ci_level)
+  }
+
   # === Create an S3 object ===
   s3obj <- structure(list(rocs = rocs, prcs = prcs),
                      class = paste0(pf, "curves"))
@@ -33,8 +45,9 @@ pl_main <- function(mdat, model_type = "single", data_type = "single",
   attr(s3obj, "data_type") <- data_type
   attr(s3obj, "model_names") <- attr(mdat, "model_names")
   attr(s3obj, "setids") <- attr(mdat, "setids")
-  attr(s3obj, "ci") <- list()
-  attr(s3obj, "args") <- list(x_interval = x_interval)
+  attr(s3obj, "args") <- list(x_interval = x_interval,
+                              calc_avg = calc_avg,
+                              ci_level = ci_level)
   attr(s3obj, "src") <- mdat
   attr(s3obj, "validated") <- FALSE
 
@@ -97,6 +110,7 @@ pl_main <- function(mdat, model_type = "single", data_type = "single",
   # Set attributes
   attr(s3obj, "model_names") <- attr(mdat, "model_names")
   attr(s3obj, "setids") <- attr(mdat, "setids")
+  attr(s3obj, "avgcurve") <- NA
   attr(s3obj, "src") <- mdat
   attr(s3obj, "validated") <- FALSE
 

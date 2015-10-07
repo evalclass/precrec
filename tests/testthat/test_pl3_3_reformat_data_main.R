@@ -46,11 +46,12 @@ test_that("'model_name' must be a character vector", {
   expect_err_msg(err_msg, as.character())
 
   err_msg <- "model_name is not an atomic vector"
+  err_msg <- "model_name is not a string"
   expect_err_msg(err_msg, factor(c(0.1, 0.2)))
   expect_err_msg(err_msg, list("1"))
   expect_err_msg(err_msg, data.frame("1"))
-  expect_err_msg(err_msg, array("1"))
-  expect_err_msg(err_msg, matrix("1"))
+#  expect_err_msg(err_msg, array("1"))
+#  expect_err_msg(err_msg, matrix("1"))
 })
 
 test_that("labels, ranks, and rank_idx must be the same length", {

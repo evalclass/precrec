@@ -60,7 +60,7 @@ pp1
 ## Hide the legend
 autoplot(curves, show_legend = FALSE)
 
-## autoplot returns a grob object.
+## autoplot returns a grob object
 pp2 <- autoplot(curves, ret_grob = TRUE)
 plot.new()
 grid.draw(pp2)

@@ -27,23 +27,23 @@
 #'                setids = samps[["setids"]])
 #'
 #' ## Convert sscurve object to a data frame
-#' curves <- evalcv(mdat)
+#' curves <- evalmodm(mdat)
 #' df <- fortify(curves)
 #'
 #' ## Fortified data frame can be used for plotting a ROC curve
 #' df_roc <- subset(df, group == "ROC")
-#' p_roc <- ggplot(df_roc, aes(x = x, y = y, group = setid))
-#' p_roc <- p_roc + geom_line()
+#' p_roc <- ggplot(df_roc, aes(x = x, y = y, ymin = ymin, ymax = ymax))
+#' p_roc <- p_roc + geom_smooth()
 #' p_roc
 #'
 #' ## Fortified data frame can be used for plotting a Precision-Recall curve
 #' df_prc <- subset(df, group == "PRC")
-#' p_prc <- ggplot(df_prc, aes(x = x, y = y, group = setid))
-#' p_prc <- p_prc + geom_line()
+#' p_prc <- ggplot(df_roc, aes(x = x, y = y, ymin = ymin, ymax = ymax))
+#' p_prc <- p_roc + geom_smooth()
 #' p_prc
 #'
 #' @export
-fortify.smcurves <- function(model, ...) {
+fortify.smcurves <- function(model, use_raw = FALSE, ...) {
   # === Check package availability  ===
   .load_ggplot2()
 
@@ -51,22 +51,33 @@ fortify.smcurves <- function(model, ...) {
   .validate(model)
 
   # === Prepare a data frame for ggplot2 ===
-  roc_df <- ggplot2::fortify(model[["rocs"]])
-  prc_df <- ggplot2::fortify(model[["prcs"]])
+  roc_df <- ggplot2::fortify(model[["rocs"]], use_raw)
+  prc_df <- ggplot2::fortify(model[["prcs"]], use_raw)
+
   x <- c(roc_df[["x"]], prc_df[["x"]])
   y <- c(roc_df[["y"]], prc_df[["y"]])
-  setid <- factor(c(roc_df[["setid"]], prc_df[["setid"]]),
-                  labels = levels(roc_df[["setid"]]))
   group = factor(c(rep("ROC", length(roc_df[["x"]])),
                    rep("PRC", length(prc_df[["x"]]))))
 
-  df <- data.frame(x = x, y = y, group = group, setid = setid)
+  if (use_raw) {
+    setid <- factor(c(roc_df[["setid"]], prc_df[["setid"]]),
+                    labels = levels(roc_df[["setid"]]))
+    df <- data.frame(x = x, y = y, group = group, setid = setid)
+
+  } else {
+    ymin <- c(roc_df[["ymin"]], prc_df[["ymin"]])
+    ymax <- c(roc_df[["ymax"]], prc_df[["ymax"]])
+
+    df <- data.frame(x = x, y = y, ymin = ymin, ymax = ymax, group = group)
+  }
+
+  df
 }
 
 #
 # Convert a mroc_curves object to a data frame for ggplot2.
 #
-fortify.smroc <- function(model, ...) {
+fortify.smroc <- function(model, use_raw = FALSE, ...) {
   # === Check package availability  ===
   .load_ggplot2()
 
@@ -74,13 +85,25 @@ fortify.smroc <- function(model, ...) {
   .validate(model)
 
   # === Prepare a data frame for ggplot2 ===
-  df <- NULL
-  setids <- attr(model, "setids")
-  for (i in seq_along(model)) {
-    x = model[[i]][["x"]]
-    y = model[[i]][["y"]]
-    setid = factor(rep(setids[i], length(x)), levels = setids)
-    df <- rbind(df, data.frame(x = x, y = y, setid = setid))
+  if (use_raw) {
+    df <- NULL
+    setids <- attr(model, "setids")
+    for (i in seq_along(model)) {
+      x = model[[i]][["x"]]
+      y = model[[i]][["y"]]
+      setid = factor(rep(setids[i], length(x)), levels = setids)
+      df <- rbind(df, data.frame(x = x, y = y, setid = setid))
+    }
+
+  } else {
+    avgcurves <- attr(model, "avgcurves")
+
+    x = avgcurves[[1]][["x"]]
+    y = avgcurves[[1]][["y_avg"]]
+    ymin = avgcurves[[1]][["y_ci_l"]]
+    ymax = avgcurves[[1]][["y_ci_h"]]
+
+    df <- data.frame(x = x, y = y, ymin = ymin, ymax = ymax)
   }
 
   df
@@ -89,6 +112,6 @@ fortify.smroc <- function(model, ...) {
 #
 # Convert a mprc_curves object to a data frame for ggplot2.
 #
-fortify.smprc <- function(model, ...) {
-  fortify.smroc(model, ...)
+fortify.smprc <- function(model, use_raw = FALSE, ...) {
+  fortify.smroc(model, use_raw, ...)
 }

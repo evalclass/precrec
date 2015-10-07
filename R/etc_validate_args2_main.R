@@ -49,10 +49,10 @@
 }
 
 #
-# Validate arguments of evalcv()
+# Validate arguments of evalmodm()
 #
-.validate_evalcv_args <- function(x_interval, model_names, setids,
-                                  na.last, ties.method, levels) {
+.validate_evalmodm_args <- function(x_interval, calc_avg, ci_level, model_names,
+                                    setids, na.last, ties.method, levels) {
 
   .validate_evalmulti_args(x_interval, model_names, setids,
                            na.last, ties.method, levels)

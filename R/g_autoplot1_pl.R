@@ -8,10 +8,8 @@ autoplot.fmdat <- function(object, ...) {
   p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y, color = x))
   p <- p + ggplot2::geom_jitter()
   p <- p + ggplot2::coord_flip()
-  p <- .geom_basic(p, "Score distributions by rank", NULL, "rank")
-  p <- p + ggplot2::theme(legend.position = "none")
-
-  p
+  p <- .geom_basic(p, "Score distributions by rank", NULL, "rank",
+                   show_legend = FALSE)
 }
 
 #
@@ -22,11 +20,9 @@ autoplot.cmats <- function(object, ...) {
 
   # === Create a ggplot object ===
   p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y, color = group))
-  p <- .geom_line_wrapper(p, "TPs, FNs, FPs, and TNs by threshold IDs",
-                          "threshold ID", "count")
-  p <- p + ggplot2::theme(legend.title = ggplot2::element_blank())
-
-  p
+  p <- p + ggplot2::geom_line()
+  p <- .geom_basic(p, "TPs, FNs, FPs, and TNs by threshold IDs",
+                   "threshold ID", "count", show_legend = TRUE)
 }
 
 #
@@ -37,12 +33,11 @@ autoplot.pevals <- function(object, ...) {
 
   # === Create a ggplot object ===
   p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y))
+  p <- p + ggplot2::geom_line()
   p <- p + ggplot2::facet_wrap(~ group, ncol = 2)
 
-  p <- .geom_line_wrapper(p, "Evaluation measures by threshold IDs",
-                          "threshold ID", "evaluation value")
-
-  p
+  p <- .geom_basic(p, "Evaluation measures by threshold IDs",
+                   "threshold ID", "evaluation value", show_legend = FALSE)
 }
 
 #
@@ -53,9 +48,8 @@ autoplot.roc_curve <- function(object, ...) {
 
   # === Create a ggplot object ===
   p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y))
-  p <- .geom_roc_line_wrapper(p, object)
-
-  p
+  p <- p + ggplot2::geom_line()
+  p <- .geom_basic_roc(p, object, show_legend = FALSE)
 }
 
 #
@@ -66,7 +60,6 @@ autoplot.prc_curve <- function(object, ...) {
 
   # === Create a ggplot object ===
   p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y))
-  p <- .geom_prc_line_wrapper(p, object)
-
-  p
+  p <- p + ggplot2::geom_line()
+  p <- .geom_basic_prc(p, object, show_legend = FALSE)
 }

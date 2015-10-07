@@ -17,6 +17,19 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// calc_avg_curve
+Rcpp::List calc_avg_curve(const Rcpp::List& curves, double x_interval, double ci_q);
+RcppExport SEXP precrec_calc_avg_curve(SEXP curvesSEXP, SEXP x_intervalSEXP, SEXP ci_qSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type curves(curvesSEXP);
+    Rcpp::traits::input_parameter< double >::type x_interval(x_intervalSEXP);
+    Rcpp::traits::input_parameter< double >::type ci_q(ci_qSEXP);
+    __result = Rcpp::wrap(calc_avg_curve(curves, x_interval, ci_q));
+    return __result;
+END_RCPP
+}
 // calc_basic_measures
 Rcpp::List calc_basic_measures(int np, int nn, const Rcpp::NumericVector& tps, const Rcpp::NumericVector& fps, const Rcpp::NumericVector& tns, const Rcpp::NumericVector& fns);
 RcppExport SEXP precrec_calc_basic_measures(SEXP npSEXP, SEXP nnSEXP, SEXP tpsSEXP, SEXP fpsSEXP, SEXP tnsSEXP, SEXP fnsSEXP) {

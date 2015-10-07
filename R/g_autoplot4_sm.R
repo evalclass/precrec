@@ -41,7 +41,7 @@
 #'                setids = samps[["setids"]])
 #'
 #' ## Generate an mscurve object
-#' curves <- evalcv(mdat)
+#' curves <- evalmodm(mdat)
 #'
 #' ## Plot both ROC and Precision-Recall curves
 #' autoplot(curves)
@@ -60,7 +60,8 @@
 #'
 #' @export
 autoplot.smcurves <- function(object, curvetype = c("ROC", "PRC"),
-                              ret_grob = FALSE, ...) {
+                              show_raw = FALSE, ret_grob = FALSE, ...) {
+
   # === Check package availability  ===
   .load_ggplot2()
   .validate(object)
@@ -69,24 +70,15 @@ autoplot.smcurves <- function(object, curvetype = c("ROC", "PRC"),
 
   # === Create a ggplot object for ROC&PRC, ROC, or PRC ===
   if ("ROC" %in% curvetype) {
-    p_roc <- ggplot2::autoplot(object[["rocs"]], ...)
+    p_roc <- ggplot2::autoplot(object[["rocs"]], show_raw, ...)
   }
 
   if ("PRC" %in% curvetype) {
-    p_prc <- ggplot2::autoplot(object[["prcs"]], ...)
+    p_prc <- ggplot2::autoplot(object[["prcs"]], show_raw, ...)
   }
 
   if ("ROC" %in% curvetype && "PRC" %in% curvetype) {
-    .load_grid()
-    .load_gridExtra()
-
-    grobframe <- gridExtra::arrangeGrob(p_roc, p_prc, ncol = 2)
-
-    if (ret_grob) {
-      grobframe
-    } else {
-      grid::grid.draw(grobframe)
-    }
+    .combine_roc_prc(p_roc, p_prc, show_legend = FALSE, ret_grob = ret_grob)
   } else if ("PRC" %in% curvetype) {
     p_prc
   } else if ("ROC" %in% curvetype) {
@@ -97,23 +89,40 @@ autoplot.smcurves <- function(object, curvetype = c("ROC", "PRC"),
 #
 # Plot ROC curves for a single model with multiple datasets
 #
-autoplot.smroc <- function(object, ...) {
-  df <- .prepare_autoplot(object)
+autoplot.smroc <- function(object, show_raw = FALSE, ...) {
+  df <- .prepare_autoplot(object, use_raw = show_raw)
 
   # === Create a ggplot object ===
-  p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y, group = setid))
-  p <- .geom_roc_line_wrapper(p, object[[1]], show_legend = FALSE)
+  if (show_raw) {
+    p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y, group = setid))
+    p <- p + ggplot2::geom_line()
+
+  } else {
+    p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y,
+                                          ymin = ymin, ymax = ymax))
+    p <- p + ggplot2::geom_smooth(stat = "identity")
+  }
+
+  p <- .geom_basic_roc(p, object[[1]], show_legend = FALSE)
 }
 
 #
 # Plot Precision-Recall curves for a single model with multiple datasets
 #
-autoplot.smprc <- function(object, ...) {
-  df <- .prepare_autoplot(object)
+autoplot.smprc <- function(object, show_raw = FALSE, ...) {
+  df <- .prepare_autoplot(object, use_raw = show_raw)
 
   # === Create a ggplot object ===
-  p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y, group = setid))
-  p <- .geom_prc_line_wrapper(p, object[[1]], show_legend = FALSE)
+  if (show_raw) {
+    p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y, group = setid))
+    p <- p + ggplot2::geom_line()
 
-  p
+  } else {
+    p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y,
+                                          ymin = ymin, ymax = ymax))
+    p <- p + ggplot2::geom_smooth(stat = "identity")
+
+  }
+
+  p <- .geom_basic_prc(p, object[[1]], show_legend = FALSE)
 }

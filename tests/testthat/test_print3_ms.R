@@ -1,6 +1,6 @@
 library(precrec)
 
-context("PT 3: Print mscurves")
+context("PR 3: Print mscurves")
 # Test print(x, ...)
 
 pt3_create_curves <- function() {

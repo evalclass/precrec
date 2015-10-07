@@ -97,9 +97,7 @@
 #
 .validate_model_name <- function(model_name) {
   if (!is.null(model_name)) {
-    assertthat::assert_that(is.atomic(model_name),
-                            is.vector(model_name),
-                            assertthat::is.string(model_name))
+    assertthat::assert_that(assertthat::is.string(model_name))
   }
 }
 
@@ -108,18 +106,26 @@
 #
 .validate_setid <- function(setid) {
   if (!is.null(setid)) {
-    assertthat::assert_that(assertthat::is.number(setid)
-                            || assertthat::is.string(setid))
+    assertthat::assert_that(assertthat::is.number(setid))
   }
 }
+
+#
+# Validate ci_level
+#
+.validate_ci_level <- function(ci_level) {
+  if (!is.null(ci_level)) {
+    assertthat::assert_that(assertthat::is.number(ci_level))
+  }
+}
+
 
 #
 # Validate expd_first
 #
 .validate_expd_first <- function(expd_first) {
   if (!is.null(expd_first)) {
-    assertthat::assert_that(is.atomic(expd_first), is.vector(expd_first),
-                            assertthat::is.string(expd_first),
+    assertthat::assert_that(assertthat::is.string(expd_first),
                             (expd_first == "model_names"
                              || expd_first == "setids"))
   }
