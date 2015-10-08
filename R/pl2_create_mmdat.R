@@ -1,109 +1,192 @@
-#' Reformat input data for Precision-Recall and ROC evaluation
-#' with multiple models.
+#' Reformat data for Precision-Recall and ROC evaluation
 #'
-#' \code{reformat_data} takes predicted scores from a model and binary lables
-#' from an observed dataset and returns a \code{fmdat} object.
-#' \code{fmdat} contains formatted labels and score ranks that are used
-#' by a subsequent function, \code{\link{create_confmats}}, in the perforamcne
-#' evaluation pipeline.
+#' The \code{mmdata} function takes predicted scores and lables
+#'   and returns an \code{mdat} object.
 #'
-#' @param mscores A dataset of predicted scores.
-#' @param mobslabs A dataset of of observed labels.
-#' @param na.last Passed to \code{\link[base]{rank}} for controlling the
-#'   treatment of NAs. The value can be TRUE or FALSE. If TRUE, missing values
-#'   in the data are put last; if FALSE, they are put first.
-#' @param ties.method Passed to \code{\link[base]{rank}} for controlling tied
-#'   scores. The value can be "average", "random", or "first". The "first"
-#'   method results in a permutation with increasing values at each index
-#'   set of ties. The "random" method puts these in random order whereas
-#'   the default, "average", replaces them by their mean.
-#' @param olevs A character vector to overide the levels of the factor for
-#'   observed binary labels.
-#' @param model_names Names of the models/classifiers to be evaluated.
-#' @param ... Other arguments passed to other methods (ignored).
-#' @return \code{reformat_data} returns an \code{mfmdat} S3 object that
-#'   contains formatted labels and score ranks.
+#' @param scores A numeric data of predicted scores. It can be a vector,
+#'   a matrix, an array, a data frame, or a list.
+#'
+#' @param labels A numeric or factor data of observed labels.
+#'   It can be a vector, a matrix, an array, a data frame, or a list.
+#'
+#' @param model_names A character vector as the names
+#'   of the models/classifiers.
+#'
+#' @param setids A numeric vector as dataset IDs.
+#'
+#' @param expd_first Indicate which of the two vaiables - model names or dataset IDs
+#'   should be expanded first when they are automatically generated.
+#'
+#'   \describe{
+#'     \item{"model_names"}{Model names are expanded first. For example,
+#'            model_names: c("m1", "m2"), setids: c(1, 1)
+#'            when they are automaticlly generated.}
+#'     \item{"setids"}{Dataset IDs are expanded first. For example,
+#'            model_names: c("m1", "m1"), setids: c(1, 2)
+#'            when they are automaticlly generated.}
+#'   }
+#'
+#' @param na.last A boolean value for controlling the treatment of NAs
+#'   in the scores.
+#'   \describe{
+#'     \item{TRUE}{NAs are treated as the highest score}
+#'     \item{FALSE}{NAs are treated as the lowest score}
+#'   }
+#'
+#' @param ties.method A string for controlling tied scores.
+#'   Ignored if mdat is set.
+#'   \describe{
+#'     \item{"equiv"}{Ties are equivalently ranked}
+#'     \item{"random"}{Ties are ranked in an incresing order as appeared}
+#'     \item{"first"}{ Ties are ranked in random order}
+#'   }
+#'
+#' @param levels A character vector to overide the levels of the factor for
+#'   the labels.
+#'
+#' @param ... Not used by this method.
+#'
+#' @return The \code{mmdata} function returns an \code{mdat} S3 object
+#'   that contains formatted labels and score ranks.
+#'
+#' @seealso \code{\link{join_scores}} and \code{\link{join_labels}}
+#'   for joining socre and labels.
 #'
 #' @examples
+#' ## Generate an mdat object
+#' mdat1 <- mmdata(1:8, sample(c(0, 1), 8, replace = TRUE))
+#'
+#' ## Use join_scores and join_labels
 #' s1 <- c(1, 2, 3, 4)
 #' s2 <- c(5, 6, 7, 8)
-#' s3 <- c(2, 4, 6, 8)
-#' pscores <- join_scores(s1, s2, s3)
+#' scores <- join_scores(s1, s2)
 #'
 #' l1 <- c(1, 0, 1, 1)
 #' l2 <- c(1, 1, 0, 0)
-#' l3 <- c(0, 1, 0, 1)
-#' olabs <- join_labels(l1, l2, l3)
+#' labels <- join_labels(l1, l2)
 #'
-#' model_names <- c("t1", "t2", "t3")
+#' mdat2 <- mmdata(scores, labels)
 #'
-#' mdat <- mmdata(pscores, olabs, model_names = model_names)
-#' mdat
-mmdata <- function(pscores, olabs, model_names = NULL, data_nos = NULL,
-                   na.last = FALSE, ties.method = "average",
-                   olevs = c("negative", "positive"), ...) {
+#' @export
+mmdata <- function(scores, labels, model_names = NULL, setids = NULL,
+                   expd_first = "model_names", na.last = FALSE,
+                   ties.method = "average",
+                   levels = c("negative", "positive"), ...) {
 
   # === Join datasets ===
-  lpscores <- join_scores(pscores)
-  lolabs <- join_labels(olabs)
+  lscores <- join_scores(scores)
+  llabels <- join_labels(labels)
 
   # === Validate arguments and variables ===
-  .validate_mmdata_args(lpscores, lolabs, model_names, data_nos,
-                        na.last = na.last, ties.method = ties.method,
-                        olevs = olevs, ...)
+  expd_first <- .pmatch_expd_first(expd_first)
+  .validate_mmdata_args(lscores, llabels, model_names, setids,
+                        expd_first = "model_names", na.last = na.last,
+                        ties.method = ties.method, levels = levels)
 
-  # Replicate olabs
-  if (length(lpscores) != 1 && length(lolabs) == 1) {
-    lolabs <- replicate(length(lpscores), lolabs[[1]], simplify = FALSE)
+  # Replicate labels
+  if (length(lscores) != 1 && length(llabels) == 1) {
+    llabels <- replicate(length(lscores), llabels[[1]], simplify = FALSE)
   }
 
-  # === Model names and data set numbers ===
-  mnames <- .get_modnames(length(lpscores), model_names, data_nos)
+  # === Model names and dataset IDs ===
+  mnames <- .create_modnames(length(lscores), model_names, setids,
+                             expd_first)
   new_model_names <- mnames[["mn"]]
-  new_data_nos <- mnames[["dn"]]
+  new_setids <- mnames[["ds"]]
 
-  # === Reformat input data ===y
+  # === Reformat input data ===
   func_fmdat <- function(i) {
-    reformat_data(lpscores[[i]], lolabs[[i]], na.last = na.last,
-                  ties.method = ties.method, olevs = olevs,
-                  model_name = new_model_names[i], data_no = new_data_nos[i],
+    reformat_data(lscores[[i]], llabels[[i]], na.last = na.last,
+                  ties.method = ties.method, levels = levels,
+                  model_name = new_model_names[i], setid = new_setids[i],
                   ...)
   }
-  mmdat <- lapply(seq_along(lpscores), func_fmdat)
+  mmdat <- lapply(seq_along(lscores), func_fmdat)
 
   # === Create an S3 object ===
   s3obj <- structure(mmdat, class = "mdat")
 
   # Set attributes
   attr(s3obj, "model_names") <- new_model_names
-  attr(s3obj, "data_nos") <- new_data_nos
+  attr(s3obj, "setids") <- new_setids
   attr(s3obj, "args") <- list(na.last = na.last,
                               ties.method = ties.method,
-                              olevs = olevs)
+                              levels = levels)
   attr(s3obj, "validated") <- FALSE
 
   # Call .validate.mdat()
   .validate(s3obj)
 }
 
-# Get model names and data numbers
-.get_modnames <- function(dlen, model_names, data_nos) {
+#
+# Check partial match - expd_first
+#
+.pmatch_expd_first <- function(val) {
+  if (assertthat::is.string(val)) {
+    if (val == "setids" || val == "model_names") {
+      return(val)
+    }
+
+    if (!is.na(pmatch(val, "setids"))) {
+      return("setids")
+    }
+
+    if (!is.na(pmatch(val, "model_names"))) {
+      return("model_names")
+    }
+  }
+
+  val
+}
+
+#
+# Check partial match - ties method
+#
+.pmatch_tiesmethod <- function(val) {
+  if (assertthat::is.string(val)) {
+    choices = c("average", "random", "first")
+    if (val %in% choices) {
+      return(val)
+    }
+
+    if (!is.na(pmatch(val, "average"))) {
+      return("average")
+    }
+
+    if (!is.na(pmatch(val, "random"))) {
+      return("random")
+    }
+
+    if (!is.na(pmatch(val, "first"))) {
+      return("first")
+    }
+
+  }
+
+  val
+}
+
+#
+# Get model names and dataset IDs
+#
+.create_modnames <- function(dlen, model_names, setids,
+                             expd_first = "setids") {
   len_mn <- length(model_names)
-  len_dn <- length(data_nos)
+  len_dn <- length(setids)
   is_null_mn <- is.null(model_names)
-  is_null_dn <- is.null(data_nos)
+  is_null_dn <- is.null(setids)
 
-  modnames <- list(mn = model_names, dn = data_nos)
+  modnames <- list(mn = model_names, ds = setids)
 
-  # === Reformat model names and data numbers ===
+  # === Reformat model names and dataset IDs ===
   # No reformat
   if (len_mn == dlen && len_dn == dlen) {
     return(modnames)
   }
 
-  # Assign a single data number
+  # Assign a single dataset ID
   if (len_mn == dlen && is_null_dn) {
-    modnames[["dn"]] <- rep(1, dlen)
+    modnames[["ds"]] <- rep(1, dlen)
     return(modnames)
   }
 
@@ -113,21 +196,33 @@ mmdata <- function(pscores, olabs, model_names = NULL, data_nos = NULL,
     return(modnames)
   }
 
-  # Expand both model names and data numbers
+  # Expand both model names and dataset IDs
   if (len_mn * len_dn == dlen) {
-    modnames[["mn"]] <- rep(model_names, each = len_dn)
-    modnames[["dn"]] <- rep(data_nos, len_mn)
+    if (expd_first == "model_names") {
+      modnames[["mn"]] <- rep(model_names, len_dn)
+      modnames[["ds"]] <- rep(setids, each = len_mn)
+    } else if (expd_first == "setids") {
+      modnames[["mn"]] <- rep(model_names, each = len_dn)
+      modnames[["ds"]] <- rep(setids, len_mn)
+    }
+
     return(modnames)
   }
 
-  # Expand model names and assign a single data number
+  # Expand model names and assign a single dataset ID
   if (is_null_mn && is_null_dn) {
-    modnames[["mn"]] <- paste0("m", seq(dlen))
-    modnames[["dn"]] <- rep(1, dlen)
+    if (expd_first == "model_names") {
+      modnames[["mn"]] <- paste0("m", seq(dlen))
+      modnames[["ds"]] <- rep(1, dlen)
+    } else if (expd_first == "setids") {
+      modnames[["mn"]] <- rep("m1", dlen)
+      modnames[["ds"]] <- seq(dlen)
+    }
+
     return(modnames)
   }
 
   # === Error handling ===
-  stop("Invalid 'model_names' & 'data_nos'")
+  stop("Invalid 'model_names' and/or 'setids'")
 
 }

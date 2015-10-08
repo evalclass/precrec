@@ -1,12 +1,18 @@
+#
 # A generic to validate data
+#
 .validate <- function(x) UseMethod(".validate")
 
+#
 # Default .validate
+#
 .validate.default <- function(x) {
   stop(paste0("Unrecognized class for .validate(): '", class(x), "'"))
 }
 
+#
 # Validate class items and attributes
+#
 .validate_basic <- function(obj, class_name, func_name, item_names, attr_names,
                             arg_names) {
   # Check class
@@ -25,9 +31,6 @@
   # Check attributes
   ditems <- setdiff(attr_names, names(attributes(obj)))
   if (!is.null(attr_names) && length(ditems) > 0) {
-    print(attributes(obj))
-    print(ditems)
-    print(paste(ditems))
     stop(paste0("Missing items in '", class_name, "' attributes: ",
                 paste(ditems, collapse = ", ")))
   }

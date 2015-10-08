@@ -2,60 +2,81 @@
 % Please edit documentation in R/pl2_create_mmdat.R
 \name{mmdata}
 \alias{mmdata}
-\title{Reformat input data for Precision-Recall and ROC evaluation
-with multiple models.}
+\title{Reformat data for Precision-Recall and ROC evaluation}
 \usage{
-mmdata(pscores, olabs, model_names = NULL, data_nos = NULL,
-  na.last = FALSE, ties.method = "average", olevs = c("negative",
-  "positive"), ...)
+mmdata(scores, labels, model_names = NULL, setids = NULL,
+  expd_first = "model_names", na.last = FALSE, ties.method = "average",
+  levels = c("negative", "positive"), ...)
 }
 \arguments{
-\item{model_names}{Names of the models/classifiers to be evaluated.}
+\item{scores}{A numeric data of predicted scores. It can be a vector,
+  a matrix, an array, a data frame, or a list.}
 
-\item{na.last}{Passed to \code{\link[base]{rank}} for controlling the
-treatment of NAs. The value can be TRUE or FALSE. If TRUE, missing values
-in the data are put last; if FALSE, they are put first.}
+\item{labels}{A numeric or factor data of observed labels.
+  It can be a vector, a matrix, an array, a data frame, or a list.}
 
-\item{ties.method}{Passed to \code{\link[base]{rank}} for controlling tied
-scores. The value can be "average", "random", or "first". The "first"
-method results in a permutation with increasing values at each index
-set of ties. The "random" method puts these in random order whereas
-the default, "average", replaces them by their mean.}
+\item{model_names}{A character vector as the names
+  of the models/classifiers.}
 
-\item{olevs}{A character vector to overide the levels of the factor for
-observed binary labels.}
+\item{setids}{A numeric vector as dataset IDs.}
 
-\item{...}{Other arguments passed to other methods (ignored).}
+\item{expd_first}{Indicate which of the two vaiables - model names or dataset IDs
+  should be expanded first when they are automatically generated.
 
-\item{mscores}{A dataset of predicted scores.}
+  \describe{
+    \item{"model_names"}{Model names are expanded first. For example,
+           model_names: c("m1", "m2"), setids: c(1, 1)
+           when they are automaticlly generated.}
+    \item{"setids"}{Dataset IDs are expanded first. For example,
+           model_names: c("m1", "m1"), setids: c(1, 2)
+           when they are automaticlly generated.}
+  }}
 
-\item{mobslabs}{A dataset of of observed labels.}
+\item{na.last}{A boolean value for controlling the treatment of NAs
+  in the scores.
+  \describe{
+    \item{TRUE}{NAs are treated as the highest score}
+    \item{FALSE}{NAs are treated as the lowest score}
+  }}
+
+\item{ties.method}{A string for controlling tied scores.
+  Ignored if mdat is set.
+  \describe{
+    \item{"equiv"}{Ties are equivalently ranked}
+    \item{"random"}{Ties are ranked in an incresing order as appeared}
+    \item{"first"}{ Ties are ranked in random order}
+  }}
+
+\item{levels}{A character vector to overide the levels of the factor for
+  the labels.}
+
+\item{...}{Not used by this method.}
 }
 \value{
-\code{reformat_data} returns an \code{mfmdat} S3 object that
-  contains formatted labels and score ranks.
+The \code{mmdata} function returns an \code{mdat} S3 object
+  that contains formatted labels and score ranks.
 }
 \description{
-\code{reformat_data} takes predicted scores from a model and binary lables
-from an observed dataset and returns a \code{fmdat} object.
-\code{fmdat} contains formatted labels and score ranks that are used
-by a subsequent function, \code{\link{create_confmats}}, in the perforamcne
-evaluation pipeline.
+The \code{mmdata} function takes predicted scores and lables
+  and returns an \code{mdat} object.
 }
 \examples{
+## Generate an mdat object
+mdat1 <- mmdata(1:8, sample(c(0, 1), 8, replace = TRUE))
+
+## Use join_scores and join_labels
 s1 <- c(1, 2, 3, 4)
 s2 <- c(5, 6, 7, 8)
-s3 <- c(2, 4, 6, 8)
-pscores <- join_scores(s1, s2, s3)
+scores <- join_scores(s1, s2)
 
 l1 <- c(1, 0, 1, 1)
 l2 <- c(1, 1, 0, 0)
-l3 <- c(0, 1, 0, 1)
-olabs <- join_labels(l1, l2, l3)
+labels <- join_labels(l1, l2)
 
-model_names <- c("t1", "t2", "t3")
-
-mdat <- mmdata(pscores, olabs, model_names = model_names)
-mdat
+mdat2 <- mmdata(scores, labels)
+}
+\seealso{
+\code{\link{join_scores}} and \code{\link{join_labels}}
+  for joining socre and labels.
 }
 

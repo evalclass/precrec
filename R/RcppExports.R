@@ -5,6 +5,10 @@ calc_auc <- function(xs, ys) {
     .Call('precrec_calc_auc', PACKAGE = 'precrec', xs, ys)
 }
 
+calc_avg_curve <- function(curves, x_interval, ci_q) {
+    .Call('precrec_calc_avg_curve', PACKAGE = 'precrec', curves, x_interval, ci_q)
+}
+
 calc_basic_measures <- function(np, nn, tps, fps, tns, fns) {
     .Call('precrec_calc_basic_measures', PACKAGE = 'precrec', np, nn, tps, fps, tns, fns)
 }

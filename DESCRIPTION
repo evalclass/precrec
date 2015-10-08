@@ -8,10 +8,13 @@ Authors@R: c(
     person("Marc", "Rehmsmeier", email = "marc.rehmsmeier@ii.uib.no", role = c("aut")))
 Description: precrec is a package for calculating accuate Precision-Recall
     and ROC curves. precrec provides correct non-linear interpolation between
-    two Precision-Recall plots. Calculated curves always maintain one-to-one
-    relathiship between ROC and Precision-Recall spaces.
+    two Precision-Recall points.
 License: GPL-3
 LazyData: TRUE
-Suggests: testthat
+Suggests: testthat,
+    grid,
+    gridExtra
 LinkingTo: Rcpp
-Imports: Rcpp
+Imports: Rcpp,
+    ggplot2,
+    assertthat

@@ -4,63 +4,95 @@
 \alias{evalmulti}
 \title{Evaluate multiple models}
 \usage{
-evalmulti(mdat, mscores = NULL, mobslabs = NULL, model_names = NULL,
-  data_nos = NULL, x_interval = 0.001, na.last = FALSE,
-  ties.method = "average", olevs = c("negative", "positive"))
+evalmulti(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
+  model_names = NULL, setids = NULL, na.last = FALSE,
+  ties.method = "average", levels = c("negative", "positive"))
 }
 \arguments{
-\item{mdat}{An \code{mdat} object created by \code{\link{create_mdat}}.}
+\item{mdat}{An \code{mdat} object created by \code{\link{mmdata}}.
+  The following arguments are ignored when \code{mdat} is specified.
+  \itemize{
+    \item \code{scores}
+    \item \code{labels}
+    \item \code{model_names}
+    \item \code{setids}
+    \item \code{na.last}
+    \item \code{ties.method}
+  }}
 
-\item{mscores}{A dataset of predicted scores.}
+\item{x_interval}{A numeric value with the range (0, 1] to specifiy
+  an interval of the evaluation values on the x-axis.
+  No interpolation between two points is performed when it is set to 1.}
 
-\item{mobslabs}{A dataset of of observed labels.}
+\item{scores}{A numeric data of predicted scores. It can be a vector,
+  a matrix, an array, a data frame, or a list.}
 
-\item{model_names}{Names of the models/classifiers to be evaluated.}
+\item{labels}{A numeric or factor data of observed labels.
+  It can be a vector, a matrix, an array, a data frame, or a list.}
 
-\item{x_interval}{A numeric value to specifiy an interval of the
-x-axis (TPRs for ROC and recall for Precision-Recall).}
+\item{model_names}{A character vector as the names
+  of the models/classifiers.}
 
-\item{na.last}{Passed to \code{\link[base]{rank}} for controlling the
-treatment of NAs. The value can be TRUE or FALSE. If TRUE, missing values
-in the data are put last; if FALSE, they are put first.}
+\item{setids}{A numeric vector as dataset IDs.}
 
-\item{ties.method}{Passed to \code{\link[base]{rank}} for controlling tied
-scores. The value can be "average", "random", or "first". The "first"
-method results in a permutation with increasing values at each index
-set of ties. The "random" method puts these in random order whereas
-the default, "average", replaces them by their mean.}
+\item{na.last}{A boolean value for controlling the treatment of NAs
+  in the scores.
+  \describe{
+    \item{TRUE}{NAs are treated as the highest score}
+    \item{FALSE}{NAs are treated as the lowest score}
+  }}
+
+\item{ties.method}{A string for controlling tied scores.
+  Ignored if mdat is set.
+  \describe{
+    \item{"equiv"}{Ties are equivalently ranked}
+    \item{"random"}{Ties are ranked in an incresing order as appeared}
+    \item{"first"}{ Ties are ranked in random order}
+  }}
 
 \item{levels}{A character vector to overide the levels of the factor for
-observed binary labels.}
+  the labels.}
 }
 \value{
-\code{evalmulti} returns a \code{mcurves} S3 object that
-  contains ROC and Precision-Recall curves.
+The \code{evalmulti} function returns an \code{mscurves} S3 object
+  that contains ROC and Precision-Recall curves.
 }
 \description{
-\code{evalmulti} takes an \code{mdat} object that contains predicted scores
-from multiple models and corresponding binary lables from an observed dataset.
-\code{mdat} is created by \code{\link{create_mdat}}. \code{evalmulti}
-can aslo take datasets of scores and labels as \code{mscores} and
-\code{mobslabs} directly. It calculates ROC and Precision-Recall curves
-for all the models.
+The \code{evalmulti} function takes predicted scores and binary lables
+  and calculates ROC and Precision-Recall curves.
 }
 \examples{
-data(IB500)
+## Create sample datasets with 100 positives and 100 negatives
+samps <- create_sim_samples(1, 100, 100, "all")
+mdat <- mmdata(samps[["scores"]], samps[["labels"]],
+               model_names = samps[["model_names"]],
+               setids = samps[["setids"]])
 
-s1 <- IB500$random_scores
-s2 <- IB500$poor_er_scores
-s3 <- IB500$good_er_scores
-s4 <- IB500$excel_scores
-s5 <- IB500$perf_scores
-l1 <- IB500$labels
+## Generate an mscurve object
+curves1 <- evalmulti(mdat)
 
-model_names <- c("Random", "Poor ER", "Good ER", "Excellent", "Perfect")
+## Directly specifiy scores and labels
+curves2 <- evalmulti(scores = samps[["scores"]], labels = samps[["labels"]],
+                     model_names = samps[["model_names"]])
 
-mscores <- join_scores(s1, s2, s3, s4, s5)
-mobslabs <- l1
-mdat <- mmdata(mscores, mobslabs, model_names = model_names)
+## Print the summary
+curves2
 
-mcurves <- evalmulti(mdat)
+## Plot Precision-Recall
+plot(curves2, "PRC")
+
+## Set x_interval = 0.1
+curves3 <- evalmulti(mdat, x_interval = 0.1)
+plot(curves3, "PRC")
+
+## No interpolation of Precsion-Recall curve
+curves4 <- evalmulti(mdat, x_interval = NULL)
+plot(curves4, "PRC")
+}
+\seealso{
+\code{\link{plot.mscurves}}, \code{\link{autoplot.mscurves}},
+  and \code{\link{fortify.mscurves}} for plotting curves.
+  \code{\link{join_scores}}, \code{\link{join_scores}},
+  and \code{\link{join_labels}} for formatting input data.
 }
 
