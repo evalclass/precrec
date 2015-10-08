@@ -45,6 +45,46 @@
 }
 
 #
+# Plot average line with CI
+#
+.plot_avg <- function(obj, curve_name, xlab, ylab, show_ci) {
+  # === Create a plot ===
+  np <- attr(obj[[1]], "np")
+  nn <- attr(obj[[1]], "nn")
+
+  avgcurves <- attr(obj, "avgcurves")
+
+  x = avgcurves[[1]][["x"]]
+  y = avgcurves[[1]][["y_avg"]]
+  ymin = avgcurves[[1]][["y_ci_l"]]
+  ymax = avgcurves[[1]][["y_ci_h"]]
+
+  plot(1, type="l", main = paste0(curve_name, " - P: ", np, ", N: ", nn),
+       xlab = xlab, ylab = ylab, ylim = c(0, 1), xlim = c(0, 1))
+  .add_curve_with_ci(avgcurves, 1, "grey", "blue", show_ci)
+}
+
+#
+# Add a curve with CI
+#
+.add_curve_with_ci <- function(avgcurves, idx, pcol, lcol, show_ci) {
+  x = avgcurves[[idx]][["x"]]
+  y = avgcurves[[idx]][["y_avg"]]
+
+  if (show_ci) {
+    ymin = avgcurves[[idx]][["y_ci_l"]]
+    ymax = avgcurves[[idx]][["y_ci_h"]]
+
+    g <- col2rgb(pcol)
+    polygon(c(x, rev(x)), c(ymin, rev(ymax)), border = FALSE,
+            col = rgb(g[1], g[2], g[3], 180, maxColorValue = 255))
+  }
+
+  b <- col2rgb(lcol)
+  lines(x, y, col = rgb(b[1], b[2], b[3], 200, maxColorValue = 255))
+}
+
+#
 # Show legend
 #
 .show_legend <- function(obj, show_legend, gnames = "model_names") {

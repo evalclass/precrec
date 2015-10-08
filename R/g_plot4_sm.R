@@ -45,17 +45,12 @@
 #' plot(curves, curvetype = "PRC")
 #'
 #' @export
-plot.smcurves <- function(x, curvetype = c("ROC", "PRC"), ...) {
+plot.smcurves <- function(x, curvetype = c("ROC", "PRC"), show_ci = TRUE,
+                          show_raw = FALSE, ...) {
 
   # === Validate input arguments ===
   .validate(x)
-
-  if (!is.atomic(curvetype) || !is.character(curvetype)
-      || length(curvetype) > 2
-      || length(setdiff(curvetype, c("ROC", "PRC"))) != 0)
-  {
-    stop("Invalid 'curvetype' value")
-  }
+  .check_curvetype(curvetype)
 
   # === Create a plot ===
   if ("ROC" %in% curvetype && "PRC" %in% curvetype) {
@@ -65,31 +60,35 @@ plot.smcurves <- function(x, curvetype = c("ROC", "PRC"), ...) {
   }
 
   if ("ROC" %in% curvetype) {
-    plot(x[["rocs"]], ...)
+    plot(x[["rocs"]], show_ci, show_raw, ...)
   }
 
   if ("PRC" %in% curvetype) {
-    plot(x[["prcs"]], ...)
+    plot(x[["prcs"]], show_ci, show_raw, ...)
   }
 }
 
 #
 # Plot ROC curves
 #
-plot.smroc <- function(x, ...) {
+plot.smroc <- function(x, show_ci = TRUE, show_raw = FALSE, ...) {
   old_pty <- par(pty = "s")
   on.exit(par(old_pty), add = TRUE)
 
   # === Create a plot ===
-  .matplot_wrapper(x, "ROC", "1 - Specificity", "Sensitivity", "single")
-  abline(a = 0, b = 1, col = "grey", lty = 3)
+  if (show_raw) {
+    .matplot_wrapper(x, "ROC", "1 - Specificity", "Sensitivity", "single")
+  } else {
+  .plot_avg(x, "ROC", "1 - Specificity", "Sensitivity", show_ci)
+  }
 
+  abline(a = 0, b = 1, col = "grey", lty = 3)
 }
 
 #
 # Plot Precision-Recall curves
 #
-plot.smprc <- function(x, ...) {
+plot.smprc <- function(x, show_ci = TRUE, show_raw = FALSE, ...) {
   old_pty <- par(pty = "s")
   on.exit(par(old_pty), add = TRUE)
 
@@ -97,7 +96,13 @@ plot.smprc <- function(x, ...) {
   np <- attr(x[[1]], "np")
   nn <- attr(x[[1]], "nn")
 
-  .matplot_wrapper(x, "Precision-Recall", "Recall", "Precision", "single")
+  if (show_raw) {
+    .matplot_wrapper(x, "Precision-Recall", "Recall", "Precision", "single")
+  } else {
+    .plot_avg(x, "Precision-Recall", "Recall", "Precision", show_ci)
+  }
+
+
   abline(h = np / (np + nn), col = "grey", lty = 3)
 
 }

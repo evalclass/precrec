@@ -48,13 +48,7 @@ plot.sscurves <- function(x, curvetype = c("ROC", "PRC"), ...) {
 
   # === Validate input arguments ===
   .validate(x)
-
-  if (!is.atomic(curvetype) || !is.character(curvetype)
-      || length(curvetype) > 2
-      || length(setdiff(curvetype, c("ROC", "PRC"))) != 0)
-  {
-    stop("Invalid 'curvetype' value")
-  }
+  .check_curvetype(curvetype)
 
   # === Create a plot ===
   if ("ROC" %in% curvetype) {

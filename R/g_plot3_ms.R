@@ -54,13 +54,7 @@ plot.mscurves <- function(x, curvetype = c("ROC", "PRC"),
   # === Validate input arguments ===
   .check_show_legend(show_legend)
   .validate(x)
-
-  if (!is.atomic(curvetype) || !is.character(curvetype)
-      || length(curvetype) > 2
-      || length(setdiff(curvetype, c("ROC", "PRC"))) != 0)
-  {
-    stop("Invalid 'curvetype' value")
-  }
+  .check_curvetype(curvetype)
 
   # === Create a plot ===
   show_legend2 <- show_legend

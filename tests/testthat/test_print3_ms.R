@@ -19,9 +19,6 @@ pt3_create_curves <- function() {
 }
 
 test_that("print mscurves", {
-  pdf(NULL)
-  on.exit(dev.off())
-
   curves <- pt3_create_curves()
 
   expect_output(print(curves), "ROC curves")
@@ -29,9 +26,6 @@ test_that("print mscurves", {
 })
 
 test_that("print msroc", {
-  pdf(NULL)
-  on.exit(dev.off())
-
   curves <- pt3_create_curves()
 
   expect_output(print(curves[["rocs"]]), "ROC curves")
@@ -39,9 +33,6 @@ test_that("print msroc", {
 
 
 test_that("print msprc", {
-  pdf(NULL)
-  on.exit(dev.off())
-
   curves <- pt3_create_curves()
 
   expect_output(print(curves[["prcs"]]), "Precision-Recall curves")
