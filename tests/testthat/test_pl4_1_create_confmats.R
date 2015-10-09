@@ -44,7 +44,8 @@ test_that("create_confmats() can take arguments for reformat_data()", {
   cmats <- create_confmats(scores = c(0.1, 0.2, 0),
                            labels = c(1, 0, 1),
                            na.last = TRUE,
-                           ties.method = "first")
+                           ties.method = "first",
+                           keep_fmdat = TRUE)
 
   expect_equal(.get_obj_arg(cmats, "fmdat", "na.last"), TRUE)
   expect_equal(.get_obj_arg(cmats, "fmdat", "ties.method"), "first")
@@ -54,7 +55,8 @@ test_that("create_confmats() can take na.last argument", {
   expect_equal_ranks <- function(scores, na.last, ranks) {
     cmats <- create_confmats(scores = scores,
                              labels = c(1, 0, 1),
-                             na.last = na.last)
+                             na.last = na.last,
+                             keep_fmdat = TRUE)
 
     fmdat <- .get_obj(cmats, "fmdat")
 
@@ -83,7 +85,8 @@ test_that("create_confmats() can take ties.method argument", {
   expect_equal_ranks <- function(ties.method, ranks) {
     cmats <- create_confmats(scores = c(0.1, 0.2, 0.2, 0.2, 0.3),
                              labels = c(1, 0, 1, 1, 1),
-                             ties.method = ties.method)
+                             ties.method = ties.method,
+                             keep_fmdat = TRUE)
 
     fmdat <- .get_obj(cmats, "fmdat")
 

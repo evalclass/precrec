@@ -79,7 +79,8 @@
   item_names <- c("pos_num", "neg_num", "tp", "fp", "tn", "fn", "ranks")
   attr_names <- c("model_name", "setid", "nn", "np", "args", "cpp_errmsg",
                   "src", "validated")
-  arg_names <- c("na.last", "ties.method", "levels", "model_name", "setid")
+  arg_names <- c("na.last", "ties.method", "levels", "model_name", "setid",
+                 "keep_fmdat")
   .validate_basic(cmats, "cmats", "create_confmats", item_names, attr_names,
                   arg_names)
 
@@ -136,7 +137,8 @@
                   "sensitivity", "precision")
   attr_names <- c("model_name", "setid", "nn", "np", "args", "cpp_errmsg",
                   "src", "validated")
-  arg_names <- c("na.last", "ties.method", "levels", "model_name", "setid")
+  arg_names <- c("na.last", "ties.method", "levels", "model_name", "setid",
+                 "keep_fmdat")
   .validate_basic(pevals, "pevals", "calc_measures", item_names, attr_names,
                   arg_names)
 
@@ -228,7 +230,7 @@
                   "x_limits", "y_limits", "args", "cpp_errmsg1", "cpp_errmsg2",
                   "src", "validated")
   arg_names <- c("x_interval", "na.last", "ties.method", "levels",
-                 "model_name", "setid")
+                 "model_name", "setid", "keep_fmdat", "keep_cmats")
   .validate_basic(obj, class_name, func_name, item_names, attr_names,
                   arg_names)
 
@@ -287,7 +289,8 @@
   item_names <- c("roc", "prc")
   attr_names <- c("model_name", "setid", "nn", "np", "args", "src",
                   "validated")
-  arg_names <- c("x_interval", "na.last", "ties.method", "model_name", "setid")
+  arg_names <- c("x_interval", "na.last", "ties.method", "model_name", "setid",
+                 "keep_fmdat", "keep_cmats")
   .validate_basic(curves, "curves", "calc_measures", item_names, attr_names,
                   arg_names)
 

@@ -48,7 +48,9 @@ test_that("create_curves() can take arguments for reformat_data()", {
   curves <- create_curves(scores = c(0.1, 0.2, 0),
                           labels = c(1, 0, 1),
                           na.last = TRUE,
-                          ties.method = "first")
+                          ties.method = "first",
+                          keep_cmats = TRUE,
+                          keep_fmdat = TRUE)
 
   expect_equal(.get_obj_arg(curves, "fmdat", "na.last"), TRUE)
   expect_equal(.get_obj_arg(curves, "fmdat", "ties.method"), "first")
@@ -57,7 +59,9 @@ test_that("create_curves() can take arguments for reformat_data()", {
 test_that("create_curves() can take na.last argument", {
   expect_equal_ranks <- function(scores, na.last, ranks) {
     curves <- create_curves(scores = scores, labels = c(1, 0, 1),
-                            na.last = na.last)
+                            na.last = na.last,
+                            keep_cmats = TRUE,
+                            keep_fmdat = TRUE)
 
     fmdat <- .get_obj(curves, "fmdat")
 
@@ -86,7 +90,9 @@ test_that("create_curves() can take ties.method argument", {
   expect_equal_ranks <- function(ties.method, ranks) {
     curves <- create_curves(scores = c(0.1, 0.2, 0.2, 0.2, 0.3),
                             labels = c(1, 0, 1, 1, 1),
-                            ties.method = ties.method)
+                            ties.method = ties.method,
+                            keep_cmats = TRUE,
+                            keep_fmdat = TRUE)
 
     fmdat <- .get_obj(curves, "fmdat")
 

@@ -2,7 +2,8 @@
 # Create ROC and Precision-Recall curves
 #
 create_curves <- function(pevals, x_interval = 0.001, scores = NULL,
-                          labels = NULL, ...) {
+                          labels = NULL, keep_cmats = FALSE, ...) {
+
   # === Validate input arguments ===
   # Create pevals from scores and labels if pevals is missing
   pevals <- .create_src_obj(pevals, "pevals", calc_measures, scores, labels,
@@ -14,8 +15,8 @@ create_curves <- function(pevals, x_interval = 0.001, scores = NULL,
   .validate(pevals)
 
   # === Create ROC and Precision-Recall curves ===
-  roc_curve <- create_roc(pevals, x_interval)
-  prc_curve <- create_prc(pevals, x_interval)
+  roc_curve <- create_roc(pevals, x_interval, keep_cmats = keep_cmats, ...)
+  prc_curve <- create_prc(pevals, x_interval, keep_cmats = keep_cmats, ...)
   curves <- list(roc = roc_curve, prc = prc_curve)
 
   # === Create an S3 object ===
@@ -38,22 +39,23 @@ create_curves <- function(pevals, x_interval = 0.001, scores = NULL,
 # Create a ROC curve
 #
 create_roc <- function(pevals, x_interval = 0.001, scores = NULL, labels = NULL,
-                       ...) {
+                       keep_cmats = FALSE, ...) {
   # === Create a ROC curve ===
   .create_curve("specificity", "sensitivity", create_roc_curve,
                 "create_roc_curve", "roc_curve", pevals, x_interval,
-                scores, labels, ...)
+                scores, labels, keep_cmats = keep_cmats, ...)
 }
 
 #
 # Create a Precision-Recall curve
 #
 create_prc <- function(pevals, x_interval = 0.001, scores = NULL, labels = NULL,
-                       ...) {
+                       keep_cmats = FALSE, ...) {
+
   # === Create a Precision-Recall curve ===
   .create_curve("sensitivity", "precision", create_prc_curve,
                 "create_prc_curve", "prc_curve", pevals, x_interval,
-                scores, labels, ...)
+                scores, labels, keep_cmats = keep_cmats, ...)
 }
 
 #
@@ -61,7 +63,7 @@ create_prc <- function(pevals, x_interval = 0.001, scores = NULL, labels = NULL,
 #
 .create_curve <- function(x_name, y_name, func, func_name, class_name,
                           pevals, x_interval = 0.001, scores = NULL,
-                          labels = NULL, ...) {
+                          labels = NULL, keep_cmats = FALSE, ...) {
 
   # === Validate input arguments ===
   # Create pevals from scores and labels if pevals is missing
@@ -83,6 +85,10 @@ create_prc <- function(pevals, x_interval = 0.001, scores = NULL, labels = NULL,
                    " values detected. AUC can be inaccurate."))
   } else {
     .check_cpp_func_error(auc, "calc_auc")
+  }
+
+  if (!keep_cmats) {
+    attr(pevals, "src") = NA
   }
 
   # === Create an S3 object ===

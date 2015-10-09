@@ -48,7 +48,9 @@ test_that("create_prc() can take arguments for reformat_data()", {
   prc_curve <- create_prc(scores = c(0.1, 0.2, 0),
                           labels = c(1, 0, 1),
                           na.last = TRUE,
-                          ties.method = "first")
+                          ties.method = "first",
+                          keep_cmats = TRUE,
+                          keep_fmdat = TRUE)
 
   expect_equal(.get_obj_arg(prc_curve, "fmdat", "na.last"), TRUE)
   expect_equal(.get_obj_arg(prc_curve, "fmdat", "ties.method"), "first")
@@ -57,7 +59,9 @@ test_that("create_prc() can take arguments for reformat_data()", {
 test_that("create_prc() can take na.last argument", {
   expect_equal_ranks <- function(scores, na.last, ranks) {
     prc_curve <- create_prc(scores = scores, labels = c(1, 0, 1),
-                            na.last = na.last)
+                            na.last = na.last,
+                            keep_cmats = TRUE,
+                            keep_fmdat = TRUE)
 
     fmdat <- .get_obj(prc_curve, "fmdat")
 
@@ -87,7 +91,9 @@ test_that("create_prc() can take ties.method argument", {
   expect_equal_ranks <- function(ties.method, ranks) {
     prc_curve <- create_prc(scores = c(0.1, 0.2, 0.2, 0.2, 0.3),
                             labels = c(1, 0, 1, 1, 1),
-                            ties.method = ties.method)
+                            ties.method = ties.method,
+                            keep_cmats = TRUE,
+                            keep_fmdat = TRUE)
 
     fmdat <- .get_obj(prc_curve, "fmdat")
 

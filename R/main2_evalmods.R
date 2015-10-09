@@ -1,6 +1,6 @@
 #' Evaluate multiple models
 #'
-#' The \code{evalmulti} function takes predicted scores and binary lables
+#' The \code{evalmods} function takes predicted scores and binary lables
 #'   and calculates ROC and Precision-Recall curves.
 #'
 #' @param mdat An \code{mdat} object created by \code{\link{mmdata}}.
@@ -47,7 +47,7 @@
 #' @param levels A character vector to overide the levels of the factor for
 #'   the labels.
 #'
-#' @return The \code{evalmulti} function returns an \code{mscurves} S3 object
+#' @return The \code{evalmods} function returns an \code{mscurves} S3 object
 #'   that contains ROC and Precision-Recall curves.
 #'
 #' @seealso \code{\link{plot.mscurves}}, \code{\link{autoplot.mscurves}},
@@ -64,10 +64,10 @@
 #'                setids = samps[["setids"]])
 #'
 #' ## Generate an mscurve object
-#' curves1 <- evalmulti(mdat)
+#' curves1 <- evalmods(mdat)
 #'
 #' ## Directly specifiy scores and labels
-#' curves2 <- evalmulti(scores = samps[["scores"]], labels = samps[["labels"]],
+#' curves2 <- evalmods(scores = samps[["scores"]], labels = samps[["labels"]],
 #'                      model_names = samps[["model_names"]])
 #'
 #' ## Print the summary
@@ -77,21 +77,21 @@
 #' plot(curves2, "PRC")
 #'
 #' ## Set x_interval = 0.1
-#' curves3 <- evalmulti(mdat, x_interval = 0.1)
+#' curves3 <- evalmods(mdat, x_interval = 0.1)
 #' plot(curves3, "PRC")
 #'
 #' ## No interpolation of Precsion-Recall curve
-#' curves4 <- evalmulti(mdat, x_interval = NULL)
+#' curves4 <- evalmods(mdat, x_interval = NULL)
 #' plot(curves4, "PRC")
 #'
 #' @export
-evalmulti <- function(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
-                      model_names = NULL, setids = NULL, na.last = FALSE,
-                      ties.method = "average",
-                      levels = c("negative", "positive")) {
+evalmods <- function(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
+                     model_names = NULL, setids = NULL, na.last = FALSE,
+                     ties.method = "average",
+                     levels = c("negative", "positive")) {
 
-  .validate_evalmulti_args(x_interval, model_names, setids, na.last,
-                           ties.method, levels)
+  .validate_evalmods_args(x_interval, model_names, setids, na.last,
+                          ties.method, levels)
 
   if (!missing(mdat)) {
     .validate(mdat)

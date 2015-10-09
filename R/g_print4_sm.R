@@ -12,7 +12,7 @@ print.smcurves <- function(x, ...) {
 }
 
 #
-# Print msroc
+# Print smroc
 #
 print.smroc <- function(x, ...) {
   cat("\n  ROC curves\n\n")
@@ -20,28 +20,12 @@ print.smroc <- function(x, ...) {
 }
 
 #
-# Print msprc
+# Print smprc
 #
 print.smprc <- function(x, ...) {
   # === Print summary ===
   cat("\n  Precision-Recall curves\n\n")
   .print_smcurves_base(x, ...)
-}
-
-#
-# Print test data
-#
-.print_testdat_ms <- function(x, ...) {
-  # === Print summary ===
-  cat("\n  Test data\n\n")
-  pfunc <- function(s) {
-    cat("    Dataset ID:", attr(x[[s]], "setid"), "\n")
-    cat("      # of positives:", attr(x[[s]], "np"), "\n")
-    cat("      # of negatives:", attr(x[[s]], "nn"), "\n\n")
-  }
-  lapply(seq_along(x), pfunc)
-
-  invisible(NULL)
 }
 
 #
@@ -52,11 +36,8 @@ print.smprc <- function(x, ...) {
   .validate(x)
 
   # === Print summary ===
-  pfunc <- function(s) {
+  for (i in seq_along(x)) {
     cat("    Dataset ID:", attr(x[[s]], "setid"), "\n")
     cat("           AUC:", attr(x[[s]], "auc"), "\n\n")
   }
-  lapply(seq_along(x), pfunc)
-
-  invisible(NULL)
 }

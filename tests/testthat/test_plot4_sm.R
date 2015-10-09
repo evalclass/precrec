@@ -15,10 +15,10 @@ pt4_create_curves <- function() {
   labels <- join_labels(l1, l2, l3)
 
   mdat <- mmdata(scores, labels, expd_first = "setids")
-  evalmodm(mdat)
+  evalmod_m(mdat)
 }
 
-test_that("plot mscurves", {
+test_that("plot smcurves", {
   pdf(NULL)
   on.exit(dev.off())
 
@@ -27,7 +27,7 @@ test_that("plot mscurves", {
   expect_that(plot(curves), not(throws_error()))
 })
 
-test_that("plot msroc", {
+test_that("plot smroc", {
   pdf(NULL)
   on.exit(dev.off())
 
@@ -37,7 +37,7 @@ test_that("plot msroc", {
 })
 
 
-test_that("plot msprc", {
+test_that("plot smprc", {
   pdf(NULL)
   on.exit(dev.off())
 

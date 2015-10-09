@@ -1,7 +1,8 @@
 #
 # Calculate confusion matrices for all possible threshold values
 #
-create_confmats <- function(fmdat, scores = NULL, labels = NULL, ...) {
+create_confmats <- function(fmdat, scores = NULL, labels = NULL,
+                            keep_fmdat = FALSE, ...) {
   # === Validate input arguments ===
   # Create fmdat from scores and labels if fmdat is missing
   fmdat <- .create_src_obj(fmdat, "fmdat", reformat_data, scores, labels, ...)
@@ -25,7 +26,11 @@ create_confmats <- function(fmdat, scores = NULL, labels = NULL, ...) {
   attr(s3obj, "np") <- attr(fmdat, "np")
   attr(s3obj, "args") <- list(...)
   attr(s3obj, "cpp_errmsg") <- cpp_errmsg
-  attr(s3obj, "src") <- fmdat
+  if (keep_fmdat) {
+    attr(s3obj, "src") <- fmdat
+  } else {
+    attr(s3obj, "src") <- NA
+  }
   attr(s3obj, "validated") <- FALSE
 
   # Call .validate.cmats()

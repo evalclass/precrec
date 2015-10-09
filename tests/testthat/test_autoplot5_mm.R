@@ -1,9 +1,9 @@
 library(precrec)
 
-context("AP 3: Autoplot for mscurves")
+context("AP 5: Autoplot for mmcurves")
 # Test autoplot(object, ...)
 
-ap3_check_libs <- function() {
+ap5_check_libs <- function() {
   if (requireNamespace("ggplot2", quietly = TRUE)
       && requireNamespace("grid", quietly = TRUE)
       && requireNamespace("gridExtra", quietly = TRUE)) {
@@ -13,7 +13,7 @@ ap3_check_libs <- function() {
   }
 }
 
-ap3_create_curves <- function() {
+ap5_create_curves <- function() {
   s1 <- c(1, 2, 3, 4)
   s2 <- c(5, 6, 7, 8)
   s3 <- c(2, 4, 6, 8)
@@ -24,39 +24,39 @@ ap3_create_curves <- function() {
   l3 <- c(1, 1, 0, 1)
   labels <- join_labels(l1, l2, l3)
 
-  mdat <- mmdata(scores, labels)
-  evalmods(mdat)
+  mdat <- mmdata(scores, labels, expd_first = "setids")
+  evalmods_m(mdat)
 }
 
-test_that("autoplot mscurves", {
-  if (!ap3_check_libs()) {
+test_that("autoplot mmcurves", {
+  if (!ap5_check_libs()) {
     skip("Libraries cannot be loaded")
   }
 
-  curves <- ap3_create_curves()
+  curves <- ap5_create_curves()
 
   pp <- ggplot2::autoplot(curves, show_legend = FALSE, ret_grob = TRUE)
   expect_true(all(class(pp) == c("gtable", "grob", "gDesc")))
 })
 
-test_that("autoplot msroc", {
-  if (!ap3_check_libs()) {
+test_that("autoplot mmroc", {
+  if (!ap5_check_libs()) {
     skip("Libraries cannot be loaded")
   }
 
-  curves <- ap3_create_curves()
+  curves <- ap5_create_curves()
 
   pp <- ggplot2::autoplot(curves[["rocs"]])
   expect_true(all(class(pp) == c("gg", "ggplot")))
 })
 
 
-test_that("autoplot msprc", {
-  if (!ap3_check_libs()) {
+test_that("autoplot mmprc", {
+  if (!ap5_check_libs()) {
     skip("Libraries cannot be loaded")
   }
 
-  curves <- ap3_create_curves()
+  curves <- ap5_create_curves()
 
   pp <- ggplot2::autoplot(curves[["prcs"]])
   expect_true(all(class(pp) == c("gg", "ggplot")))

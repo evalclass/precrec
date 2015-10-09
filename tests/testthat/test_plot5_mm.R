@@ -1,9 +1,9 @@
 library(precrec)
 
-context("PT 3: Plot mscurves")
+context("PT 5: Plot mmcurves")
 # Test plot(x, y, ...)
 
-pt3_create_curves <- function() {
+pt5_create_curves <- function() {
   s1 <- c(1, 2, 3, 4)
   s2 <- c(5, 6, 7, 8)
   s3 <- c(2, 4, 6, 8)
@@ -14,34 +14,34 @@ pt3_create_curves <- function() {
   l3 <- c(1, 1, 0, 1)
   labels <- join_labels(l1, l2, l3)
 
-  mdat <- mmdata(scores, labels)
-  evalmods(mdat)
+  mdat <- mmdata(scores, labels, expd_first = "setids")
+  evalmods_m(mdat)
 }
 
-test_that("plot mscurves", {
+test_that("plot mmcurves", {
   pdf(NULL)
   on.exit(dev.off())
 
-  curves <- pt3_create_curves()
+  curves <- pt5_create_curves()
 
   expect_that(plot(curves), not(throws_error()))
 })
 
-test_that("plot msroc", {
+test_that("plot mmroc", {
   pdf(NULL)
   on.exit(dev.off())
 
-  curves <- pt3_create_curves()
+  curves <- pt5_create_curves()
 
   expect_that(plot(curves[["rocs"]]), not(throws_error()))
 })
 
 
-test_that("plot msprc", {
+test_that("plot mmprc", {
   pdf(NULL)
   on.exit(dev.off())
 
-  curves <- pt3_create_curves()
+  curves <- pt5_create_curves()
 
   expect_that(plot(curves[["prcs"]]), not(throws_error()))
 })

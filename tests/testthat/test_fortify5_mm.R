@@ -1,9 +1,9 @@
 library(precrec)
 
-context("FT 3: Fortify mscurves")
+context("FT 5: Fortify mmcurves")
 # Test fortify(model, ...)
 
-ft3_check_libs <- function() {
+ft5_check_libs <- function() {
   if (requireNamespace("ggplot2", quietly = TRUE)
       && requireNamespace("grid", quietly = TRUE)
       && requireNamespace("gridExtra", quietly = TRUE)) {
@@ -13,7 +13,7 @@ ft3_check_libs <- function() {
   }
 }
 
-ft3_create_curves <- function() {
+ft5_create_curves <- function() {
   s1 <- c(1, 2, 3, 4)
   s2 <- c(5, 6, 7, 8)
   s3 <- c(2, 4, 6, 8)
@@ -24,39 +24,39 @@ ft3_create_curves <- function() {
   l3 <- c(1, 1, 0, 1)
   labels <- join_labels(l1, l2, l3)
 
-  mdat <- mmdata(scores, labels)
-  evalmods(mdat)
+  mdat <- mmdata(scores, labels, expd_first = "setids")
+  evalmods_m(mdat)
 }
 
-test_that("fortify mscurves", {
-  if (!ft3_check_libs()) {
+test_that("fortify mmcurves", {
+  if (!ft5_check_libs()) {
     skip("Libraries cannot be loaded")
   }
 
-  curves <- ft3_create_curves()
+  curves <- ft5_create_curves()
 
   df <- ggplot2::fortify(curves)
   expect_true(is.list(df))
 })
 
-test_that("fortify msroc", {
-  if (!ft3_check_libs()) {
+test_that("fortify mmroc", {
+  if (!ft5_check_libs()) {
     skip("Libraries cannot be loaded")
   }
 
-  curves <- ft3_create_curves()
+  curves <- ft5_create_curves()
 
   df <- ggplot2::fortify(curves[["rocs"]])
   expect_true(is.list(df))
 })
 
 
-test_that("fortify msprc", {
-  if (!ft3_check_libs()) {
+test_that("fortify mmprc", {
+  if (!ft5_check_libs()) {
     skip("Libraries cannot be loaded")
   }
 
-  curves <- ft3_create_curves()
+  curves <- ft5_create_curves()
 
   df <- ggplot2::fortify(curves[["prcs"]])
   expect_true(is.list(df))

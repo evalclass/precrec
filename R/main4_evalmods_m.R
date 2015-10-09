@@ -1,6 +1,6 @@
 #' Evaluate a single model with multiple datasets
 #'
-#' The \code{evalmodm} function takes predicted scores and binary lables
+#' The \code{evalmods_m} function takes predicted scores and binary lables
 #'   and calculates ROC and Precision-Recall curves.
 #'
 #' @param mdat An \code{mdat} object created by \code{\link{mmdata}}.
@@ -47,7 +47,7 @@
 #' @param levels A character vector to overide the levels of the factor for
 #'   the labels.
 #'
-#' @return The \code{evalmodm} function returns an \code{smcurves} S3 object
+#' @return The \code{evalmods_m} function returns an \code{smcurves} S3 object
 #'   that contains ROC and Precision-Recall curves.
 #'
 #' @seealso \code{\link{plot.smcurves}}, \code{\link{autoplot.smcurves}},
@@ -58,18 +58,18 @@
 #' @examples
 #'
 #' ## Create sample datasets with 100 positives and 100 negatives
-#' samps <- create_sim_samples(10, 100, 100, "poor_er")
+#' samps <- create_sim_samples(10, 100, 100, "all")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 #'                model_names = samps[["model_names"]],
 #'                setids = samps[["setids"]])
 #'
 #' ## Generate an mscurve object
-#' curves1 <- evalmodm(mdat)
+#' curves1 <- evalmods_m(mdat)
 #'
 #' ## Directly specifiy scores and labels
-#' curves2 <- evalmodm(scores = samps[["scores"]], labels = samps[["labels"]],
-#'                     model_names = samps[["model_names"]],
-#'                     setids = samps[["setids"]])
+#' curves2 <- evalmods_m(scores = samps[["scores"]], labels = samps[["labels"]],
+#'                       model_names = samps[["model_names"]],
+#'                       setids = samps[["setids"]])
 #'
 #' ## Print the summary
 #' curves2
@@ -78,22 +78,22 @@
 #' plot(curves2, "PRC")
 #'
 #' ## Set x_interval = 0.1
-#' curves3 <- evalmodm(mdat, x_interval = 0.1)
+#' curves3 <- evalmods_m(mdat, x_interval = 0.1)
 #' plot(curves3, "PRC")
 #'
 #' ## No interpolation of Precsion-Recall curve
-#' curves4 <- evalmodm(mdat, x_interval = NULL)
+#' curves4 <- evalmods_m(mdat, x_interval = NULL)
 #' plot(curves4, "PRC")
 #'
 #' @export
-evalmodm <- function(mdat, x_interval = 0.001, calc_avg = TRUE,
-                     ci_level = 0.95, scores = NULL, labels = NULL,
-                     model_names = NULL, setids = NULL, na.last = FALSE,
-                     ties.method = "average",
-                     levels = c("negative", "positive")) {
+evalmods_m <- function(mdat, x_interval = 0.001, calc_avg = TRUE,
+                       ci_level = 0.95, scores = NULL, labels = NULL,
+                       model_names = NULL, setids = NULL, na.last = FALSE,
+                       ties.method = "average",
+                       levels = c("negative", "positive")) {
 
-  .validate_evalmodm_args(x_interval, calc_avg, ci_level, model_names, setids,
-                          na.last, ties.method, levels)
+  .validate_evalmods_m_args(x_interval, calc_avg, ci_level, model_names, setids,
+                            na.last, ties.method, levels)
 
   if (!missing(mdat)) {
     .validate(mdat)
@@ -103,7 +103,7 @@ evalmodm <- function(mdat, x_interval = 0.001, calc_avg = TRUE,
                    ties.method = ties.method, levels = levels)
   }
 
-  pl_main(mdat, model_type = "single", data_type = "multiple",
+  pl_main(mdat, model_type = "multiple", data_type = "multiple",
           x_interval = x_interval, calc_avg = calc_avg, ci_level = ci_level)
 
 }

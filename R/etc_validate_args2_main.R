@@ -24,10 +24,10 @@
 }
 
 #
-# Validate arguments of evalmulti()
+# Validate arguments of evalmods()
 #
-.validate_evalmulti_args <- function(x_interval, model_names, setids,
-                                     na.last, ties.method, levels) {
+.validate_evalmods_args <- function(x_interval, model_names, setids,
+                                    na.last, ties.method, levels) {
 
   # Check x_interval
   .validate_x_interval(x_interval)
@@ -49,11 +49,21 @@
 }
 
 #
-# Validate arguments of evalmodm()
+# Validate arguments of evalmod_m()
 #
-.validate_evalmodm_args <- function(x_interval, calc_avg, ci_level, model_names,
-                                    setids, na.last, ties.method, levels) {
+.validate_evalmod_m_args <- function(x_interval, calc_avg, ci_level, model_names,
+                                     setids, na.last, ties.method, levels) {
 
-  .validate_evalmulti_args(x_interval, model_names, setids,
-                           na.last, ties.method, levels)
+  .validate_evalmods_args(x_interval, model_names, setids,
+                          na.last, ties.method, levels)
+}
+
+#
+# Validate arguments of evalmods_m()
+#
+.validate_evalmods_m_args <- function(x_interval, calc_avg, ci_level, model_names,
+                                     setids, na.last, ties.method, levels) {
+
+  .validate_evalmods_args(x_interval, model_names, setids,
+                          na.last, ties.method, levels)
 }
