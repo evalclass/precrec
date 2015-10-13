@@ -3,7 +3,7 @@ library(precrec)
 context("PL 2: Create mmdata")
 # Test .pmatch_tiesmethod(val),
 #      mmdata(scores, labels, model_names, setids,
-#             na.last, ties.method, levels, ...)
+#             na_worst, ties.method, levels, ...)
 
 test_that(".pmatch_tiesmethod() returns 'equiv', 'random', 'first'", {
   expect_equal(.pmatch_tiesmethod("e"), "equiv")
@@ -104,19 +104,19 @@ test_that("mmdata() accepts 'setids'", {
 
 })
 
-test_that("mmdata() accepts 'na.last'", {
+test_that("mmdata() accepts 'na_worst'", {
   s1 <- c(1, 2, 3, 4)
   l1 <- c(1, 0, 1, 0)
 
-  mdat <- mmdata(s1, l1, na.last = FALSE)
-  expect_equal(attr(mdat[[1]], "args")[["na.last"]], FALSE)
+  mdat <- mmdata(s1, l1, na_worst = FALSE)
+  expect_equal(attr(mdat[[1]], "args")[["na_worst"]], FALSE)
 
-  mdat <- mmdata(s1, l1, na.last = TRUE)
-  expect_equal(attr(mdat[[1]], "args")[["na.last"]], TRUE)
+  mdat <- mmdata(s1, l1, na_worst = TRUE)
+  expect_equal(attr(mdat[[1]], "args")[["na_worst"]], TRUE)
 
-  expect_err_msg <- function(s1, l1, na.last) {
-    err_msg <- "na.last contains 1 missing values"
-    eval(bquote(expect_error(mmdata(s1, l1, na.last = na.last), err_msg)))
+  expect_err_msg <- function(s1, l1, na_worst) {
+    err_msg <- "na_worst contains 1 missing values"
+    eval(bquote(expect_error(mmdata(s1, l1, na_worst = na_worst), err_msg)))
   }
   expect_err_msg(s1, l1, as.logical(NA))
   expect_err_msg(s1, l1, NA)

@@ -26,7 +26,7 @@
 #'            when they are automaticlly generated.}
 #'   }
 #'
-#' @param na.last A boolean value for controlling the treatment of NAs
+#' @param na_worst A boolean value for controlling the treatment of NAs
 #'   in the scores.
 #'   \describe{
 #'     \item{TRUE}{NAs are treated as the highest score}
@@ -69,7 +69,7 @@
 #'
 #' @export
 mmdata <- function(scores, labels, model_names = NULL, setids = NULL,
-                   expd_first = "model_names", na.last = TRUE,
+                   expd_first = "model_names", na_worst = TRUE,
                    ties.method = "equiv",
                    levels = c("negative", "positive"), ...) {
 
@@ -80,7 +80,7 @@ mmdata <- function(scores, labels, model_names = NULL, setids = NULL,
   # === Validate arguments and variables ===
   expd_first <- .pmatch_expd_first(expd_first)
   .validate_mmdata_args(lscores, llabels, model_names, setids,
-                        expd_first = "model_names", na.last = na.last,
+                        expd_first = "model_names", na_worst = na_worst,
                         ties.method = ties.method, levels = levels)
 
   # Replicate labels
@@ -96,7 +96,7 @@ mmdata <- function(scores, labels, model_names = NULL, setids = NULL,
 
   # === Reformat input data ===
   func_fmdat <- function(i) {
-    reformat_data(lscores[[i]], llabels[[i]], na.last = na.last,
+    reformat_data(lscores[[i]], llabels[[i]], na_worst = na_worst,
                   ties.method = ties.method, levels = levels,
                   model_name = new_model_names[i], setid = new_setids[i],
                   ...)
@@ -109,7 +109,7 @@ mmdata <- function(scores, labels, model_names = NULL, setids = NULL,
   # Set attributes
   attr(s3obj, "model_names") <- new_model_names
   attr(s3obj, "setids") <- new_setids
-  attr(s3obj, "args") <- list(na.last = na.last,
+  attr(s3obj, "args") <- list(na_worst = na_worst,
                               ties.method = ties.method,
                               levels = levels)
   attr(s3obj, "validated") <- FALSE

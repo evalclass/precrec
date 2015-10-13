@@ -5,7 +5,7 @@
 \title{Evaluate a single model}
 \usage{
 evalmod(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
-  model_name = as.character(NA), setid = 1L, na.last = TRUE,
+  model_name = as.character(NA), setid = 1L, na_worst = TRUE,
   ties.method = "equiv", levels = c("negative", "positive"))
 }
 \arguments{
@@ -16,7 +16,7 @@ evalmod(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
     \item \code{labels}
     \item \code{model_name}
     \item \code{setid}
-    \item \code{na.last}
+    \item \code{na_worst}
     \item \code{ties.method}
   }}
 
@@ -32,7 +32,7 @@ evalmod(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
 
 \item{setid}{A numeric value as a dataset ID.}
 
-\item{na.last}{A boolean value for controlling the treatment of NAs
+\item{na_worst}{A boolean value for controlling the treatment of NAs
   in the scores.
   \describe{
     \item{TRUE}{NAs are treated as the highest score}

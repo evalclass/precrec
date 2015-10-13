@@ -2,7 +2,7 @@ library(precrec)
 
 context("PL 3: Reformat input data for evaluation")
 # Test reformat_data(scores, labels,
-#                    na.last, ties.method, levels, model_name)
+#                    na_worst, ties.method, levels, model_name)
 
 test_that("reformat_data() reterns a 'fmdat' object", {
   fmdat1 <- reformat_data(c(0.1, 0.2, 0), c(1, 0, 1))
@@ -62,9 +62,9 @@ test_that("labels, ranks, and rank_idx must be the same length", {
   expect_equal(length(fmdat[["labels"]]), length(fmdat[["rank_idx"]]))
 })
 
-test_that("reformat_data() accepts 'na.last'", {
-  expect_equal_ranks <- function(scores, labels, na.last, ranks) {
-    fmdat <- reformat_data(scores, labels, na.last = na.last)
+test_that("reformat_data() accepts 'na_worst'", {
+  expect_equal_ranks <- function(scores, labels, na_worst, ranks) {
+    fmdat <- reformat_data(scores, labels, na_worst = na_worst)
     eval(bquote(expect_equal(fmdat[["ranks"]], ranks)))
   }
 

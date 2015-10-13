@@ -10,7 +10,7 @@
 #'     \item \code{labels}
 #'     \item \code{model_names}
 #'     \item \code{setids}
-#'     \item \code{na.last}
+#'     \item \code{na_worst}
 #'     \item \code{ties.method}
 #'   }
 #'
@@ -29,7 +29,7 @@
 #'
 #' @param setids A numeric vector as dataset IDs.
 #'
-#' @param na.last A boolean value for controlling the treatment of NAs
+#' @param na_worst A boolean value for controlling the treatment of NAs
 #'   in the scores.
 #'   \describe{
 #'     \item{TRUE}{NAs are treated as the highest score}
@@ -86,18 +86,18 @@
 #'
 #' @export
 evalmods <- function(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
-                     model_names = NULL, setids = NULL, na.last = TRUE,
+                     model_names = NULL, setids = NULL, na_worst = TRUE,
                      ties.method = "equiv",
                      levels = c("negative", "positive")) {
 
-  .validate_evalmods_args(x_interval, model_names, setids, na.last,
+  .validate_evalmods_args(x_interval, model_names, setids, na_worst,
                           ties.method, levels)
 
   if (!missing(mdat)) {
     .validate(mdat)
   } else {
     mdat <- mmdata(scores, labels, model_names = model_names,
-                   setids = setids, na.last = na.last,
+                   setids = setids, na_worst = na_worst,
                    ties.method = ties.method, levels = levels)
   }
 

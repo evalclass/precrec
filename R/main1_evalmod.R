@@ -10,7 +10,7 @@
 #'     \item \code{labels}
 #'     \item \code{model_name}
 #'     \item \code{setid}
-#'     \item \code{na.last}
+#'     \item \code{na_worst}
 #'     \item \code{ties.method}
 #'   }
 #'
@@ -26,7 +26,7 @@
 #'
 #' @param setid A numeric value as a dataset ID.
 #'
-#' @param na.last A boolean value for controlling the treatment of NAs
+#' @param na_worst A boolean value for controlling the treatment of NAs
 #'   in the scores.
 #'   \describe{
 #'     \item{TRUE}{NAs are treated as the highest score}
@@ -81,17 +81,17 @@
 #' @export
 evalmod <- function(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
                     model_name = as.character(NA), setid = 1L,
-                    na.last = TRUE, ties.method = "equiv",
+                    na_worst = TRUE, ties.method = "equiv",
                     levels = c("negative", "positive")) {
 
-  .validate_evalmod_args(x_interval, model_name, setid, na.last,
+  .validate_evalmod_args(x_interval, model_name, setid, na_worst,
                          ties.method, levels)
 
   if (!missing(mdat)) {
     .validate(mdat)
   } else {
     mdat <- mmdata(scores, labels, model_names = model_name, setids = setid,
-                   na.last = na.last, ties.method = ties.method, levels = levels)
+                   na_worst = na_worst, ties.method = ties.method, levels = levels)
   }
 
   pl_main(mdat, model_type = "single", data_type = "single",

@@ -47,30 +47,30 @@ test_that("create_prc() can take arguments for reformat_data()", {
 
   prc_curve <- create_prc(scores = c(0.1, 0.2, 0),
                           labels = c(1, 0, 1),
-                          na.last = TRUE,
+                          na_worst = TRUE,
                           ties.method = "first",
                           keep_cmats = TRUE,
                           keep_fmdat = TRUE)
 
-  expect_equal(.get_obj_arg(prc_curve, "fmdat", "na.last"), TRUE)
+  expect_equal(.get_obj_arg(prc_curve, "fmdat", "na_worst"), TRUE)
   expect_equal(.get_obj_arg(prc_curve, "fmdat", "ties.method"), "first")
 })
 
-test_that("create_prc() can take na.last argument", {
-  expect_equal_ranks <- function(scores, na.last, ranks) {
+test_that("create_prc() can take na_worst argument", {
+  expect_equal_ranks <- function(scores, na_worst, ranks) {
     prc_curve <- create_prc(scores = scores, labels = c(1, 0, 1),
-                            na.last = na.last,
+                            na_worst = na_worst,
                             keep_cmats = TRUE,
                             keep_fmdat = TRUE)
 
     fmdat <- .get_obj(prc_curve, "fmdat")
 
-    eval(bquote(expect_equal(.get_obj_arg(prc_curve, NULL, "na.last"),
-                             na.last)))
-    eval(bquote(expect_equal(.get_obj_arg(fmdat, NULL, "na.last"), na.last)))
+    eval(bquote(expect_equal(.get_obj_arg(prc_curve, NULL, "na_worst"),
+                             na_worst)))
+    eval(bquote(expect_equal(.get_obj_arg(fmdat, NULL, "na_worst"), na_worst)))
     eval(bquote(expect_equal(fmdat[["ranks"]], ranks)))
 
-    sranks <- .rank_scores(scores, na.last = na.last)
+    sranks <- .rank_scores(scores, na_worst = na_worst)
     eval(bquote(expect_equal(sranks[["ranks"]], ranks)))
   }
 

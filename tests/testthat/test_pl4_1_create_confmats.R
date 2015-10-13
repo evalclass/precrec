@@ -43,28 +43,28 @@ test_that("create_confmats() can take arguments for reformat_data()", {
 
   cmats <- create_confmats(scores = c(0.1, 0.2, 0),
                            labels = c(1, 0, 1),
-                           na.last = TRUE,
+                           na_worst = TRUE,
                            ties.method = "first",
                            keep_fmdat = TRUE)
 
-  expect_equal(.get_obj_arg(cmats, "fmdat", "na.last"), TRUE)
+  expect_equal(.get_obj_arg(cmats, "fmdat", "na_worst"), TRUE)
   expect_equal(.get_obj_arg(cmats, "fmdat", "ties.method"), "first")
 })
 
-test_that("create_confmats() can take na.last argument", {
-  expect_equal_ranks <- function(scores, na.last, ranks) {
+test_that("create_confmats() can take na_worst argument", {
+  expect_equal_ranks <- function(scores, na_worst, ranks) {
     cmats <- create_confmats(scores = scores,
                              labels = c(1, 0, 1),
-                             na.last = na.last,
+                             na_worst = na_worst,
                              keep_fmdat = TRUE)
 
     fmdat <- .get_obj(cmats, "fmdat")
 
-    eval(bquote(expect_equal(.get_obj_arg(cmats, NULL, "na.last"), na.last)))
-    eval(bquote(expect_equal(.get_obj_arg(fmdat, NULL, "na.last"), na.last)))
+    eval(bquote(expect_equal(.get_obj_arg(cmats, NULL, "na_worst"), na_worst)))
+    eval(bquote(expect_equal(.get_obj_arg(fmdat, NULL, "na_worst"), na_worst)))
     eval(bquote(expect_equal(fmdat[["ranks"]], ranks)))
 
-    sranks <- .rank_scores(scores, na.last = na.last)
+    sranks <- .rank_scores(scores, na_worst = na_worst)
     eval(bquote(expect_equal(sranks[["ranks"]], ranks)))
   }
 

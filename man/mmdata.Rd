@@ -5,7 +5,7 @@
 \title{Reformat data for Precision-Recall and ROC evaluation}
 \usage{
 mmdata(scores, labels, model_names = NULL, setids = NULL,
-  expd_first = "model_names", na.last = TRUE, ties.method = "equiv",
+  expd_first = "model_names", na_worst = TRUE, ties.method = "equiv",
   levels = c("negative", "positive"), ...)
 }
 \arguments{
@@ -32,7 +32,7 @@ mmdata(scores, labels, model_names = NULL, setids = NULL,
            when they are automaticlly generated.}
   }}
 
-\item{na.last}{A boolean value for controlling the treatment of NAs
+\item{na_worst}{A boolean value for controlling the treatment of NAs
   in the scores.
   \describe{
     \item{TRUE}{NAs are treated as the highest score}

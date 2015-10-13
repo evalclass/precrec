@@ -1,7 +1,7 @@
 library(precrec)
 
 context("PL 3: Reformat scores for evaluation")
-# Test .rank_scores(scores, na.last, ties.method)
+# Test .rank_scores(scores, na_worst, ties.method)
 
 test_that("rank_scores() reterns a numeric vector", {
   ranks <- .rank_scores(c(1.0, 0.1, 3.2))
@@ -50,21 +50,21 @@ test_that("Length of 'scores' must be >=1", {
   expect_err_msg(as.numeric())
 })
 
-test_that("'na.last' should be TRUE or FALSE", {
-  expect_err_msg <- function(err_msg, na.last) {
+test_that("'na_worst' should be TRUE or FALSE", {
+  expect_err_msg <- function(err_msg, na_worst) {
     scores <- c(1.1, 2.2)
-    eval(bquote(expect_error(.rank_scores(scores, na.last = na.last),
+    eval(bquote(expect_error(.rank_scores(scores, na_worst = na_worst),
                              err_msg)))
   }
 
-  err_msg <- "na.last contains 1 missing values"
+  err_msg <- "na_worst contains 1 missing values"
   expect_err_msg(err_msg, NA)
 
-  err_msg <- "na.last is not an atomic vector"
+  err_msg <- "na_worst is not an atomic vector"
   expect_err_msg(err_msg, list(c(TRUE, FALSE)))
   expect_err_msg(err_msg, data.frame(c(TRUE, FALSE)))
 
-  err_msg <- "na.last is not a flag"
+  err_msg <- "na_worst is not a flag"
   expect_err_msg(err_msg, "T")
   expect_err_msg(err_msg, array(c(TRUE, FALSE)))
   expect_err_msg(err_msg, matrix(c(TRUE, FALSE)))
@@ -87,9 +87,9 @@ test_that("'ties.method' should be one of the three options", {
   expect_err_msg(err_msg, c("max"))
 })
 
-test_that("NAs in 'scores' should be controlled by 'na.last'", {
-  expect_equal_ranks <- function(scores, na.last, ranks) {
-    sranks <- .rank_scores(scores, na.last = na.last)
+test_that("NAs in 'scores' should be controlled by 'na_worst'", {
+  expect_equal_ranks <- function(scores, na_worst, ranks) {
+    sranks <- .rank_scores(scores, na_worst = na_worst)
     eval(bquote(expect_equal(sranks[["ranks"]], ranks)))
   }
 

@@ -5,7 +5,7 @@
 \title{Evaluate multiple models}
 \usage{
 evalmods(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
-  model_names = NULL, setids = NULL, na.last = TRUE,
+  model_names = NULL, setids = NULL, na_worst = TRUE,
   ties.method = "equiv", levels = c("negative", "positive"))
 }
 \arguments{
@@ -16,7 +16,7 @@ evalmods(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
     \item \code{labels}
     \item \code{model_names}
     \item \code{setids}
-    \item \code{na.last}
+    \item \code{na_worst}
     \item \code{ties.method}
   }}
 
@@ -35,7 +35,7 @@ evalmods(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
 
 \item{setids}{A numeric vector as dataset IDs.}
 
-\item{na.last}{A boolean value for controlling the treatment of NAs
+\item{na_worst}{A boolean value for controlling the treatment of NAs
   in the scores.
   \describe{
     \item{TRUE}{NAs are treated as the highest score}
