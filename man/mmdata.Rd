@@ -5,7 +5,7 @@
 \title{Reformat data for Precision-Recall and ROC evaluation}
 \usage{
 mmdata(scores, labels, model_names = NULL, setids = NULL,
-  expd_first = "model_names", na_worst = TRUE, ties.method = "equiv",
+  expd_first = "model_names", na_worst = TRUE, ties_method = "equiv",
   levels = c("negative", "positive"), ...)
 }
 \arguments{
@@ -39,7 +39,7 @@ mmdata(scores, labels, model_names = NULL, setids = NULL,
     \item{FALSE}{NAs are treated as the lowest score}
   }}
 
-\item{ties.method}{A string for controlling tied scores.
+\item{ties_method}{A string for controlling tied scores.
   Ignored if mdat is set.
   \describe{
     \item{"equiv"}{Ties are equivalently ranked}

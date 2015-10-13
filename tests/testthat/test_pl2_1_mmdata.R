@@ -3,7 +3,7 @@ library(precrec)
 context("PL 2: Create mmdata")
 # Test .pmatch_tiesmethod(val),
 #      mmdata(scores, labels, model_names, setids,
-#             na_worst, ties.method, levels, ...)
+#             na_worst, ties_method, levels, ...)
 
 test_that(".pmatch_tiesmethod() returns 'equiv', 'random', 'first'", {
   expect_equal(.pmatch_tiesmethod("e"), "equiv")
@@ -123,22 +123,22 @@ test_that("mmdata() accepts 'na_worst'", {
 
 })
 
-test_that("mmdata() accepts 'ties.method'", {
+test_that("mmdata() accepts 'ties_method'", {
   s1 <- c(1, 2, 3, 4)
   l1 <- c(1, 0, 1, 0)
 
-  mdat <- mmdata(s1, l1, ties.method = "equiv")
-  expect_equal(attr(mdat[[1]], "args")[["ties.method"]], "equiv")
+  mdat <- mmdata(s1, l1, ties_method = "equiv")
+  expect_equal(attr(mdat[[1]], "args")[["ties_method"]], "equiv")
 
-  mdat <- mmdata(s1, l1, ties.method = "random")
-  expect_equal(attr(mdat[[1]], "args")[["ties.method"]], "random")
+  mdat <- mmdata(s1, l1, ties_method = "random")
+  expect_equal(attr(mdat[[1]], "args")[["ties_method"]], "random")
 
-  mdat <- mmdata(s1, l1, ties.method = "first")
-  expect_equal(attr(mdat[[1]], "args")[["ties.method"]], "first")
+  mdat <- mmdata(s1, l1, ties_method = "first")
+  expect_equal(attr(mdat[[1]], "args")[["ties_method"]], "first")
 
-  expect_err_msg <- function(s1, l1, ties.method) {
-    err_msg <- "ties.method should be one of "
-    eval(bquote(expect_error(mmdata(s1, l1, ties.method = ties.method),
+  expect_err_msg <- function(s1, l1, ties_method) {
+    err_msg <- "ties_method should be one of "
+    eval(bquote(expect_error(mmdata(s1, l1, ties_method = ties_method),
                              err_msg)))
   }
   expect_err_msg(s1, l1, "min")

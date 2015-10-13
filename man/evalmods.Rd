@@ -6,7 +6,7 @@
 \usage{
 evalmods(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
   model_names = NULL, setids = NULL, na_worst = TRUE,
-  ties.method = "equiv", levels = c("negative", "positive"))
+  ties_method = "equiv", levels = c("negative", "positive"))
 }
 \arguments{
 \item{mdat}{An \code{mdat} object created by \code{\link{mmdata}}.
@@ -17,7 +17,7 @@ evalmods(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
     \item \code{model_names}
     \item \code{setids}
     \item \code{na_worst}
-    \item \code{ties.method}
+    \item \code{ties_method}
   }}
 
 \item{x_interval}{A numeric value with the range (0, 1] to specifiy
@@ -42,7 +42,7 @@ evalmods(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
     \item{FALSE}{NAs are treated as the lowest score}
   }}
 
-\item{ties.method}{A string for controlling tied scores.
+\item{ties_method}{A string for controlling tied scores.
   Ignored if mdat is set.
   \describe{
     \item{"equiv"}{Ties are equivalently ranked}

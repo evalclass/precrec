@@ -2,7 +2,7 @@ library(precrec)
 
 context("PL 3: Reformat input data for evaluation")
 # Test reformat_data(scores, labels,
-#                    na_worst, ties.method, levels, model_name)
+#                    na_worst, ties_method, levels, model_name)
 
 test_that("reformat_data() reterns a 'fmdat' object", {
   fmdat1 <- reformat_data(c(0.1, 0.2, 0), c(1, 0, 1))
@@ -76,11 +76,11 @@ test_that("reformat_data() accepts 'na_worst'", {
 
 })
 
-test_that("reformat_data() accepts 'ties.method'", {
-  expect_equal_ranks <- function(ties.method, ranks) {
+test_that("reformat_data() accepts 'ties_method'", {
+  expect_equal_ranks <- function(ties_method, ranks) {
     scores <- c(0.1, 0.2, 0.2, 0.2, 0.3)
     labels <- c(1, 0, 1, 0, 1)
-    fmdat <- reformat_data(scores, labels, ties.method = ties.method)
+    fmdat <- reformat_data(scores, labels, ties_method = ties_method)
     eval(bquote(expect_equal(fmdat[["ranks"]], ranks)))
   }
 

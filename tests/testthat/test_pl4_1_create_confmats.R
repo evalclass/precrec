@@ -44,11 +44,11 @@ test_that("create_confmats() can take arguments for reformat_data()", {
   cmats <- create_confmats(scores = c(0.1, 0.2, 0),
                            labels = c(1, 0, 1),
                            na_worst = TRUE,
-                           ties.method = "first",
+                           ties_method = "first",
                            keep_fmdat = TRUE)
 
   expect_equal(.get_obj_arg(cmats, "fmdat", "na_worst"), TRUE)
-  expect_equal(.get_obj_arg(cmats, "fmdat", "ties.method"), "first")
+  expect_equal(.get_obj_arg(cmats, "fmdat", "ties_method"), "first")
 })
 
 test_that("create_confmats() can take na_worst argument", {
@@ -82,20 +82,20 @@ test_that("create_confmats() can take na_worst argument", {
   expect_equal_ranks(na3_scores, FALSE, c(2, 3, 1))
 })
 
-test_that("create_confmats() can take ties.method argument", {
+test_that("create_confmats() can take ties_method argument", {
 
-  expect_equal_ranks <- function(ties.method, ranks) {
+  expect_equal_ranks <- function(ties_method, ranks) {
     cmats <- create_confmats(scores = c(0.1, 0.2, 0.2, 0.2, 0.3),
                              labels = c(1, 0, 1, 1, 1),
-                             ties.method = ties.method,
+                             ties_method = ties_method,
                              keep_fmdat = TRUE)
 
     fmdat <- .get_obj(cmats, "fmdat")
 
-    eval(bquote(expect_equal(.get_obj_arg(cmats, NULL, "ties.method"),
-                             ties.method)))
-    eval(bquote(expect_equal(.get_obj_arg(fmdat, NULL, "ties.method"),
-                             ties.method)))
+    eval(bquote(expect_equal(.get_obj_arg(cmats, NULL, "ties_method"),
+                             ties_method)))
+    eval(bquote(expect_equal(.get_obj_arg(fmdat, NULL, "ties_method"),
+                             ties_method)))
     eval(bquote(expect_equal(fmdat[["ranks"]], ranks)))
   }
 

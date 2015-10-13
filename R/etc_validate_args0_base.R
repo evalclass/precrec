@@ -67,15 +67,15 @@
 }
 
 #
-# Validate ties.method
+# Validate ties_method
 #
-.validate_ties_method <- function(ties.method) {
-  if (!is.null(ties.method)) {
-    assertthat::assert_that(assertthat::is.string(ties.method))
+.validate_ties_method <- function(ties_method) {
+  if (!is.null(ties_method)) {
+    assertthat::assert_that(assertthat::is.string(ties_method))
 
     choices = c("equiv", "random", "first")
-    if (!(ties.method %in% choices)) {
-      stop(gettextf("ties.method should be one of %s",
+    if (!(ties_method %in% choices)) {
+      stop(gettextf("ties_method should be one of %s",
                     paste(dQuote(choices), collapse = ", ")))
     }
   }

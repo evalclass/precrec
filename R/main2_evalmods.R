@@ -11,7 +11,7 @@
 #'     \item \code{model_names}
 #'     \item \code{setids}
 #'     \item \code{na_worst}
-#'     \item \code{ties.method}
+#'     \item \code{ties_method}
 #'   }
 #'
 #' @param x_interval A numeric value with the range (0, 1] to specifiy
@@ -36,7 +36,7 @@
 #'     \item{FALSE}{NAs are treated as the lowest score}
 #'   }
 #'
-#' @param ties.method A string for controlling tied scores.
+#' @param ties_method A string for controlling tied scores.
 #'   Ignored if mdat is set.
 #'   \describe{
 #'     \item{"equiv"}{Ties are equivalently ranked}
@@ -87,18 +87,18 @@
 #' @export
 evalmods <- function(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
                      model_names = NULL, setids = NULL, na_worst = TRUE,
-                     ties.method = "equiv",
+                     ties_method = "equiv",
                      levels = c("negative", "positive")) {
 
   .validate_evalmods_args(x_interval, model_names, setids, na_worst,
-                          ties.method, levels)
+                          ties_method, levels)
 
   if (!missing(mdat)) {
     .validate(mdat)
   } else {
     mdat <- mmdata(scores, labels, model_names = model_names,
                    setids = setids, na_worst = na_worst,
-                   ties.method = ties.method, levels = levels)
+                   ties_method = ties_method, levels = levels)
   }
 
   pl_main(mdat, model_type = "multiple", data_type = "single",

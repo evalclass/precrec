@@ -58,7 +58,7 @@
 # Validate arguments of mmdata()
 #
 .validate_mmdata_args <- function(lscores, llabels, model_names, setids,
-                                  expd_first, na_worst, ties.method, levels) {
+                                  expd_first, na_worst, ties_method, levels) {
 
   # Check lscores and llabels
   if (length(llabels) != 1 && length(lscores) != length(llabels)) {
@@ -78,8 +78,8 @@
   # Check na_worst
   .validate_na_worst(na_worst)
 
-  # Check ties.method
-  .validate_ties_method(ties.method)
+  # Check ties_method
+  .validate_ties_method(ties_method)
 
   # Check levels
   .validate_levels(levels)
@@ -94,7 +94,7 @@
   # Check '...'
   arglist <- list(...)
   if (!is.null(names(arglist))){
-    invalid_list <- setdiff(names(arglist), c("na_worst", "ties.method",
+    invalid_list <- setdiff(names(arglist), c("na_worst", "ties_method",
                                               "levels", "model_name",
                                               "setid"))
     if (length(invalid_list) > 0L) {
@@ -104,8 +104,8 @@
     # Check na_worst
     .validate_na_worst(arglist[["na_worst"]])
 
-    # Check ties.method
-    .validate_ties_method(arglist[["ties.method"]])
+    # Check ties_method
+    .validate_ties_method(arglist[["ties_method"]])
 
     # Check levels
     .validate_levels(arglist[["levels"]])

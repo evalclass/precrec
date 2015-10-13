@@ -1,7 +1,7 @@
 library(precrec)
 
 context("PL 3: Reformat scores for evaluation")
-# Test .rank_scores(scores, na_worst, ties.method)
+# Test .rank_scores(scores, na_worst, ties_method)
 
 test_that("rank_scores() reterns a numeric vector", {
   ranks <- .rank_scores(c(1.0, 0.1, 3.2))
@@ -71,18 +71,18 @@ test_that("'na_worst' should be TRUE or FALSE", {
   expect_err_msg(err_msg, "keep")
 })
 
-test_that("'ties.method' should be one of the three options", {
-  expect_err_msg <- function(err_msg, ties.method) {
+test_that("'ties_method' should be one of the three options", {
+  expect_err_msg <- function(err_msg, ties_method) {
     scores <- c(1, 2)
     choices <- c("equiv", "random", "first")
-    eval(bquote(expect_error(.rank_scores(scores, ties.method = ties.method),
+    eval(bquote(expect_error(.rank_scores(scores, ties_method = ties_method),
                              err_msg)))
   }
 
-  err_msg <- "ties.method is not a string"
+  err_msg <- "ties_method is not a string"
   expect_err_msg(err_msg, c("equiv", "first"))
 
-  err_msg <- "ties.method should be one of"
+  err_msg <- "ties_method should be one of"
   expect_err_msg(err_msg, c("avg"))
   expect_err_msg(err_msg, c("max"))
 })
@@ -107,10 +107,10 @@ test_that("NAs in 'scores' should be controlled by 'na_worst'", {
   expect_equal_ranks(na3_scores, FALSE, c(2, 3, 1))
 })
 
-test_that("Ties should be controlled by 'ties.method'", {
-  expect_equal_ranks <- function(ties.method, ranks) {
+test_that("Ties should be controlled by 'ties_method'", {
+  expect_equal_ranks <- function(ties_method, ranks) {
     scores <- c(0.1, 0.2, 0.2, 0.2, 0.3)
-    sranks <- .rank_scores(scores, ties.method = ties.method)
+    sranks <- .rank_scores(scores, ties_method = ties_method)
     eval(bquote(expect_equal(sranks[["ranks"]], ranks)))
   }
 
@@ -118,7 +118,7 @@ test_that("Ties should be controlled by 'ties.method'", {
   expect_equal_ranks("first", c(5, 2, 3, 4, 1))
 
   scores2 <- c(0.1, 0.2, 0.2, 0.3)
-  r0 <- .rank_scores(scores2, ties.method = "random")
+  r0 <- .rank_scores(scores2, ties_method = "random")
 
   r1 <- c(4, 2, 3, 1)
   r2 <- c(4, 3, 2, 1)

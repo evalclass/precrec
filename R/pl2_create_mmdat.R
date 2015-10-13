@@ -33,7 +33,7 @@
 #'     \item{FALSE}{NAs are treated as the lowest score}
 #'   }
 #'
-#' @param ties.method A string for controlling tied scores.
+#' @param ties_method A string for controlling tied scores.
 #'   Ignored if mdat is set.
 #'   \describe{
 #'     \item{"equiv"}{Ties are equivalently ranked}
@@ -70,7 +70,7 @@
 #' @export
 mmdata <- function(scores, labels, model_names = NULL, setids = NULL,
                    expd_first = "model_names", na_worst = TRUE,
-                   ties.method = "equiv",
+                   ties_method = "equiv",
                    levels = c("negative", "positive"), ...) {
 
   # === Join datasets ===
@@ -81,7 +81,7 @@ mmdata <- function(scores, labels, model_names = NULL, setids = NULL,
   expd_first <- .pmatch_expd_first(expd_first)
   .validate_mmdata_args(lscores, llabels, model_names, setids,
                         expd_first = "model_names", na_worst = na_worst,
-                        ties.method = ties.method, levels = levels)
+                        ties_method = ties_method, levels = levels)
 
   # Replicate labels
   if (length(lscores) != 1 && length(llabels) == 1) {
@@ -97,7 +97,7 @@ mmdata <- function(scores, labels, model_names = NULL, setids = NULL,
   # === Reformat input data ===
   func_fmdat <- function(i) {
     reformat_data(lscores[[i]], llabels[[i]], na_worst = na_worst,
-                  ties.method = ties.method, levels = levels,
+                  ties_method = ties_method, levels = levels,
                   model_name = new_model_names[i], setid = new_setids[i],
                   ...)
   }
@@ -110,7 +110,7 @@ mmdata <- function(scores, labels, model_names = NULL, setids = NULL,
   attr(s3obj, "model_names") <- new_model_names
   attr(s3obj, "setids") <- new_setids
   attr(s3obj, "args") <- list(na_worst = na_worst,
-                              ties.method = ties.method,
+                              ties_method = ties_method,
                               levels = levels)
   attr(s3obj, "validated") <- FALSE
 

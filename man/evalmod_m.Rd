@@ -6,7 +6,7 @@
 \usage{
 evalmod_m(mdat, x_interval = 0.001, calc_avg = TRUE, ci_level = 0.95,
   scores = NULL, labels = NULL, model_names = NULL, setids = NULL,
-  na_worst = TRUE, ties.method = "equiv", levels = c("negative",
+  na_worst = TRUE, ties_method = "equiv", levels = c("negative",
   "positive"))
 }
 \arguments{
@@ -18,7 +18,7 @@ evalmod_m(mdat, x_interval = 0.001, calc_avg = TRUE, ci_level = 0.95,
     \item \code{model_names}
     \item \code{setids}
     \item \code{na_worst}
-    \item \code{ties.method}
+    \item \code{ties_method}
   }}
 
 \item{x_interval}{A numeric value with the range (0, 1] to specifiy
@@ -43,7 +43,7 @@ evalmod_m(mdat, x_interval = 0.001, calc_avg = TRUE, ci_level = 0.95,
     \item{FALSE}{NAs are treated as the lowest score}
   }}
 
-\item{ties.method}{A string for controlling tied scores.
+\item{ties_method}{A string for controlling tied scores.
   Ignored if mdat is set.
   \describe{
     \item{"equiv"}{Ties are equivalently ranked}
