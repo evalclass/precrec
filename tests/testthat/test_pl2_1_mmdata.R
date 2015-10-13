@@ -5,8 +5,8 @@ context("PL 2: Create mmdata")
 #      mmdata(scores, labels, model_names, setids,
 #             na.last, ties.method, levels, ...)
 
-test_that(".pmatch_tiesmethod() returns 'average', 'random', 'first'", {
-  expect_equal(.pmatch_tiesmethod("a"), "average")
+test_that(".pmatch_tiesmethod() returns 'equiv', 'random', 'first'", {
+  expect_equal(.pmatch_tiesmethod("e"), "equiv")
   expect_equal(.pmatch_tiesmethod("r"), "random")
   expect_equal(.pmatch_tiesmethod("f"), "first")
 
@@ -127,8 +127,8 @@ test_that("mmdata() accepts 'ties.method'", {
   s1 <- c(1, 2, 3, 4)
   l1 <- c(1, 0, 1, 0)
 
-  mdat <- mmdata(s1, l1, ties.method = "average")
-  expect_equal(attr(mdat[[1]], "args")[["ties.method"]], "average")
+  mdat <- mmdata(s1, l1, ties.method = "equiv")
+  expect_equal(attr(mdat[[1]], "args")[["ties.method"]], "equiv")
 
   mdat <- mmdata(s1, l1, ties.method = "random")
   expect_equal(attr(mdat[[1]], "args")[["ties.method"]], "random")

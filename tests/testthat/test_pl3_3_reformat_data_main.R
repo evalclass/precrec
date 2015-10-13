@@ -71,8 +71,8 @@ test_that("reformat_data() accepts 'na.last'", {
   scores <- c(NA, 0.2, 0.1)
   labels <- c(1, 1, 0)
 
-  expect_equal_ranks(scores, labels, TRUE, c(3, 2, 1))
-  expect_equal_ranks(scores, labels, FALSE, c(1, 3, 2))
+  expect_equal_ranks(scores, labels, TRUE, c(3, 1, 2))
+  expect_equal_ranks(scores, labels, FALSE, c(1, 2, 3))
 
 })
 
@@ -84,18 +84,18 @@ test_that("reformat_data() accepts 'ties.method'", {
     eval(bquote(expect_equal(fmdat[["ranks"]], ranks)))
   }
 
-  expect_equal_ranks("average", c(1, 3, 3, 3, 5))
-  expect_equal_ranks("first", c(1, 2, 3, 4, 5))
+  expect_equal_ranks("equiv", c(5, 2, 2, 2, 1))
+  expect_equal_ranks("first", c(5, 2, 3, 4, 1))
 
 })
 
-test_that("reformat_data() accepts 'levels'", {
-  levels <- c("N", "P")
-  fmdat <- reformat_data(c(0.1, 0.2, 0), c(1, 0, 1), levels = levels)
-
-  expect_equal(levels(fmdat[["labels"]]), levels)
-
-})
+# test_that("reformat_data() accepts 'levels'", {
+#   levels <- c("N", "P")
+#   fmdat <- reformat_data(c(0.1, 0.2, 0), c(1, 0, 1), levels = levels)
+#
+#   expect_equal(levels(fmdat[["labels"]]), levels)
+#
+# })
 
 test_that("'fmdat' contains a list with 3 items", {
   fmdat <- reformat_data(c(0.1, 0.2, 0), c(1, 0, 1))

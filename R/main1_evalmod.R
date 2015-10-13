@@ -81,7 +81,7 @@
 #' @export
 evalmod <- function(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
                     model_name = as.character(NA), setid = 1L,
-                    na.last = FALSE, ties.method = "average",
+                    na.last = TRUE, ties.method = "equiv",
                     levels = c("negative", "positive")) {
 
   .validate_evalmod_args(x_interval, model_name, setid, na.last,

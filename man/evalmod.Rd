@@ -5,8 +5,8 @@
 \title{Evaluate a single model}
 \usage{
 evalmod(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
-  model_name = as.character(NA), setid = 1L, na.last = FALSE,
-  ties.method = "average", levels = c("negative", "positive"))
+  model_name = as.character(NA), setid = 1L, na.last = TRUE,
+  ties.method = "equiv", levels = c("negative", "positive"))
 }
 \arguments{
 \item{mdat}{An \code{mdat} object created by \code{\link{mmdata}}.

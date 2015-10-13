@@ -5,7 +5,7 @@
 \title{Reformat data for Precision-Recall and ROC evaluation}
 \usage{
 mmdata(scores, labels, model_names = NULL, setids = NULL,
-  expd_first = "model_names", na.last = FALSE, ties.method = "average",
+  expd_first = "model_names", na.last = TRUE, ties.method = "equiv",
   levels = c("negative", "positive"), ...)
 }
 \arguments{

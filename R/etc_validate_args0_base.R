@@ -73,7 +73,7 @@
   if (!is.null(ties.method)) {
     assertthat::assert_that(assertthat::is.string(ties.method))
 
-    choices = c("average", "random", "first")
+    choices = c("equiv", "random", "first")
     if (!(ties.method %in% choices)) {
       stop(gettextf("ties.method should be one of %s",
                     paste(dQuote(choices), collapse = ", ")))

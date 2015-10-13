@@ -25,3 +25,11 @@ create_roc_curve <- function(tps, fps, sp, sn, x_interval) {
     .Call('precrec_create_roc_curve', PACKAGE = 'precrec', tps, fps, sp, sn, x_interval)
 }
 
+format_labels <- function(labels) {
+    .Call('precrec_format_labels', PACKAGE = 'precrec', labels)
+}
+
+get_score_ranks <- function(scores, na_last, ties_method) {
+    .Call('precrec_get_score_ranks', PACKAGE = 'precrec', scores, na_last, ties_method)
+}
+

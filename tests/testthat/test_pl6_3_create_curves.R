@@ -68,21 +68,24 @@ test_that("create_curves() can take na.last argument", {
     eval(bquote(expect_equal(.get_obj_arg(curves, NULL, "na.last"), na.last)))
     eval(bquote(expect_equal(.get_obj_arg(fmdat, NULL, "na.last"), na.last)))
     eval(bquote(expect_equal(fmdat[["ranks"]], ranks)))
-    eval(bquote(expect_equal(.rank_scores(scores, na.last = na.last), ranks)))
+
+    sranks <- .rank_scores(scores, na.last = na.last)
+    eval(bquote(expect_equal(sranks[["ranks"]], ranks)))
   }
 
   na1_scores <- c(NA, 0.2, 0.1)
   na2_scores <- c(0.2, NA, 0.1)
   na3_scores <- c(0.2, 0.1, NA)
 
-  expect_equal_ranks(na1_scores, TRUE, c(3, 2, 1))
-  expect_equal_ranks(na1_scores, FALSE, c(1, 3, 2))
+  expect_equal_ranks(na1_scores, TRUE, c(3, 1, 2))
+  expect_equal_ranks(na1_scores, FALSE, c(1, 2, 3))
 
-  expect_equal_ranks(na2_scores, TRUE, c(2, 3, 1))
-  expect_equal_ranks(na2_scores, FALSE, c(3, 1, 2))
+  expect_equal_ranks(na2_scores, TRUE, c(1, 3, 2))
+  expect_equal_ranks(na2_scores, FALSE, c(2, 1, 3))
 
-  expect_equal_ranks(na3_scores, TRUE, c(2, 1, 3))
-  expect_equal_ranks(na3_scores, FALSE, c(3, 2, 1))
+  expect_equal_ranks(na3_scores, TRUE, c(1, 2, 3))
+  expect_equal_ranks(na3_scores, FALSE, c(2, 3, 1))
+
 })
 
 test_that("create_curves() can take ties.method argument", {
@@ -103,8 +106,8 @@ test_that("create_curves() can take ties.method argument", {
     eval(bquote(expect_equal(fmdat[["ranks"]], ranks)))
   }
 
-  expect_equal_ranks("average", c(1, 3, 3, 3, 5))
-  expect_equal_ranks("first", c(1, 2, 3, 4, 5))
+  expect_equal_ranks("equiv", c(5, 2, 2, 2, 1))
+  expect_equal_ranks("first", c(5, 2, 3, 4, 1))
 
 })
 

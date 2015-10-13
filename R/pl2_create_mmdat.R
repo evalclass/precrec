@@ -69,8 +69,8 @@
 #'
 #' @export
 mmdata <- function(scores, labels, model_names = NULL, setids = NULL,
-                   expd_first = "model_names", na.last = FALSE,
-                   ties.method = "average",
+                   expd_first = "model_names", na.last = TRUE,
+                   ties.method = "equiv",
                    levels = c("negative", "positive"), ...) {
 
   # === Join datasets ===
@@ -144,13 +144,13 @@ mmdata <- function(scores, labels, model_names = NULL, setids = NULL,
 #
 .pmatch_tiesmethod <- function(val) {
   if (assertthat::is.string(val)) {
-    choices = c("average", "random", "first")
+    choices = c("equiv", "random", "first")
     if (val %in% choices) {
       return(val)
     }
 
-    if (!is.na(pmatch(val, "average"))) {
-      return("average")
+    if (!is.na(pmatch(val, "equiv"))) {
+      return("equiv")
     }
 
     if (!is.na(pmatch(val, "random"))) {

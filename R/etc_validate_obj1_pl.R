@@ -49,8 +49,9 @@
   }
 
   # Labels
-  assertthat::assert_that(is.ordered(fmdat[["labels"]]),
-                          length(levels(fmdat[["labels"]])) == 2)
+  assertthat::assert_that(is.atomic(fmdat[["labels"]]),
+                          is.vector(fmdat[["labels"]]),
+                          is.numeric(fmdat[["labels"]]))
 
   # Ranks
   assertthat::assert_that(is.atomic(fmdat[["ranks"]]),

@@ -5,8 +5,8 @@
 \title{Evaluate multiple models}
 \usage{
 evalmods(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
-  model_names = NULL, setids = NULL, na.last = FALSE,
-  ties.method = "average", levels = c("negative", "positive"))
+  model_names = NULL, setids = NULL, na.last = TRUE,
+  ties.method = "equiv", levels = c("negative", "positive"))
 }
 \arguments{
 \item{mdat}{An \code{mdat} object created by \code{\link{mmdata}}.

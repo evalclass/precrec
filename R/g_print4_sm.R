@@ -37,7 +37,7 @@ print.smprc <- function(x, ...) {
 
   # === Print summary ===
   for (i in seq_along(x)) {
-    cat("    Dataset ID:", attr(x[[s]], "setid"), "\n")
-    cat("           AUC:", attr(x[[s]], "auc"), "\n\n")
+    cat("    Dataset ID:", attr(x[[i]], "setid"), "\n")
+    cat("           AUC:", attr(x[[i]], "auc"), "\n\n")
   }
 }

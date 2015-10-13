@@ -6,7 +6,7 @@
 \usage{
 evalmods_m(mdat, x_interval = 0.001, calc_avg = TRUE, ci_level = 0.95,
   scores = NULL, labels = NULL, model_names = NULL, setids = NULL,
-  na.last = FALSE, ties.method = "average", levels = c("negative",
+  na.last = TRUE, ties.method = "equiv", levels = c("negative",
   "positive"))
 }
 \arguments{
