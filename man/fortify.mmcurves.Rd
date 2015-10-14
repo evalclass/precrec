@@ -28,7 +28,7 @@ library(ggplot2)
 ## Prepare input data
 samps <- create_sim_samples(10, 100, 100, "all")
 mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-               model_names = samps[["model_names"]],
+               modnames = samps[["modnames"]],
                setids = samps[["setids"]])
 
 ## Convert sscurve object to a data frame
@@ -38,14 +38,14 @@ df <- fortify(curves)
 ## Fortified data frame can be used for plotting a ROC curve
 df_roc <- subset(df, group == "ROC")
 p_roc <- ggplot(df_roc, aes(x = x, y = y, ymin = ymin, ymax = ymax,
-                            color = model_name))
+                            color = modname))
 p_roc <- p_roc + geom_smooth(stat = "identity")
 p_roc
 
 ## Fortified data frame can be used for plotting a Precision-Recall curve
 df_prc <- subset(df, group == "PRC")
 p_prc <- ggplot(df_roc, aes(x = x, y = y, ymin = ymin, ymax = ymax,
-                            color = model_name))
+                            color = modname))
 p_prc <- p_roc + geom_smooth(stat = "identity")
 p_prc
 }

@@ -22,7 +22,7 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
   s3obj <- structure(pevals, class = "pevals")
 
   # Set attributes
-  attr(s3obj, "model_name") <- attr(cmats, "model_name")
+  attr(s3obj, "modname") <- attr(cmats, "modname")
   attr(s3obj, "setid") <- attr(cmats, "setid")
   attr(s3obj, "nn") <- attr(cmats, "nn")
   attr(s3obj, "np") <- attr(cmats, "np")

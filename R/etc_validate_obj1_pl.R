@@ -13,8 +13,8 @@
   }
 
   # Check attributes
-  if (length(mdat) != length(attr(mdat, "model_names"))) {
-    stop("Invalid 'model_names'")
+  if (length(mdat) != length(attr(mdat, "modnames"))) {
+    stop("Invalid 'modnames'")
   }
 
   if (length(mdat) != length(attr(mdat, "setids"))) {
@@ -36,8 +36,8 @@
 
   # Validate class items and attributes
   item_names <- c("labels", "ranks", "rank_idx")
-  attr_names <- c("model_name", "setid", "nn", "np", "args", "validated")
-  arg_names <- c("na_worst", "ties_method", "levels", "model_name", "setid")
+  attr_names <- c("modname", "setid", "nn", "np", "args", "validated")
+  arg_names <- c("na_worst", "ties_method", "levels", "modname", "setid")
   .validate_basic(fmdat, "fmdat", "reformat_data", item_names, attr_names,
                   arg_names)
 
@@ -78,9 +78,9 @@
 
   # Validate class items and attributes
   item_names <- c("pos_num", "neg_num", "tp", "fp", "tn", "fn", "ranks")
-  attr_names <- c("model_name", "setid", "nn", "np", "args", "cpp_errmsg",
+  attr_names <- c("modname", "setid", "nn", "np", "args", "cpp_errmsg",
                   "src", "validated")
-  arg_names <- c("na_worst", "ties_method", "levels", "model_name", "setid",
+  arg_names <- c("na_worst", "ties_method", "levels", "modname", "setid",
                  "keep_fmdat")
   .validate_basic(cmats, "cmats", "create_confmats", item_names, attr_names,
                   arg_names)
@@ -136,9 +136,9 @@
   # Validate class items and attributes
   item_names <- c("pos_num", "neg_num", "error", "accuracy", "specificity",
                   "sensitivity", "precision")
-  attr_names <- c("model_name", "setid", "nn", "np", "args", "cpp_errmsg",
+  attr_names <- c("modname", "setid", "nn", "np", "args", "cpp_errmsg",
                   "src", "validated")
-  arg_names <- c("na_worst", "ties_method", "levels", "model_name", "setid",
+  arg_names <- c("na_worst", "ties_method", "levels", "modname", "setid",
                  "keep_fmdat")
   .validate_basic(pevals, "pevals", "calc_measures", item_names, attr_names,
                   arg_names)
@@ -227,11 +227,11 @@
 .validate_curve <- function(obj, class_name, func_name) {
   # Validate class items and attributes
   item_names <- c("x", "y", "orig_points")
-  attr_names <- c("model_name", "setid", "nn", "np", "auc", "partial", "pauc",
+  attr_names <- c("modname", "setid", "nn", "np", "auc", "partial", "pauc",
                   "x_limits", "y_limits", "args", "cpp_errmsg1", "cpp_errmsg2",
                   "src", "validated")
   arg_names <- c("x_interval", "na_worst", "ties_method", "levels",
-                 "model_name", "setid", "keep_fmdat", "keep_cmats")
+                 "modname", "setid", "keep_fmdat", "keep_cmats")
   .validate_basic(obj, class_name, func_name, item_names, attr_names,
                   arg_names)
 
@@ -288,9 +288,9 @@
 
   # Validate class items and attributes
   item_names <- c("roc", "prc")
-  attr_names <- c("model_name", "setid", "nn", "np", "args", "src",
+  attr_names <- c("modname", "setid", "nn", "np", "args", "src",
                   "validated")
-  arg_names <- c("x_interval", "na_worst", "ties_method", "model_name", "setid",
+  arg_names <- c("x_interval", "na_worst", "ties_method", "modname", "setid",
                  "keep_fmdat", "keep_cmats")
   .validate_basic(curves, "curves", "calc_measures", item_names, attr_names,
                   arg_names)
@@ -314,8 +314,8 @@
 
   # Validate class items and attributes
   item_names <- NULL
-  attr_names <- c("umodel_names", "args", "src", "validated")
-  arg_names <- c("model_names", "setids", "x_interval", "ci_level")
+  attr_names <- c("uniq_modnames", "args", "src", "validated")
+  arg_names <- c("modnames", "setids", "x_interval", "ci_level")
   .validate_basic(avgcurves, "avgcurves", "calc_avg", item_names, attr_names,
                   arg_names)
 

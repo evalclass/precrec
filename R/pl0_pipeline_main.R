@@ -27,12 +27,12 @@ pl_main <- function(mdat, model_type = "single", data_type = "single",
 
   # Calculate the average curves
   if (data_type == "multiple" && calc_avg) {
-    model_names <- attr(mdat, "model_names")
+    modnames <- attr(mdat, "modnames")
     setids <- attr(mdat, "setids")
 
-    attr(rocs, "avgcurves") <- calc_avg(rocs, model_names, setids,
+    attr(rocs, "avgcurves") <- calc_avg(rocs, modnames, setids,
                                         x_interval, ci_level)
-    attr(prcs, "avgcurves") <- calc_avg(prcs, model_names, setids,
+    attr(prcs, "avgcurves") <- calc_avg(prcs, modnames, setids,
                                         x_interval, ci_level)
   }
 
@@ -43,7 +43,7 @@ pl_main <- function(mdat, model_type = "single", data_type = "single",
   # Set attributes
   attr(s3obj, "model_type") <- model_type
   attr(s3obj, "data_type") <- data_type
-  attr(s3obj, "model_names") <- attr(mdat, "model_names")
+  attr(s3obj, "modnames") <- attr(mdat, "modnames")
   attr(s3obj, "setids") <- attr(mdat, "setids")
   attr(s3obj, "args") <- list(x_interval = x_interval,
                               calc_avg = calc_avg,
@@ -108,7 +108,7 @@ pl_main <- function(mdat, model_type = "single", data_type = "single",
   s3obj <- structure(mc, class = class_name)
 
   # Set attributes
-  attr(s3obj, "model_names") <- attr(mdat, "model_names")
+  attr(s3obj, "modnames") <- attr(mdat, "modnames")
   attr(s3obj, "setids") <- attr(mdat, "setids")
   attr(s3obj, "avgcurve") <- NA
   attr(s3obj, "src") <- mdat

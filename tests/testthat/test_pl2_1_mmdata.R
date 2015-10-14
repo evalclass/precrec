@@ -2,7 +2,7 @@ library(precrec)
 
 context("PL 2: Create mmdata")
 # Test .pmatch_tiesmethod(val),
-#      mmdata(scores, labels, model_names, setids,
+#      mmdata(scores, labels, modnames, setids,
 #             na_worst, ties_method, levels, ...)
 
 test_that(".pmatch_tiesmethod() returns 'equiv', 'random', 'first'", {
@@ -65,22 +65,22 @@ test_that("'scores' and 'labels' should be the same length", {
   expect_err_msg(scores, labels)
 })
 
-test_that("mmdata() accepts 'model_names'", {
+test_that("mmdata() accepts 'modnames'", {
   s1 <- c(1, 2, 3, 4)
   l1 <- c(1, 0, 1, 0)
 
-  mdat <- mmdata(s1, l1, model_names = "model1")
-  expect_equal(attr(mdat[[1]], "args")[["model_name"]], "model1")
+  mdat <- mmdata(s1, l1, modnames = "model1")
+  expect_equal(attr(mdat[[1]], "args")[["modname"]], "model1")
 
-  expect_err_msg <- function(err_msg, s1, l1, model_names) {
-    eval(bquote(expect_error(mmdata(s1, l1, model_names = model_names),
+  expect_err_msg <- function(err_msg, s1, l1, modnames) {
+    eval(bquote(expect_error(mmdata(s1, l1, modnames = modnames),
                              err_msg)))
   }
 
   err_msg <- "not equal to datalen"
   expect_err_msg(err_msg, s1, l1, c("A", "B"))
 
-  err_msg <- "model_names is not a character vector"
+  err_msg <- "modnames is not a character vector"
   expect_err_msg(err_msg, s1, l1, NA)
 
 })
@@ -178,12 +178,12 @@ test_that("mmdata() accepts 'expd_first", {
 
   dlen <- 3
 
-  mdat1 <- mmdata(scores, labels, expd_first = "model_names")
-  expect_equal(attr(mdat1, "model_names"), c("m1", "m2", "m3"))
+  mdat1 <- mmdata(scores, labels, expd_first = "modnames")
+  expect_equal(attr(mdat1, "modnames"), c("m1", "m2", "m3"))
   expect_equal(attr(mdat1, "setids"), rep(1, 3))
 
   mdat2 <- mmdata(scores, labels, expd_first = "setids")
-  expect_equal(attr(mdat2, "model_names"), rep("m1", 3))
+  expect_equal(attr(mdat2, "modnames"), rep("m1", 3))
   expect_equal(attr(mdat2, "setids"), seq(3))
 })
 

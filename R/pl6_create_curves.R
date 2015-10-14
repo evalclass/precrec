@@ -23,7 +23,7 @@ create_curves <- function(pevals, x_interval = 0.001, scores = NULL,
   s3obj <- structure(curves, class = "curves")
 
   # Set attributes
-  attr(s3obj, "model_name") <- attr(pevals, "model_name")
+  attr(s3obj, "modname") <- attr(pevals, "modname")
   attr(s3obj, "setid") <- attr(pevals, "setid")
   attr(s3obj, "nn") <- attr(pevals, "nn")
   attr(s3obj, "np") <- attr(pevals, "np")
@@ -98,7 +98,7 @@ create_prc <- function(pevals, x_interval = 0.001, scores = NULL, labels = NULL,
   s3obj <- structure(crv, class = class_name)
 
   # Set attributes
-  attr(s3obj, "model_name") <- attr(pevals, "model_name")
+  attr(s3obj, "modname") <- attr(pevals, "modname")
   attr(s3obj, "setid") <- attr(pevals, "setid")
   attr(s3obj, "nn") <- attr(pevals, "nn")
   attr(s3obj, "np") <- attr(pevals, "np")

@@ -37,7 +37,7 @@
 #' ## Create sample datasets with 100 positives and 100 negatives
 #' samps <- create_sim_samples(1, 100, 100, "all")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-#'                model_names = samps[["model_names"]],
+#'                modnames = samps[["modnames"]],
 #'                setids = samps[["setids"]])
 #'
 #' ## Generate an mscurve object
@@ -96,7 +96,7 @@ autoplot.msroc <- function(object, show_legend = TRUE, ...) {
   df <- .prepare_autoplot(object)
 
   # === Create a ggplot object ===
-  p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y, color = model_name))
+  p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y, color = modname))
   p <- p + ggplot2::geom_line()
   p <- .geom_basic_roc(p, object[[1]], show_legend = show_legend)
 }
@@ -108,7 +108,7 @@ autoplot.msprc <- function(object, show_legend = TRUE, ...) {
   df <- .prepare_autoplot(object)
 
   # === Create a ggplot object ===
-  p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y, color = model_name))
+  p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y, color = modname))
   p <- p + ggplot2::geom_line()
   p <- .geom_basic_prc(p, object[[1]], show_legend = show_legend)
 }

@@ -2,7 +2,7 @@ library(precrec)
 
 context("PL 3: Reformat input data for evaluation")
 # Test reformat_data(scores, labels,
-#                    na_worst, ties_method, levels, model_name)
+#                    na_worst, ties_method, levels, modname)
 
 test_that("reformat_data() reterns a 'fmdat' object", {
   fmdat1 <- reformat_data(c(0.1, 0.2, 0), c(1, 0, 1))
@@ -33,20 +33,20 @@ test_that("'scores' and 'labels' should be the same length", {
   expect_err_msg(c(0.1), c(1, 0))
 })
 
-test_that("'model_name' must be a character vector", {
-  expect_err_msg <- function(err_msg, model_name) {
+test_that("'modname' must be a character vector", {
+  expect_err_msg <- function(err_msg, modname) {
     eval(bquote(expect_error(reformat_data(c(0, 1), c(0, 1),
-                                           model_name = model_name),
+                                           modname = modname),
                              err_msg)))
   }
 
-  err_msg <- "model_name is not a string"
+  err_msg <- "modname is not a string"
   expect_err_msg(err_msg, c(0.1, 0.2))
   expect_err_msg(err_msg, c("1", "2"))
   expect_err_msg(err_msg, as.character())
 
-  err_msg <- "model_name is not an atomic vector"
-  err_msg <- "model_name is not a string"
+  err_msg <- "modname is not an atomic vector"
+  err_msg <- "modname is not a string"
   expect_err_msg(err_msg, factor(c(0.1, 0.2)))
   expect_err_msg(err_msg, list("1"))
   expect_err_msg(err_msg, data.frame("1"))

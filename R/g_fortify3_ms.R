@@ -23,7 +23,7 @@
 #' ## Create sample datasets with 100 positives and 100 negatives
 #' samps <- create_sim_samples(1, 100, 100, "all")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-#'                model_names = samps[["model_names"]],
+#'                modnames = samps[["modnames"]],
 #'                setids = samps[["setids"]])
 #'
 #' ## Convert sscurve object to a data frame
@@ -32,13 +32,13 @@
 #'
 #' ## Fortified data frame can be used for plotting a ROC curve
 #' df_roc <- subset(df, group == "ROC")
-#' p_roc <- ggplot(df_roc, aes(x = x, y = y, color = model_name))
+#' p_roc <- ggplot(df_roc, aes(x = x, y = y, color = modname))
 #' p_roc <- p_roc + geom_line()
 #' p_roc
 #'
 #' ## Fortified data frame can be used for plotting a Precision-Recall curve
 #' df_prc <- subset(df, group == "PRC")
-#' p_prc <- ggplot(df_prc, aes(x = x, y = y, color = model_name))
+#' p_prc <- ggplot(df_prc, aes(x = x, y = y, color = modname))
 #' p_prc <- p_prc + geom_line()
 #' p_prc
 #'
@@ -55,12 +55,12 @@ fortify.mscurves <- function(model, ...) {
   prc_df <- ggplot2::fortify(model[["prcs"]])
   x <- c(roc_df[["x"]], prc_df[["x"]])
   y <- c(roc_df[["y"]], prc_df[["y"]])
-  model_name <- factor(c(roc_df[["model_name"]], prc_df[["model_name"]]),
-                       labels = levels(roc_df[["model_name"]]))
+  modname <- factor(c(roc_df[["modname"]], prc_df[["modname"]]),
+                    labels = levels(roc_df[["modname"]]))
   group = factor(c(rep("ROC", length(roc_df[["x"]])),
                    rep("PRC", length(prc_df[["x"]]))))
 
-  df <- data.frame(x = x, y = y, group = group, model_name = model_name)
+  df <- data.frame(x = x, y = y, group = group, modname = modname)
 }
 
 #
@@ -75,12 +75,12 @@ fortify.msroc <- function(model, ...) {
 
   # === Prepare a data frame for ggplot2 ===
   df <- NULL
-  modnames <- attr(model, "model_names")
+  modnames <- attr(model, "modnames")
   for (i in seq_along(model)) {
     x = model[[i]][["x"]]
     y = model[[i]][["y"]]
-    model_name = factor(rep(modnames[i], length(x)), levels = modnames)
-    df <- rbind(df, data.frame(x = x, y = y, model_name = model_name))
+    modname = factor(rep(modnames[i], length(x)), levels = modnames)
+    df <- rbind(df, data.frame(x = x, y = y, modname = modname))
   }
 
   df

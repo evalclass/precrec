@@ -23,7 +23,7 @@
 #' ## Prepare input data
 #' samps <- create_sim_samples(10, 100, 100, "all")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-#'                model_names = samps[["model_names"]],
+#'                modnames = samps[["modnames"]],
 #'                setids = samps[["setids"]])
 #'
 #' ## Convert sscurve object to a data frame
@@ -33,14 +33,14 @@
 #' ## Fortified data frame can be used for plotting a ROC curve
 #' df_roc <- subset(df, group == "ROC")
 #' p_roc <- ggplot(df_roc, aes(x = x, y = y, ymin = ymin, ymax = ymax,
-#'                             color = model_name))
+#'                             color = modname))
 #' p_roc <- p_roc + geom_smooth(stat = "identity")
 #' p_roc
 #'
 #' ## Fortified data frame can be used for plotting a Precision-Recall curve
 #' df_prc <- subset(df, group == "PRC")
 #' p_prc <- ggplot(df_roc, aes(x = x, y = y, ymin = ymin, ymax = ymax,
-#'                             color = model_name))
+#'                             color = modname))
 #' p_prc <- p_roc + geom_smooth(stat = "identity")
 #' p_prc
 #'
@@ -62,11 +62,11 @@ fortify.mmcurves <- function(model, ...) {
   ymax <- c(roc_df[["ymax"]], prc_df[["ymax"]])
   group = factor(c(rep("ROC", length(roc_df[["x"]])),
                    rep("PRC", length(prc_df[["x"]]))))
-  model_name <- factor(c(roc_df[["model_name"]], prc_df[["model_name"]]),
-                       labels = levels(roc_df[["model_name"]]))
+  modname <- factor(c(roc_df[["modname"]], prc_df[["modname"]]),
+                    labels = levels(roc_df[["modname"]]))
 
   df <- data.frame(x = x, y = y, ymin = ymin, ymax = ymax,
-                   model_name = model_name, group = group)
+                   modname = modname, group = group)
 }
 
 #
@@ -82,15 +82,15 @@ fortify.mmroc <- function(model, ...) {
   # === Prepare a data frame for ggplot2 ===
   avgcurves <- attr(model, "avgcurves")
   df <- NULL
-  model_names <- attr(avgcurves, "umodel_names")
+  modnames <- attr(avgcurves, "uniq_modnames")
   for (i in seq_along(avgcurves)) {
     x = avgcurves[[i]][["x"]]
     y = avgcurves[[i]][["y_avg"]]
     ymin = avgcurves[[i]][["y_ci_l"]]
     ymax = avgcurves[[i]][["y_ci_h"]]
-    model_name = factor(rep(model_names[i], length(x)), levels = model_names)
+    modname = factor(rep(modnames[i], length(x)), levels = modnames)
     df <- rbind(df, data.frame(x = x, y = y, ymin = ymin, ymax = ymax,
-                               model_name = model_name))
+                               modname = modname))
   }
 
   df

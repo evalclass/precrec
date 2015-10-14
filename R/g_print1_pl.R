@@ -7,7 +7,7 @@ print.mdat <- function(x, ...) {
   cat("\n  Reformated input data\n\n")
 
   for (i in seq(length(x))) {
-    cat("    Model name:", attr(x[[i]], "model_name"), "\n")
+    cat("    Model name:", attr(x[[i]], "modname"), "\n")
     cat("    Dataset ID:", attr(x[[i]], "setid"), "\n")
     cat("    # of positives:", attr(x[[i]], "np"), "\n")
     cat("    # of negatives:", attr(x[[i]], "nn"), "\n")
@@ -40,7 +40,7 @@ print.mdat <- function(x, ...) {
     cat("\n")
   }
 
-  cat(indent_space, "Model name:", attr(x, "model_name"), "\n")
+  cat(indent_space, "Model name:", attr(x, "modname"), "\n")
   cat("\n")
 }
 

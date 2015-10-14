@@ -32,7 +32,7 @@ The \code{plot} function plots ROC and Precion-Recall curves.
 ## Prepare input data
 samps <- create_sim_samples(10, 100, 100, "all")
 mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-               model_names = samps[["model_names"]],
+               modnames = samps[["modnames"]],
                setids = samps[["setids"]])
 
 ## Generate an mscurve object

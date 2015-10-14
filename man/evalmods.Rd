@@ -5,7 +5,7 @@
 \title{Evaluate multiple models}
 \usage{
 evalmods(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
-  model_names = NULL, setids = NULL, na_worst = TRUE,
+  modnames = NULL, setids = NULL, na_worst = TRUE,
   ties_method = "equiv", levels = c("negative", "positive"))
 }
 \arguments{
@@ -14,7 +14,7 @@ evalmods(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
   \itemize{
     \item \code{scores}
     \item \code{labels}
-    \item \code{model_names}
+    \item \code{modnames}
     \item \code{setids}
     \item \code{na_worst}
     \item \code{ties_method}
@@ -30,7 +30,7 @@ evalmods(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
 \item{labels}{A numeric or factor data of observed labels.
   It can be a vector, a matrix, an array, a data frame, or a list.}
 
-\item{model_names}{A character vector as the names
+\item{modnames}{A character vector as the names
   of the models/classifiers.}
 
 \item{setids}{A numeric vector as dataset IDs.}
@@ -65,7 +65,7 @@ The \code{evalmods} function takes predicted scores and binary lables
 ## Create sample datasets with 100 positives and 100 negatives
 samps <- create_sim_samples(1, 100, 100, "all")
 mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-               model_names = samps[["model_names"]],
+               modnames = samps[["modnames"]],
                setids = samps[["setids"]])
 
 ## Generate an mscurve object
@@ -73,7 +73,7 @@ curves1 <- evalmods(mdat)
 
 ## Directly specifiy scores and labels
 curves2 <- evalmods(scores = samps[["scores"]], labels = samps[["labels"]],
-                     model_names = samps[["model_names"]])
+                     modnames = samps[["modnames"]])
 
 ## Print the summary
 curves2

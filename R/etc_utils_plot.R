@@ -91,7 +91,7 @@
 #
 # Show legend
 #
-.show_legend <- function(obj, show_legend, gnames = "model_names") {
+.show_legend <- function(obj, show_legend, gnames = "modname") {
   if (show_legend) {
     old_mar <- par(mar = c(0, 0, 0, 0))
     on.exit(par(old_mar), add = TRUE)

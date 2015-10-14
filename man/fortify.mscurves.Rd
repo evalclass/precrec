@@ -28,7 +28,7 @@ library(ggplot2)
 ## Create sample datasets with 100 positives and 100 negatives
 samps <- create_sim_samples(1, 100, 100, "all")
 mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-               model_names = samps[["model_names"]],
+               modnames = samps[["modnames"]],
                setids = samps[["setids"]])
 
 ## Convert sscurve object to a data frame
@@ -37,13 +37,13 @@ df <- fortify(curves)
 
 ## Fortified data frame can be used for plotting a ROC curve
 df_roc <- subset(df, group == "ROC")
-p_roc <- ggplot(df_roc, aes(x = x, y = y, color = model_name))
+p_roc <- ggplot(df_roc, aes(x = x, y = y, color = modname))
 p_roc <- p_roc + geom_line()
 p_roc
 
 ## Fortified data frame can be used for plotting a Precision-Recall curve
 df_prc <- subset(df, group == "PRC")
-p_prc <- ggplot(df_prc, aes(x = x, y = y, color = model_name))
+p_prc <- ggplot(df_prc, aes(x = x, y = y, color = modname))
 p_prc <- p_prc + geom_line()
 p_prc
 }

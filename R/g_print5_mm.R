@@ -42,7 +42,7 @@ print.mmprc <- function(x, ...) {
       cat("    Dataset ID:", attr(x[[i]], "setid"), "\n\n")
       setid <- attr(x[[i]], "setid")
     }
-    cat("      Model name:", attr(x[[i]], "model_name"), "\n")
+    cat("      Model name:", attr(x[[i]], "modname"), "\n")
     cat("        AUC:", attr(x[[i]], "auc"), "\n\n")
   }
 }

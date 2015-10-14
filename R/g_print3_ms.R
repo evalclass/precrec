@@ -39,7 +39,7 @@ print.msprc <- function(x, ...) {
   cat("\n  Test data\n\n")
 
   for (i in seq_along(x)) {
-    cat("    Model name:", attr(x[[i]], "model_name"), "\n")
+    cat("    Model name:", attr(x[[i]], "modname"), "\n")
     cat("      # of positives:", attr(x[[i]], "np"), "\n")
     cat("      # of negatives:", attr(x[[i]], "nn"), "\n\n")
   }
@@ -54,7 +54,7 @@ print.msprc <- function(x, ...) {
 
   # === Print summary ===
   for (i in seq_along(x)) {
-    cat("    Model name:", attr(x[[i]], "model_name"), "\n")
+    cat("    Model name:", attr(x[[i]], "modname"), "\n")
     cat("      AUC:", attr(x[[i]], "auc"), "\n\n")
   }
 }

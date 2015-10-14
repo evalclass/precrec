@@ -20,7 +20,7 @@ create_confmats <- function(fmdat, scores = NULL, labels = NULL,
   s3obj <- structure(cmats, class = "cmats")
 
   # Set attributes
-  attr(s3obj, "model_name") <- attr(fmdat, "model_name")
+  attr(s3obj, "modname") <- attr(fmdat, "modname")
   attr(s3obj, "setid") <- attr(fmdat, "setid")
   attr(s3obj, "nn") <- attr(fmdat, "nn")
   attr(s3obj, "np") <- attr(fmdat, "np")

@@ -7,9 +7,9 @@
   # Check model type
   .validate_model_type(model_type)
 
-  model_names <- attr(mdat, "model_names")
+  modnames <- attr(mdat, "modnames")
   if (model_type == "single") {
-    assertthat::assert_that(length(unique(model_names)) == 1L)
+    assertthat::assert_that(length(unique(modnames)) == 1L)
   }
 
   # Check data type
@@ -57,7 +57,7 @@
 #
 # Validate arguments of mmdata()
 #
-.validate_mmdata_args <- function(lscores, llabels, model_names, setids,
+.validate_mmdata_args <- function(lscores, llabels, modnames, setids,
                                   expd_first, na_worst, ties_method, levels) {
 
   # Check lscores and llabels
@@ -67,7 +67,7 @@
   }
 
   # Check model names
-  .validate_model_names(model_names, length(lscores))
+  .validate_modnames(modnames, length(lscores))
 
   # Check dataset IDs
   .validate_setids(setids, length(lscores))
@@ -95,7 +95,7 @@
   arglist <- list(...)
   if (!is.null(names(arglist))){
     invalid_list <- setdiff(names(arglist), c("na_worst", "ties_method",
-                                              "levels", "model_name",
+                                              "levels", "modname",
                                               "setid"))
     if (length(invalid_list) > 0L) {
       stop(paste("Invalid arguments:", paste(invalid_list, collapse = ", ")))
@@ -110,8 +110,8 @@
     # Check levels
     .validate_levels(arglist[["levels"]])
 
-    # Check model_name
-    .validate_model_name(arglist[["model_name"]])
+    # Check modname
+    .validate_modname(arglist[["modname"]])
 
     # Check setid
     .validate_setid(arglist[["setid"]])

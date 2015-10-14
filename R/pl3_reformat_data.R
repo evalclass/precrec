@@ -4,12 +4,12 @@
 reformat_data <- function(scores, labels, na_worst = TRUE,
                           ties_method = "equiv",
                           levels = c("negative", "positive"),
-                          model_name = as.character(NA), setid = 1L, ...) {
+                          modname = as.character(NA), setid = 1L, ...) {
 
   # === Validate input arguments ===
   .validate_reformat_data_args(NULL, NULL, scores, labels, na_worst = na_worst,
                                ties_method = ties_method, levels = levels,
-                               model_name = model_name, setid = setid, ...)
+                               modname = modname, setid = setid, ...)
 
   # === Reformat input data ===
   # Get score ranks and sorted indices
@@ -30,12 +30,12 @@ reformat_data <- function(scores, labels, na_worst = TRUE,
                      class = "fmdat")
 
   # Set attributes
-  attr(s3obj, "model_name") <- model_name
+  attr(s3obj, "modname") <- modname
   attr(s3obj, "setid") <- setid
   attr(s3obj, "nn") <- fmtlabs[["nn"]]
   attr(s3obj, "np") <- fmtlabs[["np"]]
   attr(s3obj, "args") <- list(na_worst = na_worst, ties_method = ties_method,
-                              levels = levels, model_name = model_name,
+                              levels = levels, modname = modname,
                               setid = setid)
   attr(s3obj, "validated") <- FALSE
 

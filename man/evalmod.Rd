@@ -5,7 +5,7 @@
 \title{Evaluate a single model}
 \usage{
 evalmod(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
-  model_name = as.character(NA), setid = 1L, na_worst = TRUE,
+  modname = as.character(NA), setid = 1L, na_worst = TRUE,
   ties_method = "equiv", levels = c("negative", "positive"))
 }
 \arguments{
@@ -14,7 +14,7 @@ evalmod(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
   \itemize{
     \item \code{scores}
     \item \code{labels}
-    \item \code{model_name}
+    \item \code{modname}
     \item \code{setid}
     \item \code{na_worst}
     \item \code{ties_method}
@@ -28,7 +28,7 @@ evalmod(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
 
 \item{labels}{A numeric vector or a factor of observed labels.}
 
-\item{model_name}{A string as the name of the model/classifier.}
+\item{modname}{A string as the name of the model/classifier.}
 
 \item{setid}{A numeric value as a dataset ID.}
 

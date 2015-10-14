@@ -4,8 +4,8 @@
 \alias{mmdata}
 \title{Reformat data for Precision-Recall and ROC evaluation}
 \usage{
-mmdata(scores, labels, model_names = NULL, setids = NULL,
-  expd_first = "model_names", na_worst = TRUE, ties_method = "equiv",
+mmdata(scores, labels, modnames = NULL, setids = NULL,
+  expd_first = "modnames", na_worst = TRUE, ties_method = "equiv",
   levels = c("negative", "positive"), ...)
 }
 \arguments{
@@ -15,7 +15,7 @@ mmdata(scores, labels, model_names = NULL, setids = NULL,
 \item{labels}{A numeric or factor data of observed labels.
   It can be a vector, a matrix, an array, a data frame, or a list.}
 
-\item{model_names}{A character vector as the names
+\item{modnames}{A character vector as the names
   of the models/classifiers.}
 
 \item{setids}{A numeric vector as dataset IDs.}
@@ -24,11 +24,11 @@ mmdata(scores, labels, model_names = NULL, setids = NULL,
   should be expanded first when they are automatically generated.
 
   \describe{
-    \item{"model_names"}{Model names are expanded first. For example,
-           model_names: c("m1", "m2"), setids: c(1, 1)
+    \item{"modnames"}{Model names are expanded first. For example,
+           modnames: c("m1", "m2"), setids: c(1, 1)
            when they are automaticlly generated.}
     \item{"setids"}{Dataset IDs are expanded first. For example,
-           model_names: c("m1", "m1"), setids: c(1, 2)
+           modnames: c("m1", "m1"), setids: c(1, 2)
            when they are automaticlly generated.}
   }}
 

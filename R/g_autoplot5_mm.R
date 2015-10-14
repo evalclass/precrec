@@ -37,7 +37,7 @@
 #' ## Prepare input data
 #' samps <- create_sim_samples(10, 100, 100, "all")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-#'                model_names = samps[["model_names"]],
+#'                modnames = samps[["modnames"]],
 #'                setids = samps[["setids"]])
 #'
 #' ## Generate an mscurve object
@@ -103,10 +103,10 @@ autoplot.mmroc <- function(object, show_ci = TRUE, call_geom_basic = TRUE,
 
   if (show_ci) {
     p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y, ymin = ymin,
-                                          ymax = ymax, color = model_name))
+                                          ymax = ymax, color = modname))
     p <- p + ggplot2::geom_smooth(stat = "identity")
   } else {
-    p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y, color = model_name))
+    p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y, color = modname))
     p <- p + ggplot2::geom_line()
   }
 

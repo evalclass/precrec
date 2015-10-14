@@ -30,7 +30,7 @@ The \code{create_sim_samples} function returns a list
   \itemize{
     \item scores: a list of numeric vectors
     \item labels: a integer vector
-    \item model_names: a character vector of the model names
+    \item modnames: a character vector of the model names
     \item setids: a character vector of the dataset IDs
   }
 }

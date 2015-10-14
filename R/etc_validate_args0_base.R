@@ -93,11 +93,11 @@
 }
 
 #
-# Validate model_name
+# Validate modname
 #
-.validate_model_name <- function(model_name) {
-  if (!is.null(model_name)) {
-    assertthat::assert_that(assertthat::is.string(model_name))
+.validate_modname <- function(modname) {
+  if (!is.null(modname)) {
+    assertthat::assert_that(assertthat::is.string(modname))
   }
 }
 
@@ -126,23 +126,23 @@
 .validate_expd_first <- function(expd_first) {
   if (!is.null(expd_first)) {
     assertthat::assert_that(assertthat::is.string(expd_first),
-                            (expd_first == "model_names"
+                            (expd_first == "modnames"
                              || expd_first == "setids"))
   }
 }
 
 #
-# Validate model_names
+# Validate modnames
 #
-.validate_model_names <- function(model_names, datalen) {
-  if (!is.null(model_names)) {
+.validate_modnames <- function(modnames, datalen) {
+  if (!is.null(modnames)) {
 
-    assertthat::assert_that(is.atomic(model_names), is.vector(model_names),
-                            is.character(model_names),
-                            length(model_names) == datalen)
+    assertthat::assert_that(is.atomic(modnames), is.vector(modnames),
+                            is.character(modnames),
+                            length(modnames) == datalen)
 
-    for (i in 1:length(model_names)) {
-      .validate_model_name(model_names[i])
+    for (i in 1:length(modnames)) {
+      .validate_modname(modnames[i])
     }
   }
 }

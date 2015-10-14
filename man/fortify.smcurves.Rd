@@ -28,7 +28,7 @@ library(ggplot2)
 ## Prepare input data
 samps <- create_sim_samples(10, 100, 100, "poor_er")
 mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-               model_names = samps[["model_names"]],
+               modnames = samps[["modnames"]],
                setids = samps[["setids"]])
 
 ## Convert sscurve object to a data frame

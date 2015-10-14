@@ -8,7 +8,7 @@
 #'   \itemize{
 #'     \item \code{scores}
 #'     \item \code{labels}
-#'     \item \code{model_name}
+#'     \item \code{modname}
 #'     \item \code{setid}
 #'     \item \code{na_worst}
 #'     \item \code{ties_method}
@@ -22,7 +22,7 @@
 #'
 #' @param labels A numeric vector or a factor of observed labels.
 #'
-#' @param model_name A string as the name of the model/classifier.
+#' @param modname A string as the name of the model/classifier.
 #'
 #' @param setid A numeric value as a dataset ID.
 #'
@@ -80,17 +80,17 @@
 #'
 #' @export
 evalmod <- function(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
-                    model_name = as.character(NA), setid = 1L,
+                    modname = as.character(NA), setid = 1L,
                     na_worst = TRUE, ties_method = "equiv",
                     levels = c("negative", "positive")) {
 
-  .validate_evalmod_args(x_interval, model_name, setid, na_worst,
+  .validate_evalmod_args(x_interval, modname, setid, na_worst,
                          ties_method, levels)
 
   if (!missing(mdat)) {
     .validate(mdat)
   } else {
-    mdat <- mmdata(scores, labels, model_names = model_name, setids = setid,
+    mdat <- mmdata(scores, labels, modnames = modname, setids = setid,
                    na_worst = na_worst, ties_method = ties_method, levels = levels)
   }
 
