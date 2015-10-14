@@ -24,7 +24,7 @@
 #' samps <- create_sim_samples(1, 100, 100, "all")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 #'                modnames = samps[["modnames"]],
-#'                setids = samps[["setids"]])
+#'                dsids = samps[["dsids"]])
 #'
 #' ## Convert sscurve object to a data frame
 #' curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)

@@ -28,7 +28,7 @@
 #' samps <- create_sim_samples(10, 100, 100, "poor_er")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 #'                modnames = samps[["modnames"]],
-#'                setids = samps[["setids"]])
+#'                dsids = samps[["dsids"]])
 #'
 #' ## Generate an mscurve object
 #' curves <- evalmod_m(mdat)

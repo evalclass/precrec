@@ -24,7 +24,7 @@
 #' samps <- create_sim_samples(10, 100, 100, "poor_er")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 #'                modnames = samps[["modnames"]],
-#'                setids = samps[["setids"]])
+#'                dsids = samps[["dsids"]])
 #'
 #' ## Convert sscurve object to a data frame
 #' curves <- evalmod_m(mdat)
@@ -60,9 +60,9 @@ fortify.smcurves <- function(model, use_raw = FALSE, ...) {
                    rep("PRC", length(prc_df[["x"]]))))
 
   if (use_raw) {
-    setid <- factor(c(roc_df[["setid"]], prc_df[["setid"]]),
-                    labels = levels(roc_df[["setid"]]))
-    df <- data.frame(x = x, y = y, group = group, setid = setid)
+    dsid <- factor(c(roc_df[["dsid"]], prc_df[["dsid"]]),
+                    labels = levels(roc_df[["dsid"]]))
+    df <- data.frame(x = x, y = y, group = group, dsid = dsid)
 
   } else {
     ymin <- c(roc_df[["ymin"]], prc_df[["ymin"]])
@@ -87,12 +87,12 @@ fortify.smroc <- function(model, use_raw = FALSE, ...) {
   # === Prepare a data frame for ggplot2 ===
   if (use_raw) {
     df <- NULL
-    setids <- attr(model, "setids")
+    dsids <- attr(model, "dsids")
     for (i in seq_along(model)) {
       x = model[[i]][["x"]]
       y = model[[i]][["y"]]
-      setid = factor(rep(setids[i], length(x)), levels = setids)
-      df <- rbind(df, data.frame(x = x, y = y, setid = setid))
+      dsid = factor(rep(dsids[i], length(x)), levels = dsids)
+      df <- rbind(df, data.frame(x = x, y = y, dsid = dsid))
     }
 
   } else {

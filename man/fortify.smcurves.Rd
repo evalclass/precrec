@@ -29,7 +29,7 @@ library(ggplot2)
 samps <- create_sim_samples(10, 100, 100, "poor_er")
 mdat <- mmdata(samps[["scores"]], samps[["labels"]],
                modnames = samps[["modnames"]],
-               setids = samps[["setids"]])
+               dsids = samps[["dsids"]])
 
 ## Convert sscurve object to a data frame
 curves <- evalmod_m(mdat)

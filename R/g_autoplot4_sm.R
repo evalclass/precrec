@@ -38,7 +38,7 @@
 #' samps <- create_sim_samples(10, 100, 100, "poor_er")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 #'                modnames = samps[["modnames"]],
-#'                setids = samps[["setids"]])
+#'                dsids = samps[["dsids"]])
 #'
 #' ## Generate an mscurve object
 #' curves <- evalmod_m(mdat)
@@ -101,7 +101,7 @@ autoplot.smroc <- function(object, show_ci = TRUE, show_raw = FALSE,
 #   print(show_ci)
 
   if (show_raw) {
-    p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y, group = setid))
+    p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y, group = dsid))
     p <- p + ggplot2::geom_line()
 
   } else if (show_ci) {

@@ -5,7 +5,7 @@
 \title{Evaluate a single model with multiple datasets}
 \usage{
 evalmods_m(mdat, x_interval = 0.001, calc_avg = TRUE, ci_level = 0.95,
-  scores = NULL, labels = NULL, modnames = NULL, setids = NULL,
+  scores = NULL, labels = NULL, modnames = NULL, dsids = NULL,
   na_worst = TRUE, ties_method = "equiv", levels = c("negative",
   "positive"))
 }
@@ -16,7 +16,7 @@ evalmods_m(mdat, x_interval = 0.001, calc_avg = TRUE, ci_level = 0.95,
     \item \code{scores}
     \item \code{labels}
     \item \code{modnames}
-    \item \code{setids}
+    \item \code{dsids}
     \item \code{na_worst}
     \item \code{ties_method}
   }}
@@ -34,7 +34,7 @@ evalmods_m(mdat, x_interval = 0.001, calc_avg = TRUE, ci_level = 0.95,
 \item{modnames}{A character vector as the names
   of the models/classifiers.}
 
-\item{setids}{A numeric vector as dataset IDs.}
+\item{dsids}{A numeric vector as dataset IDs.}
 
 \item{na_worst}{A boolean value for controlling the treatment of NAs
   in the scores.
@@ -67,7 +67,7 @@ The \code{evalmods_m} function takes predicted scores and binary lables
 samps <- create_sim_samples(10, 100, 100, "all")
 mdat <- mmdata(samps[["scores"]], samps[["labels"]],
                modnames = samps[["modnames"]],
-               setids = samps[["setids"]])
+               dsids = samps[["dsids"]])
 
 ## Generate an mscurve object
 curves1 <- evalmods_m(mdat)
@@ -75,7 +75,7 @@ curves1 <- evalmods_m(mdat)
 ## Directly specifiy scores and labels
 curves2 <- evalmods_m(scores = samps[["scores"]], labels = samps[["labels"]],
                       modnames = samps[["modnames"]],
-                      setids = samps[["setids"]])
+                      dsids = samps[["dsids"]])
 
 ## Print the summary
 curves2

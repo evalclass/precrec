@@ -21,7 +21,7 @@ create_confmats <- function(fmdat, scores = NULL, labels = NULL,
 
   # Set attributes
   attr(s3obj, "modname") <- attr(fmdat, "modname")
-  attr(s3obj, "setid") <- attr(fmdat, "setid")
+  attr(s3obj, "dsid") <- attr(fmdat, "dsid")
   attr(s3obj, "nn") <- attr(fmdat, "nn")
   attr(s3obj, "np") <- attr(fmdat, "np")
   attr(s3obj, "args") <- list(...)

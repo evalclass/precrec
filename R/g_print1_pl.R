@@ -8,7 +8,7 @@ print.mdat <- function(x, ...) {
 
   for (i in seq(length(x))) {
     cat("    Model name:", attr(x[[i]], "modname"), "\n")
-    cat("    Dataset ID:", attr(x[[i]], "setid"), "\n")
+    cat("    Dataset ID:", attr(x[[i]], "dsid"), "\n")
     cat("    # of positives:", attr(x[[i]], "np"), "\n")
     cat("    # of negatives:", attr(x[[i]], "nn"), "\n")
     cat("    Score ranks:", head(x[[i]][["rank_idx"]]))

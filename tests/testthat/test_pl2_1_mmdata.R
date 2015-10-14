@@ -2,7 +2,7 @@ library(precrec)
 
 context("PL 2: Create mmdata")
 # Test .pmatch_tiesmethod(val),
-#      mmdata(scores, labels, modnames, setids,
+#      mmdata(scores, labels, modnames, dsids,
 #             na_worst, ties_method, levels, ...)
 
 test_that(".pmatch_tiesmethod() returns 'equiv', 'random', 'first'", {
@@ -85,15 +85,15 @@ test_that("mmdata() accepts 'modnames'", {
 
 })
 
-test_that("mmdata() accepts 'setids'", {
+test_that("mmdata() accepts 'dsids'", {
   s1 <- c(1, 2, 3, 4)
   l1 <- c(1, 0, 1, 0)
 
-  mdat <- mmdata(s1, l1, setids = 10)
-  expect_equal(attr(mdat[[1]], "args")[["setid"]], 10)
+  mdat <- mmdata(s1, l1, dsids = 10)
+  expect_equal(attr(mdat[[1]], "args")[["dsid"]], 10)
 
-  expect_err_msg <- function(err_msg, s1, l1, setids) {
-    eval(bquote(expect_error(mmdata(s1, l1, setids = setids), err_msg)))
+  expect_err_msg <- function(err_msg, s1, l1, dsids) {
+    eval(bquote(expect_error(mmdata(s1, l1, dsids = dsids), err_msg)))
   }
 
   err_msg <- "not equal to datalen"
@@ -180,11 +180,11 @@ test_that("mmdata() accepts 'expd_first", {
 
   mdat1 <- mmdata(scores, labels, expd_first = "modnames")
   expect_equal(attr(mdat1, "modnames"), c("m1", "m2", "m3"))
-  expect_equal(attr(mdat1, "setids"), rep(1, 3))
+  expect_equal(attr(mdat1, "dsids"), rep(1, 3))
 
-  mdat2 <- mmdata(scores, labels, expd_first = "setids")
+  mdat2 <- mmdata(scores, labels, expd_first = "dsids")
   expect_equal(attr(mdat2, "modnames"), rep("m1", 3))
-  expect_equal(attr(mdat2, "setids"), seq(3))
+  expect_equal(attr(mdat2, "dsids"), seq(3))
 })
 
 test_that("'mdat' contains a list", {

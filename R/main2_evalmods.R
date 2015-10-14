@@ -9,7 +9,7 @@
 #'     \item \code{scores}
 #'     \item \code{labels}
 #'     \item \code{modnames}
-#'     \item \code{setids}
+#'     \item \code{dsids}
 #'     \item \code{na_worst}
 #'     \item \code{ties_method}
 #'   }
@@ -27,7 +27,7 @@
 #' @param modnames A character vector as the names
 #'   of the models/classifiers.
 #'
-#' @param setids A numeric vector as dataset IDs.
+#' @param dsids A numeric vector as dataset IDs.
 #'
 #' @param na_worst A boolean value for controlling the treatment of NAs
 #'   in the scores.
@@ -61,7 +61,7 @@
 #' samps <- create_sim_samples(1, 100, 100, "all")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 #'                modnames = samps[["modnames"]],
-#'                setids = samps[["setids"]])
+#'                dsids = samps[["dsids"]])
 #'
 #' ## Generate an mscurve object
 #' curves1 <- evalmods(mdat)
@@ -86,18 +86,18 @@
 #'
 #' @export
 evalmods <- function(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
-                     modnames = NULL, setids = NULL, na_worst = TRUE,
+                     modnames = NULL, dsids = NULL, na_worst = TRUE,
                      ties_method = "equiv",
                      levels = c("negative", "positive")) {
 
-  .validate_evalmods_args(x_interval, modnames, setids, na_worst,
+  .validate_evalmods_args(x_interval, modnames, dsids, na_worst,
                           ties_method, levels)
 
   if (!missing(mdat)) {
     .validate(mdat)
   } else {
     mdat <- mmdata(scores, labels, modnames = modnames,
-                   setids = setids, na_worst = na_worst,
+                   dsids = dsids, na_worst = na_worst,
                    ties_method = ties_method, levels = levels)
   }
 

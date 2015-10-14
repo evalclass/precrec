@@ -24,7 +24,7 @@ ft5_create_curves <- function() {
   l3 <- c(1, 1, 0, 1)
   labels <- join_labels(l1, l2, l3)
 
-  mdat <- mmdata(scores, labels, expd_first = "setids")
+  mdat <- mmdata(scores, labels, expd_first = "dsids")
   evalmods_m(mdat)
 }
 

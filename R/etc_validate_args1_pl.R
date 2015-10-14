@@ -13,9 +13,9 @@
   }
 
   # Check data type
-  setids <- attr(mdat, "setids")
+  dsids <- attr(mdat, "dsids")
   if (data_type == "single") {
-    assertthat::assert_that(length(unique(setids)) == 1L)
+    assertthat::assert_that(length(unique(dsids)) == 1L)
   }
 
   # Check x_interval
@@ -57,7 +57,7 @@
 #
 # Validate arguments of mmdata()
 #
-.validate_mmdata_args <- function(lscores, llabels, modnames, setids,
+.validate_mmdata_args <- function(lscores, llabels, modnames, dsids,
                                   expd_first, na_worst, ties_method, levels) {
 
   # Check lscores and llabels
@@ -70,7 +70,7 @@
   .validate_modnames(modnames, length(lscores))
 
   # Check dataset IDs
-  .validate_setids(setids, length(lscores))
+  .validate_dsids(dsids, length(lscores))
 
   # Check expd_first
   .validate_expd_first(expd_first)
@@ -96,7 +96,7 @@
   if (!is.null(names(arglist))){
     invalid_list <- setdiff(names(arglist), c("na_worst", "ties_method",
                                               "levels", "modname",
-                                              "setid"))
+                                              "dsid"))
     if (length(invalid_list) > 0L) {
       stop(paste("Invalid arguments:", paste(invalid_list, collapse = ", ")))
     }
@@ -113,8 +113,8 @@
     # Check modname
     .validate_modname(arglist[["modname"]])
 
-    # Check setid
-    .validate_setid(arglist[["setid"]])
+    # Check dsid
+    .validate_dsid(arglist[["dsid"]])
 
   }
 

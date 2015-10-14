@@ -102,11 +102,11 @@
 }
 
 #
-# Validate setid
+# Validate dsid
 #
-.validate_setid <- function(setid) {
-  if (!is.null(setid)) {
-    assertthat::assert_that(assertthat::is.number(setid))
+.validate_dsid <- function(dsid) {
+  if (!is.null(dsid)) {
+    assertthat::assert_that(assertthat::is.number(dsid))
   }
 }
 
@@ -127,7 +127,7 @@
   if (!is.null(expd_first)) {
     assertthat::assert_that(assertthat::is.string(expd_first),
                             (expd_first == "modnames"
-                             || expd_first == "setids"))
+                             || expd_first == "dsids"))
   }
 }
 
@@ -148,18 +148,18 @@
 }
 
 #
-# Validate setids
+# Validate dsids
 #
-.validate_setids <- function(setids, datalen) {
-  if (!is.null(setids)) {
+.validate_dsids <- function(dsids, datalen) {
+  if (!is.null(dsids)) {
 
-    assertthat::assert_that(is.atomic(setids), is.vector(setids),
-                            (is.character(setids) || is.numeric(setids)),
-                            assertthat::noNA(setids),
-                            length(setids) == datalen)
+    assertthat::assert_that(is.atomic(dsids), is.vector(dsids),
+                            (is.character(dsids) || is.numeric(dsids)),
+                            assertthat::noNA(dsids),
+                            length(dsids) == datalen)
 
-    for (i in 1:length(setids)) {
-      .validate_setid(setids[i])
+    for (i in 1:length(dsids)) {
+      .validate_dsid(dsids[i])
     }
   }
 }

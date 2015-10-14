@@ -36,11 +36,11 @@ print.mmprc <- function(x, ...) {
   .validate(x)
 
   # === Print summary ===
-  setid <- NA
+  dsid <- NA
   for (i in seq_along(x)) {
-    if (is.na(setid) || setid != attr(x[[i]], "setid")) {
-      cat("    Dataset ID:", attr(x[[i]], "setid"), "\n\n")
-      setid <- attr(x[[i]], "setid")
+    if (is.na(dsid) || dsid != attr(x[[i]], "dsid")) {
+      cat("    Dataset ID:", attr(x[[i]], "dsid"), "\n\n")
+      dsid <- attr(x[[i]], "dsid")
     }
     cat("      Model name:", attr(x[[i]], "modname"), "\n")
     cat("        AUC:", attr(x[[i]], "auc"), "\n\n")

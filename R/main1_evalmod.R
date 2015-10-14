@@ -9,7 +9,7 @@
 #'     \item \code{scores}
 #'     \item \code{labels}
 #'     \item \code{modname}
-#'     \item \code{setid}
+#'     \item \code{dsid}
 #'     \item \code{na_worst}
 #'     \item \code{ties_method}
 #'   }
@@ -24,7 +24,7 @@
 #'
 #' @param modname A string as the name of the model/classifier.
 #'
-#' @param setid A numeric value as a dataset ID.
+#' @param dsid A numeric value as a dataset ID.
 #'
 #' @param na_worst A boolean value for controlling the treatment of NAs
 #'   in the scores.
@@ -80,17 +80,17 @@
 #'
 #' @export
 evalmod <- function(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
-                    modname = as.character(NA), setid = 1L,
+                    modname = as.character(NA), dsid = 1L,
                     na_worst = TRUE, ties_method = "equiv",
                     levels = c("negative", "positive")) {
 
-  .validate_evalmod_args(x_interval, modname, setid, na_worst,
+  .validate_evalmod_args(x_interval, modname, dsid, na_worst,
                          ties_method, levels)
 
   if (!missing(mdat)) {
     .validate(mdat)
   } else {
-    mdat <- mmdata(scores, labels, modnames = modname, setids = setid,
+    mdat <- mmdata(scores, labels, modnames = modname, dsids = dsid,
                    na_worst = na_worst, ties_method = ties_method, levels = levels)
   }
 
