@@ -134,7 +134,7 @@
   }
 
   # Validate class items and attributes
-  item_names <- c("pos_num", "neg_num", "error", "accuracy", "specificity",
+  item_names <- c("threshold", "error", "accuracy", "specificity",
                   "sensitivity", "precision")
   attr_names <- c("modname", "dsid", "nn", "np", "args", "cpp_errmsg",
                   "src", "validated")
@@ -145,7 +145,8 @@
 
   # Check values of class items
   n <- length(pevals[["error"]])
-  if (length(pevals[["accuracy"]]) != n || length(pevals[["specificity"]]) != n
+  if (length(pevals[["accuracy"]]) != n
+      || length(pevals[["specificity"]]) != n
       || length(pevals[["sensitivity"]]) != n
       || length(pevals[["precision"]]) != n) {
     stop("All evaluation vectors must be the same length")
@@ -153,13 +154,13 @@
 
   # Error rate
   assertthat::assert_that(is.atomic(pevals[["error"]]),
-            is.vector(pevals[["error"]]),
-            is.numeric(pevals[["error"]]))
+                          is.vector(pevals[["error"]]),
+                          is.numeric(pevals[["error"]]))
 
   # Accuracy
   assertthat::assert_that(is.atomic(pevals[["accuracy"]]),
-            is.vector(pevals[["accuracy"]]),
-            is.numeric(pevals[["accuracy"]]))
+                          is.vector(pevals[["accuracy"]]),
+                          is.numeric(pevals[["accuracy"]]))
 
   # Error rate & Arruracy
   assertthat::assert_that(pevals[["error"]][1] + pevals[["accuracy"]][1] == 1,

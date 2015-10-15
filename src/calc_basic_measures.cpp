@@ -13,13 +13,15 @@ Rcpp::List calc_basic_measures(int np,
 
   // Variables
   Rcpp::List ret_val;
+  Rcpp::DataFrame df;
   std::string errmsg = "";
-  int n = tps.size();             // Input data size
-  std::vector<double> errrate(n); // Error-rate
-  std::vector<double> acc(n);     // Accuracy
-  std::vector<double> sp(n);      // Specificity
-  std::vector<double> sn(n);      // Sensitivity
-  std::vector<double> prec(n);    // Precision
+  int n = tps.size();               // Input data size
+  std::vector<double> threshold(n); // Error-rate
+  std::vector<double> errrate(n);   // Error-rate
+  std::vector<double> acc(n);       // Accuracy
+  std::vector<double> sp(n);        // Specificity
+  std::vector<double> sn(n);        // Sensitivity
+  std::vector<double> prec(n);      // Precision
 
   // Vector size must be >1
   if (n < 2) {
@@ -31,6 +33,7 @@ Rcpp::List calc_basic_measures(int np,
   // Calcualte evaluation measures for all thresholds
   // n should be >1
   for (int i = 0; i < n; ++i) {
+    threshold[i] = i / n;
     errrate[i] = (fps[i] + fns[i]) / (np + nn);
     acc[i] = 1 - errrate[i];
     sp[i] = tns[i] / nn;
@@ -44,13 +47,14 @@ Rcpp::List calc_basic_measures(int np,
   prec[0] = prec[1];
 
   // Return a list with P, N, and basic evaluation measures
-  ret_val["pos_num"] = np;
-  ret_val["neg_num"] = nn;
-  ret_val["error"] = errrate;
-  ret_val["accuracy"] = acc;
-  ret_val["specificity"] = sp;
-  ret_val["sensitivity"] = sn;
-  ret_val["precision"] = prec;
+  df["threshold"] = threshold;
+  df["error"] = errrate;
+  df["accuracy"] = acc;
+  df["specificity"] = sp;
+  df["sensitivity"] = sn;
+  df["precision"] = prec;
+
+  ret_val["basic"] = df;
   ret_val["errmsg"] = errmsg;
 
   return ret_val;

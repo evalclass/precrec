@@ -11,15 +11,13 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
 
   # === Create confusion matrices for all possible threshold values ===
   # Call a cpp function via Rcpp interface
-  pevals <- calc_basic_measures(cmats[["pos_num"]], cmats[["neg_num"]],
+  pevals <- calc_basic_measures(attr(cmats, "np"), attr(cmats, "nn"),
                                 cmats[["tp"]], cmats[["fp"]],
                                 cmats[["tn"]], cmats[["fn"]])
   .check_cpp_func_error(pevals, "calc_basic_measures")
 
   # === Create an S3 object ===
-  cpp_errmsg <- pevals[["errmsg"]]
-  pevals[["errmsg"]] <- NULL
-  s3obj <- structure(pevals, class = "pevals")
+  s3obj <- structure(pevals[["basic"]], class = "pevals")
 
   # Set attributes
   attr(s3obj, "modname") <- attr(cmats, "modname")
@@ -27,7 +25,7 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
   attr(s3obj, "nn") <- attr(cmats, "nn")
   attr(s3obj, "np") <- attr(cmats, "np")
   attr(s3obj, "args") <- list(...)
-  attr(s3obj, "cpp_errmsg") <- cpp_errmsg
+  attr(s3obj, "cpp_errmsg") <- pevals[["errmsg"]]
   attr(s3obj, "src") <- cmats
   attr(s3obj, "validated") <- FALSE
 

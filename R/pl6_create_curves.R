@@ -38,8 +38,9 @@ create_curves <- function(pevals, x_interval = 0.001, scores = NULL,
 #
 # Create a ROC curve
 #
-create_roc <- function(pevals, x_interval = 0.001, scores = NULL, labels = NULL,
-                       keep_cmats = FALSE, ...) {
+create_roc <- function(pevals, x_interval = 0.001, scores = NULL,
+                       labels = NULL, keep_cmats = FALSE, ...) {
+
   # === Create a ROC curve ===
   .create_curve("specificity", "sensitivity", create_roc_curve,
                 "create_roc_curve", "roc_curve", pevals, x_interval,
@@ -79,7 +80,7 @@ create_prc <- function(pevals, x_interval = 0.001, scores = NULL, labels = NULL,
   .check_cpp_func_error(crv, func_name)
 
   # Calculate AUC
-  auc <- calc_auc(crv[["x"]], crv[["y"]])
+  auc <- calc_auc(crv[["curve"]][["x"]], crv[["curve"]][["y"]])
   if (auc[["errmsg"]] == "invalid-x-vals") {
     warning(paste0("Invalid ", x_name,
                    " values detected. AUC can be inaccurate."))
@@ -92,10 +93,7 @@ create_prc <- function(pevals, x_interval = 0.001, scores = NULL, labels = NULL,
   }
 
   # === Create an S3 object ===
-  cpp_errmsg1 <- crv[["errmsg"]]
-  cpp_errmsg2 <- auc[["errmsg"]]
-  crv[["errmsg"]] <- NULL
-  s3obj <- structure(crv, class = class_name)
+  s3obj <- structure(crv[["curve"]], class = class_name)
 
   # Set attributes
   attr(s3obj, "modname") <- attr(pevals, "modname")
@@ -108,8 +106,8 @@ create_prc <- function(pevals, x_interval = 0.001, scores = NULL, labels = NULL,
   attr(s3obj, "x_limits") <- c(0, 1)
   attr(s3obj, "y_limits") <- c(0, 1)
   attr(s3obj, "args") <- c(list(x_interval = x_interval), list(...))
-  attr(s3obj, "cpp_errmsg1") <- cpp_errmsg1
-  attr(s3obj, "cpp_errmsg2") <- cpp_errmsg2
+  attr(s3obj, "cpp_errmsg1") <- crv[["errmsg"]]
+  attr(s3obj, "cpp_errmsg2") <- auc[["errmsg"]]
   attr(s3obj, "src") <- pevals
   attr(s3obj, "validated") <- FALSE
 

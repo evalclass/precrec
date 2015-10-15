@@ -111,15 +111,12 @@ test_that("'pevals' contains a list with 7 items", {
   pevals <- calc_measures(scores = c(0.1, 0.2, 0), labels = c(1, 0, 1))
 
   expect_true(is.list(pevals))
-  expect_equal(length(pevals), 7)
+  expect_equal(length(pevals), 6)
 })
 
 test_that("calc_measures() reterns correct evaluation values", {
   pevals <- calc_measures(scores = c(0.1, 0.2, 0, 0.3),
                           labels = c(1, 0, 0, 1))
-
-  expect_equal(pevals[["pos_num"]], 2)
-  expect_equal(pevals[["neg_num"]], 2)
 
 #   "TPs" c(0, 1, 1, 2, 2)
 #   "FNs" c(2, 1, 1, 0, 0)

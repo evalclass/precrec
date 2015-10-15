@@ -20,13 +20,15 @@ calc_avg <- function(curves, modnames, dsids, x_interval, ci_level) {
   ffunc <- function(mname) {
     curves[modnames == mname]
   }
-  fcurves <- lapply(uniq_modnames, ffunc)
+  curves_by_model <- lapply(uniq_modnames, ffunc)
 
   # Summarize curves
   vfunc <- function(i) {
-    calc_avg_curve(fcurves[[i]], x_interval, ci_q)
+    avgs <- calc_avg_curve(curves_by_model[[i]], x_interval, ci_q)
+    .check_cpp_func_error(avgs, "calc_avg_curve")
+    avgs[["avg"]]
   }
-  avgcurves <- lapply(seq_along(fcurves), vfunc)
+  avgcurves <- lapply(seq_along(curves_by_model), vfunc)
 
   # === Create an S3 object ===
   s3obj <- structure(avgcurves, class = "avgcurves")
