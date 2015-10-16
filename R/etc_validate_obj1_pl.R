@@ -37,7 +37,7 @@
   # Validate class items and attributes
   item_names <- c("labels", "ranks", "rank_idx")
   attr_names <- c("modname", "dsid", "nn", "np", "args", "validated")
-  arg_names <- c("na_worst", "ties_method", "levels", "modname", "dsid")
+  arg_names <- c("na_worst", "ties_method", "modname", "dsid")
   .validate_basic(fmdat, "fmdat", "reformat_data", item_names, attr_names,
                   arg_names)
 
@@ -80,8 +80,7 @@
   item_names <- c("pos_num", "neg_num", "tp", "fp", "tn", "fn", "ranks")
   attr_names <- c("modname", "dsid", "nn", "np", "args", "cpp_errmsg",
                   "src", "validated")
-  arg_names <- c("na_worst", "ties_method", "levels", "modname", "dsid",
-                 "keep_fmdat")
+  arg_names <- c("na_worst", "ties_method", "modname", "dsid", "keep_fmdat")
   .validate_basic(cmats, "cmats", "create_confmats", item_names, attr_names,
                   arg_names)
 
@@ -138,8 +137,7 @@
                   "sensitivity", "precision")
   attr_names <- c("modname", "dsid", "nn", "np", "args", "cpp_errmsg",
                   "src", "validated")
-  arg_names <- c("na_worst", "ties_method", "levels", "modname", "dsid",
-                 "keep_fmdat")
+  arg_names <- c("na_worst", "ties_method", "modname", "dsid", "keep_fmdat")
   .validate_basic(pevals, "pevals", "calc_measures", item_names, attr_names,
                   arg_names)
 
@@ -231,7 +229,7 @@
   attr_names <- c("modname", "dsid", "nn", "np", "auc", "partial", "pauc",
                   "x_limits", "y_limits", "args", "cpp_errmsg1", "cpp_errmsg2",
                   "src", "validated")
-  arg_names <- c("x_interval", "na_worst", "ties_method", "levels",
+  arg_names <- c("x_interval", "na_worst", "ties_method",
                  "modname", "dsid", "keep_fmdat", "keep_cmats")
   .validate_basic(obj, class_name, func_name, item_names, attr_names,
                   arg_names)

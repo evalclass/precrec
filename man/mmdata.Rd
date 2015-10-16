@@ -5,8 +5,7 @@
 \title{Reformat data for Precision-Recall and ROC evaluation}
 \usage{
 mmdata(scores, labels, modnames = NULL, dsids = NULL,
-  expd_first = "modnames", na_worst = TRUE, ties_method = "equiv",
-  levels = c("negative", "positive"), ...)
+  expd_first = "modnames", na_worst = TRUE, ties_method = "equiv", ...)
 }
 \arguments{
 \item{scores}{A numeric data of predicted scores. It can be a vector,
@@ -46,9 +45,6 @@ mmdata(scores, labels, modnames = NULL, dsids = NULL,
     \item{"random"}{Ties are ranked in an incresing order as appeared}
     \item{"first"}{ Ties are ranked in random order}
   }}
-
-\item{levels}{A character vector to overide the levels of the factor for
-  the labels.}
 
 \item{...}{Not used by this method.}
 }

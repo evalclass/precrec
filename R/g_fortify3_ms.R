@@ -55,8 +55,7 @@ fortify.mscurves <- function(model, ...) {
   prc_df <- ggplot2::fortify(model[["prcs"]])
   x <- c(roc_df[["x"]], prc_df[["x"]])
   y <- c(roc_df[["y"]], prc_df[["y"]])
-  modname <- factor(c(roc_df[["modname"]], prc_df[["modname"]]),
-                    labels = levels(roc_df[["modname"]]))
+  modname <- factor(c(roc_df[["modname"]], prc_df[["modname"]]))
   group = factor(c(rep("ROC", length(roc_df[["x"]])),
                    rep("PRC", length(prc_df[["x"]]))))
 
@@ -79,7 +78,7 @@ fortify.msroc <- function(model, ...) {
   for (i in seq_along(model)) {
     x = model[[i]][["x"]]
     y = model[[i]][["y"]]
-    modname = factor(rep(modnames[i], length(x)), levels = modnames)
+    modname = factor(rep(modnames[i], length(x)))
     df <- rbind(df, data.frame(x = x, y = y, modname = modname))
   }
 

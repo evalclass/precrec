@@ -44,9 +44,6 @@
 #'     \item{"first"}{ Ties are ranked in random order}
 #'   }
 #'
-#' @param levels A character vector to overide the levels of the factor for
-#'   the labels.
-#'
 #' @return The \code{evalmods} function returns an \code{mscurves} S3 object
 #'   that contains ROC and Precision-Recall curves.
 #'
@@ -87,18 +84,17 @@
 #' @export
 evalmods <- function(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
                      modnames = NULL, dsids = NULL, na_worst = TRUE,
-                     ties_method = "equiv",
-                     levels = c("negative", "positive")) {
+                     ties_method = "equiv") {
 
   .validate_evalmods_args(x_interval, modnames, dsids, na_worst,
-                          ties_method, levels)
+                          ties_method)
 
   if (!missing(mdat)) {
     .validate(mdat)
   } else {
     mdat <- mmdata(scores, labels, modnames = modnames,
                    dsids = dsids, na_worst = na_worst,
-                   ties_method = ties_method, levels = levels)
+                   ties_method = ties_method)
   }
 
   pl_main(mdat, model_type = "multiple", data_type = "single",

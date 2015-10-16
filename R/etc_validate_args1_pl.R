@@ -58,7 +58,7 @@
 # Validate arguments of mmdata()
 #
 .validate_mmdata_args <- function(lscores, llabels, modnames, dsids,
-                                  expd_first, na_worst, ties_method, levels) {
+                                  expd_first, na_worst, ties_method) {
 
   # Check lscores and llabels
   if (length(llabels) != 1 && length(lscores) != length(llabels)) {
@@ -81,9 +81,6 @@
   # Check ties_method
   .validate_ties_method(ties_method)
 
-  # Check levels
-  .validate_levels(levels)
-
 }
 
 #
@@ -95,8 +92,7 @@
   arglist <- list(...)
   if (!is.null(names(arglist))){
     invalid_list <- setdiff(names(arglist), c("na_worst", "ties_method",
-                                              "levels", "modname",
-                                              "dsid"))
+                                              "modname", "dsid"))
     if (length(invalid_list) > 0L) {
       stop(paste("Invalid arguments:", paste(invalid_list, collapse = ", ")))
     }
@@ -106,9 +102,6 @@
 
     # Check ties_method
     .validate_ties_method(arglist[["ties_method"]])
-
-    # Check levels
-    .validate_levels(arglist[["levels"]])
 
     # Check modname
     .validate_modname(arglist[["modname"]])

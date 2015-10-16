@@ -82,17 +82,6 @@
 }
 
 #
-# Validate levels
-#
-.validate_levels <- function(levels) {
-  if (!is.null(levels)) {
-    assertthat::assert_that(is.atomic(levels),
-                            is.character(levels),
-                            length(unique(levels)) == 2L)
-  }
-}
-
-#
 # Validate modname
 #
 .validate_modname <- function(modname) {

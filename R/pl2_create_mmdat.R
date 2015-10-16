@@ -41,9 +41,6 @@
 #'     \item{"first"}{ Ties are ranked in random order}
 #'   }
 #'
-#' @param levels A character vector to overide the levels of the factor for
-#'   the labels.
-#'
 #' @param ... Not used by this method.
 #'
 #' @return The \code{mmdata} function returns an \code{mdat} S3 object
@@ -70,8 +67,7 @@
 #' @export
 mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
                    expd_first = "modnames", na_worst = TRUE,
-                   ties_method = "equiv",
-                   levels = c("negative", "positive"), ...) {
+                   ties_method = "equiv", ...) {
 
   # === Join datasets ===
   lscores <- join_scores(scores)
@@ -81,7 +77,7 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   expd_first <- .pmatch_expd_first(expd_first)
   .validate_mmdata_args(lscores, llabels, modnames, dsids,
                         expd_first = "modnames", na_worst = na_worst,
-                        ties_method = ties_method, levels = levels)
+                        ties_method = ties_method)
 
   # Replicate labels
   if (length(lscores) != 1 && length(llabels) == 1) {
@@ -97,7 +93,7 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   # === Reformat input data ===
   func_fmdat <- function(i) {
     reformat_data(lscores[[i]], llabels[[i]], na_worst = na_worst,
-                  ties_method = ties_method, levels = levels,
+                  ties_method = ties_method,
                   modname = new_modnames[i], dsid = new_dsids[i],
                   ...)
   }
@@ -110,8 +106,7 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   attr(s3obj, "modnames") <- new_modnames
   attr(s3obj, "dsids") <- new_dsids
   attr(s3obj, "args") <- list(na_worst = na_worst,
-                              ties_method = ties_method,
-                              levels = levels)
+                              ties_method = ties_method)
   attr(s3obj, "validated") <- FALSE
 
   # Call .validate.mdat()

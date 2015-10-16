@@ -6,8 +6,7 @@
 \usage{
 evalmods_m(mdat, x_interval = 0.001, calc_avg = TRUE, ci_level = 0.95,
   scores = NULL, labels = NULL, modnames = NULL, dsids = NULL,
-  na_worst = TRUE, ties_method = "equiv", levels = c("negative",
-  "positive"))
+  na_worst = TRUE, ties_method = "equiv")
 }
 \arguments{
 \item{mdat}{An \code{mdat} object created by \code{\link{mmdata}}.
@@ -50,9 +49,6 @@ evalmods_m(mdat, x_interval = 0.001, calc_avg = TRUE, ci_level = 0.95,
     \item{"random"}{Ties are ranked in an incresing order as appeared}
     \item{"first"}{ Ties are ranked in random order}
   }}
-
-\item{levels}{A character vector to overide the levels of the factor for
-  the labels.}
 }
 \value{
 The \code{evalmods_m} function returns an \code{smcurves} S3 object

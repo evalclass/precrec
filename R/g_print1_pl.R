@@ -20,9 +20,6 @@ print.mdat <- function(x, ...) {
     if (length(x[[i]][["labels"]]) > 6) {
       cat(" ...")
     }
-    cat("\n")
-    cat("    Factor levels:", levels(x[[i]][["labels"]]), "\n")
-    cat("\n")
   }
 
 }

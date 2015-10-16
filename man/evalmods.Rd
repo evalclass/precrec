@@ -5,8 +5,7 @@
 \title{Evaluate multiple models}
 \usage{
 evalmods(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
-  modnames = NULL, dsids = NULL, na_worst = TRUE, ties_method = "equiv",
-  levels = c("negative", "positive"))
+  modnames = NULL, dsids = NULL, na_worst = TRUE, ties_method = "equiv")
 }
 \arguments{
 \item{mdat}{An \code{mdat} object created by \code{\link{mmdata}}.
@@ -49,9 +48,6 @@ evalmods(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
     \item{"random"}{Ties are ranked in an incresing order as appeared}
     \item{"first"}{ Ties are ranked in random order}
   }}
-
-\item{levels}{A character vector to overide the levels of the factor for
-  the labels.}
 }
 \value{
 The \code{evalmods} function returns an \code{mscurves} S3 object

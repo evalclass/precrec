@@ -2,7 +2,7 @@
 # Validate arguments of evalmod()
 #
 .validate_evalmod_args <- function(x_interval, modname, dsid,
-                                   na_worst, ties_method, levels) {
+                                   na_worst, ties_method) {
 
   # Check x_interval
   .validate_x_interval(x_interval)
@@ -18,16 +18,13 @@
 
   # Check ties_method
   .validate_ties_method(ties_method)
-
-  # Check levels
-  .validate_levels(levels)
 }
 
 #
 # Validate arguments of evalmods()
 #
 .validate_evalmods_args <- function(x_interval, modnames, dsids,
-                                    na_worst, ties_method, levels) {
+                                    na_worst, ties_method) {
 
   # Check x_interval
   .validate_x_interval(x_interval)
@@ -43,27 +40,24 @@
 
   # Check ties_method
   .validate_ties_method(ties_method)
-
-  # Check levels
-  .validate_levels(levels)
 }
 
 #
 # Validate arguments of evalmod_m()
 #
 .validate_evalmod_m_args <- function(x_interval, calc_avg, ci_level, modnames,
-                                     dsids, na_worst, ties_method, levels) {
+                                     dsids, na_worst, ties_method) {
 
   .validate_evalmods_args(x_interval, modnames, dsids,
-                          na_worst, ties_method, levels)
+                          na_worst, ties_method)
 }
 
 #
 # Validate arguments of evalmods_m()
 #
 .validate_evalmods_m_args <- function(x_interval, calc_avg, ci_level, modnames,
-                                      dsids, na_worst, ties_method, levels) {
+                                      dsids, na_worst, ties_method) {
 
   .validate_evalmods_args(x_interval, modnames, dsids,
-                          na_worst, ties_method, levels)
+                          na_worst, ties_method)
 }

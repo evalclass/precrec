@@ -60,8 +60,7 @@ fortify.smcurves <- function(model, use_raw = FALSE, ...) {
                    rep("PRC", length(prc_df[["x"]]))))
 
   if (use_raw) {
-    dsid <- factor(c(roc_df[["dsid"]], prc_df[["dsid"]]),
-                    labels = levels(roc_df[["dsid"]]))
+    dsid <- factor(c(roc_df[["dsid"]], prc_df[["dsid"]]))
     df <- data.frame(x = x, y = y, group = group, dsid = dsid)
 
   } else {
@@ -91,7 +90,7 @@ fortify.smroc <- function(model, use_raw = FALSE, ...) {
     for (i in seq_along(model)) {
       x = model[[i]][["x"]]
       y = model[[i]][["y"]]
-      dsid = factor(rep(dsids[i], length(x)), levels = dsids)
+      dsid = factor(rep(dsids[i], length(x)))
       df <- rbind(df, data.frame(x = x, y = y, dsid = dsid))
     }
 

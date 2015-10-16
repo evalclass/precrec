@@ -41,9 +41,6 @@
 #'     \item{"first"}{ Ties are ranked in random order}
 #'   }
 #'
-#' @param levels A character vector to overide the levels of the factor for
-#'   the labels.
-#'
 #' @seealso \code{\link{plot.sscurves}}, \code{\link{autoplot.sscurves}},
 #'   and \code{\link{fortify.sscurves}} for plotting curves.
 #'   \code{\link{join_scores}}, \code{\link{join_scores}},
@@ -81,17 +78,16 @@
 #' @export
 evalmod <- function(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
                     modname = as.character(NA), dsid = 1L,
-                    na_worst = TRUE, ties_method = "equiv",
-                    levels = c("negative", "positive")) {
+                    na_worst = TRUE, ties_method = "equiv") {
 
   .validate_evalmod_args(x_interval, modname, dsid, na_worst,
-                         ties_method, levels)
+                         ties_method)
 
   if (!missing(mdat)) {
     .validate(mdat)
   } else {
     mdat <- mmdata(scores, labels, modnames = modname, dsids = dsid,
-                   na_worst = na_worst, ties_method = ties_method, levels = levels)
+                   na_worst = na_worst, ties_method = ties_method)
   }
 
   pl_main(mdat, model_type = "single", data_type = "single",

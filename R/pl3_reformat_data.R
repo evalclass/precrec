@@ -3,12 +3,11 @@
 #
 reformat_data <- function(scores, labels, na_worst = TRUE,
                           ties_method = "equiv",
-                          levels = c("negative", "positive"),
                           modname = as.character(NA), dsid = 1L, ...) {
 
   # === Validate input arguments ===
   .validate_reformat_data_args(NULL, NULL, scores, labels, na_worst = na_worst,
-                               ties_method = ties_method, levels = levels,
+                               ties_method = ties_method,
                                modname = modname, dsid = dsid, ...)
 
   # === Reformat input data ===
@@ -21,7 +20,7 @@ reformat_data <- function(scores, labels, na_worst = TRUE,
   rank_idx <- sranks[["rank_idx"]]
 
   # Get a factor with "positive" and "negative"
-  fmtlabs <- .factor_labels(labels, levels, validate = FALSE)
+  fmtlabs <- .factor_labels(labels, validate = FALSE)
 
   # === Create an S3 object ===
   s3obj <- structure(list(labels = fmtlabs[["labels"]],
@@ -35,7 +34,7 @@ reformat_data <- function(scores, labels, na_worst = TRUE,
   attr(s3obj, "nn") <- fmtlabs[["nn"]]
   attr(s3obj, "np") <- fmtlabs[["np"]]
   attr(s3obj, "args") <- list(na_worst = na_worst, ties_method = ties_method,
-                              levels = levels, modname = modname,
+                              modname = modname,
                               dsid = dsid)
   attr(s3obj, "validated") <- FALSE
 
@@ -46,12 +45,10 @@ reformat_data <- function(scores, labels, na_worst = TRUE,
 #
 # Factor labels
 #
-.factor_labels <- function(labels, levels = c("negative", "positive"),
-                           validate = TRUE) {
+.factor_labels <- function(labels, validate = TRUE) {
   # === Validate input arguments ===
   if (validate) {
     .validate_labels(labels)
-    .validate_levels(levels)
   }
 
   # === Generate label factors ===

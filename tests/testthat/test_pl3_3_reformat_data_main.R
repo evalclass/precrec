@@ -2,7 +2,7 @@ library(precrec)
 
 context("PL 3: Reformat input data for evaluation")
 # Test reformat_data(scores, labels,
-#                    na_worst, ties_method, levels, modname)
+#                    na_worst, ties_method, modname)
 
 test_that("reformat_data() reterns a 'fmdat' object", {
   fmdat1 <- reformat_data(c(0.1, 0.2, 0), c(1, 0, 1))
@@ -89,13 +89,6 @@ test_that("reformat_data() accepts 'ties_method'", {
 
 })
 
-# test_that("reformat_data() accepts 'levels'", {
-#   levels <- c("N", "P")
-#   fmdat <- reformat_data(c(0.1, 0.2, 0), c(1, 0, 1), levels = levels)
-#
-#   expect_equal(levels(fmdat[["labels"]]), levels)
-#
-# })
 
 test_that("'fmdat' contains a list with 3 items", {
   fmdat <- reformat_data(c(0.1, 0.2, 0), c(1, 0, 1))

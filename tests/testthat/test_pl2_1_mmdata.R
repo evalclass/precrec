@@ -3,7 +3,7 @@ library(precrec)
 context("PL 2: Create mmdata")
 # Test .pmatch_tiesmethod(val),
 #      mmdata(scores, labels, modnames, dsids,
-#             na_worst, ties_method, levels, ...)
+#             na_worst, ties_method, ...)
 
 test_that(".pmatch_tiesmethod() returns 'equiv', 'random', 'first'", {
   expect_equal(.pmatch_tiesmethod("e"), "equiv")
@@ -143,25 +143,6 @@ test_that("mmdata() accepts 'ties_method'", {
   }
   expect_err_msg(s1, l1, "min")
   expect_err_msg(s1, l1, "max")
-
-})
-
-test_that("mmdata() accepts 'levels'", {
-  s1 <- c(1, 2, 3, 4)
-  l1 <- c(1, 0, 1, 0)
-
-  mdat <- mmdata(s1, l1, levels = c("N", "P"))
-  expect_equal(attr(mdat[[1]], "args")[["levels"]], c("N", "P"))
-
-  expect_err_msg <- function(err_msg, s1, l1, levels) {
-    eval(bquote(expect_error(mmdata(s1, l1, levels = levels), err_msg)))
-  }
-
-  err_msg <- "levels is not a character vector"
-  expect_err_msg(err_msg, s1, l1, c(0, 1))
-
-  err_msg <- "not equal to 2L"
-  expect_err_msg(err_msg, s1, l1, c("N", "P", "P2"))
 
 })
 
