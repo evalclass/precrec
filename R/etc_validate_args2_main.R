@@ -1,59 +1,63 @@
 #
 # Validate arguments of evalmod()
 #
-.validate_evalmod_args <- function(x_interval, model_name, setid,
-                                   na.last, ties.method, levels) {
+.validate_evalmod_args <- function(x_interval, modname, dsid,
+                                   na_worst, ties_method) {
 
   # Check x_interval
   .validate_x_interval(x_interval)
 
   # Check model name
-  .validate_model_name(model_name)
+  .validate_modname(modname)
 
   # Check dataset ID
-  .validate_setid(setid)
+  .validate_dsid(dsid)
 
-  # Check na.last
-  .validate_na_last(na.last)
+  # Check na_worst
+  .validate_na_worst(na_worst)
 
-  # Check ties.method
-  .validate_ties_method(ties.method)
-
-  # Check levels
-  .validate_levels(levels)
+  # Check ties_method
+  .validate_ties_method(ties_method)
 }
 
 #
-# Validate arguments of evalmulti()
+# Validate arguments of evalmods()
 #
-.validate_evalmulti_args <- function(x_interval, model_names, setids,
-                                     na.last, ties.method, levels) {
+.validate_evalmods_args <- function(x_interval, modnames, dsids,
+                                    na_worst, ties_method) {
 
   # Check x_interval
   .validate_x_interval(x_interval)
 
   # Check model names
-  .validate_model_names(model_names, length(model_names))
+  .validate_modnames(modnames, length(modnames))
 
   # Check dataset IDs
-  .validate_setids(setids, length(setids))
+  .validate_dsids(dsids, length(dsids))
 
-  # Check na.last
-  .validate_na_last(na.last)
+  # Check na_worst
+  .validate_na_worst(na_worst)
 
-  # Check ties.method
-  .validate_ties_method(ties.method)
-
-  # Check levels
-  .validate_levels(levels)
+  # Check ties_method
+  .validate_ties_method(ties_method)
 }
 
 #
-# Validate arguments of evalmodm()
+# Validate arguments of evalmod_m()
 #
-.validate_evalmodm_args <- function(x_interval, calc_avg, ci_level, model_names,
-                                    setids, na.last, ties.method, levels) {
+.validate_evalmod_m_args <- function(x_interval, calc_avg, ci_level, modnames,
+                                     dsids, na_worst, ties_method) {
 
-  .validate_evalmulti_args(x_interval, model_names, setids,
-                           na.last, ties.method, levels)
+  .validate_evalmods_args(x_interval, modnames, dsids,
+                          na_worst, ties_method)
+}
+
+#
+# Validate arguments of evalmods_m()
+#
+.validate_evalmods_m_args <- function(x_interval, calc_avg, ci_level, modnames,
+                                      dsids, na_worst, ties_method) {
+
+  .validate_evalmods_args(x_interval, modnames, dsids,
+                          na_worst, ties_method)
 }

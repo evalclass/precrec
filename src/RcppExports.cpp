@@ -89,3 +89,27 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// format_labels
+Rcpp::List format_labels(Rcpp::NumericVector& labels);
+RcppExport SEXP precrec_format_labels(SEXP labelsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector& >::type labels(labelsSEXP);
+    __result = Rcpp::wrap(format_labels(labels));
+    return __result;
+END_RCPP
+}
+// get_score_ranks
+Rcpp::List get_score_ranks(const Rcpp::NumericVector& scores, const bool& na_last, const std::string& ties_method);
+RcppExport SEXP precrec_get_score_ranks(SEXP scoresSEXP, SEXP na_lastSEXP, SEXP ties_methodSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type scores(scoresSEXP);
+    Rcpp::traits::input_parameter< const bool& >::type na_last(na_lastSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type ties_method(ties_methodSEXP);
+    __result = Rcpp::wrap(get_score_ranks(scores, na_last, ties_method));
+    return __result;
+END_RCPP
+}

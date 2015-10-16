@@ -2,7 +2,7 @@
 #include <cmath>
 
 // Prototypes
-void calc_avg_singel(const Rcpp::NumericVector& xs,
+void calc_avg_single(const Rcpp::NumericVector& xs,
                      const Rcpp::NumericVector& ys,
                      double x_interval,
                      int vec_size,
@@ -16,6 +16,7 @@ Rcpp::List calc_avg_curve(const Rcpp::List& curves,
 
   // Variables
   Rcpp::List ret_val;
+  Rcpp::DataFrame df;
   std::string errmsg = "";
 
 
@@ -29,7 +30,7 @@ Rcpp::List calc_avg_curve(const Rcpp::List& curves,
 
   std::vector<double> tot_y(vec_size, 0.0);    // Total of ys
   std::vector<double> stot_y(vec_size, 0.0);   // Total of squared ys
-  std::vector<double> wk_avg_y(vec_size);         // Average
+  std::vector<double> wk_avg_y(vec_size);      // Average
   int n = curves.size();
 
 
@@ -38,10 +39,8 @@ Rcpp::List calc_avg_curve(const Rcpp::List& curves,
   int idx;
   for (int i = 0; i < n; ++i) {
     Rcpp::List c = Rcpp::as<Rcpp::List>(curves[i]);
-    Rcpp::NumericVector xs = Rcpp::as<Rcpp::NumericVector>(c["x"]);
-    Rcpp::NumericVector ys = Rcpp::as<Rcpp::NumericVector>(c["y"]);
 
-    calc_avg_singel(xs, ys, x_interval, vec_size, wk_avg_y);
+    calc_avg_single(c["x"], c["y"], x_interval, vec_size, wk_avg_y);
 
     for (int i = 0; i < vec_size; ++i) {
       tot_y[i] += wk_avg_y[i];
@@ -80,17 +79,18 @@ Rcpp::List calc_avg_curve(const Rcpp::List& curves,
   }
 
   // Return a list
-  ret_val["x"] = x_val;
-  ret_val["y_avg"] = avg_y;
-  ret_val["y_se"] = se_y;
-  ret_val["y_ci_h"] = ci_h_y;
-  ret_val["y_ci_l"] = ci_l_y;
+  df["x"] = x_val;
+  df["y_avg"] = avg_y;
+  df["y_se"] = se_y;
+  df["y_ci_h"] = ci_h_y;
+  df["y_ci_l"] = ci_l_y;
+  ret_val["avg"] = df;
   ret_val["errmsg"] = errmsg;
 
   return ret_val;
 }
 
-void calc_avg_singel(const Rcpp::NumericVector& xs,
+void calc_avg_single(const Rcpp::NumericVector& xs,
                      const Rcpp::NumericVector& ys,
                      double x_interval,
                      int vec_size,

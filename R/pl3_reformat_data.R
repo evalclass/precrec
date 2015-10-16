@@ -1,47 +1,41 @@
 #
 # Reformat input data for Precision-Recall and ROC evaluation
 #
-reformat_data <- function(scores, labels, na.last = FALSE,
-                          ties.method = "average",
-                          levels = c("negative", "positive"),
-                          model_name = as.character(NA), setid = 1L, ...) {
+reformat_data <- function(scores, labels, na_worst = TRUE,
+                          ties_method = "equiv",
+                          modname = as.character(NA), dsid = 1L, ...) {
 
   # === Validate input arguments ===
-  .validate_reformat_data_args(NULL, NULL, scores, labels, na.last = na.last,
-                               ties.method = ties.method, levels = levels,
-                               model_name = model_name, setid = setid, ...)
+  .validate_reformat_data_args(NULL, NULL, scores, labels, na_worst = na_worst,
+                               ties_method = ties_method,
+                               modname = modname, dsid = dsid, ...)
 
   # === Reformat input data ===
   # Get score ranks and sorted indices
-  ranks <- .rank_scores(scores, na.last, ties.method, validate = FALSE)
-  rank_idx <- order(ranks, decreasing = TRUE)
+  #   ranks <- .rank_scores(scores, na_worst, ties_method, validate = FALSE)
+  #   rank_idx <- order(ranks, decreasing = TRUE)
+
+  sranks <- .rank_scores(scores, na_worst, ties_method, validate = FALSE)
+  ranks <- sranks[["ranks"]]
+  rank_idx <- sranks[["rank_idx"]]
 
   # Get a factor with "positive" and "negative"
-  fmtlabs <- .factor_labels(labels, levels, validate = FALSE)
-  num_labs <- table(fmtlabs)
-  if (nlevels(fmtlabs) == 2) {
-    nn <- num_labs[[levels[1]]]
-    np <- num_labs[[levels[2]]]
-  } else {
-    nn <- 0
-    np <- num_labs[[levels[1]]]
-  }
-
+  fmtlabs <- .factor_labels(labels, validate = FALSE)
 
   # === Create an S3 object ===
-  s3obj <- structure(list(labels = fmtlabs,
+  s3obj <- structure(list(labels = fmtlabs[["labels"]],
                           ranks = ranks,
                           rank_idx = rank_idx),
                      class = "fmdat")
 
   # Set attributes
-  attr(s3obj, "model_name") <- model_name
-  attr(s3obj, "setid") <- setid
-  attr(s3obj, "nn") <- nn
-  attr(s3obj, "np") <- np
-  attr(s3obj, "args") <- list(na.last = na.last, ties.method = ties.method,
-                              levels = levels, model_name = model_name,
-                              setid = setid)
+  attr(s3obj, "modname") <- modname
+  attr(s3obj, "dsid") <- dsid
+  attr(s3obj, "nn") <- fmtlabs[["nn"]]
+  attr(s3obj, "np") <- fmtlabs[["np"]]
+  attr(s3obj, "args") <- list(na_worst = na_worst, ties_method = ties_method,
+                              modname = modname,
+                              dsid = dsid)
   attr(s3obj, "validated") <- FALSE
 
   # Call .validate.fmdat()
@@ -51,42 +45,36 @@ reformat_data <- function(scores, labels, na.last = FALSE,
 #
 # Factor labels
 #
-.factor_labels <- function(labels, levels = c("negative", "positive"),
-                           validate = TRUE) {
+.factor_labels <- function(labels, validate = TRUE) {
   # === Validate input arguments ===
   if (validate) {
     .validate_labels(labels)
-    .validate_levels(levels)
   }
 
   # === Generate label factors ===
-  if (!is.factor(labels)) {
-    flabs <- factor(labels, ordered = TRUE)
-  } else {
-    flabs <- rep(labels)
-  }
+  flabels <- format_labels(labels)
+  .check_cpp_func_error(flabels, "format_labels")
 
-  if (nlevels(flabs) != length(levels)) {
-    stop("levels must cotain two unique labels")
-  }
-  levels(flabs) <- levels
-
-  flabs
+  flabels
 }
 
 #
 # Rank scores
 #
-.rank_scores <- function(scores, na.last = FALSE, ties.method = "average",
+.rank_scores <- function(scores, na_worst = TRUE, ties_method = "equiv",
                          validate = TRUE) {
 
   # === Validate input arguments ===
   if (validate) {
     .validate_scores((scores))
-    .validate_na_last(na.last)
-    .validate_ties_method(ties.method)
+    .validate_na_worst(na_worst)
+    .validate_ties_method(ties_method)
   }
 
   # === Create ranks ===
-  ranks <- rank(scores, na.last, ties.method)
+  #   ranks <- rank(scores, na_worst, ties_method)
+  sranks <- get_score_ranks(scores, na_worst, ties_method)
+  .check_cpp_func_error(sranks, "get_score_ranks")
+
+  sranks
 }

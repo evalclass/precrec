@@ -4,9 +4,8 @@
 \alias{mmdata}
 \title{Reformat data for Precision-Recall and ROC evaluation}
 \usage{
-mmdata(scores, labels, model_names = NULL, setids = NULL,
-  expd_first = "model_names", na.last = FALSE, ties.method = "average",
-  levels = c("negative", "positive"), ...)
+mmdata(scores, labels, modnames = NULL, dsids = NULL,
+  expd_first = "modnames", na_worst = TRUE, ties_method = "equiv", ...)
 }
 \arguments{
 \item{scores}{A numeric data of predicted scores. It can be a vector,
@@ -15,40 +14,37 @@ mmdata(scores, labels, model_names = NULL, setids = NULL,
 \item{labels}{A numeric or factor data of observed labels.
   It can be a vector, a matrix, an array, a data frame, or a list.}
 
-\item{model_names}{A character vector as the names
+\item{modnames}{A character vector as the names
   of the models/classifiers.}
 
-\item{setids}{A numeric vector as dataset IDs.}
+\item{dsids}{A numeric vector as dataset IDs.}
 
 \item{expd_first}{Indicate which of the two vaiables - model names or dataset IDs
   should be expanded first when they are automatically generated.
 
   \describe{
-    \item{"model_names"}{Model names are expanded first. For example,
-           model_names: c("m1", "m2"), setids: c(1, 1)
+    \item{"modnames"}{Model names are expanded first. For example,
+           modnames: c("m1", "m2"), dsids: c(1, 1)
            when they are automaticlly generated.}
-    \item{"setids"}{Dataset IDs are expanded first. For example,
-           model_names: c("m1", "m1"), setids: c(1, 2)
+    \item{"dsids"}{Dataset IDs are expanded first. For example,
+           modnames: c("m1", "m1"), dsids: c(1, 2)
            when they are automaticlly generated.}
   }}
 
-\item{na.last}{A boolean value for controlling the treatment of NAs
+\item{na_worst}{A boolean value for controlling the treatment of NAs
   in the scores.
   \describe{
     \item{TRUE}{NAs are treated as the highest score}
     \item{FALSE}{NAs are treated as the lowest score}
   }}
 
-\item{ties.method}{A string for controlling tied scores.
+\item{ties_method}{A string for controlling tied scores.
   Ignored if mdat is set.
   \describe{
     \item{"equiv"}{Ties are equivalently ranked}
     \item{"random"}{Ties are ranked in an incresing order as appeared}
     \item{"first"}{ Ties are ranked in random order}
   }}
-
-\item{levels}{A character vector to overide the levels of the factor for
-  the labels.}
 
 \item{...}{Not used by this method.}
 }

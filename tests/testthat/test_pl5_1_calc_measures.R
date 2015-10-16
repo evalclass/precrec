@@ -45,60 +45,65 @@ test_that("calc_measures() can take arguments for reformat_data()", {
 
   pevals <- calc_measures(scores = c(0.1, 0.2, 0),
                           labels = c(1, 0, 1),
-                          na.last = TRUE,
-                          ties.method = "first")
+                          na_worst = TRUE,
+                          ties_method = "first",
+                          keep_fmdat = TRUE)
 
-  expect_equal(.get_obj_arg(pevals, "fmdat", "na.last"), TRUE)
-  expect_equal(.get_obj_arg(pevals, "fmdat", "ties.method"), "first")
+  expect_equal(.get_obj_arg(pevals, "fmdat", "na_worst"), TRUE)
+  expect_equal(.get_obj_arg(pevals, "fmdat", "ties_method"), "first")
 })
 
 
-test_that("calc_measures() can take na.last argument", {
-  expect_equal_ranks <- function(scores, na.last, ranks) {
+test_that("calc_measures() can take na_worst argument", {
+  expect_equal_ranks <- function(scores, na_worst, ranks) {
     pevals <- calc_measures(scores = scores,
                             labels = c(1, 0, 1),
-                            na.last = na.last)
+                            na_worst = na_worst,
+                            keep_fmdat = TRUE)
 
     fmdat <- .get_obj(pevals, "fmdat")
 
-    eval(bquote(expect_equal(.get_obj_arg(pevals, NULL, "na.last"), na.last)))
-    eval(bquote(expect_equal(.get_obj_arg(fmdat, NULL, "na.last"), na.last)))
+    eval(bquote(expect_equal(.get_obj_arg(pevals, NULL, "na_worst"), na_worst)))
+    eval(bquote(expect_equal(.get_obj_arg(fmdat, NULL, "na_worst"), na_worst)))
     eval(bquote(expect_equal(fmdat[["ranks"]], ranks)))
-    eval(bquote(expect_equal(.rank_scores(scores, na.last = na.last), ranks)))
+
+    sranks <- .rank_scores(scores, na_worst = na_worst)
+    eval(bquote(expect_equal(sranks[["ranks"]], ranks)))
   }
 
   na1_scores <- c(NA, 0.2, 0.1)
   na2_scores <- c(0.2, NA, 0.1)
   na3_scores <- c(0.2, 0.1, NA)
 
-  expect_equal_ranks(na1_scores, TRUE, c(3, 2, 1))
-  expect_equal_ranks(na1_scores, FALSE, c(1, 3, 2))
+  expect_equal_ranks(na1_scores, TRUE, c(3, 1, 2))
+  expect_equal_ranks(na1_scores, FALSE, c(1, 2, 3))
 
-  expect_equal_ranks(na2_scores, TRUE, c(2, 3, 1))
-  expect_equal_ranks(na2_scores, FALSE, c(3, 1, 2))
+  expect_equal_ranks(na2_scores, TRUE, c(1, 3, 2))
+  expect_equal_ranks(na2_scores, FALSE, c(2, 1, 3))
 
-  expect_equal_ranks(na3_scores, TRUE, c(2, 1, 3))
-  expect_equal_ranks(na3_scores, FALSE, c(3, 2, 1))
+  expect_equal_ranks(na3_scores, TRUE, c(1, 2, 3))
+  expect_equal_ranks(na3_scores, FALSE, c(2, 3, 1))
 })
 
-test_that("calc_measures() can take ties.method argument", {
+test_that("calc_measures() can take ties_method argument", {
 
-  expect_equal_ranks <- function(ties.method, ranks) {
+  expect_equal_ranks <- function(ties_method, ranks) {
     pevals <- calc_measures(scores = c(0.1, 0.2, 0.2, 0.2, 0.3),
                             labels = c(1, 0, 1, 1, 1),
-                            ties.method = ties.method)
+                            ties_method = ties_method,
+                            keep_fmdat = TRUE)
 
     fmdat <- .get_obj(pevals, "fmdat")
 
-    eval(bquote(expect_equal(.get_obj_arg(pevals, NULL, "ties.method"),
-                             ties.method)))
-    eval(bquote(expect_equal(.get_obj_arg(fmdat, NULL, "ties.method"),
-                             ties.method)))
+    eval(bquote(expect_equal(.get_obj_arg(pevals, NULL, "ties_method"),
+                             ties_method)))
+    eval(bquote(expect_equal(.get_obj_arg(fmdat, NULL, "ties_method"),
+                             ties_method)))
     eval(bquote(expect_equal(fmdat[["ranks"]], ranks)))
   }
 
-  expect_equal_ranks("average", c(1, 3, 3, 3, 5))
-  expect_equal_ranks("first", c(1, 2, 3, 4, 5))
+  expect_equal_ranks("equiv", c(5, 2, 2, 2, 1))
+  expect_equal_ranks("first", c(5, 2, 3, 4, 1))
 
 })
 
@@ -106,15 +111,12 @@ test_that("'pevals' contains a list with 7 items", {
   pevals <- calc_measures(scores = c(0.1, 0.2, 0), labels = c(1, 0, 1))
 
   expect_true(is.list(pevals))
-  expect_equal(length(pevals), 7)
+  expect_equal(length(pevals), 6)
 })
 
 test_that("calc_measures() reterns correct evaluation values", {
   pevals <- calc_measures(scores = c(0.1, 0.2, 0, 0.3),
                           labels = c(1, 0, 0, 1))
-
-  expect_equal(pevals[["pos_num"]], 2)
-  expect_equal(pevals[["neg_num"]], 2)
 
 #   "TPs" c(0, 1, 1, 2, 2)
 #   "FNs" c(2, 1, 1, 0, 0)

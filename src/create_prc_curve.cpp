@@ -23,6 +23,7 @@ Rcpp::List create_prc_curve(const Rcpp::NumericVector& tps,
 
   // Variables
   Rcpp::List ret_val;
+  Rcpp::DataFrame df;
   std::string errmsg = "";
   int max_n = sn.size() + (1.0 / x_interval);
   std::vector<double> rec(max_n);           // Recall
@@ -61,9 +62,11 @@ Rcpp::List create_prc_curve(const Rcpp::NumericVector& tps,
   prc_orig.resize(n);
 
   // Return a list
-  ret_val["x"] = rec;
-  ret_val["y"] = prec;
-  ret_val["orig_points"] = prc_orig;
+  df["x"] = rec;
+  df["y"] = prec;
+  df["orig_points"] = prc_orig;
+
+  ret_val["curve"] = df;
   ret_val["errmsg"] = errmsg;
 
   return ret_val;

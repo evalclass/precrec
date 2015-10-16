@@ -46,12 +46,6 @@
     } else {
       stop("The first argument must be specified.")
     }
-  } else {
-    arglist <- list(...)
-    if (length(arglist) != 0) {
-      warning(gettextf("%s are ignored",
-                       paste(dQuote(choices), collapse = ", ")))
-    }
   }
 
   obj

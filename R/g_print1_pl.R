@@ -7,8 +7,8 @@ print.mdat <- function(x, ...) {
   cat("\n  Reformated input data\n\n")
 
   for (i in seq(length(x))) {
-    cat("    Model name:", attr(x[[i]], "model_name"), "\n")
-    cat("    Dataset ID:", attr(x[[i]], "setid"), "\n")
+    cat("    Model name:", attr(x[[i]], "modname"), "\n")
+    cat("    Dataset ID:", attr(x[[i]], "dsid"), "\n")
     cat("    # of positives:", attr(x[[i]], "np"), "\n")
     cat("    # of negatives:", attr(x[[i]], "nn"), "\n")
     cat("    Score ranks:", head(x[[i]][["rank_idx"]]))
@@ -20,9 +20,6 @@ print.mdat <- function(x, ...) {
     if (length(x[[i]][["labels"]]) > 6) {
       cat(" ...")
     }
-    cat("\n")
-    cat("    Factor levels:", levels(x[[i]][["labels"]]), "\n")
-    cat("\n")
   }
 
 }
@@ -40,7 +37,7 @@ print.mdat <- function(x, ...) {
     cat("\n")
   }
 
-  cat(indent_space, "Model name:", attr(x, "model_name"), "\n")
+  cat(indent_space, "Model name:", attr(x, "modname"), "\n")
   cat("\n")
 }
 

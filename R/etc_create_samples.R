@@ -25,8 +25,8 @@
 #'   \itemize{
 #'     \item scores: a list of numeric vectors
 #'     \item labels: a integer vector
-#'     \item model_names: a character vector of the model names
-#'     \item setids: a character vector of the dataset IDs
+#'     \item modnames: a character vector of the model names
+#'     \item dsids: a character vector of the dataset IDs
 #'   }
 #'
 #' @examples
@@ -79,8 +79,8 @@ create_sim_samples <- function(n_repeat, np, nn, score_names = "random") {
   # === Make a list ===
   list(scores = scores,
        labels = labels,
-       model_names = rep(score_names, n_repeat),
-       setids = rep(seq(n_repeat), each = length(score_names)))
+       modnames = rep(score_names, n_repeat),
+       dsids = rep(seq(n_repeat), each = length(score_names)))
 }
 
 #

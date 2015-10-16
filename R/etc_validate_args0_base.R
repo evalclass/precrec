@@ -56,57 +56,46 @@
 }
 
 #
-# Validate na.last
+# Validate na_worst
 #
-.validate_na_last <- function(na.last) {
-  if (!is.null(na.last)) {
-    assertthat::assert_that(is.atomic(na.last),
-                            assertthat::is.flag(na.last),
-                            assertthat::noNA(na.last))
+.validate_na_worst <- function(na_worst) {
+  if (!is.null(na_worst)) {
+    assertthat::assert_that(is.atomic(na_worst),
+                            assertthat::is.flag(na_worst),
+                            assertthat::noNA(na_worst))
   }
 }
 
 #
-# Validate ties.method
+# Validate ties_method
 #
-.validate_ties_method <- function(ties.method) {
-  if (!is.null(ties.method)) {
-    assertthat::assert_that(assertthat::is.string(ties.method))
+.validate_ties_method <- function(ties_method) {
+  if (!is.null(ties_method)) {
+    assertthat::assert_that(assertthat::is.string(ties_method))
 
-    choices = c("average", "random", "first")
-    if (!(ties.method %in% choices)) {
-      stop(gettextf("ties.method should be one of %s",
+    choices = c("equiv", "random", "first")
+    if (!(ties_method %in% choices)) {
+      stop(gettextf("ties_method should be one of %s",
                     paste(dQuote(choices), collapse = ", ")))
     }
   }
 }
 
 #
-# Validate levels
+# Validate modname
 #
-.validate_levels <- function(levels) {
-  if (!is.null(levels)) {
-    assertthat::assert_that(is.atomic(levels),
-                            is.character(levels),
-                            length(unique(levels)) == 2L)
+.validate_modname <- function(modname) {
+  if (!is.null(modname)) {
+    assertthat::assert_that(assertthat::is.string(modname))
   }
 }
 
 #
-# Validate model_name
+# Validate dsid
 #
-.validate_model_name <- function(model_name) {
-  if (!is.null(model_name)) {
-    assertthat::assert_that(assertthat::is.string(model_name))
-  }
-}
-
-#
-# Validate setid
-#
-.validate_setid <- function(setid) {
-  if (!is.null(setid)) {
-    assertthat::assert_that(assertthat::is.number(setid))
+.validate_dsid <- function(dsid) {
+  if (!is.null(dsid)) {
+    assertthat::assert_that(assertthat::is.number(dsid))
   }
 }
 
@@ -126,40 +115,40 @@
 .validate_expd_first <- function(expd_first) {
   if (!is.null(expd_first)) {
     assertthat::assert_that(assertthat::is.string(expd_first),
-                            (expd_first == "model_names"
-                             || expd_first == "setids"))
+                            (expd_first == "modnames"
+                             || expd_first == "dsids"))
   }
 }
 
 #
-# Validate model_names
+# Validate modnames
 #
-.validate_model_names <- function(model_names, datalen) {
-  if (!is.null(model_names)) {
+.validate_modnames <- function(modnames, datalen) {
+  if (!is.null(modnames)) {
 
-    assertthat::assert_that(is.atomic(model_names), is.vector(model_names),
-                            is.character(model_names),
-                            length(model_names) == datalen)
+    assertthat::assert_that(is.atomic(modnames), is.vector(modnames),
+                            is.character(modnames),
+                            length(modnames) == datalen)
 
-    for (i in 1:length(model_names)) {
-      .validate_model_name(model_names[i])
+    for (i in 1:length(modnames)) {
+      .validate_modname(modnames[i])
     }
   }
 }
 
 #
-# Validate setids
+# Validate dsids
 #
-.validate_setids <- function(setids, datalen) {
-  if (!is.null(setids)) {
+.validate_dsids <- function(dsids, datalen) {
+  if (!is.null(dsids)) {
 
-    assertthat::assert_that(is.atomic(setids), is.vector(setids),
-                            (is.character(setids) || is.numeric(setids)),
-                            assertthat::noNA(setids),
-                            length(setids) == datalen)
+    assertthat::assert_that(is.atomic(dsids), is.vector(dsids),
+                            (is.character(dsids) || is.numeric(dsids)),
+                            assertthat::noNA(dsids),
+                            length(dsids) == datalen)
 
-    for (i in 1:length(setids)) {
-      .validate_setid(setids[i])
+    for (i in 1:length(dsids)) {
+      .validate_dsid(dsids[i])
     }
   }
 }

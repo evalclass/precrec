@@ -7,15 +7,15 @@
   # Check model type
   .validate_model_type(model_type)
 
-  model_names <- attr(mdat, "model_names")
+  modnames <- attr(mdat, "modnames")
   if (model_type == "single") {
-    assertthat::assert_that(length(unique(model_names)) == 1L)
+    assertthat::assert_that(length(unique(modnames)) == 1L)
   }
 
   # Check data type
-  setids <- attr(mdat, "setids")
+  dsids <- attr(mdat, "dsids")
   if (data_type == "single") {
-    assertthat::assert_that(length(unique(setids)) == 1L)
+    assertthat::assert_that(length(unique(dsids)) == 1L)
   }
 
   # Check x_interval
@@ -57,8 +57,8 @@
 #
 # Validate arguments of mmdata()
 #
-.validate_mmdata_args <- function(lscores, llabels, model_names, setids,
-                                  expd_first, na.last, ties.method, levels) {
+.validate_mmdata_args <- function(lscores, llabels, modnames, dsids,
+                                  expd_first, na_worst, ties_method) {
 
   # Check lscores and llabels
   if (length(llabels) != 1 && length(lscores) != length(llabels)) {
@@ -67,22 +67,19 @@
   }
 
   # Check model names
-  .validate_model_names(model_names, length(lscores))
+  .validate_modnames(modnames, length(lscores))
 
   # Check dataset IDs
-  .validate_setids(setids, length(lscores))
+  .validate_dsids(dsids, length(lscores))
 
   # Check expd_first
   .validate_expd_first(expd_first)
 
-  # Check na.last
-  .validate_na_last(na.last)
+  # Check na_worst
+  .validate_na_worst(na_worst)
 
-  # Check ties.method
-  .validate_ties_method(ties.method)
-
-  # Check levels
-  .validate_levels(levels)
+  # Check ties_method
+  .validate_ties_method(ties_method)
 
 }
 
@@ -94,27 +91,23 @@
   # Check '...'
   arglist <- list(...)
   if (!is.null(names(arglist))){
-    invalid_list <- setdiff(names(arglist), c("na.last", "ties.method",
-                                              "levels", "model_name",
-                                              "setid"))
+    invalid_list <- setdiff(names(arglist), c("na_worst", "ties_method",
+                                              "modname", "dsid"))
     if (length(invalid_list) > 0L) {
       stop(paste("Invalid arguments:", paste(invalid_list, collapse = ", ")))
     }
 
-    # Check na.last
-    .validate_na_last(arglist[["na.last"]])
+    # Check na_worst
+    .validate_na_worst(arglist[["na_worst"]])
 
-    # Check ties.method
-    .validate_ties_method(arglist[["ties.method"]])
+    # Check ties_method
+    .validate_ties_method(arglist[["ties_method"]])
 
-    # Check levels
-    .validate_levels(arglist[["levels"]])
+    # Check modname
+    .validate_modname(arglist[["modname"]])
 
-    # Check model_name
-    .validate_model_name(arglist[["model_name"]])
-
-    # Check setid
-    .validate_setid(arglist[["setid"]])
+    # Check dsid
+    .validate_dsid(arglist[["dsid"]])
 
   }
 

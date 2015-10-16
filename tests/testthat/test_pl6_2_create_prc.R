@@ -47,59 +47,68 @@ test_that("create_prc() can take arguments for reformat_data()", {
 
   prc_curve <- create_prc(scores = c(0.1, 0.2, 0),
                           labels = c(1, 0, 1),
-                          na.last = TRUE,
-                          ties.method = "first")
+                          na_worst = TRUE,
+                          ties_method = "first",
+                          keep_cmats = TRUE,
+                          keep_fmdat = TRUE)
 
-  expect_equal(.get_obj_arg(prc_curve, "fmdat", "na.last"), TRUE)
-  expect_equal(.get_obj_arg(prc_curve, "fmdat", "ties.method"), "first")
+  expect_equal(.get_obj_arg(prc_curve, "fmdat", "na_worst"), TRUE)
+  expect_equal(.get_obj_arg(prc_curve, "fmdat", "ties_method"), "first")
 })
 
-test_that("create_prc() can take na.last argument", {
-  expect_equal_ranks <- function(scores, na.last, ranks) {
+test_that("create_prc() can take na_worst argument", {
+  expect_equal_ranks <- function(scores, na_worst, ranks) {
     prc_curve <- create_prc(scores = scores, labels = c(1, 0, 1),
-                            na.last = na.last)
+                            na_worst = na_worst,
+                            keep_cmats = TRUE,
+                            keep_fmdat = TRUE)
 
     fmdat <- .get_obj(prc_curve, "fmdat")
 
-    eval(bquote(expect_equal(.get_obj_arg(prc_curve, NULL, "na.last"),
-                             na.last)))
-    eval(bquote(expect_equal(.get_obj_arg(fmdat, NULL, "na.last"), na.last)))
+    eval(bquote(expect_equal(.get_obj_arg(prc_curve, NULL, "na_worst"),
+                             na_worst)))
+    eval(bquote(expect_equal(.get_obj_arg(fmdat, NULL, "na_worst"), na_worst)))
     eval(bquote(expect_equal(fmdat[["ranks"]], ranks)))
-    eval(bquote(expect_equal(.rank_scores(scores, na.last = na.last), ranks)))
+
+    sranks <- .rank_scores(scores, na_worst = na_worst)
+    eval(bquote(expect_equal(sranks[["ranks"]], ranks)))
   }
 
   na1_scores <- c(NA, 0.2, 0.1)
   na2_scores <- c(0.2, NA, 0.1)
   na3_scores <- c(0.2, 0.1, NA)
 
-  expect_equal_ranks(na1_scores, TRUE, c(3, 2, 1))
-  expect_equal_ranks(na1_scores, FALSE, c(1, 3, 2))
+  expect_equal_ranks(na1_scores, TRUE, c(3, 1, 2))
+  expect_equal_ranks(na1_scores, FALSE, c(1, 2, 3))
 
-  expect_equal_ranks(na2_scores, TRUE, c(2, 3, 1))
-  expect_equal_ranks(na2_scores, FALSE, c(3, 1, 2))
+  expect_equal_ranks(na2_scores, TRUE, c(1, 3, 2))
+  expect_equal_ranks(na2_scores, FALSE, c(2, 1, 3))
 
-  expect_equal_ranks(na3_scores, TRUE, c(2, 1, 3))
-  expect_equal_ranks(na3_scores, FALSE, c(3, 2, 1))
+  expect_equal_ranks(na3_scores, TRUE, c(1, 2, 3))
+  expect_equal_ranks(na3_scores, FALSE, c(2, 3, 1))
+
 })
 
-test_that("create_prc() can take ties.method argument", {
+test_that("create_prc() can take ties_method argument", {
 
-  expect_equal_ranks <- function(ties.method, ranks) {
+  expect_equal_ranks <- function(ties_method, ranks) {
     prc_curve <- create_prc(scores = c(0.1, 0.2, 0.2, 0.2, 0.3),
                             labels = c(1, 0, 1, 1, 1),
-                            ties.method = ties.method)
+                            ties_method = ties_method,
+                            keep_cmats = TRUE,
+                            keep_fmdat = TRUE)
 
     fmdat <- .get_obj(prc_curve, "fmdat")
 
-    eval(bquote(expect_equal(.get_obj_arg(prc_curve, NULL, "ties.method"),
-                             ties.method)))
-    eval(bquote(expect_equal(.get_obj_arg(fmdat, NULL, "ties.method"),
-                             ties.method)))
+    eval(bquote(expect_equal(.get_obj_arg(prc_curve, NULL, "ties_method"),
+                             ties_method)))
+    eval(bquote(expect_equal(.get_obj_arg(fmdat, NULL, "ties_method"),
+                             ties_method)))
     eval(bquote(expect_equal(fmdat[["ranks"]], ranks)))
   }
 
-  expect_equal_ranks("average", c(1, 3, 3, 3, 5))
-  expect_equal_ranks("first", c(1, 2, 3, 4, 5))
+  expect_equal_ranks("equiv", c(5, 2, 2, 2, 1))
+  expect_equal_ranks("first", c(5, 2, 3, 4, 1))
 
 })
 

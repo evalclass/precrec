@@ -21,6 +21,7 @@ Rcpp::List create_roc_curve(const Rcpp::NumericVector& tps,
 
   // Variables
   Rcpp::List ret_val;
+  Rcpp::DataFrame df;
   std::string errmsg = "";
   int max_n = sp.size() + (1.0 / x_interval);
   std::vector<double> fpr(max_n);           // False positive rate
@@ -58,9 +59,11 @@ Rcpp::List create_roc_curve(const Rcpp::NumericVector& tps,
   roc_orig.resize(n);
 
   // Return a list
-  ret_val["x"] = fpr;
-  ret_val["y"] = tpr;
-  ret_val["orig_points"] = roc_orig;
+  df["x"] = fpr;
+  df["y"] = tpr;
+  df["orig_points"] = roc_orig;
+
+  ret_val["curve"] = df;
   ret_val["errmsg"] = errmsg;
 
   return ret_val;

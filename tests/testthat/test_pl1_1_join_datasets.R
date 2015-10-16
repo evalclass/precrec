@@ -175,7 +175,7 @@ test_that(".join_datasets() accepts lists", {
   expect_equal(cdat_list[[3]], c(7, 8, 9))
 })
 
-test_that(".join_datasets() accepts lists with two levels", {
+test_that(".join_datasets() accepts nested lists with two levels", {
   list1 = list(a = 1:3)
   list2 = list(b = 4:6, c = list(d = 7:9, e = 10:12))
   cdat_list <- .join_datasets(list1, list2)
@@ -187,7 +187,7 @@ test_that(".join_datasets() accepts lists with two levels", {
   expect_equal(cdat_list[[4]], c(10, 11, 12))
 })
 
-test_that(".join_datasets() accepts lists with multiple levels", {
+test_that(".join_datasets() accepts nested lists with multiple levels", {
   list1 = list(a = 1:3)
   list2 = list(b = 4:6, c = list(d = list(e = 7:9, f = 10:12), g = 13:15))
   cdat_list <- .join_datasets(list1, list2)

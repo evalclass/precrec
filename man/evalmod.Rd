@@ -5,8 +5,8 @@
 \title{Evaluate a single model}
 \usage{
 evalmod(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
-  model_name = as.character(NA), setid = 1L, na.last = FALSE,
-  ties.method = "average", levels = c("negative", "positive"))
+  modname = as.character(NA), dsid = 1L, na_worst = TRUE,
+  ties_method = "equiv")
 }
 \arguments{
 \item{mdat}{An \code{mdat} object created by \code{\link{mmdata}}.
@@ -14,10 +14,10 @@ evalmod(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
   \itemize{
     \item \code{scores}
     \item \code{labels}
-    \item \code{model_name}
-    \item \code{setid}
-    \item \code{na.last}
-    \item \code{ties.method}
+    \item \code{modname}
+    \item \code{dsid}
+    \item \code{na_worst}
+    \item \code{ties_method}
   }}
 
 \item{x_interval}{A numeric value with the range (0, 1] to specifiy
@@ -28,27 +28,24 @@ evalmod(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
 
 \item{labels}{A numeric vector or a factor of observed labels.}
 
-\item{model_name}{A string as the name of the model/classifier.}
+\item{modname}{A string as the name of the model/classifier.}
 
-\item{setid}{A numeric value as a dataset ID.}
+\item{dsid}{A numeric value as a dataset ID.}
 
-\item{na.last}{A boolean value for controlling the treatment of NAs
+\item{na_worst}{A boolean value for controlling the treatment of NAs
   in the scores.
   \describe{
     \item{TRUE}{NAs are treated as the highest score}
     \item{FALSE}{NAs are treated as the lowest score}
   }}
 
-\item{ties.method}{A string for controlling tied scores.
+\item{ties_method}{A string for controlling tied scores.
   Ignored if mdat is set.
   \describe{
     \item{"equiv"}{Ties are equivalently ranked}
     \item{"random"}{Ties are ranked in an incresing order as appeared}
     \item{"first"}{ Ties are ranked in random order}
   }}
-
-\item{levels}{A character vector to overide the levels of the factor for
-  the labels.}
 }
 \value{
 The \code{evalmod} function returns an \code{sscurves} S3 object

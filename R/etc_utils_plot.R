@@ -54,14 +54,18 @@
 
   avgcurves <- attr(obj, "avgcurves")
 
-  x = avgcurves[[1]][["x"]]
-  y = avgcurves[[1]][["y_avg"]]
-  ymin = avgcurves[[1]][["y_ci_l"]]
-  ymax = avgcurves[[1]][["y_ci_h"]]
-
   plot(1, type="l", main = paste0(curve_name, " - P: ", np, ", N: ", nn),
        xlab = xlab, ylab = ylab, ylim = c(0, 1), xlim = c(0, 1))
-  .add_curve_with_ci(avgcurves, 1, "grey", "blue", show_ci)
+
+  if (length(avgcurves) == 1) {
+    lcols <- "blue"
+  } else {
+    lcols <- rainbow(length(avgcurves))
+  }
+
+  for (i in 1:length(avgcurves)) {
+    .add_curve_with_ci(avgcurves, i, "grey", lcols[i], show_ci)
+  }
 }
 
 #
@@ -87,14 +91,14 @@
 #
 # Show legend
 #
-.show_legend <- function(obj, show_legend, gnames = "model_names") {
+.show_legend <- function(obj, show_legend, gnames = "modname") {
   if (show_legend) {
     old_mar <- par(mar = c(0, 0, 0, 0))
     on.exit(par(old_mar), add = TRUE)
     old_pty <- par(pty = "m")
     on.exit(par(old_pty), add = TRUE)
 
-    gnames <- attr(obj, gnames)
+    gnames <- unique(attr(obj, gnames))
     plot(1, type = "n", axes = FALSE, xlab = "", ylab = "")
     legend(x = "top", lty = 1,
            legend = gnames,

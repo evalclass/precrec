@@ -1,9 +1,9 @@
 library(precrec)
 
-context("PR 3: Print mscurves")
+context("PR 5: Print mmcurves")
 # Test print(x, ...)
 
-pr3_create_curves <- function() {
+pr5_create_curves <- function() {
   s1 <- c(1, 2, 3, 4)
   s2 <- c(5, 6, 7, 8)
   s3 <- c(2, 4, 6, 8)
@@ -14,26 +14,26 @@ pr3_create_curves <- function() {
   l3 <- c(1, 1, 0, 1)
   labels <- join_labels(l1, l2, l3)
 
-  mdat <- mmdata(scores, labels)
-  evalmods(mdat)
+  mdat <- mmdata(scores, labels, expd_first = "dsids")
+  evalmods_m(mdat)
 }
 
-test_that("print mscurves", {
-  curves <- pr3_create_curves()
+test_that("print mmcurves", {
+  curves <- pr5_create_curves()
 
   expect_output(print(curves), "ROC curves")
   expect_output(print(curves), "Precision-Recall curves")
 })
 
-test_that("print msroc", {
-  curves <- pr3_create_curves()
+test_that("print mmroc", {
+  curves <- pr5_create_curves()
 
   expect_output(print(curves[["rocs"]]), "ROC curves")
 })
 
 
-test_that("print msprc", {
-  curves <- pr3_create_curves()
+test_that("print mmprc", {
+  curves <- pr5_create_curves()
 
   expect_output(print(curves[["prcs"]]), "Precision-Recall curves")
 })
