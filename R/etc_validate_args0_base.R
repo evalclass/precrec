@@ -100,11 +100,11 @@
 }
 
 #
-# Validate ci_level
+# Validate ci_alpha
 #
-.validate_ci_level <- function(ci_level) {
-  if (!is.null(ci_level)) {
-    assertthat::assert_that(assertthat::is.number(ci_level))
+.validate_ci_alpha <- function(ci_alpha) {
+  if (!is.null(ci_alpha)) {
+    assertthat::assert_that(assertthat::is.number(ci_alpha))
   }
 }
 

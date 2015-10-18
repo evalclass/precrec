@@ -1,11 +1,11 @@
 #
 # Calculate the average curve for a model
 #
-calc_avg <- function(curves, modnames, dsids, x_bins, ci_level) {
+calc_avg <- function(curves, modnames, dsids, x_bins, ci_alpha) {
 
   # === Validate input arguments ===
   .validate_x_bins(x_bins)
-  .validate_ci_level(ci_level)
+  .validate_ci_alpha(ci_alpha)
   .validate(curves)
 
   uniq_modnames <- unique(modnames)
@@ -14,7 +14,7 @@ calc_avg <- function(curves, modnames, dsids, x_bins, ci_level) {
 
   # === Summarize curves by by models ===
   # Quantile of CI
-  ci_q <- qnorm(ci_level + (1.0 - ci_level) * 0.5)
+  ci_q <- qnorm((1.0 - ci_alpha) + (ci_alpha * 0.5))
 
   # Filter curves by model
   ffunc <- function(mname) {
@@ -36,7 +36,7 @@ calc_avg <- function(curves, modnames, dsids, x_bins, ci_level) {
   # Set attributes
   attr(s3obj, "uniq_modnames") <- uniq_modnames
   attr(s3obj, "args") <- list(modnames = modnames, dsids = dsids,
-                              x_bins = x_bins, ci_level = ci_level)
+                              x_bins = x_bins, ci_alpha = ci_alpha)
   attr(s3obj, "src") <- curves
   attr(s3obj, "validated") <- FALSE
 

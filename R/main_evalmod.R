@@ -85,11 +85,11 @@
 #' @export
 evalmod <- function(mdat, scores = NULL, labels = NULL,
                     modnames = NULL, dsids = NULL,
-                    calc_avg = TRUE, ci_level = 0.95, all_curves = FALSE,
+                    calc_avg = TRUE, ci_alpha = 0.05, all_curves = FALSE,
                     x_bins = 1000,
                     na_worst = TRUE, ties_method = "equiv") {
 
-  .validate_evalmods_m_args(x_bins, calc_avg, ci_level, modnames, dsids,
+  .validate_evalmods_m_args(x_bins, calc_avg, ci_alpha, modnames, dsids,
                             na_worst, ties_method)
 
   if (!missing(mdat)) {
@@ -101,6 +101,6 @@ evalmod <- function(mdat, scores = NULL, labels = NULL,
   }
 
   pl_main(mdat, model_type = "multiple", data_type = "multiple",
-          x_bins = x_bins, calc_avg = calc_avg, ci_level = ci_level)
+          x_bins = x_bins, calc_avg = calc_avg, ci_alpha = ci_alpha)
 
 }

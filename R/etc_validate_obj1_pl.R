@@ -314,7 +314,7 @@
   # Validate class items and attributes
   item_names <- NULL
   attr_names <- c("uniq_modnames", "args", "src", "validated")
-  arg_names <- c("modnames", "dsids", "x_bins", "ci_level")
+  arg_names <- c("modnames", "dsids", "x_bins", "ci_alpha")
   .validate_basic(avgcurves, "avgcurves", "calc_avg", item_names, attr_names,
                   arg_names)
 

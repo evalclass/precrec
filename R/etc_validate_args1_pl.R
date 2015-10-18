@@ -2,7 +2,7 @@
 # Validate arguments of pl_main()
 #
 .validate_pl_main_args <- function(mdat, model_type, data_type, x_bins,
-                                   calc_avg, ci_level) {
+                                   calc_avg, ci_alpha) {
 
   # Check model type
   .validate_model_type(model_type)

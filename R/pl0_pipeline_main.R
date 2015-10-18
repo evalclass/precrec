@@ -2,14 +2,14 @@
 # Control the main pipeline iterations
 #
 pl_main <- function(mdat, model_type = "single", data_type = "single",
-                    x_bins = 1000, calc_avg = TRUE, ci_level = 0.95) {
+                    x_bins = 1000, calc_avg = TRUE, ci_alpha = 0.05) {
 
   # === Validation ===
   .validate(mdat)
   model_type <- .pmatch_model_data_types(model_type)
   data_type <- .pmatch_model_data_types(data_type)
   .validate_pl_main_args(mdat, model_type, data_type, x_bins, calc_avg,
-                         ci_level)
+                         ci_alpha)
 
   # === Create ROC and Precision-Recall curves ===
   # Define a function for each iteration
@@ -31,9 +31,9 @@ pl_main <- function(mdat, model_type = "single", data_type = "single",
     dsids <- attr(mdat, "dsids")
 
     attr(rocs, "avgcurves") <- calc_avg(rocs, modnames, dsids,
-                                        x_bins, ci_level)
+                                        x_bins, ci_alpha)
     attr(prcs, "avgcurves") <- calc_avg(prcs, modnames, dsids,
-                                        x_bins, ci_level)
+                                        x_bins, ci_alpha)
   }
 
   # === Create an S3 object ===
@@ -47,7 +47,7 @@ pl_main <- function(mdat, model_type = "single", data_type = "single",
   attr(s3obj, "dsids") <- attr(mdat, "dsids")
   attr(s3obj, "args") <- list(x_bins = x_bins,
                               calc_avg = calc_avg,
-                              ci_level = ci_level)
+                              ci_alpha = ci_alpha)
   attr(s3obj, "src") <- mdat
   attr(s3obj, "validated") <- FALSE
 

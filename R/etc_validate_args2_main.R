@@ -45,7 +45,7 @@
 #
 # Validate arguments of evalmod_m()
 #
-.validate_evalmod_m_args <- function(x_bins, calc_avg, ci_level, modnames,
+.validate_evalmod_m_args <- function(x_bins, calc_avg, ci_alpha, modnames,
                                      dsids, na_worst, ties_method) {
 
   .validate_evalmods_s_args(x_bins, modnames, dsids,
@@ -55,7 +55,7 @@
 #
 # Validate arguments of evalmods_m()
 #
-.validate_evalmods_m_args <- function(x_bins, calc_avg, ci_level, modnames,
+.validate_evalmods_m_args <- function(x_bins, calc_avg, ci_alpha, modnames,
                                       dsids, na_worst, ties_method) {
 
   .validate_evalmods_s_args(x_bins, modnames, dsids,
