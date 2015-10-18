@@ -19,7 +19,7 @@ test_that("autoplot sscurves", {
   }
 
   data(P10N10)
-  curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
+  curves <- evalmod_s(scores = P10N10$scores, labels = P10N10$labels)
 
   pp <- ggplot2::autoplot(curves, ret_grob = TRUE)
   expect_true(all(class(pp) == c("gtable", "grob", "gDesc")))
@@ -31,7 +31,7 @@ test_that("autoplot ssroc", {
   }
 
   data(P10N10)
-  curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
+  curves <- evalmod_s(scores = P10N10$scores, labels = P10N10$labels)
 
   pp <- ggplot2::autoplot(curves[["rocs"]])
   expect_true(all(class(pp) == c("gg", "ggplot")))
@@ -44,7 +44,7 @@ test_that("autoplot ssprc", {
   }
 
   data(P10N10)
-  curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
+  curves <- evalmod_s(scores = P10N10$scores, labels = P10N10$labels)
 
   pp <- ggplot2::autoplot(curves[["prcs"]])
   expect_true(all(class(pp) == c("gg", "ggplot")))

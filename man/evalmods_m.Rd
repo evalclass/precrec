@@ -4,9 +4,9 @@
 \alias{evalmods_m}
 \title{Evaluate a single model with multiple datasets}
 \usage{
-evalmods_m(mdat, x_interval = 0.001, calc_avg = TRUE, ci_level = 0.95,
-  scores = NULL, labels = NULL, modnames = NULL, dsids = NULL,
-  na_worst = TRUE, ties_method = "equiv")
+evalmods_m(mdat, scores = NULL, labels = NULL, modnames = NULL,
+  dsids = NULL, calc_avg = TRUE, ci_level = 0.95, all_curves = FALSE,
+  x_interval = 0.001, na_worst = TRUE, ties_method = "equiv")
 }
 \arguments{
 \item{mdat}{An \code{mdat} object created by \code{\link{mmdata}}.
@@ -20,10 +20,6 @@ evalmods_m(mdat, x_interval = 0.001, calc_avg = TRUE, ci_level = 0.95,
     \item \code{ties_method}
   }}
 
-\item{x_interval}{A numeric value with the range (0, 1] to specifiy
-  an interval of the evaluation values on the x-axis.
-  No interpolation between two points is performed when it is set to 1.}
-
 \item{scores}{A numeric data of predicted scores. It can be a vector,
   a matrix, an array, a data frame, or a list.}
 
@@ -34,6 +30,10 @@ evalmods_m(mdat, x_interval = 0.001, calc_avg = TRUE, ci_level = 0.95,
   of the models/classifiers.}
 
 \item{dsids}{A numeric vector as dataset IDs.}
+
+\item{x_interval}{A numeric value with the range (0, 1] to specifiy
+  an interval of the evaluation values on the x-axis.
+  No interpolation between two points is performed when it is set to 1.}
 
 \item{na_worst}{A boolean value for controlling the treatment of NAs
   in the scores.

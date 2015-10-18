@@ -15,7 +15,7 @@ pt3_create_curves <- function() {
   labels <- join_labels(l1, l2, l3)
 
   mdat <- mmdata(scores, labels)
-  evalmods(mdat)
+  evalmods_s(mdat)
 }
 
 test_that("plot mscurves", {

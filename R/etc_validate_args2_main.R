@@ -1,7 +1,7 @@
 #
-# Validate arguments of evalmod()
+# Validate arguments of evalmod_s()
 #
-.validate_evalmod_args <- function(x_interval, modname, dsid,
+.validate_evalmod_s_args <- function(x_interval, modname, dsid,
                                    na_worst, ties_method) {
 
   # Check x_interval
@@ -21,9 +21,9 @@
 }
 
 #
-# Validate arguments of evalmods()
+# Validate arguments of evalmods_s()
 #
-.validate_evalmods_args <- function(x_interval, modnames, dsids,
+.validate_evalmods_s_args <- function(x_interval, modnames, dsids,
                                     na_worst, ties_method) {
 
   # Check x_interval
@@ -48,8 +48,8 @@
 .validate_evalmod_m_args <- function(x_interval, calc_avg, ci_level, modnames,
                                      dsids, na_worst, ties_method) {
 
-  .validate_evalmods_args(x_interval, modnames, dsids,
-                          na_worst, ties_method)
+  .validate_evalmods_s_args(x_interval, modnames, dsids,
+                            na_worst, ties_method)
 }
 
 #
@@ -58,6 +58,6 @@
 .validate_evalmods_m_args <- function(x_interval, calc_avg, ci_level, modnames,
                                       dsids, na_worst, ties_method) {
 
-  .validate_evalmods_args(x_interval, modnames, dsids,
-                          na_worst, ties_method)
+  .validate_evalmods_s_args(x_interval, modnames, dsids,
+                            na_worst, ties_method)
 }

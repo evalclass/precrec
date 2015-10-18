@@ -5,8 +5,8 @@
 \title{Evaluate a single model with multiple datasets}
 \usage{
 evalmod_m(mdat, x_interval = 0.001, calc_avg = TRUE, ci_level = 0.95,
-  scores = NULL, labels = NULL, modnames = NULL, dsids = NULL,
-  na_worst = TRUE, ties_method = "equiv")
+  keep_all_curves = FALSE, scores = NULL, labels = NULL,
+  modnames = NULL, dsids = NULL, na_worst = TRUE, ties_method = "equiv")
 }
 \arguments{
 \item{mdat}{An \code{mdat} object created by \code{\link{mmdata}}.

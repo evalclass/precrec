@@ -84,12 +84,12 @@
 #'
 #' @export
 evalmod_m <- function(mdat, x_interval = 0.001, calc_avg = TRUE,
-                      ci_level = 0.95, scores = NULL, labels = NULL,
-                      modnames = NULL, dsids = NULL, na_worst = TRUE,
-                      ties_method = "equiv") {
+                      ci_level = 0.95, keep_all_curves = FALSE, scores = NULL,
+                      labels = NULL, modnames = NULL, dsids = NULL,
+                      na_worst = TRUE, ties_method = "equiv") {
 
-  .validate_evalmod_m_args(x_interval, calc_avg, ci_level, modnames, dsids,
-                           na_worst, ties_method)
+  .validate_evalmod_m_args(x_interval, calc_avg, ci_level,
+                           modnames, dsids, na_worst, ties_method)
 
   if (!missing(mdat)) {
     .validate(mdat)

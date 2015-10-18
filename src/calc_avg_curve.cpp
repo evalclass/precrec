@@ -36,7 +36,6 @@ Rcpp::List calc_avg_curve(const Rcpp::List& curves,
 
 
   // Calculate total
-  int idx;
   for (int i = 0; i < n; ++i) {
     Rcpp::List c = Rcpp::as<Rcpp::List>(curves[i]);
 

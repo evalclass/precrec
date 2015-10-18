@@ -82,12 +82,12 @@
 #' plot(curves4, "PRC")
 #'
 #' @export
-evalmods <- function(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
-                     modnames = NULL, dsids = NULL, na_worst = TRUE,
-                     ties_method = "equiv") {
+evalmods_s <- function(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
+                       modnames = NULL, dsids = NULL, na_worst = TRUE,
+                       ties_method = "equiv") {
 
-  .validate_evalmods_args(x_interval, modnames, dsids, na_worst,
-                          ties_method)
+  .validate_evalmods_s_args(x_interval, modnames, dsids, na_worst,
+                            ties_method)
 
   if (!missing(mdat)) {
     .validate(mdat)

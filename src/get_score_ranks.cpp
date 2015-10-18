@@ -64,7 +64,7 @@ Rcpp::List get_score_ranks(const Rcpp::NumericVector& scores,
   }
 
   // Set ranks
-  for (int i = 0; i < sorted_idx.size(); ++i) {
+  for (unsigned i = 0; i < sorted_idx.size(); ++i) {
      ranks[sorted_idx[i]] = i + 1;
      rank_idx[i] = sorted_idx[i];
   }
@@ -74,7 +74,7 @@ Rcpp::List get_score_ranks(const Rcpp::NumericVector& scores,
     std::vector<int> tied_idx;
     double prev_val = svals[rank_idx[0]];
     bool tied = false;
-    for (int i = 1; i < rank_idx.size(); ++i) {
+    for (unsigned i = 1; i < rank_idx.size(); ++i) {
       if (tied) {
         if (prev_val != svals[rank_idx[i]]) {
           update_ties(ranks, rank_idx, tied_idx, ties_method);
@@ -98,7 +98,7 @@ Rcpp::List get_score_ranks(const Rcpp::NumericVector& scores,
   }
 
   // Add 1 to rank_idx
-  for (int i = 0; i < rank_idx.size(); ++i) {
+  for (unsigned i = 0; i < rank_idx.size(); ++i) {
     rank_idx[i] = rank_idx[i] + 1;
   }
 
@@ -127,7 +127,7 @@ void update_ties(std::vector<int>& ranks,
     }
   } else if (ties_method == "random") {
     std::random_shuffle(tied_idx.begin(), tied_idx.end());
-    for (int i = 0; i < tied_idx.size(); ++i) {
+    for (unsigned i = 0; i < tied_idx.size(); ++i) {
       ranks[rank_idx[tied_idx[i]]] = base_rank + i;
       rank_idx[tied_idx[i]] = base_rank_idx + i;
     }
