@@ -114,7 +114,7 @@ test_that("create_roc() can take ties_method argument", {
 
 test_that("create_roc() reterns a correct ROC curve", {
   roc_curve <- create_roc(scores = c(0.6, 0.5, 0.4, 0.3, 0.2, 0.1),
-                          labels = c(0, 1, 0, 1, 0, 1), x_interval = 0.1)
+                          labels = c(0, 1, 0, 1, 0, 1), x_bins = 10)
 
   expect_equal(attr(roc_curve, "np"), 3)
   expect_equal(attr(roc_curve, "nn"), 3)
@@ -131,7 +131,7 @@ test_that("create_roc() reterns a correct ROC curve", {
 
 test_that("create_roc() reterns a correct ROC AUC", {
   roc_curve <- create_roc(scores = c(0.6, 0.5, 0.4, 0.3, 0.2, 0.1),
-                          labels = c(0, 1, 0, 1, 0, 1), x_interval = 0.01)
+                          labels = c(0, 1, 0, 1, 0, 1), x_bins = 100)
 
   expect_equal(attr(roc_curve, "auc"), 1/3, tolerance = 1e-3)
 })

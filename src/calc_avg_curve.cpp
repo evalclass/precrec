@@ -11,13 +11,14 @@ void calc_avg_single(const Rcpp::NumericVector& xs,
 // Calculate average curves
 // [[Rcpp::export]]
 Rcpp::List calc_avg_curve(const Rcpp::List& curves,
-                          double x_interval,
+                          double x_bins,
                           double ci_q) {
 
   // Variables
   Rcpp::List ret_val;
   Rcpp::DataFrame df;
   std::string errmsg = "";
+  double x_interval = 1.0 / x_bins;
 
 
   int vec_size = 3 + (1.0 / x_interval);

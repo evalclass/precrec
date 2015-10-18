@@ -1,7 +1,7 @@
 #
 # Validate arguments of pl_main()
 #
-.validate_pl_main_args <- function(mdat, model_type, data_type, x_interval,
+.validate_pl_main_args <- function(mdat, model_type, data_type, x_bins,
                                    calc_avg, ci_level) {
 
   # Check model type
@@ -18,8 +18,8 @@
     assertthat::assert_that(length(unique(dsids)) == 1L)
   }
 
-  # Check x_interval
-  .validate_x_interval(x_interval)
+  # Check x_bins
+  .validate_x_bins(x_bins)
 
 }
 

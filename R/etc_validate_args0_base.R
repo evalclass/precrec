@@ -154,12 +154,12 @@
 }
 
 #
-# Validate x_interval
+# Validate x_bins
 #
-.validate_x_interval <- function(x_interval) {
-  if (!is.null(x_interval)) {
-    assertthat::assert_that(assertthat::is.number(x_interval),
-                            (x_interval > 0L && x_interval <= 1L))
+.validate_x_bins <- function(x_bins) {
+  if (!is.null(x_bins)) {
+    assertthat::assert_that(assertthat::is.number(x_bins),
+                            x_bins >= 1L)
   }
 }
 

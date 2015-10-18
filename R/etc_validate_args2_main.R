@@ -1,11 +1,11 @@
 #
 # Validate arguments of evalmod_s()
 #
-.validate_evalmod_s_args <- function(x_interval, modname, dsid,
+.validate_evalmod_s_args <- function(x_bins, modname, dsid,
                                    na_worst, ties_method) {
 
-  # Check x_interval
-  .validate_x_interval(x_interval)
+  # Check x_bins
+  .validate_x_bins(x_bins)
 
   # Check model name
   .validate_modname(modname)
@@ -23,11 +23,11 @@
 #
 # Validate arguments of evalmods_s()
 #
-.validate_evalmods_s_args <- function(x_interval, modnames, dsids,
+.validate_evalmods_s_args <- function(x_bins, modnames, dsids,
                                     na_worst, ties_method) {
 
-  # Check x_interval
-  .validate_x_interval(x_interval)
+  # Check x_bins
+  .validate_x_bins(x_bins)
 
   # Check model names
   .validate_modnames(modnames, length(modnames))
@@ -45,19 +45,19 @@
 #
 # Validate arguments of evalmod_m()
 #
-.validate_evalmod_m_args <- function(x_interval, calc_avg, ci_level, modnames,
+.validate_evalmod_m_args <- function(x_bins, calc_avg, ci_level, modnames,
                                      dsids, na_worst, ties_method) {
 
-  .validate_evalmods_s_args(x_interval, modnames, dsids,
+  .validate_evalmods_s_args(x_bins, modnames, dsids,
                             na_worst, ties_method)
 }
 
 #
 # Validate arguments of evalmods_m()
 #
-.validate_evalmods_m_args <- function(x_interval, calc_avg, ci_level, modnames,
+.validate_evalmods_m_args <- function(x_bins, calc_avg, ci_level, modnames,
                                       dsids, na_worst, ties_method) {
 
-  .validate_evalmods_s_args(x_interval, modnames, dsids,
+  .validate_evalmods_s_args(x_bins, modnames, dsids,
                             na_worst, ties_method)
 }

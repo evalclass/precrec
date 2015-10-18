@@ -14,7 +14,7 @@
 #'     \item \code{ties_method}
 #'   }
 #'
-#' @param x_interval A numeric value with the range (0, 1] to specifiy
+#' @param x_bins A numeric value with the range (0, 1] to specifiy
 #'   an interval of the evaluation values on the x-axis.
 #'   No interpolation between two points is performed when it is set to 1.
 #'
@@ -67,20 +67,20 @@
 #' ## Plot Precision-Recall
 #' plot(curves2, "PRC")
 #'
-#' ## Set x_interval = 0.1
-#' curves3 <- evalmod(mdat, x_interval = 0.1)
+#' ## Set x_bins = 10
+#' curves3 <- evalmod(mdat, x_bins = 10)
 #' plot(curves3, "PRC")
 #'
 #' ## No interpolation of Precsion-Recall curve
-#' curves4 <- evalmod(mdat, x_interval = NULL)
+#' curves4 <- evalmod(mdat, x_bins = NULL)
 #' plot(curves4, "PRC")
 #'
 #' @export
-evalmod_s <- function(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
+evalmod_s <- function(mdat, x_bins = 1000, scores = NULL, labels = NULL,
                       modname = as.character(NA), dsid = 1L,
                       na_worst = TRUE, ties_method = "equiv") {
 
-  .validate_evalmod_s_args(x_interval, modname, dsid, na_worst,
+  .validate_evalmod_s_args(x_bins, modname, dsid, na_worst,
                            ties_method)
 
   if (!missing(mdat)) {
@@ -91,5 +91,5 @@ evalmod_s <- function(mdat, x_interval = 0.001, scores = NULL, labels = NULL,
   }
 
   pl_main(mdat, model_type = "single", data_type = "single",
-          x_interval =x_interval)
+          x_bins = x_bins)
 }

@@ -2,13 +2,13 @@
 # Control the main pipeline iterations
 #
 pl_main <- function(mdat, model_type = "single", data_type = "single",
-                    x_interval = 0.001, calc_avg = TRUE, ci_level = 0.95) {
+                    x_bins = 1000, calc_avg = TRUE, ci_level = 0.95) {
 
   # === Validation ===
   .validate(mdat)
   model_type <- .pmatch_model_data_types(model_type)
   data_type <- .pmatch_model_data_types(data_type)
-  .validate_pl_main_args(mdat, model_type, data_type, x_interval, calc_avg,
+  .validate_pl_main_args(mdat, model_type, data_type, x_bins, calc_avg,
                          ci_level)
 
   # === Create ROC and Precision-Recall curves ===
@@ -16,7 +16,7 @@ pl_main <- function(mdat, model_type = "single", data_type = "single",
   plfunc <- function(s) {
     cdat <- create_confmats(mdat[[s]])
     pevals <- calc_measures(cdat)
-    curves <- create_curves(pevals, x_interval = x_interval)
+    curves <- create_curves(pevals, x_bins = x_bins)
   }
 
   # Create curves
@@ -31,9 +31,9 @@ pl_main <- function(mdat, model_type = "single", data_type = "single",
     dsids <- attr(mdat, "dsids")
 
     attr(rocs, "avgcurves") <- calc_avg(rocs, modnames, dsids,
-                                        x_interval, ci_level)
+                                        x_bins, ci_level)
     attr(prcs, "avgcurves") <- calc_avg(prcs, modnames, dsids,
-                                        x_interval, ci_level)
+                                        x_bins, ci_level)
   }
 
   # === Create an S3 object ===
@@ -45,7 +45,7 @@ pl_main <- function(mdat, model_type = "single", data_type = "single",
   attr(s3obj, "data_type") <- data_type
   attr(s3obj, "modnames") <- attr(mdat, "modnames")
   attr(s3obj, "dsids") <- attr(mdat, "dsids")
-  attr(s3obj, "args") <- list(x_interval = x_interval,
+  attr(s3obj, "args") <- list(x_bins = x_bins,
                               calc_avg = calc_avg,
                               ci_level = ci_level)
   attr(s3obj, "src") <- mdat

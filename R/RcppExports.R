@@ -5,8 +5,8 @@ calc_auc <- function(xs, ys) {
     .Call('precrec_calc_auc', PACKAGE = 'precrec', xs, ys)
 }
 
-calc_avg_curve <- function(curves, x_interval, ci_q) {
-    .Call('precrec_calc_avg_curve', PACKAGE = 'precrec', curves, x_interval, ci_q)
+calc_avg_curve <- function(curves, x_bins, ci_q) {
+    .Call('precrec_calc_avg_curve', PACKAGE = 'precrec', curves, x_bins, ci_q)
 }
 
 calc_basic_measures <- function(np, nn, tps, fps, tns, fns) {
@@ -17,12 +17,12 @@ create_confusion_matrices <- function(olabs, ranks, rank_idx) {
     .Call('precrec_create_confusion_matrices', PACKAGE = 'precrec', olabs, ranks, rank_idx)
 }
 
-create_prc_curve <- function(tps, fps, sn, pr, x_interval) {
-    .Call('precrec_create_prc_curve', PACKAGE = 'precrec', tps, fps, sn, pr, x_interval)
+create_prc_curve <- function(tps, fps, sn, pr, x_bins) {
+    .Call('precrec_create_prc_curve', PACKAGE = 'precrec', tps, fps, sn, pr, x_bins)
 }
 
-create_roc_curve <- function(tps, fps, sp, sn, x_interval) {
-    .Call('precrec_create_roc_curve', PACKAGE = 'precrec', tps, fps, sp, sn, x_interval)
+create_roc_curve <- function(tps, fps, sp, sn, x_bins) {
+    .Call('precrec_create_roc_curve', PACKAGE = 'precrec', tps, fps, sp, sn, x_bins)
 }
 
 format_labels <- function(labels) {

@@ -3,7 +3,7 @@ library(precrec)
 context("PL 0: Pipeline main")
 # Test .pmatch_model_data_types(val),
 #      .make_prefix(model_type, data_type), and
-#      pl_main(mdat, model_type, data_type, x_interval)
+#      pl_main(mdat, model_type, data_type, x_bins)
 
 test_that(".pmatch_model_data_types() returns 'single' or 'multiple'", {
   expect_equal(.pmatch_model_data_types("s"), "single")
@@ -49,26 +49,26 @@ test_that("pl_main() returns 'mscurves'", {
   expect_equal(class(pl), "mscurves")
 })
 
-test_that("pl_main() accepts 'x_interval'", {
+test_that("pl_main() accepts 'x_bins'", {
   s1 <- c(1, 2, 3, 4)
   l1 <- c(1, 0, 1, 0)
 
   mdat <- mmdata(s1, l1)
-  pl <- pl_main(mdat, x_interval = 0.1)
+  pl <- pl_main(mdat, x_bins = 10)
 
-  expect_equal(attr(pl[["rocs"]][[1]], "args")[["x_interval"]], 0.1)
-  expect_equal(attr(pl[["rocs"]][[1]], "args")[["x_interval"]], 0.1)
+  expect_equal(attr(pl[["rocs"]][[1]], "args")[["x_bins"]], 10)
+  expect_equal(attr(pl[["rocs"]][[1]], "args")[["x_bins"]], 10)
 
-  expect_err_msg <- function(err_msg, mdat, x_interval) {
-    eval(bquote(expect_error(pl_main(mdat, x_interval = x_interval), err_msg)))
+  expect_err_msg <- function(err_msg, mdat, x_bins) {
+    eval(bquote(expect_error(pl_main(mdat, x_bins = x_bins), err_msg)))
   }
 
-  err_msg <- "x_interval is not a number"
-  expect_err_msg(err_msg, mdat, c(0.1, 0.2))
+  err_msg <- "x_bins is not a number"
+  expect_err_msg(err_msg, mdat, c(10, 20))
 
-  err_msg <- "is not TRUE"
+  err_msg <- "x_bins not greater than or equal to 1L"
   expect_err_msg(err_msg, mdat, 0)
-  expect_err_msg(err_msg, mdat, 1.1)
+  expect_err_msg(err_msg, mdat, 0.001)
 
 })
 

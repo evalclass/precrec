@@ -1,22 +1,22 @@
 #
 # Create ROC and Precision-Recall curves
 #
-create_curves <- function(pevals, x_interval = 0.001, scores = NULL,
+create_curves <- function(pevals, x_bins = 1000, scores = NULL,
                           labels = NULL, keep_cmats = FALSE, ...) {
 
   # === Validate input arguments ===
   # Create pevals from scores and labels if pevals is missing
   pevals <- .create_src_obj(pevals, "pevals", calc_measures, scores, labels,
                             ...)
-  if (is.null(x_interval) || is.na(x_interval)) {
-    x_interval = 1
+  if (is.null(x_bins) || is.na(x_bins)) {
+    x_bins = 1
   }
-  .validate_x_interval(x_interval)
+  .validate_x_bins(x_bins)
   .validate(pevals)
 
   # === Create ROC and Precision-Recall curves ===
-  roc_curve <- create_roc(pevals, x_interval, keep_cmats = keep_cmats, ...)
-  prc_curve <- create_prc(pevals, x_interval, keep_cmats = keep_cmats, ...)
+  roc_curve <- create_roc(pevals, x_bins, keep_cmats = keep_cmats, ...)
+  prc_curve <- create_prc(pevals, x_bins, keep_cmats = keep_cmats, ...)
   curves <- list(roc = roc_curve, prc = prc_curve)
 
   # === Create an S3 object ===
@@ -27,7 +27,7 @@ create_curves <- function(pevals, x_interval = 0.001, scores = NULL,
   attr(s3obj, "dsid") <- attr(pevals, "dsid")
   attr(s3obj, "nn") <- attr(pevals, "nn")
   attr(s3obj, "np") <- attr(pevals, "np")
-  attr(s3obj, "args") <- c(list(x_interval = x_interval), list(...))
+  attr(s3obj, "args") <- c(list(x_bins = x_bins), list(...))
   attr(s3obj, "src") <- pevals
   attr(s3obj, "validated") <- FALSE
 
@@ -38,24 +38,24 @@ create_curves <- function(pevals, x_interval = 0.001, scores = NULL,
 #
 # Create a ROC curve
 #
-create_roc <- function(pevals, x_interval = 0.001, scores = NULL,
+create_roc <- function(pevals, x_bins = 1000, scores = NULL,
                        labels = NULL, keep_cmats = FALSE, ...) {
 
   # === Create a ROC curve ===
   .create_curve("specificity", "sensitivity", create_roc_curve,
-                "create_roc_curve", "roc_curve", pevals, x_interval,
+                "create_roc_curve", "roc_curve", pevals, x_bins,
                 scores, labels, keep_cmats = keep_cmats, ...)
 }
 
 #
 # Create a Precision-Recall curve
 #
-create_prc <- function(pevals, x_interval = 0.001, scores = NULL, labels = NULL,
+create_prc <- function(pevals, x_bins = 1000, scores = NULL, labels = NULL,
                        keep_cmats = FALSE, ...) {
 
   # === Create a Precision-Recall curve ===
   .create_curve("sensitivity", "precision", create_prc_curve,
-                "create_prc_curve", "prc_curve", pevals, x_interval,
+                "create_prc_curve", "prc_curve", pevals, x_bins,
                 scores, labels, keep_cmats = keep_cmats, ...)
 }
 
@@ -63,20 +63,20 @@ create_prc <- function(pevals, x_interval = 0.001, scores = NULL, labels = NULL,
 # Create ROC or Precision-Recall curve
 #
 .create_curve <- function(x_name, y_name, func, func_name, class_name,
-                          pevals, x_interval = 0.001, scores = NULL,
+                          pevals, x_bins = 1000, scores = NULL,
                           labels = NULL, keep_cmats = FALSE, ...) {
 
   # === Validate input arguments ===
   # Create pevals from scores and labels if pevals is missing
   pevals <- .create_src_obj(pevals, "pevals", calc_measures, scores, labels,
                             ...)
-  .validate_x_interval(x_interval)
+  .validate_x_bins(x_bins)
   .validate(pevals)
 
   # === Create a curve ===
   # Calculate a curve
   crv <- func(attr(pevals, "src")[["tp"]], attr(pevals, "src")[["fp"]],
-              pevals[[x_name]], pevals[[y_name]], x_interval)
+              pevals[[x_name]], pevals[[y_name]], x_bins)
   .check_cpp_func_error(crv, func_name)
 
   # Calculate AUC
@@ -105,7 +105,7 @@ create_prc <- function(pevals, x_interval = 0.001, scores = NULL, labels = NULL,
   attr(s3obj, "pauc") <- NA
   attr(s3obj, "x_limits") <- c(0, 1)
   attr(s3obj, "y_limits") <- c(0, 1)
-  attr(s3obj, "args") <- c(list(x_interval = x_interval), list(...))
+  attr(s3obj, "args") <- c(list(x_bins = x_bins), list(...))
   attr(s3obj, "cpp_errmsg1") <- crv[["errmsg"]]
   attr(s3obj, "cpp_errmsg2") <- auc[["errmsg"]]
   attr(s3obj, "src") <- pevals

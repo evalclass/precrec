@@ -6,7 +6,7 @@
 \usage{
 evalmods_m(mdat, scores = NULL, labels = NULL, modnames = NULL,
   dsids = NULL, calc_avg = TRUE, ci_level = 0.95, all_curves = FALSE,
-  x_interval = 0.001, na_worst = TRUE, ties_method = "equiv")
+  x_bins = 1000, na_worst = TRUE, ties_method = "equiv")
 }
 \arguments{
 \item{mdat}{An \code{mdat} object created by \code{\link{mmdata}}.
@@ -31,7 +31,7 @@ evalmods_m(mdat, scores = NULL, labels = NULL, modnames = NULL,
 
 \item{dsids}{A numeric vector as dataset IDs.}
 
-\item{x_interval}{A numeric value with the range (0, 1] to specifiy
+\item{x_bins}{A numeric value with the range (0, 1] to specifiy
   an interval of the evaluation values on the x-axis.
   No interpolation between two points is performed when it is set to 1.}
 
@@ -79,12 +79,12 @@ curves2
 ## Plot Precision-Recall
 plot(curves2, "PRC")
 
-## Set x_interval = 0.1
-curves3 <- evalmods_m(mdat, x_interval = 0.1)
+## Set x_bins = 10
+curves3 <- evalmods_m(mdat, x_bins = 10)
 plot(curves3, "PRC")
 
 ## No interpolation of Precsion-Recall curve
-curves4 <- evalmods_m(mdat, x_interval = NULL)
+curves4 <- evalmods_m(mdat, x_bins = NULL)
 plot(curves4, "PRC")
 }
 \seealso{

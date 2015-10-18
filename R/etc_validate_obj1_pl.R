@@ -229,7 +229,7 @@
   attr_names <- c("modname", "dsid", "nn", "np", "auc", "partial", "pauc",
                   "x_limits", "y_limits", "args", "cpp_errmsg1", "cpp_errmsg2",
                   "src", "validated")
-  arg_names <- c("x_interval", "na_worst", "ties_method",
+  arg_names <- c("x_bins", "na_worst", "ties_method",
                  "modname", "dsid", "keep_fmdat", "keep_cmats")
   .validate_basic(obj, class_name, func_name, item_names, attr_names,
                   arg_names)
@@ -289,7 +289,7 @@
   item_names <- c("roc", "prc")
   attr_names <- c("modname", "dsid", "nn", "np", "args", "src",
                   "validated")
-  arg_names <- c("x_interval", "na_worst", "ties_method", "modname", "dsid",
+  arg_names <- c("x_bins", "na_worst", "ties_method", "modname", "dsid",
                  "keep_fmdat", "keep_cmats")
   .validate_basic(curves, "curves", "calc_measures", item_names, attr_names,
                   arg_names)
@@ -314,7 +314,7 @@
   # Validate class items and attributes
   item_names <- NULL
   attr_names <- c("uniq_modnames", "args", "src", "validated")
-  arg_names <- c("modnames", "dsids", "x_interval", "ci_level")
+  arg_names <- c("modnames", "dsids", "x_bins", "ci_level")
   .validate_basic(avgcurves, "avgcurves", "calc_avg", item_names, attr_names,
                   arg_names)
 

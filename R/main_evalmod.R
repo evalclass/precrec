@@ -1,6 +1,6 @@
 #' Evaluate a single model with multiple datasets
 #'
-#' The \code{evalmods_m} function takes predicted scores and binary lables
+#' The \code{evalmod} function takes predicted scores and binary lables
 #'   and calculates ROC and Precision-Recall curves.
 #'
 #' @param mdat An \code{mdat} object created by \code{\link{mmdata}}.
@@ -64,9 +64,9 @@
 #' curves1 <- evalmods_m(mdat)
 #'
 #' ## Directly specifiy scores and labels
-#' curves2 <- evalmods_m(scores = samps[["scores"]], labels = samps[["labels"]],
-#'                       modnames = samps[["modnames"]],
-#'                       dsids = samps[["dsids"]])
+#' curves2 <- evalmod(scores = samps[["scores"]], labels = samps[["labels"]],
+#'                    modnames = samps[["modnames"]],
+#'                    dsids = samps[["dsids"]])
 #'
 #' ## Print the summary
 #' curves2
@@ -83,10 +83,11 @@
 #' plot(curves4, "PRC")
 #'
 #' @export
-evalmods_m <- function(mdat, scores = NULL, labels = NULL,
-                       modnames = NULL, dsids = NULL,
-                       calc_avg = TRUE, ci_level = 0.95, all_curves = FALSE,
-                       x_bins = 1000, na_worst = TRUE, ties_method = "equiv") {
+evalmod <- function(mdat, scores = NULL, labels = NULL,
+                    modnames = NULL, dsids = NULL,
+                    calc_avg = TRUE, ci_level = 0.95, all_curves = FALSE,
+                    x_bins = 1000,
+                    na_worst = TRUE, ties_method = "equiv") {
 
   .validate_evalmods_m_args(x_bins, calc_avg, ci_level, modnames, dsids,
                             na_worst, ties_method)
