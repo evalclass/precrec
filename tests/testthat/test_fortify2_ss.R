@@ -17,7 +17,7 @@ test_that("fortify sscurves", {
   }
 
   data(P10N10)
-  curves <- evalmod_s(scores = P10N10$scores, labels = P10N10$labels)
+  curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 
   df <- ggplot2::fortify(curves)
   expect_true(is.list(df))
@@ -29,7 +29,7 @@ test_that("fortify ssroc", {
   }
 
   data(P10N10)
-  curves <- evalmod_s(scores = P10N10$scores, labels = P10N10$labels)
+  curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 
   df <- ggplot2::fortify(curves[["rocs"]])
   expect_true(is.list(df))
@@ -42,7 +42,7 @@ test_that("fortify ssprc", {
   }
 
   data(P10N10)
-  curves <- evalmod_s(scores = P10N10$scores, labels = P10N10$labels)
+  curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 
   df <- ggplot2::fortify(curves[["prcs"]])
   expect_true(is.list(df))

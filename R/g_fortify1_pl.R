@@ -46,14 +46,15 @@ fortify.pevals <- function(model, ...) {
   .validate(model)
 
   # === Prepare a data frame for ggplot2 ===
-  n <- length(model[["error"]])
+  pb <- model[["basic"]]
+  n <- length(pb[["error"]])
   df <- data.frame(x = rep(1:n, 6),
-                   y = c(model[["error"]],
-                         model[["accuracy"]],
-                         model[["specificity"]],
-                         model[["sensitivity"]],
-                         1 - model[["specificity"]],
-                         model[["precision"]]),
+                   y = c(pb[["error"]],
+                         pb[["accuracy"]],
+                         pb[["specificity"]],
+                         pb[["sensitivity"]],
+                         1 - pb[["specificity"]],
+                         pb[["precision"]]),
                    group = factor(c(rep("error", n),
                                     rep("accuracy", n),
                                     rep("specificity", n),

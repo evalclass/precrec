@@ -39,32 +39,19 @@
 #'
 #' @export
 fortify.sscurves <- function(model, ...) {
-  # === Check package availability  ===
-  .load_ggplot2()
-
-  # === Validate input arguments ===
-  .validate(model)
-
-  # === Prepare a data frame for ggplot2 ===
-  roc_df <- ggplot2::fortify(model[["rocs"]])
-  prc_df <- ggplot2::fortify(model[["prcs"]])
-  x <- c(roc_df[["x"]], prc_df[["x"]])
-  y <- c(roc_df[["y"]], prc_df[["y"]])
-  group = factor(c(rep("ROC", length(roc_df[["x"]])),
-                   rep("PRC", length(prc_df[["x"]]))))
-  df <- data.frame(x = x, y = y, group = group)
+  fortify.mscurves(model, ...)
 }
 
 #
 # Convert a roc_curve object to a data frame for ggplot2
 #
 fortify.ssroc <- function(model, ...) {
-  ggplot2::fortify(model[[1]], ...)
+  fortify.msroc(model, ...)
 }
 
 #
 # Convert a prc_curve object to a data frame for ggplot2
 #
 fortify.ssprc <- function(model, ...) {
-  ggplot2::fortify(model[[1]], ...)
+  fortify.msroc(model, ...)
 }

@@ -4,10 +4,10 @@
 \alias{evalmod}
 \title{Evaluate a single model with multiple datasets}
 \usage{
-evalmod(mdat, scores = NULL, labels = NULL, modnames = NULL,
-  dsids = NULL, posclass = NULL, na_worst = TRUE, ties_method = "equiv",
-  calc_avg = TRUE, ci_alpha = 0.05, all_curves = FALSE, x_bins = 1000,
-  orig_points = TRUE)
+evalmod(mdat, mode = "rocprc", scores = NULL, labels = NULL,
+  modnames = NULL, dsids = NULL, posclass = NULL, na_worst = TRUE,
+  ties_method = "equiv", calc_avg = TRUE, ci_alpha = 0.05,
+  all_curves = FALSE, x_bins = 1000, orig_points = TRUE)
 }
 \arguments{
 \item{mdat}{An \code{mdat} object created by \code{\link{mmdata}}.

@@ -83,7 +83,7 @@
 #' plot(curves4, "PRC")
 #'
 #' @export
-evalmod <- function(mdat, scores = NULL, labels = NULL,
+evalmod <- function(mdat, mode = "rocprc", scores = NULL, labels = NULL,
                     modnames = NULL, dsids = NULL, posclass = NULL,
                     na_worst = TRUE, ties_method = "equiv",
                     calc_avg = TRUE, ci_alpha = 0.05, all_curves = FALSE,
@@ -100,8 +100,11 @@ evalmod <- function(mdat, scores = NULL, labels = NULL,
                    na_worst = na_worst, ties_method = ties_method)
   }
 
-  pl_main(mdat,
-          calc_avg = calc_avg, ci_alpha = ci_alpha, all_curves = all_curves,
-          x_bins = x_bins, orig_points = orig_points)
+  if (mode == "rocprc") {
+    pl_main(mdat,
+            calc_avg = calc_avg, ci_alpha = ci_alpha, all_curves = all_curves,
+            x_bins = x_bins, orig_points = orig_points)
+  }
+
 
 }

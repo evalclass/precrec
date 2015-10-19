@@ -49,7 +49,7 @@ test_that("create_curves() can take arguments for reformat_data()", {
                           labels = c(1, 0, 1),
                           na_worst = TRUE,
                           ties_method = "first",
-                          keep_cmats = TRUE,
+                          keep_pevals = TRUE,
                           keep_fmdat = TRUE)
 
   expect_equal(.get_obj_arg(curves, "fmdat", "na_worst"), TRUE)
@@ -60,7 +60,7 @@ test_that("create_curves() can take na_worst argument", {
   expect_equal_ranks <- function(scores, na_worst, ranks) {
     curves <- create_curves(scores = scores, labels = c(1, 0, 1),
                             na_worst = na_worst,
-                            keep_cmats = TRUE,
+                            keep_pevals = TRUE,
                             keep_fmdat = TRUE)
 
     fmdat <- .get_obj(curves, "fmdat")
@@ -94,7 +94,7 @@ test_that("create_curves() can take ties_method argument", {
     curves <- create_curves(scores = c(0.1, 0.2, 0.2, 0.2, 0.3),
                             labels = c(1, 0, 1, 1, 1),
                             ties_method = ties_method,
-                            keep_cmats = TRUE,
+                            keep_pevals = TRUE,
                             keep_fmdat = TRUE)
 
     fmdat <- .get_obj(curves, "fmdat")

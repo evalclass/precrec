@@ -17,7 +17,7 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
   .check_cpp_func_error(pevals, "calc_basic_measures")
 
   # === Create an S3 object ===
-  s3obj <- structure(pevals[["basic"]], class = "pevals")
+  s3obj <- structure(pevals["basic"], class = "pevals")
 
   # Set attributes
   attr(s3obj, "modname") <- attr(cmats, "modname")

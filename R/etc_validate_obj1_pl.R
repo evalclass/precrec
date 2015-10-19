@@ -129,56 +129,57 @@
   }
 
   # Validate class items and attributes
-  item_names <- c("threshold", "error", "accuracy", "specificity",
-                  "sensitivity", "precision")
+  item_names <- c("basic")
   attr_names <- c("modname", "dsid", "nn", "np", "args", "cpp_errmsg",
                   "src", "validated")
   arg_names <- c("na_worst", "ties_method", "modname", "dsid", "keep_fmdat")
   .validate_basic(pevals, "pevals", "calc_measures", item_names, attr_names,
                   arg_names)
 
+  pb <- pevals[["basic"]]
+
   # Check values of class items
-  n <- length(pevals[["error"]])
-  if (length(pevals[["accuracy"]]) != n
-      || length(pevals[["specificity"]]) != n
-      || length(pevals[["sensitivity"]]) != n
-      || length(pevals[["precision"]]) != n) {
+  n <- length(pb[["error"]])
+  if (length(pb[["accuracy"]]) != n
+      || length(pb[["specificity"]]) != n
+      || length(pb[["sensitivity"]]) != n
+      || length(pb[["precision"]]) != n) {
     stop("All evaluation vectors must be the same length")
   }
 
   # Error rate
-  assertthat::assert_that(is.atomic(pevals[["error"]]),
-                          is.vector(pevals[["error"]]),
-                          is.numeric(pevals[["error"]]))
+  assertthat::assert_that(is.atomic(pb[["error"]]),
+                          is.vector(pb[["error"]]),
+                          is.numeric(pb[["error"]]))
 
   # Accuracy
-  assertthat::assert_that(is.atomic(pevals[["accuracy"]]),
-                          is.vector(pevals[["accuracy"]]),
-                          is.numeric(pevals[["accuracy"]]))
+  assertthat::assert_that(is.atomic(pb[["accuracy"]]),
+                          is.vector(pb[["accuracy"]]),
+                          is.numeric(pb[["accuracy"]]))
 
   # Error rate & Arruracy
-  assertthat::assert_that(pevals[["error"]][1] + pevals[["accuracy"]][1] == 1,
-                          pevals[["error"]][n] + pevals[["accuracy"]][n] ==1)
+  assertthat::assert_that(pb[["error"]][1] + pb[["accuracy"]][1] == 1,
+                          pb[["error"]][n] + pb[["accuracy"]][n] ==1)
 
   # SP
-  assertthat::assert_that(is.atomic(pevals[["specificity"]]),
-                          is.vector(pevals[["specificity"]]),
-                          is.numeric(pevals[["specificity"]]),
-                          pevals[["specificity"]][1] == 1,
-                          pevals[["specificity"]][n] == 0)
+  assertthat::assert_that(is.atomic(pb[["specificity"]]),
+                          is.vector(pb[["specificity"]]),
+                          is.numeric(pb[["specificity"]]),
+                          pb[["specificity"]][1] == 1,
+                          pb[["specificity"]][n] == 0)
 
   # SN
-  assertthat::assert_that(is.atomic(pevals[["sensitivity"]]),
-                          is.vector(pevals[["sensitivity"]]),
-                          is.numeric(pevals[["sensitivity"]]),
-                          pevals[["sensitivity"]][1] == 0,
-                          pevals[["sensitivity"]][n] == 1)
+  assertthat::assert_that(is.atomic(pb[["sensitivity"]]),
+                          is.vector(pb[["sensitivity"]]),
+                          is.numeric(pb[["sensitivity"]]),
+                          pb[["sensitivity"]][1] == 0,
+                          pb[["sensitivity"]][n] == 1)
 
   # PREC
-  assertthat::assert_that(is.atomic(pevals[["precision"]]),
-                          is.vector(pevals[["precision"]]),
-                          is.numeric(pevals[["precision"]]),
-                          pevals[["precision"]][1] == pevals[["precision"]][2])
+  assertthat::assert_that(is.atomic(pb[["precision"]]),
+                          is.vector(pb[["precision"]]),
+                          is.numeric(pb[["precision"]]),
+                          pb[["precision"]][1] == pb[["precision"]][2])
 
   attr(pevals, "validated") <- TRUE
   pevals
@@ -222,9 +223,8 @@
 .validate_curve <- function(obj, class_name, func_name) {
   # Validate class items and attributes
   item_names <- c("x", "y", "orig_points")
-  attr_names <- c("modname", "dsid", "nn", "np", "auc", "partial", "pauc",
-                  "x_limits", "y_limits", "args", "cpp_errmsg1", "cpp_errmsg2",
-                  "src", "validated")
+  attr_names <- c("modname", "dsid", "nn", "np", "auc", "args",
+                  "cpp_errmsg1", "cpp_errmsg2", "src", "validated")
   arg_names <- c("x_bins", "na_worst", "ties_method",
                  "modname", "dsid", "keep_fmdat", "keep_cmats")
   .validate_basic(obj, class_name, func_name, item_names, attr_names,
@@ -242,34 +242,6 @@
   # AUC
   assertthat::assert_that((attr(obj, "auc") >= 0) && (attr(obj, "auc") <= 1))
 
-  # Partial AUC
-  assertthat::assert_that(is.atomic(attr(obj, "partial")),
-                          is.logical(attr(obj, "partial")),
-                          (is.na(attr(obj, "pauc"))
-                           || (attr(obj, "pauc") >= 0
-                               && attr(obj, "pauc") <= 1)))
-
-  # X limits
-  assertthat::assert_that(is.atomic(attr(obj, "x_limits")),
-                          is.vector(attr(obj, "x_limits")),
-                          is.numeric(attr(obj, "x_limits")),
-                          length(attr(obj, "x_limits")) == 2,
-                          (attr(obj, "x_limits")[1] >= 0
-                           && attr(obj, "x_limits")[1] <= 1),
-                          (attr(obj, "x_limits")[2] >= 0
-                           && attr(obj, "x_limits")[2] <= 1),
-                          attr(obj, "x_limits")[1] < attr(obj, "x_limits")[2])
-
-  # Y limits
-  assertthat::assert_that(is.atomic(attr(obj, "y_limits")),
-                          is.vector(attr(obj, "y_limits")),
-                          is.numeric(attr(obj, "y_limits")),
-                          length(attr(obj, "y_limits")) == 2,
-                          (attr(obj, "y_limits")[1] >= 0
-                           && attr(obj, "y_limits")[1] <= 1),
-                          (attr(obj, "y_limits")[2] >= 0
-                           && attr(obj, "y_limits")[2] <= 1),
-                          attr(obj, "y_limits")[1] < attr(obj, "y_limits")[2])
 }
 
 #

@@ -48,7 +48,7 @@ test_that("create_roc() can take arguments for reformat_data()", {
                           labels = c(1, 0, 1),
                           na_worst = TRUE,
                           ties_method = "first",
-                          keep_cmats = TRUE,
+                          keep_pevals = TRUE,
                           keep_fmdat = TRUE)
 
   expect_equal(.get_obj_arg(roc_curve, "fmdat", "na_worst"), TRUE)
@@ -60,7 +60,7 @@ test_that("create_roc() can take na_worst argument", {
   expect_equal_ranks <- function(scores, na_worst, ranks) {
     roc_curve <- create_roc(scores = scores, labels = c(1, 0, 1),
                             na_worst = na_worst,
-                            keep_cmats = TRUE,
+                            keep_pevals = TRUE,
                             keep_fmdat = TRUE)
 
     fmdat <- .get_obj(roc_curve, "fmdat")
@@ -95,7 +95,7 @@ test_that("create_roc() can take ties_method argument", {
     roc_curve <- create_roc(scores = c(0.1, 0.2, 0.2, 0.2, 0.3),
                             labels = c(1, 0, 1, 1, 1),
                             ties_method = ties_method,
-                            keep_cmats = TRUE,
+                            keep_pevals = TRUE,
                             keep_fmdat = TRUE)
 
     fmdat <- .get_obj(roc_curve, "fmdat")

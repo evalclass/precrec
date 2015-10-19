@@ -73,17 +73,6 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   lscores <- join_scores(scores)
   llabels <- join_labels(labels)
 
-  # === Validate arguments and variables ===
-  expd_first <- .pmatch_expd_first(expd_first)
-  .validate_mmdata_args(lscores, llabels, modnames, dsids, posclass = posclass,
-                        na_worst = na_worst, ties_method = ties_method,
-                        expd_first = expd_first)
-
-  # Replicate labels
-  if (length(lscores) != 1 && length(llabels) == 1) {
-    llabels <- replicate(length(lscores), llabels[[1]], simplify = FALSE)
-  }
-
   # === Model names and dataset IDs ===
   mnames <- .create_modnames(length(lscores), modnames, dsids, expd_first)
   new_modnames <- mnames[["mn"]]
@@ -92,6 +81,18 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
                           nn = rep(NA, length(new_modnames)),
                           np = rep(NA, length(new_modnames)),
                           stringsAsFactors = FALSE)
+
+  # === Validate arguments and variables ===
+  expd_first <- .pmatch_expd_first(expd_first)
+  .validate_mmdata_args(lscores, llabels, new_modnames, new_dsids,
+                        posclass = posclass,
+                        na_worst = na_worst, ties_method = ties_method,
+                        expd_first = expd_first)
+
+  # Replicate labels
+  if (length(lscores) != 1 && length(llabels) == 1) {
+    llabels <- replicate(length(lscores), llabels[[1]], simplify = FALSE)
+  }
 
   # === Reformat input data ===
   func_fmdat <- function(i) {

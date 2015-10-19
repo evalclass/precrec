@@ -3,6 +3,7 @@
 #
 create_confmats <- function(fmdat, scores = NULL, labels = NULL,
                             keep_fmdat = FALSE, ...) {
+
   # === Validate input arguments ===
   # Create fmdat from scores and labels if fmdat is missing
   fmdat <- .create_src_obj(fmdat, "fmdat", reformat_data, scores, labels, ...)

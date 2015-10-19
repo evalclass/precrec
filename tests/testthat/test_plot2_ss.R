@@ -8,7 +8,7 @@ test_that("plot sscurves", {
   on.exit(dev.off())
 
   data(P10N10)
-  curves <- evalmod_s(scores = P10N10$scores, labels = P10N10$labels)
+  curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 
   expect_that(plot(curves), not(throws_error()))
 })
@@ -18,7 +18,7 @@ test_that("plot ssroc", {
   on.exit(dev.off())
 
   data(P10N10)
-  curves <- evalmod_s(scores = P10N10$scores, labels = P10N10$labels)
+  curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 
   expect_that(plot(curves[["rocs"]]), not(throws_error()))
 })
@@ -29,7 +29,7 @@ test_that("plot ssprc", {
   on.exit(dev.off())
 
   data(P10N10)
-  curves <- evalmod_s(scores = P10N10$scores, labels = P10N10$labels)
+  curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 
   expect_that(plot(curves[["prcs"]]), not(throws_error()))
 })

@@ -120,3 +120,45 @@
   .validate_ties_method(ties_method)
 
 }
+
+#
+# Validate arguments of evalmod()
+#
+.validate_evalmod_args <- function(modnames, dsids,
+                                   posclass, na_worst, ties_method,
+                                   calc_avg, ci_alpha, all_curves,
+                                   x_bins, orig_points) {
+
+  # Check model names
+  .validate_modnames(modnames, length(modnames))
+
+  # Check dataset IDs
+  .validate_dsids(dsids, length(dsids))
+
+  # Check posclass
+  .validate_posclass(posclass)
+
+  # Check na_worst
+  .validate_na_worst(na_worst)
+
+  # Check ties_method
+  .validate_ties_method(ties_method)
+
+
+  # Validate calc_avg
+  .validate_calc_avg(calc_avg)
+
+  # Validate ci_alpha
+  .validate_ci_alpha(ci_alpha)
+
+  # Validate all_curves
+  .validate_all_curves(all_curves)
+
+
+  # Check x_bins
+  .validate_x_bins(x_bins)
+
+  # Check orig_points
+  .validate_orig_points(orig_points)
+
+}

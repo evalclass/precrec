@@ -76,7 +76,7 @@ test_that("mmdata() accepts 'modnames'", {
                              err_msg)))
   }
 
-  err_msg <- "not equal to datalen"
+  err_msg <- "Invalid"
   expect_err_msg(err_msg, s1, l1, c("A", "B"))
 
   err_msg <- "modnames is not a character vector"
@@ -95,8 +95,10 @@ test_that("mmdata() accepts 'dsids'", {
     eval(bquote(expect_error(mmdata(s1, l1, dsids = dsids), err_msg)))
   }
 
-  err_msg <- "dsids is not a numeric or integer vector"
+  err_msg <- "Invalid"
   expect_err_msg(err_msg, s1, l1, c("A", "B"))
+
+  err_msg <- "dsids is not a numeric or integer vector"
   expect_err_msg(err_msg, s1, l1, NA)
 
 })
