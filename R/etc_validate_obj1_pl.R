@@ -13,12 +13,8 @@
   }
 
   # Check attributes
-  if (length(mdat) != length(attr(mdat, "modnames"))) {
-    stop("Invalid 'modnames'")
-  }
-
-  if (length(mdat) != length(attr(mdat, "dsids"))) {
-    stop("Invalid 'dsids'")
+  if (length(mdat) != nrow(attr(mdat, "data_info"))) {
+    stop("Invalid modnames and dsids")
   }
 
   attr(mdat, "validated") <- TRUE
@@ -313,8 +309,8 @@
 
   # Validate class items and attributes
   item_names <- NULL
-  attr_names <- c("uniq_modnames", "args", "src", "validated")
-  arg_names <- c("modnames", "dsids", "x_bins", "ci_alpha")
+  attr_names <- c("args", "src", "validated")
+  arg_names <- c("ci_alpha", "x_bins")
   .validate_basic(avgcurves, "avgcurves", "calc_avg", item_names, attr_names,
                   arg_names)
 

@@ -74,7 +74,7 @@ fortify.msroc <- function(model, ...) {
 
   # === Prepare a data frame for ggplot2 ===
   df <- NULL
-  modnames <- attr(model, "modnames")
+  modnames <- attr(model, "data_info")[["modnames"]]
   for (i in seq_along(model)) {
     x = model[[i]][["x"]]
     y = model[[i]][["y"]]

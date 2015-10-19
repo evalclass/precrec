@@ -99,7 +99,6 @@ evalmod_m <- function(mdat, x_bins = 1000, calc_avg = TRUE,
                    ties_method = ties_method)
   }
 
-  pl_main(mdat, model_type = "single", data_type = "multiple",
-          x_bins = x_bins, calc_avg = calc_avg, ci_alpha = ci_alpha)
+  pl_main(mdat, x_bins = x_bins, calc_avg = calc_avg, ci_alpha = ci_alpha)
 
 }

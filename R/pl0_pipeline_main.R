@@ -1,15 +1,25 @@
 #
 # Control the main pipeline iterations
 #
-pl_main <- function(mdat, model_type = "single", data_type = "single",
-                    x_bins = 1000, calc_avg = TRUE, ci_alpha = 0.05) {
+pl_main <- function(mdat, calc_avg = TRUE, ci_alpha = 0.05, all_curves = FALSE,
+                    x_bins = 1000, orig_points = TRUE) {
 
   # === Validation ===
-  .validate(mdat)
-  model_type <- .pmatch_model_data_types(model_type)
-  data_type <- .pmatch_model_data_types(data_type)
-  .validate_pl_main_args(mdat, model_type, data_type, x_bins, calc_avg,
-                         ci_alpha)
+  .validate_pl_main_args(mdat, calc_avg, ci_alpha, all_curves,
+                         x_bins, orig_points)
+
+  # Create model_type and dataset_type
+  if (length(attr(mdat, "uniq_modnames")) == 1L) {
+    model_type <- "single"
+  } else {
+    model_type <- "multiple"
+  }
+
+  if (length(attr(mdat, "uniq_dsids")) == 1L) {
+    dataset_type <- "single"
+  } else {
+    dataset_type <- "multiple"
+  }
 
   # === Create ROC and Precision-Recall curves ===
   # Define a function for each iteration
@@ -21,19 +31,14 @@ pl_main <- function(mdat, model_type = "single", data_type = "single",
 
   # Create curves
   lcurves <- lapply(seq_along(mdat), plfunc)
-  pf <- .make_prefix(model_type, data_type)
+  pf <- .make_prefix(model_type, dataset_type)
   rocs <- .group_curves(lcurves, "roc", paste0(pf, "roc"), mdat)
   prcs <- .group_curves(lcurves, "prc", paste0(pf, "prc"), mdat)
 
   # Calculate the average curves
-  if (data_type == "multiple" && calc_avg) {
-    modnames <- attr(mdat, "modnames")
-    dsids <- attr(mdat, "dsids")
-
-    attr(rocs, "avgcurves") <- calc_avg(rocs, modnames, dsids,
-                                        x_bins, ci_alpha)
-    attr(prcs, "avgcurves") <- calc_avg(prcs, modnames, dsids,
-                                        x_bins, ci_alpha)
+  if (dataset_type == "multiple" && calc_avg) {
+    attr(rocs, "avgcurves") <- calc_avg(rocs, ci_alpha, x_bins)
+    attr(prcs, "avgcurves") <- calc_avg(prcs, ci_alpha, x_bins)
   }
 
   # === Create an S3 object ===
@@ -41,10 +46,11 @@ pl_main <- function(mdat, model_type = "single", data_type = "single",
                      class = paste0(pf, "curves"))
 
   # Set attributes
+  attr(s3obj, "data_info") <- attr(mdat, "data_info")
+  attr(s3obj, "uniq_modnames") <- attr(mdat, "uniq_modnames")
+  attr(s3obj, "uniq_dsids") <- attr(mdat, "uniq_dsids")
   attr(s3obj, "model_type") <- model_type
-  attr(s3obj, "data_type") <- data_type
-  attr(s3obj, "modnames") <- attr(mdat, "modnames")
-  attr(s3obj, "dsids") <- attr(mdat, "dsids")
+  attr(s3obj, "dataset_type") <- dataset_type
   attr(s3obj, "args") <- list(x_bins = x_bins,
                               calc_avg = calc_avg,
                               ci_alpha = ci_alpha)
@@ -56,30 +62,9 @@ pl_main <- function(mdat, model_type = "single", data_type = "single",
 }
 
 #
-# Check partial match
-#
-.pmatch_model_data_types <- function(val) {
-  if (assertthat::is.string(val)) {
-    if (val == "single" || val == "multiple") {
-      return(val)
-    }
-
-    if (!is.na(pmatch(val, "single"))) {
-      return("single")
-    }
-
-    if (!is.na(pmatch(val, "multiple"))) {
-      return("multiple")
-    }
-  }
-
-  val
-}
-
-#
 # Make prefix
 #
-.make_prefix <- function(model_type, data_type) {
+.make_prefix <- function(model_type, dataset_type) {
   mt <- ""
   if (model_type == "single") {
     mt <- "s"
@@ -88,9 +73,9 @@ pl_main <- function(mdat, model_type = "single", data_type = "single",
   }
 
   dt <- ""
-  if (data_type == "single") {
+  if (dataset_type == "single") {
     dt <- "s"
-  } else if (data_type == "multiple") {
+  } else if (dataset_type == "multiple") {
     dt <- "m"
   }
 
@@ -108,8 +93,9 @@ pl_main <- function(mdat, model_type = "single", data_type = "single",
   s3obj <- structure(mc, class = class_name)
 
   # Set attributes
-  attr(s3obj, "modnames") <- attr(mdat, "modnames")
-  attr(s3obj, "dsids") <- attr(mdat, "dsids")
+  attr(s3obj, "data_info") <- attr(mdat, "data_info")
+  attr(s3obj, "uniq_modnames") <- attr(mdat, "uniq_modnames")
+  attr(s3obj, "uniq_dsids") <- attr(mdat, "uniq_dsids")
   attr(s3obj, "avgcurve") <- NA
   attr(s3obj, "src") <- mdat
   attr(s3obj, "validated") <- FALSE

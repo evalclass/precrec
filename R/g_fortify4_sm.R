@@ -86,7 +86,7 @@ fortify.smroc <- function(model, use_raw = FALSE, ...) {
   # === Prepare a data frame for ggplot2 ===
   if (use_raw) {
     df <- NULL
-    dsids <- attr(model, "dsids")
+    dsids <- attr(model, "data_info")[["dsids"]]
     for (i in seq_along(model)) {
       x = model[[i]][["x"]]
       y = model[[i]][["y"]]

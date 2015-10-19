@@ -2,7 +2,7 @@
 # matplot wrapper
 #
 .matplot_wrapper <- function(obj, curve_name, xlab, ylab,
-                             data_type = "multiple") {
+                             dataset_type = "multiple") {
 
   # === Validate input arguments ===
   .validate(obj)
@@ -12,7 +12,7 @@
   nn <- attr(obj[[1]], "nn")
 
   mats <- .make_matplot_mats(obj)
-  if (data_type == "single") {
+  if (dataset_type == "single") {
     line_col <- "black"
   } else {
     line_col <- rainbow(ncol(mats[["x"]]))
@@ -91,14 +91,14 @@
 #
 # Show legend
 #
-.show_legend <- function(obj, show_legend, gnames = "modname") {
+.show_legend <- function(obj, show_legend, gnames = "modnames") {
   if (show_legend) {
     old_mar <- par(mar = c(0, 0, 0, 0))
     on.exit(par(old_mar), add = TRUE)
     old_pty <- par(pty = "m")
     on.exit(par(old_pty), add = TRUE)
 
-    gnames <- unique(attr(obj, gnames))
+    gnames <- attr(obj, paste0("uniq_", gnames))
     plot(1, type = "n", axes = FALSE, xlab = "", ylab = "")
     legend(x = "top", lty = 1,
            legend = gnames,

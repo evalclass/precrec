@@ -1,25 +1,28 @@
 #
 # Validate arguments of pl_main()
 #
-.validate_pl_main_args <- function(mdat, model_type, data_type, x_bins,
-                                   calc_avg, ci_alpha) {
+.validate_pl_main_args <- function(mdat, calc_avg, ci_alpha, all_curves,
+                                   x_bins, orig_points) {
 
-  # Check model type
-  .validate_model_type(model_type)
+  # Validate mdat
+  .validate(mdat)
 
-  modnames <- attr(mdat, "modnames")
-  if (model_type == "single") {
-    assertthat::assert_that(length(unique(modnames)) == 1L)
-  }
 
-  # Check data type
-  dsids <- attr(mdat, "dsids")
-  if (data_type == "single") {
-    assertthat::assert_that(length(unique(dsids)) == 1L)
-  }
+  # Validate calc_avg
+  .validate_calc_avg(calc_avg)
+
+  # Validate ci_alpha
+  .validate_ci_alpha(ci_alpha)
+
+  # Validate all_curves
+  .validate_all_curves(all_curves)
+
 
   # Check x_bins
   .validate_x_bins(x_bins)
+
+  # Check orig_points
+  .validate_orig_points(orig_points)
 
 }
 

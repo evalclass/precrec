@@ -1,18 +1,8 @@
 library(precrec)
 
 context("PL 0: Pipeline main")
-# Test .pmatch_model_data_types(val),
-#      .make_prefix(model_type, data_type), and
-#      pl_main(mdat, model_type, data_type, x_bins)
-
-test_that(".pmatch_model_data_types() returns 'single' or 'multiple'", {
-  expect_equal(.pmatch_model_data_types("s"), "single")
-  expect_equal(.pmatch_model_data_types("m"), "multiple")
-
-  expect_equal(.pmatch_model_data_types("L"), "L")
-  expect_equal(.pmatch_model_data_types(1), 1)
-  expect_equal(.pmatch_model_data_types(NULL), NULL)
-})
+# Test .make_prefix(model_type, data_type), and
+#      pl_main(mdat, x_bins)
 
 test_that(".make_prefix() takes 'model_type' and 'data_type'", {
   expect_equal(.make_prefix("single", "single"), "ss")
@@ -44,7 +34,7 @@ test_that("pl_main() returns 'mscurves'", {
   labels <- join_labels(l1, l2)
 
   mdat <- mmdata(scores, labels)
-  pl <- pl_main(mdat, model_type = "multiple")
+  pl <- pl_main(mdat)
 
   expect_equal(class(pl), "mscurves")
 })
@@ -98,7 +88,7 @@ test_that("'mscurves' contains 'msrocs' and 'msprcs'", {
   labels <- join_labels(l1, l2)
 
   mdat <- mmdata(scores, labels)
-  pl <- pl_main(mdat, model_type = "multiple")
+  pl <- pl_main(mdat)
 
   expect_equal(length(pl[["rocs"]]), 2)
   expect_equal(class(pl[["rocs"]]), "msroc")

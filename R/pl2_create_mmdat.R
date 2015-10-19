@@ -88,6 +88,10 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   mnames <- .create_modnames(length(lscores), modnames, dsids, expd_first)
   new_modnames <- mnames[["mn"]]
   new_dsids <- mnames[["ds"]]
+  data_info <- data.frame(modnames = new_modnames, dsids = new_dsids,
+                          nn = rep(NA, length(new_modnames)),
+                          np = rep(NA, length(new_modnames)),
+                          stringsAsFactors = FALSE)
 
   # === Reformat input data ===
   func_fmdat <- function(i) {
@@ -97,12 +101,18 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   }
   mmdat <- lapply(seq_along(lscores), func_fmdat)
 
+  for (i in seq_along(mmdat)) {
+    data_info[["nn"]][i] <- attr(mmdat[[i]], "nn")
+    data_info[["np"]][i] <- attr(mmdat[[i]], "np")
+  }
+
   # === Create an S3 object ===
   s3obj <- structure(mmdat, class = "mdat")
 
   # Set attributes
-  attr(s3obj, "modnames") <- new_modnames
-  attr(s3obj, "dsids") <- new_dsids
+  attr(s3obj, "data_info") <- data_info
+  attr(s3obj, "uniq_modnames") <- unique(new_modnames)
+  attr(s3obj, "uniq_dsids") <- unique(new_dsids)
   attr(s3obj, "args") <- list(na_worst = na_worst,
                               ties_method = ties_method)
   attr(s3obj, "validated") <- FALSE

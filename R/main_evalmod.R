@@ -95,12 +95,13 @@ evalmod <- function(mdat, scores = NULL, labels = NULL,
   if (!missing(mdat)) {
     .validate(mdat)
   } else {
-    mdat <- mmdata(scores, labels, modnames = modnames,
-                   dsids = dsids, posclass = posclass, na_worst = na_worst,
-                   ties_method = ties_method)
+    mdat <- mmdata(scores, labels,
+                   modnames = modnames, dsids = dsids, posclass = posclass,
+                   na_worst = na_worst, ties_method = ties_method)
   }
 
-  pl_main(mdat, model_type = "multiple", data_type = "multiple",
-          x_bins = x_bins, calc_avg = calc_avg, ci_alpha = ci_alpha)
+  pl_main(mdat,
+          calc_avg = calc_avg, ci_alpha = ci_alpha, all_curves = all_curves,
+          x_bins = x_bins, orig_points = orig_points)
 
 }

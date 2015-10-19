@@ -90,6 +90,5 @@ evalmod_s <- function(mdat, x_bins = 1000, scores = NULL, labels = NULL,
                    na_worst = na_worst, ties_method = ties_method)
   }
 
-  pl_main(mdat, model_type = "single", data_type = "single",
-          x_bins = x_bins)
+  pl_main(mdat, x_bins = x_bins)
 }

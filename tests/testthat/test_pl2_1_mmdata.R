@@ -157,12 +157,12 @@ test_that("mmdata() accepts 'expd_first", {
   dlen <- 3
 
   mdat1 <- mmdata(scores, labels, expd_first = "modnames")
-  expect_equal(attr(mdat1, "modnames"), c("m1", "m2", "m3"))
-  expect_equal(attr(mdat1, "dsids"), rep(1, 3))
+  expect_equal(attr(mdat1, "data_info")[["modnames"]], c("m1", "m2", "m3"))
+  expect_equal(attr(mdat1, "data_info")[["dsids"]], rep(1, 3))
 
   mdat2 <- mmdata(scores, labels, expd_first = "dsids")
-  expect_equal(attr(mdat2, "modnames"), rep("m1", 3))
-  expect_equal(attr(mdat2, "dsids"), seq(3))
+  expect_equal(attr(mdat2, "data_info")[["modnames"]], rep("m1", 3))
+  expect_equal(attr(mdat2, "data_info")[["dsids"]], seq(3))
 })
 
 test_that("'mdat' contains a list", {

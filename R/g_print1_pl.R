@@ -4,24 +4,17 @@
 #' @export
 print.mdat <- function(x, ...) {
 
-  cat("\n  Reformated input data\n\n")
+  cat("\n  Input data\n\n")
 
-  for (i in seq(length(x))) {
-    cat("    Model name:", attr(x[[i]], "modname"), "\n")
-    cat("    Dataset ID:", attr(x[[i]], "dsid"), "\n")
-    cat("    # of positives:", attr(x[[i]], "np"), "\n")
-    cat("    # of negatives:", attr(x[[i]], "nn"), "\n")
-    cat("    Score ranks:", head(x[[i]][["rank_idx"]]))
-    if (length(x[[i]][["rank_idx"]]) > 6) {
-      cat(" ...")
-    }
-    cat("\n")
-    cat("    Labels (factor):", head(x[[i]][["labels"]]))
-    if (length(x[[i]][["labels"]]) > 6) {
-      cat(" ...")
-    }
-  }
+  data_info <- attr(x, "data_info")
+  rownames(data_info) <- format(rownames(data_info), width = 4,
+                                justify = "right")
+  colnames(data_info) <- c("Model name", "Dataset ID", "# of positives",
+                           "# of negatives")
 
+  print(data_info, print.gap = 2)
+
+  cat("\n")
 }
 
 #
