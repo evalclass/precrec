@@ -13,9 +13,9 @@ test_that("create_prc() reterns a 'prc_curve' object", {
   prc_curve2 <- create_prc(pevals)
   prc_curve3 <- create_prc(scores = P10N10$scores, labels = P10N10$labels)
 
-  expect_equal(class(prc_curve1), "prc_curve")
-  expect_equal(class(prc_curve2), "prc_curve")
-  expect_equal(class(prc_curve3), "prc_curve")
+  expect_true(is(prc_curve1, "prc_curve"))
+  expect_true(is(prc_curve2, "prc_curve"))
+  expect_true(is(prc_curve3, "prc_curve"))
 })
 
 test_that("'pevals' must be an 'pevals' object", {
@@ -37,7 +37,6 @@ test_that("create_prc() directly takes scores and labels", {
 
   expect_equal(prc_curve1[["auc"]], prc_curve2[["auc"]])
 })
-
 
 test_that("create_prc() can take arguments for reformat_data()", {
   err_msg <- "Invalid arguments: na.rm"

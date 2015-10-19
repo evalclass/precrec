@@ -13,9 +13,9 @@ test_that("create_roc() reterns a 'roc_curve' object", {
   roc_curve2 <- create_roc(pevals)
   roc_curve3 <- create_roc(scores = P10N10$scores, labels = P10N10$labels)
 
-  expect_equal(class(roc_curve1), "roc_curve")
-  expect_equal(class(roc_curve2), "roc_curve")
-  expect_equal(class(roc_curve3), "roc_curve")
+  expect_true(is(roc_curve1, "roc_curve"))
+  expect_true(is(roc_curve2, "roc_curve"))
+  expect_true(is(roc_curve3, "roc_curve"))
 })
 
 test_that("'pevals' must be an 'pevals' object", {

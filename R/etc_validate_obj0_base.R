@@ -16,7 +16,7 @@
 .validate_basic <- function(obj, class_name, func_name, item_names, attr_names,
                             arg_names) {
   # Check class
-  if (class(obj) != class_name) {
+  if (!is(obj, class_name)) {
     stop(paste0("Expected '", class_name, "' created by ", func_name, "(): ",
                 class(obj)))
   }

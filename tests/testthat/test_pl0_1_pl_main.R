@@ -21,7 +21,7 @@ test_that("pl_main() returns 'sscurves'", {
   mdat <- mmdata(s1, l1)
   pl <- pl_main(mdat)
 
-  expect_equal(class(pl), "sscurves")
+  expect_true(is(pl, "sscurves"))
 })
 
 test_that("pl_main() returns 'mscurves'", {
@@ -36,7 +36,7 @@ test_that("pl_main() returns 'mscurves'", {
   mdat <- mmdata(scores, labels)
   pl <- pl_main(mdat)
 
-  expect_equal(class(pl), "mscurves")
+  expect_true(is(pl, "mscurves"))
 })
 
 test_that("pl_main() accepts 'x_bins'", {
@@ -70,12 +70,12 @@ test_that("'sscurves' contains 'ssrocs' and 'ssprcs'", {
   pl <- pl_main(mdat)
 
   expect_equal(length(pl[["rocs"]]), 1)
-  expect_equal(class(pl[["rocs"]]), "ssroc")
-  expect_equal(class(pl[["rocs"]][[1]]), "roc_curve")
+  expect_true(is(pl[["rocs"]], "ssroc"))
+  expect_true(is(pl[["rocs"]][[1]], "roc_curve"))
 
   expect_equal(length(pl[["prcs"]]), 1)
-  expect_equal(class(pl[["prcs"]]), "ssprc")
-  expect_equal(class(pl[["prcs"]][[1]]), "prc_curve")
+  expect_true(is(pl[["prcs"]], "ssprc"))
+  expect_true(is(pl[["prcs"]][[1]], "prc_curve"))
 })
 
 test_that("'mscurves' contains 'msrocs' and 'msprcs'", {
@@ -91,12 +91,12 @@ test_that("'mscurves' contains 'msrocs' and 'msprcs'", {
   pl <- pl_main(mdat)
 
   expect_equal(length(pl[["rocs"]]), 2)
-  expect_equal(class(pl[["rocs"]]), "msroc")
-  expect_equal(class(pl[["rocs"]][[1]]), "roc_curve")
-  expect_equal(class(pl[["rocs"]][[2]]), "roc_curve")
+  expect_true(is(pl[["rocs"]], "msroc"))
+  expect_true(is(pl[["rocs"]][[1]], "roc_curve"))
+  expect_true(is(pl[["rocs"]][[2]], "roc_curve"))
 
   expect_equal(length(pl[["prcs"]]), 2)
-  expect_equal(class(pl[["prcs"]]), "msprc")
-  expect_equal(class(pl[["prcs"]][[1]]), "prc_curve")
-  expect_equal(class(pl[["prcs"]][[2]]), "prc_curve")
+  expect_true(is(pl[["prcs"]], "msprc"))
+  expect_true(is(pl[["prcs"]][[1]], "prc_curve"))
+  expect_true(is(pl[["prcs"]][[2]], "prc_curve"))
 })

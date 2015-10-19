@@ -12,9 +12,9 @@ test_that("calc_measures() reterns an 'pevals' object", {
   pevals2 <- calc_measures(cmats)
   pevals3 <- calc_measures(scores = P10N10$scores, labels = P10N10$labels)
 
-  expect_equal(class(pevals1), "pevals")
-  expect_equal(class(pevals2), "pevals")
-  expect_equal(class(pevals3), "pevals")
+  expect_true(is(pevals1, "pevals"))
+  expect_true(is(pevals2, "pevals"))
+  expect_true(is(pevals3, "pevals"))
 })
 
 test_that("'cmats' must be a 'cmats' object", {

@@ -3,12 +3,12 @@
 #
 .validate.sscurves <- function(sscurves) {
   # Need to validate only once
-  if (class(sscurves) == "sscurves" && attr(sscurves, "validated")) {
+  if (is(sscurves, "sscurves") && attr(sscurves, "validated")) {
     return(sscurves)
   }
 
   # Check sscurves
-  if (class(sscurves) != "sscurves") {
+  if (!is(sscurves, "sscurves")) {
     stop("'sscurves' S3 object created by pl_main() expected")
   }
 
@@ -21,12 +21,12 @@
 #
 .validate.ssroc <- function(ssroc) {
   # Need to validate only once
-  if (class(ssroc) == "ssroc" && attr(ssroc, "validated")) {
+  if (is(ssroc, "ssroc") && attr(ssroc, "validated")) {
     return(ssroc)
   }
 
   # Check ssroc
-  if (class(ssroc) != "ssroc") {
+  if (!is(ssroc, "ssroc")) {
     stop("'ssroc' S3 object created by pl_main() expected")
   }
 
@@ -39,12 +39,12 @@
 #
 .validate.ssprc <- function(ssprc) {
   # Need to validate only once
-  if (class(ssprc) == "ssprc" && attr(ssprc, "validated")) {
+  if (is(ssprc, "ssprc") && attr(ssprc, "validated")) {
     return(ssprc)
   }
 
   # Check ssprc
-  if (class(ssprc) != "ssprc") {
+  if (!is(ssprc, "ssprc")) {
     stop("'ssprc' S3 object created by pl_main() expected")
   }
 

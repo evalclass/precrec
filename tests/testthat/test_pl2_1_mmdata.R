@@ -28,7 +28,7 @@ test_that("mmdata() returns an 'mdat' object", {
 
   mdat <- mmdata(scores, labels)
 
-  expect_equal(class(mdat), "mdat")
+  expect_true(is(mdat, "mdat"))
   expect_equal(length(mdat), 3)
 
 })

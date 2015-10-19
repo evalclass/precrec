@@ -3,12 +3,12 @@
 #
 .validate.mdat <- function(mdat) {
   # Need to validate only once
-  if (class(mdat) == "mdat" && attr(mdat, "validated")) {
+  if (is(mdat, "mdat") && attr(mdat, "validated")) {
     return(mdat)
   }
 
   # Check mdat
-  if (class(mdat) != "mdat") {
+  if (!is(mdat, "mdat")) {
     stop("'mdat' S3 object created by mmdata() expected")
   }
 
@@ -26,7 +26,7 @@
 #
 .validate.fmdat <- function(fmdat) {
   # Need to validate only once
-  if (class(fmdat) == "fmdat" && attr(fmdat, "validated")) {
+  if (is(fmdat, "fmdat") && attr(fmdat, "validated")) {
     return(fmdat)
   }
 
@@ -68,7 +68,7 @@
 #
 .validate.cmats <- function(cmats) {
   # Need to validate only once
-  if (class(cmats) == "cmats" && attr(cmats, "validated")) {
+  if (is(cmats, "cmats") && attr(cmats, "validated")) {
     return(cmats)
   }
 
@@ -124,7 +124,7 @@
 #
 .validate.pevals <- function(pevals) {
   # Need to validate only once
-  if (class(pevals) == "pevals" && attr(pevals, "validated")) {
+  if (is(pevals, "pevals") && attr(pevals, "validated")) {
     return(pevals)
   }
 
@@ -189,7 +189,7 @@
 #
 .validate.roc_curve <- function(roc_curve) {
   # Need to validate only once
-  if (class(roc_curve) == "roc_curve" && attr(roc_curve, "validated")) {
+  if (is(roc_curve, "roc_curve") && attr(roc_curve, "validated")) {
     return(roc_curve)
   }
 
@@ -205,7 +205,7 @@
 #
 .validate.prc_curve <- function(prc_curve) {
   # Need to validate only once
-  if (class(prc_curve) == "prc_curve" && attr(prc_curve, "validated")) {
+  if (is(prc_curve, "prc_curve") && attr(prc_curve, "validated")) {
     return(prc_curve)
   }
 
@@ -277,7 +277,7 @@
 #
 .validate.curves <- function(curves) {
   # Need to validate only once
-  if (class(curves) == "curves" && attr(curves, "validated")) {
+  if (is(curves, "curves") && attr(curves, "validated")) {
     return(curves)
   }
 
@@ -303,7 +303,7 @@
 #
 .validate.avgcurves <- function(avgcurves) {
   # Need to validate only once
-  if (class(avgcurves) == "avgcurves" && attr(avgcurves, "validated")) {
+  if (is(avgcurves, "avgcurves") && attr(avgcurves, "validated")) {
     return(avgcurves)
   }
 

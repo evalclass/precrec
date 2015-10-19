@@ -39,14 +39,14 @@
 
   # Check efunc_vtype
   if (!is.null(efunc_vtype)
-      && (class(efunc_vtype) != "function"
+      && (!is(efunc_vtype, "function")
           || length(as.list(formals(efunc_vtype))) != 1)) {
     stop("'efunc_vtype' must be a function with 1 argument")
   }
 
   # Check efunc_nrow
   if (!is.null(efunc_nrow)
-      && (class(efunc_nrow) != "function"
+      && (!is(efunc_nrow, "function")
           || length(as.list(formals(efunc_nrow))) != 2)) {
     stop("'efunc_nrow' must be a function with 2 arguments")
   }

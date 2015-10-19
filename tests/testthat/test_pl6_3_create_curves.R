@@ -13,9 +13,9 @@ test_that("create_curves() reterns a 'curves' object", {
   curves2 <- create_curves(pevals)
   curves3 <- create_curves(scores = P10N10$scores, labels = P10N10$labels)
 
-  expect_equal(class(curves1), "curves")
-  expect_equal(class(curves2), "curves")
-  expect_equal(class(curves3), "curves")
+  expect_true(is(curves1, "curves"))
+  expect_true(is(curves2, "curves"))
+  expect_true(is(curves3, "curves"))
 })
 
 test_that("'pevals' must be an 'pevals' object", {

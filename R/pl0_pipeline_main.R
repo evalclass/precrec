@@ -51,9 +51,11 @@ pl_main <- function(mdat, calc_avg = TRUE, ci_alpha = 0.05, all_curves = FALSE,
   attr(s3obj, "uniq_dsids") <- attr(mdat, "uniq_dsids")
   attr(s3obj, "model_type") <- model_type
   attr(s3obj, "dataset_type") <- dataset_type
-  attr(s3obj, "args") <- list(x_bins = x_bins,
-                              calc_avg = calc_avg,
-                              ci_alpha = ci_alpha)
+  attr(s3obj, "args") <- list(calc_avg = calc_avg,
+                              ci_alpha = ci_alpha,
+                              all_curves = all_curves,
+                              x_bins = x_bins,
+                              orig_points = orig_points)
   attr(s3obj, "src") <- mdat
   attr(s3obj, "validated") <- FALSE
 
