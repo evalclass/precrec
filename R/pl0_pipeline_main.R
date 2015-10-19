@@ -35,6 +35,9 @@ pl_main <- function(mdat, calc_avg = TRUE, ci_alpha = 0.05, all_curves = FALSE,
   rocs <- .group_curves(lcurves, "roc", paste0(pf, "roc"), mdat)
   prcs <- .group_curves(lcurves, "prc", paste0(pf, "prc"), mdat)
 
+  # Summarize AUC
+  aucs <- .group_aucs(lcurves, mdat)
+
   # Calculate the average curves
   if (dataset_type == "multiple" && calc_avg) {
     attr(rocs, "avgcurves") <- calc_avg(rocs, ci_alpha, x_bins)
@@ -43,9 +46,10 @@ pl_main <- function(mdat, calc_avg = TRUE, ci_alpha = 0.05, all_curves = FALSE,
 
   # === Create an S3 object ===
   s3obj <- structure(list(rocs = rocs, prcs = prcs),
-                     class = paste0(pf, "curves"))
+                     class = c(paste0(pf, "curves"), "curve_info"))
 
   # Set attributes
+  attr(s3obj, "aucs") <- aucs
   attr(s3obj, "data_info") <- attr(mdat, "data_info")
   attr(s3obj, "uniq_modnames") <- attr(mdat, "uniq_modnames")
   attr(s3obj, "uniq_dsids") <- attr(mdat, "uniq_dsids")
@@ -56,7 +60,6 @@ pl_main <- function(mdat, calc_avg = TRUE, ci_alpha = 0.05, all_curves = FALSE,
                               all_curves = all_curves,
                               x_bins = x_bins,
                               orig_points = orig_points)
-  attr(s3obj, "src") <- mdat
   attr(s3obj, "validated") <- FALSE
 
   # Call .validate.class_name()
@@ -99,9 +102,33 @@ pl_main <- function(mdat, calc_avg = TRUE, ci_alpha = 0.05, all_curves = FALSE,
   attr(s3obj, "uniq_modnames") <- attr(mdat, "uniq_modnames")
   attr(s3obj, "uniq_dsids") <- attr(mdat, "uniq_dsids")
   attr(s3obj, "avgcurve") <- NA
-  attr(s3obj, "src") <- mdat
   attr(s3obj, "validated") <- FALSE
 
   # Call .validate.class_name()
   .validate(s3obj)
+}
+
+#
+# Get AUCs
+#
+.group_aucs <- function(lcurves, mdat) {
+
+  # Group AUC of ROC or PRC curves
+  modnames <- attr(mdat, "data_info")[["modnames"]]
+  dsids <- attr(mdat, "data_info")[["dsids"]]
+  aucs <- data.frame(modnames = rep(modnames, each = 2),
+                     dsids = rep(dsids, each = 2),
+                     curvetypes = rep(c("ROC", "PRC"), length(modnames)),
+                     aucs = rep(NA, length(modnames) * 2),
+                     stringsAsFactors = FALSE)
+
+  j <- 1
+  for (i in seq_along(lcurves)) {
+    aucs[["aucs"]][j] <- attr(lcurves[[i]][["roc"]], "auc")
+    j <- j + 1
+    aucs[["aucs"]][j] <- attr(lcurves[[i]][["prc"]], "auc")
+    j <- j + 1
+  }
+
+  aucs
 }
