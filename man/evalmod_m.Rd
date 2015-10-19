@@ -4,7 +4,7 @@
 \alias{evalmod_m}
 \title{Evaluate a single model with multiple datasets}
 \usage{
-evalmod_m(mdat, x_bins = 1000, calc_avg = TRUE, ci_level = 0.95,
+evalmod_m(mdat, x_bins = 1000, calc_avg = TRUE, ci_alpha = 0.05,
   keep_all_curves = FALSE, scores = NULL, labels = NULL,
   modnames = NULL, dsids = NULL, na_worst = TRUE, ties_method = "equiv")
 }

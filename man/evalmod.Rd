@@ -5,8 +5,9 @@
 \title{Evaluate a single model with multiple datasets}
 \usage{
 evalmod(mdat, scores = NULL, labels = NULL, modnames = NULL,
-  dsids = NULL, calc_avg = TRUE, ci_level = 0.95, all_curves = FALSE,
-  x_bins = 1000, na_worst = TRUE, ties_method = "equiv")
+  dsids = NULL, posclass = NULL, na_worst = TRUE, ties_method = "equiv",
+  calc_avg = TRUE, ci_alpha = 0.05, all_curves = FALSE, x_bins = 1000,
+  orig_points = TRUE)
 }
 \arguments{
 \item{mdat}{An \code{mdat} object created by \code{\link{mmdata}}.
@@ -31,10 +32,6 @@ evalmod(mdat, scores = NULL, labels = NULL, modnames = NULL,
 
 \item{dsids}{A numeric vector as dataset IDs.}
 
-\item{x_bins}{A numeric value with the range (0, 1] to specifiy
-  an interval of the evaluation values on the x-axis.
-  No interpolation between two points is performed when it is set to 1.}
-
 \item{na_worst}{A boolean value for controlling the treatment of NAs
   in the scores.
   \describe{
@@ -49,6 +46,10 @@ evalmod(mdat, scores = NULL, labels = NULL, modnames = NULL,
     \item{"random"}{Ties are ranked in an incresing order as appeared}
     \item{"first"}{ Ties are ranked in random order}
   }}
+
+\item{x_bins}{A numeric value with the range (0, 1] to specifiy
+  an interval of the evaluation values on the x-axis.
+  No interpolation between two points is performed when it is set to 1.}
 }
 \value{
 The \code{evalmods_m} function returns an \code{smcurves} S3 object

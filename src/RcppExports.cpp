@@ -90,13 +90,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // format_labels
-Rcpp::List format_labels(Rcpp::NumericVector& labels);
-RcppExport SEXP precrec_format_labels(SEXP labelsSEXP) {
+Rcpp::List format_labels(SEXP labels, SEXP posclass);
+RcppExport SEXP precrec_format_labels(SEXP labelsSEXP, SEXP posclassSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< Rcpp::NumericVector& >::type labels(labelsSEXP);
-    __result = Rcpp::wrap(format_labels(labels));
+    Rcpp::traits::input_parameter< SEXP >::type labels(labelsSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type posclass(posclassSEXP);
+    __result = Rcpp::wrap(format_labels(labels, posclass));
     return __result;
 END_RCPP
 }

@@ -5,7 +5,7 @@
 \title{Evaluate a single model with multiple datasets}
 \usage{
 evalmods_m(mdat, scores = NULL, labels = NULL, modnames = NULL,
-  dsids = NULL, calc_avg = TRUE, ci_level = 0.95, all_curves = FALSE,
+  dsids = NULL, calc_avg = TRUE, ci_alpha = 0.05, all_curves = FALSE,
   x_bins = 1000, na_worst = TRUE, ties_method = "equiv")
 }
 \arguments{

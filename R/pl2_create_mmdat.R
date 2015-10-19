@@ -66,8 +66,8 @@
 #'
 #' @export
 mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
-                   expd_first = "modnames", na_worst = TRUE,
-                   ties_method = "equiv", ...) {
+                   posclass = NULL, na_worst = TRUE, ties_method = "equiv",
+                   expd_first = "modnames", ...) {
 
   # === Join datasets ===
   lscores <- join_scores(scores)
@@ -75,9 +75,9 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
 
   # === Validate arguments and variables ===
   expd_first <- .pmatch_expd_first(expd_first)
-  .validate_mmdata_args(lscores, llabels, modnames, dsids,
-                        expd_first = "modnames", na_worst = na_worst,
-                        ties_method = ties_method)
+  .validate_mmdata_args(lscores, llabels, modnames, dsids, posclass = posclass,
+                        na_worst = na_worst, ties_method = ties_method,
+                        expd_first = expd_first)
 
   # Replicate labels
   if (length(lscores) != 1 && length(llabels) == 1) {
@@ -85,17 +85,15 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   }
 
   # === Model names and dataset IDs ===
-  mnames <- .create_modnames(length(lscores), modnames, dsids,
-                             expd_first)
+  mnames <- .create_modnames(length(lscores), modnames, dsids, expd_first)
   new_modnames <- mnames[["mn"]]
   new_dsids <- mnames[["ds"]]
 
   # === Reformat input data ===
   func_fmdat <- function(i) {
-    reformat_data(lscores[[i]], llabels[[i]], na_worst = na_worst,
-                  ties_method = ties_method,
-                  modname = new_modnames[i], dsid = new_dsids[i],
-                  ...)
+    reformat_data(lscores[[i]], llabels[[i]], posclass = posclass,
+                  na_worst = na_worst, ties_method = ties_method,
+                  modname = new_modnames[i], dsid = new_dsids[i], ...)
   }
   mmdat <- lapply(seq_along(lscores), func_fmdat)
 

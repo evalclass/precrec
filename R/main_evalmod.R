@@ -84,19 +84,19 @@
 #'
 #' @export
 evalmod <- function(mdat, scores = NULL, labels = NULL,
-                    modnames = NULL, dsids = NULL,
+                    modnames = NULL, dsids = NULL, posclass = NULL,
+                    na_worst = TRUE, ties_method = "equiv",
                     calc_avg = TRUE, ci_alpha = 0.05, all_curves = FALSE,
-                    x_bins = 1000,
-                    na_worst = TRUE, ties_method = "equiv") {
+                    x_bins = 1000, orig_points = TRUE) {
 
-  .validate_evalmods_m_args(x_bins, calc_avg, ci_alpha, modnames, dsids,
-                            na_worst, ties_method)
+  .validate_evalmod_args(modnames, dsids, posclass, na_worst, ties_method,
+                         calc_avg, ci_alpha, all_curves, x_bins, orig_points)
 
   if (!missing(mdat)) {
     .validate(mdat)
   } else {
     mdat <- mmdata(scores, labels, modnames = modnames,
-                   dsids = dsids, na_worst = na_worst,
+                   dsids = dsids, posclass = posclass, na_worst = na_worst,
                    ties_method = ties_method)
   }
 

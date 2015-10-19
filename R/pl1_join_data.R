@@ -36,15 +36,9 @@
 #'
 #' @export
 join_scores <- function(..., byrow = FALSE, chklen = TRUE) {
-  # Set a function to check the vector values
-  if (chklen) {
-    efunc_nrow <- NULL
-  } else {
-    efunc_nrow <- function(m, vlen) NULL
-  }
-
   # Call join datasets
-  .join_datasets(..., efunc_nrow = efunc_nrow, byrow = byrow)
+  .join_datasets(..., efunc_vtype = .validate_scores, efunc_nrow = NULL,
+                 byrow = byrow, chklen = chklen)
 }
 
 #' Join observed labels of multiple models into a list.
@@ -106,33 +100,16 @@ join_scores <- function(..., byrow = FALSE, chklen = TRUE) {
 #'
 #' @export
 join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
-  # Set a function to check the vector values
-  efunc_vtype <- function(v) {
-    if (!is.atomic(v) || ((!is.vector(v) || !is.numeric(v))
-                          && !is.factor(v))) {
-      stop("Invalid type of label data")
-    } else if (length(unique(v)) != 2L) {
-      stop("The number of unique labels must be 2")
-    }
-  }
-
-  # Set a function to check the number of vectors
-  if (chklen) {
-    efunc_nrow <- NULL
-  } else {
-    efunc_nrow <- function(m, vlen) NULL
-  }
-
   # Call join datasets
-  .join_datasets(..., efunc_vtype = efunc_vtype, efunc_nrow = efunc_nrow,
-                 byrow = byrow)
+  .join_datasets(..., efunc_vtype = .validate_labels, efunc_nrow = NULL,
+                 byrow = byrow, chklen = chklen)
 }
 
 #
 # Join datasets
 #
 .join_datasets <- function(..., efunc_vtype = NULL, efunc_nrow = NULL,
-                           byrow = FALSE) {
+                           byrow = FALSE, chklen = TRUE) {
 
   # Validate arguments
   .validate_join_datasets_args(..., efunc_vtype = efunc_vtype,
@@ -140,19 +117,23 @@ join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
 
   # Set a default error function for checking values
   if (is.null(efunc_vtype)) {
-    efunc_vtype <- function(v) {
-      if (!is.atomic(v) || !is.vector(v) || !is.numeric(v)) {
-        stop("All vectors must be numeric")
+    efunc_vtype <- function(efunc_vtype) {
+      if (any(is.null(efunc_vtype))){
+        stop("All vectors must be none NULL")
       }
     }
   }
 
   # Set a default error function for checking the # of rows
   if (is.null(efunc_nrow)) {
-    efunc_nrow <- function(m, vlen) {
-      if (m != 0 && m != vlen) {
-        stop("All vectors must be of the same size")
+    if (chklen) {
+      efunc_nrow <- function(m, vlen) {
+        if (m != 0 && m != vlen) {
+          stop("All vectors must be of the same size")
+        }
       }
+    } else {
+      efunc_nrow <- function(m, vlen) NULL
     }
   }
 

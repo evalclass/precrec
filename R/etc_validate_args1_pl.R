@@ -57,13 +57,13 @@
 #
 # Validate arguments of mmdata()
 #
-.validate_mmdata_args <- function(lscores, llabels, modnames, dsids,
-                                  expd_first, na_worst, ties_method) {
+.validate_mmdata_args <- function(lscores, llabels, modnames, dsids, posclass,
+                                  na_worst, ties_method, expd_first) {
 
   # Check lscores and llabels
   if (length(llabels) != 1 && length(lscores) != length(llabels)) {
-    stop(paste0("'scores' and 'labels' should be of the same size, or ",
-                "the size of 'labels' should be 1"))
+    stop(paste0("The number of scores and label lists should be the same size",
+                ", or the number of label list should be 1"))
   }
 
   # Check model names
@@ -72,8 +72,8 @@
   # Check dataset IDs
   .validate_dsids(dsids, length(lscores))
 
-  # Check expd_first
-  .validate_expd_first(expd_first)
+  # Check posclass
+  .validate_posclass(posclass)
 
   # Check na_worst
   .validate_na_worst(na_worst)
@@ -81,35 +81,39 @@
   # Check ties_method
   .validate_ties_method(ties_method)
 
+  # Check expd_first
+  .validate_expd_first(expd_first)
 }
 
 #
 # Validate arguments of reformat_data()
 #
-.validate_reformat_data_args <- function(obj, obj_name, scores, labels, ...) {
+.validate_reformat_data_args <- function(scores, labels, modname, dsid,
+                                         posclass, na_worst, ties_method,
+                                         ...) {
 
   # Check '...'
   arglist <- list(...)
   if (!is.null(names(arglist))){
-    invalid_list <- setdiff(names(arglist), c("na_worst", "ties_method",
-                                              "modname", "dsid"))
-    if (length(invalid_list) > 0L) {
-      stop(paste("Invalid arguments:", paste(invalid_list, collapse = ", ")))
-    }
-
-    # Check na_worst
-    .validate_na_worst(arglist[["na_worst"]])
-
-    # Check ties_method
-    .validate_ties_method(arglist[["ties_method"]])
-
-    # Check modname
-    .validate_modname(arglist[["modname"]])
-
-    # Check dsid
-    .validate_dsid(arglist[["dsid"]])
-
+    stop(paste("Invalid arguments:", paste(names(arglist), collapse = ", ")))
   }
 
-  .validate_scores_and_labels(obj, obj_name, scores, labels, ...)
+  # Check scores and labels
+  .validate_scores_and_labels(NULL, NULL, scores, labels)
+
+  # Check model name
+  .validate_modname(modname)
+
+  # Check dataset ID
+  .validate_dsid(dsid)
+
+  # Check posclass
+  .validate_posclass(posclass)
+
+  # Check na_worst
+  .validate_na_worst(na_worst)
+
+  # Check ties_method
+  .validate_ties_method(ties_method)
+
 }

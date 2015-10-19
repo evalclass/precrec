@@ -68,29 +68,41 @@ test_that("join_labels() returns a list", {
   expect_true(is.list(cdat))
 })
 
-test_that("join_labels() only accepts numeric vector or factors", {
+test_that("join_labels() only accepts vectors or factors", {
   vec1 <- c(1, 2)
   vec2 <- factor(c(1, 2))
   vec3 <- c("0", "1")
   vec4 <- c(TRUE, FALSE)
 
-  l <- join_labels(vec1, vec2)
+  l <- join_labels(vec1, vec2, vec3, vec4)
+  expect_equal(is.numeric(l[[1]]), TRUE)
+  expect_equal(is.vector(l[[1]]), TRUE)
   expect_equal(is.factor(l[[1]]), FALSE)
+
+  expect_equal(is.factor(l[[2]]), TRUE)
+  expect_equal(is.numeric(l[[2]]), FALSE)
   expect_equal(is.vector(l[[2]]), FALSE)
 
+  expect_equal(is.character(l[[3]]), TRUE)
+  expect_equal(is.vector(l[[3]]), TRUE)
+  expect_equal(is.numeric(l[[3]]), FALSE)
+
+  expect_equal(is.logical(l[[4]]), TRUE)
+  expect_equal(is.vector(l[[4]]), TRUE)
+  expect_equal(is.numeric(l[[4]]), FALSE)
+
   expect_err_msg <- function(vec1, vec2) {
-    err_msg <- "Invalid type of label data"
+    err_msg <- "Cannot join this type of data"
     eval(bquote(expect_error(join_labels(vec1, vec2), err_msg)))
   }
 
-  expect_err_msg(vec1, vec3)
-  expect_err_msg(vec1, vec4)
-
+  vec5 <- c(NULL, NULL)
+  expect_err_msg(vec1, vec5)
 })
 
 test_that("join_labels() accepts two unique labels", {
   expect_err_msg <- function(vec1, vec2) {
-    err_msg <- "The number of unique labels must be 2"
+    err_msg <- "not equal to 2L"
     eval(bquote(expect_error(join_labels(vec1, vec2), err_msg)))
   }
 

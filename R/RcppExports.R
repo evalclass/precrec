@@ -25,8 +25,8 @@ create_roc_curve <- function(tps, fps, sp, sn, x_bins) {
     .Call('precrec_create_roc_curve', PACKAGE = 'precrec', tps, fps, sp, sn, x_bins)
 }
 
-format_labels <- function(labels) {
-    .Call('precrec_format_labels', PACKAGE = 'precrec', labels)
+format_labels <- function(labels, posclass) {
+    .Call('precrec_format_labels', PACKAGE = 'precrec', labels, posclass)
 }
 
 get_score_ranks <- function(scores, na_last, ties_method) {

@@ -1,22 +1,4 @@
 #
-# Validate scores
-#
-.validate_scores <- function(scores) {
-  assertthat::assert_that(is.atomic(scores), is.vector(scores),
-                          is.numeric(scores), length(scores) > 0L)
-}
-
-#
-# Validate labels
-#
-.validate_labels <- function(labels) {
-  assertthat::assert_that(is.atomic(labels),
-                          ((is.vector(labels) && is.numeric(labels))
-                           || is.factor(labels)),
-                          length(unique(labels)) == 2L)
-}
-
-#
 # Validate scores and labels
 #
 .validate_scores_and_labels <- function(obj, obj_name, scores, labels, ...) {
@@ -56,12 +38,93 @@
 }
 
 #
+# Validate scores
+#
+.validate_scores <- function(scores) {
+  assertthat::assert_that(is.atomic(scores),
+                          is.vector(scores),
+                          is.numeric(scores),
+                          length(scores) > 0L)
+}
+
+#
+# Validate labels
+#
+.validate_labels <- function(labels) {
+  assertthat::assert_that(is.atomic(labels),
+                          (is.vector(labels) || is.factor(labels)),
+                          length(labels) > 0L,
+                          length(unique(labels)) == 2L)
+}
+
+#
+# Validate modname
+#
+.validate_modname <- function(modname) {
+  if (!is.null(modname)) {
+    assertthat::assert_that(assertthat::is.string(modname))
+  }
+}
+
+#
+# Validate modnames
+#
+.validate_modnames <- function(modnames, datalen) {
+  if (!is.null(modnames)) {
+
+    assertthat::assert_that(is.vector(modnames),
+                            is.character(modnames),
+                            length(modnames) == datalen)
+
+    for (i in 1:length(modnames)) {
+      .validate_modname(modnames[i])
+    }
+  }
+}
+
+#
+# Validate dsid
+#
+.validate_dsid <- function(dsid) {
+  if (!is.null(dsid)) {
+    assertthat::assert_that(assertthat::is.number(dsid))
+  }
+}
+
+#
+# Validate dsids
+#
+.validate_dsids <- function(dsids, datalen) {
+  if (!is.null(dsids)) {
+
+    assertthat::assert_that(is.vector(dsids),
+                            is.numeric(dsids),
+                            length(dsids) == datalen)
+
+    for (i in 1:length(dsids)) {
+      .validate_dsid(dsids[i])
+    }
+  }
+}
+
+#
+# Validate posclass
+#
+.validate_posclass <- function(posclass) {
+  if (!is.null(posclass)) {
+    assertthat::assert_that(is.atomic(posclass),
+                            (is.vector(posclass) || is.factor(posclass)),
+                            length(posclass) == 1L)
+  }
+}
+
+
+#
 # Validate na_worst
 #
 .validate_na_worst <- function(na_worst) {
   if (!is.null(na_worst)) {
-    assertthat::assert_that(is.atomic(na_worst),
-                            assertthat::is.flag(na_worst),
+    assertthat::assert_that(assertthat::is.flag(na_worst),
                             assertthat::noNA(na_worst))
   }
 }
@@ -82,34 +145,6 @@
 }
 
 #
-# Validate modname
-#
-.validate_modname <- function(modname) {
-  if (!is.null(modname)) {
-    assertthat::assert_that(assertthat::is.string(modname))
-  }
-}
-
-#
-# Validate dsid
-#
-.validate_dsid <- function(dsid) {
-  if (!is.null(dsid)) {
-    assertthat::assert_that(assertthat::is.number(dsid))
-  }
-}
-
-#
-# Validate ci_alpha
-#
-.validate_ci_alpha <- function(ci_alpha) {
-  if (!is.null(ci_alpha)) {
-    assertthat::assert_that(assertthat::is.number(ci_alpha))
-  }
-}
-
-
-#
 # Validate expd_first
 #
 .validate_expd_first <- function(expd_first) {
@@ -117,49 +152,6 @@
     assertthat::assert_that(assertthat::is.string(expd_first),
                             (expd_first == "modnames"
                              || expd_first == "dsids"))
-  }
-}
-
-#
-# Validate modnames
-#
-.validate_modnames <- function(modnames, datalen) {
-  if (!is.null(modnames)) {
-
-    assertthat::assert_that(is.atomic(modnames), is.vector(modnames),
-                            is.character(modnames),
-                            length(modnames) == datalen)
-
-    for (i in 1:length(modnames)) {
-      .validate_modname(modnames[i])
-    }
-  }
-}
-
-#
-# Validate dsids
-#
-.validate_dsids <- function(dsids, datalen) {
-  if (!is.null(dsids)) {
-
-    assertthat::assert_that(is.atomic(dsids), is.vector(dsids),
-                            (is.character(dsids) || is.numeric(dsids)),
-                            assertthat::noNA(dsids),
-                            length(dsids) == datalen)
-
-    for (i in 1:length(dsids)) {
-      .validate_dsid(dsids[i])
-    }
-  }
-}
-
-#
-# Validate x_bins
-#
-.validate_x_bins <- function(x_bins) {
-  if (!is.null(x_bins)) {
-    assertthat::assert_that(assertthat::is.number(x_bins),
-                            x_bins >= 1L)
   }
 }
 
@@ -182,5 +174,54 @@
     assertthat::assert_that(assertthat::is.string(data_type),
                             (data_type == "single"
                              || data_type == "multiple"))
+  }
+}
+
+#
+# Validate calc_avg
+#
+.validate_calc_avg <- function(calc_avg) {
+  if (!is.null(calc_avg)) {
+    assertthat::assert_that(assertthat::is.flag(calc_avg),
+                            assertthat::noNA(calc_avg))
+  }
+}
+
+#
+# Validate ci_alpha
+#
+.validate_ci_alpha <- function(ci_alpha) {
+  if (!is.null(ci_alpha)) {
+    assertthat::assert_that(assertthat::is.number(ci_alpha))
+  }
+}
+
+#
+# Validate all_curves
+#
+.validate_all_curves <- function(all_curves) {
+  if (!is.null(all_curves)) {
+    assertthat::assert_that(assertthat::is.flag(all_curves),
+                            assertthat::noNA(all_curves))
+  }
+}
+
+#
+# Validate x_bins
+#
+.validate_x_bins <- function(x_bins) {
+  if (!is.null(x_bins)) {
+    assertthat::assert_that(assertthat::is.number(x_bins),
+                            x_bins >= 1L)
+  }
+}
+
+#
+# Validate orig_points
+#
+.validate_orig_points <- function(orig_points) {
+  if (!is.null(orig_points)) {
+    assertthat::assert_that(assertthat::is.flag(orig_points),
+                            assertthat::noNA(orig_points))
   }
 }

@@ -4,7 +4,7 @@
 .check_cpp_func_error <- function(obj, func_name) {
 
   if (obj[["errmsg"]] != "") {
-    stop(paste0("An internal function (", func_name, "()) failed: ",
+    stop(paste0("Internal cpp function (", func_name, "()) failed: ",
                 obj[["errmsg"]]))
   }
 }

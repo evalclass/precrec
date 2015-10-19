@@ -1,26 +1,24 @@
 #
 # Reformat input data for Precision-Recall and ROC evaluation
 #
-reformat_data <- function(scores, labels, na_worst = TRUE,
-                          ties_method = "equiv",
-                          modname = as.character(NA), dsid = 1L, ...) {
+reformat_data <- function(scores, labels,
+                          modname = as.character(NA), dsid = 1L,
+                          posclass = NULL, na_worst = TRUE,
+                          ties_method = "equiv", ...) {
 
   # === Validate input arguments ===
-  .validate_reformat_data_args(NULL, NULL, scores, labels, na_worst = na_worst,
-                               ties_method = ties_method,
-                               modname = modname, dsid = dsid, ...)
+  .validate_reformat_data_args(scores, labels, modname = modname, dsid = dsid,
+                               posclass = posclass, na_worst = na_worst,
+                               ties_method = ties_method, ...)
 
   # === Reformat input data ===
   # Get score ranks and sorted indices
-  #   ranks <- .rank_scores(scores, na_worst, ties_method, validate = FALSE)
-  #   rank_idx <- order(ranks, decreasing = TRUE)
-
   sranks <- .rank_scores(scores, na_worst, ties_method, validate = FALSE)
   ranks <- sranks[["ranks"]]
   rank_idx <- sranks[["rank_idx"]]
 
   # Get a factor with "positive" and "negative"
-  fmtlabs <- .factor_labels(labels, validate = FALSE)
+  fmtlabs <- .factor_labels(labels, posclass, validate = FALSE)
 
   # === Create an S3 object ===
   s3obj <- structure(list(labels = fmtlabs[["labels"]],
@@ -45,14 +43,23 @@ reformat_data <- function(scores, labels, na_worst = TRUE,
 #
 # Factor labels
 #
-.factor_labels <- function(labels, validate = TRUE) {
+.factor_labels <- function(labels, posclass, validate = TRUE) {
   # === Validate input arguments ===
   if (validate) {
     .validate_labels(labels)
+    .validate_posclass(posclass)
+  }
+
+  # Update posclass if nesessary
+  if (is.null(posclass)) {
+    posclass = NA
+  } else if (is.factor(labels)) {
+    lv <- levels(labels)
+    posclass <- which(lv == posclass)
   }
 
   # === Generate label factors ===
-  flabels <- format_labels(labels)
+  flabels <- format_labels(labels, posclass)
   .check_cpp_func_error(flabels, "format_labels")
 
   flabels

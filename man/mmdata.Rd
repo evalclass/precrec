@@ -4,8 +4,8 @@
 \alias{mmdata}
 \title{Reformat data for Precision-Recall and ROC evaluation}
 \usage{
-mmdata(scores, labels, modnames = NULL, dsids = NULL,
-  expd_first = "modnames", na_worst = TRUE, ties_method = "equiv", ...)
+mmdata(scores, labels, modnames = NULL, dsids = NULL, posclass = NULL,
+  na_worst = TRUE, ties_method = "equiv", expd_first = "modnames", ...)
 }
 \arguments{
 \item{scores}{A numeric data of predicted scores. It can be a vector,
@@ -18,18 +18,6 @@ mmdata(scores, labels, modnames = NULL, dsids = NULL,
   of the models/classifiers.}
 
 \item{dsids}{A numeric vector as dataset IDs.}
-
-\item{expd_first}{Indicate which of the two vaiables - model names or dataset IDs
-  should be expanded first when they are automatically generated.
-
-  \describe{
-    \item{"modnames"}{Model names are expanded first. For example,
-           modnames: c("m1", "m2"), dsids: c(1, 1)
-           when they are automaticlly generated.}
-    \item{"dsids"}{Dataset IDs are expanded first. For example,
-           modnames: c("m1", "m1"), dsids: c(1, 2)
-           when they are automaticlly generated.}
-  }}
 
 \item{na_worst}{A boolean value for controlling the treatment of NAs
   in the scores.
@@ -44,6 +32,18 @@ mmdata(scores, labels, modnames = NULL, dsids = NULL,
     \item{"equiv"}{Ties are equivalently ranked}
     \item{"random"}{Ties are ranked in an incresing order as appeared}
     \item{"first"}{ Ties are ranked in random order}
+  }}
+
+\item{expd_first}{Indicate which of the two vaiables - model names or dataset IDs
+  should be expanded first when they are automatically generated.
+
+  \describe{
+    \item{"modnames"}{Model names are expanded first. For example,
+           modnames: c("m1", "m2"), dsids: c(1, 1)
+           when they are automaticlly generated.}
+    \item{"dsids"}{Dataset IDs are expanded first. For example,
+           modnames: c("m1", "m1"), dsids: c(1, 2)
+           when they are automaticlly generated.}
   }}
 
 \item{...}{Not used by this method.}

@@ -78,7 +78,7 @@ test_that("join_scores() only accepts numeric data", {
   expect_equal(length(s), 2)
 
   expect_err_msg <- function(vec1, vec2) {
-    err_msg <- "All vectors must be numeric"
+    err_msg <- " scores is not a numeric or integer vector"
     eval(bquote(expect_error(join_scores(vec1, vec2), err_msg)))
   }
 

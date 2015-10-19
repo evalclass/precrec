@@ -47,9 +47,8 @@ test_that("'scores' and 'labels' must be specified", {
 
 test_that("'scores' and 'labels' should be the same length", {
   expect_err_msg <- function(scores, labels) {
-    err_msg <- paste0("'scores' and 'labels' should be ",
-                      "of the same size, or ",
-                      "the size of 'labels' should be 1")
+    err_msg <- paste0("The number of scores and label lists ",
+                      "should be the same size")
     eval(bquote(expect_error(mmdata(scores, labels), err_msg)))
   }
 
@@ -96,10 +95,8 @@ test_that("mmdata() accepts 'dsids'", {
     eval(bquote(expect_error(mmdata(s1, l1, dsids = dsids), err_msg)))
   }
 
-  err_msg <- "not equal to datalen"
+  err_msg <- "dsids is not a numeric or integer vector"
   expect_err_msg(err_msg, s1, l1, c("A", "B"))
-
-  err_msg <- "is not TRUE"
   expect_err_msg(err_msg, s1, l1, NA)
 
 })
