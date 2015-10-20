@@ -43,8 +43,8 @@ autoplot.pevals <- function(object, ...) {
 #
 # Plot a ROC curve
 #
-autoplot.roc_curve <- function(object, ...) {
-  df <- .prepare_autoplot(object)
+autoplot.roc_curve <- function(object, df = NULL, ...) {
+  df <- .prepare_autoplot(object, df = df, ...)
 
   # === Create a ggplot object ===
   p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y))
@@ -55,8 +55,8 @@ autoplot.roc_curve <- function(object, ...) {
 #
 # Plot a Precision-Recall curve
 #
-autoplot.prc_curve <- function(object, ...) {
-  df <- .prepare_autoplot(object)
+autoplot.prc_curve <- function(object, df = NULL, ...) {
+  df <- .prepare_autoplot(object, df = df, ...)
 
   # === Create a ggplot object ===
   p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y))

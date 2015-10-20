@@ -70,12 +70,18 @@ autoplot.mmcurves <- function(object, curvetype = c("ROC", "PRC"),
   .check_ret_grob(ret_grob)
 
   # === Create a ggplot object for ROC&PRC, ROC, or PRC ===
+  df <- ggplot2::fortify(object, ...)
+
   if ("ROC" %in% curvetype) {
-    p_roc <- ggplot2::autoplot(object[["rocs"]], show_ci, show_legend, ...)
+    p_roc <- ggplot2::autoplot(object[["rocs"]],
+                               subset(df, curvetype == "ROC"),
+                               show_ci, show_legend, ...)
   }
 
   if ("PRC" %in% curvetype) {
-    p_prc <- ggplot2::autoplot(object[["prcs"]], show_ci, show_legend, ...)
+    p_prc <- ggplot2::autoplot(object[["prcs"]],
+                               subset(df, curvetype == "PRC"),
+                               show_ci, show_legend, ...)
   }
 
   if ("ROC" %in% curvetype && "PRC" %in% curvetype) {
@@ -91,16 +97,12 @@ autoplot.mmcurves <- function(object, curvetype = c("ROC", "PRC"),
 #
 # Plot ROC curves for multiple models with multiple datasets
 #
-autoplot.mmroc <- function(object, show_ci = TRUE, call_geom_basic = TRUE,
-                           ...) {
+autoplot.mmroc <- function(object, df = NULL, show_ci = TRUE,
+                           call_geom_basic = TRUE, ...) {
 
-  df <- .prepare_autoplot(object, use_raw = show_raw)
+  df <- .prepare_autoplot(object, df = df, ...)
 
   # === Create a ggplot object ===
-#   print("fdsa")
-#   print(show_raw)
-#   print(show_ci)
-
   if (show_ci) {
     p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y, ymin = ymin,
                                           ymax = ymax, color = modname))
@@ -120,8 +122,10 @@ autoplot.mmroc <- function(object, show_ci = TRUE, call_geom_basic = TRUE,
 #
 # Plot Precision-Recall curves for multiple models with multiple datasets
 #
-autoplot.mmprc <- function(object, show_ci = TRUE, ...) {
-  p <- autoplot.mmroc(object, show_ci = show_ci, call_geom_basic = FALSE, ...)
+autoplot.mmprc <- function(object, df = NULL, show_ci = TRUE, ...) {
+
+  p <- autoplot.mmroc(object, df = df, show_ci = show_ci,
+                      call_geom_basic = FALSE, ...)
 
   p <- .geom_basic_prc(p, object[[1]], show_legend = FALSE)
 }

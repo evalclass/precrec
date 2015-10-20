@@ -46,7 +46,8 @@ test_that("autoplot msroc", {
 
   curves <- ap3_create_curves()
 
-  pp <- ggplot2::autoplot(curves[["rocs"]])
+  df <- ggplot2::fortify(curves)
+  pp <- ggplot2::autoplot(curves[["rocs"]], df = df)
   expect_true(all(class(pp) == c("gg", "ggplot")))
 })
 
@@ -58,6 +59,7 @@ test_that("autoplot msprc", {
 
   curves <- ap3_create_curves()
 
-  pp <- ggplot2::autoplot(curves[["prcs"]])
+  df <- ggplot2::fortify(curves)
+  pp <- ggplot2::autoplot(curves[["prcs"]], df = df)
   expect_true(all(class(pp) == c("gg", "ggplot")))
 })

@@ -63,12 +63,16 @@ autoplot.sscurves <- function(object, curvetype = c("ROC", "PRC"),
   .check_ret_grob(ret_grob)
 
   # === Create a ggplot object for ROC&PRC, ROC, or PRC ===
+  df <- ggplot2::fortify(object, ...)
+
   if ("ROC" %in% curvetype) {
-    p_roc <- ggplot2::autoplot(object[["rocs"]])
+    p_roc <- ggplot2::autoplot(object[["rocs"]],
+                               subset(df, curvetype == "ROC"), ...)
   }
 
   if ("PRC" %in% curvetype) {
-    p_prc <- ggplot2::autoplot(object[["prcs"]])
+    p_prc <- ggplot2::autoplot(object[["prcs"]],
+                               subset(df, curvetype == "PRC"), ...)
   }
 
   if ("ROC" %in% curvetype && "PRC" %in% curvetype) {
@@ -91,13 +95,13 @@ autoplot.sscurves <- function(object, curvetype = c("ROC", "PRC"),
 #
 # Plot a ROC curve
 #
-autoplot.ssroc <- function(object, ...) {
-  ggplot2::autoplot(object[[1]], ...)
+autoplot.ssroc <- function(object, df = NULL, ...) {
+  ggplot2::autoplot(object[[1]], df = df, ...)
 }
 
 #
 # Plot a Precision-Recall curve
 #
-autoplot.ssprc <- function(object, ...) {
-  ggplot2::autoplot(object[[1]], ...)
+autoplot.ssprc <- function(object, df = NULL, ...) {
+  ggplot2::autoplot(object[[1]], df = df, ...)
 }

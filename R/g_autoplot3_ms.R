@@ -72,12 +72,18 @@ autoplot.mscurves <- function(object, curvetype = c("ROC", "PRC"),
   .check_ret_grob(ret_grob)
 
   # === Create a ggplot object for ROC&PRC, ROC, or PRC ===
+  df <- ggplot2::fortify(object, ...)
+
   if ("ROC" %in% curvetype) {
-    p_roc <- ggplot2::autoplot(object[["rocs"]], show_legend = show_legend)
+    p_roc <- ggplot2::autoplot(object[["rocs"]], "ROC",
+                               subset(df, curvetype == "ROC"),
+                               show_legend = show_legend, ...)
   }
 
   if ("PRC" %in% curvetype) {
-    p_prc <- ggplot2::autoplot(object[["prcs"]], show_legend = show_legend)
+    p_prc <- ggplot2::autoplot(object[["prcs"]], "PRC",
+                               subset(df, curvetype == "PRC"),
+                               show_legend = show_legend, ...)
   }
 
   if ("ROC" %in% curvetype && "PRC" %in% curvetype) {
@@ -92,8 +98,10 @@ autoplot.mscurves <- function(object, curvetype = c("ROC", "PRC"),
 #
 # Plot ROC curves for multiple models
 #
-autoplot.msroc <- function(object, show_legend = TRUE, ...) {
-  df <- .prepare_autoplot(object)
+autoplot.msroc <- function(object, curvetype = "ROC", df = NULL,
+                           show_legend = TRUE, ...) {
+
+  df <- .prepare_autoplot(object, curvetype = curvetype, df = df, ...)
 
   # === Create a ggplot object ===
   p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y, color = modname))
@@ -104,8 +112,10 @@ autoplot.msroc <- function(object, show_legend = TRUE, ...) {
 #
 # Plot Precision-Recall curves for multiple models
 #
-autoplot.msprc <- function(object, show_legend = TRUE, ...) {
-  df <- .prepare_autoplot(object)
+autoplot.msprc <- function(object, curvetype = "PRC", df = NULL,
+                           show_legend = TRUE, ...) {
+
+  df <- .prepare_autoplot(object, curvetype = curvetype, df = df, ...)
 
   # === Create a ggplot object ===
   p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y, color = modname))

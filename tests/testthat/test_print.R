@@ -7,8 +7,8 @@ test_that("print sscurves", {
   data(P10N10)
   curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 
-  expect_output(print(curves), "= AUCs =")
-  expect_output(print(curves), "= Input data =")
+  expect_output(print(curves), "=== AUCs ===")
+  expect_output(print(curves), "=== Input data ===")
 })
 
 pr3_create_curves <- function() {
@@ -29,8 +29,8 @@ pr3_create_curves <- function() {
 test_that("print mscurves", {
   curves <- pr3_create_curves()
 
-  expect_output(print(curves), "= AUCs =")
-  expect_output(print(curves), "= Input data =")
+  expect_output(print(curves), "=== AUCs ===")
+  expect_output(print(curves), "=== Input data ===")
 })
 
 pr4_create_curves <- function() {
@@ -51,8 +51,8 @@ pr4_create_curves <- function() {
 test_that("print smcurves", {
   curves <- pr4_create_curves()
 
-  expect_output(print(curves), "= AUCs =")
-  expect_output(print(curves), "= Input data =")
+  expect_output(print(curves), "=== AUCs ===")
+  expect_output(print(curves), "=== Input data ===")
 })
 
 pr5_create_curves <- function() {
@@ -76,7 +76,7 @@ pr5_create_curves <- function() {
 test_that("print mmcurves", {
   curves <- pr5_create_curves()
 
-  expect_output(print(curves), "= AUCs =")
-  expect_output(print(curves), "= Input data =")
+  expect_output(print(curves), "=== AUCs ===")
+  expect_output(print(curves), "=== Input data ===")
 })
 

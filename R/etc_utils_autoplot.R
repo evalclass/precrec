@@ -58,7 +58,7 @@
 #
 # Prepare autoplot and return a data frame
 #
-.prepare_autoplot <- function(object, ...) {
+.prepare_autoplot <- function(object, df = NULL, curvetype = NULL, ...) {
   # === Check package availability  ===
   .load_ggplot2()
 
@@ -66,7 +66,14 @@
   .validate(object)
 
   # === Prepare a data frame for ggplot2 ===
-  df <- ggplot2::fortify(object, ...)
+  if (is.null(df)) {
+    df <- ggplot2::fortify(object, ...)
+    if (!is.null(curvetype)) {
+      df <- subset(df, curvetype == curvetype)
+    }
+  }
+
+  df
 }
 
 #

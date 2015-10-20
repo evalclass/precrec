@@ -3,8 +3,8 @@
 #
 #' @export
 print.mdat <- function(x, ...) {
-
-  cat("\n  = Input data =\n\n")
+  cat("\n")
+  cat("     === Input data ===\n\n")
 
   data_info <- attr(x, "data_info")
   rownames(data_info) <- format(rownames(data_info), width = 4,
@@ -26,7 +26,7 @@ print.curve_info <- function(x, ...) {
   .validate(x)
 
   cat("\n")
-  cat("  = AUCs =\n")
+  cat("    === AUCs ===\n")
   cat("\n")
 
   aucs <- attr(x, "aucs")

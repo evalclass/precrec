@@ -60,7 +60,7 @@
 #'
 #' @export
 autoplot.smcurves <- function(object, curvetype = c("ROC", "PRC"),
-                              show_ci = TRUE, show_raw = FALSE,
+                              show_ci = TRUE, all_curves = FALSE,
                               ret_grob = FALSE, ...) {
 
   # === Check package availability  ===
@@ -70,12 +70,18 @@ autoplot.smcurves <- function(object, curvetype = c("ROC", "PRC"),
   .check_ret_grob(ret_grob)
 
   # === Create a ggplot object for ROC&PRC, ROC, or PRC ===
+  df <- ggplot2::fortify(object, all_curves = all_curves, ...)
+
   if ("ROC" %in% curvetype) {
-    p_roc <- ggplot2::autoplot(object[["rocs"]], show_ci, show_raw, ...)
+    p_roc <- ggplot2::autoplot(object[["rocs"]], "ROC",
+                               subset(df, curvetype == "ROC"),
+                               show_ci, all_curves, ...)
   }
 
   if ("PRC" %in% curvetype) {
-    p_prc <- ggplot2::autoplot(object[["prcs"]], show_ci, show_raw, ...)
+    p_prc <- ggplot2::autoplot(object[["prcs"]], "PRC",
+                               subset(df, curvetype == "PRC"),
+                               show_ci, all_curves, ...)
   }
 
   if ("ROC" %in% curvetype && "PRC" %in% curvetype) {
@@ -90,17 +96,16 @@ autoplot.smcurves <- function(object, curvetype = c("ROC", "PRC"),
 #
 # Plot ROC curves for a single model with multiple datasets
 #
-autoplot.smroc <- function(object, show_ci = TRUE, show_raw = FALSE,
+autoplot.smroc <- function(object, curvetype = "ROC", df = NULL,
+                           show_ci = TRUE, all_curves = FALSE,
                            call_geom_basic = TRUE, ...) {
 
-  df <- .prepare_autoplot(object, use_raw = show_raw)
+  df <- .prepare_autoplot(object, curvetype = curvetype, df = df,
+                          all_curves = all_curves, ...)
 
   # === Create a ggplot object ===
-#   print("fdsa")
-#   print(show_raw)
-#   print(show_ci)
 
-  if (show_raw) {
+  if (all_curves) {
     p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y, group = dsid))
     p <- p + ggplot2::geom_line()
 
@@ -123,8 +128,11 @@ autoplot.smroc <- function(object, show_ci = TRUE, show_raw = FALSE,
 #
 # Plot Precision-Recall curves for a single model with multiple datasets
 #
-autoplot.smprc <- function(object, show_ci = TRUE, show_raw = FALSE, ...) {
-  p <- autoplot.smroc(object, show_ci = show_ci, show_raw = show_raw,
+autoplot.smprc <- function(object, curvetype = "PRC", df = NULL,
+                           show_ci = TRUE, all_curves = FALSE, ...) {
+
+  p <- autoplot.smroc(object, curvetype = curvetype, df = df,
+                      show_ci = show_ci, all_curves = all_curves,
                       call_geom_basic = FALSE, ...)
 
   p <- .geom_basic_prc(p, object[[1]], show_legend = FALSE)
