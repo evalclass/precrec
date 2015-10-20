@@ -35,16 +35,16 @@
     }
   }
 
-  # Create df
+  # Create curve_df
   if (all_curves) {
-    df <- .fortify_regular(obj, uniq_modnames, uniq_dsids, modnames, dsids,
-                           dsid_modnames, curvetype_names)
+    curve_df <- .fortify_regular(obj, uniq_modnames, uniq_dsids, modnames,
+                                 dsids, dsid_modnames, curvetype_names)
   } else {
-    df <- .fortify_average(obj, uniq_modnames, uniq_dsids, modnames, dsids,
-                           dsid_modnames, curvetype_names)
+    curve_df <- .fortify_average(obj, uniq_modnames, uniq_dsids, modnames,
+                                 dsids, dsid_modnames, curvetype_names)
   }
 
-  df
+  curve_df
 }
 
 #
@@ -52,7 +52,7 @@
 #
 .fortify_regular <- function(obj, uniq_modnames, uniq_dsids, modnames, dsids,
                              dsid_modnames, curvetype_names) {
-  df <- NULL
+  curve_df <- NULL
   for (curvetype in names(curvetype_names)) {
     curves <- obj[[curvetype_names[[curvetype]]]]
     for (i in seq_along(curves)) {
@@ -66,13 +66,14 @@
                              levels = dsid_modnames)
       curvename <- factor(rep(curvetype, length(x)),
                           levels = names(curvetype_names))
-      df <- rbind(df, data.frame(x = x, y = y, modname = modname, dsid = dsid,
-                                 dsid_modname = dsid_modname,
-                                 curvetype = curvename))
+      curve_df <- rbind(curve_df, data.frame(x = x, y = y, modname = modname,
+                                             dsid = dsid,
+                                             dsid_modname = dsid_modname,
+                                             curvetype = curvename))
     }
   }
 
-  df
+  curve_df
 }
 
 #
@@ -80,7 +81,7 @@
 #
 .fortify_average <- function(obj, uniq_modnames, uniq_dsids, modnames, dsids,
                              dsid_modnames, curvetype_names) {
-  df <- NULL
+  curve_df <- NULL
   for (curvetype in names(curvetype_names)) {
     curves <- obj[[curvetype_names[[curvetype]]]]
     avgcurves <- attr(curves, "avgcurves")
@@ -95,10 +96,12 @@
                         levels = uniq_modnames)
       curvename <- factor(rep(curvetype, length(x)),
                           levels = names(curvetype_names))
-      df <- rbind(df, data.frame(x = x, y = y, ymin = ymin, ymax = ymax,
-                                 modname = modname, curvetype = curvename))
+      curve_df <- rbind(curve_df, data.frame(x = x, y = y,
+                                             ymin = ymin, ymax = ymax,
+                                             modname = modname,
+                                             curvetype = curvename))
     }
   }
 
-  df
+  curve_df
 }

@@ -50,29 +50,29 @@ test_that("autoplot pevals", {
   expect_true(all(class(pp) == c("gg", "ggplot")))
 })
 
-test_that("autoplot roc_curve", {
-  if (!ap1_check_libs()) {
-    skip("Libraries cannot be loaded")
-  }
-
-  data(B500)
-  roc_curve <- create_roc(scores = P10N10$scores,
-                          labels = P10N10$labels)
-
-  pp <- ggplot2::autoplot(roc_curve)
-  expect_true(all(class(pp) == c("gg", "ggplot")))
-})
-
-test_that("autoplot prc_curve", {
-  if (!ap1_check_libs()) {
-    skip("Libraries cannot be loaded")
-  }
-
-  data(B500)
-  prc_curve <- create_prc(scores = P10N10$scores,
-                          labels = P10N10$labels)
-
-  pp <- ggplot2::autoplot(prc_curve)
-  expect_true(all(class(pp) == c("gg", "ggplot")))
-})
+# test_that("autoplot roc_curve", {
+#   if (!ap1_check_libs()) {
+#     skip("Libraries cannot be loaded")
+#   }
+#
+#   data(B500)
+#   roc_curve <- create_roc(scores = P10N10$scores,
+#                           labels = P10N10$labels)
+#
+#   pp <- ggplot2::autoplot(roc_curve)
+#   expect_true(all(class(pp) == c("gg", "ggplot")))
+# })
+#
+# test_that("autoplot prc_curve", {
+#   if (!ap1_check_libs()) {
+#     skip("Libraries cannot be loaded")
+#   }
+#
+#   data(B500)
+#   prc_curve <- create_prc(scores = P10N10$scores,
+#                           labels = P10N10$labels)
+#
+#   pp <- ggplot2::autoplot(prc_curve)
+#   expect_true(all(class(pp) == c("gg", "ggplot")))
+# })
 

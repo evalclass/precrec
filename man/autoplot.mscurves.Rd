@@ -45,7 +45,7 @@ mdat <- mmdata(samps[["scores"]], samps[["labels"]],
                dsids = samps[["dsids"]])
 
 ## Generate an mscurve object
-curves <- evalmods(mdat)
+curves <- evalmod(mdat)
 
 ## Plot both ROC and Precision-Recall curves
 autoplot(curves)

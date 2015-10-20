@@ -69,8 +69,8 @@ test_that("fortify sscurves", {
   data(P10N10)
   curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 
-  df <- ggplot2::fortify(curves)
-  expect_true(is.list(df))
+  curve_df <- ggplot2::fortify(curves)
+  expect_true(is.list(curve_df))
 })
 
 test_that("fortify mscurves", {
@@ -80,8 +80,8 @@ test_that("fortify mscurves", {
 
   curves <- ft2_create_mscurves()
 
-  df <- ggplot2::fortify(curves)
-  expect_true(is.list(df))
+  curve_df <- ggplot2::fortify(curves)
+  expect_true(is.list(curve_df))
 })
 
 test_that("fortify smcurves", {
@@ -91,8 +91,8 @@ test_that("fortify smcurves", {
 
   curves <- ft2_create_smcurves()
 
-  df <- ggplot2::fortify(curves)
-  expect_true(is.list(df))
+  curve_df <- ggplot2::fortify(curves)
+  expect_true(is.list(curve_df))
 })
 
 test_that("fortify mmcurves", {
@@ -102,6 +102,6 @@ test_that("fortify mmcurves", {
 
   curves <- ft2_create_mmcurves()
 
-  df <- ggplot2::fortify(curves)
-  expect_true(is.list(df))
+  curve_df <- ggplot2::fortify(curves)
+  expect_true(is.list(curve_df))
 })

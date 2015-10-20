@@ -41,7 +41,7 @@
 #'                dsids = samps[["dsids"]])
 #'
 #' ## Generate an mscurve object
-#' curves <- evalmod_m(mdat)
+#' curves <- evalmod(mdat)
 #'
 #' ## Plot both ROC and Precision-Recall curves
 #' autoplot(curves)
@@ -70,18 +70,18 @@ autoplot.smcurves <- function(object, curvetype = c("ROC", "PRC"),
   .check_ret_grob(ret_grob)
 
   # === Create a ggplot object for ROC&PRC, ROC, or PRC ===
-  df <- ggplot2::fortify(object, all_curves = all_curves, ...)
+  curve_df <- ggplot2::fortify(object, all_curves = all_curves, ...)
 
   if ("ROC" %in% curvetype) {
-    p_roc <- ggplot2::autoplot(object[["rocs"]], "ROC",
-                               subset(df, curvetype == "ROC"),
-                               show_ci, all_curves, ...)
+    p_roc <- .plot_single(object, curve_df = curve_df, curvetype = "ROC",
+                          show_ci = show_ci, all_curves = all_curves,
+                          show_legend = FALSE, add_np_nn = TRUE)
   }
 
   if ("PRC" %in% curvetype) {
-    p_prc <- ggplot2::autoplot(object[["prcs"]], "PRC",
-                               subset(df, curvetype == "PRC"),
-                               show_ci, all_curves, ...)
+    p_prc <- .plot_single(object, curve_df = curve_df, curvetype = "PRC",
+                          show_ci = show_ci, all_curves = all_curves,
+                          show_legend = FALSE, add_np_nn = TRUE)
   }
 
   if ("ROC" %in% curvetype && "PRC" %in% curvetype) {
@@ -91,49 +91,4 @@ autoplot.smcurves <- function(object, curvetype = c("ROC", "PRC"),
   } else if ("ROC" %in% curvetype) {
     p_roc
   }
-}
-
-#
-# Plot ROC curves for a single model with multiple datasets
-#
-autoplot.smroc <- function(object, curvetype = "ROC", df = NULL,
-                           show_ci = TRUE, all_curves = FALSE,
-                           call_geom_basic = TRUE, ...) {
-
-  df <- .prepare_autoplot(object, curvetype = curvetype, df = df,
-                          all_curves = all_curves, ...)
-
-  # === Create a ggplot object ===
-
-  if (all_curves) {
-    p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y, group = dsid))
-    p <- p + ggplot2::geom_line()
-
-  } else if (show_ci) {
-    p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y,
-                                          ymin = ymin, ymax = ymax))
-    p <- p + ggplot2::geom_smooth(stat = "identity")
-  } else {
-    p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y))
-    p <- p + ggplot2::geom_line()
-  }
-
-  if (call_geom_basic) {
-    p <- .geom_basic_roc(p, object[[1]], show_legend = FALSE)
-  }
-
-  p
-}
-
-#
-# Plot Precision-Recall curves for a single model with multiple datasets
-#
-autoplot.smprc <- function(object, curvetype = "PRC", df = NULL,
-                           show_ci = TRUE, all_curves = FALSE, ...) {
-
-  p <- autoplot.smroc(object, curvetype = curvetype, df = df,
-                      show_ci = show_ci, all_curves = all_curves,
-                      call_geom_basic = FALSE, ...)
-
-  p <- .geom_basic_prc(p, object[[1]], show_legend = FALSE)
 }

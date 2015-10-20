@@ -63,45 +63,25 @@ autoplot.sscurves <- function(object, curvetype = c("ROC", "PRC"),
   .check_ret_grob(ret_grob)
 
   # === Create a ggplot object for ROC&PRC, ROC, or PRC ===
-  df <- ggplot2::fortify(object, ...)
+  curve_df <- ggplot2::fortify(object, ...)
 
   if ("ROC" %in% curvetype) {
-    p_roc <- ggplot2::autoplot(object[["rocs"]],
-                               subset(df, curvetype == "ROC"), ...)
+    p_roc <- .plot_single(object, curve_df = curve_df, curvetype = "ROC",
+                          show_ci = FALSE, all_curves = FALSE,
+                          show_legend = FALSE, add_np_nn = TRUE)
   }
 
   if ("PRC" %in% curvetype) {
-    p_prc <- ggplot2::autoplot(object[["prcs"]],
-                               subset(df, curvetype == "PRC"), ...)
+    p_prc <- .plot_single(object, curve_df = curve_df, curvetype = "PRC",
+                          show_ci = FALSE, all_curves = FALSE,
+                          show_legend = FALSE, add_np_nn = TRUE)
   }
 
   if ("ROC" %in% curvetype && "PRC" %in% curvetype) {
-    .load_grid()
-    .load_gridExtra()
-
-    grobframe <- gridExtra::arrangeGrob(p_roc, p_prc, ncol = 2)
-    if (ret_grob) {
-      grobframe
-    } else {
-      grid::grid.draw(grobframe)
-    }
+    .combine_roc_prc(p_roc, p_prc, show_legend = FALSE, ret_grob = ret_grob)
   } else if ("PRC" %in% curvetype) {
     p_prc
   } else if ("ROC" %in% curvetype) {
     p_roc
   }
-}
-
-#
-# Plot a ROC curve
-#
-autoplot.ssroc <- function(object, df = NULL, ...) {
-  ggplot2::autoplot(object[[1]], df = df, ...)
-}
-
-#
-# Plot a Precision-Recall curve
-#
-autoplot.ssprc <- function(object, df = NULL, ...) {
-  ggplot2::autoplot(object[[1]], df = df, ...)
 }

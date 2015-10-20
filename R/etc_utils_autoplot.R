@@ -58,7 +58,7 @@
 #
 # Prepare autoplot and return a data frame
 #
-.prepare_autoplot <- function(object, df = NULL, curvetype = NULL, ...) {
+.prepare_autoplot <- function(object, curve_df = NULL, curvetype = NULL, ...) {
   # === Check package availability  ===
   .load_ggplot2()
 
@@ -66,14 +66,16 @@
   .validate(object)
 
   # === Prepare a data frame for ggplot2 ===
-  if (is.null(df)) {
-    df <- ggplot2::fortify(object, ...)
-    if (!is.null(curvetype)) {
-      df <- subset(df, curvetype == curvetype)
-    }
+  if (is.null(curve_df)) {
+    curve_df <- ggplot2::fortify(object, ...)
   }
 
-  df
+  if (!is.null(curvetype)) {
+    ctype <- curvetype
+    curve_df <- subset(curve_df, curvetype == ctype)
+  }
+
+  curve_df
 }
 
 #
@@ -98,6 +100,43 @@
 }
 
 #
+# Plot ROC or Precisoin-Recall
+#
+.plot_single <- function(object, curve_df = NULL, curvetype = "ROC",
+                         show_ci = FALSE, all_curves = FALSE,
+                         show_legend = FALSE, add_np_nn = TRUE, ...) {
+
+  curve_df <- .prepare_autoplot(object, curve_df = curve_df, curvetype = curvetype,
+                          all_curves = all_curves, ...)
+
+  # === Create a ggplot object ===
+  if (all_curves) {
+    p <- ggplot2::ggplot(curve_df, ggplot2::aes(x = x, y = y,
+                                                group = dsid_modname,
+                                                color = modname))
+    p <- p + ggplot2::geom_line()
+
+  } else if (show_ci) {
+    p <- ggplot2::ggplot(curve_df, ggplot2::aes(x = x, y = y,
+                                                ymin = ymin, ymax = ymax,
+                                                color = modname))
+    p <- p + ggplot2::geom_smooth(stat = "identity")
+  } else {
+    p <- ggplot2::ggplot(curve_df, ggplot2::aes(x = x, y = y, color = modname))
+    p <- p + ggplot2::geom_line()
+  }
+
+  if (curvetype == "ROC") {
+    func_g <- .geom_basic_roc
+  } else if (curvetype == "PRC") {
+    func_g <- .geom_basic_prc
+  }
+  p <- func_g(p, object[[1]], show_legend = show_legend, add_np_nn = add_np_nn)
+
+  p
+}
+
+#
 # Geom basic
 #
 .geom_basic <- function(p, main, xlab, ylab, show_legend) {
@@ -118,8 +157,8 @@
 # Make main title
 #
 .make_rocprc_title <- function(object, pt) {
-  np <- attr(object, "np")
-  nn <- attr(object, "nn")
+  np <- attr(object, "data_info")[["np"]]
+  nn <- attr(object, "data_info")[["nn"]]
 
   main <- paste0(pt, " - P: ", np, ", N: ", nn)
 }
@@ -127,8 +166,12 @@
 #
 # Geom basic for ROC
 #
-.geom_basic_roc <- function(p, object, show_legend = TRUE) {
-  main <- .make_rocprc_title(object, "ROC")
+.geom_basic_roc <- function(p, object, show_legend = TRUE, add_np_nn = TRUE) {
+  if (add_np_nn) {
+    main <- .make_rocprc_title(object, "ROC")
+  } else {
+    main <- "ROC"
+  }
 
   p <- p + ggplot2::geom_abline(intercept = 0, slope = 1, colour = "grey",
                                 linetype = 3)
@@ -142,13 +185,18 @@
 #
 # Geom_line for Precision-Recall
 #
-.geom_basic_prc <- function(p, object, show_legend = TRUE) {
-  main <- .make_rocprc_title(object, "Precision-Recall")
-  np <- attr(object, "np")
-  nn <- attr(object, "nn")
+.geom_basic_prc <- function(p, object, show_legend = TRUE, add_np_nn = TRUE) {
+  if (add_np_nn) {
+    main <- .make_rocprc_title(object, "Precision-Recall")
 
-  p <- p + ggplot2::geom_hline(yintercept = np / (np + nn), colour = "grey",
-                               linetype = 3)
+    np <- attr(object, "np")
+    nn <- attr(object, "nn")
+    p <- p + ggplot2::geom_hline(yintercept = np / (np + nn), colour = "grey",
+                                 linetype = 3)
+  } else {
+    main <- "Precision-Recall"
+  }
+
   p <- p + ggplot2::scale_y_continuous(limits = c(0.0, 1.0))
   p <- p + ggplot2::coord_fixed(ratio = 1)
 

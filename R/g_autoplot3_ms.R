@@ -41,7 +41,7 @@
 #'                dsids = samps[["dsids"]])
 #'
 #' ## Generate an mscurve object
-#' curves <- evalmods(mdat)
+#' curves <- evalmod(mdat)
 #'
 #' ## Plot both ROC and Precision-Recall curves
 #' autoplot(curves)
@@ -72,18 +72,18 @@ autoplot.mscurves <- function(object, curvetype = c("ROC", "PRC"),
   .check_ret_grob(ret_grob)
 
   # === Create a ggplot object for ROC&PRC, ROC, or PRC ===
-  df <- ggplot2::fortify(object, ...)
+  curve_df <- ggplot2::fortify(object, ...)
 
   if ("ROC" %in% curvetype) {
-    p_roc <- ggplot2::autoplot(object[["rocs"]], "ROC",
-                               subset(df, curvetype == "ROC"),
-                               show_legend = show_legend, ...)
+    p_roc <- .plot_single(object, curve_df = curve_df, curvetype = "ROC",
+                          show_ci = FALSE, all_curves = TRUE,
+                          show_legend = TRUE, add_np_nn = TRUE)
   }
 
   if ("PRC" %in% curvetype) {
-    p_prc <- ggplot2::autoplot(object[["prcs"]], "PRC",
-                               subset(df, curvetype == "PRC"),
-                               show_legend = show_legend, ...)
+    p_prc <- .plot_single(object, curve_df = curve_df, curvetype = "PRC",
+                          show_ci = FALSE, all_curves = TRUE,
+                          show_legend = TRUE, add_np_nn = TRUE)
   }
 
   if ("ROC" %in% curvetype && "PRC" %in% curvetype) {
@@ -93,32 +93,4 @@ autoplot.mscurves <- function(object, curvetype = c("ROC", "PRC"),
   } else if ("ROC" %in% curvetype) {
     p_roc
   }
-}
-
-#
-# Plot ROC curves for multiple models
-#
-autoplot.msroc <- function(object, curvetype = "ROC", df = NULL,
-                           show_legend = TRUE, ...) {
-
-  df <- .prepare_autoplot(object, curvetype = curvetype, df = df, ...)
-
-  # === Create a ggplot object ===
-  p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y, color = modname))
-  p <- p + ggplot2::geom_line()
-  p <- .geom_basic_roc(p, object[[1]], show_legend = show_legend)
-}
-
-#
-# Plot Precision-Recall curves for multiple models
-#
-autoplot.msprc <- function(object, curvetype = "PRC", df = NULL,
-                           show_legend = TRUE, ...) {
-
-  df <- .prepare_autoplot(object, curvetype = curvetype, df = df, ...)
-
-  # === Create a ggplot object ===
-  p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y, color = modname))
-  p <- p + ggplot2::geom_line()
-  p <- .geom_basic_prc(p, object[[1]], show_legend = show_legend)
 }

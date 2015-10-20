@@ -42,27 +42,27 @@ test_that("autoplot mmcurves", {
   expect_true(all(class(pp) == c("gtable", "grob", "gDesc")))
 })
 
-test_that("autoplot mmroc", {
-  if (!ap5_check_libs()) {
-    skip("Libraries cannot be loaded")
-  }
-
-  curves <- ap5_create_curves()
-
-  df <- ggplot2::fortify(curves)
-  pp <- ggplot2::autoplot(curves[["rocs"]], df = df)
-  expect_true(all(class(pp) == c("gg", "ggplot")))
-})
-
-
-test_that("autoplot mmprc", {
-  if (!ap5_check_libs()) {
-    skip("Libraries cannot be loaded")
-  }
-
-  curves <- ap5_create_curves()
-
-  df <- ggplot2::fortify(curves)
-  pp <- ggplot2::autoplot(curves[["prcs"]], df = df)
-  expect_true(all(class(pp) == c("gg", "ggplot")))
-})
+# test_that("autoplot mmroc", {
+#   if (!ap5_check_libs()) {
+#     skip("Libraries cannot be loaded")
+#   }
+#
+#   curves <- ap5_create_curves()
+#
+#   df <- ggplot2::fortify(curves)
+#   pp <- ggplot2::autoplot(curves[["rocs"]], df = df)
+#   expect_true(all(class(pp) == c("gg", "ggplot")))
+# })
+#
+#
+# test_that("autoplot mmprc", {
+#   if (!ap5_check_libs()) {
+#     skip("Libraries cannot be loaded")
+#   }
+#
+#   curves <- ap5_create_curves()
+#
+#   df <- ggplot2::fortify(curves)
+#   pp <- ggplot2::autoplot(curves[["prcs"]], df = df)
+#   expect_true(all(class(pp) == c("gg", "ggplot")))
+# })

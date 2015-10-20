@@ -19,8 +19,8 @@ test_that("fortify fmdat", {
   data(B500)
   fmdat <- reformat_data(B500$good_er_scores, B500$labels)
 
-  df <- ggplot2::fortify(fmdat)
-  expect_true(is.list(df))
+  curve_df <- ggplot2::fortify(fmdat)
+  expect_true(is.list(curve_df))
 })
 
 test_that("fortify cmat", {
@@ -32,8 +32,8 @@ test_that("fortify cmat", {
   cmat <- create_confmats(scores = B500$good_er_scores,
                           labels = B500$labels)
 
-  df <- ggplot2::fortify(cmat)
-  expect_true(is.list(df))
+  curve_df <- ggplot2::fortify(cmat)
+  expect_true(is.list(curve_df))
 })
 
 
@@ -46,8 +46,8 @@ test_that("fortify pevals", {
   pevals <- calc_measures(scores = B500$good_er_scores,
                           labels = B500$labels)
 
-  df <- ggplot2::fortify(pevals)
-  expect_true(is.list(df))
+  curve_df <- ggplot2::fortify(pevals)
+  expect_true(is.list(curve_df))
 })
 
 test_that("fortify roc_curve", {
@@ -59,8 +59,8 @@ test_that("fortify roc_curve", {
   roc_curve <- create_roc(scores = P10N10$scores,
                           labels = P10N10$labels)
 
-  df <- ggplot2::fortify(roc_curve)
-  expect_true(is.list(df))
+  curve_df <- ggplot2::fortify(roc_curve)
+  expect_true(is.list(curve_df))
 })
 
 test_that("fortify prc_curve", {
@@ -72,6 +72,6 @@ test_that("fortify prc_curve", {
   prc_curve <- create_prc(scores = P10N10$scores,
                           labels = P10N10$labels)
 
-  df <- ggplot2::fortify(prc_curve)
-  expect_true(is.list(df))
+  curve_df <- ggplot2::fortify(prc_curve)
+  expect_true(is.list(curve_df))
 })

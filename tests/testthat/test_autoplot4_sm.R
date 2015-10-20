@@ -39,27 +39,27 @@ test_that("autoplot smcurves", {
   expect_true(all(class(pp) == c("gtable", "grob", "gDesc")))
 })
 
-test_that("autoplot smroc", {
-  if (!ap4_check_libs()) {
-    skip("Libraries cannot be loaded")
-  }
-
-  curves <- ap4_create_curves()
-
-  df <- ggplot2::fortify(curves, all_curves = FALSE)
-  pp <- ggplot2::autoplot(curves[["rocs"]], df = df)
-  expect_true(all(class(pp) == c("gg", "ggplot")))
-})
-
-
-test_that("autoplot smprc", {
-  if (!ap4_check_libs()) {
-    skip("Libraries cannot be loaded")
-  }
-
-  curves <- ap4_create_curves()
-
-  df <- ggplot2::fortify(curves, all_curves = FALSE)
-  pp <- ggplot2::autoplot(curves[["prcs"]], df = df)
-  expect_true(all(class(pp) == c("gg", "ggplot")))
-})
+# test_that("autoplot smroc", {
+#   if (!ap4_check_libs()) {
+#     skip("Libraries cannot be loaded")
+#   }
+#
+#   curves <- ap4_create_curves()
+#
+#   df <- ggplot2::fortify(curves, all_curves = FALSE)
+#   pp <- ggplot2::autoplot(curves[["rocs"]], df = df)
+#   expect_true(all(class(pp) == c("gg", "ggplot")))
+# })
+#
+#
+# test_that("autoplot smprc", {
+#   if (!ap4_check_libs()) {
+#     skip("Libraries cannot be loaded")
+#   }
+#
+#   curves <- ap4_create_curves()
+#
+#   df <- ggplot2::fortify(curves, all_curves = FALSE)
+#   pp <- ggplot2::autoplot(curves[["prcs"]], df = df)
+#   expect_true(all(class(pp) == c("gg", "ggplot")))
+# })
