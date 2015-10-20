@@ -39,27 +39,3 @@ autoplot.pevals <- function(object, ...) {
   p <- .geom_basic(p, "Evaluation measures by threshold IDs",
                    "threshold ID", "evaluation value", show_legend = FALSE)
 }
-
-# #
-# # Plot a ROC curve
-# #
-# autoplot.roc_curve <- function(object, df = NULL, ...) {
-#   df <- .prepare_autoplot(object, df = df, ...)
-#
-#   # === Create a ggplot object ===
-#   p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y))
-#   p <- p + ggplot2::geom_line()
-#   p <- .geom_basic_roc(p, object, show_legend = FALSE)
-# }
-#
-# #
-# # Plot a Precision-Recall curve
-# #
-# autoplot.prc_curve <- function(object, df = NULL, ...) {
-#   df <- .prepare_autoplot(object, df = df, ...)
-#
-#   # === Create a ggplot object ===
-#   p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y))
-#   p <- p + ggplot2::geom_line()
-#   p <- .geom_basic_prc(p, object, show_legend = FALSE)
-# }

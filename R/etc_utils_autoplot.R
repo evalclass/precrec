@@ -1,26 +1,24 @@
 #
-# .grid_arrange_shared_legend
+# Prepare autoplot and return a data frame
 #
-#   Modified version of grid_arrange_shared_legend from RPubs
-#   URL of the original version:
-#     http://rpubs.com/sjackman/grid_arrange_shared_legend
-#
-.grid_arrange_shared_legend <- function(..., main_ncol = 2) {
-  plots <- list(...)
+.prepare_autoplot <- function(object, curve_df = NULL, curvetype = NULL, ...) {
+  # === Check package availability  ===
+  .load_ggplot2()
 
-  g <- ggplot2::ggplotGrob(plots[[1]]
-                           + ggplot2::theme(legend.position = "bottom"))$grobs
-  legend <- g[[which(sapply(g, function(x) x$name) == "guide-box")]]
-  lheight <- sum(legend$height)
+  # === Validate input arguments ===
+  .validate(object)
 
-  fncol <- function (...) gridExtra::arrangeGrob(..., ncol = main_ncol)
-  fnolegend <- function(x) x + ggplot2::theme(legend.position = "none")
+  # === Prepare a data frame for ggplot2 ===
+  if (is.null(curve_df)) {
+    curve_df <- ggplot2::fortify(object, ...)
+  }
 
-  gridExtra::arrangeGrob(
-    do.call(fncol, lapply(plots, fnolegend)),
-    legend,
-    heights = grid::unit.c(grid::unit(1, "npc") - lheight, lheight),
-    ncol = 1)
+  if (!is.null(curvetype)) {
+    ctype <- curvetype
+    curve_df <- subset(curve_df, curvetype == ctype)
+  }
+
+  curve_df
 }
 
 #
@@ -56,26 +54,64 @@
 }
 
 #
-# Prepare autoplot and return a data frame
+# Plot ROC and Precisoin-Recall
 #
-.prepare_autoplot <- function(object, curve_df = NULL, curvetype = NULL, ...) {
+.plot_multi <- function(object, curvetype = c("ROC", "PRC"),
+                        show_ci = FALSE, all_curves = TRUE,
+                        show_legend = TRUE, add_np_nn = TRUE,
+                        ret_grob = FALSE, ...) {
+
   # === Check package availability  ===
   .load_ggplot2()
-
-  # === Validate input arguments ===
   .validate(object)
+  .check_curvetype(curvetype)
+  .check_show_legend(show_legend)
+  .check_ret_grob(ret_grob)
 
-  # === Prepare a data frame for ggplot2 ===
-  if (is.null(curve_df)) {
-    curve_df <- ggplot2::fortify(object, ...)
+  # === Create a ggplot object for ROC&PRC, ROC, or PRC ===
+  curve_df <- ggplot2::fortify(object, all_curves = all_curves, ...)
+
+  func_plot <- function(ctype) {
+    .plot_single(object, curve_df = curve_df, curvetype = ctype,
+                 show_ci = show_ci, all_curves = all_curves,
+                 show_legend = show_legend, add_np_nn = add_np_nn, ...)
   }
+  lcurves <- lapply(curvetype, func_plot)
+  names(lcurves) <- curvetype
 
-  if (!is.null(curvetype)) {
-    ctype <- curvetype
-    curve_df <- subset(curve_df, curvetype == ctype)
+  if ("ROC" %in% curvetype && "PRC" %in% curvetype) {
+    .combine_roc_prc(lcurves[["ROC"]], lcurves[["PRC"]],
+                     show_legend = show_legend, ret_grob = ret_grob)
+  } else if ("ROC" %in% curvetype) {
+    lcurves[["ROC"]]
+  } else if ("PRC" %in% curvetype) {
+    lcurves[["PRC"]]
   }
+}
 
-  curve_df
+#
+# .grid_arrange_shared_legend
+#
+#   Modified version of grid_arrange_shared_legend from RPubs
+#   URL of the original version:
+#     http://rpubs.com/sjackman/grid_arrange_shared_legend
+#
+.grid_arrange_shared_legend <- function(..., main_ncol = 2) {
+  plots <- list(...)
+
+  g <- ggplot2::ggplotGrob(plots[[1]]
+                           + ggplot2::theme(legend.position = "bottom"))$grobs
+  legend <- g[[which(sapply(g, function(x) x$name) == "guide-box")]]
+  lheight <- sum(legend$height)
+
+  fncol <- function (...) gridExtra::arrangeGrob(..., ncol = main_ncol)
+  fnolegend <- function(x) x + ggplot2::theme(legend.position = "none")
+
+  gridExtra::arrangeGrob(
+    do.call(fncol, lapply(plots, fnolegend)),
+    legend,
+    heights = grid::unit.c(grid::unit(1, "npc") - lheight, lheight),
+    ncol = 1)
 }
 
 #
@@ -106,8 +142,9 @@
                          show_ci = FALSE, all_curves = FALSE,
                          show_legend = FALSE, add_np_nn = TRUE, ...) {
 
-  curve_df <- .prepare_autoplot(object, curve_df = curve_df, curvetype = curvetype,
-                          all_curves = all_curves, ...)
+  curve_df <- .prepare_autoplot(object, curve_df = curve_df,
+                                curvetype = curvetype,
+                                all_curves = all_curves, ...)
 
   # === Create a ggplot object ===
   if (all_curves) {
