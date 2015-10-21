@@ -49,10 +49,14 @@ Rcpp::List calc_avg_curve(const Rcpp::List& curves,
   }
 
   // Calculate average & CI
+  double exp2;
+  double sd;
   for (int i = 0; i < vec_size; ++i) {
     // x
     if (i == 0) {
       x_val[i] = 0;
+    } else if (i == vec_size - 1) {
+      x_val[i] = 1;
     } else {
       x_val[i] = (i - 1) * x_interval;
     }
@@ -61,9 +65,14 @@ Rcpp::List calc_avg_curve(const Rcpp::List& curves,
     avg_y[i] = tot_y[i] / n;
 
     // se
-    se_y[i] = (::sqrt(double(n) / double(n - 1))
-               * ::sqrt((stot_y[i] / n) - (avg_y[i] * avg_y[i])))
-              / ::sqrt(double(n));
+    exp2 = (stot_y[i] / double(n)) - (avg_y[i] * avg_y[i]);
+    if (exp2 < 0){
+      exp2 = 0;
+    }
+    sd =  ::sqrt(double(n) / double(n - 1)) * ::sqrt(exp2);
+    se_y[i] = sd / ::sqrt(double(n));
+
+    se_y[i] = (stot_y[i] / double(n)) - (avg_y[i] * avg_y[i]);
 
     // ci upper bound
     ci_h_y[i] = avg_y[i] + ci_q * se_y[i];

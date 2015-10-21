@@ -36,7 +36,6 @@ calc_avg <- function(curves, ci_alpha, x_bins) {
   attr(s3obj, "uniq_modnames") <- uniq_modnames
   attr(s3obj, "args") <- list(ci_alpha = ci_alpha,
                               x_bins = x_bins)
-  attr(s3obj, "src") <- curves
   attr(s3obj, "validated") <- FALSE
 
   # Call .validate.sumcrvs()
@@ -54,7 +53,7 @@ calc_avg <- function(curves, ci_alpha, x_bins) {
 
   # Validate class items and attributes
   item_names <- NULL
-  attr_names <- c("args", "src", "validated")
+  attr_names <- c("args", "validated")
   arg_names <- c("ci_alpha", "x_bins")
   .validate_basic(avgcurves, "avgcurves", "calc_avg", item_names, attr_names,
                   arg_names)
