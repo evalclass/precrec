@@ -56,10 +56,10 @@
 #
 # Plot ROC and Precisoin-Recall
 #
-.plot_multi <- function(object, curvetype = c("ROC", "PRC"),
-                        show_ci = FALSE, all_curves = TRUE,
-                        show_legend = TRUE, add_np_nn = TRUE,
-                        ret_grob = FALSE, ...) {
+.autoplot_multi <- function(object, curvetype = c("ROC", "PRC"),
+                            show_ci = FALSE, all_curves = TRUE,
+                            show_legend = TRUE, add_np_nn = TRUE,
+                            ret_grob = FALSE, ...) {
 
   # === Check package availability  ===
   .load_ggplot2()
@@ -72,9 +72,9 @@
   curve_df <- ggplot2::fortify(object, all_curves = all_curves, ...)
 
   func_plot <- function(ctype) {
-    .plot_single(object, curve_df = curve_df, curvetype = ctype,
-                 show_ci = show_ci, all_curves = all_curves,
-                 show_legend = show_legend, add_np_nn = add_np_nn, ...)
+    .autoplot_single(object, curve_df, curvetype = ctype,
+                     show_ci = show_ci, all_curves = all_curves,
+                     show_legend = show_legend, add_np_nn = add_np_nn, ...)
   }
   lcurves <- lapply(curvetype, func_plot)
   names(lcurves) <- curvetype
@@ -138,9 +138,9 @@
 #
 # Plot ROC or Precisoin-Recall
 #
-.plot_single <- function(object, curve_df = NULL, curvetype = "ROC",
-                         show_ci = FALSE, all_curves = FALSE,
-                         show_legend = FALSE, add_np_nn = TRUE, ...) {
+.autoplot_single <- function(object, curve_df, curvetype = "ROC",
+                             show_ci = FALSE, all_curves = FALSE,
+                             show_legend = FALSE, add_np_nn = TRUE, ...) {
 
   curve_df <- .prepare_autoplot(object, curve_df = curve_df,
                                 curvetype = curvetype,

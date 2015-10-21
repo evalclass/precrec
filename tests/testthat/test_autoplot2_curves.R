@@ -1,6 +1,6 @@
 library(precrec)
 
-context("AP 2: Autoplot for sscurves")
+context("AP 2: Autoplot for curves")
 # Test autoplot(object, ...)
 
 ap2_check_libs <- function() {

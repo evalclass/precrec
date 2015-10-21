@@ -57,9 +57,9 @@
 autoplot.sscurves <- function(object, curvetype = c("ROC", "PRC"),
                               ret_grob = FALSE, ...) {
 
-  .plot_multi(object, curvetype = curvetype, show_ci = FALSE,
-              all_curves = TRUE, show_legend = FALSE, add_np_nn = TRUE,
-              ret_grob = ret_grob)
+  .autoplot_multi(object, curvetype = curvetype, show_ci = FALSE,
+                  all_curves = TRUE, show_legend = FALSE, add_np_nn = TRUE,
+                  ret_grob = ret_grob)
 
 }
 
@@ -130,9 +130,9 @@ autoplot.sscurves <- function(object, curvetype = c("ROC", "PRC"),
 autoplot.mscurves <- function(object, curvetype = c("ROC", "PRC"),
                               show_legend = TRUE, ret_grob = FALSE, ...) {
 
-  .plot_multi(object, curvetype = curvetype, show_ci = FALSE,
-              all_curves = TRUE, show_legend = TRUE, add_np_nn = TRUE,
-              ret_grob = ret_grob)
+  .autoplot_multi(object, curvetype = curvetype, show_ci = FALSE,
+                  all_curves = TRUE, show_legend = TRUE, add_np_nn = TRUE,
+                  ret_grob = ret_grob)
 }
 
 #' Plot ROC and Precision-Recall curves for a single model with multiple datasets
@@ -200,9 +200,9 @@ autoplot.smcurves <- function(object, curvetype = c("ROC", "PRC"),
                               show_ci = TRUE, all_curves = FALSE,
                               ret_grob = FALSE, ...) {
 
-  .plot_multi(object, curvetype = curvetype, show_ci = show_ci,
-              all_curves = all_curves, show_legend = FALSE, add_np_nn = TRUE,
-              ret_grob = ret_grob)
+  .autoplot_multi(object, curvetype = curvetype, show_ci = show_ci,
+                  all_curves = all_curves, show_legend = FALSE, add_np_nn = TRUE,
+                  ret_grob = ret_grob)
 }
 
 #' Plot ROC and Precision-Recall curves for multiple models with multiple datasets
@@ -270,7 +270,7 @@ autoplot.mmcurves <- function(object, curvetype = c("ROC", "PRC"),
                               show_ci = FALSE, all_curves = FALSE,
                               show_legend = TRUE, ret_grob = FALSE, ...) {
 
-  .plot_multi(object, curvetype = curvetype, show_ci = show_ci,
-              all_curves = all_curves, show_legend = show_legend,
-              add_np_nn = TRUE, ret_grob = ret_grob)
+  .autoplot_multi(object, curvetype = curvetype, show_ci = show_ci,
+                  all_curves = all_curves, show_legend = show_legend,
+                  add_np_nn = TRUE, ret_grob = ret_grob)
 }
