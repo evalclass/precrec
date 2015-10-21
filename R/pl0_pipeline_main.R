@@ -132,3 +132,32 @@ pl_main <- function(mdat, calc_avg = TRUE, ci_alpha = 0.05, all_curves = FALSE,
 
   aucs
 }
+
+#
+# Validate arguments of pl_main()
+#
+.validate_pl_main_args <- function(mdat, calc_avg, ci_alpha, all_curves,
+                                   x_bins, orig_points) {
+
+  # Validate mdat
+  .validate(mdat)
+
+
+  # Validate calc_avg
+  .validate_calc_avg(calc_avg)
+
+  # Validate ci_alpha
+  .validate_ci_alpha(ci_alpha)
+
+  # Validate all_curves
+  .validate_all_curves(all_curves)
+
+
+  # Check x_bins
+  .validate_x_bins(x_bins)
+
+  # Check orig_points
+  .validate_orig_points(orig_points)
+
+}
+

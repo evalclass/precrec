@@ -192,3 +192,34 @@ join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
 
   cdat
 }
+
+#
+# Validate arguments of .join_datasets()
+#
+.validate_join_datasets_args <- function(..., efunc_vtype, efunc_nrow, byrow) {
+
+  # Check ...
+  arglist <- list(...)
+  if (length(arglist) == 0) {
+    stop("No datasets specified")
+  }
+
+  # Check efunc_vtype
+  if (!is.null(efunc_vtype)
+      && (!is(efunc_vtype, "function")
+          || length(as.list(formals(efunc_vtype))) != 1)) {
+    stop("'efunc_vtype' must be a function with 1 argument")
+  }
+
+  # Check efunc_nrow
+  if (!is.null(efunc_nrow)
+      && (!is(efunc_nrow, "function")
+          || length(as.list(formals(efunc_nrow))) != 2)) {
+    stop("'efunc_nrow' must be a function with 2 arguments")
+  }
+
+  # Check byrow
+  assertthat::assert_that(assertthat::is.flag(byrow),
+                          assertthat::noNA(byrow))
+
+}
