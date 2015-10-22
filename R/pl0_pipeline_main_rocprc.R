@@ -1,12 +1,13 @@
 #
 # Control the main pipeline iterations
 #
-pl_main <- function(mdat, calc_avg = TRUE, ci_alpha = 0.05, all_curves = FALSE,
-                    x_bins = 1000, orig_points = TRUE) {
+pl_main_rocprc <- function(mdat, calc_avg = TRUE, ci_alpha = 0.05,
+                           all_curves = FALSE, x_bins = 1000,
+                           orig_points = TRUE) {
 
   # === Validation ===
-  .validate_pl_main_args(mdat, calc_avg, ci_alpha, all_curves,
-                         x_bins, orig_points)
+  .validate_pl_main_rocprc_args(mdat, calc_avg, ci_alpha, all_curves,
+                                x_bins, orig_points)
 
   # Create model_type and dataset_type
   if (length(attr(mdat, "uniq_modnames")) == 1L) {
@@ -134,10 +135,10 @@ pl_main <- function(mdat, calc_avg = TRUE, ci_alpha = 0.05, all_curves = FALSE,
 }
 
 #
-# Validate arguments of pl_main()
+# Validate arguments of pl_main_rocprc()
 #
-.validate_pl_main_args <- function(mdat, calc_avg, ci_alpha, all_curves,
-                                   x_bins, orig_points) {
+.validate_pl_main_rocprc_args <- function(mdat, calc_avg, ci_alpha, all_curves,
+                                          x_bins, orig_points) {
 
   # Validate mdat
   .validate(mdat)
