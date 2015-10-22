@@ -106,7 +106,6 @@ evalmod <- function(mdat, mode = "rocprc", scores = NULL, labels = NULL,
             x_bins = x_bins, orig_points = orig_points)
   }
 
-
 }
 
 #
