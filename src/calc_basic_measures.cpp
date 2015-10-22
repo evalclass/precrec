@@ -2,7 +2,9 @@
 #include <vector>
 #include <string>
 
+//
 // Calculate confusion matrices for all possible threshold values
+//
 // [[Rcpp::export]]
 Rcpp::List calc_basic_measures(int np,
                                int nn,

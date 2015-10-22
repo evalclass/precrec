@@ -10,7 +10,7 @@ create_curves <- function(pevals, scores = NULL, labels = NULL,
                                  ...)
 
   if (is.null(x_bins) || is.na(x_bins)) {
-    x_bins = 1
+    x_bins <- 1
   }
   .validate_x_bins(x_bins)
   .validate(pevals)

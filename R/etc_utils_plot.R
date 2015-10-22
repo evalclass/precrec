@@ -121,12 +121,12 @@
 # Add a curve with CI
 #
 .add_curve_with_ci <- function(avgcurves, idx, pcol, lcol, show_ci) {
-  x = avgcurves[[idx]][["x"]]
-  y = avgcurves[[idx]][["y_avg"]]
+  x <- avgcurves[[idx]][["x"]]
+  y <- avgcurves[[idx]][["y_avg"]]
 
   if (show_ci) {
-    ymin = avgcurves[[idx]][["y_ci_l"]]
-    ymax = avgcurves[[idx]][["y_ci_h"]]
+    ymin <- avgcurves[[idx]][["y_ci_l"]]
+    ymax <- avgcurves[[idx]][["y_ci_h"]]
 
     g <- col2rgb(pcol)
     polygon(c(x, rev(x)), c(ymin, rev(ymax)), border = FALSE,
@@ -158,7 +158,7 @@
   if (add_np_nn) {
     np <- attr(x[[ctype]][[1]], "np")
     nn <- attr(x[[ctype]][[1]], "nn")
-    main = paste0(main, " - P: ", np, ", N: ", nn)
+    main <- paste0(main, " - P: ", np, ", N: ", nn)
   }
 
   old_pty <- par(pty = "s")

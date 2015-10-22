@@ -25,7 +25,9 @@ class CompDVec {
     }
 };
 
+//
 // Get ranks and index of scores
+//
 // [[Rcpp::export]]
 Rcpp::List get_score_ranks(const Rcpp::NumericVector& scores,
                            const bool& na_last,

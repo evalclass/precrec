@@ -11,7 +11,9 @@ int interpolate_roc(const Rcpp::NumericVector& sp,
                     std::vector<double>& tpr,
                     int n);
 
+//
 // Calculate confusion matrices for all possible threshold values
+//
 // [[Rcpp::export]]
 Rcpp::List create_roc_curve(const Rcpp::NumericVector& tps,
                             const Rcpp::NumericVector& fps,

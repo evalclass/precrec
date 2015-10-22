@@ -52,7 +52,7 @@ reformat_data <- function(scores, labels,
 
   # Update posclass if nesessary
   if (is.null(posclass)) {
-    posclass = NA
+    posclass <- NA
   } else if (is.factor(labels)) {
     lv <- levels(labels)
     posclass <- which(lv == posclass)

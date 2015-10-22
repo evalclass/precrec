@@ -8,7 +8,9 @@ void calc_avg_single(const Rcpp::NumericVector& xs,
                      int vec_size,
                      std::vector<double>& wk_avg_y);
 
+//
 // Calculate average curves
+//
 // [[Rcpp::export]]
 Rcpp::List calc_avg_curve(const Rcpp::List& curves,
                           double x_bins,
@@ -33,8 +35,6 @@ Rcpp::List calc_avg_curve(const Rcpp::List& curves,
   std::vector<double> stot_y(vec_size, 0.0);   // Total of squared ys
   std::vector<double> wk_avg_y(vec_size);      // Average
   int n = curves.size();
-
-
 
   // Calculate total
   for (int i = 0; i < n; ++i) {

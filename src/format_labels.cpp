@@ -64,7 +64,9 @@ Rcpp::List make_new_labels(T labels,
   return ret_val;
 }
 
+//
 // Format labels
+//
 // [[Rcpp::export]]
 Rcpp::List format_labels(SEXP labels,
                          SEXP posclass) {

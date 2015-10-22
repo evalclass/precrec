@@ -89,8 +89,8 @@
     for (i in seq_along(avgcurves)) {
       x <- avgcurves[[i]][["x"]]
       y <- avgcurves[[i]][["y_avg"]]
-      ymin = avgcurves[[i]][["y_ci_l"]]
-      ymax = avgcurves[[i]][["y_ci_h"]]
+      ymin <- avgcurves[[i]][["y_ci_l"]]
+      ymax <- avgcurves[[i]][["y_ci_h"]]
 
       modname <- factor(rep(uniq_modnames[i], length(x)),
                         levels = uniq_modnames)

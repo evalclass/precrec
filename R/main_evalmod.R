@@ -127,14 +127,8 @@ evalmod <- function(mdat, mode = "rocprc", scores = NULL, labels = NULL,
                    na_worst = na_worst, ties_method = ties_method)
   }
 
-  if (mode == "rocprc") {
-    pl_main_rocprc(mdat, calc_avg = calc_avg, ci_alpha = ci_alpha,
-                   all_curves = all_curves, x_bins = x_bins,
-                   orig_points = orig_points)
-  } else if (mode == "basic") {
-    pl_main_basic(mdat, calc_avg = calc_avg, ci_alpha = ci_alpha,
-                  all_curves = all_curves)
-  }
+  pl_main(mdat, mode = mode, calc_avg = calc_avg, ci_alpha = ci_alpha,
+          all_curves = all_curves, x_bins = x_bins, orig_points = orig_points)
 
 }
 

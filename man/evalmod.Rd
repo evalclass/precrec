@@ -11,7 +11,8 @@ evalmod(mdat, mode = "rocprc", scores = NULL, labels = NULL,
 }
 \arguments{
 \item{mdat}{An \code{mdat} object created by the \code{\link{mmdata}}
-  function. The following arguments are ignored when \code{mdat} is specified.
+  function. The following arguments are ignored when \code{mdat} is
+  specified.
   \itemize{
     \item \code{scores}
     \item \code{labels}
@@ -21,7 +22,7 @@ evalmod(mdat, mode = "rocprc", scores = NULL, labels = NULL,
     \item \code{na_worst}
     \item \code{ties_method}
   }
-  Both \code{scores} and \code{labels} must be specified at least
+  Both \code{scores} and \code{labels} must be at least specified
   when \code{mdat} is unspecified.}
 
 \item{mode}{A string that specifies what evaluation plots
@@ -35,13 +36,15 @@ evalmod(mdat, mode = "rocprc", scores = NULL, labels = NULL,
 \item{scores}{A numeric dataset of predicted scores. It can be a vector,
   a matrix, an array, a data frame, or a list.}
 
-\item{labels}{A numeric/character/logical or factor dataset
+\item{labels}{A numeric, character, logical, or factor dataset
   of observed labels. It can be a vector, a matrix, an array,
   a data frame, or a list.}
 
 \item{modnames}{A character vector for the names of the models.}
 
 \item{dsids}{A numeric vector for dataset IDs.}
+
+\item{posclass}{A scaler value to specify positives in \code{labels}.}
 
 \item{na_worst}{A boolean value for controlling the treatment of NAs
   in \code{scores}.
@@ -50,7 +53,7 @@ evalmod(mdat, mode = "rocprc", scores = NULL, labels = NULL,
     \item{FALSE}{NAs are treated as the lowest score}
   }}
 
-\item{ties_method}{A string for controlling tied scores.
+\item{ties_method}{A string for controlling ties in \code{scores}.
   Ignored if mdat is set.
   \describe{
     \item{"equiv"}{Ties are equivalently ranked}
@@ -58,18 +61,29 @@ evalmod(mdat, mode = "rocprc", scores = NULL, labels = NULL,
     \item{"first"}{ Ties are ranked in random order}
   }}
 
-\item{x_bins}{A numeric value with the range (0, 1] to specifiy
-  an interval of the evaluation values on the x-axis.
-  No interpolation between two points is performed when it is set to 1.}
+\item{calc_avg}{A logical value to specifiy whether average curves should
+  be calculated.}
+
+\item{ci_alpha}{A numeric value with range [0, 1] to specifiy the alpha
+  value of the confidence interval calculation. It is effective only
+  when \code{calc_avg} is set to \code{TRUE}}
+
+\item{all_curves}{A logical value to specifiy whether all raw curves
+  are stored or deleted when the average curves are calculated.}
+
+\item{x_bins}{A numeric value to specifiy the number of minimum bins
+  on the x-axis.}
 }
 \value{
 The \code{evalmod} function returns an S3 object
-  that contains ROC and Precision-Recall curves. The returned S3 object
+  that contains peformace evaluation measures, such as ROC
+  and Precision-Recall curves. The returned S3 object
   can be \code{sscurves}, \code{mscurves}, \code{scurves}
 }
 \description{
 The \code{evalmod} function takes predicted scores and binary lables
-  and calculates ROC and Precision-Recall curves.
+  and calculates ROC and Precision-Recall curves. It can aslo generate
+  several other performace evaluation plots, alternatively.
 }
 \examples{
 ## Create sample datasets with 100 positives and 100 negatives
@@ -82,7 +96,8 @@ mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 curves1 <- evalmods_m(mdat)
 
 ## Directly specifiy scores and labels
-curves2 <- evalmod(scores = samps[["scores"]], labels = samps[["labels"]],
+curves2 <- evalmod(scores = samps[["scores"]],
+                   labels = samps[["labels"]],
                    modnames = samps[["modnames"]],
                    dsids = samps[["dsids"]])
 
@@ -101,9 +116,9 @@ curves4 <- evalmods_m(mdat, x_bins = NULL)
 plot(curves4, "PRC")
 }
 \seealso{
-\code{\link{plot.smcurves}}, \code{\link{autoplot.smcurves}},
-  and \code{\link{fortify.smcurves}} for plotting curves.
+\code{\link{plot}}, \code{\link{autoplot}},
+  and \code{\link{fortify}} for plotting curves.
   \code{\link{join_scores}}, \code{\link{join_scores}},
-  and \code{\link{join_labels}} for formatting input data.
+  and \code{\link{mmdata}} for formatting input data.
 }
 
