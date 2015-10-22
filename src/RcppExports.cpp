@@ -18,15 +18,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // calc_avg_curve
-Rcpp::List calc_avg_curve(const Rcpp::List& curves, double x_interval, double ci_q);
-RcppExport SEXP precrec_calc_avg_curve(SEXP curvesSEXP, SEXP x_intervalSEXP, SEXP ci_qSEXP) {
+Rcpp::List calc_avg_curve(const Rcpp::List& curves, double x_bins, double ci_q);
+RcppExport SEXP precrec_calc_avg_curve(SEXP curvesSEXP, SEXP x_binsSEXP, SEXP ci_qSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< const Rcpp::List& >::type curves(curvesSEXP);
-    Rcpp::traits::input_parameter< double >::type x_interval(x_intervalSEXP);
+    Rcpp::traits::input_parameter< double >::type x_bins(x_binsSEXP);
     Rcpp::traits::input_parameter< double >::type ci_q(ci_qSEXP);
-    __result = Rcpp::wrap(calc_avg_curve(curves, x_interval, ci_q));
+    __result = Rcpp::wrap(calc_avg_curve(curves, x_bins, ci_q));
     return __result;
 END_RCPP
 }
@@ -60,8 +60,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // create_prc_curve
-Rcpp::List create_prc_curve(const Rcpp::NumericVector& tps, const Rcpp::NumericVector& fps, const Rcpp::NumericVector& sn, const Rcpp::NumericVector& pr, double x_interval);
-RcppExport SEXP precrec_create_prc_curve(SEXP tpsSEXP, SEXP fpsSEXP, SEXP snSEXP, SEXP prSEXP, SEXP x_intervalSEXP) {
+Rcpp::List create_prc_curve(const Rcpp::NumericVector& tps, const Rcpp::NumericVector& fps, const Rcpp::NumericVector& sn, const Rcpp::NumericVector& pr, double x_bins);
+RcppExport SEXP precrec_create_prc_curve(SEXP tpsSEXP, SEXP fpsSEXP, SEXP snSEXP, SEXP prSEXP, SEXP x_binsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -69,14 +69,14 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type fps(fpsSEXP);
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type sn(snSEXP);
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type pr(prSEXP);
-    Rcpp::traits::input_parameter< double >::type x_interval(x_intervalSEXP);
-    __result = Rcpp::wrap(create_prc_curve(tps, fps, sn, pr, x_interval));
+    Rcpp::traits::input_parameter< double >::type x_bins(x_binsSEXP);
+    __result = Rcpp::wrap(create_prc_curve(tps, fps, sn, pr, x_bins));
     return __result;
 END_RCPP
 }
 // create_roc_curve
-Rcpp::List create_roc_curve(const Rcpp::NumericVector& tps, const Rcpp::NumericVector& fps, const Rcpp::NumericVector& sp, const Rcpp::NumericVector& sn, double x_interval);
-RcppExport SEXP precrec_create_roc_curve(SEXP tpsSEXP, SEXP fpsSEXP, SEXP spSEXP, SEXP snSEXP, SEXP x_intervalSEXP) {
+Rcpp::List create_roc_curve(const Rcpp::NumericVector& tps, const Rcpp::NumericVector& fps, const Rcpp::NumericVector& sp, const Rcpp::NumericVector& sn, double x_bins);
+RcppExport SEXP precrec_create_roc_curve(SEXP tpsSEXP, SEXP fpsSEXP, SEXP spSEXP, SEXP snSEXP, SEXP x_binsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -84,19 +84,20 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type fps(fpsSEXP);
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type sp(spSEXP);
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type sn(snSEXP);
-    Rcpp::traits::input_parameter< double >::type x_interval(x_intervalSEXP);
-    __result = Rcpp::wrap(create_roc_curve(tps, fps, sp, sn, x_interval));
+    Rcpp::traits::input_parameter< double >::type x_bins(x_binsSEXP);
+    __result = Rcpp::wrap(create_roc_curve(tps, fps, sp, sn, x_bins));
     return __result;
 END_RCPP
 }
 // format_labels
-Rcpp::List format_labels(Rcpp::NumericVector& labels);
-RcppExport SEXP precrec_format_labels(SEXP labelsSEXP) {
+Rcpp::List format_labels(SEXP labels, SEXP posclass);
+RcppExport SEXP precrec_format_labels(SEXP labelsSEXP, SEXP posclassSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< Rcpp::NumericVector& >::type labels(labelsSEXP);
-    __result = Rcpp::wrap(format_labels(labels));
+    Rcpp::traits::input_parameter< SEXP >::type labels(labelsSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type posclass(posclassSEXP);
+    __result = Rcpp::wrap(format_labels(labels, posclass));
     return __result;
 END_RCPP
 }

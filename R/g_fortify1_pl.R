@@ -9,8 +9,8 @@ fortify.fmdat <- function(model, ...) {
   .validate(model)
 
   # === Prepare a data frame for ggplot2 ===
-  df <- data.frame(x = model[["labels"]],
-                   y = model[["ranks"]])
+  curve_df <- data.frame(x = model[["labels"]],
+                         y = model[["ranks"]])
 }
 
 #
@@ -25,14 +25,13 @@ fortify.cmats <- function(model, ...) {
 
   # === Prepare a data frame for ggplot2 ===
   n <- length(model[["ranks"]])
-  df <- data.frame(x = rep(1:length(model[["ranks"]]), 4),
-                   y = c(model[["tp"]],
-                         model[["fn"]],
-                         model[["fp"]],
-                         model[["tn"]]),
-                   group = factor(c(rep("TPs", n), rep("FNs", n),
-                                    rep("FPs", n), rep("TNs", n)),
-                                  levels = c("TPs", "FNs", "FPs", "TNs")))
+  curve_df <- data.frame(x = rep(1:length(model[["ranks"]]), 4),
+                         y = c(model[["tp"]], model[["fn"]],
+                               model[["fp"]], model[["tn"]]),
+                         group = factor(c(rep("TPs", n), rep("FNs", n),
+                                          rep("FPs", n), rep("TNs", n)),
+                                        levels = c("TPs", "FNs",
+                                                   "FPs", "TNs")))
 }
 
 #
@@ -46,24 +45,23 @@ fortify.pevals <- function(model, ...) {
   .validate(model)
 
   # === Prepare a data frame for ggplot2 ===
-  n <- length(model[["error"]])
-  df <- data.frame(x = rep(1:n, 6),
-                   y = c(model[["error"]],
-                         model[["accuracy"]],
-                         model[["specificity"]],
-                         model[["sensitivity"]],
-                         1 - model[["specificity"]],
-                         model[["precision"]]),
-                   group = factor(c(rep("error", n),
-                                    rep("accuracy", n),
-                                    rep("specificity", n),
-                                    rep("sensitivity", n),
-                                    rep("1 - specificity", n),
-                                    rep("precision", n)),
-                                  levels = c("error", "accuracy",
-                                             "specificity", "sensitivity",
-                                             "1 - specificity",
-                                             "precision")))
+  pb <- model[["basic"]]
+  n <- length(pb[["error"]])
+  curve_df <- data.frame(x = rep(1:n, 6),
+                         y = c(pb[["error"]], pb[["accuracy"]],
+                               pb[["specificity"]], pb[["sensitivity"]],
+                               1 - pb[["specificity"]], pb[["precision"]]),
+                         group = factor(c(rep("error", n),
+                                          rep("accuracy", n),
+                                          rep("specificity", n),
+                                          rep("sensitivity", n),
+                                          rep("1 - specificity", n),
+                                          rep("precision", n)),
+                                        levels = c("error", "accuracy",
+                                                   "specificity",
+                                                   "sensitivity",
+                                                   "1 - specificity",
+                                                   "precision")))
 }
 
 #
@@ -77,7 +75,7 @@ fortify.roc_curve <- function(model, ...) {
   .validate(model)
 
   # === Prepare a data frame for ggplot2 ===
-  df <- data.frame(x = model[["x"]], y = model[["y"]])
+  curve_df <- data.frame(x = model[["x"]], y = model[["y"]])
 
 }
 

@@ -13,9 +13,9 @@ test_that("create_roc() reterns a 'roc_curve' object", {
   roc_curve2 <- create_roc(pevals)
   roc_curve3 <- create_roc(scores = P10N10$scores, labels = P10N10$labels)
 
-  expect_equal(class(roc_curve1), "roc_curve")
-  expect_equal(class(roc_curve2), "roc_curve")
-  expect_equal(class(roc_curve3), "roc_curve")
+  expect_true(is(roc_curve1, "roc_curve"))
+  expect_true(is(roc_curve2, "roc_curve"))
+  expect_true(is(roc_curve3, "roc_curve"))
 })
 
 test_that("'pevals' must be an 'pevals' object", {
@@ -48,7 +48,7 @@ test_that("create_roc() can take arguments for reformat_data()", {
                           labels = c(1, 0, 1),
                           na_worst = TRUE,
                           ties_method = "first",
-                          keep_cmats = TRUE,
+                          keep_pevals = TRUE,
                           keep_fmdat = TRUE)
 
   expect_equal(.get_obj_arg(roc_curve, "fmdat", "na_worst"), TRUE)
@@ -60,7 +60,7 @@ test_that("create_roc() can take na_worst argument", {
   expect_equal_ranks <- function(scores, na_worst, ranks) {
     roc_curve <- create_roc(scores = scores, labels = c(1, 0, 1),
                             na_worst = na_worst,
-                            keep_cmats = TRUE,
+                            keep_pevals = TRUE,
                             keep_fmdat = TRUE)
 
     fmdat <- .get_obj(roc_curve, "fmdat")
@@ -95,7 +95,7 @@ test_that("create_roc() can take ties_method argument", {
     roc_curve <- create_roc(scores = c(0.1, 0.2, 0.2, 0.2, 0.3),
                             labels = c(1, 0, 1, 1, 1),
                             ties_method = ties_method,
-                            keep_cmats = TRUE,
+                            keep_pevals = TRUE,
                             keep_fmdat = TRUE)
 
     fmdat <- .get_obj(roc_curve, "fmdat")
@@ -114,7 +114,7 @@ test_that("create_roc() can take ties_method argument", {
 
 test_that("create_roc() reterns a correct ROC curve", {
   roc_curve <- create_roc(scores = c(0.6, 0.5, 0.4, 0.3, 0.2, 0.1),
-                          labels = c(0, 1, 0, 1, 0, 1), x_interval = 0.1)
+                          labels = c(0, 1, 0, 1, 0, 1), x_bins = 10)
 
   expect_equal(attr(roc_curve, "np"), 3)
   expect_equal(attr(roc_curve, "nn"), 3)
@@ -131,7 +131,7 @@ test_that("create_roc() reterns a correct ROC curve", {
 
 test_that("create_roc() reterns a correct ROC AUC", {
   roc_curve <- create_roc(scores = c(0.6, 0.5, 0.4, 0.3, 0.2, 0.1),
-                          labels = c(0, 1, 0, 1, 0, 1), x_interval = 0.01)
+                          labels = c(0, 1, 0, 1, 0, 1), x_bins = 100)
 
   expect_equal(attr(roc_curve, "auc"), 1/3, tolerance = 1e-3)
 })

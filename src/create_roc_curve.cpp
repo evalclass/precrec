@@ -17,12 +17,13 @@ Rcpp::List create_roc_curve(const Rcpp::NumericVector& tps,
                             const Rcpp::NumericVector& fps,
                             const Rcpp::NumericVector& sp,
                             const Rcpp::NumericVector& sn,
-                            double x_interval) {
+                            double x_bins) {
 
   // Variables
   Rcpp::List ret_val;
   Rcpp::DataFrame df;
   std::string errmsg = "";
+  double x_interval = 1.0 / x_bins;
   int max_n = sp.size() + (1.0 / x_interval);
   std::vector<double> fpr(max_n);           // False positive rate
   std::vector<double> tpr(max_n);           // True positive rate

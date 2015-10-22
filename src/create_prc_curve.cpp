@@ -19,12 +19,13 @@ Rcpp::List create_prc_curve(const Rcpp::NumericVector& tps,
                             const Rcpp::NumericVector& fps,
                             const Rcpp::NumericVector& sn,
                             const Rcpp::NumericVector& pr,
-                            double x_interval) {
+                            double x_bins) {
 
   // Variables
   Rcpp::List ret_val;
   Rcpp::DataFrame df;
   std::string errmsg = "";
+  double x_interval = 1.0 / x_bins;
   int max_n = sn.size() + (1.0 / x_interval);
   std::vector<double> rec(max_n);           // Recall
   std::vector<double> prec(max_n);          // Precision

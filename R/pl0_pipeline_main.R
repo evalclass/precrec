@@ -1,54 +1,65 @@
 #
 # Control the main pipeline iterations
 #
-pl_main <- function(mdat, model_type = "single", data_type = "single",
-                    x_interval = 0.001, calc_avg = TRUE, ci_level = 0.95) {
+pl_main <- function(mdat, calc_avg = TRUE, ci_alpha = 0.05, all_curves = FALSE,
+                    x_bins = 1000, orig_points = TRUE) {
 
   # === Validation ===
-  .validate(mdat)
-  model_type <- .pmatch_model_data_types(model_type)
-  data_type <- .pmatch_model_data_types(data_type)
-  .validate_pl_main_args(mdat, model_type, data_type, x_interval, calc_avg,
-                         ci_level)
+  .validate_pl_main_args(mdat, calc_avg, ci_alpha, all_curves,
+                         x_bins, orig_points)
+
+  # Create model_type and dataset_type
+  if (length(attr(mdat, "uniq_modnames")) == 1L) {
+    model_type <- "single"
+  } else {
+    model_type <- "multiple"
+  }
+
+  if (length(attr(mdat, "uniq_dsids")) == 1L) {
+    dataset_type <- "single"
+  } else {
+    dataset_type <- "multiple"
+  }
 
   # === Create ROC and Precision-Recall curves ===
   # Define a function for each iteration
   plfunc <- function(s) {
     cdat <- create_confmats(mdat[[s]])
     pevals <- calc_measures(cdat)
-    curves <- create_curves(pevals, x_interval = x_interval)
+    curves <- create_curves(pevals, x_bins = x_bins)
   }
 
   # Create curves
   lcurves <- lapply(seq_along(mdat), plfunc)
-  pf <- .make_prefix(model_type, data_type)
+  pf <- .make_prefix(model_type, dataset_type)
   rocs <- .group_curves(lcurves, "roc", paste0(pf, "roc"), mdat)
   prcs <- .group_curves(lcurves, "prc", paste0(pf, "prc"), mdat)
 
-  # Calculate the average curves
-  if (data_type == "multiple" && calc_avg) {
-    modnames <- attr(mdat, "modnames")
-    dsids <- attr(mdat, "dsids")
+  # Summarize AUC
+  aucs <- .group_aucs(lcurves, mdat)
 
-    attr(rocs, "avgcurves") <- calc_avg(rocs, modnames, dsids,
-                                        x_interval, ci_level)
-    attr(prcs, "avgcurves") <- calc_avg(prcs, modnames, dsids,
-                                        x_interval, ci_level)
+  # Calculate the average curves
+  if (dataset_type == "multiple" && calc_avg) {
+    attr(rocs, "avgcurves") <- calc_avg(rocs, ci_alpha, x_bins)
+    attr(prcs, "avgcurves") <- calc_avg(prcs, ci_alpha, x_bins)
   }
 
   # === Create an S3 object ===
   s3obj <- structure(list(rocs = rocs, prcs = prcs),
-                     class = paste0(pf, "curves"))
+                     class = c(paste0(pf, "curves"), "curve_info"))
 
   # Set attributes
+  attr(s3obj, "aucs") <- aucs
+  attr(s3obj, "data_info") <- attr(mdat, "data_info")
+  attr(s3obj, "uniq_modnames") <- attr(mdat, "uniq_modnames")
+  attr(s3obj, "uniq_dsids") <- attr(mdat, "uniq_dsids")
   attr(s3obj, "model_type") <- model_type
-  attr(s3obj, "data_type") <- data_type
-  attr(s3obj, "modnames") <- attr(mdat, "modnames")
-  attr(s3obj, "dsids") <- attr(mdat, "dsids")
-  attr(s3obj, "args") <- list(x_interval = x_interval,
-                              calc_avg = calc_avg,
-                              ci_level = ci_level)
-  attr(s3obj, "src") <- mdat
+  attr(s3obj, "dataset_type") <- dataset_type
+  attr(s3obj, "args") <- list(calc_avg = calc_avg,
+                              ci_alpha = ci_alpha,
+                              all_curves = all_curves,
+                              x_bins = x_bins,
+                              orig_points = orig_points)
   attr(s3obj, "validated") <- FALSE
 
   # Call .validate.class_name()
@@ -56,30 +67,9 @@ pl_main <- function(mdat, model_type = "single", data_type = "single",
 }
 
 #
-# Check partial match
-#
-.pmatch_model_data_types <- function(val) {
-  if (assertthat::is.string(val)) {
-    if (val == "single" || val == "multiple") {
-      return(val)
-    }
-
-    if (!is.na(pmatch(val, "single"))) {
-      return("single")
-    }
-
-    if (!is.na(pmatch(val, "multiple"))) {
-      return("multiple")
-    }
-  }
-
-  val
-}
-
-#
 # Make prefix
 #
-.make_prefix <- function(model_type, data_type) {
+.make_prefix <- function(model_type, dataset_type) {
   mt <- ""
   if (model_type == "single") {
     mt <- "s"
@@ -88,9 +78,9 @@ pl_main <- function(mdat, model_type = "single", data_type = "single",
   }
 
   dt <- ""
-  if (data_type == "single") {
+  if (dataset_type == "single") {
     dt <- "s"
-  } else if (data_type == "multiple") {
+  } else if (dataset_type == "multiple") {
     dt <- "m"
   }
 
@@ -108,12 +98,66 @@ pl_main <- function(mdat, model_type = "single", data_type = "single",
   s3obj <- structure(mc, class = class_name)
 
   # Set attributes
-  attr(s3obj, "modnames") <- attr(mdat, "modnames")
-  attr(s3obj, "dsids") <- attr(mdat, "dsids")
+  attr(s3obj, "data_info") <- attr(mdat, "data_info")
+  attr(s3obj, "uniq_modnames") <- attr(mdat, "uniq_modnames")
+  attr(s3obj, "uniq_dsids") <- attr(mdat, "uniq_dsids")
   attr(s3obj, "avgcurve") <- NA
-  attr(s3obj, "src") <- mdat
   attr(s3obj, "validated") <- FALSE
 
   # Call .validate.class_name()
   .validate(s3obj)
 }
+
+#
+# Get AUCs
+#
+.group_aucs <- function(lcurves, mdat) {
+
+  # Group AUC of ROC or PRC curves
+  modnames <- attr(mdat, "data_info")[["modnames"]]
+  dsids <- attr(mdat, "data_info")[["dsids"]]
+  aucs <- data.frame(modnames = rep(modnames, each = 2),
+                     dsids = rep(dsids, each = 2),
+                     curvetypes = rep(c("ROC", "PRC"), length(modnames)),
+                     aucs = rep(NA, length(modnames) * 2),
+                     stringsAsFactors = FALSE)
+
+  j <- 1
+  for (i in seq_along(lcurves)) {
+    aucs[["aucs"]][j] <- attr(lcurves[[i]][["roc"]], "auc")
+    j <- j + 1
+    aucs[["aucs"]][j] <- attr(lcurves[[i]][["prc"]], "auc")
+    j <- j + 1
+  }
+
+  aucs
+}
+
+#
+# Validate arguments of pl_main()
+#
+.validate_pl_main_args <- function(mdat, calc_avg, ci_alpha, all_curves,
+                                   x_bins, orig_points) {
+
+  # Validate mdat
+  .validate(mdat)
+
+
+  # Validate calc_avg
+  .validate_calc_avg(calc_avg)
+
+  # Validate ci_alpha
+  .validate_ci_alpha(ci_alpha)
+
+  # Validate all_curves
+  .validate_all_curves(all_curves)
+
+
+  # Check x_bins
+  .validate_x_bins(x_bins)
+
+  # Check orig_points
+  .validate_orig_points(orig_points)
+
+}
+

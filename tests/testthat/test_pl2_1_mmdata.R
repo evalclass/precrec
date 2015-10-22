@@ -28,7 +28,7 @@ test_that("mmdata() returns an 'mdat' object", {
 
   mdat <- mmdata(scores, labels)
 
-  expect_equal(class(mdat), "mdat")
+  expect_true(is(mdat, "mdat"))
   expect_equal(length(mdat), 3)
 
 })
@@ -47,9 +47,8 @@ test_that("'scores' and 'labels' must be specified", {
 
 test_that("'scores' and 'labels' should be the same length", {
   expect_err_msg <- function(scores, labels) {
-    err_msg <- paste0("'scores' and 'labels' should be ",
-                      "of the same size, or ",
-                      "the size of 'labels' should be 1")
+    err_msg <- paste0("The number of scores and label lists ",
+                      "should be the same size")
     eval(bquote(expect_error(mmdata(scores, labels), err_msg)))
   }
 
@@ -77,7 +76,7 @@ test_that("mmdata() accepts 'modnames'", {
                              err_msg)))
   }
 
-  err_msg <- "not equal to datalen"
+  err_msg <- "Invalid"
   expect_err_msg(err_msg, s1, l1, c("A", "B"))
 
   err_msg <- "modnames is not a character vector"
@@ -96,10 +95,10 @@ test_that("mmdata() accepts 'dsids'", {
     eval(bquote(expect_error(mmdata(s1, l1, dsids = dsids), err_msg)))
   }
 
-  err_msg <- "not equal to datalen"
+  err_msg <- "Invalid"
   expect_err_msg(err_msg, s1, l1, c("A", "B"))
 
-  err_msg <- "is not TRUE"
+  err_msg <- "dsids is not a numeric or integer vector"
   expect_err_msg(err_msg, s1, l1, NA)
 
 })
@@ -160,12 +159,12 @@ test_that("mmdata() accepts 'expd_first", {
   dlen <- 3
 
   mdat1 <- mmdata(scores, labels, expd_first = "modnames")
-  expect_equal(attr(mdat1, "modnames"), c("m1", "m2", "m3"))
-  expect_equal(attr(mdat1, "dsids"), rep(1, 3))
+  expect_equal(attr(mdat1, "data_info")[["modnames"]], c("m1", "m2", "m3"))
+  expect_equal(attr(mdat1, "data_info")[["dsids"]], rep(1, 3))
 
   mdat2 <- mmdata(scores, labels, expd_first = "dsids")
-  expect_equal(attr(mdat2, "modnames"), rep("m1", 3))
-  expect_equal(attr(mdat2, "dsids"), seq(3))
+  expect_equal(attr(mdat2, "data_info")[["modnames"]], rep("m1", 3))
+  expect_equal(attr(mdat2, "data_info")[["dsids"]], seq(3))
 })
 
 test_that("'mdat' contains a list", {

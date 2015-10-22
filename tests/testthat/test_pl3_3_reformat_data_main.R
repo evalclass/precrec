@@ -9,9 +9,9 @@ test_that("reformat_data() reterns a 'fmdat' object", {
   fmdat2 <- reformat_data(c(0.1, 0.2, 0.3), c(0, 1, 1))
   fmdat3 <- reformat_data(c(0.3, 0.1, 0.2), c(-1, -1, 1))
 
-  expect_equal(class(fmdat1), "fmdat")
-  expect_equal(class(fmdat2), "fmdat")
-  expect_equal(class(fmdat3), "fmdat")
+  expect_true(is(fmdat1, "fmdat"))
+  expect_true(is(fmdat2, "fmdat"))
+  expect_true(is(fmdat3, "fmdat"))
 })
 
 test_that("'scores' and 'labels' must be specified", {

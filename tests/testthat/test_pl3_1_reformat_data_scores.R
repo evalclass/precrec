@@ -33,11 +33,11 @@ test_that("'scores' is an numeric vector", {
   expect_err_msg(err_msg, c("1", "0"))
 
   err_msg <- "scores is not an atomic vector"
+  expect_err_msg(err_msg, factor(1))
   expect_err_msg(err_msg, list(1))
   expect_err_msg(err_msg, data.frame(1))
   expect_err_msg(err_msg, array(1))
   expect_err_msg(err_msg, matrix(1))
-  expect_err_msg(err_msg, factor(1))
   expect_err_msg(err_msg, NULL)
 })
 
@@ -60,11 +60,9 @@ test_that("'na_worst' should be TRUE or FALSE", {
   err_msg <- "na_worst contains 1 missing values"
   expect_err_msg(err_msg, NA)
 
-  err_msg <- "na_worst is not an atomic vector"
+  err_msg <- "na_worst is not a flag"
   expect_err_msg(err_msg, list(c(TRUE, FALSE)))
   expect_err_msg(err_msg, data.frame(c(TRUE, FALSE)))
-
-  err_msg <- "na_worst is not a flag"
   expect_err_msg(err_msg, "T")
   expect_err_msg(err_msg, array(c(TRUE, FALSE)))
   expect_err_msg(err_msg, matrix(c(TRUE, FALSE)))

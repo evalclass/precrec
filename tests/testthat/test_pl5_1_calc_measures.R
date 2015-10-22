@@ -12,9 +12,9 @@ test_that("calc_measures() reterns an 'pevals' object", {
   pevals2 <- calc_measures(cmats)
   pevals3 <- calc_measures(scores = P10N10$scores, labels = P10N10$labels)
 
-  expect_equal(class(pevals1), "pevals")
-  expect_equal(class(pevals2), "pevals")
-  expect_equal(class(pevals3), "pevals")
+  expect_true(is(pevals1, "pevals"))
+  expect_true(is(pevals2, "pevals"))
+  expect_true(is(pevals3, "pevals"))
 })
 
 test_that("'cmats' must be a 'cmats' object", {
@@ -107,25 +107,26 @@ test_that("calc_measures() can take ties_method argument", {
 
 })
 
-test_that("'pevals' contains a list with 7 items", {
+test_that("'pevals' contains a list with 1 item", {
   pevals <- calc_measures(scores = c(0.1, 0.2, 0), labels = c(1, 0, 1))
 
   expect_true(is.list(pevals))
-  expect_equal(length(pevals), 6)
+  expect_equal(length(pevals), 1)
 })
 
 test_that("calc_measures() reterns correct evaluation values", {
   pevals <- calc_measures(scores = c(0.1, 0.2, 0, 0.3),
                           labels = c(1, 0, 0, 1))
+  pb <- pevals[["basic"]]
 
 #   "TPs" c(0, 1, 1, 2, 2)
 #   "FNs" c(2, 1, 1, 0, 0)
 #   "FPs" c(0, 0, 1, 1, 2)
 #   "TNs" c(2, 2, 1, 1, 0)
-  expect_equal(pevals[["error"]], c(0.5, 0.25, 0.5, 0.25, 0.5))
-  expect_equal(pevals[["accuracy"]], c(0.5, 0.75, 0.5, 0.75, 0.5))
-  expect_equal(pevals[["specificity"]], c(1, 1, 0.5, 0.5, 0))
-  expect_equal(pevals[["sensitivity"]], c(0, 0.5, 0.5, 1, 1))
-  expect_equal(pevals[["precision"]], c(1, 1, 0.5, 2/3, 0.5))
+  expect_equal(pb[["error"]], c(0.5, 0.25, 0.5, 0.25, 0.5))
+  expect_equal(pb[["accuracy"]], c(0.5, 0.75, 0.5, 0.75, 0.5))
+  expect_equal(pb[["specificity"]], c(1, 1, 0.5, 0.5, 0))
+  expect_equal(pb[["sensitivity"]], c(0, 0.5, 0.5, 1, 1))
+  expect_equal(pb[["precision"]], c(1, 1, 0.5, 2/3, 0.5))
 
 })

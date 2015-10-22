@@ -11,9 +11,9 @@ test_that("create_confmats() reterns a 'cmats' object", {
   cmats2 <- create_confmats(fmdat)
   cmats3 <- create_confmats(scores = P10N10$scores, labels = P10N10$labels)
 
-  expect_equal(class(cmats1), "cmats")
-  expect_equal(class(cmats2), "cmats")
-  expect_equal(class(cmats3), "cmats")
+  expect_true(is(cmats1, "cmats"))
+  expect_true(is(cmats2, "cmats"))
+  expect_true(is(cmats3, "cmats"))
 })
 
 test_that("'fmdat' must be a 'fmdat' object", {
