@@ -10,17 +10,9 @@ pl_main_rocprc <- function(mdat, calc_avg = TRUE, ci_alpha = 0.05,
                                 x_bins, orig_points)
 
   # Create model_type and dataset_type
-  if (length(attr(mdat, "uniq_modnames")) == 1L) {
-    model_type <- "single"
-  } else {
-    model_type <- "multiple"
-  }
+  model_type <- .get_single_or_multiple(mdat, "uniq_modnames")
+  dataset_type <- .get_single_or_multiple(mdat, "uniq_dsids")
 
-  if (length(attr(mdat, "uniq_dsids")) == 1L) {
-    dataset_type <- "single"
-  } else {
-    dataset_type <- "multiple"
-  }
 
   # === Create ROC and Precision-Recall curves ===
   # Define a function for each iteration
@@ -33,8 +25,8 @@ pl_main_rocprc <- function(mdat, calc_avg = TRUE, ci_alpha = 0.05,
   # Create curves
   lcurves <- lapply(seq_along(mdat), plfunc)
   pf <- .make_prefix(model_type, dataset_type)
-  rocs <- .group_curves(lcurves, "roc", paste0(pf, "roc"), mdat)
-  prcs <- .group_curves(lcurves, "prc", paste0(pf, "prc"), mdat)
+  rocs <- .group_curves(lcurves, "roc", "crvgrp", mdat)
+  prcs <- .group_curves(lcurves, "prc", "crvgrp", mdat)
 
   # Summarize AUC
   aucs <- .group_aucs(lcurves, mdat)
@@ -65,6 +57,45 @@ pl_main_rocprc <- function(mdat, calc_avg = TRUE, ci_alpha = 0.05,
 
   # Call .validate.class_name()
   .validate(s3obj)
+}
+
+#
+# Validate arguments of pl_main_rocprc()
+#
+.validate_pl_main_rocprc_args <- function(mdat, calc_avg, ci_alpha, all_curves,
+                                          x_bins, orig_points) {
+
+  # Validate mdat
+  .validate(mdat)
+
+
+  # Validate calc_avg
+  .validate_calc_avg(calc_avg)
+
+  # Validate ci_alpha
+  .validate_ci_alpha(ci_alpha)
+
+  # Validate all_curves
+  .validate_all_curves(all_curves)
+
+
+  # Check x_bins
+  .validate_x_bins(x_bins)
+
+  # Check orig_points
+  .validate_orig_points(orig_points)
+
+}
+
+#
+# Determin either "single" or "multiple" for model_type and data_type
+#
+.get_single_or_multiple <- function(mdat, attr_name) {
+  if (length(attr(mdat, attr_name)) == 1L) {
+    single_or_multiple <- "single"
+  } else {
+    single_or_multiple <- "multiple"
+  }
 }
 
 #
@@ -100,6 +131,7 @@ pl_main_rocprc <- function(mdat, calc_avg = TRUE, ci_alpha = 0.05,
 
   # Set attributes
   attr(s3obj, "data_info") <- attr(mdat, "data_info")
+  attr(s3obj, "curve_type") <- attr(mdat, "curve_type")
   attr(s3obj, "uniq_modnames") <- attr(mdat, "uniq_modnames")
   attr(s3obj, "uniq_dsids") <- attr(mdat, "uniq_dsids")
   attr(s3obj, "avgcurve") <- NA
@@ -134,31 +166,4 @@ pl_main_rocprc <- function(mdat, calc_avg = TRUE, ci_alpha = 0.05,
   aucs
 }
 
-#
-# Validate arguments of pl_main_rocprc()
-#
-.validate_pl_main_rocprc_args <- function(mdat, calc_avg, ci_alpha, all_curves,
-                                          x_bins, orig_points) {
-
-  # Validate mdat
-  .validate(mdat)
-
-
-  # Validate calc_avg
-  .validate_calc_avg(calc_avg)
-
-  # Validate ci_alpha
-  .validate_ci_alpha(ci_alpha)
-
-  # Validate all_curves
-  .validate_all_curves(all_curves)
-
-
-  # Check x_bins
-  .validate_x_bins(x_bins)
-
-  # Check orig_points
-  .validate_orig_points(orig_points)
-
-}
 

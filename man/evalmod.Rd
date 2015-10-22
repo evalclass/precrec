@@ -2,7 +2,7 @@
 % Please edit documentation in R/main_evalmod.R
 \name{evalmod}
 \alias{evalmod}
-\title{Evaluate a single model with multiple datasets}
+\title{Evaluate models and generate performance evaluation plots}
 \usage{
 evalmod(mdat, mode = "rocprc", scores = NULL, labels = NULL,
   modnames = NULL, dsids = NULL, posclass = NULL, na_worst = TRUE,
@@ -10,30 +10,41 @@ evalmod(mdat, mode = "rocprc", scores = NULL, labels = NULL,
   all_curves = FALSE, x_bins = 1000, orig_points = TRUE)
 }
 \arguments{
-\item{mdat}{An \code{mdat} object created by \code{\link{mmdata}}.
-  The following arguments are ignored when \code{mdat} is specified.
+\item{mdat}{An \code{mdat} object created by the \code{\link{mmdata}}
+  function. The following arguments are ignored when \code{mdat} is specified.
   \itemize{
     \item \code{scores}
     \item \code{labels}
     \item \code{modnames}
     \item \code{dsids}
+    \item \code{posclass}
     \item \code{na_worst}
     \item \code{ties_method}
+  }
+  Both \code{scores} and \code{labels} must be specified at least
+  when \code{mdat} is unspecified.}
+
+\item{mode}{A string that specifies what evaluation plots
+  \code{evalmod} generates.
+  \describe{
+    \item{"rocprc"}{ROC and Precision-Recall curves}
+    \item{"basic"}{Threshold values vs. accuracy, error rate, specificity,
+                   sensitivity, or precision}
   }}
 
-\item{scores}{A numeric data of predicted scores. It can be a vector,
+\item{scores}{A numeric dataset of predicted scores. It can be a vector,
   a matrix, an array, a data frame, or a list.}
 
-\item{labels}{A numeric or factor data of observed labels.
-  It can be a vector, a matrix, an array, a data frame, or a list.}
+\item{labels}{A numeric/character/logical or factor dataset
+  of observed labels. It can be a vector, a matrix, an array,
+  a data frame, or a list.}
 
-\item{modnames}{A character vector as the names
-  of the models/classifiers.}
+\item{modnames}{A character vector for the names of the models.}
 
-\item{dsids}{A numeric vector as dataset IDs.}
+\item{dsids}{A numeric vector for dataset IDs.}
 
 \item{na_worst}{A boolean value for controlling the treatment of NAs
-  in the scores.
+  in \code{scores}.
   \describe{
     \item{TRUE}{NAs are treated as the highest score}
     \item{FALSE}{NAs are treated as the lowest score}
@@ -52,8 +63,9 @@ evalmod(mdat, mode = "rocprc", scores = NULL, labels = NULL,
   No interpolation between two points is performed when it is set to 1.}
 }
 \value{
-The \code{evalmods_m} function returns an \code{smcurves} S3 object
-  that contains ROC and Precision-Recall curves.
+The \code{evalmod} function returns an S3 object
+  that contains ROC and Precision-Recall curves. The returned S3 object
+  can be \code{sscurves}, \code{mscurves}, \code{scurves}
 }
 \description{
 The \code{evalmod} function takes predicted scores and binary lables
