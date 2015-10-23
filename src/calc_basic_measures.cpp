@@ -35,7 +35,7 @@ Rcpp::List calc_basic_measures(int np,
   // Calcualte evaluation measures for all thresholds
   // n should be >1
   for (int i = 0; i < n; ++i) {
-    threshold[i] = i / n;
+    threshold[i] = double(i) / double(n - 1);
     errrate[i] = (fps[i] + fns[i]) / (np + nn);
     acc[i] = 1 - errrate[i];
     sp[i] = tns[i] / nn;

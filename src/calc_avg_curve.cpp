@@ -1,5 +1,7 @@
 #include <Rcpp.h>
 #include <cmath>
+#include <vector>
+#include <string>
 
 // Prototypes
 void calc_avg_single(const Rcpp::NumericVector& xs,
@@ -42,9 +44,9 @@ Rcpp::List calc_avg_curve(const Rcpp::List& curves,
 
     calc_avg_single(c["x"], c["y"], x_interval, vec_size, wk_avg_y);
 
-    for (int i = 0; i < vec_size; ++i) {
-      tot_y[i] += wk_avg_y[i];
-      stot_y[i] += (wk_avg_y[i] * wk_avg_y[i]);
+    for (int j = 0; j < vec_size; ++j) {
+      tot_y[j] += wk_avg_y[j];
+      stot_y[j] += (wk_avg_y[j] * wk_avg_y[j]);
     }
   }
 
@@ -62,7 +64,7 @@ Rcpp::List calc_avg_curve(const Rcpp::List& curves,
     }
 
     // y
-    avg_y[i] = tot_y[i] / n;
+    avg_y[i] = tot_y[i] / double(n);
 
     // se
     exp2 = (stot_y[i] / double(n)) - (avg_y[i] * avg_y[i]);

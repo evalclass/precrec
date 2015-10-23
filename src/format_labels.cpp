@@ -1,7 +1,7 @@
 #include <Rcpp.h>
-#include <string>
 #include <vector>
 #include <set>
+#include <string>
 
 // Make new labels - nagative: 1, positive: 2
 template<typename T, typename S>

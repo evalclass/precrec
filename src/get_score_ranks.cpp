@@ -1,7 +1,6 @@
 #include <Rcpp.h>
 #include <vector>       // std::vector
 #include <string>       // std::string
-#include <map>          // std::map, std::multimap
 #include <cfloat>       // DBL_MIN, DBL_MAX
 #include <algorithm>    // std::random_shuffle, std::sort, std::stable_sort
 #include <ctime>        // std::time

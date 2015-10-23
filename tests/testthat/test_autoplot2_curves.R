@@ -60,6 +60,7 @@ ap2_create_mmcurves <- function() {
                  expd_first = "modnames")
   evalmod(mdat)
 }
+
 test_that("autoplot sscurves", {
   if (!ap2_check_libs()) {
     skip("Libraries cannot be loaded")
