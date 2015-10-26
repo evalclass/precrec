@@ -22,11 +22,15 @@
                          "precision"), grpfunc)
   names(grp_points)<- c("err", "acc", "sp", "sn", "prec")
 
+  # Summarize basic evaluation measures
+  eval_summary <- .summarize_basic(lpoints, mdat)
+
   # === Create an S3 object ===
   s3obj <- structure(grp_points, class = c(paste0(class_name_pf, "points"),
-                                           "point_info"))
+                                           "beval_info"))
 
   # Set attributes
+  attr(s3obj, "eval_summary") <- eval_summary
   attr(s3obj, "data_info") <- attr(mdat, "data_info")
   attr(s3obj, "uniq_modnames") <- attr(mdat, "uniq_modnames")
   attr(s3obj, "uniq_dsids") <- attr(mdat, "uniq_dsids")
@@ -59,7 +63,7 @@
 
   # Set attributes
   attr(s3obj, "data_info") <- attr(mdat, "data_info")
-  attr(s3obj, "curve_type") <- attr(mdat, "curve_type")
+  attr(s3obj, "eval_type") <- eval_type
   attr(s3obj, "uniq_modnames") <- attr(mdat, "uniq_modnames")
   attr(s3obj, "uniq_dsids") <- attr(mdat, "uniq_dsids")
   attr(s3obj, "avgpoints") <- NA
@@ -75,6 +79,38 @@
 
   s3obj
 
+}
+
+#
+# Summarize basic evaluation measures
+#
+.summarize_basic <- function(lpoints, mdat) {
+  # Group AUC of ROC or PRC curves
+  modnames <- attr(mdat, "data_info")[["modnames"]]
+  dsids <- attr(mdat, "data_info")[["dsids"]]
+  evaltypes <- c("threshold", "error", "accuracy", "specificity",
+                 "sensitivity", "precision")
+  elen <- length(evaltypes)
+
+  sbasic <- data.frame(modnames = rep(modnames, each = elen),
+                       dsids = rep(dsids, each = elen),
+                       evaltypes = rep(evaltypes, length(modnames)),
+                       minvals = rep(NA, length(modnames) * elen),
+                       q25vals = rep(NA, length(modnames) * elen),
+                       medianvals = rep(NA, length(modnames) * elen),
+                       meanvals = rep(NA, length(modnames) * elen),
+                       q75vals = rep(NA, length(modnames) * elen),
+                       maxvals = rep(NA, length(modnames) * elen),
+                       stringsAsFactors = FALSE)
+
+  for (i in seq_along(lpoints)) {
+    for (j in seq_along(evaltypes)) {
+      vals <- lpoints[[i]][["basic"]][[evaltypes[j]]]
+      sbasic[(i - 1) * length(evaltypes) + j, 4:9] <- summary(vals)
+    }
+  }
+
+  sbasic
 }
 
 #

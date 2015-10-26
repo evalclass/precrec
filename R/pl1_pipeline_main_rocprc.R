@@ -61,7 +61,7 @@
 
   # Set attributes
   attr(s3obj, "data_info") <- attr(mdat, "data_info")
-  attr(s3obj, "curve_type") <- attr(mdat, "curve_type")
+  attr(s3obj, "curve_type") <- curve_type
   attr(s3obj, "uniq_modnames") <- attr(mdat, "uniq_modnames")
   attr(s3obj, "uniq_dsids") <- attr(mdat, "uniq_dsids")
   attr(s3obj, "avgcurve") <- NA
@@ -92,12 +92,10 @@
                      aucs = rep(NA, length(modnames) * 2),
                      stringsAsFactors = FALSE)
 
-  j <- 1
   for (i in seq_along(lcurves)) {
-    aucs[["aucs"]][j] <- attr(lcurves[[i]][["roc"]], "auc")
-    j <- j + 1
-    aucs[["aucs"]][j] <- attr(lcurves[[i]][["prc"]], "auc")
-    j <- j + 1
+    idx = 2 * i - 1
+    aucs[["aucs"]][idx:(idx + 1)] <- c(attr(lcurves[[i]][["roc"]], "auc"),
+                                       attr(lcurves[[i]][["prc"]], "auc"))
   }
 
   aucs

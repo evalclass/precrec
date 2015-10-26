@@ -3,15 +3,7 @@ library(precrec)
 context("PR 1: Print objects")
 # Test print(x, ...)
 
-test_that("print sscurves", {
-  data(P10N10)
-  curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
-
-  expect_output(print(curves), "=== AUCs ===")
-  expect_output(print(curves), "=== Input data ===")
-})
-
-pr3_create_curves <- function() {
+pr_create_msdat <- function() {
   s1 <- c(1, 2, 3, 4)
   s2 <- c(5, 6, 7, 8)
   s3 <- c(2, 4, 6, 8)
@@ -23,17 +15,9 @@ pr3_create_curves <- function() {
   labels <- join_labels(l1, l2, l3)
 
   mdat <- mmdata(scores, labels)
-  evalmod(mdat)
 }
 
-test_that("print mscurves", {
-  curves <- pr3_create_curves()
-
-  expect_output(print(curves), "=== AUCs ===")
-  expect_output(print(curves), "=== Input data ===")
-})
-
-pr4_create_curves <- function() {
+pr_create_smdat <- function() {
   s1 <- c(1, 2, 3, 4)
   s2 <- c(5, 6, 7, 8)
   s3 <- c(2, 4, 6, 8)
@@ -45,17 +29,9 @@ pr4_create_curves <- function() {
   labels <- join_labels(l1, l2, l3)
 
   mdat <- mmdata(scores, labels, expd_first = "dsids")
-  evalmod(mdat)
 }
 
-test_that("print smcurves", {
-  curves <- pr4_create_curves()
-
-  expect_output(print(curves), "=== AUCs ===")
-  expect_output(print(curves), "=== Input data ===")
-})
-
-pr5_create_curves <- function() {
+pr_create_mmdat <- function() {
   s1 <- c(1, 2, 3, 4)
   s2 <- c(5, 6, 7, 8)
   s3 <- c(2, 4, 6, 8)
@@ -70,13 +46,69 @@ pr5_create_curves <- function() {
 
   mdat <- mmdata(scores, labels, modnames = c("m1", "m2"), dsids = c(1, 2),
                  expd_first = "modnames")
-  evalmod(mdat)
 }
 
-test_that("print mmcurves", {
-  curves <- pr5_create_curves()
+test_that("print sscurves", {
+  data(P10N10)
+  curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 
   expect_output(print(curves), "=== AUCs ===")
   expect_output(print(curves), "=== Input data ===")
 })
 
+test_that("print mscurves", {
+  mdat <- pr_create_msdat()
+  curves <- evalmod(mdat)
+
+  expect_output(print(curves), "=== AUCs ===")
+  expect_output(print(curves), "=== Input data ===")
+})
+
+test_that("print smcurves", {
+  mdat <- pr_create_smdat()
+  curves <- evalmod(mdat)
+
+  expect_output(print(curves), "=== AUCs ===")
+  expect_output(print(curves), "=== Input data ===")
+})
+
+test_that("print mmcurves", {
+  mdat <- pr_create_mmdat()
+  curves <- evalmod(mdat)
+
+  expect_output(print(curves), "=== AUCs ===")
+  expect_output(print(curves), "=== Input data ===")
+})
+
+test_that("print sspoints", {
+  data(P10N10)
+  points <- evalmod(mode = "basic", scores = P10N10$scores,
+                    labels = P10N10$labels)
+
+  expect_output(print(points), "=== Basic performance evaluation measures ===")
+  expect_output(print(points), "=== Input data ===")
+})
+
+test_that("print mspoints", {
+  mdat <- pr_create_msdat()
+  points <- evalmod(mdat, mode = "basic")
+
+  expect_output(print(points), "=== Basic performance evaluation measures ===")
+  expect_output(print(points), "=== Input data ===")
+})
+
+test_that("print smpoints", {
+  mdat <- pr_create_smdat()
+  points <- evalmod(mdat, mode = "basic")
+
+  expect_output(print(points), "=== Basic performance evaluation measures ===")
+  expect_output(print(points), "=== Input data ===")
+})
+
+test_that("print mmpoints", {
+  mdat <- pr_create_mmdat()
+  points <- evalmod(mdat, mode = "basic")
+
+  expect_output(print(points), "=== Basic performance evaluation measures ===")
+  expect_output(print(points), "=== Input data ===")
+})

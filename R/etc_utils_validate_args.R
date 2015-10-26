@@ -232,3 +232,48 @@
                             assertthat::noNA(orig_points))
   }
 }
+
+#
+# Check curve types
+#
+.check_curvetype <- function(curvetype) {
+  roc_prc <- TRUE
+  basic_eval <- TRUE
+
+  cfunc <- function(curvetype, all_types, all_len) {
+    if (!is.atomic(curvetype) || !is.character(curvetype)
+        || length(curvetype) > all_len
+        || length(setdiff(curvetype, all_types)) != 0) {
+      FALSE
+    } else {
+      TRUE
+    }
+  }
+  roc_prc <- cfunc(curvetype, c("ROC", "PRC"), 2)
+  basic_eval <- cfunc(curvetype, c("error", "accuracy", "specificity",
+                                   "sensitivity", "precision"), 5)
+
+  if (!roc_prc && !basic_eval) {
+    stop("Invalid 'curvetype' value")
+  }
+
+}
+
+#
+# Check ret_grob
+#
+.check_ret_grob <- function(ret_grob) {
+  assertthat::assert_that(is.atomic(ret_grob),
+                          assertthat::is.flag(ret_grob),
+                          assertthat::noNA(ret_grob))
+}
+
+#
+# Check show_legend
+#
+.check_show_legend <- function(show_legend) {
+  assertthat::assert_that(is.atomic(show_legend),
+                          assertthat::is.flag(show_legend),
+                          assertthat::noNA(show_legend))
+}
+

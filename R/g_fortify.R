@@ -85,3 +85,51 @@ fortify.roc_curve <- function(model, ...) {
 fortify.prc_curve <- function(model, ...) {
   fortify.roc_curve(model, data, ...)
 }
+
+#' @rdname fortify
+#' @export
+fortify.sscurves <- function(model, ...) {
+  .fortify_common(model, ...)
+}
+
+#' @rdname fortify
+#' @export
+fortify.mscurves <- function(model, ...) {
+  .fortify_common(model, ...)
+}
+
+#' @rdname fortify
+#' @export
+fortify.smcurves <- function(model, ...) {
+  .fortify_common(model, ...)
+}
+
+#' @rdname fortify
+#' @export
+fortify.mmcurves <- function(model, ...) {
+  .fortify_common(model, ...)
+}
+#' @rdname fortify
+#' @export
+fortify.sspoints <- function(model, ...) {
+  .fortify_common(model, mode = "basic", ...)
+}
+
+#' @rdname fortify
+#' @export
+fortify.mspoints <- function(model, ...) {
+  .fortify_common(model, mode = "basic", ...)
+}
+
+#' @rdname fortify
+#' @export
+fortify.smpoints <- function(model, ...) {
+  .fortify_common(model, mode = "basic", ...)
+}
+
+#' @rdname fortify
+#' @export
+fortify.mmpoints <- function(model, ...) {
+  .fortify_common(model, mode = "basic", ...)
+}
+
