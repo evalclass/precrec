@@ -7,7 +7,7 @@
 evalmod(mdat, mode = "rocprc", scores = NULL, labels = NULL,
   modnames = NULL, dsids = NULL, posclass = NULL, na_worst = TRUE,
   ties_method = "equiv", calc_avg = TRUE, ci_alpha = 0.05,
-  all_curves = FALSE, x_bins = 1000, orig_points = TRUE)
+  raw_curves = FALSE, x_bins = 1000, orig_points = TRUE)
 }
 \arguments{
 \item{mdat}{An \code{mdat} object created by the \code{\link{mmdata}}
@@ -68,7 +68,7 @@ evalmod(mdat, mode = "rocprc", scores = NULL, labels = NULL,
   value of the confidence interval calculation. It is effective only
   when \code{calc_avg} is set to \code{TRUE}}
 
-\item{all_curves}{A logical value to specifiy whether all raw curves
+\item{raw_curves}{A logical value to specifiy whether all raw curves
   are stored or deleted when the average curves are calculated.}
 
 \item{x_bins}{A numeric value to specifiy the number of minimum bins
@@ -93,7 +93,7 @@ mdat <- mmdata(samps[["scores"]], samps[["labels"]],
                dsids = samps[["dsids"]])
 
 ## Generate an mscurve object
-curves1 <- evalmods_m(mdat)
+curves1 <- evalmod(mdat)
 
 ## Directly specifiy scores and labels
 curves2 <- evalmod(scores = samps[["scores"]],

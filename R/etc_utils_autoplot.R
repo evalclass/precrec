@@ -154,7 +154,7 @@ NULL
 # Plot ROC and Precisoin-Recall
 #
 .autoplot_multi <- function(object, curvetype = c("ROC", "PRC"), type = "l",
-                            show_ci = FALSE, all_curves = TRUE,
+                            show_ci = FALSE, raw_curves = TRUE,
                             show_legend = TRUE, add_np_nn = TRUE,
                             ret_grob = FALSE, ...) {
 
@@ -166,11 +166,11 @@ NULL
   .check_ret_grob(ret_grob)
 
   # === Create a ggplot object for ROC&PRC, ROC, or PRC ===
-  curve_df <- ggplot2::fortify(object, all_curves = all_curves, ...)
+  curve_df <- ggplot2::fortify(object, raw_curves = raw_curves, ...)
 
   func_plot <- function(ctype) {
     .autoplot_single(object, curve_df, curvetype = ctype, type = type,
-                     show_ci = show_ci, all_curves = all_curves,
+                     show_ci = show_ci, raw_curves = raw_curves,
                      show_legend = show_legend, add_np_nn = add_np_nn, ...)
   }
   lcurves <- lapply(curvetype, func_plot)
@@ -240,15 +240,15 @@ NULL
 # Plot ROC or Precisoin-Recall
 #
 .autoplot_single <- function(object, curve_df, curvetype = "ROC", type = "l",
-                             show_ci = FALSE, all_curves = FALSE,
+                             show_ci = FALSE, raw_curves = FALSE,
                              show_legend = FALSE, add_np_nn = TRUE, ...) {
 
   curve_df <- .prepare_autoplot(object, curve_df = curve_df,
                                 curvetype = curvetype,
-                                all_curves = all_curves, ...)
+                                raw_curves = raw_curves, ...)
 
   # === Create a ggplot object ===
-  if (all_curves) {
+  if (raw_curves) {
     p <- ggplot2::ggplot(curve_df, ggplot2::aes(x = x, y = y,
                                                 group = dsid_modname,
                                                 color = modname))

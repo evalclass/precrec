@@ -102,7 +102,7 @@ NULL
 # Plot ROC and Precision-Recall
 #
 .plot_multi <- function(x, curvetype = c("ROC", "PRC"), type = "l",
-                        show_ci = FALSE, all_curves = TRUE, add_np_nn = TRUE,
+                        show_ci = FALSE, raw_curves = TRUE, add_np_nn = TRUE,
                         show_legend = FALSE, ...) {
 
   # === Validate input arguments ===
@@ -120,7 +120,7 @@ NULL
 
   for (ct in curvetype) {
     .plot_single(x, ct, type = type, show_ci = show_ci,
-                 all_curves = all_curves, add_np_nn = add_np_nn,
+                 raw_curves = raw_curves, add_np_nn = add_np_nn,
                  show_legend = show_legend2, ...)
   }
 
@@ -280,7 +280,7 @@ NULL
 # Plot ROC or Precision-Recall
 #
 .plot_single <- function(x, curvetype, type = type, show_ci = FALSE,
-                         all_curves = FALSE, add_np_nn = TRUE,
+                         raw_curves = FALSE, add_np_nn = TRUE,
                          show_legend = TRUE, ...) {
 
   tlist <- .get_titiles(curvetype)
@@ -301,7 +301,7 @@ NULL
   }
 
   # === Create a plot ===
-  if (all_curves) {
+  if (raw_curves) {
     .matplot_wrapper(x, type, tlist[["ctype"]], main, tlist[["xlab"]],
                      tlist[["ylab"]])
   } else {

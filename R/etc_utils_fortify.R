@@ -155,7 +155,7 @@ NULL
 #
 # Make a dataframe for plotting
 #
-.fortify_common <- function(obj, mode = "rocprc", all_curves = TRUE, ...) {
+.fortify_common <- function(obj, mode = "rocprc", raw_curves = TRUE, ...) {
   # === Check package availability  ===
   .load_ggplot2()
 
@@ -190,7 +190,7 @@ NULL
   }
 
   # Create curve_df
-  if (all_curves) {
+  if (raw_curves) {
     curve_df <- .fortify_curve(obj, uniq_modnames, uniq_dsids, modnames,
                                dsids, dsid_modnames, curvetype_names)
   } else {

@@ -87,7 +87,7 @@ test_that("plot smcurves", {
 
   ap2_test_roc_prc(curves)
   ap2_test_roc_prc(curves, show_ci = FALSE)
-  ap2_test_roc_prc(curves, all_curves = TRUE)
+  ap2_test_roc_prc(curves, raw_curves = TRUE)
 })
 
 test_that("plot mmcurves", {
@@ -98,6 +98,6 @@ test_that("plot mmcurves", {
 
   ap2_test_roc_prc(curves)
   ap2_test_roc_prc(curves, show_ci = TRUE)
-  ap2_test_roc_prc(curves, all_curves = TRUE)
-  ap2_test_roc_prc(curves, show_legend = FALSE)
+  ap2_test_roc_prc(curves, raw_curves = TRUE)
+  ap2_test_roc_prc(curves, raw_curves = FALSE)
 })

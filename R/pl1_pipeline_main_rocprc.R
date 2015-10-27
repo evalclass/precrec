@@ -2,7 +2,7 @@
 # Control the main pipeline iterations for ROC and Precision-Recall curves
 #
 .pl_main_rocprc <- function(mdat, model_type, dataset_type, class_name_pf,
-                            calc_avg = TRUE, ci_alpha = 0.05, all_curves = FALSE,
+                            calc_avg = TRUE, ci_alpha = 0.05, raw_curves = FALSE,
                             x_bins = 1000, orig_points = TRUE) {
 
   # === Create ROC and Precision-Recall curves ===
@@ -38,7 +38,7 @@
   attr(s3obj, "dataset_type") <- dataset_type
   attr(s3obj, "args") <- list(calc_avg = calc_avg,
                               ci_alpha = ci_alpha,
-                              all_curves = all_curves,
+                              raw_curves = raw_curves,
                               x_bins = x_bins,
                               orig_points = orig_points)
   attr(s3obj, "validated") <- FALSE
@@ -56,6 +56,15 @@
   # Group ROC or PRC curves
   mc <- lapply(seq_along(lcurves), function(s) lcurves[[s]][[curve_type]])
 
+  # Calculate the average curves
+  if (dataset_type == "multiple" && calc_avg) {
+    modnames <- attr(mdat, "data_info")[["modnames"]]
+    uniq_modnames <- attr(mdat, "uniq_modnames")
+    avgcurves <- calc_avg_rocprc(mc, modnames, uniq_modnames, ci_alpha, x_bins)
+  } else {
+    avgcurves <- NA
+  }
+
   # === Create an S3 object ===
   s3obj <- structure(mc, class = class_name)
 
@@ -64,16 +73,11 @@
   attr(s3obj, "curve_type") <- curve_type
   attr(s3obj, "uniq_modnames") <- attr(mdat, "uniq_modnames")
   attr(s3obj, "uniq_dsids") <- attr(mdat, "uniq_dsids")
-  attr(s3obj, "avgcurve") <- NA
+  attr(s3obj, "avgcurves") <- avgcurves
   attr(s3obj, "validated") <- FALSE
 
   # Call .validate.class_name()
   s3obj <- .validate(s3obj)
-
-  # Calculate the average curves
-  if (dataset_type == "multiple" && calc_avg) {
-    attr(s3obj, "avgcurves") <- calc_avg_rocprc(s3obj, ci_alpha, x_bins)
-  }
 
   s3obj
 }

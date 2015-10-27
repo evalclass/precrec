@@ -204,12 +204,12 @@
 }
 
 #
-# Validate all_curves
+# Validate raw_curves
 #
-.validate_all_curves <- function(all_curves) {
-  if (!is.null(all_curves)) {
-    assertthat::assert_that(assertthat::is.flag(all_curves),
-                            assertthat::noNA(all_curves))
+.validate_raw_curves <- function(raw_curves) {
+  if (!is.null(raw_curves)) {
+    assertthat::assert_that(assertthat::is.flag(raw_curves),
+                            assertthat::noNA(raw_curves))
   }
 }
 

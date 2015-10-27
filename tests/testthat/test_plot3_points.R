@@ -102,7 +102,7 @@ test_that("plot smpoints", {
   ap3_test_basic_measures(points, type = "l")
   ap3_test_basic_measures(points, type = "p+l")
   ap3_test_basic_measures(points, show_ci = FALSE)
-  ap3_test_basic_measures(points, all_curves = TRUE)
+  ap3_test_basic_measures(points, raw_curves = TRUE)
 })
 
 test_that("plot mmpoints", {
@@ -115,6 +115,6 @@ test_that("plot mmpoints", {
   ap3_test_basic_measures(points, type = "l")
   ap3_test_basic_measures(points, type = "p+l")
   ap3_test_basic_measures(points, show_ci = TRUE)
-  ap3_test_basic_measures(points, all_curves = TRUE)
+  ap3_test_basic_measures(points, raw_curves = TRUE)
   ap3_test_basic_measures(points, show_legend = FALSE)
 })

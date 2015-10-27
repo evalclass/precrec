@@ -1,29 +1,29 @@
 #
 # Calculate the average curve for a model
 #
-calc_avg_rocprc <- function(curves, ci_alpha, x_bins) {
-  .calc_avg_common(curves, "curve", "avgcurves", ci_alpha, x_bins)
+calc_avg_rocprc <- function(curves, modnames, uniq_modnames, ci_alpha,
+                            x_bins) {
+  .calc_avg_common(curves, "curve", "avgcurves", modnames, uniq_modnames,
+                   ci_alpha, x_bins)
 }
 
 #
 # Calculate the average points for a model
 #
-calc_avg_basic <- function(epoints, ci_alpha) {
-  .calc_avg_common(epoints, "point", "avgpoints", ci_alpha, NULL)
+calc_avg_basic <- function(epoints, modnames, uniq_modnames, ci_alpha) {
+  .calc_avg_common(epoints, "point", "avgpoints", modnames, uniq_modnames,
+                   ci_alpha, NULL)
 }
 
 #
 # Calculate averages
 #
-.calc_avg_common <- function(obj, mode, class_name, ci_alpha, x_bins) {
+.calc_avg_common <- function(obj, mode, class_name, modnames, uniq_modnames,
+                             ci_alpha, x_bins) {
 
   # === Validate input arguments ===
   .validate_ci_alpha(ci_alpha)
   .validate_x_bins(x_bins)
-  .validate(obj)
-
-  modnames <- attr(obj, "data_info")[["modnames"]]
-  uniq_modnames <- attr(obj, "uniq_modnames")
 
   # === Summarize curves by by models ===
   # Quantile of CI

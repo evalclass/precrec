@@ -62,7 +62,7 @@
 #'   value of the confidence interval calculation. It is effective only
 #'   when \code{calc_avg} is set to \code{TRUE}
 #'
-#' @param all_curves A logical value to specifiy whether all raw curves
+#' @param raw_curves A logical value to specifiy whether all raw curves
 #'   are stored or deleted when the average curves are calculated.
 #'
 #' @param x_bins A numeric value to specifiy the number of minimum bins
@@ -87,7 +87,7 @@
 #'                dsids = samps[["dsids"]])
 #'
 #' ## Generate an mscurve object
-#' curves1 <- evalmods_m(mdat)
+#' curves1 <- evalmod(mdat)
 #'
 #' ## Directly specifiy scores and labels
 #' curves2 <- evalmod(scores = samps[["scores"]],
@@ -113,11 +113,11 @@
 evalmod <- function(mdat, mode = "rocprc", scores = NULL, labels = NULL,
                     modnames = NULL, dsids = NULL,
                     posclass = NULL, na_worst = TRUE, ties_method = "equiv",
-                    calc_avg = TRUE, ci_alpha = 0.05, all_curves = FALSE,
+                    calc_avg = TRUE, ci_alpha = 0.05, raw_curves = FALSE,
                     x_bins = 1000, orig_points = TRUE) {
 
   .validate_evalmod_args(mode, modnames, dsids, posclass, na_worst, ties_method,
-                         calc_avg, ci_alpha, all_curves, x_bins, orig_points)
+                         calc_avg, ci_alpha, raw_curves, x_bins, orig_points)
 
   if (!missing(mdat)) {
     .validate(mdat)
@@ -128,7 +128,7 @@ evalmod <- function(mdat, mode = "rocprc", scores = NULL, labels = NULL,
   }
 
   pl_main(mdat, mode = mode, calc_avg = calc_avg, ci_alpha = ci_alpha,
-          all_curves = all_curves, x_bins = x_bins, orig_points = orig_points)
+          raw_curves = raw_curves, x_bins = x_bins, orig_points = orig_points)
 
 }
 
@@ -137,7 +137,7 @@ evalmod <- function(mdat, mode = "rocprc", scores = NULL, labels = NULL,
 #
 .validate_evalmod_args <- function(mode, modnames, dsids,
                                    posclass, na_worst, ties_method,
-                                   calc_avg, ci_alpha, all_curves,
+                                   calc_avg, ci_alpha, raw_curves,
                                    x_bins, orig_points) {
 
   # Check mode
@@ -165,8 +165,8 @@ evalmod <- function(mdat, mode = "rocprc", scores = NULL, labels = NULL,
   # Validate ci_alpha
   .validate_ci_alpha(ci_alpha)
 
-  # Validate all_curves
-  .validate_all_curves(all_curves)
+  # Validate raw_curves
+  .validate_raw_curves(raw_curves)
 
 
   # Check x_bins
