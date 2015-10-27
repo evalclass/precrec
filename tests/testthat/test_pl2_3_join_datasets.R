@@ -1,6 +1,6 @@
 library(precrec)
 
-context("PL 1: Join datasets")
+context("PL 2: Join datasets")
 # Test .join_datasets(..., efunc_vtype, efunc_nrow, byrow)
 
 test_that(".join_datasets() returns a list", {
@@ -93,8 +93,8 @@ test_that(".join_datasets() accepts vectors", {
 })
 
 test_that(".join_datasets() accepts matrices", {
-  mat1 = matrix(1:6, 3, 2)
-  mat2 = matrix(7:9, 3, 1)
+  mat1 <- matrix(1:6, 3, 2)
+  mat2 <- matrix(7:9, 3, 1)
   cdat_mat <- .join_datasets(mat1, mat2)
 
   expect_equal(length(cdat_mat), 3)
@@ -104,8 +104,8 @@ test_that(".join_datasets() accepts matrices", {
 })
 
 test_that(".join_datasets() accepts matrices as row vectors", {
-  mat1 = matrix(1:6, 2, 3, byrow = TRUE)
-  mat2 = matrix(7:9, 1, 3, byrow = TRUE)
+  mat1 <- matrix(1:6, 2, 3, byrow = TRUE)
+  mat2 <- matrix(7:9, 1, 3, byrow = TRUE)
   cdat_mat <- .join_datasets(mat1, mat2, byrow = TRUE)
 
   expect_equal(length(cdat_mat), 3)
@@ -115,9 +115,9 @@ test_that(".join_datasets() accepts matrices as row vectors", {
 })
 
 test_that(".join_datasets() accepts 1d arrays", {
-  arr1 = array(1:3, c(3, 1))
-  arr2 = array(4:6, c(3, 1))
-  arr3 = array(7:9, c(3, 1))
+  arr1 <- array(1:3, c(3, 1))
+  arr2 <- array(4:6, c(3, 1))
+  arr3 <- array(7:9, c(3, 1))
   cdat_arr <- .join_datasets(arr1, arr2, arr3)
 
   expect_equal(length(cdat_arr), 3)
@@ -127,8 +127,8 @@ test_that(".join_datasets() accepts 1d arrays", {
 })
 
 test_that(".join_datasets() accepts 2d arrays", {
-  arr1 = array(1:6, c(3, 2))
-  arr2 = array(7:9, c(3, 1))
+  arr1 <- array(1:6, c(3, 2))
+  arr2 <- array(7:9, c(3, 1))
   cdat_arr <- .join_datasets(arr1, arr2)
 
   expect_equal(length(cdat_arr), 3)
@@ -138,13 +138,13 @@ test_that(".join_datasets() accepts 2d arrays", {
 })
 
 test_that(".join_datasets() accepts 1d or 2d arrays", {
-  arr = array(1:8, c(2, 2, 2))
+  arr <- array(1:8, c(2, 2, 2))
   expect_error(.join_datasets(arr), "Array must be 1 or 2 dimensions")
 })
 
 test_that(".join_datasets() accepts 2d arrays as row vectors", {
-  arr1 = t(array(1:6, c(3, 2)))
-  arr2 = t(array(7:9, c(3, 1)))
+  arr1 <- t(array(1:6, c(3, 2)))
+  arr2 <- t(array(7:9, c(3, 1)))
   cdat_arr <- .join_datasets(arr1, arr2, byrow = TRUE)
 
   expect_equal(length(cdat_arr), 3)
@@ -154,8 +154,8 @@ test_that(".join_datasets() accepts 2d arrays as row vectors", {
 })
 
 test_that(".join_datasets() accepts data frames", {
-  df1 = data.frame(a = 1:3, b = 4:6)
-  df2 = data.frame(c = 7:9)
+  df1 <- data.frame(a = 1:3, b = 4:6)
+  df2 <- data.frame(c = 7:9)
   cdat_df <- .join_datasets(df1, df2)
 
   expect_equal(length(cdat_df), 3)
@@ -165,8 +165,8 @@ test_that(".join_datasets() accepts data frames", {
 })
 
 test_that(".join_datasets() accepts lists", {
-  list1 = list(a = 1:3, b = 4:6)
-  list2 = list(c = 7:9)
+  list1 <- list(a = 1:3, b = 4:6)
+  list2 <- list(c = 7:9)
   cdat_list <- .join_datasets(list1, list2)
 
   expect_equal(length(cdat_list), 3)
@@ -176,8 +176,8 @@ test_that(".join_datasets() accepts lists", {
 })
 
 test_that(".join_datasets() accepts nested lists with two levels", {
-  list1 = list(a = 1:3)
-  list2 = list(b = 4:6, c = list(d = 7:9, e = 10:12))
+  list1 <- list(a = 1:3)
+  list2 <- list(b = 4:6, c = list(d = 7:9, e = 10:12))
   cdat_list <- .join_datasets(list1, list2)
 
   expect_equal(length(cdat_list), 4)
@@ -188,8 +188,8 @@ test_that(".join_datasets() accepts nested lists with two levels", {
 })
 
 test_that(".join_datasets() accepts nested lists with multiple levels", {
-  list1 = list(a = 1:3)
-  list2 = list(b = 4:6, c = list(d = list(e = 7:9, f = 10:12), g = 13:15))
+  list1 <- list(a = 1:3)
+  list2 <- list(b = 4:6, c = list(d = list(e = 7:9, f = 10:12), g = 13:15))
   cdat_list <- .join_datasets(list1, list2)
 
   expect_equal(length(cdat_list), 5)
@@ -203,10 +203,10 @@ test_that(".join_datasets() accepts nested lists with multiple levels", {
 
 test_that(".join_datasets() accepts various data types", {
   vec1 <- 1:3
-  mat1 = matrix(4:9, 3, 2)
-  arr1 = array(10:15, c(3, 2))
-  df1 = data.frame(a = 16:18, b = 19:21)
-  list1 = list(a = 22:24, b = 25:27)
+  mat1 <- matrix(4:9, 3, 2)
+  arr1 <- array(10:15, c(3, 2))
+  df1 <- data.frame(a = 16:18, b = 19:21)
+  list1 <- list(a = 22:24, b = 25:27)
   cdat_list <- .join_datasets(vec1, mat1, arr1, df1, list1)
 
   expect_equal(cdat_list[[1]], 1:3)

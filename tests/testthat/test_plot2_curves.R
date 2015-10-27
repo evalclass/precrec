@@ -51,6 +51,14 @@ pt2_create_mmcurves <- function() {
   evalmod(mdat)
 }
 
+ap2_test_roc_prc <- function(curves, ...){
+
+  expect_that(plot(curves, ...), not(throws_error()))
+  expect_that(plot(curves, c("ROC", "PRC"), ...), not(throws_error()))
+  expect_that(plot(curves, "ROC", ...), not(throws_error()))
+  expect_that(plot(curves, "PRC", ...), not(throws_error()))
+}
+
 test_that("plot sscurves", {
   pdf(NULL)
   on.exit(dev.off())
@@ -58,7 +66,7 @@ test_that("plot sscurves", {
   data(P10N10)
   curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 
-  expect_that(plot(curves), not(throws_error()))
+  ap2_test_roc_prc(curves)
 })
 
 test_that("plot mscurves", {
@@ -67,7 +75,8 @@ test_that("plot mscurves", {
 
   curves <- pt2_create_mscurves()
 
-  expect_that(plot(curves), not(throws_error()))
+  ap2_test_roc_prc(curves)
+  ap2_test_roc_prc(curves, show_legend = TRUE)
 })
 
 test_that("plot smcurves", {
@@ -76,7 +85,9 @@ test_that("plot smcurves", {
 
   curves <- pt2_create_smcurves()
 
-  expect_that(plot(curves), not(throws_error()))
+  ap2_test_roc_prc(curves)
+  ap2_test_roc_prc(curves, show_ci = FALSE)
+  ap2_test_roc_prc(curves, raw_curves = TRUE)
 })
 
 test_that("plot mmcurves", {
@@ -85,5 +96,8 @@ test_that("plot mmcurves", {
 
   curves <- pt2_create_mmcurves()
 
-  expect_that(plot(curves), not(throws_error()))
+  ap2_test_roc_prc(curves)
+  ap2_test_roc_prc(curves, show_ci = TRUE)
+  ap2_test_roc_prc(curves, raw_curves = TRUE)
+  ap2_test_roc_prc(curves, raw_curves = FALSE)
 })

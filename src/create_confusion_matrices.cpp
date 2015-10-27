@@ -13,7 +13,9 @@ void calc_tp_fp(const Rcpp::IntegerVector& olabs,
 void solve_ties(std::vector<double>& tp, std::vector<double>& fp,
                 int curpos, int ties);
 
+//
 // Calculate confusion matrices for all possible threshold values
+//
 // [[Rcpp::export]]
 Rcpp::List create_confusion_matrices(const Rcpp::IntegerVector& olabs,
                                      const Rcpp::NumericVector& ranks,

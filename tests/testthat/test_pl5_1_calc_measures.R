@@ -32,7 +32,7 @@ test_that("calc_measures() can directly take scores and labels", {
                            labels = c(1, 0, 1, 1))
   pevals1 <- calc_measures(cmats)
   pevals2 <- calc_measures(scores = c(0.1, 0.2, 0.2, 0),
-                          labels = c(1, 0, 1, 1))
+                           labels = c(1, 0, 1, 1))
 
   expect_equal(pevals1, pevals2)
 })

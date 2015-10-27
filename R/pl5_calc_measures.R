@@ -73,7 +73,7 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
 
   # Error rate & Arruracy
   assertthat::assert_that(pb[["error"]][1] + pb[["accuracy"]][1] == 1,
-                          pb[["error"]][n] + pb[["accuracy"]][n] ==1)
+                          pb[["error"]][n] + pb[["accuracy"]][n] == 1)
 
   # SP
   assertthat::assert_that(is.atomic(pb[["specificity"]]),

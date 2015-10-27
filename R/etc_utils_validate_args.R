@@ -37,6 +37,13 @@
   obj
 }
 
+# Check mode
+.validate_mode <- function(mode) {
+  assertthat::assert_that(assertthat::is.string(mode),
+                          (mode == "rocprc"
+                           || mode == "basic"))
+}
+
 #
 # Validate scores
 #
@@ -197,12 +204,12 @@
 }
 
 #
-# Validate all_curves
+# Validate raw_curves
 #
-.validate_all_curves <- function(all_curves) {
-  if (!is.null(all_curves)) {
-    assertthat::assert_that(assertthat::is.flag(all_curves),
-                            assertthat::noNA(all_curves))
+.validate_raw_curves <- function(raw_curves) {
+  if (!is.null(raw_curves)) {
+    assertthat::assert_that(assertthat::is.flag(raw_curves),
+                            assertthat::noNA(raw_curves))
   }
 }
 
@@ -217,11 +224,46 @@
 }
 
 #
-# Validate orig_points
+# Check curve types
 #
-.validate_orig_points <- function(orig_points) {
-  if (!is.null(orig_points)) {
-    assertthat::assert_that(assertthat::is.flag(orig_points),
-                            assertthat::noNA(orig_points))
+.check_curvetype <- function(curvetype) {
+  roc_prc <- TRUE
+  basic_eval <- TRUE
+
+  cfunc <- function(curvetype, all_types, all_len) {
+    if (!is.atomic(curvetype) || !is.character(curvetype)
+        || length(curvetype) > all_len
+        || length(setdiff(curvetype, all_types)) != 0) {
+      FALSE
+    } else {
+      TRUE
+    }
   }
+  roc_prc <- cfunc(curvetype, c("ROC", "PRC"), 2)
+  basic_eval <- cfunc(curvetype, c("error", "accuracy", "specificity",
+                                   "sensitivity", "precision"), 5)
+
+  if (!roc_prc && !basic_eval) {
+    stop("Invalid 'curvetype' value")
+  }
+
 }
+
+#
+# Check ret_grob
+#
+.check_ret_grob <- function(ret_grob) {
+  assertthat::assert_that(is.atomic(ret_grob),
+                          assertthat::is.flag(ret_grob),
+                          assertthat::noNA(ret_grob))
+}
+
+#
+# Check show_legend
+#
+.check_show_legend <- function(show_legend) {
+  assertthat::assert_that(is.atomic(show_legend),
+                          assertthat::is.flag(show_legend),
+                          assertthat::noNA(show_legend))
+}
+

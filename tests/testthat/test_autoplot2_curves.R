@@ -60,7 +60,35 @@ ap2_create_mmcurves <- function() {
                  expd_first = "modnames")
   evalmod(mdat)
 }
+
+ap2_test_roc_prc <- function(curves, ...){
+  pp <- ggplot2::autoplot(curves, ...)
+  expect_that(pp, not(throws_error()))
+
+  pp <- ggplot2::autoplot(curves, c("ROC", "PRC"), ...)
+  expect_that(pp, not(throws_error()))
+
+  pp <- ggplot2::autoplot(curves, "ROC", ...)
+  expect_that(pp, not(throws_error()))
+
+  pp <- ggplot2::autoplot(curves, "PRC", ...)
+  expect_that(pp, not(throws_error()))
+}
+
 test_that("autoplot sscurves", {
+  if (!ap2_check_libs()) {
+    skip("Libraries cannot be loaded")
+  }
+  pdf(NULL)
+  on.exit(dev.off())
+
+  data(P10N10)
+  curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
+
+  ap2_test_roc_prc(curves)
+})
+
+test_that("autoplot for multiple sscurves returns grob", {
   if (!ap2_check_libs()) {
     skip("Libraries cannot be loaded")
   }
@@ -76,6 +104,19 @@ test_that("autoplot mscurves", {
   if (!ap2_check_libs()) {
     skip("Libraries cannot be loaded")
   }
+  pdf(NULL)
+  on.exit(dev.off())
+
+  curves <- ap2_create_mscurves()
+
+  ap2_test_roc_prc(curves)
+  ap2_test_roc_prc(curves, show_legend = TRUE)
+})
+
+test_that("autoplot for multiple mscurves returns grob", {
+  if (!ap2_check_libs()) {
+    skip("Libraries cannot be loaded")
+  }
 
   curves <- ap2_create_mscurves()
 
@@ -83,11 +124,24 @@ test_that("autoplot mscurves", {
   expect_true(all(class(pp) == c("gtable", "grob", "gDesc")))
 })
 
-test_that("autoplot smcurves", {
+test_that("autoplot single smcurve", {
   if (!ap2_check_libs()) {
     skip("Libraries cannot be loaded")
   }
+  pdf(NULL)
+  on.exit(dev.off())
 
+  curves <- ap2_create_smcurves()
+
+  ap2_test_roc_prc(curves)
+  ap2_test_roc_prc(curves, show_ci = FALSE)
+  ap2_test_roc_prc(curves, raw_curves = TRUE)
+})
+
+test_that("autoplot for multiple smcurves retruns grob", {
+  if (!ap2_check_libs()) {
+    skip("Libraries cannot be loaded")
+  }
   curves <- ap2_create_smcurves()
 
   pp <- ggplot2::autoplot(curves, show_legend = FALSE, ret_grob = TRUE)
@@ -95,6 +149,21 @@ test_that("autoplot smcurves", {
 })
 
 test_that("autoplot mmcurves", {
+  if (!ap2_check_libs()) {
+    skip("Libraries cannot be loaded")
+  }
+  pdf(NULL)
+  on.exit(dev.off())
+
+  curves <- ap2_create_mmcurves()
+
+  ap2_test_roc_prc(curves)
+  ap2_test_roc_prc(curves, show_ci = TRUE)
+  ap2_test_roc_prc(curves, raw_curves = TRUE)
+  ap2_test_roc_prc(curves, show_legend = FALSE)
+})
+
+test_that("autoplot multiple mmcurves returns grob", {
   if (!ap2_check_libs()) {
     skip("Libraries cannot be loaded")
   }

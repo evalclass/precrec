@@ -1,7 +1,9 @@
 #include <Rcpp.h>
 #include <string>
 
+//
 // Calculate area under the curve
+//
 // [[Rcpp::export]]
 Rcpp::List calc_auc(const Rcpp::NumericVector& xs,
                     const Rcpp::NumericVector& ys) {
