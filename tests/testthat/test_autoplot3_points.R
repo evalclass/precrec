@@ -61,16 +61,57 @@ ap3_create_mmpoints <- function() {
   evalmod(mdat, mode = "basic")
 }
 
+ap3_test_basic_measures <- function(curves, ...){
+  pp <- ggplot2::autoplot(curves, ...)
+  expect_that(pp, not(throws_error()))
+
+  pp <- ggplot2::autoplot(curves, ...)
+  expect_that(pp, not(throws_error()))
+
+  pp <- ggplot2::autoplot(curves, c("sensitivity", "specificity", "error",
+                                    "accuracy", "precision"), ...)
+  expect_that(pp, not(throws_error()))
+
+  pp <- ggplot2::autoplot(curves, c("sensitivity", "specificity", "error",
+                                    "precision"), ...)
+  expect_that(pp, not(throws_error()))
+
+  pp <- ggplot2::autoplot(curves, c("sensitivity", "specificity", "precision"),
+                          ...)
+  expect_that(pp, not(throws_error()))
+
+  pp <- ggplot2::autoplot(curves, c("sensitivity", "precision"), ...)
+  expect_that(pp, not(throws_error()))
+
+  pp <- ggplot2::autoplot(curves, "precision", ...)
+  expect_that(pp, not(throws_error()))
+}
+
 test_that("autoplot sspoints", {
+  if (!ap3_check_libs()) {
+    skip("Libraries cannot be loaded")
+  }
+  pdf(NULL)
+  on.exit(dev.off())
+
+  data(P10N10)
+  points <- evalmod(mode = "basic", scores = P10N10$scores,
+                    labels = P10N10$labels)
+  ap3_test_basic_measures(points)
+  ap3_test_basic_measures(points, type = "l")
+  ap3_test_basic_measures(points, type = "p+l")
+})
+
+test_that("autoplot for multiple sspoints returns grob", {
   if (!ap3_check_libs()) {
     skip("Libraries cannot be loaded")
   }
 
   data(P10N10)
-  curves <- evalmod(mode = "basic", scores = P10N10$scores,
+  points <- evalmod(mode = "basic", scores = P10N10$scores,
                     labels = P10N10$labels)
 
-  pp <- ggplot2::autoplot(curves, ret_grob = TRUE)
+  pp <- ggplot2::autoplot(points, ret_grob = TRUE)
   expect_true(all(class(pp) == c("gtable", "grob", "gDesc")))
 })
 
@@ -78,10 +119,25 @@ test_that("autoplot mspoints", {
   if (!ap3_check_libs()) {
     skip("Libraries cannot be loaded")
   }
+  pdf(NULL)
+  on.exit(dev.off())
 
-  curves <- ap3_create_mspoints()
+  points <- ap3_create_mspoints()
 
-  pp <- ggplot2::autoplot(curves, show_legend = FALSE, ret_grob = TRUE)
+  ap3_test_basic_measures(points)
+  ap3_test_basic_measures(points, type = "l")
+  ap3_test_basic_measures(points, type = "p+l")
+  ap3_test_basic_measures(points, show_legend = TRUE)
+})
+
+test_that("autoplot for multiple mspoints returns grob", {
+  if (!ap3_check_libs()) {
+    skip("Libraries cannot be loaded")
+  }
+
+  points <- ap3_create_mspoints()
+
+  pp <- ggplot2::autoplot(points, show_legend = FALSE, ret_grob = TRUE)
   expect_true(all(class(pp) == c("gtable", "grob", "gDesc")))
 })
 
@@ -89,10 +145,26 @@ test_that("autoplot smpoints", {
   if (!ap3_check_libs()) {
     skip("Libraries cannot be loaded")
   }
+  pdf(NULL)
+  on.exit(dev.off())
 
-  curves <- ap3_create_smpoints()
+  points <- ap3_create_smpoints()
 
-  pp <- ggplot2::autoplot(curves, show_legend = FALSE, ret_grob = TRUE)
+  ap3_test_basic_measures(points)
+  ap3_test_basic_measures(points, type = "l")
+  ap3_test_basic_measures(points, type = "p+l")
+  ap3_test_basic_measures(points, show_ci = FALSE)
+  ap3_test_basic_measures(points, all_curves = TRUE)
+})
+
+test_that("autoplot for multiple smpoints returns grob", {
+  if (!ap3_check_libs()) {
+    skip("Libraries cannot be loaded")
+  }
+
+  points <- ap3_create_smpoints()
+
+  pp <- ggplot2::autoplot(points, show_legend = FALSE, ret_grob = TRUE)
   expect_true(all(class(pp) == c("gtable", "grob", "gDesc")))
 })
 
@@ -100,10 +172,27 @@ test_that("autoplot mmpoints", {
   if (!ap3_check_libs()) {
     skip("Libraries cannot be loaded")
   }
+  pdf(NULL)
+  on.exit(dev.off())
 
-  curves <- ap3_create_mmpoints()
+  points <- ap3_create_mmpoints()
 
-  pp <- ggplot2::autoplot(curves, show_legend = FALSE, ret_grob = TRUE)
-  expect_true(all(class(pp) == c("gtable", "grob", "gDesc")))
+  ap3_test_basic_measures(points)
+  ap3_test_basic_measures(points, type = "l")
+  ap3_test_basic_measures(points, type = "p+l")
+  ap3_test_basic_measures(points, show_ci = TRUE)
+  ap3_test_basic_measures(points, all_curves = TRUE)
+  ap3_test_basic_measures(points, show_legend = FALSE)
 })
 
+
+test_that("autoplot for multiple mmpoints returns grob", {
+  if (!ap3_check_libs()) {
+    skip("Libraries cannot be loaded")
+  }
+
+  points <- ap3_create_mmpoints()
+
+  pp <- ggplot2::autoplot(points, show_legend = FALSE, ret_grob = TRUE)
+  expect_true(all(class(pp) == c("gtable", "grob", "gDesc")))
+})

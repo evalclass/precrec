@@ -153,7 +153,7 @@ NULL
 #
 # Plot ROC and Precisoin-Recall
 #
-.autoplot_multi <- function(object, type = "l", curvetype = c("ROC", "PRC"),
+.autoplot_multi <- function(object, curvetype = c("ROC", "PRC"), type = "l",
                             show_ci = FALSE, all_curves = TRUE,
                             show_legend = TRUE, add_np_nn = TRUE,
                             ret_grob = FALSE, ...) {
@@ -169,7 +169,7 @@ NULL
   curve_df <- ggplot2::fortify(object, all_curves = all_curves, ...)
 
   func_plot <- function(ctype) {
-    .autoplot_single(object, curve_df, type = type, curvetype = ctype,
+    .autoplot_single(object, curve_df, curvetype = ctype, type = type,
                      show_ci = show_ci, all_curves = all_curves,
                      show_legend = show_legend, add_np_nn = add_np_nn, ...)
   }
@@ -239,7 +239,7 @@ NULL
 #
 # Plot ROC or Precisoin-Recall
 #
-.autoplot_single <- function(object, curve_df, type = "l", curvetype = "ROC",
+.autoplot_single <- function(object, curve_df, curvetype = "ROC", type = "l",
                              show_ci = FALSE, all_curves = FALSE,
                              show_legend = FALSE, add_np_nn = TRUE, ...) {
 
@@ -264,9 +264,20 @@ NULL
 
   } else if (show_ci) {
     p <- ggplot2::ggplot(curve_df, ggplot2::aes(x = x, y = y,
-                                                ymin = ymin, ymax = ymax,
-                                                color = modname))
-    p <- p + ggplot2::geom_smooth(stat = "identity")
+                                                ymin = ymin, ymax = ymax))
+    if (type == "l") {
+      p <- p + ggplot2::geom_smooth(ggplot2::aes(color = modname),
+                                    stat = "identity")
+    } else if (type == "p+l" || type == "p") {
+      p <- p + ggplot2::geom_ribbon(ggplot2::aes(min = ymin, ymax = ymax),
+                                    stat = "identity", alpha = 0.25,
+                                    fill = "grey25")
+      if (type == "p+l") {
+        p <- p + ggplot2::geom_line(ggplot2::aes(color = modname),
+                                    alpha = 0.25)
+      }
+      p <- p + ggplot2::geom_point(ggplot2::aes(x = x, y = y, color = modname))
+    }
   } else {
     p <- ggplot2::ggplot(curve_df, ggplot2::aes(x = x, y = y, color = modname))
     if (type == "l") {
@@ -370,7 +381,6 @@ NULL
                               curve_df = curve_df, ...) {
 
   s <- curve_df[["curvetype"]][1]
- # print(object)
   main <- paste0(toupper(substring(s, 1, 1)), substring(s,2))
 
   p <- p + ggplot2::scale_y_continuous(limits = c(0.0, 1.0))

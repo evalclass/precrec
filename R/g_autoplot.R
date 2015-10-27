@@ -57,8 +57,8 @@ autoplot.mscurves <- function(object, curvetype = c("ROC", "PRC"),
                               show_legend = TRUE, ret_grob = FALSE, ...) {
 
   .autoplot_multi(object, curvetype = curvetype, show_ci = FALSE,
-                  all_curves = TRUE, show_legend = TRUE, add_np_nn = TRUE,
-                  ret_grob = ret_grob)
+                  all_curves = TRUE, show_legend = show_legend,
+                  add_np_nn = TRUE, ret_grob = ret_grob)
 }
 
 #' @rdname autoplot
@@ -85,12 +85,13 @@ autoplot.mmcurves <- function(object, curvetype = c("ROC", "PRC"),
 
 #' @rdname autoplot
 #' @export
-autoplot.sspoints <- function(object, type = "p+l",
+autoplot.sspoints <- function(object,
                               curvetype = c("error", "accuracy", "specificity",
                                             "sensitivity", "precision"),
+                              type = "p",
                               ret_grob = FALSE, ...) {
 
-  .autoplot_multi(object, type = type, curvetype = curvetype,
+  .autoplot_multi(object, curvetype = curvetype, type = type,
                   show_ci = FALSE, all_curves = TRUE,
                   show_legend = FALSE, add_np_nn = TRUE,
                   ret_grob = ret_grob)
@@ -99,26 +100,28 @@ autoplot.sspoints <- function(object, type = "p+l",
 
 #' @rdname autoplot
 #' @export
-autoplot.mspoints <- function(object, type = "p+l",
+autoplot.mspoints <- function(object,
                               curvetype = c("error", "accuracy", "specificity",
                                             "sensitivity", "precision"),
+                              type = "p",
                               show_legend = TRUE, ret_grob = FALSE, ...) {
 
-  .autoplot_multi(object, type = type, curvetype = curvetype,
+  .autoplot_multi(object, curvetype = curvetype, type = type,
                   show_ci = FALSE, all_curves = TRUE,
-                  show_legend = TRUE, add_np_nn = TRUE,
+                  show_legend = show_legend, add_np_nn = TRUE,
                   ret_grob = ret_grob)
 }
 
 #' @rdname autoplot
 #' @export
-autoplot.smpoints <- function(object, type = "p+l",
+autoplot.smpoints <- function(object,
                               curvetype = c("error", "accuracy", "specificity",
                                             "sensitivity", "precision"),
+                              type = "p",
                               show_ci = TRUE, all_curves = FALSE,
                               ret_grob = FALSE, ...) {
 
-  .autoplot_multi(object, type = type, curvetype = curvetype,
+  .autoplot_multi(object, curvetype = curvetype, type = type,
                   show_ci = show_ci, all_curves = all_curves,
                   show_legend = FALSE, add_np_nn = TRUE,
                   ret_grob = ret_grob)
@@ -126,13 +129,14 @@ autoplot.smpoints <- function(object, type = "p+l",
 
 #' @rdname autoplot
 #' @export
-autoplot.mmpoints <- function(object, type = "p+l",
+autoplot.mmpoints <- function(object,
                               curvetype = c("error", "accuracy", "specificity",
                                             "sensitivity", "precision"),
+                              type = "p",
                               show_ci = FALSE, all_curves = FALSE,
                               show_legend = TRUE, ret_grob = FALSE, ...) {
 
-  .autoplot_multi(object, type = type, curvetype = curvetype,
+  .autoplot_multi(object, curvetype = curvetype, type = type,
                   show_ci = show_ci, all_curves = all_curves,
                   show_legend = show_legend, add_np_nn = TRUE,
                   ret_grob = ret_grob)
