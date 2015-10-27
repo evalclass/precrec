@@ -2,11 +2,10 @@
 # Control the main pipeline iterations
 #
 pl_main <- function(mdat, mode = "rocprc", calc_avg = TRUE, ci_alpha = 0.05,
-                    raw_curves = FALSE, x_bins = 1000, orig_points = TRUE) {
+                    raw_curves = FALSE, x_bins = 1000) {
 
   # === Validation ===
-  .validate_pl_main_args(mdat, calc_avg, ci_alpha, raw_curves, x_bins,
-                         orig_points)
+  .validate_pl_main_args(mdat, calc_avg, ci_alpha, raw_curves, x_bins)
 
   # Create model_type and dataset_type
   model_type <- .get_single_or_multiple(mdat, "uniq_modnames")
@@ -16,8 +15,7 @@ pl_main <- function(mdat, mode = "rocprc", calc_avg = TRUE, ci_alpha = 0.05,
   if (mode == "rocprc") {
     .pl_main_rocprc(mdat, model_type, dataset_type, class_name_pf,
                     calc_avg = calc_avg, ci_alpha = ci_alpha,
-                    raw_curves = raw_curves, x_bins = x_bins,
-                    orig_points = orig_points)
+                    raw_curves = raw_curves, x_bins = x_bins)
   } else if (mode == "basic") {
     .pl_main_basic(mdat, model_type, dataset_type, class_name_pf,
                    calc_avg = calc_avg, ci_alpha = ci_alpha,
@@ -29,7 +27,7 @@ pl_main <- function(mdat, mode = "rocprc", calc_avg = TRUE, ci_alpha = 0.05,
 # Validate arguments of pl_main
 #
 .validate_pl_main_args <- function(mdat, calc_avg, ci_alpha, raw_curves,
-                                   x_bins, orig_points) {
+                                   x_bins) {
 
   # Validate mdat
   .validate(mdat)
@@ -47,9 +45,6 @@ pl_main <- function(mdat, mode = "rocprc", calc_avg = TRUE, ci_alpha = 0.05,
 
   # Check x_bins
   .validate_x_bins(x_bins)
-
-  # Check orig_points
-  .validate_orig_points(orig_points)
 
 }
 

@@ -7,7 +7,7 @@
 evalmod(mdat, mode = "rocprc", scores = NULL, labels = NULL,
   modnames = NULL, dsids = NULL, posclass = NULL, na_worst = TRUE,
   ties_method = "equiv", calc_avg = TRUE, ci_alpha = 0.05,
-  raw_curves = FALSE, x_bins = 1000, orig_points = TRUE)
+  raw_curves = FALSE, x_bins = 1000)
 }
 \arguments{
 \item{mdat}{An \code{mdat} object created by the \code{\link{mmdata}}

@@ -114,10 +114,10 @@ evalmod <- function(mdat, mode = "rocprc", scores = NULL, labels = NULL,
                     modnames = NULL, dsids = NULL,
                     posclass = NULL, na_worst = TRUE, ties_method = "equiv",
                     calc_avg = TRUE, ci_alpha = 0.05, raw_curves = FALSE,
-                    x_bins = 1000, orig_points = TRUE) {
+                    x_bins = 1000) {
 
   .validate_evalmod_args(mode, modnames, dsids, posclass, na_worst, ties_method,
-                         calc_avg, ci_alpha, raw_curves, x_bins, orig_points)
+                         calc_avg, ci_alpha, raw_curves, x_bins)
 
   if (!missing(mdat)) {
     .validate(mdat)
@@ -128,7 +128,7 @@ evalmod <- function(mdat, mode = "rocprc", scores = NULL, labels = NULL,
   }
 
   pl_main(mdat, mode = mode, calc_avg = calc_avg, ci_alpha = ci_alpha,
-          raw_curves = raw_curves, x_bins = x_bins, orig_points = orig_points)
+          raw_curves = raw_curves, x_bins = x_bins)
 
 }
 
@@ -138,7 +138,7 @@ evalmod <- function(mdat, mode = "rocprc", scores = NULL, labels = NULL,
 .validate_evalmod_args <- function(mode, modnames, dsids,
                                    posclass, na_worst, ties_method,
                                    calc_avg, ci_alpha, raw_curves,
-                                   x_bins, orig_points) {
+                                   x_bins) {
 
   # Check mode
   .validate_mode(mode)
@@ -171,8 +171,5 @@ evalmod <- function(mdat, mode = "rocprc", scores = NULL, labels = NULL,
 
   # Check x_bins
   .validate_x_bins(x_bins)
-
-  # Check orig_points
-  .validate_orig_points(orig_points)
 
 }

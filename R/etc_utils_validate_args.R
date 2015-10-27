@@ -224,16 +224,6 @@
 }
 
 #
-# Validate orig_points
-#
-.validate_orig_points <- function(orig_points) {
-  if (!is.null(orig_points)) {
-    assertthat::assert_that(assertthat::is.flag(orig_points),
-                            assertthat::noNA(orig_points))
-  }
-}
-
-#
 # Check curve types
 #
 .check_curvetype <- function(curvetype) {

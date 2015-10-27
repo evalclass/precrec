@@ -3,7 +3,7 @@
 #
 .pl_main_rocprc <- function(mdat, model_type, dataset_type, class_name_pf,
                             calc_avg = TRUE, ci_alpha = 0.05, raw_curves = FALSE,
-                            x_bins = 1000, orig_points = TRUE) {
+                            x_bins = 1000) {
 
   # === Create ROC and Precision-Recall curves ===
   # Create curves
@@ -39,8 +39,7 @@
   attr(s3obj, "args") <- list(calc_avg = calc_avg,
                               ci_alpha = ci_alpha,
                               raw_curves = raw_curves,
-                              x_bins = x_bins,
-                              orig_points = orig_points)
+                              x_bins = x_bins)
   attr(s3obj, "validated") <- FALSE
 
   # Call .validate.class_name()
@@ -88,16 +87,17 @@
 .group_aucs <- function(lcurves, mdat) {
 
   # Group AUC of ROC or PRC curves
+  ct_len <- 2
   modnames <- attr(mdat, "data_info")[["modnames"]]
   dsids <- attr(mdat, "data_info")[["dsids"]]
-  aucs <- data.frame(modnames = rep(modnames, each = 2),
-                     dsids = rep(dsids, each = 2),
+  aucs <- data.frame(modnames = rep(modnames, each = ct_len),
+                     dsids = rep(dsids, each = ct_len),
                      curvetypes = rep(c("ROC", "PRC"), length(modnames)),
-                     aucs = rep(NA, length(modnames) * 2),
+                     aucs = rep(NA, length(modnames) * ct_len),
                      stringsAsFactors = FALSE)
 
   for (i in seq_along(lcurves)) {
-    idx = 2 * i - 1
+    idx = ct_len * i - 1
     aucs[["aucs"]][idx:(idx + 1)] <- c(attr(lcurves[[i]][["roc"]], "auc"),
                                        attr(lcurves[[i]][["prc"]], "auc"))
   }

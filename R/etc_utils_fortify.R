@@ -198,12 +198,6 @@ NULL
                                    dsids, dsid_modnames, curvetype_names)
   }
 
-#   if (mode == "basic") {
-#     tmp_names <- names(curve_df)
-#     tmp_names[length(tmp_names)] <- "pointname"
-#     names(curve_df) <- tmp_names
-#   }
-
   curve_df
 }
 
