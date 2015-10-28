@@ -66,7 +66,7 @@
 #'                dsids = samps[["dsids"]])
 #'
 #' ## Convert sscurve object to a data frame
-#' curves <- evalmod_m(mdat)
+#' curves <- evalmod(mdat)
 #' df <- fortify(curves)
 #'
 #' ## Fortified data frame can be used for plotting a ROC curve
@@ -176,8 +176,6 @@ NULL
                             precision = "prec")
   }
 
-
-
   # Make dsis-modname pairs
   i <- 1
   dsid_modnames <- vector(mode = "character",
@@ -236,10 +234,11 @@ NULL
 #
 .fortify_curve_avg <- function(obj, uniq_modnames, uniq_dsids, modnames, dsids,
                                dsid_modnames, curvetype_names) {
+
+  grp_avg <- attr(obj, "grp_avg")
   curve_df <- NULL
   for (curvetype in names(curvetype_names)) {
-    curves <- obj[[curvetype_names[[curvetype]]]]
-    avgcurves <- attr(curves, "avgcurves")
+    avgcurves <- grp_avg[[curvetype_names[[curvetype]]]]
 
     for (i in seq_along(avgcurves)) {
       x <- avgcurves[[i]][["x"]]

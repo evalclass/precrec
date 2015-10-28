@@ -54,7 +54,8 @@ print.beval_info <- function(x, ...) {
   eval_summary <- attr(x, "eval_summary")
   rownames(eval_summary) <- format(rownames(eval_summary), width = 4,
                                    justify = "right")
-  colnames(eval_summary) <- c("Model name", "Dataset ID", "Measure", "Min.", "1st Qu.", "Median", "Mean", "3rd Qu.", "Max.")
+  colnames(eval_summary) <- c("Model name", "Dataset ID", "Measure", "Min.",
+                              "1st Qu.", "Median", "Mean", "3rd Qu.", "Max.")
 
   print.data.frame(eval_summary, print.gap = 2)
   cat("\n")

@@ -13,24 +13,41 @@
   }
   lpoints <- lapply(seq_along(mdat), plfunc)
 
-  # Group points by evaluation measure
+  # Summarize points by evaluation measure
   grpfunc <- function(m) {
-    .group_points(lpoints, m, "pointgrp", mdat, dataset_type,
-                  calc_avg, ci_alpha)
+    .summarize_points(lpoints, m, "pointgrp", mdat, dataset_type,
+                      calc_avg, ci_alpha)
   }
-  grp_points <- lapply(c("error", "accuracy", "specificity", "sensitivity",
-                         "precision"), grpfunc)
-  names(grp_points)<- c("err", "acc", "sp", "sn", "prec")
+  eval_names <- c("error", "accuracy", "specificity", "sensitivity",
+                  "precision")
+  grp_row_names <- c("err", "acc", "sp", "sn", "prec")
+  grp_points <- lapply(eval_names, grpfunc)
+  names(grp_points)<- grp_row_names
 
   # Summarize basic evaluation measures
   eval_summary <- .summarize_basic(lpoints, mdat)
 
+  # Summarize average
+  grpfunc2 <- function(et) {
+    attr(grp_points[[et]], "avgcurves")
+  }
+  grp_avg <- lapply(names(grp_points), grpfunc2)
+  names(grp_avg)<- names(grp_points)
+
   # === Create an S3 object ===
+  if (dataset_type == "multiple" && calc_avg && !raw_curves) {
+    grpfunc3 <- function(m) {
+      .summarize_points(NULL, m, "pointgrp", mdat, NULL, NULL, NULL)
+    }
+    grp_points <- lapply(eval_names, grpfunc3)
+    names(grp_points)<- grp_row_names
+  }
   s3obj <- structure(grp_points, class = c(paste0(class_name_pf, "points"),
                                            "beval_info"))
 
   # Set attributes
   attr(s3obj, "eval_summary") <- eval_summary
+  attr(s3obj, "grp_avg") <- grp_avg
   attr(s3obj, "data_info") <- attr(mdat, "data_info")
   attr(s3obj, "uniq_modnames") <- attr(mdat, "uniq_modnames")
   attr(s3obj, "uniq_dsids") <- attr(mdat, "uniq_dsids")
@@ -48,24 +65,30 @@
 #
 # Get evaluation measures at all threshold values by models
 #
-.group_points <- function(lpoints, eval_type, class_name, mdat, dataset_type,
-                          calc_avg, ci_alpha) {
+.summarize_points <- function(lpoints, eval_type, class_name, mdat, dataset_type,
+                              calc_avg, ci_alpha) {
 
-  # Group by basic evaluation measure
-  grp_func <- function(s) {
-    list(x = lpoints[[s]][["basic"]][["threshold"]],
-         y = lpoints[[s]][["basic"]][[eval_type]])
-  }
-  pevals <- lapply(seq_along(lpoints), grp_func)
+  if (!is.null(lpoints)) {
+    # Summarize basic evaluation measures
+    grp_func <- function(s) {
+      list(x = lpoints[[s]][["basic"]][["threshold"]],
+           y = lpoints[[s]][["basic"]][[eval_type]])
+    }
+    pevals <- lapply(seq_along(lpoints), grp_func)
 
-  # Calculate the average curves
-  if (dataset_type == "multiple" && calc_avg) {
-    modnames <- attr(mdat, "data_info")[["modnames"]]
-    uniq_modnames <- attr(mdat, "uniq_modnames")
-    avgcurves <- calc_avg_basic(pevals, modnames, uniq_modnames, ci_alpha)
+    # Calculate the average curves
+    if (dataset_type == "multiple" && calc_avg) {
+      modnames <- attr(mdat, "data_info")[["modnames"]]
+      uniq_modnames <- attr(mdat, "uniq_modnames")
+      avgcurves <- calc_avg_basic(pevals, modnames, uniq_modnames, ci_alpha)
+    } else {
+      avgcurves <- NA
+    }
   } else {
+    pevals <- NA
     avgcurves <- NA
   }
+
 
   # === Create an S3 object ===
   s3obj <- structure(pevals, class = class_name)
@@ -88,7 +111,8 @@
 # Summarize basic evaluation measures
 #
 .summarize_basic <- function(lpoints, mdat) {
-  # Group AUC of ROC or PRC curves
+
+  # Summarize AUC of ROC or PRC curves
   modnames <- attr(mdat, "data_info")[["modnames"]]
   dsids <- attr(mdat, "data_info")[["dsids"]]
   evaltypes <- c("threshold", "error", "accuracy", "specificity",

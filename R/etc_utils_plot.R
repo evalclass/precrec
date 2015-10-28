@@ -240,7 +240,8 @@ NULL
 #
 .plot_avg <- function(obj, type, curvetype, main, xlab, ylab, show_ci) {
   # === Create a plot ===
-  avgcurves <- attr(obj[[curvetype]], "avgcurves")
+  grp_avg <- attr(obj, "grp_avg")
+  avgcurves <- grp_avg[[curvetype]]
 
   plot(1, type = "l", main = main, xlab = xlab, ylab = ylab,
        ylim = c(0, 1), xlim = c(0, 1))

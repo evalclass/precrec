@@ -93,7 +93,7 @@ mdat <- mmdata(samps[["scores"]], samps[["labels"]],
                dsids = samps[["dsids"]])
 
 ## Convert sscurve object to a data frame
-curves <- evalmod_m(mdat)
+curves <- evalmod(mdat)
 df <- fortify(curves)
 
 ## Fortified data frame can be used for plotting a ROC curve

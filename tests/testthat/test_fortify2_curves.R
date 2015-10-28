@@ -26,7 +26,7 @@ ft2_create_mscurves <- function() {
   evalmod(mdat)
 }
 
-ft2_create_smcurves <- function() {
+ft2_create_smcurves <- function(raw_curves = FALSE) {
   s1 <- c(1, 2, 3, 4)
   s2 <- c(5, 6, 7, 8)
   s3 <- c(2, 4, 6, 8)
@@ -38,10 +38,10 @@ ft2_create_smcurves <- function() {
   labels <- join_labels(l1, l2, l3)
 
   mdat <- mmdata(scores, labels, expd_first = "dsids")
-  evalmod(mdat)
+  evalmod(mdat, raw_curves = raw_curves)
 }
 
-ft2_create_mmcurves <- function() {
+ft2_create_mmcurves <- function(raw_curves = FALSE) {
   s1 <- c(1, 2, 3, 4)
   s2 <- c(5, 6, 7, 8)
   s3 <- c(2, 4, 6, 8)
@@ -56,7 +56,7 @@ ft2_create_mmcurves <- function() {
 
   mdat <- mmdata(scores, labels, modnames = c("m1", "m2"), dsids = c(1, 2),
                  expd_first = "modnames")
-  evalmod(mdat)
+  evalmod(mdat, raw_curves = raw_curves)
 }
 
 test_that("fortify sscurves", {
@@ -87,7 +87,7 @@ test_that("fortify smcurves", {
     skip("Libraries cannot be loaded")
   }
 
-  curves <- ft2_create_smcurves()
+  curves <- ft2_create_smcurves(raw_curves = TRUE)
 
   curve_df <- ggplot2::fortify(curves)
   expect_true(is.list(curve_df))
@@ -98,7 +98,7 @@ test_that("fortify mmcurves", {
     skip("Libraries cannot be loaded")
   }
 
-  curves <- ft2_create_mmcurves()
+  curves <- ft2_create_mmcurves(raw_curves = TRUE)
 
   curve_df <- ggplot2::fortify(curves)
   expect_true(is.list(curve_df))

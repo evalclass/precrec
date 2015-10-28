@@ -79,5 +79,3 @@ pl_main <- function(mdat, mode = "rocprc", calc_avg = TRUE, ci_alpha = 0.05,
 
   paste0(mt, dt)
 }
-
-

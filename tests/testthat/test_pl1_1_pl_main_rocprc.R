@@ -148,7 +148,7 @@ test_that("'mscurve' contains 'msrocs' and 'msprcs'", {
 
 test_that("'smcurve' contains 'msrocs' and 'msprcs'", {
   mdat <- pl1_create_mdat_sm()
-  pl <- .pl_main_rocprc(mdat, "single", "multiple", "sm")
+  pl <- .pl_main_rocprc(mdat, "single", "multiple", "sm", raw_curves = TRUE)
 
   expect_equal(length(pl[["rocs"]]), 3)
   expect_true(is(pl[["rocs"]], "crvgrp"))
