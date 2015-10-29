@@ -50,7 +50,7 @@ reformat_data <- function(scores, labels,
     .validate_posclass(posclass)
   }
 
-  # Update posclass if nesessary
+  # Update posclass if necessary
   if (is.null(posclass)) {
     posclass <- NA
   } else if (is.factor(labels)) {

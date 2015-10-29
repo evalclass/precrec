@@ -2,7 +2,7 @@
 % Please edit documentation in R/pl2_join_data.R
 \name{join_labels}
 \alias{join_labels}
-\title{Join observed labels of multiple models into a list.}
+\title{Join observed labels of multiple test datasets into a list.}
 \usage{
 join_labels(..., byrow = FALSE, chklen = TRUE)
 }
@@ -10,44 +10,37 @@ join_labels(..., byrow = FALSE, chklen = TRUE)
 \item{...}{Multiple datasets. They can be vectors, arrays, matrices,
   data frames, and lists.}
 
-\item{byrow}{A boolean value to specify whether row vectors are used
+\item{byrow}{A Boolean value to specify whether row vectors are used
   for matrix, data.frame, and array.}
 
-\item{chklen}{A boolean value to specify whether all list items should be
-  of the same length.}
-
-\item{...}{Multiple datasets. They can be vectors, arrays, matrices,
-  data frames, and lists.}
-
-\item{byrow}{A boolean value to specify whether row vectors are used
-  for matrix, data.frame, and array.}
-
-\item{chklen}{A boolean value to specify whether all list items should be
+\item{chklen}{A Boolean value to specify whether all list items should be
   of the same length.}
 }
 \value{
 The \code{join_labels} function returns a list that
-  contains all combined datasets.
-
-\code{join_scores} returns a list that
-  contains all combined datasets.
+  contains all combined label data.
 }
 \description{
 \code{join_labels} takes observed labels and converts them to a list.
 }
 \examples{
+## Add three numeric vectors
 l1 <- c(1, 0, 1, 1)
 l2 <- c(1, 1, 0, 0)
 l3 <- c(0, 1, 0, 1)
-labels <- join_labels(l1, l2, l3)
+labels1 <- join_labels(l1, l2, l3)
 
-Join observed labels of multiple models into a list.
+## Add three numeric vectors
+a1 <- matrix(rep(c(1, 0), 4), 4, 2)
+labels2 <- join_labels(a1, l3)
 
-The \\code{join_labels} function takes observed labels from multiple datasets
-  and converst them to a list.
+## Use byrow
+a2 <- matrix(rep(c(1, 0), 4), 2, 4, byrow = TRUE)
+labels3 <- join_labels(a2, l3, byrow = TRUE)
 }
 \seealso{
-\code{\link{join_scores}} for joining scores.
-  \code{\link{mmdata}} for formating input data.
+\code{\link{evalmod}} for calculation evaluation measures.
+  \code{\link{mmdata}} for formatting input data.
+  \code{\link{join_scores}} for formatting scores with multiple datasets.
 }
 

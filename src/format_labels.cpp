@@ -3,7 +3,7 @@
 #include <set>
 #include <string>
 
-// Make new labels - nagative: 1, positive: 2
+// Make new labels - negative: 1, positive: 2
 template<typename T, typename S>
 Rcpp::List make_new_labels(T labels,
                            S posclass,

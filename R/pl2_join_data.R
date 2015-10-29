@@ -1,22 +1,23 @@
 #' Join scores of multiple models into a list.
 #'
 #' The \code{join_scores} function takes predicted scores from multiple models
-#'   and converst them to a list.
+#'   and convert them to a list.
 #'
 #' @param ... Multiple datasets. They can be vectors, arrays, matrices,
 #'   data frames, and lists.
 #'
-#' @param byrow A boolean value to specify whether row vectors are used
+#' @param byrow A Boolean value to specify whether row vectors are used
 #'   for matrix, data.frame, and array.
 #'
-#' @param chklen A boolean value to specify whether all list items should be
+#' @param chklen A Boolean value to specify whether all list items should be
 #'   of the same length.
 #'
 #' @return The \code{join_scores} function returns a list that
-#'   contains all combined datasets.
+#'   contains all combined score data.
 #'
-#' @seealso \code{\link{join_labels}} for joining labels.
-#'   \code{\link{mmdata}} for formating input data.
+#' @seealso \code{\link{evalmod}} for calculation evaluation measures.
+#'   \code{\link{mmdata}} for formatting input data.
+#'   \code{\link{join_labels}} for formatting labels with multiple datasets.
 #'
 #' @examples
 #'
@@ -41,47 +42,25 @@ join_scores <- function(..., byrow = FALSE, chklen = TRUE) {
                  byrow = byrow, chklen = chklen)
 }
 
-#' Join observed labels of multiple models into a list.
+#' Join observed labels of multiple test datasets into a list.
 #'
 #' \code{join_labels} takes observed labels and converts them to a list.
 #'
 #' @param ... Multiple datasets. They can be vectors, arrays, matrices,
 #'   data frames, and lists.
 #'
-#' @param byrow A boolean value to specify whether row vectors are used
+#' @param byrow A Boolean value to specify whether row vectors are used
 #'   for matrix, data.frame, and array.
 #'
-#' @param chklen A boolean value to specify whether all list items should be
+#' @param chklen A Boolean value to specify whether all list items should be
 #'   of the same length.
 #'
 #' @return The \code{join_labels} function returns a list that
-#'   contains all combined datasets.
+#'   contains all combined label data.
 #'
-#' @seealso \code{\link{join_scores}} for joining scores.
-#'   \code{\link{mmdata}} for formating input data.
-#'
-#' @examples
-#' l1 <- c(1, 0, 1, 1)
-#' l2 <- c(1, 1, 0, 0)
-#' l3 <- c(0, 1, 0, 1)
-#' labels <- join_labels(l1, l2, l3)
-#'
-#' Join observed labels of multiple models into a list.
-#'
-#' The \code{join_labels} function takes observed labels from multiple datasets
-#'   and converst them to a list.
-#'
-#' @param ... Multiple datasets. They can be vectors, arrays, matrices,
-#'   data frames, and lists.
-#'
-#' @param byrow A boolean value to specify whether row vectors are used
-#'   for matrix, data.frame, and array.
-#'
-#' @param chklen A boolean value to specify whether all list items should be
-#'   of the same length.
-#'
-#' @return \code{join_scores} returns a list that
-#'   contains all combined datasets.
+#' @seealso \code{\link{evalmod}} for calculation evaluation measures.
+#'   \code{\link{mmdata}} for formatting input data.
+#'   \code{\link{join_scores}} for formatting scores with multiple datasets.
 #'
 #' @examples
 #' ## Add three numeric vectors

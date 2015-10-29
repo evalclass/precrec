@@ -3,13 +3,13 @@
 \docType{data}
 \name{IB1000}
 \alias{IB1000}
-\title{Imbalacned data with 1000 positives and 10000 negatives.}
-\format{A list with 8 items:
+\title{Imbalanced data with 1000 positives and 10000 negatives.}
+\format{A list with 8 items.
 \describe{
   \item{np}{number of positives: 1000}
   \item{nn}{number of negatives: 10000}
-  \item{labels}{labeles of observed data}
-  \item{random_scores}{scores of random perforamnce level}
+  \item{labels}{labels of observed data}
+  \item{random_scores}{scores of random performance level}
   \item{poor_er_scores}{scores of poor early retrieval level}
   \item{good_er_scores}{scores of good early retrieval level}
   \item{excel_scores}{scores of excellent level}

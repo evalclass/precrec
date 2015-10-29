@@ -49,7 +49,7 @@ pl_main <- function(mdat, mode = "rocprc", calc_avg = TRUE, ci_alpha = 0.05,
 }
 
 #
-# Determin either "single" or "multiple" for model_type and data_type
+# Determine either "single" or "multiple" for model_type and data_type
 #
 .get_single_or_multiple <- function(mdat, attr_name) {
   if (length(attr(mdat, attr_name)) == 1L) {

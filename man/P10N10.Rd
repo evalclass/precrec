@@ -3,13 +3,13 @@
 \docType{data}
 \name{P10N10}
 \alias{P10N10}
-\title{A small example dataset with tied scores.}
-\format{A list with 8 items:
+\title{A small example dataset with several tied scores.}
+\format{A list with 4 items.
 \describe{
   \item{np}{number of positives: 10}
   \item{nn}{number of negatives: 10}
-  \item{labels}{20 labeles of observed data}
-  \item{scores}{20 scores with ties}
+  \item{labels}{20 labels of observed data}
+  \item{scores}{20 scores with some ties}
 }}
 \usage{
 data(P10N10)

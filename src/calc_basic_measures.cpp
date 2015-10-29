@@ -32,7 +32,7 @@ Rcpp::List calc_basic_measures(int np,
     return ret_val;
   }
 
-  // Calcualte evaluation measures for all thresholds
+  // Calculate evaluation measures for all thresholds
   // n should be >1
   for (int i = 0; i < n; ++i) {
     threshold[i] = double(i) / double(n - 1);
@@ -45,7 +45,7 @@ Rcpp::List calc_basic_measures(int np,
     }
   }
 
-  // Update the precision value of the hightest rank
+  // Update the precision value of the highest rank
   prec[0] = prec[1];
 
   // Return a list with P, N, and basic evaluation measures

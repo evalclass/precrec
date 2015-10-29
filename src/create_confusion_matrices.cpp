@@ -72,7 +72,7 @@ void calc_tp_fp(const Rcpp::IntegerVector& olabs,
   fp[0] = 0;
   sorted_ranks[0] = ranks[rank_idx[0] - 1] + 1;
 
-  // Iterate all thesholds
+  // Iterate all thresholds
   for (int i = 0; i < n; ++i) {
     int idx = rank_idx[i] - 1;
 

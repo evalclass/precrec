@@ -3,13 +3,13 @@
 \docType{data}
 \name{B500}
 \alias{B500}
-\title{Balacned data with 500 positives and 500 negatives.}
-\format{A list with 8 items:
+\title{Balanced data with 500 positives and 500 negatives.}
+\format{A list with 8 items.
 \describe{
   \item{np}{number of positives: 500}
   \item{nn}{number of negatives: 500}
-  \item{labels}{labeles of observed data}
-  \item{random_scores}{scores of random perforamnce level}
+  \item{labels}{labels of observed data}
+  \item{random_scores}{scores of random performance level}
   \item{poor_er_scores}{scores of poor early retrieval level}
   \item{good_er_scores}{scores of good early retrieval level}
   \item{excel_scores}{scores of excellent level}

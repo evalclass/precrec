@@ -4,9 +4,9 @@
 \name{precrec}
 \alias{precrec}
 \alias{precrec-package}
-\title{precrec: A package for computating accurate ROC and Precision-Recall curves}
+\title{precrec: A package for computing accurate ROC and Precision-Recall curves}
 \description{
-The prec package provides three categories of important functions:
+The precrec package provides three categories of important functions:
 foo, bar and baz.
 }
 \section{precrec functions}{

@@ -10,19 +10,19 @@ join_scores(..., byrow = FALSE, chklen = TRUE)
 \item{...}{Multiple datasets. They can be vectors, arrays, matrices,
   data frames, and lists.}
 
-\item{byrow}{A boolean value to specify whether row vectors are used
+\item{byrow}{A Boolean value to specify whether row vectors are used
   for matrix, data.frame, and array.}
 
-\item{chklen}{A boolean value to specify whether all list items should be
+\item{chklen}{A Boolean value to specify whether all list items should be
   of the same length.}
 }
 \value{
 The \code{join_scores} function returns a list that
-  contains all combined datasets.
+  contains all combined score data.
 }
 \description{
 The \code{join_scores} function takes predicted scores from multiple models
-  and converst them to a list.
+  and convert them to a list.
 }
 \examples{
 ## Add three numeric vectors
@@ -40,7 +40,8 @@ a2 <- matrix(seq(8), 2, 4, byrow = TRUE)
 scores3 <- join_scores(a2, s3, byrow = TRUE)
 }
 \seealso{
-\code{\link{join_labels}} for joining labels.
-  \code{\link{mmdata}} for formating input data.
+\code{\link{evalmod}} for calculation evaluation measures.
+  \code{\link{mmdata}} for formatting input data.
+  \code{\link{join_labels}} for formatting labels with multiple datasets.
 }
 

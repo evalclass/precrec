@@ -22,7 +22,7 @@
   grp_curves <- lapply(c("roc", "prc"), grpfunc)
   names(grp_curves)<- c("rocs", "prcs")
 
-  # Summarize AUC
+  # Summarize AUCs
   aucs <- .gather_aucs(lcurves, mdat)
 
   # Summarize average

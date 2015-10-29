@@ -40,7 +40,7 @@ print.curve_info <- function(x, ...) {
 }
 
 #
-# Print the summary of basic performace evaluation measures
+# Print the summary of basic performance evaluation measures
 #
 #' @export
 print.beval_info <- function(x, ...) {

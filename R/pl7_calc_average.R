@@ -35,7 +35,7 @@ calc_avg_basic <- function(epoints, modnames, uniq_modnames, ci_alpha) {
   }
   obj_by_model <- lapply(uniq_modnames, ffunc)
 
-  # Calcualte averages and confidence interval
+  # Calculate averages and confidence interval
   vfunc <- function(i) {
     if (mode == "curve") {
       avgs <- calc_avg_curve(obj_by_model[[i]], x_bins, ci_q)

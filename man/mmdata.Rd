@@ -2,59 +2,78 @@
 % Please edit documentation in R/pl2_create_mmdat.R
 \name{mmdata}
 \alias{mmdata}
-\title{Reformat data for Precision-Recall and ROC evaluation}
+\title{Reformat input data for performance evaluation calculation}
 \usage{
 mmdata(scores, labels, modnames = NULL, dsids = NULL, posclass = NULL,
   na_worst = TRUE, ties_method = "equiv", expd_first = "modnames", ...)
 }
 \arguments{
-\item{scores}{A numeric data of predicted scores. It can be a vector,
-  a matrix, an array, a data frame, or a list.}
+\item{scores}{A numeric dataset of predicted scores. It can be a vector,
+  a matrix, an array, a data frame, or a list. The \code{\link{join_scores}}
+  function can be useful to make scores with multiple datasets.}
 
-\item{labels}{A numeric or factor data of observed labels.
-  It can be a vector, a matrix, an array, a data frame, or a list.}
+\item{labels}{A numeric, character, logical, or factor dataset
+  of observed labels. It can be a vector, a matrix, an array,
+  a data frame, or a list. The \code{\link{join_labels}}
+  function can be useful to make labels with multiple datasets.}
 
-\item{modnames}{A character vector as the names
-  of the models/classifiers.}
+\item{modnames}{A character vector for the names of the models.
+  The \code{evalmod} function automatically generates default names
+  as "m1", "m2", "m3", and so on when it is \code{NULL}.}
 
-\item{dsids}{A numeric vector as dataset IDs.}
+\item{dsids}{A numeric vector for test dataset IDs.
+The \code{evalmod} function automatically generates the default ID
+as \code{1} when it is \code{NULL}.}
 
-\item{na_worst}{A boolean value for controlling the treatment of NAs
-  in the scores.
+\item{posclass}{A scalar value to specify the label of positives
+in \code{labels}. It must be the same data type as \code{labels}.
+For example, \code{posclass = -1} changes the positive label
+from \code{1} to \code{-1} when \code{labels} contains
+\code{1} and \code{-1}. The positive label will be automatically
+detected when \code{posclass} is \code{NULL}.}
+
+\item{na_worst}{A Boolean value for controlling the treatment of NAs
+  in \code{scores}.
   \describe{
     \item{TRUE}{NAs are treated as the highest score}
     \item{FALSE}{NAs are treated as the lowest score}
   }}
 
-\item{ties_method}{A string for controlling tied scores.
-  Ignored if mdat is set.
+\item{ties_method}{A string for controlling ties in \code{scores}.
   \describe{
     \item{"equiv"}{Ties are equivalently ranked}
-    \item{"random"}{Ties are ranked in an incresing order as appeared}
-    \item{"first"}{ Ties are ranked in random order}
+    \item{"first"}{Ties are ranked in an increasing order as appeared}
+    \item{"random"}{ Ties are ranked in random order}
   }}
 
-\item{expd_first}{Indicate which of the two vaiables - model names or dataset IDs
+\item{expd_first}{A string to indicate which of the two variables
+  - model names or test dataset IDs
   should be expanded first when they are automatically generated.
 
   \describe{
     \item{"modnames"}{Model names are expanded first. For example,
-           modnames: c("m1", "m2"), dsids: c(1, 1)
-           when they are automaticlly generated.}
-    \item{"dsids"}{Dataset IDs are expanded first. For example,
-           modnames: c("m1", "m1"), dsids: c(1, 2)
-           when they are automaticlly generated.}
+           The \code{mmdata} function generates \code{modnames} as
+           \code{c("m1", "m2")} and \code{dsids} as \code{c(1, 1)}
+           when two vectors are passed as input,
+           and \code{modnames} and \code{dsids} are unspecified.}
+    \item{"dsids"}{Test dataset IDs are expanded first. For example,
+           The \code{mmdata} function generates \code{modnames} as
+           \code{c("m1", "m1")} and \code{dsids} as \code{c(1, 2)}
+           when two vectors are passed as input,
+           and \code{modnames} and \code{dsids} are unspecified.}
   }}
 
 \item{...}{Not used by this method.}
 }
 \value{
-The \code{mmdata} function returns an \code{mdat} S3 object
-  that contains formatted labels and score ranks.
+The \code{mmdata} function returns an \code{mdat} object
+  that contains formatted labels and score ranks. The object can
+  be used as input data for the \code{\link{evalmod}} function.
 }
 \description{
-The \code{mmdata} function takes predicted scores and lables
-  and returns an \code{mdat} object.
+The \code{mmdata} function takes predicted scores and labels
+  and returns an \code{mdat} object. The \code{\link{evalmod}} function
+  takes an \code{mdat} object as input data to calculate evaluation measures.
 }
 \examples{
 ## Generate an mdat object
@@ -72,7 +91,8 @@ labels <- join_labels(l1, l2)
 mdat2 <- mmdata(scores, labels)
 }
 \seealso{
-\code{\link{join_scores}} and \code{\link{join_labels}}
-  for joining socre and labels.
+\code{\link{evalmod}} for calculation evaluation measures.
+  \code{\link{join_scores}} and \code{\link{join_labels}} for formatting
+  scores and labels with multiple datasets.
 }
 

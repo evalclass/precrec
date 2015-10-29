@@ -102,7 +102,7 @@ test_that("autoplot sspoints", {
                     labels = P10N10$labels)
   ap3_test_basic_measures(points)
   ap3_test_basic_measures(points, type = "l")
-  ap3_test_basic_measures(points, type = "p+l")
+  ap3_test_basic_measures(points, type = "b")
 })
 
 test_that("autoplot for multiple sspoints returns grob", {
@@ -129,7 +129,7 @@ test_that("autoplot mspoints", {
 
   ap3_test_basic_measures(points)
   ap3_test_basic_measures(points, type = "l")
-  ap3_test_basic_measures(points, type = "p+l")
+  ap3_test_basic_measures(points, type = "b")
   ap3_test_basic_measures(points, show_legend = TRUE)
 })
 
@@ -155,7 +155,7 @@ test_that("autoplot smpoints", {
 
   ap3_test_basic_measures(points)
   ap3_test_basic_measures(points, type = "l")
-  ap3_test_basic_measures(points, type = "p+l")
+  ap3_test_basic_measures(points, type = "b")
   ap3_test_basic_measures(points, show_ci = FALSE)
 
   points2 <- ap3_create_mmpoints(raw_curves = TRUE)
@@ -184,7 +184,7 @@ test_that("autoplot mmpoints", {
 
   ap3_test_basic_measures(points)
   ap3_test_basic_measures(points, type = "l")
-  ap3_test_basic_measures(points, type = "p+l")
+  ap3_test_basic_measures(points, type = "b")
   ap3_test_basic_measures(points, show_ci = TRUE)
   ap3_test_basic_measures(points, show_legend = FALSE)
 

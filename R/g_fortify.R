@@ -64,28 +64,6 @@ fortify.pevals <- function(model, ...) {
                                                    "precision")))
 }
 
-#
-# Convert a roc_curve object to a data frame for ggplot2
-#
-fortify.roc_curve <- function(model, ...) {
-  # === Check package availability  ===
-  .load_ggplot2()
-
-  # === Validate input arguments ===
-  .validate(model)
-
-  # === Prepare a data frame for ggplot2 ===
-  curve_df <- data.frame(x = model[["x"]], y = model[["y"]])
-
-}
-
-#
-# Convert a prc_curve object to a data frame for ggplot2
-#
-fortify.prc_curve <- function(model, ...) {
-  fortify.roc_curve(model, data, ...)
-}
-
 #' @rdname fortify
 #' @export
 fortify.sscurves <- function(model, ...) {
@@ -132,4 +110,3 @@ fortify.smpoints <- function(model, ...) {
 fortify.mmpoints <- function(model, ...) {
   .fortify_common(model, mode = "basic", ...)
 }
-

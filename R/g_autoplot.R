@@ -1,5 +1,5 @@
 #
-#  Plot score distibutions by rank
+#  Plot score distributions by rank
 #
 autoplot.fmdat <- function(object, ...) {
   curve_df <- .prepare_autoplot(object)

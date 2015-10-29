@@ -77,7 +77,7 @@ test_that("plot sspoints", {
 
   ap3_test_basic_measures(points)
   ap3_test_basic_measures(points, type = "l")
-  ap3_test_basic_measures(points, type = "p+l")
+  ap3_test_basic_measures(points, type = "b")
 })
 
 test_that("plot mspoints", {
@@ -88,7 +88,7 @@ test_that("plot mspoints", {
 
   ap3_test_basic_measures(points)
   ap3_test_basic_measures(points, type = "l")
-  ap3_test_basic_measures(points, type = "p+l")
+  ap3_test_basic_measures(points, type = "b")
   ap3_test_basic_measures(points, show_legend = TRUE)
 })
 
@@ -100,7 +100,7 @@ test_that("plot smpoints", {
 
   ap3_test_basic_measures(points)
   ap3_test_basic_measures(points, type = "l")
-  ap3_test_basic_measures(points, type = "p+l")
+  ap3_test_basic_measures(points, type = "b")
   ap3_test_basic_measures(points, show_ci = FALSE)
 
   points2 <- pt3_create_smpoints(raw_curves = TRUE)
@@ -115,7 +115,7 @@ test_that("plot mmpoints", {
 
   ap3_test_basic_measures(points)
   ap3_test_basic_measures(points, type = "l")
-  ap3_test_basic_measures(points, type = "p+l")
+  ap3_test_basic_measures(points, type = "b")
   ap3_test_basic_measures(points, show_ci = TRUE)
   ap3_test_basic_measures(points, show_legend = FALSE)
 

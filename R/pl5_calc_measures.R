@@ -1,5 +1,5 @@
 #
-# Calculate basic evaluation measurs from confusion matrices
+# Calculate basic evaluation measures from confusion matrices
 #
 calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
 

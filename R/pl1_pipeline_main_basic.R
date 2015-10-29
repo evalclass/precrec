@@ -1,5 +1,5 @@
 #
-# Control the main pipeline iterations for basic evaluation messures
+# Control the main pipeline iterations for basic evaluation measures
 #
 .pl_main_basic <- function(mdat, model_type, dataset_type, class_name_pf,
                            calc_avg = TRUE, ci_alpha = 0.05,
