@@ -7,14 +7,14 @@
 
     # Check if scores and labels are specified
     if(is.null(scores) && !is.null(labels)) {
-      stop("Invalid scores")
+      stop("Invalid scores", call. = FALSE)
     } else if(!is.null(scores) && is.null(labels)) {
-      stop("Invalid labels")
+      stop("Invalid labels", call. = FALSE)
     } else if (is.null(scores) && is.null(labels)) {
       if (is.null(obj)) {
-        stop("Invalid scores & labels")
+        stop("Invalid scores & labels", call. = FALSE)
       } else {
-        stop(paste0(obj_name, " must be specified"))
+        stop(paste0(obj_name, " must be specified"), call. = FALSE)
       }
     }
 
@@ -26,7 +26,7 @@
 
     # Check length of scores and labels
     if (length(labels) != length(scores)) {
-      stop("scores and labels must be of the same length")
+      stop("scores and labels must be the same lengths", call. = FALSE)
     }
 
   } else if (!is.null(obj)) {
@@ -145,8 +145,8 @@
 
     choices = c("equiv", "random", "first")
     if (!(ties_method %in% choices)) {
-      stop(gettextf("ties_method should be one of %s",
-                    paste(dQuote(choices), collapse = ", ")))
+      stop(gettextf("ties_method must be one of %s",
+                    paste(dQuote(choices), collapse = ", ")), call. = FALSE)
     }
   }
 }
@@ -244,7 +244,7 @@
                                    "sensitivity", "precision"), 5)
 
   if (!roc_prc && !basic_eval) {
-    stop("Invalid 'curvetype' value")
+    stop("Invalid curvetype", call. = FALSE)
   }
 
 }

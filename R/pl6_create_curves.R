@@ -169,9 +169,10 @@ create_prc <- function(pevals, scores = NULL, labels = NULL, x_bins = 1000,
   # Check values of class items
   if ((length(obj[["x"]]) != length(obj[["y"]]))
       || (length(obj[["x"]]) != length(obj[["orig_points"]]))) {
-    stop("x, y, and orig_points must be the same length")
+    stop("x, y, and orig_points must be all the same lengths", call. = FALSE)
   } else if (!(length(obj[["x"]]) > 2)) {
-    stop("x, y, and orig_points must be >2")
+    stop("The minimum length of x, y, and orig_points must be 3",
+         call. = FALSE)
   }
 
   # Check values of class attributes

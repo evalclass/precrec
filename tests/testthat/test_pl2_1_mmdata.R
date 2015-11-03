@@ -47,8 +47,7 @@ test_that("'scores' and 'labels' must be specified", {
 
 test_that("'scores' and 'labels' should be the same length", {
   expect_err_msg <- function(scores, labels) {
-    err_msg <- paste0("The number of scores and label lists ",
-                      "should be the same size")
+    err_msg <- paste0("scores and labels must be the same lengths")
     eval(bquote(expect_error(mmdata(scores, labels), err_msg)))
   }
 
@@ -136,7 +135,7 @@ test_that("mmdata() accepts 'ties_method'", {
   expect_equal(attr(mdat[[1]], "args")[["ties_method"]], "first")
 
   expect_err_msg <- function(s1, l1, ties_method) {
-    err_msg <- "ties_method should be one of "
+    err_msg <- "ties_method must be one of "
     eval(bquote(expect_error(mmdata(s1, l1, ties_method = ties_method),
                              err_msg)))
   }
@@ -213,7 +212,7 @@ test_that("mmdata() can take only one 'labels' dataset", {
 
 test_that("All items in 'scores' and 'labels' must be of the same length", {
   expect_err_msg <- function(scores, labels) {
-    err_msg <- "scores and labels must be of the same length"
+    err_msg <- "scores and labels must be the same lengths"
     eval(bquote(expect_error(mmdata(scores, labels), err_msg)))
   }
 

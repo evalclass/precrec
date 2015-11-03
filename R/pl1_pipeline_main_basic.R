@@ -151,7 +151,8 @@
 
   # Check points
   if (!is(points, class_name)) {
-    stop(paste0(class_name, " object created by .pl_main_basic() expected"))
+    stop(paste0(class_name, " created by .pl_main_basic() expected"),
+         call. = FALSE)
   }
 
   attr(points, "validated") <- TRUE

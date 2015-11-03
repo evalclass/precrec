@@ -45,7 +45,7 @@ test_that("All vectors should have the same length", {
   expect_equal(length(s[[1]]), 2)
   expect_equal(length(s[[2]]), 2)
 
-  err_msg <- "All vectors must be of the same size"
+  err_msg <- "All vectors must be the same lengths"
   expect_error(join_scores(vec1, vec3), err_msg)
 })
 
@@ -53,7 +53,7 @@ test_that("Checking vector lenght is ignore when 'chklen' is set", {
   vec1 <- c(1, 2)
   vec2 <- c(3, 4, 5)
 
-  err_msg <- "All vectors must be of the same size"
+  err_msg <- "All vectors must be the same lengths"
   expect_error(join_scores(vec1, vec2), err_msg)
 
   s <- join_scores(vec1, vec2, chklen = FALSE)

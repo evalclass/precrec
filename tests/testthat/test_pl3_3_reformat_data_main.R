@@ -25,7 +25,7 @@ test_that("'scores' and 'labels' must be specified", {
 
 test_that("'scores' and 'labels' should be the same length", {
   expect_err_msg <- function(scores, labels) {
-    err_msg <- "scores and labels must be of the same length"
+    err_msg <- "scores and labels must be the same lengths"
     eval(bquote(expect_error(reformat_data(scores, labels), err_msg)))
   }
 

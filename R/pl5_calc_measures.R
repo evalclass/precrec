@@ -58,7 +58,7 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
       || length(pb[["specificity"]]) != n
       || length(pb[["sensitivity"]]) != n
       || length(pb[["precision"]]) != n) {
-    stop("All evaluation vectors must be the same length")
+    stop("Evaluation vectors must be all the same lengths", call. = FALSE)
   }
 
   # Error rate

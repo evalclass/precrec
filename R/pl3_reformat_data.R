@@ -96,7 +96,8 @@ reformat_data <- function(scores, labels,
   # Check '...'
   arglist <- list(...)
   if (!is.null(names(arglist))){
-    stop(paste("Invalid arguments:", paste(names(arglist), collapse = ", ")))
+    stop(paste0("Invalid arguments: ", paste(names(arglist), collapse = ", ")),
+         call. = FALSE)
   }
 
   # Check scores and labels
@@ -139,7 +140,7 @@ reformat_data <- function(scores, labels,
   if (length(fmdat[["labels"]]) == 0
       || length(fmdat[["labels"]]) != length(fmdat[["ranks"]])
       || length(fmdat[["labels"]]) != length(fmdat[["rank_idx"]])) {
-    stop("Items in 'fmdat' must be of the same length")
+    stop("List items in fmdat must be all the same lengths", call. = FALSE)
   }
 
   # Labels

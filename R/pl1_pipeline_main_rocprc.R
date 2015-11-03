@@ -137,7 +137,8 @@
 
   # Check curves
   if (!is(curves, class_name)) {
-    stop(paste0(class_name, " object created by .pl_main_rocprc() expected"))
+    stop(paste0(class_name, " object created by .pl_main_rocprc() expected"),
+         call. = FALSE)
   }
 
   attr(curves, "validated") <- TRUE

@@ -59,7 +59,8 @@ create_confmats <- function(fmdat, scores = NULL, labels = NULL,
   n <- length(cmats[["tp"]])
   if (length(cmats[["fp"]]) != n || length(cmats[["tn"]]) != n
       || length(cmats[["fn"]]) != n) {
-    stop("tp, fp, tn, and fn in 'cmats' must be the same length")
+    stop("tp, fp, tn, and fn in cmats must be all the same lengths",
+         call. = FALSE)
   }
 
   # TP
