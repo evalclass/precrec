@@ -28,7 +28,7 @@ ap3_create_mspoints <- function() {
   evalmod(mdat, mode = "basic")
 }
 
-ap3_create_smpoints <- function() {
+ap3_create_smpoints <- function(raw_curves = FALSE) {
   s1 <- c(1, 2, 3, 4)
   s2 <- c(5, 6, 7, 8)
   s3 <- c(2, 4, 6, 8)
@@ -40,10 +40,10 @@ ap3_create_smpoints <- function() {
   labels <- join_labels(l1, l2, l3)
 
   mdat <- mmdata(scores, labels, expd_first = "dsids")
-  evalmod(mdat, mode = "basic")
+  evalmod(mdat, mode = "basic", raw_curves = raw_curves)
 }
 
-ap3_create_mmpoints <- function() {
+ap3_create_mmpoints <- function(raw_curves = FALSE) {
   s1 <- c(1, 2, 3, 4)
   s2 <- c(5, 6, 7, 8)
   s3 <- c(2, 4, 6, 8)
@@ -58,32 +58,35 @@ ap3_create_mmpoints <- function() {
 
   mdat <- mmdata(scores, labels, modnames = c("m1", "m2"), dsids = c(1, 2),
                  expd_first = "modnames")
-  evalmod(mdat, mode = "basic")
+  evalmod(mdat, mode = "basic", raw_curves = raw_curves)
 }
 
-ap3_test_basic_measures <- function(curves, ...){
-  pp <- ggplot2::autoplot(curves, ...)
+ap3_test_basic_measures <- function(curves, raw_curves = FALSE, ...){
+  pp <- ggplot2::autoplot(curves, raw_curves = raw_curves, ...)
   expect_that(pp, not(throws_error()))
 
-  pp <- ggplot2::autoplot(curves, ...)
-  expect_that(pp, not(throws_error()))
-
-  pp <- ggplot2::autoplot(curves, c("sensitivity", "specificity", "error",
-                                    "accuracy", "precision"), ...)
+  pp <- ggplot2::autoplot(curves, raw_curves = raw_curves, ...)
   expect_that(pp, not(throws_error()))
 
   pp <- ggplot2::autoplot(curves, c("sensitivity", "specificity", "error",
-                                    "precision"), ...)
+                                    "accuracy", "precision"),
+                          raw_curves = raw_curves, ...)
+  expect_that(pp, not(throws_error()))
+
+  pp <- ggplot2::autoplot(curves, c("sensitivity", "specificity", "error",
+                                    "precision"),
+                          raw_curves = raw_curves, ...)
   expect_that(pp, not(throws_error()))
 
   pp <- ggplot2::autoplot(curves, c("sensitivity", "specificity", "precision"),
-                          ...)
+                          raw_curves = raw_curves, ...)
   expect_that(pp, not(throws_error()))
 
-  pp <- ggplot2::autoplot(curves, c("sensitivity", "precision"), ...)
+  pp <- ggplot2::autoplot(curves, c("sensitivity", "precision"),
+                          raw_curves = raw_curves, ...)
   expect_that(pp, not(throws_error()))
 
-  pp <- ggplot2::autoplot(curves, "precision", ...)
+  pp <- ggplot2::autoplot(curves, "precision", raw_curves = raw_curves, ...)
   expect_that(pp, not(throws_error()))
 }
 
@@ -99,7 +102,7 @@ test_that("autoplot sspoints", {
                     labels = P10N10$labels)
   ap3_test_basic_measures(points)
   ap3_test_basic_measures(points, type = "l")
-  ap3_test_basic_measures(points, type = "p+l")
+  ap3_test_basic_measures(points, type = "b")
 })
 
 test_that("autoplot for multiple sspoints returns grob", {
@@ -126,7 +129,7 @@ test_that("autoplot mspoints", {
 
   ap3_test_basic_measures(points)
   ap3_test_basic_measures(points, type = "l")
-  ap3_test_basic_measures(points, type = "p+l")
+  ap3_test_basic_measures(points, type = "b")
   ap3_test_basic_measures(points, show_legend = TRUE)
 })
 
@@ -152,9 +155,11 @@ test_that("autoplot smpoints", {
 
   ap3_test_basic_measures(points)
   ap3_test_basic_measures(points, type = "l")
-  ap3_test_basic_measures(points, type = "p+l")
+  ap3_test_basic_measures(points, type = "b")
   ap3_test_basic_measures(points, show_ci = FALSE)
-  ap3_test_basic_measures(points, raw_curves = TRUE)
+
+  points2 <- ap3_create_mmpoints(raw_curves = TRUE)
+  ap3_test_basic_measures(points2, raw_curves = TRUE)
 })
 
 test_that("autoplot for multiple smpoints returns grob", {
@@ -179,10 +184,12 @@ test_that("autoplot mmpoints", {
 
   ap3_test_basic_measures(points)
   ap3_test_basic_measures(points, type = "l")
-  ap3_test_basic_measures(points, type = "p+l")
+  ap3_test_basic_measures(points, type = "b")
   ap3_test_basic_measures(points, show_ci = TRUE)
-  ap3_test_basic_measures(points, raw_curves = TRUE)
   ap3_test_basic_measures(points, show_legend = FALSE)
+
+  points2 <- ap3_create_mmpoints(raw_curves = TRUE)
+  ap3_test_basic_measures(points2, raw_curves = TRUE)
 })
 
 

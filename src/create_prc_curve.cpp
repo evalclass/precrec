@@ -42,7 +42,7 @@ Rcpp::List create_prc_curve(const Rcpp::NumericVector& tps,
     return ret_val;
   }
 
-  // Calcualte Precision-Recall points
+  // Calculate Precision-Recall points
   for (int i = 0; i < sn.size(); ++i) {
     if ((i != 0) && (sn[i] == sn[i-1])  && (pr[i] == pr[i-1])) {
       continue;

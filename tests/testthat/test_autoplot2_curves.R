@@ -28,7 +28,7 @@ ap2_create_mscurves <- function() {
   evalmod(mdat)
 }
 
-ap2_create_smcurves <- function() {
+ap2_create_smcurves <- function(raw_curves = FALSE) {
   s1 <- c(1, 2, 3, 4)
   s2 <- c(5, 6, 7, 8)
   s3 <- c(2, 4, 6, 8)
@@ -40,10 +40,10 @@ ap2_create_smcurves <- function() {
   labels <- join_labels(l1, l2, l3)
 
   mdat <- mmdata(scores, labels, expd_first = "dsids")
-  evalmod(mdat)
+  evalmod(mdat, raw_curves = raw_curves)
 }
 
-ap2_create_mmcurves <- function() {
+ap2_create_mmcurves <- function(raw_curves = FALSE) {
   s1 <- c(1, 2, 3, 4)
   s2 <- c(5, 6, 7, 8)
   s3 <- c(2, 4, 6, 8)
@@ -58,7 +58,7 @@ ap2_create_mmcurves <- function() {
 
   mdat <- mmdata(scores, labels, modnames = c("m1", "m2"), dsids = c(1, 2),
                  expd_first = "modnames")
-  evalmod(mdat)
+  evalmod(mdat, raw_curves = raw_curves)
 }
 
 ap2_test_roc_prc <- function(curves, ...){
@@ -135,7 +135,9 @@ test_that("autoplot single smcurve", {
 
   ap2_test_roc_prc(curves)
   ap2_test_roc_prc(curves, show_ci = FALSE)
-  ap2_test_roc_prc(curves, raw_curves = TRUE)
+
+  curves2 <- ap2_create_smcurves(raw_curves = TRUE)
+  ap2_test_roc_prc(curves2, raw_curves = TRUE)
 })
 
 test_that("autoplot for multiple smcurves retruns grob", {
@@ -159,8 +161,11 @@ test_that("autoplot mmcurves", {
 
   ap2_test_roc_prc(curves)
   ap2_test_roc_prc(curves, show_ci = TRUE)
-  ap2_test_roc_prc(curves, raw_curves = TRUE)
   ap2_test_roc_prc(curves, show_legend = FALSE)
+
+  curves2 <- ap2_create_smcurves(raw_curves = TRUE)
+  ap2_test_roc_prc(curves2, raw_curves = TRUE)
+
 })
 
 test_that("autoplot multiple mmcurves returns grob", {

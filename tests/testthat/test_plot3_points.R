@@ -18,7 +18,7 @@ pt3_create_mspoints <- function() {
   evalmod(mdat, mode = "basic")
 }
 
-pt3_create_smpoints <- function() {
+pt3_create_smpoints <- function(raw_curves = FALSE) {
   s1 <- c(1, 2, 3, 4)
   s2 <- c(5, 6, 7, 8)
   s3 <- c(2, 4, 6, 8)
@@ -30,10 +30,10 @@ pt3_create_smpoints <- function() {
   labels <- join_labels(l1, l2, l3)
 
   mdat <- mmdata(scores, labels, expd_first = "dsids")
-  evalmod(mdat, mode = "basic")
+  evalmod(mdat, mode = "basic", raw_curves = raw_curves)
 }
 
-pt3_create_mmpoints <- function() {
+pt3_create_mmpoints <- function(raw_curves = FALSE) {
   s1 <- c(1, 2, 3, 4)
   s2 <- c(5, 6, 7, 8)
   s3 <- c(2, 4, 6, 8)
@@ -48,7 +48,7 @@ pt3_create_mmpoints <- function() {
 
   mdat <- mmdata(scores, labels, modnames = c("m1", "m2"), dsids = c(1, 2),
                  expd_first = "modnames")
-  evalmod(mdat, mode = "basic")
+  evalmod(mdat, mode = "basic", raw_curves = raw_curves)
 }
 
 ap3_test_basic_measures <- function(points, ...){
@@ -77,7 +77,7 @@ test_that("plot sspoints", {
 
   ap3_test_basic_measures(points)
   ap3_test_basic_measures(points, type = "l")
-  ap3_test_basic_measures(points, type = "p+l")
+  ap3_test_basic_measures(points, type = "b")
 })
 
 test_that("plot mspoints", {
@@ -88,7 +88,7 @@ test_that("plot mspoints", {
 
   ap3_test_basic_measures(points)
   ap3_test_basic_measures(points, type = "l")
-  ap3_test_basic_measures(points, type = "p+l")
+  ap3_test_basic_measures(points, type = "b")
   ap3_test_basic_measures(points, show_legend = TRUE)
 })
 
@@ -100,9 +100,11 @@ test_that("plot smpoints", {
 
   ap3_test_basic_measures(points)
   ap3_test_basic_measures(points, type = "l")
-  ap3_test_basic_measures(points, type = "p+l")
+  ap3_test_basic_measures(points, type = "b")
   ap3_test_basic_measures(points, show_ci = FALSE)
-  ap3_test_basic_measures(points, raw_curves = TRUE)
+
+  points2 <- pt3_create_smpoints(raw_curves = TRUE)
+  ap3_test_basic_measures(points2, raw_curves = TRUE)
 })
 
 test_that("plot mmpoints", {
@@ -113,8 +115,10 @@ test_that("plot mmpoints", {
 
   ap3_test_basic_measures(points)
   ap3_test_basic_measures(points, type = "l")
-  ap3_test_basic_measures(points, type = "p+l")
+  ap3_test_basic_measures(points, type = "b")
   ap3_test_basic_measures(points, show_ci = TRUE)
-  ap3_test_basic_measures(points, raw_curves = TRUE)
   ap3_test_basic_measures(points, show_legend = FALSE)
+
+  points2 <- pt3_create_mmpoints(raw_curves = TRUE)
+  ap3_test_basic_measures(points2, raw_curves = TRUE)
 })

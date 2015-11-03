@@ -2,7 +2,7 @@
 % Please edit documentation in R/etc_create_samples.R
 \name{create_sim_samples}
 \alias{create_sim_samples}
-\title{Create random samples for simulation}
+\title{Create random samples for simulations}
 \usage{
 create_sim_samples(n_repeat, np, nn, score_names = "random")
 }
@@ -13,7 +13,7 @@ create_sim_samples(n_repeat, np, nn, score_names = "random")
 
 \item{nn}{The number of negatives in a sample.}
 
-\item{score_names}{A character vector with the names of
+\item{score_names}{A character vector for the names of
   the following performance levels.
   \describe{
     \item{"random"}{Random}
@@ -29,7 +29,7 @@ The \code{create_sim_samples} function returns a list
   with the following items.
   \itemize{
     \item scores: a list of numeric vectors
-    \item labels: a integer vector
+    \item labels: an integer vector
     \item modnames: a character vector of the model names
     \item dsids: a character vector of the dataset IDs
   }
@@ -40,15 +40,19 @@ The \code{create_sim_samples} function generates random samples
 }
 \examples{
 ## Create a set of samples with 10 positives and 10 negatives
-## for the random perforamance level
+## for the random performance level
 samps1 <- create_sim_samples(1, 10, 10, "random")
 
 ## Create two sets of samples with 10 positives and 20 negatives
-## for the random and the poor early retrieval perforamance levels
+## for the random and the poor early retrieval performance levels
 samps2 <- create_sim_samples(2, 10, 20, c("random", "poor_er"))
 
 ## Create 3 sets of samples with 5 positives and 5 negatives
 ## for all 5 levels
 samps3 <- create_sim_samples(3, 5, 5, "all")
+}
+\seealso{
+\code{\link{mmdata}} for formatting input data.
+  \code{\link{evalmod}} for calculation evaluation measures.
 }
 

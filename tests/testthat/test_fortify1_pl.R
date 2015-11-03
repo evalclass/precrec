@@ -49,29 +49,3 @@ test_that("fortify pevals", {
   curve_df <- ggplot2::fortify(pevals)
   expect_true(is.list(curve_df))
 })
-
-test_that("fortify roc_curve", {
-  if (!ft1_check_libs()) {
-    skip("Libraries cannot be loaded")
-  }
-
-  data(B500)
-  roc_curve <- create_roc(scores = P10N10$scores,
-                          labels = P10N10$labels)
-
-  curve_df <- ggplot2::fortify(roc_curve)
-  expect_true(is.list(curve_df))
-})
-
-test_that("fortify prc_curve", {
-  if (!ft1_check_libs()) {
-    skip("Libraries cannot be loaded")
-  }
-
-  data(B500)
-  prc_curve <- create_prc(scores = P10N10$scores,
-                          labels = P10N10$labels)
-
-  curve_df <- ggplot2::fortify(prc_curve)
-  expect_true(is.list(curve_df))
-})

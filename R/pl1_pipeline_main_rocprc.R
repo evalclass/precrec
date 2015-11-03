@@ -14,23 +14,38 @@
   }
   lcurves <- lapply(seq_along(mdat), plfunc)
 
-  # Group curves by line type
+  # Summarize curves by line type
   grpfunc <- function(lt) {
-    .group_curves(lcurves, lt, "crvgrp", mdat, dataset_type,
-                  calc_avg, ci_alpha, x_bins)
+    .summarize_curves(lcurves, lt, "crvgrp", mdat, dataset_type,
+                      calc_avg, ci_alpha, x_bins)
   }
   grp_curves <- lapply(c("roc", "prc"), grpfunc)
   names(grp_curves)<- c("rocs", "prcs")
 
-  # Summarize AUC
-  aucs <- .group_aucs(lcurves, mdat)
+  # Summarize AUCs
+  aucs <- .gather_aucs(lcurves, mdat)
+
+  # Summarize average
+  grpfunc2 <- function(lt) {
+    attr(grp_curves[[lt]], "avgcurves")
+  }
+  grp_avg <- lapply(names(grp_curves), grpfunc2)
+  names(grp_avg)<- names(grp_curves)
 
   # === Create an S3 object ===
+  if (dataset_type == "multiple" && calc_avg && !raw_curves) {
+    grpfunc3 <- function(lt) {
+      .summarize_curves(NULL, lt, "crvgrp", mdat, NULL, NULL, NULL, NULL)
+    }
+    grp_curves <- lapply(c("roc", "prc"), grpfunc3)
+    names(grp_curves)<- c("rocs", "prcs")
+  }
   s3obj <- structure(grp_curves, class = c(paste0(class_name_pf, "curves"),
                                            "curve_info"))
 
   # Set attributes
   attr(s3obj, "aucs") <- aucs
+  attr(s3obj, "grp_avg") <- grp_avg
   attr(s3obj, "data_info") <- attr(mdat, "data_info")
   attr(s3obj, "uniq_modnames") <- attr(mdat, "uniq_modnames")
   attr(s3obj, "uniq_dsids") <- attr(mdat, "uniq_dsids")
@@ -49,20 +64,26 @@
 #
 # Get ROC or Precision-Recall curves from curves
 #
-.group_curves <- function(lcurves, curve_type, class_name, mdat,
-                          dataset_type, calc_avg, ci_alpha, x_bins) {
+.summarize_curves <- function(lcurves, curve_type, class_name, mdat,
+                              dataset_type, calc_avg, ci_alpha, x_bins) {
 
-  # Group ROC or PRC curves
-  mc <- lapply(seq_along(lcurves), function(s) lcurves[[s]][[curve_type]])
+  if (!is.null(lcurves)) {
+    # Summarize ROC or PRC curves
+    mc <- lapply(seq_along(lcurves), function(s) lcurves[[s]][[curve_type]])
 
-  # Calculate the average curves
-  if (dataset_type == "multiple" && calc_avg) {
-    modnames <- attr(mdat, "data_info")[["modnames"]]
-    uniq_modnames <- attr(mdat, "uniq_modnames")
-    avgcurves <- calc_avg_rocprc(mc, modnames, uniq_modnames, ci_alpha, x_bins)
+    # Calculate the average curves
+    if (dataset_type == "multiple" && calc_avg) {
+      modnames <- attr(mdat, "data_info")[["modnames"]]
+      uniq_modnames <- attr(mdat, "uniq_modnames")
+      avgcurves <- calc_avg_rocprc(mc, modnames, uniq_modnames, ci_alpha, x_bins)
+    } else {
+      avgcurves <- NA
+    }
   } else {
+    mc <- NA
     avgcurves <- NA
   }
+
 
   # === Create an S3 object ===
   s3obj <- structure(mc, class = class_name)
@@ -84,9 +105,9 @@
 #
 # Get AUCs
 #
-.group_aucs <- function(lcurves, mdat) {
+.gather_aucs <- function(lcurves, mdat) {
 
-  # Group AUC of ROC or PRC curves
+  # Collect AUCs of ROC or PRC curves
   ct_len <- 2
   modnames <- attr(mdat, "data_info")[["modnames"]]
   dsids <- attr(mdat, "data_info")[["dsids"]]
