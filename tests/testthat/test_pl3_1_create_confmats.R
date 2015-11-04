@@ -1,6 +1,6 @@
 library(precrec)
 
-context("PL 4: Create confusion matrices")
+context("PL 3: Create confusion matrices")
 # Test create_confmats(fmdat, scores, labels)
 
 test_that("create_confmats() reterns a 'cmats' object", {

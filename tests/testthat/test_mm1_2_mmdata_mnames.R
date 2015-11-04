@@ -1,6 +1,6 @@
 library(precrec)
 
-context("PL 2: Create model names")
+context("MM 1: Create model names")
 # Test .pmatch_expd_first(val),
 #      .create_modnames(dlen, modnames, dsids, expd_first)
 

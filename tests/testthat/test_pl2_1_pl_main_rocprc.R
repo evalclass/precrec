@@ -1,6 +1,6 @@
 library(precrec)
 
-context("PL 1: Pipeline main for ROC and Precision-Recall")
+context("PL 2: Pipeline main for ROC and Precision-Recall")
 # Test .make_prefix(model_type, data_type), and
 #      .pl_main_rocprc(mdat, x_bins)
 

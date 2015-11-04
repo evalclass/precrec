@@ -284,7 +284,7 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
 
   # Chekc the length of modnames and dsids
   if (length(modnames) != length(dsids)) {
-    stop("modnames and dsids must be the same lengths", , call. = FALSE)
+    stop("modnames and dsids must be the same lengths", call. = FALSE)
   }
 
 }
@@ -314,6 +314,22 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   # Check values of class items
   if (length(mdat) != nrow(attr(mdat, "data_info"))) {
     stop("Invalid modnames and dsids", call. = FALSE)
+  }
+
+  # Chekc data consistency among the same dsids
+  dsid_nn <- list()
+  dsid_np <- list()
+  for (i in seq_along(mdat)) {
+    # Check nn and np for the same dsids
+    nn <- attr(mdat[[i]], "nn")
+    np <- attr(mdat[[i]], "np")
+    dsid_chr <- as.character(attr(mdat[[i]], "dsid"))
+    if (is.null(dsid_nn[[dsid_chr]])) {
+      dsid_nn[[dsid_chr]] <- nn
+      dsid_np[[dsid_chr]] <- np
+    } else if (dsid_nn[[dsid_chr]] != nn || dsid_np[[dsid_chr]] != np) {
+      stop(paste0("Inconsistent labels for dsid: ", dsid_chr), call. = FALSE)
+    }
   }
 
   attr(mdat, "validated") <- TRUE

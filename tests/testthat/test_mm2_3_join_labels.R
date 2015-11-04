@@ -1,6 +1,6 @@
 library(precrec)
 
-context("PL 2: Join label datasets")
+context("MM 2: Join label datasets")
 # Test join_labels(..., byrow, chklen)
 
 test_that("join_labels() combines muliple label datasets", {

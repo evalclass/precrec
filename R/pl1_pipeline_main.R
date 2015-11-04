@@ -2,10 +2,12 @@
 # Control the main pipeline iterations
 #
 pl_main <- function(mdat, mode = "rocprc", calc_avg = TRUE, ci_alpha = 0.05,
-                    raw_curves = FALSE, x_bins = 1000) {
+                    raw_curves = FALSE, x_bins = 1000, validate = TRUE) {
 
   # === Validation ===
-  .validate_pl_main_args(mdat, calc_avg, ci_alpha, raw_curves, x_bins)
+  if (validate) {
+    .validate_pl_main_args(mdat, calc_avg, ci_alpha, raw_curves, x_bins)
+  }
 
   # Create model_type and dataset_type
   model_type <- .get_single_or_multiple(mdat, "uniq_modnames")

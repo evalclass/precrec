@@ -1,6 +1,6 @@
 library(precrec)
 
-context("PL 2: Join datasets")
+context("MM 2: Join datasets")
 # Test .join_datasets(..., efunc_vtype, efunc_nrow, byrow)
 
 test_that(".join_datasets() returns a list", {

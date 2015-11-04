@@ -32,8 +32,7 @@ reformat_data <- function(scores, labels,
   attr(s3obj, "nn") <- fmtlabs[["nn"]]
   attr(s3obj, "np") <- fmtlabs[["np"]]
   attr(s3obj, "args") <- list(na_worst = na_worst, ties_method = ties_method,
-                              modname = modname,
-                              dsid = dsid)
+                              modname = modname, dsid = dsid)
   attr(s3obj, "validated") <- FALSE
 
   # Call .validate.fmdat()
@@ -58,6 +57,11 @@ reformat_data <- function(scores, labels,
     posclass <- which(lv == posclass)
   }
 
+  # Check the data type of posclass
+  if (!is.na(posclass) && typeof(posclass) != typeof(labels[1])) {
+    stop("posclass must be the same data type as labels", call. = FALSE)
+  }
+
   # === Generate label factors ===
   flabels <- format_labels(labels, posclass)
   .check_cpp_func_error(flabels, "format_labels")
@@ -73,7 +77,7 @@ reformat_data <- function(scores, labels,
 
   # === Validate input arguments ===
   if (validate) {
-    .validate_scores((scores))
+    .validate_scores(scores)
     .validate_na_worst(na_worst)
     .validate_ties_method(ties_method)
   }

@@ -1,6 +1,6 @@
 library(precrec)
 
-context("PL 2: Create mmdata")
+context("MM 1: Create mmdata")
 # Test .pmatch_tiesmethod(val),
 #      mmdata(scores, labels, modnames, dsids,
 #             na_worst, ties_method, ...)
@@ -21,7 +21,7 @@ test_that("mmdata() returns an 'mdat' object", {
   s3 <- c(2, 4, 6, 8)
   scores <- join_scores(s1, s2, s3)
 
-  l1 <- c(1, 0, 1, 1)
+  l1 <- c(1, 0, 1, 0)
   l2 <- c(1, 1, 0, 0)
   l3 <- c(0, 1, 0, 1)
   labels <- join_labels(l1, l2, l3)
@@ -57,7 +57,7 @@ test_that("'scores' and 'labels' should be the same length", {
   scores <- join_scores(s1, s2, s3)
 
   l1 <- c(1, 0, 1, 1)
-  l2 <- c(1, 1, 0, 0)
+  l2 <- c(1, 1, 0, 1)
   labels <- join_labels(l1, l2)
 
   expect_err_msg(scores, labels)
@@ -152,7 +152,7 @@ test_that("mmdata() accepts 'expd_first", {
 
   l1 <- c(1, 0, 1, 1)
   l2 <- c(1, 1, 0, 1)
-  l3 <- c(0, 1, 0, 1)
+  l3 <- c(0, 1, 1, 1)
   labels <- join_labels(l1, l2, l3)
 
   dlen <- 3
@@ -179,7 +179,7 @@ test_that("'mdat' contains a list with 3 items", {
   s3 <- c(2, 4, 6, 8)
   scores <- join_scores(s1, s2, s3)
 
-  l1 <- c(1, 0, 1, 1)
+  l1 <- c(1, 0, 1, 0)
   l2 <- c(1, 1, 0, 0)
   l3 <- c(0, 1, 0, 1)
   labels <- join_labels(l1, l2, l3)
@@ -228,6 +228,3 @@ test_that("All items in 'scores' and 'labels' must be of the same length", {
 
   expect_err_msg(scores, labels)
 })
-
-
-

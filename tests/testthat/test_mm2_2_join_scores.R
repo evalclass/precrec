@@ -1,6 +1,6 @@
 library(precrec)
 
-context("PL 2: Join score datasets")
+context("MM 2: Join score datasets")
 # Test join_scores(..., byrow, chklen)
 
 test_that("join_scores() combines muliple score datasets", {

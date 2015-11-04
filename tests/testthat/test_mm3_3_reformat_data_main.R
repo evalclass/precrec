@@ -1,6 +1,6 @@
 library(precrec)
 
-context("PL 3: Reformat input data for evaluation")
+context("MM 3: Reformat input data for evaluation")
 # Test reformat_data(scores, labels,
 #                    na_worst, ties_method, modname)
 

@@ -1,6 +1,6 @@
 library(precrec)
 
-context("PL 5: Calculate evaluation measures")
+context("PL 4: Calculate evaluation measures")
 # Test calc_measures(cmats, scores, labels)
 
 test_that("calc_measures() reterns an 'pevals' object", {

@@ -1,6 +1,6 @@
 library(precrec)
 
-context("PL 1: Pipeline main for basic evaluation values")
+context("PL 2: Pipeline main for basic evaluation values")
 # Test .pl_main_basic(mdat, x_bins)
 
 pl1_create_mdat_ms <- function() {

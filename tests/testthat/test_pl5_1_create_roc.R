@@ -1,6 +1,6 @@
 library(precrec)
 
-context("PL 6: Create a ROC curve")
+context("PL 5: Create a ROC curve")
 # Test create_roc(pevals, x.interval, scores, labels)
 
 test_that("create_roc() reterns a 'roc_curve' object", {

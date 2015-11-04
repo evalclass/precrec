@@ -1,6 +1,6 @@
 library(precrec)
 
-context("PL 6: Create ROC and Precision-Recall curves")
+context("PL 5: Create ROC and Precision-Recall curves")
 # Test create_curves(pevals, x.interval, scores, labels)
 
 test_that("create_curves() reterns a 'curves' object", {

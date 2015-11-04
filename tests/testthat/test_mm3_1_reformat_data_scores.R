@@ -1,6 +1,6 @@
 library(precrec)
 
-context("PL 3: Reformat scores for evaluation")
+context("MM 3: Reformat scores for evaluation")
 # Test .rank_scores(scores, na_worst, ties_method)
 
 test_that("rank_scores() reterns a numeric vector", {

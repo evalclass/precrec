@@ -1,6 +1,6 @@
 library(precrec)
 
-context("PL 3: Reformat labels for evaluation")
+context("MM 3: Reformat labels for evaluation")
 # Test .factor_labels(labels)
 
 test_that("factor_labels() reterns a numeric vector", {

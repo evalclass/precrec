@@ -1,6 +1,6 @@
 library(precrec)
 
-context("PL 6: Create a Precision-Recall curve")
+context("PL 5: Create a Precision-Recall curve")
 # Test create_prc(pevals, x.interval, scores, labels)
 
 test_that("create_prc() reterns a 'prc_curve' object", {

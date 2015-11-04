@@ -9,8 +9,8 @@
 #' @param byrow A Boolean value to specify whether row vectors are used
 #'   for matrix, data.frame, and array.
 #'
-#' @param chklen A Boolean value to specify whether all list items should be
-#'   of the same length.
+#' @param chklen A Boolean value to specify whether all list items must be
+#'   the same lengths.
 #'
 #' @return The \code{join_scores} function returns a list that
 #'   contains all combined score data.
@@ -52,8 +52,8 @@ join_scores <- function(..., byrow = FALSE, chklen = TRUE) {
 #' @param byrow A Boolean value to specify whether row vectors are used
 #'   for matrix, data.frame, and array.
 #'
-#' @param chklen A Boolean value to specify whether all list items should be
-#'   of the same length.
+#' @param chklen A Boolean value to specify whether all list items must be
+#'   the same lengths.
 #'
 #' @return The \code{join_labels} function returns a list that
 #'   contains all combined label data.
@@ -92,7 +92,8 @@ join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
 
   # Validate arguments
   .validate_join_datasets_args(..., efunc_vtype = efunc_vtype,
-                               efunc_nrow = efunc_nrow, byrow = byrow)
+                               efunc_nrow = efunc_nrow, byrow = byrow,
+                               chklen = chklen)
 
   # Set a default error function for checking values
   if (is.null(efunc_vtype)) {
@@ -175,7 +176,8 @@ join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
 #
 # Validate arguments of .join_datasets()
 #
-.validate_join_datasets_args <- function(..., efunc_vtype, efunc_nrow, byrow) {
+.validate_join_datasets_args <- function(..., efunc_vtype, efunc_nrow, byrow,
+                                         chklen) {
 
   # Check ...
   arglist <- list(...)
@@ -200,5 +202,9 @@ join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
   # Check byrow
   assertthat::assert_that(assertthat::is.flag(byrow),
                           assertthat::noNA(byrow))
+
+  # Check chklen
+  assertthat::assert_that(assertthat::is.flag(chklen),
+                          assertthat::noNA(chklen))
 
 }
