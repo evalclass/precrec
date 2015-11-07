@@ -27,6 +27,7 @@
 #'   that the \code{evalmod} function calculates.
 #'   \describe{
 #'     \item{"rocprc"}{ROC and Precision-Recall curves}
+#'     \item{"prcroc"}{Same as above}
 #'     \item{"basic"}{Threshold values vs. accuracy, error rate, specificity,
 #'                    sensitivity, or precision}
 #'   }
@@ -189,18 +190,24 @@ evalmod <- function(mdat, mode = "rocprc", scores = NULL, labels = NULL,
                     calc_avg = TRUE, ci_alpha = 0.05, raw_curves = FALSE,
                     x_bins = 1000) {
 
-  .validate_evalmod_args(mode, modnames, dsids, posclass, na_worst, ties_method,
-                         calc_avg, ci_alpha, raw_curves, x_bins)
+  # Validation
+  new_mode <- .pmatch_mode(mode)
+  new_ties_method <- .pmatch_tiesmethod(ties_method)
+  .validate_evalmod_args(new_mode, modnames, dsids, posclass, na_worst,
+                         new_ties_method, calc_avg, ci_alpha, raw_curves,
+                         x_bins)
 
+  # Create mdat if not provided
   if (!missing(mdat)) {
     .validate(mdat)
   } else {
     mdat <- mmdata(scores, labels,
                    modnames = modnames, dsids = dsids, posclass = posclass,
-                   na_worst = na_worst, ties_method = ties_method)
+                   na_worst = na_worst, ties_method = new_ties_method)
   }
 
-  pl_main(mdat, mode = mode, calc_avg = calc_avg, ci_alpha = ci_alpha,
+  # Call pipeline controller
+  pl_main(mdat, mode = new_mode, calc_avg = calc_avg, ci_alpha = ci_alpha,
           raw_curves = raw_curves, x_bins = x_bins, validate = FALSE)
 
 }

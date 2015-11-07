@@ -22,12 +22,15 @@ calc_avg_basic <- function(epoints, modnames, uniq_modnames, ci_alpha) {
                              ci_alpha, x_bins) {
 
   # === Validate input arguments ===
+  if (is.null(x_bins) || is.na(x_bins)) {
+    x_bins <- 1
+  }
   .validate_ci_alpha(ci_alpha)
   .validate_x_bins(x_bins)
 
   # === Summarize curves by by models ===
-  # Quantile of CI
-  ci_q <- qnorm((1.0 - ci_alpha) + (ci_alpha * 0.5))
+  # Z value of confidence bands
+  cb_zval <- qnorm((1.0 - ci_alpha) + (ci_alpha * 0.5))
 
   # Filter curves by model
   ffunc <- function(mname) {
@@ -38,11 +41,11 @@ calc_avg_basic <- function(epoints, modnames, uniq_modnames, ci_alpha) {
   # Calculate averages and confidence interval
   vfunc <- function(i) {
     if (mode == "curve") {
-      avgs <- calc_avg_curve(obj_by_model[[i]], x_bins, ci_q)
+      avgs <- calc_avg_curve(obj_by_model[[i]], x_bins, cb_zval)
       .check_cpp_func_error(avgs, "calc_avg_curve")
 
     } else if (mode == "point") {
-      avgs <- calc_avg_points(obj_by_model[[i]], ci_q)
+      avgs <- calc_avg_points(obj_by_model[[i]], cb_zval)
       .check_cpp_func_error(avgs, "calc_avg_basic")
     }
     avgs[["avg"]]
@@ -54,6 +57,7 @@ calc_avg_basic <- function(epoints, modnames, uniq_modnames, ci_alpha) {
 
   # Set attributes
   attr(s3obj, "uniq_modnames") <- uniq_modnames
+  attr(s3obj, "cb_zval") <- cb_zval
   attr(s3obj, "args") <- list(ci_alpha = ci_alpha,
                               x_bins = x_bins)
   attr(s3obj, "validated") <- FALSE
@@ -73,7 +77,7 @@ calc_avg_basic <- function(epoints, modnames, uniq_modnames, ci_alpha) {
 
   # Validate class items and attributes
   item_names <- NULL
-  attr_names <- c("args", "validated")
+  attr_names <- c("uniq_modnames", "cb_zval", "args", "validated")
   arg_names <- c("ci_alpha", "x_bins")
   .validate_basic(avgobj, class_name, func_name, item_names, attr_names,
                   arg_names)

@@ -35,7 +35,7 @@ test_that("create_confmats() can directly take scores and labels", {
   expect_equal(cmats1, cmats2)
 })
 
-test_that("create_confmats() can take arguments for reformat_data()", {
+test_that("create_confmats() accepts arguments for reformat_data()", {
   err_msg <- "Invalid arguments: na.rm"
   expect_error(create_confmats(scores = c(0.1, 0.2, 0.2, 0),
                                labels = c(1, 0, 1, 1), na.rm = TRUE),
@@ -51,7 +51,7 @@ test_that("create_confmats() can take arguments for reformat_data()", {
   expect_equal(.get_obj_arg(cmats, "fmdat", "ties_method"), "first")
 })
 
-test_that("create_confmats() can take na_worst argument", {
+test_that("create_confmats() accepts na_worst argument", {
   expect_equal_ranks <- function(scores, na_worst, ranks) {
     cmats <- create_confmats(scores = scores,
                              labels = c(1, 0, 1),
@@ -82,7 +82,7 @@ test_that("create_confmats() can take na_worst argument", {
   expect_equal_ranks(na3_scores, FALSE, c(2, 3, 1))
 })
 
-test_that("create_confmats() can take ties_method argument", {
+test_that("create_confmats() accepts ties_method argument", {
 
   expect_equal_ranks <- function(ties_method, ranks) {
     cmats <- create_confmats(scores = c(0.1, 0.2, 0.2, 0.2, 0.3),

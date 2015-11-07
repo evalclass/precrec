@@ -4,7 +4,7 @@
 #' @export
 print.mdat <- function(x, ...) {
   cat("\n")
-  cat("     === Input data ===\n\n")
+  cat("    === Input data ===\n\n")
 
   data_info <- attr(x, "data_info")
   rownames(data_info) <- format(rownames(data_info), width = 4,

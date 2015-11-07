@@ -37,7 +37,7 @@ test_that("calc_measures() can directly take scores and labels", {
   expect_equal(pevals1, pevals2)
 })
 
-test_that("calc_measures() can take arguments for reformat_data()", {
+test_that("calc_measures() accepts arguments for reformat_data()", {
   err_msg <- "Invalid arguments: na.rm"
   expect_error(calc_measures(scores = c(0.1, 0.2, 0.2, 0),
                              labels = c(1, 0, 1, 1), na.rm = TRUE),
@@ -54,7 +54,7 @@ test_that("calc_measures() can take arguments for reformat_data()", {
 })
 
 
-test_that("calc_measures() can take na_worst argument", {
+test_that("calc_measures() accepts na_worst argument", {
   expect_equal_ranks <- function(scores, na_worst, ranks) {
     pevals <- calc_measures(scores = scores,
                             labels = c(1, 0, 1),
@@ -85,7 +85,7 @@ test_that("calc_measures() can take na_worst argument", {
   expect_equal_ranks(na3_scores, FALSE, c(2, 3, 1))
 })
 
-test_that("calc_measures() can take ties_method argument", {
+test_that("calc_measures() accepts ties_method argument", {
 
   expect_equal_ranks <- function(ties_method, ranks) {
     pevals <- calc_measures(scores = c(0.1, 0.2, 0.2, 0.2, 0.3),

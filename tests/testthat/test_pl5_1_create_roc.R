@@ -1,7 +1,7 @@
 library(precrec)
 
 context("PL 5: Create a ROC curve")
-# Test create_roc(pevals, x.interval, scores, labels)
+# Test create_roc(pevals, scores, labels, x_bins)
 
 test_that("create_roc() reterns a 'roc_curve' object", {
   roc_curve1 <- create_roc(scores = c(0.1, 0.2, 0), labels = c(1, 0, 1))
@@ -38,7 +38,7 @@ test_that("create_roc() directly takes scores and labels", {
   expect_equal(roc_curve1[["auc"]], roc_curve2[["auc"]])
 })
 
-test_that("create_roc() can take arguments for reformat_data()", {
+test_that("create_roc() accepts arguments for reformat_data()", {
   err_msg <- "Invalid arguments: na.rm"
   expect_error(create_roc(scores = c(0.1, 0.2, 0.2, 0),
                           labels = c(1, 0, 1, 1), na.rm = TRUE),
@@ -56,7 +56,7 @@ test_that("create_roc() can take arguments for reformat_data()", {
 })
 
 
-test_that("create_roc() can take na_worst argument", {
+test_that("create_roc() accepts na_worst argument", {
   expect_equal_ranks <- function(scores, na_worst, ranks) {
     roc_curve <- create_roc(scores = scores, labels = c(1, 0, 1),
                             na_worst = na_worst,
@@ -89,7 +89,7 @@ test_that("create_roc() can take na_worst argument", {
 
 })
 
-test_that("create_roc() can take ties_method argument", {
+test_that("create_roc() accepts ties_method argument", {
 
   expect_equal_ranks <- function(ties_method, ranks) {
     roc_curve <- create_roc(scores = c(0.1, 0.2, 0.2, 0.2, 0.3),

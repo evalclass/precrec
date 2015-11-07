@@ -84,7 +84,6 @@
     avgcurves <- NA
   }
 
-
   # === Create an S3 object ===
   s3obj <- structure(mc, class = class_name)
 

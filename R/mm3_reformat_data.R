@@ -31,7 +31,8 @@ reformat_data <- function(scores, labels,
   attr(s3obj, "dsid") <- dsid
   attr(s3obj, "nn") <- fmtlabs[["nn"]]
   attr(s3obj, "np") <- fmtlabs[["np"]]
-  attr(s3obj, "args") <- list(na_worst = na_worst, ties_method = ties_method,
+  attr(s3obj, "args") <- list(posclass = posclass, na_worst = na_worst,
+                              ties_method = ties_method,
                               modname = modname, dsid = dsid)
   attr(s3obj, "validated") <- FALSE
 
@@ -136,7 +137,7 @@ reformat_data <- function(scores, labels,
   # Validate class items and attributes
   item_names <- c("labels", "ranks", "rank_idx")
   attr_names <- c("modname", "dsid", "nn", "np", "args", "validated")
-  arg_names <- c("na_worst", "ties_method", "modname", "dsid")
+  arg_names <- c("posclass", "na_worst", "ties_method", "modname", "dsid")
   .validate_basic(fmdat, "fmdat", "reformat_data", item_names, attr_names,
                   arg_names)
 

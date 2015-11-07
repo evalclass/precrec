@@ -1,7 +1,7 @@
 library(precrec)
 
 context("PL 5: Create ROC and Precision-Recall curves")
-# Test create_curves(pevals, x.interval, scores, labels)
+# Test create_curves(pevals, scores, labels, x_bins)
 
 test_that("create_curves() reterns a 'curves' object", {
   curves1 <- create_curves(scores = c(0.1, 0.2, 0), labels = c(1, 0, 1))
@@ -39,7 +39,7 @@ test_that("create_curves() directly takes scores and labels", {
                attr(curves2[["roc"]], "auc"))
 })
 
-test_that("create_curves() can take arguments for reformat_data()", {
+test_that("create_curves() accepts arguments for reformat_data()", {
   err_msg <- "Invalid arguments: na.rm"
   expect_error(create_curves(scores = c(0.1, 0.2, 0.2, 0),
                              labels = c(1, 0, 1, 1), na.rm = TRUE),
@@ -56,7 +56,7 @@ test_that("create_curves() can take arguments for reformat_data()", {
   expect_equal(.get_obj_arg(curves, "fmdat", "ties_method"), "first")
 })
 
-test_that("create_curves() can take na_worst argument", {
+test_that("create_curves() accepts na_worst argument", {
   expect_equal_ranks <- function(scores, na_worst, ranks) {
     curves <- create_curves(scores = scores, labels = c(1, 0, 1),
                             na_worst = na_worst,
@@ -88,7 +88,7 @@ test_that("create_curves() can take na_worst argument", {
 
 })
 
-test_that("create_curves() can take ties_method argument", {
+test_that("create_curves() accepts ties_method argument", {
 
   expect_equal_ranks <- function(ties_method, ranks) {
     curves <- create_curves(scores = c(0.1, 0.2, 0.2, 0.2, 0.3),

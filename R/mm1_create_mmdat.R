@@ -104,9 +104,10 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
                           stringsAsFactors = FALSE)
 
   # === Validate arguments and variables ===
+  new_ties_method <- .pmatch_tiesmethod(ties_method)
   .validate_mmdata_args(lscores, llabels, new_modnames, new_dsids,
                         posclass = posclass,
-                        na_worst = na_worst, ties_method = ties_method,
+                        na_worst = na_worst, ties_method = new_ties_method,
                         expd_first = new_expd_first)
 
   # Replicate labels
@@ -117,7 +118,7 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   # === Reformat input data ===
   func_fmdat <- function(i) {
     reformat_data(lscores[[i]], llabels[[i]], posclass = posclass,
-                  na_worst = na_worst, ties_method = ties_method,
+                  na_worst = na_worst, ties_method = new_ties_method,
                   modname = new_modnames[i], dsid = new_dsids[i], ...)
   }
   mmdat <- lapply(seq_along(lscores), func_fmdat)
@@ -134,7 +135,8 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   attr(s3obj, "data_info") <- data_info
   attr(s3obj, "uniq_modnames") <- unique(new_modnames)
   attr(s3obj, "uniq_dsids") <- unique(new_dsids)
-  attr(s3obj, "args") <- list(na_worst = na_worst,
+  attr(s3obj, "args") <- list(posclass = posclass,
+                              na_worst = na_worst,
                               ties_method = ties_method,
                               expd_first = new_expd_first)
   attr(s3obj, "validated") <- FALSE
@@ -307,7 +309,7 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   item_names <- NULL
   attr_names <- c("data_info", "uniq_modnames", "uniq_dsids", "args",
                   "validated")
-  arg_names <- c("na_worst", "ties_method", "expd_first")
+  arg_names <- c("posclass", "na_worst", "ties_method", "expd_first")
   .validate_basic(mdat, "mdat", "mmdata", item_names, attr_names,
                   arg_names)
 
