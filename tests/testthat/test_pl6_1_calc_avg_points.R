@@ -1,7 +1,7 @@
 library(precrec)
 
 context("PL 6: Calculate average points")
-# Test calc_avg_basic(epoints, modnames, uniq_modnames, ci_alpha)
+# Test calc_avg_basic(epoints, modnames, uniq_modnames, cb_alpha)
 
 pl6_create_mdat_sm <- function() {
   s1 <- c(1, 2, 3, 4)
@@ -34,7 +34,7 @@ pl6_create_mdat_mm <- function() {
                  expd_first = "modnames")
 }
 
-pl6_calc_avg_basic <- function(mdat, eval_type = "err", ci_alpha = 0.05) {
+pl6_calc_avg_basic <- function(mdat, eval_type = "err", cb_alpha = 0.05) {
   eval_names <- list(err = "error",
                      acc = "accuracy",
                      sp = "specificity",
@@ -55,7 +55,7 @@ pl6_calc_avg_basic <- function(mdat, eval_type = "err", ci_alpha = 0.05) {
 
   modnames <- attr(mdat, "data_info")[["modnames"]]
   uniq_modnames <- attr(mdat, "uniq_modnames")
-  avgcurves <- calc_avg_basic(pevals, modnames, uniq_modnames, ci_alpha)
+  avgcurves <- calc_avg_basic(pevals, modnames, uniq_modnames, cb_alpha)
 }
 
 test_that("calc_avg_basic() returns 'avgpoints'", {
@@ -71,4 +71,3 @@ test_that("calc_avg_basic() returns 'avgpoints'", {
   }
 
 })
-

@@ -2,7 +2,7 @@
 # Control the main pipeline iterations for basic evaluation measures
 #
 .pl_main_basic <- function(mdat, model_type, dataset_type, class_name_pf,
-                           calc_avg = TRUE, ci_alpha = 0.05,
+                           calc_avg = TRUE, cb_alpha = 0.05,
                            raw_curves = FALSE) {
 
   # === Create ROC and Precision-Recall curves ===
@@ -16,7 +16,7 @@
   # Summarize points by evaluation measure
   grpfunc <- function(m) {
     .summarize_points(lpoints, m, "pointgrp", mdat, dataset_type,
-                      calc_avg, ci_alpha)
+                      calc_avg, cb_alpha)
   }
   eval_names <- c("error", "accuracy", "specificity", "sensitivity",
                   "precision")
@@ -54,7 +54,7 @@
   attr(s3obj, "model_type") <- model_type
   attr(s3obj, "dataset_type") <- dataset_type
   attr(s3obj, "args") <- list(calc_avg = calc_avg,
-                              ci_alpha = ci_alpha,
+                              cb_alpha = cb_alpha,
                               raw_curves = raw_curves)
   attr(s3obj, "validated") <- FALSE
 
@@ -66,7 +66,7 @@
 # Get evaluation measures at all threshold values by models
 #
 .summarize_points <- function(lpoints, eval_type, class_name, mdat, dataset_type,
-                              calc_avg, ci_alpha) {
+                              calc_avg, cb_alpha) {
 
   if (!is.null(lpoints)) {
     # Summarize basic evaluation measures
@@ -80,7 +80,7 @@
     if (dataset_type == "multiple" && calc_avg) {
       modnames <- attr(mdat, "data_info")[["modnames"]]
       uniq_modnames <- attr(mdat, "uniq_modnames")
-      avgcurves <- calc_avg_basic(pevals, modnames, uniq_modnames, ci_alpha)
+      avgcurves <- calc_avg_basic(pevals, modnames, uniq_modnames, cb_alpha)
     } else {
       avgcurves <- NA
     }
@@ -154,7 +154,7 @@
   attr_names <- c("eval_summary", "grp_avg", "data_info", "uniq_modnames",
                   "uniq_dsids", "model_type", "dataset_type", "args",
                   "validated")
-  arg_names <- c("calc_avg", "ci_alpha", "raw_curves")
+  arg_names <- c("calc_avg", "cb_alpha", "raw_curves")
   .validate_basic(points, class_name, ".pl_main_basic", item_names, attr_names,
                   arg_names)
 

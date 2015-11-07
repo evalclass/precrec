@@ -195,11 +195,11 @@
 }
 
 #
-# Validate ci_alpha
+# Validate cb_alpha
 #
-.validate_ci_alpha <- function(ci_alpha) {
-  if (!is.null(ci_alpha)) {
-    assertthat::assert_that(assertthat::is.number(ci_alpha))
+.validate_cb_alpha <- function(cb_alpha) {
+  if (!is.null(cb_alpha)) {
+    assertthat::assert_that(assertthat::is.number(cb_alpha))
   }
 }
 

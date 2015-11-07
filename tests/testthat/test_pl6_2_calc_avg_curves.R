@@ -1,7 +1,7 @@
 library(precrec)
 
 context("PL 6: Calculate average curves")
-# Test calc_avg_rocprc(epoints, modnames, uniq_modnames, ci_alpha)
+# Test calc_avg_rocprc(epoints, modnames, uniq_modnames, cb_alpha)
 
 pl6_create_mdat_sm <- function() {
   s1 <- c(1, 2, 3, 4)
@@ -34,7 +34,7 @@ pl6_create_mdat_mm <- function() {
                  expd_first = "modnames")
 }
 
-pl6_calc_avg_rocprc <- function(mdat, curvetype = "roc", ci_alpha = 0.05,
+pl6_calc_avg_rocprc <- function(mdat, curvetype = "roc", cb_alpha = 0.05,
                                 x_bins = 10) {
   plfunc <- function(s) {
     cdat <- create_confmats(mdat[[s]])
@@ -47,7 +47,7 @@ pl6_calc_avg_rocprc <- function(mdat, curvetype = "roc", ci_alpha = 0.05,
 
   modnames <- attr(mdat, "data_info")[["modnames"]]
   uniq_modnames <- attr(mdat, "uniq_modnames")
-  avgcurves <- calc_avg_rocprc(mc, modnames, uniq_modnames, ci_alpha, x_bins)
+  avgcurves <- calc_avg_rocprc(mc, modnames, uniq_modnames, cb_alpha, x_bins)
 }
 
 test_that("calc_avg_rocprc() returns 'avgcurves'", {

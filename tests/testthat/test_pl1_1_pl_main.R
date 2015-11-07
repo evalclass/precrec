@@ -3,7 +3,7 @@ library(precrec)
 context("PL 1: Pipeline main")
 # Test .pmatch_mode(val)
 #      .make_prefix(model_type, data_type)
-#      pl_main(mdat, mode, calc_avg, ci_alpha, raw_curves, x_bins)
+#      pl_main(mdat, mode, calc_avg, cb_alpha, raw_curves, x_bins)
 #
 
 test_that(".pmatch_mode() returns 'rocprc' or 'basic'", {
@@ -176,39 +176,39 @@ test_that("pl_main() accepts 'calc_avg'", {
   f_check_calc_avg2(mdat4, "list")
 })
 
-test_that("pl_main() accepts 'ci_alpha'", {
+test_that("pl_main() accepts 'cb_alpha'", {
 
-  f_check_ci_alpha1 <- function(mdat) {
+  f_check_cb_alpha1 <- function(mdat) {
     for (ct in c("rocs", "prcs")) {
-      pl1 <- pl_main(mdat, ci_alpha = 0.05, raw_curves = TRUE)
+      pl1 <- pl_main(mdat, cb_alpha = 0.05, raw_curves = TRUE)
       expect_equal(attr(attr(pl1[[ct]], "avgcurves"), "cb_zval"), 1.96,
                    tolerance = 1e-2)
 
-      pl2 <- pl_main(mdat, ci_alpha = 0.01, raw_curves = TRUE)
+      pl2 <- pl_main(mdat, cb_alpha = 0.01, raw_curves = TRUE)
       expect_equal(attr(attr(pl2[[ct]], "avgcurves"), "cb_zval"), 2.575,
                    tolerance = 1e-3)
     }
   }
 
-  f_check_ci_alpha2 <- function(mdat) {
+  f_check_cb_alpha2 <- function(mdat) {
     for (et in c("err", "acc", "sp", "sn", "prec")) {
-      pl1 <- pl_main(mdat, "basic", ci_alpha = 0.05, raw_curves = TRUE)
+      pl1 <- pl_main(mdat, "basic", cb_alpha = 0.05, raw_curves = TRUE)
       expect_equal(attr(attr(pl1[[et]], "avgcurves"), "cb_zval"), 1.96,
                    tolerance = 1e-2)
 
-      pl2 <- pl_main(mdat, "basic", ci_alpha = 0.01, raw_curves = TRUE)
+      pl2 <- pl_main(mdat, "basic", cb_alpha = 0.01, raw_curves = TRUE)
       expect_equal(attr(attr(pl2[[et]], "avgcurves"), "cb_zval"), 2.575,
                    tolerance = 1e-3)
     }
   }
 
   mdat1 <- pl1_create_mdat_sm()
-  f_check_ci_alpha1(mdat1)
-  f_check_ci_alpha2(mdat1)
+  f_check_cb_alpha1(mdat1)
+  f_check_cb_alpha2(mdat1)
 
   mdat2 <- pl1_create_mdat_mm()
-  f_check_ci_alpha1(mdat2)
-  f_check_ci_alpha2(mdat2)
+  f_check_cb_alpha1(mdat2)
+  f_check_cb_alpha2(mdat2)
 })
 
 test_that("pl_main() accepts 'raw_curves'", {

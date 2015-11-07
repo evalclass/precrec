@@ -2,7 +2,7 @@
 # Control the main pipeline iterations for ROC and Precision-Recall curves
 #
 .pl_main_rocprc <- function(mdat, model_type, dataset_type, class_name_pf,
-                            calc_avg = TRUE, ci_alpha = 0.05, raw_curves = FALSE,
+                            calc_avg = TRUE, cb_alpha = 0.05, raw_curves = FALSE,
                             x_bins = 1000) {
 
   # === Create ROC and Precision-Recall curves ===
@@ -17,7 +17,7 @@
   # Summarize curves by line type
   grpfunc <- function(lt) {
     .summarize_curves(lcurves, lt, "crvgrp", mdat, dataset_type,
-                      calc_avg, ci_alpha, x_bins)
+                      calc_avg, cb_alpha, x_bins)
   }
   grp_curves <- lapply(c("roc", "prc"), grpfunc)
   names(grp_curves)<- c("rocs", "prcs")
@@ -52,7 +52,7 @@
   attr(s3obj, "model_type") <- model_type
   attr(s3obj, "dataset_type") <- dataset_type
   attr(s3obj, "args") <- list(calc_avg = calc_avg,
-                              ci_alpha = ci_alpha,
+                              cb_alpha = cb_alpha,
                               raw_curves = raw_curves,
                               x_bins = x_bins)
   attr(s3obj, "validated") <- FALSE
@@ -65,7 +65,7 @@
 # Get ROC or Precision-Recall curves from curves
 #
 .summarize_curves <- function(lcurves, curve_type, class_name, mdat,
-                              dataset_type, calc_avg, ci_alpha, x_bins) {
+                              dataset_type, calc_avg, cb_alpha, x_bins) {
 
   if (!is.null(lcurves)) {
     # Summarize ROC or PRC curves
@@ -75,7 +75,7 @@
     if (dataset_type == "multiple" && calc_avg) {
       modnames <- attr(mdat, "data_info")[["modnames"]]
       uniq_modnames <- attr(mdat, "uniq_modnames")
-      avgcurves <- calc_avg_rocprc(mc, modnames, uniq_modnames, ci_alpha, x_bins)
+      avgcurves <- calc_avg_rocprc(mc, modnames, uniq_modnames, cb_alpha, x_bins)
     } else {
       avgcurves <- NA
     }
@@ -140,7 +140,7 @@
   attr_names <- c("aucs", "grp_avg", "data_info", "uniq_modnames",
                   "uniq_dsids", "model_type", "dataset_type", "args",
                   "validated")
-  arg_names <- c("calc_avg", "ci_alpha", "raw_curves", "x_bins")
+  arg_names <- c("calc_avg", "cb_alpha", "raw_curves", "x_bins")
   .validate_basic(curves, class_name, ".pl_main_rocprc", item_names, attr_names,
                   arg_names)
 
