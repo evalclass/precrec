@@ -29,7 +29,7 @@ calc_avg_basic <- function(epoints, modnames, uniq_modnames, cb_alpha) {
   .validate_x_bins(x_bins)
 
   # === Summarize curves by by models ===
-  # Z value of confidence bands
+  # Z value of confidence bounds
   cb_zval <- qnorm((1.0 - cb_alpha) + (cb_alpha * 0.5))
 
   # Filter curves by model

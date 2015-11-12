@@ -100,7 +100,7 @@
   shown.}
 
 \item{show_cb}{A Boolean value to specify whether point-wise confidence
-  bands are drawn. It is effective only when \code{calc_avg} is
+  bounds are drawn. It is effective only when \code{calc_avg} is
   set to \code{TRUE} of the \code{\link{evalmod}} function.}
 
 \item{raw_curves}{A Boolean value to specify whether raw curves are

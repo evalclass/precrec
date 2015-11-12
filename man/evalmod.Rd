@@ -85,7 +85,7 @@ detected when \code{posclass} is \code{NULL}.}
   by \code{x_bins}.}
 
 \item{cb_alpha}{A numeric value with range [0, 1] to specify the alpha
-  value of the point-wise confidence bands calculation. It is effective only
+  value of the point-wise confidence bounds calculation. It is effective only
   when \code{calc_avg} is set to \code{TRUE}. For example, it should be
   \code{0.05} for the 95\% confidence level. The calculation points are
   defined by \code{x_bins}.}
