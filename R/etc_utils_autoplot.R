@@ -66,14 +66,14 @@
 #'     \item{"b"}{both lines and points}
 #'   }
 #'
-#' @param show_ci A Boolean value to specify whether confidence intervals are
-#'   drawn. It is effective only when \code{calc_avg} is set to \code{TRUE}
-#'   with the \code{\link{evalmod}} function.
+#' @param show_cb A Boolean value to specify whether point-wise confidence
+#'   bands are drawn. It is effective only when \code{calc_avg} is
+#'   set to \code{TRUE} of the \code{\link{evalmod}} function.
 #'
 #' @param raw_curves A Boolean value to specify whether raw curves are
 #'   shown instead of the average curve. It is effective only
 #'   when \code{raw_curves} is set to \code{TRUE}
-#'   with the \code{\link{evalmod}} function.
+#'   of the \code{\link{evalmod}} function.
 #'
 #' @param show_legend A Boolean value to specify whether the legend is
 #'   shown.
@@ -223,7 +223,7 @@ NULL
 # Plot ROC and Precision-Recall
 #
 .autoplot_multi <- function(object, curvetype = c("ROC", "PRC"), type = "l",
-                            show_ci = FALSE, raw_curves = TRUE,
+                            show_cb = FALSE, raw_curves = TRUE,
                             show_legend = TRUE, add_np_nn = TRUE,
                             ret_grob = FALSE, ...) {
 
@@ -239,7 +239,7 @@ NULL
 
   func_plot <- function(ctype) {
     .autoplot_single(object, curve_df, curvetype = ctype, type = type,
-                     show_ci = show_ci, raw_curves = raw_curves,
+                     show_cb = show_cb, raw_curves = raw_curves,
                      show_legend = show_legend, add_np_nn = add_np_nn, ...)
   }
   lcurves <- lapply(curvetype, func_plot)
@@ -309,7 +309,7 @@ NULL
 # Plot ROC or Precision-Recall
 #
 .autoplot_single <- function(object, curve_df, curvetype = "ROC", type = "l",
-                             show_ci = FALSE, raw_curves = FALSE,
+                             show_cb = FALSE, raw_curves = FALSE,
                              show_legend = FALSE, add_np_nn = TRUE, ...) {
 
   curve_df <- .prepare_autoplot(object, curve_df = curve_df,
@@ -331,7 +331,7 @@ NULL
       p <- p + ggplot2::geom_point()
     }
 
-  } else if (show_ci) {
+  } else if (show_cb) {
     p <- ggplot2::ggplot(curve_df, ggplot2::aes(x = x, y = y,
                                                 ymin = ymin, ymax = ymax))
     if (type == "l") {

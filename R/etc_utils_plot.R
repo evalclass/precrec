@@ -65,14 +65,14 @@
 #'     \item{"b"}{both lines and points}
 #'   }
 #'
-#' @param show_ci A Boolean value to specify whether confidence intervals are
-#'   drawn. It is effective only when \code{calc_avg} is set to \code{TRUE}
-#'   with the \code{\link{evalmod}} function.
+#' @param show_cb A Boolean value to specify whether point-wise confidence
+#'   bands are drawn. It is effective only when \code{calc_avg} is
+#'   set to \code{TRUE} of the \code{\link{evalmod}} function.
 #'
 #' @param raw_curves A Boolean value to specify whether raw curves are
 #'   shown instead of the average curve. It is effective only
 #'   when \code{raw_curves} is set to \code{TRUE}
-#'   with the \code{\link{evalmod}} function.
+#'   of the \code{\link{evalmod}} function.
 #'
 #' @param show_legend A Boolean value to specify whether the legend is
 #'   shown.
@@ -167,7 +167,7 @@ NULL
 # Plot ROC and Precision-Recall
 #
 .plot_multi <- function(x, curvetype = c("ROC", "PRC"), type = "l",
-                        show_ci = FALSE, raw_curves = TRUE, add_np_nn = TRUE,
+                        show_cb = FALSE, raw_curves = TRUE, add_np_nn = TRUE,
                         show_legend = FALSE, ...) {
 
   # === Validate input arguments ===
@@ -184,7 +184,7 @@ NULL
   }
 
   for (ct in curvetype) {
-    .plot_single(x, ct, type = type, show_ci = show_ci,
+    .plot_single(x, ct, type = type, show_cb = show_cb,
                  raw_curves = raw_curves, add_np_nn = add_np_nn,
                  show_legend = show_legend2, ...)
   }
@@ -303,7 +303,7 @@ NULL
 #
 # Plot average line with CI
 #
-.plot_avg <- function(obj, type, curvetype, main, xlab, ylab, show_ci) {
+.plot_avg <- function(obj, type, curvetype, main, xlab, ylab, show_cb) {
   # === Create a plot ===
   grp_avg <- attr(obj, "grp_avg")
   avgcurves <- grp_avg[[curvetype]]
@@ -318,18 +318,18 @@ NULL
   }
 
   for (i in 1:length(avgcurves)) {
-    .add_curve_with_ci(avgcurves, i, "grey", lcols[i], show_ci)
+    .add_curve_with_ci(avgcurves, i, "grey", lcols[i], show_cb)
   }
 }
 
 #
 # Add a curve with CI
 #
-.add_curve_with_ci <- function(avgcurves, idx, pcol, lcol, show_ci) {
+.add_curve_with_ci <- function(avgcurves, idx, pcol, lcol, show_cb) {
   x <- avgcurves[[idx]][["x"]]
   y <- avgcurves[[idx]][["y_avg"]]
 
-  if (show_ci) {
+  if (show_cb) {
     ymin <- avgcurves[[idx]][["y_ci_l"]]
     ymax <- avgcurves[[idx]][["y_ci_h"]]
 
@@ -345,7 +345,7 @@ NULL
 #
 # Plot ROC or Precision-Recall
 #
-.plot_single <- function(x, curvetype, type = type, show_ci = FALSE,
+.plot_single <- function(x, curvetype, type = type, show_cb = FALSE,
                          raw_curves = FALSE, add_np_nn = TRUE,
                          show_legend = TRUE, ...) {
 
@@ -372,7 +372,7 @@ NULL
                      tlist[["ylab"]])
   } else {
     .plot_avg(x, type, tlist[["ctype"]], main, tlist[["xlab"]],
-              tlist[["ylab"]], show_ci)
+              tlist[["ylab"]], show_cb)
   }
 
   if (curvetype == "ROC") {

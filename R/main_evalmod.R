@@ -80,15 +80,14 @@
 #'   by \code{x_bins}.
 #'
 #' @param cb_alpha A numeric value with range [0, 1] to specify the alpha
-#'   value of the confidence interval calculation. It is effective only
+#'   value of the point-wise confidence bands calculation. It is effective only
 #'   when \code{calc_avg} is set to \code{TRUE}. For example, it should be
-#'   \code{0.05} for the 95\% confidence level. The confidence interval is
-#'   calculated as point-wise confidend bands, and the calculation points
-#'   are defined by \code{x_bins}.
+#'   \code{0.05} for the 95\% confidence level. The calculation points are
+#'   defined by \code{x_bins}.
 #'
 #' @param raw_curves A logical value to specify whether all raw curves
 #'   should be discarded after the average curves are calculated.
-#'   It is effective only when \code{calc_avg} is set to \code{TRUE}
+#'   It is effective only when \code{calc_avg} is set to \code{TRUE}.
 #'
 #' @param x_bins A numeric value to specify the number of minimum bins
 #'   on the x-axis. The \code{evalmod} function calculates
