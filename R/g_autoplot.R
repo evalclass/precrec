@@ -68,8 +68,8 @@ autoplot.smcurves <- function(object, curvetype = c("ROC", "PRC"),
                               ret_grob = FALSE, ...) {
 
   .autoplot_multi(object, curvetype = curvetype, show_ci = show_ci,
-                  raw_curves = raw_curves, show_legend = FALSE, add_np_nn = TRUE,
-                  ret_grob = ret_grob)
+                  raw_curves = raw_curves, show_legend = FALSE,
+                  add_np_nn = TRUE, ret_grob = ret_grob)
 }
 
 #' @rdname autoplot
@@ -88,8 +88,7 @@ autoplot.mmcurves <- function(object, curvetype = c("ROC", "PRC"),
 autoplot.sspoints <- function(object,
                               curvetype = c("error", "accuracy", "specificity",
                                             "sensitivity", "precision"),
-                              type = "p",
-                              ret_grob = FALSE, ...) {
+                              type = "p", ret_grob = FALSE, ...) {
 
   .autoplot_multi(object, curvetype = curvetype, type = type,
                   show_ci = FALSE, raw_curves = TRUE,
@@ -117,8 +116,7 @@ autoplot.mspoints <- function(object,
 autoplot.smpoints <- function(object,
                               curvetype = c("error", "accuracy", "specificity",
                                             "sensitivity", "precision"),
-                              type = "p",
-                              show_ci = TRUE, raw_curves = FALSE,
+                              type = "p", show_ci = TRUE, raw_curves = FALSE,
                               ret_grob = FALSE, ...) {
 
   .autoplot_multi(object, curvetype = curvetype, type = type,
@@ -132,8 +130,7 @@ autoplot.smpoints <- function(object,
 autoplot.mmpoints <- function(object,
                               curvetype = c("error", "accuracy", "specificity",
                                             "sensitivity", "precision"),
-                              type = "p",
-                              show_ci = FALSE, raw_curves = FALSE,
+                              type = "p", show_ci = FALSE, raw_curves = FALSE,
                               show_legend = TRUE, ret_grob = FALSE, ...) {
 
   .autoplot_multi(object, curvetype = curvetype, type = type,

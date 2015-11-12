@@ -353,8 +353,8 @@ NULL
   main <- tlist[["main"]]
 
   if (add_np_nn) {
-    np <- attr(x[[tlist[["ctype"]]]][[1]], "np")
-    nn <- attr(x[[tlist[["ctype"]]]][[1]], "nn")
+    np <- attr(x, "data_info")[["np"]][[1]]
+    nn <- attr(x, "data_info")[["nn"]][[1]]
     main <- paste0(main, " - P: ", np, ", N: ", nn)
   }
 

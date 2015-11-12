@@ -35,7 +35,7 @@ pl6_create_mdat_mm <- function() {
 }
 
 pl6_calc_avg_rocprc <- function(mdat, curvetype = "roc", cb_alpha = 0.05,
-                                x_bins = 10) {
+                                x_bins = 4) {
   plfunc <- function(s) {
     cdat <- create_confmats(mdat[[s]])
     pevals <- calc_measures(cdat)
@@ -64,3 +64,94 @@ test_that("calc_avg_rocprc() returns 'avgcurves'", {
 
 })
 
+test_that("sm test data", {
+
+  mdat <- pl6_create_mdat_sm()
+
+  avg_roc <- pl6_calc_avg_rocprc(mdat, "roc")
+  expect_equal(avg_roc[[1]][["x"]], c(0, 0, 0.25, 0.5, 0.75, 1, 1))
+  expect_equal(avg_roc[[1]][["y_avg"]],
+               c(0, 0.6666, 0.6666, 0.6666, 0.6666, 0.6666, 1),
+               tolerance = 1e-3)
+  expect_equal(avg_roc[[1]][["y_se"]],
+               c(0, 0.1924, 0.1924, 0.1924, 0.1924, 0.1924, 0),
+               tolerance = 1e-3)
+  expect_equal(avg_roc[[1]][["y_ci_h"]],
+               c(0, 1, 1, 1, 1, 1, 1),
+               tolerance = 1e-3)
+  expect_equal(avg_roc[[1]][["y_ci_l"]],
+               c(0, 0.2894, 0.2894, 0.2894, 0.2894, 0.2894, 1),
+               tolerance = 1e-3)
+
+  avg_prc <- pl6_calc_avg_rocprc(mdat, "prc")
+  expect_equal(avg_prc[[1]][["x"]], c(0, 0, 0.25, 0.5, 0.75, 1, 1))
+  expect_equal(avg_prc[[1]][["y_avg"]],
+               c(1, 1, 1, 0.8666, 0.7948, 0.8333, 0.75),
+               tolerance = 1e-3)
+  expect_equal(avg_prc[[1]][["y_se"]],
+               c(0, 0, 0, 0.1333, 0.1025, 0.0833, 0),
+               tolerance = 1e-3)
+  expect_equal(avg_prc[[1]][["y_ci_h"]],
+               c(1, 1, 1, 1, 0.9958, 0.9966, 0.75),
+               tolerance = 1e-3)
+  expect_equal(avg_prc[[1]][["y_ci_l"]],
+               c(1, 1, 1, 0.6053, 0.5938, 0.67, 0.75),
+               tolerance = 1e-3)
+
+})
+
+test_that("mm test data", {
+
+  mdat <- pl6_create_mdat_mm()
+
+  avg_roc <- pl6_calc_avg_rocprc(mdat, "roc")
+  avg_prc <- pl6_calc_avg_rocprc(mdat, "prc")
+
+  expect_equal(avg_roc[[1]][["x"]], c(0, 0, 0.25, 0.5, 0.75, 1, 1))
+  expect_equal(avg_roc[[1]][["y_avg"]],
+               c(0, 0.5, 0.5, 0.5, 0.5, 0.5, 1),
+               tolerance = 1e-3)
+  expect_equal(avg_roc[[1]][["y_se"]],
+               c(0, 0.1666, 0.1666, 0.1666, 0.1666, 0.1666, 0),
+               tolerance = 1e-3)
+  expect_equal(avg_roc[[1]][["y_ci_h"]],
+               c(0, 0.8266, 0.8266, 0.8266, 0.8266, 0.8266, 1),
+               tolerance = 1e-3)
+  expect_equal(avg_roc[[1]][["y_ci_l"]],
+               c(0, 0.1733, 0.1733, 0.1733, 0.1733, 0.1733, 1),
+               tolerance = 1e-3)
+
+  expect_equal(avg_prc[[1]][["x"]], c(0, 0, 0.25, 0.5, 0.75, 1, 1))
+  expect_equal(avg_prc[[1]][["y_avg"]], c(1, 1, 1, 0.8, 0.6923, 0.75, 0.75),
+               tolerance = 1e-3)
+  expect_equal(avg_prc[[1]][["y_se"]], c(0, 0, 0, 0.2, 0, 0, 0),
+               tolerance = 1e-3)
+  expect_equal(avg_prc[[1]][["y_ci_h"]], c(1, 1, 1, 1, 0.6923, 0.75, 0.75),
+               tolerance = 1e-3)
+  expect_equal(avg_prc[[1]][["y_ci_l"]], c(1, 1, 1, 0.408, 0.6923, 0.75, 0.75),
+               tolerance = 1e-3)
+
+  expect_equal(avg_roc[[2]][["x"]], c(0, 0, 0.25, 0.5, 0.75, 1, 1))
+  expect_equal(avg_roc[[2]][["y_avg"]],
+               c(0, 0.6666, 0.6666, 0.6666, 0.6666, 0.6666, 1),
+               tolerance = 1e-3)
+  expect_equal(avg_roc[[2]][["y_se"]],
+               c(0, 0.3333, 0.3333, 0.3333, 0.3333, 0.3333, 0),
+               tolerance = 1e-3)
+  expect_equal(avg_roc[[2]][["y_ci_h"]], c(0, 1, 1, 1, 1, 1, 1),
+               tolerance = 1e-3)
+  expect_equal(avg_roc[[2]][["y_ci_l"]],
+               c(0, 0.013333, 0.013333, 0.013333, 0.013333, 0.013333, 1),
+               tolerance = 1e-3)
+
+  expect_equal(avg_prc[[2]][["x"]], c(0, 0, 0.25, 0.5, 0.75, 1, 1))
+  expect_equal(avg_prc[[2]][["y_avg"]], c(1, 1, 1, 0.8, 0.8461, 0.875, 0.75),
+               tolerance = 1e-3)
+  expect_equal(avg_prc[[2]][["y_se"]], c(0, 0, 0, 0.2, 0.1538, 0.125, 0),
+               tolerance = 1e-3)
+  expect_equal(avg_prc[[2]][["y_ci_h"]], c(1, 1, 1, 1, 1, 1, 0.75),
+               tolerance = 1e-3)
+  expect_equal(avg_prc[[2]][["y_ci_l"]], c(1, 1, 1, 0.408, 0.5446, 0.63, 0.75),
+               tolerance = 1e-3)
+
+})

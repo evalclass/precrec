@@ -164,3 +164,164 @@ test_that("create_confmats() handles tied scores 2", {
   expect_equal(cmats[["tp"]], c(0, 0, 0.5, 1, 1.5, 2))
   expect_equal(cmats[["fp"]], c(0, 1, 1.5, 2, 2.5, 3))
 })
+
+pl3_create_ms_dat <- function() {
+  s1 <- c(1, 2, 3, 4)
+  s2 <- c(5, 6, 7, 8)
+  s3 <- c(2, 4, 6, 8)
+  scores <- join_scores(s1, s2, s3)
+
+  l1 <- c(1, 0, 1, 1)
+  l2 <- c(0, 1, 1, 1)
+  l3 <- c(1, 1, 0, 1)
+  labels <- join_labels(l1, l2, l3)
+
+  list(scores = scores, labels = labels)
+}
+
+pl3_create_sm_dat <- function() {
+  s1 <- c(1, 2, 3, 4)
+  s2 <- c(5, 6, 7, 8)
+  s3 <- c(2, 4, 6, 8)
+  scores <- join_scores(s1, s2, s3)
+
+  l1 <- c(1, 0, 1, 1)
+  l2 <- c(0, 1, 1, 1)
+  l3 <- c(1, 1, 0, 1)
+  labels <- join_labels(l1, l2, l3)
+
+  list(scores = scores, labels = labels)
+}
+
+pl3_create_mm_dat <- function() {
+  s1 <- c(1, 2, 3, 4)
+  s2 <- c(5, 6, 7, 8)
+  s3 <- c(2, 4, 6, 8)
+  s4 <- c(2, 4, 6, 8)
+  scores <- join_scores(s1, s2, s3, s4)
+
+  l1 <- c(1, 0, 1, 1)
+  l2 <- c(0, 1, 1, 1)
+  l3 <- c(1, 1, 0, 1)
+  l4 <- c(1, 1, 0, 1)
+  labels <- join_labels(l1, l2, l3, l4)
+
+  list(scores = scores, labels = labels)
+}
+
+test_that("ss test data", {
+  cmats <- create_confmats(scores = c(1, 2, 3, 4),
+                           labels = c(1, 0, 1, 0))
+
+  expect_equal(cmats[["pos_num"]], 2)
+  expect_equal(cmats[["neg_num"]], 2)
+  expect_equal(cmats[["tp"]], c(0, 0, 1, 1, 2))
+  expect_equal(cmats[["fn"]], c(2, 2, 1, 1, 0))
+  expect_equal(cmats[["fp"]], c(0, 1, 1, 2, 2))
+  expect_equal(cmats[["tn"]], c(2, 1, 1, 0, 0))
+
+})
+
+test_that("ms test data", {
+  msdat <- pl3_create_ms_dat()
+
+  cmats1 <- create_confmats(scores = msdat[["scores"]][[1]],
+                            labels = msdat[["labels"]][[1]])
+  expect_equal(cmats1[["pos_num"]], 3)
+  expect_equal(cmats1[["neg_num"]], 1)
+  expect_equal(cmats1[["tp"]], c(0, 1, 2, 2, 3))
+  expect_equal(cmats1[["fn"]], c(3, 2, 1, 1, 0))
+  expect_equal(cmats1[["fp"]], c(0, 0, 0, 1, 1))
+  expect_equal(cmats1[["tn"]], c(1, 1, 1, 0, 0))
+
+  cmats2 <- create_confmats(scores = msdat[["scores"]][[2]],
+                            labels = msdat[["labels"]][[2]])
+  expect_equal(cmats2[["pos_num"]], 3)
+  expect_equal(cmats2[["neg_num"]], 1)
+  expect_equal(cmats2[["tp"]], c(0, 1, 2, 3, 3))
+  expect_equal(cmats2[["fn"]], c(3, 2, 1, 0, 0))
+  expect_equal(cmats2[["fp"]], c(0, 0, 0, 0, 1))
+  expect_equal(cmats2[["tn"]], c(1, 1, 1, 1, 0))
+
+  cmats3 <- create_confmats(scores = msdat[["scores"]][[3]],
+                            labels = msdat[["labels"]][[3]])
+  expect_equal(cmats3[["pos_num"]], 3)
+  expect_equal(cmats3[["neg_num"]], 1)
+  expect_equal(cmats3[["tp"]], c(0, 1, 1, 2, 3))
+  expect_equal(cmats3[["fn"]], c(3, 2, 2, 1, 0))
+  expect_equal(cmats3[["fp"]], c(0, 0, 1, 1, 1))
+  expect_equal(cmats3[["tn"]], c(1, 1, 0, 0, 0))
+
+})
+
+test_that("sm test data", {
+  smdat <- pl3_create_sm_dat()
+
+  cmats1 <- create_confmats(scores = smdat[["scores"]][[1]],
+                            labels = smdat[["labels"]][[1]])
+  expect_equal(cmats1[["pos_num"]], 3)
+  expect_equal(cmats1[["neg_num"]], 1)
+  expect_equal(cmats1[["tp"]], c(0, 1, 2, 2, 3))
+  expect_equal(cmats1[["fn"]], c(3, 2, 1, 1, 0))
+  expect_equal(cmats1[["fp"]], c(0, 0, 0, 1, 1))
+  expect_equal(cmats1[["tn"]], c(1, 1, 1, 0, 0))
+
+  cmats2 <- create_confmats(scores = smdat[["scores"]][[2]],
+                            labels = smdat[["labels"]][[2]])
+  expect_equal(cmats2[["pos_num"]], 3)
+  expect_equal(cmats2[["neg_num"]], 1)
+  expect_equal(cmats2[["tp"]], c(0, 1, 2, 3, 3))
+  expect_equal(cmats2[["fn"]], c(3, 2, 1, 0, 0))
+  expect_equal(cmats2[["fp"]], c(0, 0, 0, 0, 1))
+  expect_equal(cmats2[["tn"]], c(1, 1, 1, 1, 0))
+
+  cmats3 <- create_confmats(scores = smdat[["scores"]][[3]],
+                            labels = smdat[["labels"]][[3]])
+  expect_equal(cmats3[["pos_num"]], 3)
+  expect_equal(cmats3[["neg_num"]], 1)
+  expect_equal(cmats3[["tp"]], c(0, 1, 1, 2, 3))
+  expect_equal(cmats3[["fn"]], c(3, 2, 2, 1, 0))
+  expect_equal(cmats3[["fp"]], c(0, 0, 1, 1, 1))
+  expect_equal(cmats3[["tn"]], c(1, 1, 0, 0, 0))
+
+})
+
+test_that("mm test data", {
+  mmdat <- pl3_create_mm_dat()
+
+  cmats1 <- create_confmats(scores = mmdat[["scores"]][[1]],
+                            labels = mmdat[["labels"]][[1]])
+  expect_equal(cmats1[["pos_num"]], 3)
+  expect_equal(cmats1[["neg_num"]], 1)
+  expect_equal(cmats1[["tp"]], c(0, 1, 2, 2, 3))
+  expect_equal(cmats1[["fn"]], c(3, 2, 1, 1, 0))
+  expect_equal(cmats1[["fp"]], c(0, 0, 0, 1, 1))
+  expect_equal(cmats1[["tn"]], c(1, 1, 1, 0, 0))
+
+  cmats2 <- create_confmats(scores = mmdat[["scores"]][[2]],
+                            labels = mmdat[["labels"]][[2]])
+  expect_equal(cmats2[["pos_num"]], 3)
+  expect_equal(cmats2[["neg_num"]], 1)
+  expect_equal(cmats2[["tp"]], c(0, 1, 2, 3, 3))
+  expect_equal(cmats2[["fn"]], c(3, 2, 1, 0, 0))
+  expect_equal(cmats2[["fp"]], c(0, 0, 0, 0, 1))
+  expect_equal(cmats2[["tn"]], c(1, 1, 1, 1, 0))
+
+  cmats3 <- create_confmats(scores = mmdat[["scores"]][[3]],
+                            labels = mmdat[["labels"]][[3]])
+  expect_equal(cmats3[["pos_num"]], 3)
+  expect_equal(cmats3[["neg_num"]], 1)
+  expect_equal(cmats3[["tp"]], c(0, 1, 1, 2, 3))
+  expect_equal(cmats3[["fn"]], c(3, 2, 2, 1, 0))
+  expect_equal(cmats3[["fp"]], c(0, 0, 1, 1, 1))
+  expect_equal(cmats3[["tn"]], c(1, 1, 0, 0, 0))
+
+  cmats4 <- create_confmats(scores = mmdat[["scores"]][[4]],
+                            labels = mmdat[["labels"]][[4]])
+  expect_equal(cmats4[["pos_num"]], 3)
+  expect_equal(cmats4[["neg_num"]], 1)
+  expect_equal(cmats4[["tp"]], c(0, 1, 1, 2, 3))
+  expect_equal(cmats4[["fn"]], c(3, 2, 2, 1, 0))
+  expect_equal(cmats4[["fp"]], c(0, 0, 1, 1, 1))
+  expect_equal(cmats4[["tn"]], c(1, 1, 0, 0, 0))
+})
