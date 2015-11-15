@@ -230,8 +230,12 @@ NULL
   # === Check package availability  ===
   .load_ggplot2()
   .validate(object)
-  .check_curvetype(curvetype)
+  .check_curvetype(curvetype, object)
+  .check_type(type)
+  .check_show_cb(show_cb, object)
+  .check_raw_curves(raw_curves, object)
   .check_show_legend(show_legend)
+  .check_add_np_nn(add_np_nn)
   .check_ret_grob(ret_grob)
 
   # === Create a ggplot object for ROC&PRC, ROC, or PRC ===

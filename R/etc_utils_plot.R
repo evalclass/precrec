@@ -171,9 +171,13 @@ NULL
                         show_legend = FALSE, ...) {
 
   # === Validate input arguments ===
-  .check_show_legend(show_legend)
   .validate(x)
-  .check_curvetype(curvetype)
+  .check_curvetype(curvetype, x)
+  .check_type(type)
+  .check_show_cb(show_cb, x)
+  .check_raw_curves(raw_curves, x)
+  .check_add_np_nn(add_np_nn)
+  .check_show_legend(show_legend)
 
   # === Create a plot ===
   show_legend2 <- show_legend

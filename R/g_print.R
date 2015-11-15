@@ -3,6 +3,10 @@
 #
 #' @export
 print.mdat <- function(x, ...) {
+  # === Validate input arguments ===
+  .validate(x)
+
+  # === print ===
   cat("\n")
   cat("    === Input data ===\n\n")
 
@@ -25,6 +29,7 @@ print.curve_info <- function(x, ...) {
   # === Validate input arguments ===
   .validate(x)
 
+  # === print ===
   cat("\n")
   cat("    === AUCs ===\n")
   cat("\n")
@@ -47,6 +52,7 @@ print.beval_info <- function(x, ...) {
   # === Validate input arguments ===
   .validate(x)
 
+  # === print ===
   cat("\n")
   cat("    === Basic performance evaluation measures ===\n")
   cat("\n")
@@ -61,5 +67,4 @@ print.beval_info <- function(x, ...) {
   cat("\n")
 
   print.mdat(x)
-
 }

@@ -53,7 +53,8 @@
   attr(s3obj, "uniq_dsids") <- attr(mdat, "uniq_dsids")
   attr(s3obj, "model_type") <- model_type
   attr(s3obj, "dataset_type") <- dataset_type
-  attr(s3obj, "args") <- list(calc_avg = calc_avg,
+  attr(s3obj, "args") <- list(mode = "basic",
+                              calc_avg = calc_avg,
                               cb_alpha = cb_alpha,
                               raw_curves = raw_curves)
   attr(s3obj, "validated") <- FALSE
@@ -154,7 +155,7 @@
   attr_names <- c("eval_summary", "grp_avg", "data_info", "uniq_modnames",
                   "uniq_dsids", "model_type", "dataset_type", "args",
                   "validated")
-  arg_names <- c("calc_avg", "cb_alpha", "raw_curves")
+  arg_names <- c("mode", "calc_avg", "cb_alpha", "raw_curves")
   .validate_basic(points, class_name, ".pl_main_basic", item_names, attr_names,
                   arg_names)
 

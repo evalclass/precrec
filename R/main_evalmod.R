@@ -242,10 +242,10 @@ evalmod <- function(mdat, mode = "rocprc", scores = NULL, labels = NULL,
   .validate_calc_avg(calc_avg)
 
   # Validate cb_alpha
-  .validate_cb_alpha(cb_alpha)
+  .validate_cb_alpha(cb_alpha, calc_avg)
 
   # Validate raw_curves
-  .validate_raw_curves(raw_curves)
+  .validate_raw_curves(raw_curves, calc_avg)
 
 
   # Check x_bins
