@@ -19,10 +19,10 @@
   show_legend = TRUE, ret_grob = FALSE, ...)
 
 \method{autoplot}{smcurves}(object, curvetype = c("ROC", "PRC"),
-  show_ci = TRUE, raw_curves = FALSE, ret_grob = FALSE, ...)
+  show_cb = TRUE, raw_curves = FALSE, ret_grob = FALSE, ...)
 
 \method{autoplot}{mmcurves}(object, curvetype = c("ROC", "PRC"),
-  show_ci = FALSE, raw_curves = FALSE, show_legend = TRUE,
+  show_cb = FALSE, raw_curves = FALSE, show_legend = TRUE,
   ret_grob = FALSE, ...)
 
 \method{autoplot}{sspoints}(object, curvetype = c("error", "accuracy",
@@ -34,11 +34,11 @@
   show_legend = TRUE, ret_grob = FALSE, ...)
 
 \method{autoplot}{smpoints}(object, curvetype = c("error", "accuracy",
-  "specificity", "sensitivity", "precision"), type = "p", show_ci = TRUE,
+  "specificity", "sensitivity", "precision"), type = "p", show_cb = TRUE,
   raw_curves = FALSE, ret_grob = FALSE, ...)
 
 \method{autoplot}{mmpoints}(object, curvetype = c("error", "accuracy",
-  "specificity", "sensitivity", "precision"), type = "p", show_ci = FALSE,
+  "specificity", "sensitivity", "precision"), type = "p", show_cb = FALSE,
   raw_curves = FALSE, show_legend = TRUE, ret_grob = FALSE, ...)
 }
 \arguments{
@@ -111,14 +111,14 @@
 \item{show_legend}{A Boolean value to specify whether the legend is
   shown.}
 
-\item{show_ci}{A Boolean value to specify whether confidence intervals are
-  drawn. It is effective only when \code{calc_avg} is set to \code{TRUE}
-  with the \code{\link{evalmod}} function.}
+\item{show_cb}{A Boolean value to specify whether point-wise confidence
+  bounds are drawn. It is effective only when \code{calc_avg} is
+  set to \code{TRUE} of the \code{\link{evalmod}} function.}
 
 \item{raw_curves}{A Boolean value to specify whether raw curves are
   shown instead of the average curve. It is effective only
   when \code{raw_curves} is set to \code{TRUE}
-  with the \code{\link{evalmod}} function.}
+  of the \code{\link{evalmod}} function.}
 
 \item{type}{A single character to specify the type of plot.
   \describe{

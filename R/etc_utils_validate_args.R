@@ -7,14 +7,14 @@
 
     # Check if scores and labels are specified
     if(is.null(scores) && !is.null(labels)) {
-      stop("Invalid scores")
+      stop("Invalid scores", call. = FALSE)
     } else if(!is.null(scores) && is.null(labels)) {
-      stop("Invalid labels")
+      stop("Invalid labels", call. = FALSE)
     } else if (is.null(scores) && is.null(labels)) {
       if (is.null(obj)) {
-        stop("Invalid scores & labels")
+        stop("Invalid scores & labels", call. = FALSE)
       } else {
-        stop(paste0(obj_name, " must be specified"))
+        stop(paste0(obj_name, " must be specified"), call. = FALSE)
       }
     }
 
@@ -26,7 +26,7 @@
 
     # Check length of scores and labels
     if (length(labels) != length(scores)) {
-      stop("scores and labels must be of the same length")
+      stop("scores and labels must be the same lengths", call. = FALSE)
     }
 
   } else if (!is.null(obj)) {
@@ -145,8 +145,8 @@
 
     choices = c("equiv", "random", "first")
     if (!(ties_method %in% choices)) {
-      stop(gettextf("ties_method should be one of %s",
-                    paste(dQuote(choices), collapse = ", ")))
+      stop(gettextf("ties_method must be one of %s",
+                    paste(dQuote(choices), collapse = ", ")), call. = FALSE)
     }
   }
 }
@@ -195,21 +195,32 @@
 }
 
 #
-# Validate ci_alpha
+# Validate cb_alpha
 #
-.validate_ci_alpha <- function(ci_alpha) {
-  if (!is.null(ci_alpha)) {
-    assertthat::assert_that(assertthat::is.number(ci_alpha))
+.validate_cb_alpha <- function(cb_alpha, calc_avg = NULL) {
+  if (!is.null(cb_alpha)) {
+    assertthat::assert_that(assertthat::is.number(cb_alpha),
+                            cb_alpha >= 0 && cb_alpha <= 1)
+    if (!is.null(calc_avg)) {
+      if (!calc_avg && cb_alpha) {
+        warning("cb_alpha is ignored when calc_avg = FALSE", call. = FALSE)
+      }
+    }
   }
 }
 
 #
 # Validate raw_curves
 #
-.validate_raw_curves <- function(raw_curves) {
+.validate_raw_curves <- function(raw_curves, calc_avg = NULL) {
   if (!is.null(raw_curves)) {
     assertthat::assert_that(assertthat::is.flag(raw_curves),
                             assertthat::noNA(raw_curves))
+    if (!is.null(calc_avg)) {
+      if (!calc_avg && raw_curves) {
+        warning("raw_curves is ignored when calc_avg = FALSE", call. = FALSE)
+      }
+    }
   }
 }
 
@@ -217,16 +228,25 @@
 # Validate x_bins
 #
 .validate_x_bins <- function(x_bins) {
-  if (!is.null(x_bins)) {
+  if (!is.null(x_bins) && !is.na(x_bins)) {
     assertthat::assert_that(assertthat::is.number(x_bins),
                             x_bins >= 1L)
+  }
+}
+
+# Check mode
+.check_mode <- function(mode, obj = NULL) {
+  .validate_mode(mode)
+  obj_mode <- attr(obj, "args")[["mode"]]
+  if (mode != obj_mode) {
+    stop("Invalid mode", call. = FALSE)
   }
 }
 
 #
 # Check curve types
 #
-.check_curvetype <- function(curvetype) {
+.check_curvetype <- function(curvetype, obj = NULL) {
   roc_prc <- TRUE
   basic_eval <- TRUE
 
@@ -244,18 +264,67 @@
                                    "sensitivity", "precision"), 5)
 
   if (!roc_prc && !basic_eval) {
-    stop("Invalid 'curvetype' value")
+    stop("Invalid curvetype", call. = FALSE)
+  }
+
+  if (!is.null(obj)) {
+    obj_mode <- attr(obj, "args")[["mode"]]
+    if (((obj_mode == "rocprc") && !roc_prc)
+        || ((obj_mode == "basic") && !basic_eval)) {
+      stop("Invalid curvetype", call. = FALSE)
+    }
   }
 
 }
 
 #
-# Check ret_grob
+# Check type
 #
-.check_ret_grob <- function(ret_grob) {
-  assertthat::assert_that(is.atomic(ret_grob),
-                          assertthat::is.flag(ret_grob),
-                          assertthat::noNA(ret_grob))
+.check_type <- function(type) {
+  if (!is.null(type)) {
+    assertthat::assert_that(assertthat::is.string(type),
+                            (type == "l" || type == "p" || type == "b"))
+  }
+
+}
+
+#
+# Check show_cb
+#
+.check_show_cb <- function(show_cb, obj = NULL) {
+  assertthat::assert_that(is.atomic(show_cb),
+                          assertthat::is.flag(show_cb),
+                          assertthat::noNA(show_cb))
+
+  if (!is.null(obj) && (attr(obj, "dataset_type") == "multiple")) {
+    obj_calc_avg <- attr(obj, "args")[["calc_avg"]]
+    if (show_cb && !obj_calc_avg ) {
+      stop(paste0("calc_avg of the evalmod function",
+                  " must be set as TRUE before using show_cb",
+                  " of this function"),
+           call. = FALSE)
+    }
+  }
+}
+
+#
+# Check raw_curves
+#
+.check_raw_curves <- function(raw_curves, obj = NULL) {
+  assertthat::assert_that(is.atomic(raw_curves),
+                          assertthat::is.flag(raw_curves),
+                          assertthat::noNA(raw_curves))
+
+  if (!is.null(obj) && (attr(obj, "dataset_type") == "multiple")) {
+    obj_calc_avg <- attr(obj, "args")[["calc_avg"]]
+    obj_raw_curves <- attr(obj, "args")[["raw_curves"]]
+    if (raw_curves && (!obj_calc_avg || !obj_raw_curves)) {
+      stop(paste0("Both calc_avg and raw_curves of the evalmod function",
+                  " must be set as TRUE before using raw_curves",
+                  " of this function"),
+           call. = FALSE)
+    }
+  }
 }
 
 #
@@ -267,3 +336,20 @@
                           assertthat::noNA(show_legend))
 }
 
+#
+# Check add_np_nn
+#
+.check_add_np_nn <- function(add_np_nn) {
+  assertthat::assert_that(is.atomic(add_np_nn),
+                          assertthat::is.flag(add_np_nn),
+                          assertthat::noNA(add_np_nn))
+}
+
+#
+# Check ret_grob
+#
+.check_ret_grob <- function(ret_grob) {
+  assertthat::assert_that(is.atomic(ret_grob),
+                          assertthat::is.flag(ret_grob),
+                          assertthat::noNA(ret_grob))
+}

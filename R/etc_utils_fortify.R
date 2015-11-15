@@ -191,6 +191,9 @@ NULL
 
   # === Validate input arguments ===
   .validate(obj)
+  new_mode <- .pmatch_mode(mode)
+  .check_mode(new_mode, obj)
+  .check_raw_curves(raw_curves, obj)
 
   # Prepare variables
   uniq_modnames <- attr(obj, "uniq_modnames")
@@ -198,9 +201,9 @@ NULL
   modnames <- attr(obj, "data_info")[["modnames"]]
   dsids <- attr(obj, "data_info")[["dsids"]]
 
-  if (mode == "rocprc") {
+  if (new_mode == "rocprc") {
     curvetype_names <- list(ROC = "rocs", PRC = "prcs")
-  } else if (mode == "basic") {
+  } else if (new_mode == "basic") {
     curvetype_names <- list(error = "err", accuracy = "acc",
                             specificity = "sp", sensitivity = "sn",
                             precision = "prec")

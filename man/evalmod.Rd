@@ -6,7 +6,7 @@
 \usage{
 evalmod(mdat, mode = "rocprc", scores = NULL, labels = NULL,
   modnames = NULL, dsids = NULL, posclass = NULL, na_worst = TRUE,
-  ties_method = "equiv", calc_avg = TRUE, ci_alpha = 0.05,
+  ties_method = "equiv", calc_avg = TRUE, cb_alpha = 0.05,
   raw_curves = FALSE, x_bins = 1000)
 }
 \arguments{
@@ -32,6 +32,7 @@ evalmod(mdat, mode = "rocprc", scores = NULL, labels = NULL,
   that the \code{evalmod} function calculates.
   \describe{
     \item{"rocprc"}{ROC and Precision-Recall curves}
+    \item{"prcroc"}{Same as above}
     \item{"basic"}{Threshold values vs. accuracy, error rate, specificity,
                    sensitivity, or precision}
   }}
@@ -79,16 +80,19 @@ detected when \code{posclass} is \code{NULL}.}
   dataset IDs. For instance, the \code{evalmod} function calculates
   the average curves for the model "m1"
   when \code{modnames = c("m1", "m1", "m1")} and \code{dsids = c(1, 2, 3)}
-  are specified.}
+  are specified. The average curve is created by linearly connecting
+  point-wise averages, and the calculation points are defined
+  by \code{x_bins}.}
 
-\item{ci_alpha}{A numeric value with range [0, 1] to specify the alpha
-  value of the confidence interval calculation. It is effective only
+\item{cb_alpha}{A numeric value with range [0, 1] to specify the alpha
+  value of the point-wise confidence bounds calculation. It is effective only
   when \code{calc_avg} is set to \code{TRUE}. For example, it should be
-  \code{0.05} for the 95\% confidence level.}
+  \code{0.05} for the 95\% confidence level. The calculation points are
+  defined by \code{x_bins}.}
 
 \item{raw_curves}{A logical value to specify whether all raw curves
   should be discarded after the average curves are calculated.
-  It is effective only when \code{calc_avg} is set to \code{TRUE}}
+  It is effective only when \code{calc_avg} is set to \code{TRUE}.}
 
 \item{x_bins}{A numeric value to specify the number of minimum bins
   on the x-axis. The \code{evalmod} function calculates

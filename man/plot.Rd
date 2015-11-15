@@ -17,10 +17,10 @@
 \method{plot}{mscurves}(x, curvetype = c("ROC", "PRC"), show_legend = TRUE,
   ...)
 
-\method{plot}{smcurves}(x, curvetype = c("ROC", "PRC"), show_ci = TRUE,
+\method{plot}{smcurves}(x, curvetype = c("ROC", "PRC"), show_cb = TRUE,
   raw_curves = FALSE, ...)
 
-\method{plot}{mmcurves}(x, curvetype = c("ROC", "PRC"), show_ci = FALSE,
+\method{plot}{mmcurves}(x, curvetype = c("ROC", "PRC"), show_cb = FALSE,
   raw_curves = FALSE, show_legend = TRUE, ...)
 
 \method{plot}{sspoints}(x, curvetype = c("error", "accuracy", "specificity",
@@ -30,11 +30,11 @@
   "sensitivity", "precision"), type = "p", show_legend = TRUE, ...)
 
 \method{plot}{smpoints}(x, curvetype = c("error", "accuracy", "specificity",
-  "sensitivity", "precision"), type = "p", show_ci = TRUE,
+  "sensitivity", "precision"), type = "p", show_cb = TRUE,
   raw_curves = FALSE, ...)
 
 \method{plot}{mmpoints}(x, curvetype = c("error", "accuracy", "specificity",
-  "sensitivity", "precision"), type = "p", show_ci = FALSE,
+  "sensitivity", "precision"), type = "p", show_cb = FALSE,
   raw_curves = FALSE, show_legend = TRUE, ...)
 }
 \arguments{
@@ -99,14 +99,14 @@
 \item{show_legend}{A Boolean value to specify whether the legend is
   shown.}
 
-\item{show_ci}{A Boolean value to specify whether confidence intervals are
-  drawn. It is effective only when \code{calc_avg} is set to \code{TRUE}
-  with the \code{\link{evalmod}} function.}
+\item{show_cb}{A Boolean value to specify whether point-wise confidence
+  bounds are drawn. It is effective only when \code{calc_avg} is
+  set to \code{TRUE} of the \code{\link{evalmod}} function.}
 
 \item{raw_curves}{A Boolean value to specify whether raw curves are
   shown instead of the average curve. It is effective only
   when \code{raw_curves} is set to \code{TRUE}
-  with the \code{\link{evalmod}} function.}
+  of the \code{\link{evalmod}} function.}
 
 \item{type}{A single character to specify the type of plot.
   \describe{

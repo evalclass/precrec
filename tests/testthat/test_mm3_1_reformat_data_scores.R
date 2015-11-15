@@ -1,6 +1,6 @@
 library(precrec)
 
-context("PL 3: Reformat scores for evaluation")
+context("MM 3: Reformat scores for evaluation")
 # Test .rank_scores(scores, na_worst, ties_method)
 
 test_that("rank_scores() reterns a numeric vector", {
@@ -80,7 +80,7 @@ test_that("'ties_method' should be one of the three options", {
   err_msg <- "ties_method is not a string"
   expect_err_msg(err_msg, c("equiv", "first"))
 
-  err_msg <- "ties_method should be one of"
+  err_msg <- "ties_method must be one of"
   expect_err_msg(err_msg, c("avg"))
   expect_err_msg(err_msg, c("max"))
 })

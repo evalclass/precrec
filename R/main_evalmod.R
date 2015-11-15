@@ -27,6 +27,7 @@
 #'   that the \code{evalmod} function calculates.
 #'   \describe{
 #'     \item{"rocprc"}{ROC and Precision-Recall curves}
+#'     \item{"prcroc"}{Same as above}
 #'     \item{"basic"}{Threshold values vs. accuracy, error rate, specificity,
 #'                    sensitivity, or precision}
 #'   }
@@ -74,16 +75,19 @@
 #'   dataset IDs. For instance, the \code{evalmod} function calculates
 #'   the average curves for the model "m1"
 #'   when \code{modnames = c("m1", "m1", "m1")} and \code{dsids = c(1, 2, 3)}
-#'   are specified.
+#'   are specified. The average curve is created by linearly connecting
+#'   point-wise averages, and the calculation points are defined
+#'   by \code{x_bins}.
 #'
-#' @param ci_alpha A numeric value with range [0, 1] to specify the alpha
-#'   value of the confidence interval calculation. It is effective only
+#' @param cb_alpha A numeric value with range [0, 1] to specify the alpha
+#'   value of the point-wise confidence bounds calculation. It is effective only
 #'   when \code{calc_avg} is set to \code{TRUE}. For example, it should be
-#'   \code{0.05} for the 95\% confidence level.
+#'   \code{0.05} for the 95\% confidence level. The calculation points are
+#'   defined by \code{x_bins}.
 #'
 #' @param raw_curves A logical value to specify whether all raw curves
 #'   should be discarded after the average curves are calculated.
-#'   It is effective only when \code{calc_avg} is set to \code{TRUE}
+#'   It is effective only when \code{calc_avg} is set to \code{TRUE}.
 #'
 #' @param x_bins A numeric value to specify the number of minimum bins
 #'   on the x-axis. The \code{evalmod} function calculates
@@ -182,22 +186,28 @@
 evalmod <- function(mdat, mode = "rocprc", scores = NULL, labels = NULL,
                     modnames = NULL, dsids = NULL,
                     posclass = NULL, na_worst = TRUE, ties_method = "equiv",
-                    calc_avg = TRUE, ci_alpha = 0.05, raw_curves = FALSE,
+                    calc_avg = TRUE, cb_alpha = 0.05, raw_curves = FALSE,
                     x_bins = 1000) {
 
-  .validate_evalmod_args(mode, modnames, dsids, posclass, na_worst, ties_method,
-                         calc_avg, ci_alpha, raw_curves, x_bins)
+  # Validation
+  new_mode <- .pmatch_mode(mode)
+  new_ties_method <- .pmatch_tiesmethod(ties_method)
+  .validate_evalmod_args(new_mode, modnames, dsids, posclass, na_worst,
+                         new_ties_method, calc_avg, cb_alpha, raw_curves,
+                         x_bins)
 
+  # Create mdat if not provided
   if (!missing(mdat)) {
     .validate(mdat)
   } else {
     mdat <- mmdata(scores, labels,
                    modnames = modnames, dsids = dsids, posclass = posclass,
-                   na_worst = na_worst, ties_method = ties_method)
+                   na_worst = na_worst, ties_method = new_ties_method)
   }
 
-  pl_main(mdat, mode = mode, calc_avg = calc_avg, ci_alpha = ci_alpha,
-          raw_curves = raw_curves, x_bins = x_bins)
+  # Call pipeline controller
+  pl_main(mdat, mode = new_mode, calc_avg = calc_avg, cb_alpha = cb_alpha,
+          raw_curves = raw_curves, x_bins = x_bins, validate = FALSE)
 
 }
 
@@ -206,7 +216,7 @@ evalmod <- function(mdat, mode = "rocprc", scores = NULL, labels = NULL,
 #
 .validate_evalmod_args <- function(mode, modnames, dsids,
                                    posclass, na_worst, ties_method,
-                                   calc_avg, ci_alpha, raw_curves,
+                                   calc_avg, cb_alpha, raw_curves,
                                    x_bins) {
 
   # Check mode
@@ -231,11 +241,11 @@ evalmod <- function(mdat, mode = "rocprc", scores = NULL, labels = NULL,
   # Validate calc_avg
   .validate_calc_avg(calc_avg)
 
-  # Validate ci_alpha
-  .validate_ci_alpha(ci_alpha)
+  # Validate cb_alpha
+  .validate_cb_alpha(cb_alpha, calc_avg)
 
   # Validate raw_curves
-  .validate_raw_curves(raw_curves)
+  .validate_raw_curves(raw_curves, calc_avg)
 
 
   # Check x_bins

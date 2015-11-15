@@ -134,7 +134,7 @@ test_that("autoplot single smcurve", {
   curves <- ap2_create_smcurves()
 
   ap2_test_roc_prc(curves)
-  ap2_test_roc_prc(curves, show_ci = FALSE)
+  ap2_test_roc_prc(curves, show_cb = FALSE)
 
   curves2 <- ap2_create_smcurves(raw_curves = TRUE)
   ap2_test_roc_prc(curves2, raw_curves = TRUE)
@@ -160,7 +160,7 @@ test_that("autoplot mmcurves", {
   curves <- ap2_create_mmcurves()
 
   ap2_test_roc_prc(curves)
-  ap2_test_roc_prc(curves, show_ci = TRUE)
+  ap2_test_roc_prc(curves, show_cb = TRUE)
   ap2_test_roc_prc(curves, show_legend = FALSE)
 
   curves2 <- ap2_create_smcurves(raw_curves = TRUE)

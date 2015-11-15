@@ -9,8 +9,8 @@
 #' @param byrow A Boolean value to specify whether row vectors are used
 #'   for matrix, data.frame, and array.
 #'
-#' @param chklen A Boolean value to specify whether all list items should be
-#'   of the same length.
+#' @param chklen A Boolean value to specify whether all list items must be
+#'   the same lengths.
 #'
 #' @return The \code{join_scores} function returns a list that
 #'   contains all combined score data.
@@ -52,8 +52,8 @@ join_scores <- function(..., byrow = FALSE, chklen = TRUE) {
 #' @param byrow A Boolean value to specify whether row vectors are used
 #'   for matrix, data.frame, and array.
 #'
-#' @param chklen A Boolean value to specify whether all list items should be
-#'   of the same length.
+#' @param chklen A Boolean value to specify whether all list items must be
+#'   the same lengths.
 #'
 #' @return The \code{join_labels} function returns a list that
 #'   contains all combined label data.
@@ -92,13 +92,14 @@ join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
 
   # Validate arguments
   .validate_join_datasets_args(..., efunc_vtype = efunc_vtype,
-                               efunc_nrow = efunc_nrow, byrow = byrow)
+                               efunc_nrow = efunc_nrow, byrow = byrow,
+                               chklen = chklen)
 
   # Set a default error function for checking values
   if (is.null(efunc_vtype)) {
     efunc_vtype <- function(efunc_vtype) {
       if (any(is.null(efunc_vtype))){
-        stop("All vectors must be none NULL")
+        stop("All vectors must contain values", call. = FALSE)
       }
     }
   }
@@ -108,7 +109,7 @@ join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
     if (chklen) {
       efunc_nrow <- function(m, vlen) {
         if (m != 0 && m != vlen) {
-          stop("All vectors must be of the same size")
+          stop("All vectors must be the same lengths", call. = FALSE)
         }
       }
     } else {
@@ -138,7 +139,7 @@ join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
           cdat <- c(cdat, lapply(seq(dim(ds)[2]), function(j) ds[, j]))
         }
       } else {
-        stop("Array must be 1 or 2 dimensions")
+        stop("Array must be 1 or 2 dimensions", call. = FALSE)
       }
     } else if (is.list(ds)) {
       if (any(unlist(lapply(ds, is.list)))) {
@@ -158,7 +159,7 @@ join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
         cdat <- c(cdat, ds)
       }
     } else {
-      stop("Cannot join this type of data")
+      stop("Cannot join this type of data", call. = FALSE)
     }
   }
 
@@ -175,30 +176,35 @@ join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
 #
 # Validate arguments of .join_datasets()
 #
-.validate_join_datasets_args <- function(..., efunc_vtype, efunc_nrow, byrow) {
+.validate_join_datasets_args <- function(..., efunc_vtype, efunc_nrow, byrow,
+                                         chklen) {
 
   # Check ...
   arglist <- list(...)
   if (length(arglist) == 0) {
-    stop("No datasets specified")
+    stop("No datasets specified", call. = FALSE)
   }
 
   # Check efunc_vtype
   if (!is.null(efunc_vtype)
       && (!is(efunc_vtype, "function")
           || length(as.list(formals(efunc_vtype))) != 1)) {
-    stop("'efunc_vtype' must be a function with 1 argument")
+    stop("efunc_vtype must be a function with 1 argument", call. = FALSE)
   }
 
   # Check efunc_nrow
   if (!is.null(efunc_nrow)
       && (!is(efunc_nrow, "function")
           || length(as.list(formals(efunc_nrow))) != 2)) {
-    stop("'efunc_nrow' must be a function with 2 arguments")
+    stop("efunc_nrow must be a function with 2 arguments", call. = FALSE)
   }
 
   # Check byrow
   assertthat::assert_that(assertthat::is.flag(byrow),
                           assertthat::noNA(byrow))
+
+  # Check chklen
+  assertthat::assert_that(assertthat::is.flag(chklen),
+                          assertthat::noNA(chklen))
 
 }

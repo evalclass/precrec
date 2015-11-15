@@ -31,9 +31,9 @@ reformat_data <- function(scores, labels,
   attr(s3obj, "dsid") <- dsid
   attr(s3obj, "nn") <- fmtlabs[["nn"]]
   attr(s3obj, "np") <- fmtlabs[["np"]]
-  attr(s3obj, "args") <- list(na_worst = na_worst, ties_method = ties_method,
-                              modname = modname,
-                              dsid = dsid)
+  attr(s3obj, "args") <- list(posclass = posclass, na_worst = na_worst,
+                              ties_method = ties_method,
+                              modname = modname, dsid = dsid)
   attr(s3obj, "validated") <- FALSE
 
   # Call .validate.fmdat()
@@ -58,6 +58,11 @@ reformat_data <- function(scores, labels,
     posclass <- which(lv == posclass)
   }
 
+  # Check the data type of posclass
+  if (!is.na(posclass) && typeof(posclass) != typeof(labels[1])) {
+    stop("posclass must be the same data type as labels", call. = FALSE)
+  }
+
   # === Generate label factors ===
   flabels <- format_labels(labels, posclass)
   .check_cpp_func_error(flabels, "format_labels")
@@ -73,7 +78,7 @@ reformat_data <- function(scores, labels,
 
   # === Validate input arguments ===
   if (validate) {
-    .validate_scores((scores))
+    .validate_scores(scores)
     .validate_na_worst(na_worst)
     .validate_ties_method(ties_method)
   }
@@ -96,7 +101,8 @@ reformat_data <- function(scores, labels,
   # Check '...'
   arglist <- list(...)
   if (!is.null(names(arglist))){
-    stop(paste("Invalid arguments:", paste(names(arglist), collapse = ", ")))
+    stop(paste0("Invalid arguments: ", paste(names(arglist), collapse = ", ")),
+         call. = FALSE)
   }
 
   # Check scores and labels
@@ -131,7 +137,7 @@ reformat_data <- function(scores, labels,
   # Validate class items and attributes
   item_names <- c("labels", "ranks", "rank_idx")
   attr_names <- c("modname", "dsid", "nn", "np", "args", "validated")
-  arg_names <- c("na_worst", "ties_method", "modname", "dsid")
+  arg_names <- c("posclass", "na_worst", "ties_method", "modname", "dsid")
   .validate_basic(fmdat, "fmdat", "reformat_data", item_names, attr_names,
                   arg_names)
 
@@ -139,7 +145,7 @@ reformat_data <- function(scores, labels,
   if (length(fmdat[["labels"]]) == 0
       || length(fmdat[["labels"]]) != length(fmdat[["ranks"]])
       || length(fmdat[["labels"]]) != length(fmdat[["rank_idx"]])) {
-    stop("Items in 'fmdat' must be of the same length")
+    stop("List items in fmdat must be all the same lengths", call. = FALSE)
   }
 
   # Labels

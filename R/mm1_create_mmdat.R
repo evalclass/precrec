@@ -94,7 +94,8 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   llabels <- join_labels(labels, chklen = FALSE)
 
   # === Model names and dataset IDs ===
-  mnames <- .create_modnames(length(lscores), modnames, dsids, expd_first)
+  new_expd_first <- .pmatch_expd_first(expd_first)
+  mnames <- .create_modnames(length(lscores), modnames, dsids, new_expd_first)
   new_modnames <- mnames[["mn"]]
   new_dsids <- mnames[["ds"]]
   data_info <- data.frame(modnames = new_modnames, dsids = new_dsids,
@@ -103,11 +104,11 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
                           stringsAsFactors = FALSE)
 
   # === Validate arguments and variables ===
-  expd_first <- .pmatch_expd_first(expd_first)
+  new_ties_method <- .pmatch_tiesmethod(ties_method)
   .validate_mmdata_args(lscores, llabels, new_modnames, new_dsids,
                         posclass = posclass,
-                        na_worst = na_worst, ties_method = ties_method,
-                        expd_first = expd_first)
+                        na_worst = na_worst, ties_method = new_ties_method,
+                        expd_first = new_expd_first)
 
   # Replicate labels
   if (length(lscores) != 1 && length(llabels) == 1) {
@@ -117,7 +118,7 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   # === Reformat input data ===
   func_fmdat <- function(i) {
     reformat_data(lscores[[i]], llabels[[i]], posclass = posclass,
-                  na_worst = na_worst, ties_method = ties_method,
+                  na_worst = na_worst, ties_method = new_ties_method,
                   modname = new_modnames[i], dsid = new_dsids[i], ...)
   }
   mmdat <- lapply(seq_along(lscores), func_fmdat)
@@ -134,8 +135,10 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   attr(s3obj, "data_info") <- data_info
   attr(s3obj, "uniq_modnames") <- unique(new_modnames)
   attr(s3obj, "uniq_dsids") <- unique(new_dsids)
-  attr(s3obj, "args") <- list(na_worst = na_worst,
-                              ties_method = ties_method)
+  attr(s3obj, "args") <- list(posclass = posclass,
+                              na_worst = na_worst,
+                              ties_method = ties_method,
+                              expd_first = new_expd_first)
   attr(s3obj, "validated") <- FALSE
 
   # Call .validate.mdat()
@@ -247,7 +250,7 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   }
 
   # === Error handling ===
-  stop("Invalid 'modnames' and/or 'dsids'")
+  stop("Invalid modnames and/or dsids", call. = FALSE)
 
 }
 
@@ -259,8 +262,8 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
 
   # Check lscores and llabels
   if (length(llabels) != 1 && length(lscores) != length(llabels)) {
-    stop(paste0("The number of scores and label lists should be the same size",
-                ", or the number of label list should be 1"))
+    stop(paste0("scores and labels must be the same lengths",
+                ", or the length of labels must be 1"), call. = FALSE)
   }
 
   # Check model names
@@ -280,6 +283,12 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
 
   # Check expd_first
   .validate_expd_first(expd_first)
+
+  # Chekc the length of modnames and dsids
+  if (length(modnames) != length(dsids)) {
+    stop("modnames and dsids must be the same lengths", call. = FALSE)
+  }
+
 }
 
 #
@@ -293,15 +302,38 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
 
   # Check mdat
   if (!is(mdat, "mdat")) {
-    stop("'mdat' S3 object created by mmdata() expected")
+    stop("mdat created by mmdata() expected", call. = FALSE)
   }
 
-  # Check attributes
+  # Validate class items and attributes
+  item_names <- NULL
+  attr_names <- c("data_info", "uniq_modnames", "uniq_dsids", "args",
+                  "validated")
+  arg_names <- c("posclass", "na_worst", "ties_method", "expd_first")
+  .validate_basic(mdat, "mdat", "mmdata", item_names, attr_names,
+                  arg_names)
+
+  # Check values of class items
   if (length(mdat) != nrow(attr(mdat, "data_info"))) {
-    stop("Invalid modnames and dsids")
+    stop("Invalid modnames and dsids", call. = FALSE)
+  }
+
+  # Chekc data consistency among the same dsids
+  dsid_nn <- list()
+  dsid_np <- list()
+  for (i in seq_along(mdat)) {
+    # Check nn and np for the same dsids
+    nn <- attr(mdat[[i]], "nn")
+    np <- attr(mdat[[i]], "np")
+    dsid_chr <- as.character(attr(mdat[[i]], "dsid"))
+    if (is.null(dsid_nn[[dsid_chr]])) {
+      dsid_nn[[dsid_chr]] <- nn
+      dsid_np[[dsid_chr]] <- np
+    } else if (dsid_nn[[dsid_chr]] != nn || dsid_np[[dsid_chr]] != np) {
+      stop(paste0("Inconsistent labels for dsid: ", dsid_chr), call. = FALSE)
+    }
   }
 
   attr(mdat, "validated") <- TRUE
   mdat
 }
-

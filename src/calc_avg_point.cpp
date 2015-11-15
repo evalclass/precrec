@@ -91,10 +91,8 @@ Rcpp::List calc_avg_points(const Rcpp::List& points,
     if (exp2 < 0){
       exp2 = 0;
     }
-    sd =  ::sqrt(n / n - 1) * ::sqrt(exp2);
+    sd =  ::sqrt(n / (n - 1)) * ::sqrt(exp2);
     se_y[i] = sd / ::sqrt(n);
-
-    se_y[i] = (stot_y[i] / n) - (avg_y[i] * avg_y[i]);
 
     // ci upper bound
     ci_h_y[i] = avg_y[i] + ci_q * se_y[i];

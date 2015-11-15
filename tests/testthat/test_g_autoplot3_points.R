@@ -156,7 +156,7 @@ test_that("autoplot smpoints", {
   ap3_test_basic_measures(points)
   ap3_test_basic_measures(points, type = "l")
   ap3_test_basic_measures(points, type = "b")
-  ap3_test_basic_measures(points, show_ci = FALSE)
+  ap3_test_basic_measures(points, show_cb = FALSE)
 
   points2 <- ap3_create_mmpoints(raw_curves = TRUE)
   ap3_test_basic_measures(points2, raw_curves = TRUE)
@@ -185,7 +185,7 @@ test_that("autoplot mmpoints", {
   ap3_test_basic_measures(points)
   ap3_test_basic_measures(points, type = "l")
   ap3_test_basic_measures(points, type = "b")
-  ap3_test_basic_measures(points, show_ci = TRUE)
+  ap3_test_basic_measures(points, show_cb = TRUE)
   ap3_test_basic_measures(points, show_legend = FALSE)
 
   points2 <- ap3_create_mmpoints(raw_curves = TRUE)

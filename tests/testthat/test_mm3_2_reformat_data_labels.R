@@ -1,9 +1,9 @@
 library(precrec)
 
-context("PL 3: Reformat labels for evaluation")
-# Test .factor_labels(labels)
+context("MM 3: Reformat labels for evaluation")
+# Test .factor_labels(labels, posclass)
 
-test_that("factor_labels() reterns a numeric vector", {
+test_that(".factor_labels() reterns a numeric vector", {
   fmtlbs <- .factor_labels(c(1, 0, 1), NULL)
 
   expect_true(is.atomic(fmtlbs[["labels"]]))
@@ -11,7 +11,7 @@ test_that("factor_labels() reterns a numeric vector", {
   expect_true(is.numeric(fmtlbs[["labels"]]))
 })
 
-test_that("factor_labels() returns a factor with two values", {
+test_that(".factor_labels() returns a vector with two values", {
   expect_equal_length <- function(labels, len) {
     fmtlbs <- .factor_labels(c(1, 0, 1), NULL)
     labels <- fmtlbs[["labels"]]
@@ -121,4 +121,25 @@ test_that("'labels' takes two unique labels", {
 
   expect_err_msg(c(0, 0, 1, 2, 3))
   expect_err_msg(c(-1, 0, -1, 2))
+})
+
+test_that(".factor_labels() accepts 'posclass'", {
+  l1 <- c(1, 0, 1, 0)
+
+  labs <- .factor_labels(l1, posclass = 0)
+  expect_equal(labs[["labels"]], c(1, 2, 1, 2))
+
+  labs <- .factor_labels(l1, posclass = 1)
+  expect_equal(labs[["labels"]], c(2, 1, 2, 1))
+
+  expect_err_msg <- function(l1, posclass, err_msg) {
+    eval(bquote(expect_error(.factor_labels(l1, posclass = posclass),
+                             err_msg)))
+  }
+  expect_err_msg(l1, -1, "invalid-posclass")
+
+  err_msg <- "posclass must be the same data type as labels"
+  expect_err_msg(l1, "0", err_msg)
+  expect_err_msg(l1, "1", err_msg)
+
 })

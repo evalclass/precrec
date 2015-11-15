@@ -1,7 +1,7 @@
 library(precrec)
 
-context("PL 2: Join datasets")
-# Test .join_datasets(..., efunc_vtype, efunc_nrow, byrow)
+context("MM 2: Join datasets")
+# Test .join_datasets(..., efunc_vtype, efunc_nrow, byrow, chklen)
 
 test_that(".join_datasets() returns a list", {
   cdat <- .join_datasets(c(0))
@@ -15,8 +15,11 @@ test_that("'...' must be specified", {
 })
 
 test_that("'efunc_vtype' must be a function with 1 argument", {
+  expect_that(.join_datasets(c(0), efunc_vtype = function(a1) TRUE),
+              not(throws_error()))
+
   expect_err_msg <- function(efunc_vtype) {
-    err_msg <- "'efunc_vtype' must be a function with 1 argument"
+    err_msg <- "efunc_vtype must be a function with 1 argument"
     eval(bquote(expect_error(.join_datasets(c(0), efunc_vtype = efunc_vtype),
                              err_msg)))
   }
@@ -26,8 +29,11 @@ test_that("'efunc_vtype' must be a function with 1 argument", {
 })
 
 test_that("'efunc_nrow' must be a function with 2 arguments", {
+  expect_that(.join_datasets(c(0), efunc_nrow = function(a1, a2) TRUE),
+              not(throws_error()))
+
   expect_err_msg <- function(efunc_nrow) {
-    err_msg <- "'efunc_nrow' must be a function with 2 arguments"
+    err_msg <- "efunc_nrow must be a function with 2 arguments"
     eval(bquote(expect_error(.join_datasets(c(0), efunc_nrow = efunc_nrow),
                              err_msg)))
   }
@@ -37,6 +43,9 @@ test_that("'efunc_nrow' must be a function with 2 arguments", {
 })
 
 test_that("'byrow' should be TRUE or FALSE", {
+  expect_that(.join_datasets(c(0), byrow = TRUE), not(throws_error()))
+  expect_that(.join_datasets(c(0), byrow = FALSE), not(throws_error()))
+
   expect_err_msg <- function(err_msg, byrow) {
 
     eval(bquote(expect_error(.join_datasets(c(0), byrow = byrow), err_msg)))
@@ -46,6 +55,26 @@ test_that("'byrow' should be TRUE or FALSE", {
   expect_err_msg(err_msg, NA)
 
   err_msg <- "byrow is not a flag"
+  expect_err_msg(err_msg, "T")
+  expect_err_msg(err_msg, list(c(TRUE, FALSE)))
+  expect_err_msg(err_msg, data.frame(c(TRUE, FALSE)))
+  expect_err_msg(err_msg, array(c(TRUE, FALSE)))
+  expect_err_msg(err_msg, matrix(c(TRUE, FALSE)))
+})
+
+test_that("'chklen' should be TRUE or FALSE", {
+  expect_that(.join_datasets(c(0), chklen = TRUE), not(throws_error()))
+  expect_that(.join_datasets(c(0), chklen = FALSE), not(throws_error()))
+
+  expect_err_msg <- function(err_msg, chklen) {
+
+    eval(bquote(expect_error(.join_datasets(c(0), chklen = chklen), err_msg)))
+  }
+
+  err_msg <- "chklen contains 1 missing values"
+  expect_err_msg(err_msg, NA)
+
+  err_msg <- "chklen is not a flag"
   expect_err_msg(err_msg, "T")
   expect_err_msg(err_msg, list(c(TRUE, FALSE)))
   expect_err_msg(err_msg, data.frame(c(TRUE, FALSE)))

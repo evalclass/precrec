@@ -86,7 +86,7 @@ test_that("plot smcurves", {
   curves <- pt2_create_smcurves()
 
   ap2_test_roc_prc(curves)
-  ap2_test_roc_prc(curves, show_ci = FALSE)
+  ap2_test_roc_prc(curves, show_cb = FALSE)
 
   curves2 <- pt2_create_smcurves(raw_curves = TRUE)
   ap2_test_roc_prc(curves2, raw_curves = TRUE)
@@ -99,9 +99,46 @@ test_that("plot mmcurves", {
   curves <- pt2_create_mmcurves()
 
   ap2_test_roc_prc(curves)
-  ap2_test_roc_prc(curves, show_ci = TRUE)
+  ap2_test_roc_prc(curves, show_cb = TRUE)
   ap2_test_roc_prc(curves, raw_curves = FALSE)
 
   curves2 <- pt2_create_mmcurves(raw_curves = TRUE)
   ap2_test_roc_prc(curves2, raw_curves = TRUE)
+})
+
+test_that("plot() accepts type", {
+  pdf(NULL)
+  on.exit(dev.off())
+
+  curves <- pt2_create_mmcurves()
+  expect_that(plot(curves, type = "l"), not(throws_error()))
+  expect_that(plot(curves, type = "p"), not(throws_error()))
+  expect_that(plot(curves, type = "b"), not(throws_error()))
+})
+
+test_that("plot() accepts show_cb", {
+  pdf(NULL)
+  on.exit(dev.off())
+
+  curves <- pt2_create_mmcurves()
+  expect_that(plot(curves, show_cb = TRUE), not(throws_error()))
+  expect_that(plot(curves, show_cb = FALSE), not(throws_error()))
+})
+
+test_that("plot() accepts raw_curves", {
+  pdf(NULL)
+  on.exit(dev.off())
+
+  curves <- pt2_create_mmcurves(raw_curves = TRUE)
+  expect_that(plot(curves, raw_curves = TRUE), not(throws_error()))
+  expect_that(plot(curves, raw_curves = FALSE), not(throws_error()))
+})
+
+test_that("plot() accepts show_legend", {
+  pdf(NULL)
+  on.exit(dev.off())
+
+  curves <- pt2_create_mmcurves()
+  expect_that(plot(curves, show_legend = TRUE), not(throws_error()))
+  expect_that(plot(curves, show_legend = FALSE), not(throws_error()))
 })

@@ -5,7 +5,7 @@
 
   if (obj[["errmsg"]] != "") {
     stop(paste0("Internal cpp function (", func_name, "()) failed: ",
-                obj[["errmsg"]]))
+                obj[["errmsg"]]), call. = FALSE)
   }
 }
 
@@ -44,7 +44,7 @@
     if (!is.null(scores) && !is.null(labels)) {
       obj <- func(scores = scores, labels = labels, ...)
     } else {
-      stop("The first argument must be specified.")
+      stop("The first argument must be specified.", call. = FALSE)
     }
   }
 
