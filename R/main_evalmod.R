@@ -153,34 +153,69 @@
 #'
 #' @examples
 #'
+#' ###
+#' ### Single model & single test dataset
+#' ###
+#'
+#' ## Load a dataset with 10 positives and 10 negatives
+#' data(P10N10)
+#'
+#' ## Generate an sscurve object that contains ROC and Precision-Recall curves
+#' sscurves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
+#'
+#' ## Generate an sspoints object that contains basic evaluation measures
+#' sspoints <- evalmod(mode = "basic", scores = P10N10$scores,
+#'                     labels = P10N10$labels)
+#'
+#'
+#' ###
+#' ### Multiple models & single test dataset
+#' ###
+#'
+#'  ## Create sample datasets with 100 positives and 100 negatives
+#' samps <- create_sim_samples(1, 100, 100, "all")
+#' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
+#'                modnames = samps[["modnames"]])
+#'
+#' ## Generate an mscurve object that contains ROC and Precision-Recall curves
+#' mscurves <- evalmod(mdat)
+#'
+#' ## Generate an mspoints object that contains basic evaluation measures
+#' mspoints <- evalmod(mdat, mode = "basic")
+#'
+#'
+#' ###
+#' ### Single model & multiple test datasets
+#' ###
+#'
+#' ## Create sample datasets with 100 positives and 100 negatives
+#' samps <- create_sim_samples(10, 100, 100, "good_er")
+#' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
+#'                modnames = samps[["modnames"]],
+#'                dsids = samps[["dsids"]])
+#'
+#' ## Generate an smcurve object that contains ROC and Precision-Recall curves
+#' smcurves <- evalmod(mdat)
+#'
+#' ## Generate an smpoints object that contains basic evaluation measures
+#' smpoints <- evalmod(mdat, mode = "basic")
+#'
+#'
+#' ###
+#' ### Multiple models & multiple test datasets
+#' ###
+#'
 #' ## Create sample datasets with 100 positives and 100 negatives
 #' samps <- create_sim_samples(10, 100, 100, "all")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 #'                modnames = samps[["modnames"]],
 #'                dsids = samps[["dsids"]])
 #'
-#' ## Generate an mscurve object
-#' curves1 <- evalmod(mdat)
+#' ## Generate an mscurve object that contains ROC and Precision-Recall curves
+#' mmcurves <- evalmod(mdat)
 #'
-#' ## Directly specifiy scores and labels
-#' curves2 <- evalmod(scores = samps[["scores"]],
-#'                    labels = samps[["labels"]],
-#'                    modnames = samps[["modnames"]],
-#'                    dsids = samps[["dsids"]])
-#'
-#' ## Print the summary
-#' curves2
-#'
-#' ## Plot Precision-Recall
-#' plot(curves2, "PRC")
-#'
-#' ## Set x_bins = 10
-#' curves3 <- evalmods_m(mdat, x_bins = 10)
-#' plot(curves3, "PRC")
-#'
-#' ## No interpolation of Precsion-Recall curve
-#' curves4 <- evalmods_m(mdat, x_bins = NULL)
-#' plot(curves4, "PRC")
+#' ## Generate an mmpoints object that contains basic evaluation measures
+#' mmpoints <- evalmod(mdat, mode = "basic")
 #'
 #' @export
 evalmod <- function(mdat, mode = "rocprc", scores = NULL, labels = NULL,

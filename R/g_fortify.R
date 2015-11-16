@@ -66,47 +66,47 @@ fortify.pevals <- function(model, ...) {
 
 #' @rdname fortify
 #' @export
-fortify.sscurves <- function(model, ...) {
-  .fortify_common(model, ...)
+fortify.sscurves <- function(model, raw_curves = TRUE, ...) {
+  .fortify_common(model, raw_curves = raw_curves, ...)
 }
 
 #' @rdname fortify
 #' @export
-fortify.mscurves <- function(model, ...) {
-  .fortify_common(model, ...)
+fortify.mscurves <- function(model, raw_curves = TRUE, ...) {
+  .fortify_common(model, raw_curves = raw_curves, ...)
 }
 
 #' @rdname fortify
 #' @export
-fortify.smcurves <- function(model, ...) {
-  .fortify_common(model, ...)
+fortify.smcurves <- function(model, raw_curves = FALSE, ...) {
+  .fortify_common(model, raw_curves = raw_curves, ...)
 }
 
 #' @rdname fortify
 #' @export
-fortify.mmcurves <- function(model, ...) {
-  .fortify_common(model, ...)
+fortify.mmcurves <- function(model, raw_curves = FALSE, ...) {
+  .fortify_common(model, raw_curves = raw_curves, ...)
 }
 #' @rdname fortify
 #' @export
-fortify.sspoints <- function(model, ...) {
-  .fortify_common(model, mode = "basic", ...)
-}
-
-#' @rdname fortify
-#' @export
-fortify.mspoints <- function(model, ...) {
-  .fortify_common(model, mode = "basic", ...)
+fortify.sspoints <- function(model, raw_curves = TRUE, ...) {
+  .fortify_common(model, mode = "basic", raw_curves = raw_curves, ...)
 }
 
 #' @rdname fortify
 #' @export
-fortify.smpoints <- function(model, ...) {
-  .fortify_common(model, mode = "basic", ...)
+fortify.mspoints <- function(model, raw_curves = TRUE, ...) {
+  .fortify_common(model, mode = "basic", raw_curves = raw_curves, ...)
 }
 
 #' @rdname fortify
 #' @export
-fortify.mmpoints <- function(model, ...) {
-  .fortify_common(model, mode = "basic", ...)
+fortify.smpoints <- function(model, raw_curves = FALSE, ...) {
+  .fortify_common(model, mode = "basic", raw_curves = raw_curves, ...)
+}
+
+#' @rdname fortify
+#' @export
+fortify.mmpoints <- function(model, raw_curves = FALSE, ...) {
+  .fortify_common(model, mode = "basic", raw_curves = raw_curves, ...)
 }

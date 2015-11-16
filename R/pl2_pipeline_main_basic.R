@@ -66,8 +66,8 @@
 #
 # Get evaluation measures at all threshold values by models
 #
-.summarize_points <- function(lpoints, eval_type, class_name, mdat, dataset_type,
-                              calc_avg, cb_alpha) {
+.summarize_points <- function(lpoints, eval_type, class_name, mdat,
+                              dataset_type, calc_avg, cb_alpha) {
 
   if (!is.null(lpoints)) {
     # Summarize basic evaluation measures

@@ -21,7 +21,7 @@ Rcpp::List make_new_labels(T labels,
   S lab2 = labels[0];
 
   // Check two labels
-  for (int i = 0; i < labels.size(); ++i) {
+  for (unsigned i = 0; i < labels.size(); ++i) {
     label_set.insert(labels[i]);
   }
 
@@ -46,7 +46,7 @@ Rcpp::List make_new_labels(T labels,
   }
 
   // Make new labels - negative 1 & positive 2
-  for (int i = 0; i < labels.size(); ++i) {
+  for (unsigned i = 0; i < labels.size(); ++i) {
     if (labels[i] == lab2) {
       ++np;
       new_labels[i] = 2;

@@ -2,8 +2,8 @@
 # Control the main pipeline iterations for ROC and Precision-Recall curves
 #
 .pl_main_rocprc <- function(mdat, model_type, dataset_type, class_name_pf,
-                            calc_avg = TRUE, cb_alpha = 0.05, raw_curves = FALSE,
-                            x_bins = 1000) {
+                            calc_avg = TRUE, cb_alpha = 0.05,
+                            raw_curves = FALSE, x_bins = 1000) {
 
   # === Create ROC and Precision-Recall curves ===
   # Create curves
@@ -76,7 +76,8 @@
     if (dataset_type == "multiple" && calc_avg) {
       modnames <- attr(mdat, "data_info")[["modnames"]]
       uniq_modnames <- attr(mdat, "uniq_modnames")
-      avgcurves <- calc_avg_rocprc(mc, modnames, uniq_modnames, cb_alpha, x_bins)
+      avgcurves <- calc_avg_rocprc(mc, modnames, uniq_modnames, cb_alpha,
+                                   x_bins)
     } else {
       avgcurves <- NA
     }

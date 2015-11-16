@@ -1,4 +1,4 @@
-#' Plot performance evaluation measures with ggplot2.
+#' Plot performance evaluation measures with ggplot2
 #'
 #' The \code{autoplot} function plots performance evaluation measures
 #'   by using \code{\link[ggplot2]{ggplot2}} instead of the general R plot.
@@ -103,63 +103,129 @@
 #' library(grid)
 #' library(gridExtra)
 #'
+#' ###
+#' ### Single model & single test dataset
+#' ###
+#'
 #' ## Load a dataset with 10 positives and 10 negatives
 #' data(P10N10)
 #'
-#' ## Generate an sscurve object
-#' curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
+#' ## Generate an sscurve object that contains ROC and Precision-Recall curves
+#' sscurves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 #'
 #' ## Plot both ROC and Precision-Recall curves
-#' autoplot(curves)
+#' autoplot(sscurves)
+#'
+#' ## Get a grob object for multiple plots
+#' pp1 <- autoplot(sscurves, ret_grob = TRUE)
+#' plot.new()
+#' grid.draw(pp1)
 #'
 #' ## Plot a ROC curve
-#' autoplot(curves, curvetype = "ROC")
+#' autoplot(sscurves, curvetype = "ROC")
 #'
 #' ## Plot a Precision-Recall curve
-#' pp1 <- autoplot(curves, curvetype = "PRC")
-#' pp1
+#' autoplot(sscurves, curvetype = "PRC")
 #'
-#' ## autoplot returns a grob object.
-#' pp2 <- autoplot(curves, ret_grob = TRUE)
-#' plot.new()
-#' grid.draw(pp2)
+#' ## Get a ggplot object for a single plot
+#' pp2 <- autoplot(sscurves, curvetype = "PRC")
+#' pp2
+#'
+#' ## Generate an sspoints object that contains basic evaluation measures
+#' sspoints <- evalmod(mode = "basic", scores = P10N10$scores,
+#'                     labels = P10N10$labels)
+#'
+#' ## Plot threshold values vs. basic evaluation measures
+#' autoplot(sspoints)
+#'
+#' ## Plot threshold vs. precision
+#' autoplot(sspoints, curvetype = "precision")
+#'
+#'
+#' ###
+#' ### Multiple models & single test dataset
+#' ###
 #'
 #' ## Create sample datasets with 100 positives and 100 negatives
 #' samps <- create_sim_samples(1, 100, 100, "all")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-#'                modnames = samps[["modnames"]],
-#'                dsids = samps[["dsids"]])
+#'                modnames = samps[["modnames"]])
 #'
-#' ## Generate an mscurve object
-#' curves <- evalmod(mdat)
+#' ## Generate an mscurve object that contains ROC and Precision-Recall curves
+#' mscurves <- evalmod(mdat)
 #'
 #' ## Plot both ROC and Precision-Recall curves
-#' autoplot(curves)
+#' autoplot(mscurves)
 #'
-#' ## Prepare input data
-#' samps <- create_sim_samples(10, 100, 100, "poor_er")
+#' ## Hide the legend
+#' autoplot(mscurves, show_legend = FALSE)
+#'
+#' ## Generate an mspoints object that contains basic evaluation measures
+#' mspoints <- evalmod(mdat, mode = "basic")
+#'
+#' ## Plot threshold values vs. basic evaluation measures
+#' autoplot(mspoints)
+#'
+#' ## Hide the legend
+#' autoplot(mspoints, show_legend = FALSE)
+#'
+#'
+#' ###
+#' ### Single model & multiple test datasets
+#' ###
+#'
+#' ## Create sample datasets with 100 positives and 100 negatives
+#' samps <- create_sim_samples(10, 100, 100, "good_er")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 #'                modnames = samps[["modnames"]],
 #'                dsids = samps[["dsids"]])
 #'
-#' ## Generate an smcurve object
-#' curves <- evalmod(mdat)
+#' ## Generate an smcurve object that contains ROC and Precision-Recall curves
+#' smcurves <- evalmod(mdat, raw_curves = TRUE)
 #'
-#' ## Plot both ROC and Precision-Recall curves
-#' autoplot(curves)
+#' ## Plot average ROC and Precision-Recall curves
+#' autoplot(smcurves)
+#'
+#' ## Hide confidence bounds
+#' autoplot(smcurves, show_cb = FALSE)
+#'
+#' ## Plot raw ROC and Precision-Recall curves
+#' autoplot(smcurves, raw_curves = TRUE)
+#'
+#' ## Generate an smpoints object that contains basic evaluation measures
+#' smpoints <- evalmod(mdat, mode = "basic")
+#'
+#' ## Plot threshold values vs. average basic evaluation measures
+#' autoplot(smpoints)
 #'
 #'
-#' ## Prepare input data
+#' ###
+#' ### Multiple models & multiple test datasets
+#' ###
+#'
+#' ## Create sample datasets with 100 positives and 100 negatives
 #' samps <- create_sim_samples(10, 100, 100, "all")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 #'                modnames = samps[["modnames"]],
 #'                dsids = samps[["dsids"]])
 #'
-#' ## Generate an mscurve object
-#' curves <- evalmod(mdat)
+#' ## Generate an mscurve object that contains ROC and Precision-Recall curves
+#' mmcurves <- evalmod(mdat, raw_curves = TRUE)
 #'
-#' ## Plot both ROC and Precision-Recall curves
-#' autoplot(curves)
+#' ## Plot average ROC and Precision-Recall curves
+#' autoplot(mmcurves)
+#'
+#' ## Show confidence bounds
+#' autoplot(mmcurves, show_cb = TRUE)
+#'
+#' ## Plot raw ROC and Precision-Recall curves
+#' autoplot(mmcurves, raw_curves = TRUE)
+#'
+#' ## Generate an mmpoints object that contains basic evaluation measures
+#' mmpoints <- evalmod(mdat, mode = "basic")
+#'
+#' ## Plot threshold values vs. average basic evaluation measures
+#' autoplot(mmpoints)
 #'
 #' @name autoplot
 NULL
