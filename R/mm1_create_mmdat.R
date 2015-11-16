@@ -70,8 +70,17 @@
 #'   scores and labels with multiple datasets.
 #'
 #' @examples
-#' ## Generate an mdat object
-#' mdat1 <- mmdata(1:8, sample(c(0, 1), 8, replace = TRUE))
+#'
+#' ###
+#' ### Single model & single test dataset
+#' ###
+#'
+#' ## Load a dataset with 10 positives and 10 negatives
+#' data(P10N10)
+#'
+#' ## Generate mdat object
+#' ssmdat1 <- mmdata(P10N10$scores, P10N10$labels)
+#' ssmdat2 <- mmdata(1:8, sample(c(0, 1), 8, replace = TRUE))
 #'
 #' ## Use join_scores and join_labels
 #' s1 <- c(1, 2, 3, 4)
@@ -82,7 +91,45 @@
 #' l2 <- c(1, 1, 0, 0)
 #' labels <- join_labels(l1, l2)
 #'
-#' mdat2 <- mmdata(scores, labels)
+#' ssmdat3 <- mmdata(scores, labels)
+#'
+#'
+#' ###
+#' ### Multiple models & single test dataset
+#' ###
+#'
+#' ## Create sample datasets with 100 positives and 100 negatives
+#' samps <- create_sim_samples(1, 100, 100, "all")
+#'
+#' ## Multiple models & single test dataset
+#' msmdat <- mmdata(samps[["scores"]], samps[["labels"]],
+#'                  modnames = samps[["modnames"]])
+#'
+#'
+#' ###
+#' ### Single model & multiple test datasets
+#' ###
+#'
+#' ## Create sample datasets with 100 positives and 100 negatives
+#' samps <- create_sim_samples(10, 100, 100, "good_er")
+#'
+#' ## Single model & multiple test datasets
+#' smmdat <- mmdata(samps[["scores"]], samps[["labels"]],
+#'                  modnames = samps[["modnames"]],
+#'                  dsids = samps[["dsids"]])
+#'
+#'
+#' ###
+#' ### Multiple models & multiple test datasets
+#' ###
+#'
+#' ## Create sample datasets with 100 positives and 100 negatives
+#' samps <- create_sim_samples(10, 100, 100, "all")
+#'
+#' ## Multiple models & multiple test datasets
+#' mmmdat <- mmdata(samps[["scores"]], samps[["labels"]],
+#'                  modnames = samps[["modnames"]],
+#'                  dsids = samps[["dsids"]])
 #'
 #' @export
 mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,

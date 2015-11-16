@@ -11,10 +11,10 @@ Description: precrec is a package for calculating accuate Precision-Recall
     two Precision-Recall points.
 License: GPL-3
 LazyData: TRUE
-Suggests: testthat,
-    grid,
-    gridExtra
+Suggests: testthat
 LinkingTo: Rcpp
 Imports: Rcpp,
     ggplot2,
-    assertthat
+    assertthat,
+    grid,
+    gridExtra

@@ -4,7 +4,7 @@
 #include <string>
 #define EPSILON_D (1.0E-8)
 
-// Prototypes
+// Prototype
 void get_yval_single(const Rcpp::NumericVector& xs,
                      const Rcpp::NumericVector& ys,
                      double x_interval,

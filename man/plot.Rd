@@ -122,79 +122,120 @@ The \code{plot} function shows a plot and returns NULL.
 The \code{plot} function plots performance evaluation measures
 }
 \examples{
+###
+### Single model & single test dataset
+###
+
 ## Load a dataset with 10 positives and 10 negatives
 data(P10N10)
 
-## Generate an sscurve object
-curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
+## Generate an sscurve object that contains ROC and Precision-Recall curves
+sscurves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 
 ## Plot both ROC and Precision-Recall curves
-plot(curves)
+plot(sscurves)
 
 ## Plot a ROC curve
-readline("Press <Enter> to continue...")
-plot(curves, curvetype = "ROC")
+plot(sscurves, curvetype = "ROC")
 
 ## Plot a Precision-Recall curve
-readline("Press <Enter> to continue...")
-plot(curves, curvetype = "PRC")
+plot(sscurves, curvetype = "PRC")
+
+## Generate an sspoints object that contains basic evaluation measures
+sspoints <- evalmod(mode = "basic", scores = P10N10$scores,
+                    labels = P10N10$labels)
+
+## Plot threshold values vs. basic evaluation measures
+plot(sspoints)
+
+## Plot threshold vs. precision
+plot(sspoints, curvetype = "precision")
+
+
+###
+### Multiple models & single test dataset
+###
 
 ## Create sample datasets with 100 positives and 100 negatives
 samps <- create_sim_samples(1, 100, 100, "all")
 mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-               modnames = samps[["modnames"]],
-               dsids = samps[["dsids"]])
+               modnames = samps[["modnames"]])
 
-## Generate an mscurve object
-curves <- evalmod(mdat)
+## Generate an mscurve object that contains ROC and Precision-Recall curves
+mscurves <- evalmod(mdat)
 
 ## Plot both ROC and Precision-Recall curves
-plot(curves)
-
-## Plot a ROC curve
-plot(curves, curvetype = "ROC")
-
-## Plot a Precision-Recall curve
-plot(curves, curvetype = "PRC")
+plot(mscurves)
 
 ## Hide the legend
-plot(curves, show_legend = FALSE)
+plot(mscurves, show_legend = FALSE)
 
-## Prepare input data
-samps <- create_sim_samples(10, 100, 100, "poor_er")
+## Generate an mspoints object that contains basic evaluation measures
+mspoints <- evalmod(mdat, mode = "basic")
+
+## Plot threshold values vs. basic evaluation measures
+plot(mspoints)
+
+## Hide the legend
+plot(mspoints, show_legend = FALSE)
+
+
+###
+### Single model & multiple test datasets
+###
+
+## Create sample datasets with 100 positives and 100 negatives
+samps <- create_sim_samples(10, 100, 100, "good_er")
 mdat <- mmdata(samps[["scores"]], samps[["labels"]],
                modnames = samps[["modnames"]],
                dsids = samps[["dsids"]])
 
-## Generate an mscurve object
-curves <- evalmod(mdat)
+## Generate an smcurve object that contains ROC and Precision-Recall curves
+smcurves <- evalmod(mdat, raw_curves = TRUE)
 
-## Plot both ROC and Precision-Recall curves
-plot(curves)
+## Plot average ROC and Precision-Recall curves
+plot(smcurves)
 
-## Plot a ROC curve
-plot(curves, curvetype = "ROC")
+## Hide confidence bounds
+plot(smcurves, show_cb = FALSE)
 
-## Plot a Precision-Recall curve
-plot(curves, curvetype = "PRC")
+## Plot raw ROC and Precision-Recall curves
+plot(smcurves, raw_curves = TRUE)
 
-## Prepare input data
+## Generate an smpoints object that contains basic evaluation measures
+smpoints <- evalmod(mdat, mode = "basic")
+
+## Plot threshold values vs. average basic evaluation measures
+plot(smpoints)
+
+
+###
+### Multiple models & multiple test datasets
+###
+
+## Create sample datasets with 100 positives and 100 negatives
 samps <- create_sim_samples(10, 100, 100, "all")
 mdat <- mmdata(samps[["scores"]], samps[["labels"]],
                modnames = samps[["modnames"]],
                dsids = samps[["dsids"]])
 
-## Generate an mscurve object
-curves <- evalmod(mdat)
+## Generate an mscurve object that contains ROC and Precision-Recall curves
+mmcurves <- evalmod(mdat, raw_curves = TRUE)
 
-## Plot both ROC and Precision-Recall curves
-plot(curves)
+## Plot average ROC and Precision-Recall curves
+plot(mmcurves)
 
-## Plot a ROC curve
-plot(curves, curvetype = "ROC")
+## Show confidence bounds
+plot(mmcurves, show_cb = TRUE)
 
-## Plot a Precision-Recall curve
-plot(curves, curvetype = "PRC")
+## Plot raw ROC and Precision-Recall curves
+plot(mmcurves, raw_curves = TRUE)
+
+## Generate an mmpoints object that contains basic evaluation measures
+mmpoints <- evalmod(mdat, mode = "basic")
+
+## Plot threshold values vs. average basic evaluation measures
+plot(mmpoints)
 }
 \seealso{
 \code{\link{evalmod}} for generating an S3 object.

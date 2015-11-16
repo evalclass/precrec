@@ -44,8 +44,8 @@ plot.sspoints <- function(x, curvetype = c("error", "accuracy", "specificity",
                                            "sensitivity", "precision"),
                           type = "p", ...) {
 
-  .plot_multi(x, curvetype = curvetype, show_cb = FALSE, raw_curves = TRUE,
-              add_np_nn = FALSE, show_legend = FALSE, ...)
+  .plot_multi(x, curvetype = curvetype, type = type, show_cb = FALSE,
+              raw_curves = TRUE, add_np_nn = FALSE, show_legend = FALSE, ...)
 
 }
 

@@ -38,6 +38,11 @@ scores2 <- join_scores(a1, s3)
 ## Use byrow
 a2 <- matrix(seq(8), 2, 4, byrow = TRUE)
 scores3 <- join_scores(a2, s3, byrow = TRUE)
+
+## Use chklen
+s4 <- c(1, 2, 3)
+s5 <- c(5, 6, 7, 8)
+scores4 <- join_scores(s4, s5, chklen = FALSE)
 }
 \seealso{
 \code{\link{evalmod}} for calculation evaluation measures.

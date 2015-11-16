@@ -37,6 +37,11 @@ labels2 <- join_labels(a1, l3)
 ## Use byrow
 a2 <- matrix(rep(c(1, 0), 4), 2, 4, byrow = TRUE)
 labels3 <- join_labels(a2, l3, byrow = TRUE)
+
+## Use chklen
+l4 <- c(-1, 0, -1)
+l5 <- c(0, -1)
+scores4 <- join_labels(l4, l5, chklen = FALSE)
 }
 \seealso{
 \code{\link{evalmod}} for calculation evaluation measures.

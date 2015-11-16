@@ -35,6 +35,11 @@
 #' a2 <- matrix(seq(8), 2, 4, byrow = TRUE)
 #' scores3 <- join_scores(a2, s3, byrow = TRUE)
 #'
+#' ## Use chklen
+#' s4 <- c(1, 2, 3)
+#' s5 <- c(5, 6, 7, 8)
+#' scores4 <- join_scores(s4, s5, chklen = FALSE)
+#'
 #' @export
 join_scores <- function(..., byrow = FALSE, chklen = TRUE) {
   # Call join datasets
@@ -76,6 +81,11 @@ join_scores <- function(..., byrow = FALSE, chklen = TRUE) {
 #' ## Use byrow
 #' a2 <- matrix(rep(c(1, 0), 4), 2, 4, byrow = TRUE)
 #' labels3 <- join_labels(a2, l3, byrow = TRUE)
+#'
+#' ## Use chklen
+#' l4 <- c(-1, 0, -1)
+#' l5 <- c(0, -1)
+#' scores4 <- join_labels(l4, l5, chklen = FALSE)
 #'
 #' @export
 join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
