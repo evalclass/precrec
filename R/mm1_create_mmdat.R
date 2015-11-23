@@ -71,7 +71,7 @@
 #'
 #' @examples
 #'
-#' ###
+#' #############################################################################
 #' ### Single model & single test dataset
 #' ###
 #'
@@ -82,19 +82,7 @@
 #' ssmdat1 <- mmdata(P10N10$scores, P10N10$labels)
 #' ssmdat2 <- mmdata(1:8, sample(c(0, 1), 8, replace = TRUE))
 #'
-#' ## Use join_scores and join_labels
-#' s1 <- c(1, 2, 3, 4)
-#' s2 <- c(5, 6, 7, 8)
-#' scores <- join_scores(s1, s2)
-#'
-#' l1 <- c(1, 0, 1, 1)
-#' l2 <- c(1, 1, 0, 0)
-#' labels <- join_labels(l1, l2)
-#'
-#' ssmdat3 <- mmdata(scores, labels)
-#'
-#'
-#' ###
+#' #############################################################################
 #' ### Multiple models & single test dataset
 #' ###
 #'
@@ -102,11 +90,21 @@
 #' samps <- create_sim_samples(1, 100, 100, "all")
 #'
 #' ## Multiple models & single test dataset
-#' msmdat <- mmdata(samps[["scores"]], samps[["labels"]],
-#'                  modnames = samps[["modnames"]])
+#' msmdat1 <- mmdata(samps[["scores"]], samps[["labels"]],
+#'                   modnames = samps[["modnames"]])
 #'
+#' ## Use join_scores and join_labels
+#' s1 <- c(1, 2, 3, 4)
+#' s2 <- c(5, 6, 7, 8)
+#' scores <- join_scores(s1, s2)
 #'
-#' ###
+#' l1 <- c(1, 0, 1, 1)
+#' l2 <- c(1, 0, 1, 1)
+#' labels <- join_labels(l1, l2)
+#'
+#' msmdat2 <- mmdata(scores, labels, modnames = c("ms1", "ms2"))
+#'
+#' #############################################################################
 #' ### Single model & multiple test datasets
 #' ###
 #'
@@ -119,7 +117,7 @@
 #'                  dsids = samps[["dsids"]])
 #'
 #'
-#' ###
+#' #############################################################################
 #' ### Multiple models & multiple test datasets
 #' ###
 #'

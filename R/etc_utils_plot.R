@@ -7,7 +7,7 @@
 #'
 #' \enumerate{
 #'
-#'   \item ROC and Precision-Recall curves
+#'   \item ROC and Precision-Recall curves (mode = "rocprc")
 #'
 #'   \tabular{lllll}{
 #'     \strong{S3 object}
@@ -20,7 +20,7 @@
 #'     mmcurves \tab \tab multiple \tab \tab multiple
 #'   }
 #'
-#'   \item Basic evaluation measures
+#'   \item Basic evaluation measures (mode = "basic")
 #'
 #'   \tabular{lllll}{
 #'     \strong{S3 object}
@@ -34,10 +34,14 @@
 #'   }
 #' }
 #'
+#' @param y Equivalent with \code{curvetype}.
+#'
+#' @param ... All the following arguments can be specified.
+#'
 #' @param curvetype A character vector with the following curve types
 #' \enumerate{
 #'
-#'   \item ROC and Precision-Recall curves
+#'   \item ROC and Precision-Recall curves (mode = "rocprc")
 #'
 #'     \describe{
 #'       \item{"ROC"}{ROC curve}
@@ -45,7 +49,7 @@
 #'       \item{c("ROC", "PRC")}{ROC and Precision-Recall curves}
 #'     }
 #'
-#'   \item Basic evaluation measures
+#'   \item Basic evaluation measures (mode = "basic")
 #'
 #'     \describe{
 #'       \item{"error"}{Normalized threshold values vs. error rate}
@@ -77,8 +81,6 @@
 #' @param show_legend A Boolean value to specify whether the legend is
 #'   shown.
 #'
-#' @param ... Not used by this method.
-#'
 #' @return The \code{plot} function shows a plot and returns NULL.
 #'
 #' @seealso \code{\link{evalmod}} for generating an S3 object.
@@ -87,7 +89,7 @@
 #'
 #' @examples
 #'
-#' ###
+#' #############################################################################
 #' ### Single model & single test dataset
 #' ###
 #'
@@ -117,7 +119,7 @@
 #' plot(sspoints, curvetype = "precision")
 #'
 #'
-#' ###
+#' #############################################################################
 #' ### Multiple models & single test dataset
 #' ###
 #'
@@ -145,7 +147,7 @@
 #' plot(mspoints, show_legend = FALSE)
 #'
 #'
-#' ###
+#' #############################################################################
 #' ### Single model & multiple test datasets
 #' ###
 #'
@@ -174,7 +176,7 @@
 #' plot(smpoints)
 #'
 #'
-#' ###
+#' #############################################################################
 #' ### Multiple models & multiple test datasets
 #' ###
 #'
@@ -206,11 +208,56 @@
 NULL
 
 #
+# Process ... for curve objects
+#
+.get_plot_arglist <- function(y, def_curvetype, def_type, def_show_cb,
+                              def_raw_curves, def_add_np_nn, def_show_legend,
+                              ...) {
+  arglist <- list(...)
+
+  if (!is.null(y)) {
+    arglist[["curvetype"]] <- y
+  }
+
+  if (is.null(arglist[["curvetype"]])){
+    arglist[["curvetype"]] <- def_curvetype
+  }
+
+  if (is.null(arglist[["type"]])){
+    arglist[["type"]] <- def_type
+  }
+
+  if (is.null(arglist[["show_cb"]])){
+    arglist[["show_cb"]] <- def_show_cb
+  }
+
+  if (is.null(arglist[["raw_curves"]])){
+    arglist[["raw_curves"]] <- def_raw_curves
+  }
+
+  if (is.null(arglist[["add_np_nn"]])){
+    arglist[["add_np_nn"]] <- def_add_np_nn
+  }
+
+  if (is.null(arglist[["show_legend"]])){
+    arglist[["show_legend"]] <- def_show_legend
+  }
+
+  arglist
+
+}
+
+#
 # Plot ROC and Precision-Recall
 #
-.plot_multi <- function(x, curvetype = c("ROC", "PRC"), type = "l",
-                        show_cb = FALSE, raw_curves = TRUE, add_np_nn = TRUE,
-                        show_legend = FALSE, ...) {
+.plot_multi <- function(x, arglist) {
+
+  curvetype <- arglist[["curvetype"]]
+  type <- arglist[["type"]]
+  show_cb <- arglist[["show_cb"]]
+  raw_curves <- arglist[["raw_curves"]]
+  add_np_nn <- arglist[["add_np_nn"]]
+  show_legend <- arglist[["show_legend"]]
 
   # === Validate input arguments ===
   .validate(x)
@@ -232,7 +279,7 @@ NULL
   for (ct in curvetype) {
     .plot_single(x, ct, type = type, show_cb = show_cb,
                  raw_curves = raw_curves, add_np_nn = add_np_nn,
-                 show_legend = show_legend2, ...)
+                 show_legend = show_legend2)
   }
   if (length(curvetype) == 5) {
     plot(1, type = "n", axes = FALSE, xlab = "", ylab = "")
@@ -392,14 +439,15 @@ NULL
 #
 .plot_single <- function(x, curvetype, type = type, show_cb = FALSE,
                          raw_curves = FALSE, add_np_nn = TRUE,
-                         show_legend = TRUE, ...) {
+                         show_legend = TRUE) {
 
   tlist <- .get_titiles(curvetype)
   main <- tlist[["main"]]
 
+  np <- attr(x, "data_info")[["np"]][[1]]
+  nn <- attr(x, "data_info")[["nn"]][[1]]
+
   if (add_np_nn) {
-    np <- attr(x, "data_info")[["np"]][[1]]
-    nn <- attr(x, "data_info")[["nn"]][[1]]
     main <- paste0(main, " - P: ", np, ", N: ", nn)
   }
 
@@ -423,7 +471,7 @@ NULL
   if (curvetype == "ROC") {
     abline(a = 0, b = 1, col = "grey", lty = 3)
 
-  } else if (curvetype == "PRC" && add_np_nn) {
+  } else if (curvetype == "PRC") {
     abline(h = np / (np + nn), col = "grey", lty = 3)
   }
 

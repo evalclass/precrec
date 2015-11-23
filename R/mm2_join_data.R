@@ -1,4 +1,4 @@
-#' Join scores of multiple models into a list.
+#' Join scores of multiple models into a list
 #'
 #' The \code{join_scores} function takes predicted scores from multiple models
 #'   and convert them to a list.
@@ -47,7 +47,7 @@ join_scores <- function(..., byrow = FALSE, chklen = TRUE) {
                  byrow = byrow, chklen = chklen)
 }
 
-#' Join observed labels of multiple test datasets into a list.
+#' Join observed labels of multiple test datasets into a list
 #'
 #' \code{join_labels} takes observed labels and converts them to a list.
 #'

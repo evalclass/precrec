@@ -8,7 +8,7 @@
 #'
 #' \enumerate{
 #'
-#'   \item ROC and Precision-Recall curves
+#'   \item ROC and Precision-Recall curves (mode = "rocprc")
 #'
 #'   \tabular{lllll}{
 #'     \strong{S3 object}
@@ -21,7 +21,7 @@
 #'     mmcurves \tab \tab multiple \tab \tab multiple
 #'   }
 #'
-#'   \item Basic evaluation measures
+#'   \item Basic evaluation measures (mode = "basic")
 #'
 #'   \tabular{lllll}{
 #'     \strong{S3 object}
@@ -38,7 +38,7 @@
 #' @param curvetype A character vector with the following curve types
 #' \enumerate{
 #'
-#'   \item ROC and Precision-Recall curves
+#'   \item ROC and Precision-Recall curves (mode = "rocprc")
 #'
 #'     \describe{
 #'       \item{"ROC"}{ROC curve}
@@ -46,7 +46,7 @@
 #'       \item{c("ROC", "PRC")}{ROC and Precision-Recall curves}
 #'     }
 #'
-#'   \item Basic evaluation measures
+#'   \item Basic evaluation measures (mode = "basic")
 #'
 #'     \describe{
 #'       \item{"error"}{Normalized threshold values vs. error rate}
@@ -103,7 +103,7 @@
 #' library(grid)
 #' library(gridExtra)
 #'
-#' ###
+#' #############################################################################
 #' ### Single model & single test dataset
 #' ###
 #'
@@ -142,7 +142,7 @@
 #' autoplot(sspoints, curvetype = "precision")
 #'
 #'
-#' ###
+#' #############################################################################
 #' ### Multiple models & single test dataset
 #' ###
 #'
@@ -170,7 +170,7 @@
 #' autoplot(mspoints, show_legend = FALSE)
 #'
 #'
-#' ###
+#' #############################################################################
 #' ### Single model & multiple test datasets
 #' ###
 #'
@@ -199,7 +199,7 @@
 #' autoplot(smpoints)
 #'
 #'
-#' ###
+#' #############################################################################
 #' ### Multiple models & multiple test datasets
 #' ###
 #'
@@ -229,6 +229,46 @@
 #'
 #' @name autoplot
 NULL
+
+#
+# Process ... for curve objects
+#
+.get_autoplot_arglist <- function(def_curvetype, def_type, def_show_cb,
+                                  def_raw_curves, def_add_np_nn,
+                                  def_show_legend, def_ret_grob, ...) {
+
+  arglist <- list(...)
+
+  if (is.null(arglist[["curvetype"]])){
+    arglist[["curvetype"]] <- def_curvetype
+  }
+
+  if (is.null(arglist[["type"]])){
+    arglist[["type"]] <- def_type
+  }
+
+  if (is.null(arglist[["show_cb"]])){
+    arglist[["show_cb"]] <- def_show_cb
+  }
+
+  if (is.null(arglist[["raw_curves"]])){
+    arglist[["raw_curves"]] <- def_raw_curves
+  }
+
+  if (is.null(arglist[["add_np_nn"]])){
+    arglist[["add_np_nn"]] <- def_add_np_nn
+  }
+
+  if (is.null(arglist[["show_legend"]])){
+    arglist[["show_legend"]] <- def_show_legend
+  }
+
+  if (is.null(arglist[["ret_grob"]])){
+    arglist[["ret_grob"]] <- def_ret_grob
+  }
+
+  arglist
+}
 
 #
 # Prepare autoplot and return a data frame
@@ -288,10 +328,14 @@ NULL
 #
 # Plot ROC and Precision-Recall
 #
-.autoplot_multi <- function(object, curvetype = c("ROC", "PRC"), type = "l",
-                            show_cb = FALSE, raw_curves = TRUE,
-                            show_legend = TRUE, add_np_nn = TRUE,
-                            ret_grob = FALSE, ...) {
+.autoplot_multi <- function(object, arglist) {
+  curvetype <- arglist[["curvetype"]]
+  type <- arglist[["type"]]
+  show_cb <- arglist[["show_cb"]]
+  raw_curves <- arglist[["raw_curves"]]
+  add_np_nn <- arglist[["add_np_nn"]]
+  show_legend <- arglist[["show_legend"]]
+  ret_grob <- arglist[["ret_grob"]]
 
   # === Check package availability  ===
   .load_ggplot2()
@@ -305,12 +349,12 @@ NULL
   .check_ret_grob(ret_grob)
 
   # === Create a ggplot object for ROC&PRC, ROC, or PRC ===
-  curve_df <- ggplot2::fortify(object, raw_curves = raw_curves, ...)
+  curve_df <- ggplot2::fortify(object, raw_curves = raw_curves)
 
   func_plot <- function(ctype) {
     .autoplot_single(object, curve_df, curvetype = ctype, type = type,
                      show_cb = show_cb, raw_curves = raw_curves,
-                     show_legend = show_legend, add_np_nn = add_np_nn, ...)
+                     show_legend = show_legend, add_np_nn = add_np_nn)
   }
   lcurves <- lapply(curvetype, func_plot)
   names(lcurves) <- curvetype
@@ -496,15 +540,14 @@ NULL
                             ...) {
   if (add_np_nn) {
     main <- .make_rocprc_title(object, "Precision-Recall")
-
-    np <- attr(object, "np")
-    nn <- attr(object, "nn")
-    p <- p + ggplot2::geom_hline(yintercept = np / (np + nn), colour = "grey",
-                                 linetype = 3)
   } else {
     main <- "Precision-Recall"
   }
 
+  np <- attr(object, "data_info")[["np"]]
+  nn <- attr(object, "data_info")[["nn"]]
+  p <- p + ggplot2::geom_hline(yintercept = np / (np + nn), colour = "grey",
+                               linetype = 3)
   p <- p + ggplot2::scale_y_continuous(limits = c(0.0, 1.0))
   p <- p + ggplot2::coord_fixed(ratio = 1)
 

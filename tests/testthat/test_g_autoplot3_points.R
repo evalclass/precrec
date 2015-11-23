@@ -65,9 +65,6 @@ ap3_test_basic_measures <- function(curves, raw_curves = FALSE, ...){
   pp <- ggplot2::autoplot(curves, raw_curves = raw_curves, ...)
   expect_that(pp, not(throws_error()))
 
-  pp <- ggplot2::autoplot(curves, raw_curves = raw_curves, ...)
-  expect_that(pp, not(throws_error()))
-
   pp <- ggplot2::autoplot(curves, c("sensitivity", "specificity", "error",
                                     "accuracy", "precision"),
                           raw_curves = raw_curves, ...)
@@ -109,6 +106,8 @@ test_that("autoplot for multiple sspoints returns grob", {
   if (!ap3_check_libs()) {
     skip("Libraries cannot be loaded")
   }
+  pdf(NULL)
+  on.exit(dev.off())
 
   data(P10N10)
   points <- evalmod(mode = "basic", scores = P10N10$scores,
@@ -137,6 +136,8 @@ test_that("autoplot for multiple mspoints returns grob", {
   if (!ap3_check_libs()) {
     skip("Libraries cannot be loaded")
   }
+  pdf(NULL)
+  on.exit(dev.off())
 
   points <- ap3_create_mspoints()
 
@@ -166,6 +167,8 @@ test_that("autoplot for multiple smpoints returns grob", {
   if (!ap3_check_libs()) {
     skip("Libraries cannot be loaded")
   }
+  pdf(NULL)
+  on.exit(dev.off())
 
   points <- ap3_create_smpoints()
 
@@ -197,6 +200,8 @@ test_that("autoplot for multiple mmpoints returns grob", {
   if (!ap3_check_libs()) {
     skip("Libraries cannot be loaded")
   }
+  pdf(NULL)
+  on.exit(dev.off())
 
   points <- ap3_create_mmpoints()
 
