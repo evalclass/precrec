@@ -92,6 +92,8 @@ test_that("autoplot for multiple sscurves returns grob", {
   if (!ap2_check_libs()) {
     skip("Libraries cannot be loaded")
   }
+  pdf(NULL)
+  on.exit(dev.off())
 
   data(P10N10)
   curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
@@ -117,6 +119,8 @@ test_that("autoplot for multiple mscurves returns grob", {
   if (!ap2_check_libs()) {
     skip("Libraries cannot be loaded")
   }
+  pdf(NULL)
+  on.exit(dev.off())
 
   curves <- ap2_create_mscurves()
 
@@ -144,6 +148,9 @@ test_that("autoplot for multiple smcurves retruns grob", {
   if (!ap2_check_libs()) {
     skip("Libraries cannot be loaded")
   }
+  pdf(NULL)
+  on.exit(dev.off())
+
   curves <- ap2_create_smcurves()
 
   pp <- ggplot2::autoplot(curves, show_legend = FALSE, ret_grob = TRUE)
@@ -172,6 +179,8 @@ test_that("autoplot multiple mmcurves returns grob", {
   if (!ap2_check_libs()) {
     skip("Libraries cannot be loaded")
   }
+  pdf(NULL)
+  on.exit(dev.off())
 
   curves <- ap2_create_mmcurves()
 

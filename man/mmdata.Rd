@@ -77,7 +77,7 @@ The \code{mmdata} function takes predicted scores and labels
 }
 \examples{
 
-###
+#############################################################################
 ### Single model & single test dataset
 ###
 
@@ -88,7 +88,7 @@ data(P10N10)
 ssmdat1 <- mmdata(P10N10$scores, P10N10$labels)
 ssmdat2 <- mmdata(1:8, sample(c(0, 1), 8, replace = TRUE))
 
-###
+#############################################################################
 ### Multiple models & single test dataset
 ###
 
@@ -110,7 +110,7 @@ labels <- join_labels(l1, l2)
 
 msmdat2 <- mmdata(scores, labels, modnames = c("ms1", "ms2"))
 
-###
+#############################################################################
 ### Single model & multiple test datasets
 ###
 
@@ -123,7 +123,7 @@ smmdat <- mmdata(samps[["scores"]], samps[["labels"]],
                  dsids = samps[["dsids"]])
 
 
-###
+#############################################################################
 ### Multiple models & multiple test datasets
 ###
 

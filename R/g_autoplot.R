@@ -42,58 +42,76 @@ autoplot.pevals <- function(object, ...) {
 
 #' @rdname autoplot
 #' @export
-autoplot.sscurves <- function(object, curvetype = c("ROC", "PRC"),
-                              ret_grob = FALSE, ...) {
+autoplot.sscurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
 
-  .autoplot_multi(object, curvetype = curvetype, show_cb = FALSE,
-                  raw_curves = TRUE, show_legend = FALSE, add_np_nn = TRUE,
-                  ret_grob = ret_grob)
+  arglist <- .get_autoplot_arglist(def_curvetype = curvetype, def_type = "l",
+                                   def_show_cb = FALSE, def_raw_curves = TRUE,
+                                   def_add_np_nn = TRUE,
+                                   def_show_legend = FALSE,
+                                   def_ret_grob = FALSE, ...)
+  arglist[["raw_curves"]] <- TRUE
+  arglist[["show_cb"]] <- FALSE
+
+  .autoplot_multi(object, arglist)
 
 }
 
 #' @rdname autoplot
 #' @export
-autoplot.mscurves <- function(object, curvetype = c("ROC", "PRC"),
-                              show_legend = TRUE, ret_grob = FALSE, ...) {
+autoplot.mscurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
 
-  .autoplot_multi(object, curvetype = curvetype, show_cb = FALSE,
-                  raw_curves = TRUE, show_legend = show_legend,
-                  add_np_nn = TRUE, ret_grob = ret_grob)
+  arglist <- .get_autoplot_arglist(def_curvetype = curvetype, def_type = "l",
+                                   def_show_cb = FALSE, def_raw_curves = TRUE,
+                                   def_add_np_nn = TRUE,
+                                   def_show_legend = TRUE,
+                                   def_ret_grob = FALSE, ...)
+  arglist[["raw_curves"]] <- TRUE
+  arglist[["show_cb"]] <- FALSE
+
+  .autoplot_multi(object, arglist)
 }
 
 #' @rdname autoplot
 #' @export
-autoplot.smcurves <- function(object, curvetype = c("ROC", "PRC"),
-                              show_cb = TRUE, raw_curves = FALSE,
-                              ret_grob = FALSE, ...) {
+autoplot.smcurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
 
-  .autoplot_multi(object, curvetype = curvetype, show_cb = show_cb,
-                  raw_curves = raw_curves, show_legend = FALSE,
-                  add_np_nn = TRUE, ret_grob = ret_grob)
+  arglist <- .get_autoplot_arglist(def_curvetype = curvetype, def_type = "l",
+                                   def_show_cb = TRUE, def_raw_curves = FALSE,
+                                   def_add_np_nn = TRUE,
+                                   def_show_legend = FALSE,
+                                   def_ret_grob = FALSE, ...)
+
+  .autoplot_multi(object, arglist)
 }
 
 #' @rdname autoplot
 #' @export
-autoplot.mmcurves <- function(object, curvetype = c("ROC", "PRC"),
-                              show_cb = FALSE, raw_curves = FALSE,
-                              show_legend = TRUE, ret_grob = FALSE, ...) {
+autoplot.mmcurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
 
-  .autoplot_multi(object, curvetype = curvetype, show_cb = show_cb,
-                  raw_curves = raw_curves, show_legend = show_legend,
-                  add_np_nn = TRUE, ret_grob = ret_grob)
+  arglist <- .get_autoplot_arglist(def_curvetype = curvetype, def_type = "l",
+                                   def_show_cb = FALSE, def_raw_curves = FALSE,
+                                   def_add_np_nn = TRUE,
+                                   def_show_legend = TRUE,
+                                   def_ret_grob = FALSE, ...)
+
+  .autoplot_multi(object, arglist)
 }
 
 #' @rdname autoplot
 #' @export
 autoplot.sspoints <- function(object,
                               curvetype = c("error", "accuracy", "specificity",
-                                            "sensitivity", "precision"),
-                              type = "p", ret_grob = FALSE, ...) {
+                                            "sensitivity", "precision"), ...) {
 
-  .autoplot_multi(object, curvetype = curvetype, type = type,
-                  show_cb = FALSE, raw_curves = TRUE,
-                  show_legend = FALSE, add_np_nn = TRUE,
-                  ret_grob = ret_grob)
+  arglist <- .get_autoplot_arglist(def_curvetype = curvetype, def_type = "p",
+                                   def_show_cb = FALSE, def_raw_curves = TRUE,
+                                   def_add_np_nn = TRUE,
+                                   def_show_legend = FALSE,
+                                   def_ret_grob = FALSE, ...)
+  arglist[["raw_curves"]] <- TRUE
+  arglist[["show_cb"]] <- FALSE
+
+  .autoplot_multi(object, arglist)
 
 }
 
@@ -101,40 +119,45 @@ autoplot.sspoints <- function(object,
 #' @export
 autoplot.mspoints <- function(object,
                               curvetype = c("error", "accuracy", "specificity",
-                                            "sensitivity", "precision"),
-                              type = "p",
-                              show_legend = TRUE, ret_grob = FALSE, ...) {
+                                            "sensitivity", "precision"), ...) {
 
-  .autoplot_multi(object, curvetype = curvetype, type = type,
-                  show_cb = FALSE, raw_curves = TRUE,
-                  show_legend = show_legend, add_np_nn = TRUE,
-                  ret_grob = ret_grob)
+  arglist <- .get_autoplot_arglist(def_curvetype = curvetype, def_type = "p",
+                                   def_show_cb = FALSE, def_raw_curves = TRUE,
+                                   def_add_np_nn = TRUE,
+                                   def_show_legend = TRUE,
+                                   def_ret_grob = FALSE, ...)
+  arglist[["raw_curves"]] <- TRUE
+  arglist[["show_cb"]] <- FALSE
+
+  .autoplot_multi(object, arglist)
 }
 
 #' @rdname autoplot
 #' @export
 autoplot.smpoints <- function(object,
                               curvetype = c("error", "accuracy", "specificity",
-                                            "sensitivity", "precision"),
-                              type = "p", show_cb = TRUE, raw_curves = FALSE,
-                              ret_grob = FALSE, ...) {
+                                            "sensitivity", "precision"), ...) {
 
-  .autoplot_multi(object, curvetype = curvetype, type = type,
-                  show_cb = show_cb, raw_curves = raw_curves,
-                  show_legend = FALSE, add_np_nn = TRUE,
-                  ret_grob = ret_grob)
+  arglist <- .get_autoplot_arglist(def_curvetype = curvetype, def_type = "p",
+                                   def_show_cb = TRUE, def_raw_curves = FALSE,
+                                   def_add_np_nn = TRUE,
+                                   def_show_legend = FALSE,
+                                   def_ret_grob = FALSE, ...)
+
+  .autoplot_multi(object, arglist)
 }
 
 #' @rdname autoplot
 #' @export
 autoplot.mmpoints <- function(object,
                               curvetype = c("error", "accuracy", "specificity",
-                                            "sensitivity", "precision"),
-                              type = "p", show_cb = FALSE, raw_curves = FALSE,
-                              show_legend = TRUE, ret_grob = FALSE, ...) {
+                                            "sensitivity", "precision"), ...) {
 
-  .autoplot_multi(object, curvetype = curvetype, type = type,
-                  show_cb = show_cb, raw_curves = raw_curves,
-                  show_legend = show_legend, add_np_nn = TRUE,
-                  ret_grob = ret_grob)
+  arglist <- .get_autoplot_arglist(def_curvetype = curvetype, def_type = "p",
+                                   def_show_cb = FALSE, def_raw_curves = FALSE,
+                                   def_add_np_nn = TRUE,
+                                   def_show_legend = TRUE,
+                                   def_ret_grob = FALSE, ...)
+
+  .autoplot_multi(object, arglist)
 }

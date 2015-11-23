@@ -71,10 +71,10 @@ pl_main <- function(mdat, mode = "rocprc", calc_avg = TRUE, cb_alpha = 0.05,
   .validate_calc_avg(calc_avg)
 
   # Validate cb_alpha
-  .validate_cb_alpha(cb_alpha, calc_avg)
+  .validate_cb_alpha(cb_alpha, NULL)
 
   # Validate raw_curves
-  .validate_raw_curves(raw_curves, calc_avg)
+  .validate_raw_curves(raw_curves, NULL)
 
 
   # Check x_bins

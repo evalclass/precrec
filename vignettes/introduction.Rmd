@@ -130,7 +130,7 @@ Level name  Description
 # A dataset with 10 positives and 10 negatives for the random performance level
 samps1 <- create_sim_samples(1, 10, 10, "random")
 
-# A dataset for five different performance levels
+#  A dataset for five different performance levels
 samps2 <- create_sim_samples(1, 10, 10, "all")
 
 # A dataset with 20 samples for the good early retrieval performance level
@@ -241,8 +241,50 @@ autoplot(mmcurves, "PRC")
 autoplot(mmcurves, "PRC", show_cb = TRUE)
 ```
 
-## 6. Basic performance evaluation measures
-The `evalmod` function also calculates basic evaluation measures - error, accuracy, specificity, sensitivity, and precision.
+## 6. Simulation with balanced and imbalanced datasets
+It is easy to simulate various scenarios, such as balanced vs. imbalanced 
+datasets, by using the `evalmod` and `create_sim_samples` functions.
+
+### Data preparation
+```{r}
+# Balanced dataset
+samps5 <- create_sim_samples(100, 100, 100, "all")
+simmdat1 <- mmdata(samps5[["scores"]], samps5[["labels"]], 
+                   modnames = samps5[["modnames"]], dsids = samps5[["dsids"]])
+
+# Imbalanced dataset
+samps6 <- create_sim_samples(100, 10, 100, "all")
+simmdat2 <- mmdata(samps6[["scores"]], samps6[["labels"]], 
+                   modnames = samps6[["modnames"]], dsids = samps6[["dsids"]])
+
+```
+
+### ROC and Precision-Recall calculations
+The `evalmod` function automatically detects multiple models and multiple test datasets.
+```{r}
+# Balanced dataset
+simcurves1 <- evalmod(simmdat1)
+
+# Imbalanced dataset
+simcurves2 <- evalmod(simmdat2)
+```
+
+### Balanced vs. imbalanced datasets
+ROC plots are unchanged between balanced and imbalanced datasets, whereas
+Precision-Recall plots show a clear difference between them. See our 
+[article](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0118432) or [website](https://classeval.wordpress.com) for potential pitfalls by
+using ROC plots with imbalanced datasets.
+```{r, fig.width=7, fig.show='hold'}
+# Balanced dataset
+autoplot(simcurves1)
+
+# Imbalanced dataset
+autoplot(simcurves2)
+```
+
+## 7. Basic performance evaluation measures
+The `evalmod` function also calculates basic evaluation measures - error, 
+accuracy, specificity, sensitivity, and precision.
 
 Measure     Description 
 ----------- --------------------------
@@ -264,6 +306,12 @@ mmpoins <- evalmod(mmmdat2, mode = "basic")
 All the five S3 generics except for the `auc` function are also effective 
 for the S3 object generated.
 ```{r, fig.width=7, fig.show='hold'}
-# Show normalized threshold values vs. error rate and precision
-autoplot(mmpoins, c("error", "precision"))
+# Show normalized threshold values vs. error rate and accuracy
+autoplot(mmpoins, c("error", "accuracy"))
+
+# Show normalized threshold values vs. specificity and sensitivity
+autoplot(mmpoins, c("specificity", "sensitivity"))
+
+# Show normalized threshold values vs. precision
+autoplot(mmpoins, "precision")
 ```

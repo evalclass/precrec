@@ -156,7 +156,7 @@ The \code{evalmod} function takes predicted scores and binary labels
 }
 \examples{
 
-###
+#############################################################################
 ### Single model & single test dataset
 ###
 
@@ -171,7 +171,7 @@ sspoints <- evalmod(mode = "basic", scores = P10N10$scores,
                     labels = P10N10$labels)
 
 
-###
+#############################################################################
 ### Multiple models & single test dataset
 ###
 
@@ -187,7 +187,7 @@ mscurves <- evalmod(mdat)
 mspoints <- evalmod(mdat, mode = "basic")
 
 
-###
+#############################################################################
 ### Single model & multiple test datasets
 ###
 
@@ -204,7 +204,7 @@ smcurves <- evalmod(mdat)
 smpoints <- evalmod(mdat, mode = "basic")
 
 
-###
+#############################################################################
 ### Multiple models & multiple test datasets
 ###
 
