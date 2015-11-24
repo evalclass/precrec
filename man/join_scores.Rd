@@ -11,7 +11,7 @@ join_scores(..., byrow = FALSE, chklen = TRUE)
 data frames, and lists.}
 
 \item{byrow}{A Boolean value to specify whether row vectors are used
-for matrix, data.frame, and array.}
+for matrix, data frame, and array.}
 
 \item{chklen}{A Boolean value to specify whether all list items must be
 the same lengths.}
