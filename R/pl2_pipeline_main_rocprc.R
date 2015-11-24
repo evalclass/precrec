@@ -41,7 +41,7 @@
     names(grp_curves)<- c("rocs", "prcs")
   }
   s3obj <- structure(grp_curves, class = c(paste0(class_name_pf, "curves"),
-                                           "curve_info"))
+                                           "curve_info", "aucs"))
 
   # Set attributes
   attr(s3obj, "aucs") <- aucs

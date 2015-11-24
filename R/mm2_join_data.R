@@ -7,7 +7,7 @@
 #'   data frames, and lists.
 #'
 #' @param byrow A Boolean value to specify whether row vectors are used
-#'   for matrix, data.frame, and array.
+#'   for matrix, data frame, and array.
 #'
 #' @param chklen A Boolean value to specify whether all list items must be
 #'   the same lengths.
@@ -55,7 +55,7 @@ join_scores <- function(..., byrow = FALSE, chklen = TRUE) {
 #'   data frames, and lists.
 #'
 #' @param byrow A Boolean value to specify whether row vectors are used
-#'   for matrix, data.frame, and array.
+#'   for matrix, data frame, and array.
 #'
 #' @param chklen A Boolean value to specify whether all list items must be
 #'   the same lengths.

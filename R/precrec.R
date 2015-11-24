@@ -6,8 +6,8 @@
 #' @section Performance measure calculations:
 #' The \code{\link{evalmod}} function calculates ROC and Precision-Recall
 #'  curves and returns an S3 object. The generated S3 object can be used
-#'  with several different S3 generics, such as \code{print}
-#'  and \code{\link{plot}}. The \code{\link{evalmod}} function can also
+#'  with several different S3 generics, such as \code{print} and
+#'  \code{\link{plot}}. The \code{\link{evalmod}} function can also
 #'  calculate basic evaluation measures - error rate, accuracy, specificity,
 #'  sensitivity, and precision.
 #'

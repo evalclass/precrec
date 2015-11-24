@@ -19,7 +19,7 @@
 #'     \item \code{ties_method}
 #'   }
 #'   These arguments are internally passed to the \code{\link{mmdata}} function
-#'   when code{mdat} is unspecified.
+#'   when \code{mdat} is unspecified.
 #'   In that case, both \code{scores} and \code{labels} must be
 #'   at least specified.
 #'
