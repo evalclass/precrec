@@ -38,48 +38,53 @@
 #'
 #' @param ... All the following arguments can be specified.
 #'
-#' @param curvetype A character vector with the following curve types
-#' \enumerate{
+#' \describe{
+#'   \item{curvetype}{
+#'     \enumerate{
 #'
-#'   \item ROC and Precision-Recall curves (mode = "rocprc")
+#'       \item ROC and Precision-Recall curves (mode = "rocprc")
 #'
-#'     \describe{
-#'       \item{"ROC"}{ROC curve}
-#'       \item{"PRC"}{Precision-Recall curve}
-#'       \item{c("ROC", "PRC")}{ROC and Precision-Recall curves}
-#'     }
+#'         \describe{
+#'           \item{"ROC"}{ROC curve}
+#'           \item{"PRC"}{Precision-Recall curve}
+#'           \item{c("ROC", "PRC")}{ROC and Precision-Recall curves}
+#'          }
 #'
-#'   \item Basic evaluation measures (mode = "basic")
+#'       \item Basic evaluation measures (mode = "basic")
 #'
-#'     \describe{
-#'       \item{"error"}{Normalized threshold values vs. error rate}
-#'       \item{"accuracy"}{Normalized threshold values vs. accuracy}
-#'       \item{"specificity"}{Normalized threshold values vs. specificity}
-#'       \item{"sensitivity"}{Normalized threshold values vs. sensitivity}
-#'       \item{"precision"}{Normalized threshold values vs. precision}
-#'       \item{c("error", "accuracy", "specificity", "sensitivity",
+#'         \describe{
+#'           \item{"error"}{Normalized threshold values vs. error rate}
+#'           \item{"accuracy"}{Normalized threshold values vs. accuracy}
+#'           \item{"specificity"}{Normalized threshold values vs. specificity}
+#'           \item{"sensitivity"}{Normalized threshold values vs. sensitivity}
+#'           \item{"precision"}{Normalized threshold values vs. precision}
+#'           \item{c("error", "accuracy", "specificity", "sensitivity",
 #'               "precision")}{All of the above}
-#'     }
-#' }
-#'
-#' @param type A single character to specify the type of plot.
-#'   \describe{
-#'     \item{"l"}{lines}
-#'     \item{"p"}{points}
-#'     \item{"b"}{both lines and points}
+#'         }
+#'      }
 #'   }
-#'
-#' @param show_cb A Boolean value to specify whether point-wise confidence
-#'   bounds are drawn. It is effective only when \code{calc_avg} is
-#'   set to \code{TRUE} of the \code{\link{evalmod}} function.
-#'
-#' @param raw_curves A Boolean value to specify whether raw curves are
-#'   shown instead of the average curve. It is effective only
-#'   when \code{raw_curves} is set to \code{TRUE}
-#'   of the \code{\link{evalmod}} function.
-#'
-#' @param show_legend A Boolean value to specify whether the legend is
-#'   shown.
+#'   \item{type}{
+#'     \describe{
+#'       \item{"l"}{lines}
+#'       \item{"p"}{points}
+#'       \item{"b"}{both lines and points}
+#'     }
+#'   }
+#'   \item{show_cb}{
+#'     A Boolean value to specify whether point-wise confidence
+#'     bounds are drawn. It is effective only when \code{calc_avg} is
+#'     set to \code{TRUE} of the \code{\link{evalmod}} function.
+#'   }
+#'   \item{raw_curves}{
+#'     A Boolean value to specify whether raw curves are
+#'     shown instead of the average curve. It is effective only
+#'     when \code{raw_curves} is set to \code{TRUE}
+#'     of the \code{\link{evalmod}} function.
+#'   }
+#'   \item{show_legend}{
+#'     A Boolean value to specify whether the legend is shown.
+#'   }
+#' }
 #'
 #' @return The \code{plot} function shows a plot and returns NULL.
 #'
@@ -92,6 +97,8 @@
 #' #############################################################################
 #' ### Single model & single test dataset
 #' ###
+#'
+#'\dontrun{
 #'
 #' ## Load a dataset with 10 positives and 10 negatives
 #' data(P10N10)
@@ -118,10 +125,13 @@
 #' ## Plot threshold vs. precision
 #' plot(sspoints, curvetype = "precision")
 #'
+#'}
 #'
 #' #############################################################################
 #' ### Multiple models & single test dataset
 #' ###
+#'
+#'\dontrun{
 #'
 #' ## Create sample datasets with 100 positives and 100 negatives
 #' samps <- create_sim_samples(1, 100, 100, "all")
@@ -146,10 +156,13 @@
 #' ## Hide the legend
 #' plot(mspoints, show_legend = FALSE)
 #'
+#'}
 #'
 #' #############################################################################
 #' ### Single model & multiple test datasets
 #' ###
+#'
+#'\dontrun{
 #'
 #' ## Create sample datasets with 100 positives and 100 negatives
 #' samps <- create_sim_samples(10, 100, 100, "good_er")
@@ -175,10 +188,13 @@
 #' ## Plot threshold values vs. average basic evaluation measures
 #' plot(smpoints)
 #'
+#'}
 #'
 #' #############################################################################
 #' ### Multiple models & multiple test datasets
 #' ###
+#'
+#'\dontrun{
 #'
 #' ## Create sample datasets with 100 positives and 100 negatives
 #' samps <- create_sim_samples(10, 100, 100, "all")
@@ -203,6 +219,7 @@
 #'
 #' ## Plot threshold values vs. average basic evaluation measures
 #' plot(mmpoints)
+#'}
 #'
 #' @name plot
 NULL
