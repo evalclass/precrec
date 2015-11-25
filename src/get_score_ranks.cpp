@@ -3,8 +3,6 @@
 #include <string>       // std::string
 #include <cfloat>       // DBL_MIN, DBL_MAX
 #include <algorithm>    // std::random_shuffle, std::sort, std::stable_sort
-#include <ctime>        // std::time
-#include <cstdlib>      // std::rand, std::srand
 
 // Prototype
 void update_ties(std::vector<int>& ranks,
@@ -31,8 +29,6 @@ class CompDVec {
 Rcpp::List get_score_ranks(const Rcpp::NumericVector& scores,
                            const bool& na_last,
                            const std::string& ties_method) {
-
-  std::srand(unsigned(std::time(0)));
 
   // Variables
   Rcpp::List ret_val;
@@ -111,6 +107,11 @@ Rcpp::List get_score_ranks(const Rcpp::NumericVector& scores,
   return ret_val;
 }
 
+// Copied from http://gallery.rcpp.org/articles/stl-random-shuffle/
+// wrapper around R's RNG such that we get a uniform distribution over
+// [0,n) as required by the STL algorithm
+inline int randWrapper(const int n) { return floor(unif_rand() * n); }
+
 // Update ranks and rank_idx for ties
 void update_ties(std::vector<int>& ranks,
                  std::vector<int>& rank_idx,
@@ -127,7 +128,7 @@ void update_ties(std::vector<int>& ranks,
       ranks[*it] = base_rank;
     }
   } else if (ties_method == "random") {
-    std::random_shuffle(tied_idx.begin(), tied_idx.end());
+    std::random_shuffle(tied_idx.begin(), tied_idx.end(), randWrapper);
     for (unsigned i = 0; i < tied_idx.size(); ++i) {
       ranks[rank_idx[tied_idx[i]]] = base_rank + i;
       rank_idx[tied_idx[i]] = base_rank_idx + i;

@@ -9,18 +9,19 @@ Authors@R: c(
 Description: precrec is a package for calculating accuate Precision-Recall
     and ROC curves. precrec provides correct non-linear interpolation between
     two Precision-Recall points.
+Depends: R (>= 3.2.1)
 License: GPL-3
 LazyData: TRUE
-Suggests: 
-    testthat,
-    knitr,
-    rmarkdown
+Suggests:
+    testthat (>= 1.0-6),
+    knitr (>= 1.11),
+    rmarkdown (>= 0.8.1)
 LinkingTo: Rcpp
-Imports: 
-    Rcpp,
-    ggplot2,
-    assertthat,
-    grid,
-    gridExtra
+Imports:
+    Rcpp (>= 0.12.2),
+    ggplot2 (>= 1.0.1),
+    assertthat (>= 0.1),
+    grid (>= 3.2.1),
+    gridExtra (>= 2.0.0)
 RoxygenNote: 5.0.1
 VignetteBuilder: knitr
