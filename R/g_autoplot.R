@@ -5,7 +5,8 @@ autoplot.fmdat <- function(object, ...) {
   curve_df <- .prepare_autoplot(object)
 
   # === Create a ggplot object ===
-  p <- ggplot2::ggplot(curve_df, ggplot2::aes(x = x, y = y, color = x))
+  p <- ggplot2::ggplot(curve_df,
+                       ggplot2::aes_string(x = 'x', y = 'y', color = 'x'))
   p <- p + ggplot2::geom_jitter()
   p <- p + ggplot2::coord_flip()
   p <- .geom_basic(p, "Score distributions by rank", NULL, "rank",
@@ -19,7 +20,8 @@ autoplot.cmats <- function(object, ...) {
   curve_df <- .prepare_autoplot(object)
 
   # === Create a ggplot object ===
-  p <- ggplot2::ggplot(curve_df, ggplot2::aes(x = x, y = y, color = group))
+  p <- ggplot2::ggplot(curve_df,
+                       ggplot2::aes_string(x = 'x', y = 'y', color = 'group'))
   p <- p + ggplot2::geom_line()
   p <- .geom_basic(p, "TPs, FNs, FPs, and TNs by threshold IDs",
                    "threshold ID", "count", show_legend = TRUE)
@@ -32,7 +34,8 @@ autoplot.pevals <- function(object, ...) {
   curve_df <- .prepare_autoplot(object)
 
   # === Create a ggplot object ===
-  p <- ggplot2::ggplot(curve_df, ggplot2::aes(x = x, y = y))
+  p <- ggplot2::ggplot(curve_df,
+                       ggplot2::aes_string(x = 'x', y = 'y'))
   p <- p + ggplot2::geom_line()
   p <- p + ggplot2::facet_wrap(~ group, ncol = 2)
 
