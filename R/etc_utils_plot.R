@@ -225,6 +225,66 @@
 NULL
 
 #
+# Check partial match - ROC and PRC curve type
+#
+.pmatch_curvetype_rocprc <- function(vals) {
+  pfunc <- function(val) {
+    if (assertthat::is.string(val)) {
+      sval <- tolower(val)
+
+      if (!is.na(pmatch(sval, "roc"))) {
+        return("ROC")
+      }
+
+      if (!is.na(pmatch(sval, "prc"))) {
+        return("PRC")
+      }
+    }
+
+    val
+  }
+
+  unlist(lapply(vals, pfunc))
+}
+
+#
+# Check partial match - Basic evaluation measures
+#
+.pmatch_curvetype_basic <- function(vals) {
+
+  pfunc <- function(val) {
+    if (assertthat::is.string(val)) {
+      sval <- tolower(val)
+
+      if (!is.na(pmatch(sval, "error rate"))) {
+        return("error")
+      }
+
+      if (!is.na(pmatch(sval, "accuracy"))) {
+        return("accuracy")
+      }
+
+      if (!is.na(pmatch(sval, "specificity")) || sval == "tnr") {
+        return("specificity")
+      }
+
+      if (!is.na(pmatch(sval, "sensitivity"))
+          || !is.na(pmatch(sval, "recall")) || sval == "tpr" || sval == "sn") {
+        return("sensitivity")
+      }
+
+      if (!is.na(pmatch(sval, "precision")) || sval == "ppv") {
+        return("precision")
+      }
+    }
+
+    val
+  }
+
+  unlist(lapply(vals, pfunc))
+}
+
+#
 # Process ... for curve objects
 #
 .get_plot_arglist <- function(y, def_curvetype, def_type, def_show_cb,

@@ -6,8 +6,10 @@ plot.sscurves <- function(x, y = NULL, ...) {
                                def_type = "l", def_show_cb = FALSE,
                                def_raw_curves = TRUE, def_add_np_nn = TRUE,
                                def_show_legend = FALSE, ...)
+
   arglist[["raw_curves"]] <- TRUE
   arglist[["show_cb"]] <- FALSE
+  arglist[["curvetype"]] <- .pmatch_curvetype_rocprc(arglist[["curvetype"]])
 
   .plot_multi(x, arglist)
 
@@ -21,8 +23,10 @@ plot.mscurves <- function(x, y = NULL, ...) {
                                def_type = "l", def_show_cb = FALSE,
                                def_raw_curves = TRUE, def_add_np_nn = TRUE,
                                def_show_legend = TRUE, ...)
+
   arglist[["raw_curves"]] <- TRUE
   arglist[["show_cb"]] <- FALSE
+  arglist[["curvetype"]] <- .pmatch_curvetype_rocprc(arglist[["curvetype"]])
 
   .plot_multi(x, arglist)
 
@@ -36,6 +40,9 @@ plot.smcurves <- function(x, y = NULL, ...) {
                                def_type = "l", def_show_cb = TRUE,
                                def_raw_curves = FALSE, def_add_np_nn = TRUE,
                                def_show_legend = FALSE, ...)
+
+  arglist[["curvetype"]] <- .pmatch_curvetype_rocprc(arglist[["curvetype"]])
+
   .plot_multi(x, arglist)
 
 }
@@ -48,6 +55,9 @@ plot.mmcurves <- function(x, y = NULL, ...) {
                                def_type = "l", def_show_cb = FALSE,
                                def_raw_curves = FALSE, def_add_np_nn = TRUE,
                                def_show_legend = TRUE, ...)
+
+  arglist[["curvetype"]] <- .pmatch_curvetype_rocprc(arglist[["curvetype"]])
+
   .plot_multi(x, arglist)
 
 }
@@ -63,6 +73,7 @@ plot.sspoints <- function(x, y = NULL, ...) {
                                ...)
   arglist[["raw_curves"]] <- TRUE
   arglist[["show_cb"]] <- FALSE
+  arglist[["curvetype"]] <- .pmatch_curvetype_basic(arglist[["curvetype"]])
 
   .plot_multi(x, arglist)
 
@@ -80,6 +91,7 @@ plot.mspoints <- function(x, y = NULL, ...) {
                                ...)
   arglist[["raw_curves"]] <- TRUE
   arglist[["show_cb"]] <- FALSE
+  arglist[["curvetype"]] <- .pmatch_curvetype_basic(arglist[["curvetype"]])
 
   .plot_multi(x, arglist)
 
@@ -94,6 +106,9 @@ plot.smpoints <- function(x, y = NULL, ...) {
                                def_show_cb = TRUE, def_raw_curves = FALSE,
                                def_add_np_nn = TRUE, def_show_legend = FALSE,
                                ...)
+
+  arglist[["curvetype"]] <- .pmatch_curvetype_basic(arglist[["curvetype"]])
+
   .plot_multi(x, arglist)
 
 }
@@ -107,6 +122,9 @@ plot.mmpoints <- function(x, y = NULL, ...) {
                                def_show_cb = FALSE, def_raw_curves = FALSE,
                                def_add_np_nn = TRUE, def_show_legend = TRUE,
                                ...)
+
+  arglist[["curvetype"]] <- .pmatch_curvetype_basic(arglist[["curvetype"]])
+
   .plot_multi(x, arglist)
 
 }
