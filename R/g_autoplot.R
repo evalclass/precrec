@@ -54,6 +54,7 @@ autoplot.sscurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
                                    def_ret_grob = FALSE, ...)
   arglist[["raw_curves"]] <- TRUE
   arglist[["show_cb"]] <- FALSE
+  arglist[["curvetype"]] <- .pmatch_curvetype_rocprc(arglist[["curvetype"]])
 
   .autoplot_multi(object, arglist)
 
@@ -70,6 +71,7 @@ autoplot.mscurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
                                    def_ret_grob = FALSE, ...)
   arglist[["raw_curves"]] <- TRUE
   arglist[["show_cb"]] <- FALSE
+  arglist[["curvetype"]] <- .pmatch_curvetype_rocprc(arglist[["curvetype"]])
 
   .autoplot_multi(object, arglist)
 }
@@ -84,6 +86,8 @@ autoplot.smcurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
                                    def_show_legend = FALSE,
                                    def_ret_grob = FALSE, ...)
 
+  arglist[["curvetype"]] <- .pmatch_curvetype_rocprc(arglist[["curvetype"]])
+
   .autoplot_multi(object, arglist)
 }
 
@@ -96,6 +100,8 @@ autoplot.mmcurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
                                    def_add_np_nn = TRUE,
                                    def_show_legend = TRUE,
                                    def_ret_grob = FALSE, ...)
+
+  arglist[["curvetype"]] <- .pmatch_curvetype_rocprc(arglist[["curvetype"]])
 
   .autoplot_multi(object, arglist)
 }
@@ -113,6 +119,7 @@ autoplot.sspoints <- function(object,
                                    def_ret_grob = FALSE, ...)
   arglist[["raw_curves"]] <- TRUE
   arglist[["show_cb"]] <- FALSE
+  arglist[["curvetype"]] <- .pmatch_curvetype_basic(arglist[["curvetype"]])
 
   .autoplot_multi(object, arglist)
 
@@ -131,6 +138,7 @@ autoplot.mspoints <- function(object,
                                    def_ret_grob = FALSE, ...)
   arglist[["raw_curves"]] <- TRUE
   arglist[["show_cb"]] <- FALSE
+  arglist[["curvetype"]] <- .pmatch_curvetype_basic(arglist[["curvetype"]])
 
   .autoplot_multi(object, arglist)
 }
@@ -147,6 +155,8 @@ autoplot.smpoints <- function(object,
                                    def_show_legend = FALSE,
                                    def_ret_grob = FALSE, ...)
 
+  arglist[["curvetype"]] <- .pmatch_curvetype_basic(arglist[["curvetype"]])
+
   .autoplot_multi(object, arglist)
 }
 
@@ -161,6 +171,8 @@ autoplot.mmpoints <- function(object,
                                    def_add_np_nn = TRUE,
                                    def_show_legend = TRUE,
                                    def_ret_grob = FALSE, ...)
+
+  arglist[["curvetype"]] <- .pmatch_curvetype_basic(arglist[["curvetype"]])
 
   .autoplot_multi(object, arglist)
 }
