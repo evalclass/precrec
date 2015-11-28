@@ -5,4 +5,6 @@
 ^NEWS.md$
 ^cran-comments\.md$
 ^README\.Rmd$
+^README_files$
 ^README-.*\.png$
+^NEWS\.md$

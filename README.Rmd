@@ -3,6 +3,9 @@ output:
   md_document:
     variant: markdown_github
 ---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
 # precrec
 
 The aim of `precrec` is to provide various tools that enable robust performance evaluations of binary classifiers. Specifically, `precrec` offers accurate calculations of ROC and Precision-Recall curves.
@@ -85,7 +88,6 @@ library(gridExtra)
 autoplot(sscurves)
 
 ```
-
 
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(
