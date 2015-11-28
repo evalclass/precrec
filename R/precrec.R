@@ -44,6 +44,10 @@
 #' @importFrom Rcpp sourceCpp
 #' @importFrom ggplot2 autoplot
 #' @importFrom ggplot2 fortify
+#' @importFrom grDevices col2rgb rainbow rgb
+#' @importFrom graphics abline layout legend lines matplot par plot plot.new polygon
+#' @importFrom methods is
+#' @importFrom stats qnorm rbeta rnorm
 #'
 NULL
 

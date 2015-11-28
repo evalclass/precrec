@@ -13,16 +13,17 @@ BugReports: https://github.com/takayasaito/precrec/issues
 Depends: R (>= 3.2.1)
 License: GPL (>= 2)
 LazyData: TRUE
-Suggests:
+Suggests: 
     testthat (>= 1.0-6),
     knitr (>= 1.11),
     rmarkdown (>= 0.8.1)
 LinkingTo: Rcpp
-Imports:
+Imports: 
     Rcpp (>= 0.12.2),
     ggplot2 (>= 1.0.1),
     assertthat (>= 0.1),
     grid (>= 3.2.1),
-    gridExtra (>= 2.0.0)
+    gridExtra (>= 2.0.0),
+    methods
 RoxygenNote: 5.0.1
 VignetteBuilder: knitr

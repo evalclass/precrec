@@ -13,7 +13,7 @@
 # Get a specified object
 #
 .get_obj <- function(obj, obj_name) {
-  if (is.null(obj_name) || is.null(obj) || is(obj, obj_name)) {
+  if (is.null(obj_name) || is.null(obj) || methods::is(obj, obj_name)) {
     obj
   } else {
     .get_obj(attr(obj, "src"), obj_name)

@@ -30,7 +30,7 @@ calc_avg_basic <- function(epoints, modnames, uniq_modnames, cb_alpha) {
 
   # === Summarize curves by by models ===
   # Z value of confidence bounds
-  cb_zval <- qnorm((1.0 - cb_alpha) + (cb_alpha * 0.5))
+  cb_zval <- stats::qnorm((1.0 - cb_alpha) + (cb_alpha * 0.5))
 
   # Filter curves by model
   ffunc <- function(mname) {
@@ -71,7 +71,7 @@ calc_avg_basic <- function(epoints, modnames, uniq_modnames, cb_alpha) {
 #
 .validate_avg_common <- function(avgobj, class_name, func_name) {
   # Need to validate only once
-  if (is(avgobj, class_name) && attr(avgobj, "validated")) {
+  if (methods::is(avgobj, class_name) && attr(avgobj, "validated")) {
     return(avgobj)
   }
 

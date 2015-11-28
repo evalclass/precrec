@@ -197,14 +197,14 @@ join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
 
   # Check efunc_vtype
   if (!is.null(efunc_vtype)
-      && (!is(efunc_vtype, "function")
+      && (!methods::is(efunc_vtype, "function")
           || length(as.list(formals(efunc_vtype))) != 1)) {
     stop("efunc_vtype must be a function with 1 argument", call. = FALSE)
   }
 
   # Check efunc_nrow
   if (!is.null(efunc_nrow)
-      && (!is(efunc_nrow, "function")
+      && (!methods::is(efunc_nrow, "function")
           || length(as.list(formals(efunc_nrow))) != 2)) {
     stop("efunc_nrow must be a function with 2 arguments", call. = FALSE)
   }

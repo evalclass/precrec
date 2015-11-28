@@ -341,12 +341,12 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
 #
 .validate.mdat <- function(mdat) {
   # Need to validate only once
-  if (is(mdat, "mdat") && attr(mdat, "validated")) {
+  if (methods::is(mdat, "mdat") && attr(mdat, "validated")) {
     return(mdat)
   }
 
   # Check mdat
-  if (!is(mdat, "mdat")) {
+  if (!methods::is(mdat, "mdat")) {
     stop("mdat created by mmdata() expected", call. = FALSE)
   }
 

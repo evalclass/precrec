@@ -133,7 +133,7 @@
 .validate_curves_common <- function(curves, class_name) {
 
   # Need to validate only once
-  if (is(curves, class_name) && attr(curves, "validated")) {
+  if (methods::is(curves, class_name) && attr(curves, "validated")) {
     return(curves)
   }
 
@@ -183,7 +183,7 @@
 #
 .validate.crvgrp <- function(crvgrp) {
   # Need to validate only once
-  if (is(crvgrp, "crvgrp") && attr(crvgrp, "validated")) {
+  if (methods::is(crvgrp, "crvgrp") && attr(crvgrp, "validated")) {
     return(crvgrp)
   }
 

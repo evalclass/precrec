@@ -453,7 +453,7 @@ NULL
   if (ret_grob) {
     grobframe
   } else {
-    plot.new()
+    graphics::plot.new()
     grid::grid.draw(grobframe)
   }
 }

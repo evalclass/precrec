@@ -146,7 +146,7 @@
 #
 .validate_points_common <- function(points, class_name) {
   # Need to validate only once
-  if (is(points, class_name) && attr(points, "validated")) {
+  if (methods::is(points, class_name) && attr(points, "validated")) {
     return(points)
   }
 
@@ -196,7 +196,7 @@
 #
 .validate.pointgrp <- function(pointgrp) {
   # Need to validate only once
-  if (is(pointgrp, "pointgrp") && attr(pointgrp, "validated")) {
+  if (methods::is(pointgrp, "pointgrp") && attr(pointgrp, "validated")) {
     return(pointgrp)
   }
 

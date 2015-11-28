@@ -126,7 +126,7 @@ create_prc <- function(pevals, scores = NULL, labels = NULL, x_bins = 1000,
 #
 .validate.roc_curve <- function(roc_curve) {
   # Need to validate only once
-  if (is(roc_curve, "roc_curve") && attr(roc_curve, "validated")) {
+  if (methods::is(roc_curve, "roc_curve") && attr(roc_curve, "validated")) {
     return(roc_curve)
   }
 
@@ -142,7 +142,7 @@ create_prc <- function(pevals, scores = NULL, labels = NULL, x_bins = 1000,
 #
 .validate.prc_curve <- function(prc_curve) {
   # Need to validate only once
-  if (is(prc_curve, "prc_curve") && attr(prc_curve, "validated")) {
+  if (methods::is(prc_curve, "prc_curve") && attr(prc_curve, "validated")) {
     return(prc_curve)
   }
 
@@ -186,7 +186,7 @@ create_prc <- function(pevals, scores = NULL, labels = NULL, x_bins = 1000,
 #
 .validate.curves <- function(curves) {
   # Need to validate only once
-  if (is(curves, "curves") && attr(curves, "validated")) {
+  if (methods::is(curves, "curves") && attr(curves, "validated")) {
     return(curves)
   }
 

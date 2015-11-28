@@ -349,7 +349,7 @@ NULL
   show_legend2 <- show_legend
   if (length(curvetype) > 1) {
     .set_layout(length(curvetype), show_legend)
-    on.exit(layout(1), add = TRUE)
+    on.exit(graphics::layout(1), add = TRUE)
     show_legend2 <- FALSE
   }
 
@@ -359,7 +359,7 @@ NULL
                  show_legend = show_legend2)
   }
   if (length(curvetype) == 5) {
-    plot(1, type = "n", axes = FALSE, xlab = "", ylab = "")
+    graphics::plot(1, type = "n", axes = FALSE, xlab = "", ylab = "")
   }
 
   if (length(curvetype) > 1) {
@@ -406,10 +406,10 @@ NULL
 
   if (show_legend) {
     m <- matrix(mat1, nrow = nrow1, ncol = ncol1, byrow = TRUE)
-    layout(mat = m, heights = heights)
+    graphics::layout(mat = m, heights = heights)
   } else {
     m <- matrix(mat2, nrow = nrow1 - 1, ncol = ncol1)
-    layout(mat = m)
+    graphics::layout(mat = m)
   }
 }
 
@@ -432,9 +432,9 @@ NULL
 
   # === Create a plot ===
   mats <- .make_matplot_mats(obj[[curvetype]])
-  matplot(mats[["x"]], mats[["y"]], type = type, lty = 1, pch = 19,
-          col = line_col, main = main, xlab = xlab, ylab = ylab,
-          ylim = c(0, 1), xlim = c(0, 1))
+  graphics::matplot(mats[["x"]], mats[["y"]], type = type, lty = 1, pch = 19,
+                    col = line_col, main = main, xlab = xlab, ylab = ylab,
+                    ylim = c(0, 1), xlim = c(0, 1))
 }
 
 #
@@ -463,7 +463,7 @@ NULL
   uniq_modnames <- attr(obj, "uniq_modnames")
   modnames <- attr(obj, "data_info")[["modnames"]]
 
-  uniq_col <- rainbow(length(uniq_modnames))
+  uniq_col <- grDevices::rainbow(length(uniq_modnames))
   modnams_idx <- as.numeric(factor(modnames, levels = uniq_modnames))
   unlist(lapply(seq_along(modnames), function(i) uniq_col[modnams_idx[i]]))
 }
@@ -476,13 +476,13 @@ NULL
   grp_avg <- attr(obj, "grp_avg")
   avgcurves <- grp_avg[[curvetype]]
 
-  plot(1, type = "n", main = main, xlab = xlab, ylab = ylab,
-       ylim = c(0, 1), xlim = c(0, 1))
+  graphics::plot(1, type = "n", main = main, xlab = xlab, ylab = ylab,
+                 ylim = c(0, 1), xlim = c(0, 1))
 
   if (length(avgcurves) == 1) {
     lcols <- "blue"
   } else {
-    lcols <- rainbow(length(avgcurves))
+    lcols <- grDevices::rainbow(length(avgcurves))
   }
 
   for (i in 1:length(avgcurves)) {
@@ -501,14 +501,16 @@ NULL
     ymin <- avgcurves[[idx]][["y_ci_l"]]
     ymax <- avgcurves[[idx]][["y_ci_h"]]
 
-    g <- col2rgb(pcol)
-    polygon(c(x, rev(x)), c(ymin, rev(ymax)), border = FALSE,
-            col = rgb(g[1], g[2], g[3], 180, maxColorValue = 255))
+    g <- grDevices::col2rgb(pcol)
+    graphics::polygon(c(x, rev(x)), c(ymin, rev(ymax)), border = FALSE,
+                      col = grDevices::rgb(g[1], g[2], g[3], 180,
+                                           maxColorValue = 255))
   }
 
-  b <- col2rgb(lcol)
-  lines(x, y, type = type, lty = 1, pch = 19,
-        col = rgb(b[1], b[2], b[3], 200, maxColorValue = 255))
+  b <- grDevices::col2rgb(lcol)
+  graphics::lines(x, y, type = type, lty = 1, pch = 19,
+                  col = grDevices::rgb(b[1], b[2], b[3], 200,
+                                       maxColorValue = 255))
 }
 
 #
@@ -528,12 +530,12 @@ NULL
     main <- paste0(main, " - P: ", np, ", N: ", nn)
   }
 
-  old_pty <- par(pty = "s")
-  on.exit(par(old_pty), add = TRUE)
+  old_pty <- graphics::par(pty = "s")
+  on.exit(graphics::par(old_pty), add = TRUE)
 
   if (show_legend) {
     .set_layout(1, show_legend)
-    on.exit(layout(1), add = TRUE)
+    on.exit(graphics::layout(1), add = TRUE)
   }
 
   # === Create a plot ===
@@ -546,10 +548,10 @@ NULL
   }
 
   if (curvetype == "ROC") {
-    abline(a = 0, b = 1, col = "grey", lty = 3)
+    graphics::abline(a = 0, b = 1, col = "grey", lty = 3)
 
   } else if (curvetype == "PRC") {
-    abline(h = np / (np + nn), col = "grey", lty = 3)
+    graphics::abline(h = np / (np + nn), col = "grey", lty = 3)
   }
 
   .show_legend(x, show_legend)
@@ -589,16 +591,16 @@ NULL
 #
 .show_legend <- function(obj, show_legend, gnames = "modnames") {
   if (show_legend) {
-    old_mar <- par(mar = c(0, 0, 0, 0))
-    on.exit(par(old_mar), add = TRUE)
-    old_pty <- par(pty = "m")
-    on.exit(par(old_pty), add = TRUE)
+    old_mar <- graphics::par(mar = c(0, 0, 0, 0))
+    on.exit(graphics::par(old_mar), add = TRUE)
+    old_pty <- graphics::par(pty = "m")
+    on.exit(graphics::par(old_pty), add = TRUE)
 
     gnames <- attr(obj, paste0("uniq_", gnames))
-    plot(1, type = "n", axes = FALSE, xlab = "", ylab = "")
-    legend(x = "top", lty = 1,
-           legend = gnames,
-           col = rainbow(length(gnames)),
-           horiz = TRUE)
+    graphics::plot(1, type = "n", axes = FALSE, xlab = "", ylab = "")
+    graphics::legend(x = "top", lty = 1,
+                     legend = gnames,
+                     col = grDevices::rainbow(length(gnames)),
+                     horiz = TRUE)
   }
 }

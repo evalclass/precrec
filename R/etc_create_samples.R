@@ -92,10 +92,10 @@ create_sim_samples <- function(n_repeat, np, nn, score_names = "random") {
 .sample_rnd5levs <- function(np, nn) {
   labels <- c(rep(1, np), rep(0, nn))
 
-  random_scores <- c(rnorm(np, 0, 1), rnorm(nn, 0, 1))
-  poor_er_scores <- c(rbeta(np, 4, 1), rbeta(nn, 1, 1))
-  good_er_scores <- c(rbeta(np, 1, 1), rbeta(nn, 1, 4))
-  excel_scores <- c(rnorm(np, 3, 1), rnorm(nn, 0, 1))
+  random_scores <- c(stats::rnorm(np, 0, 1), stats::rnorm(nn, 0, 1))
+  poor_er_scores <- c(stats::rbeta(np, 4, 1), stats::rbeta(nn, 1, 1))
+  good_er_scores <- c(stats::rbeta(np, 1, 1), stats::rbeta(nn, 1, 4))
+  excel_scores <- c(stats::rnorm(np, 3, 1), stats::rnorm(nn, 0, 1))
   perf_scores <- c(rep(1, np), rep(0, nn))
 
   list(np = np,

@@ -98,12 +98,12 @@ ssdf <- fortify(sscurves)
 ## Plot a ROC curve
 p_roc <- ggplot(subset(ssdf, curvetype == "ROC"), aes(x = x, y = y))
 p_roc <- p_roc + geom_line()
-p_roc
+\dontrun{p_roc}
 
 ## Plot a Precision-Recall curve
 p_prc <- ggplot(subset(ssdf, curvetype == "PRC"), aes(x = x, y = y))
 p_prc <- p_prc + geom_line()
-p_prc
+\dontrun{p_prc}
 
 ## Generate an sspoints object that contains basic evaluation measures
 sspoints <- evalmod(mode = "basic", scores = P10N10$scores,
@@ -114,7 +114,7 @@ ssdf <- fortify(sscurves)
 ## Plot threshold vs. precision
 p_prec <- ggplot(subset(ssdf, curvetype == "precision"), aes(x = x, y = y))
 p_prec <- p_prc + geom_point()
-p_prec
+\dontrun{p_prec}
 
 
 #############################################################################
@@ -136,13 +136,13 @@ msdf <- fortify(mscurves)
 df_roc <- subset(msdf, curvetype == "ROC")
 p_roc <- ggplot(df_roc, aes(x = x, y = y, color = modname))
 p_roc <- p_roc + geom_line()
-p_roc
+\dontrun{p_roc}
 
 ## Fortified data frame can be used for plotting a Precision-Recall curve
 df_prc <- subset(msdf, curvetype == "PRC")
 p_prc <- ggplot(df_prc, aes(x = x, y = y, color = modname))
 p_prc <- p_prc + geom_line()
-p_prc
+\dontrun{p_prc}
 
 ## Generate an mspoints object that contains basic evaluation measures
 mspoints <- evalmod(mdat, mode = "basic")
@@ -154,7 +154,7 @@ msdf <- fortify(mscurves)
 df_prec <- subset(msdf, curvetype == "precision")
 p_prec <- ggplot(df_prec, aes(x = x, y = y, color = modname))
 p_prec <- p_prc + geom_point()
-p_prec
+\dontrun{p_prec}
 
 
 #############################################################################
@@ -177,13 +177,13 @@ smdf <- fortify(smcurves)
 df_roc <- subset(smdf, curvetype == "ROC")
 p_roc <- ggplot(df_roc, aes(x = x, y = y, ymin = ymin, ymax = ymax))
 p_roc <- p_roc + geom_smooth(stat = "identity")
-p_roc
+\dontrun{p_roc}
 
 ## Plot average Precision-Recall curve
 df_prc <- subset(smdf, curvetype == "PRC")
 p_prc <- ggplot(df_prc, aes(x = x, y = y, ymin = ymin, ymax = ymax))
 p_prc <- p_prc + geom_smooth(stat = "identity")
-p_prc
+\dontrun{p_prc}
 
 ## Generate an smpoints object that contains basic evaluation measures
 smpoints <- evalmod(mdat, mode = "basic")
@@ -198,7 +198,7 @@ p_prec <- p_prec + geom_ribbon(aes(min = ymin, ymax = ymax),
                                stat = "identity", alpha = 0.25,
                                fill = "grey25")
 p_prec <- p_prec + geom_point(aes(x = x, y = y))
-p_prec
+\dontrun{p_prec}
 
 
 #############################################################################
@@ -221,13 +221,13 @@ mmdf <- fortify(mmcurves)
 df_roc <- subset(mmdf, curvetype == "ROC")
 p_roc <- ggplot(df_roc, aes(x = x, y = y, ymin = ymin, ymax = ymax))
 p_roc <- p_roc + geom_smooth(aes(color = modname), stat = "identity")
-p_roc
+\dontrun{p_roc}
 
 ## Plot average Precision-Recall curve
 df_prc <- subset(mmdf, curvetype == "PRC")
 p_prc <- ggplot(df_prc, aes(x = x, y = y, ymin = ymin, ymax = ymax))
 p_prc <- p_prc + geom_smooth(aes(color = modname), stat = "identity")
-p_prc
+\dontrun{p_prc}
 
 ## Generate an mmpoints object that contains basic evaluation measures
 mmpoints <- evalmod(mdat, mode = "basic")
@@ -242,7 +242,7 @@ p_prec <- p_prec + geom_ribbon(aes(min = ymin, ymax = ymax),
                                stat = "identity", alpha = 0.25,
                                fill = "grey25")
 p_prec <- p_prec + geom_point(aes(x = x, y = y, color = modname))
-p_prec
+\dontrun{p_prec}
 
 }
 \seealso{

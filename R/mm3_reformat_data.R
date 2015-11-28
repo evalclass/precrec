@@ -130,7 +130,7 @@ reformat_data <- function(scores, labels,
 #
 .validate.fmdat <- function(fmdat) {
   # Need to validate only once
-  if (is(fmdat, "fmdat") && attr(fmdat, "validated")) {
+  if (methods::is(fmdat, "fmdat") && attr(fmdat, "validated")) {
     return(fmdat)
   }
 

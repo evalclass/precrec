@@ -38,7 +38,7 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
 #
 .validate.pevals <- function(pevals) {
   # Need to validate only once
-  if (is(pevals, "pevals") && attr(pevals, "validated")) {
+  if (methods::is(pevals, "pevals") && attr(pevals, "validated")) {
     return(pevals)
   }
 

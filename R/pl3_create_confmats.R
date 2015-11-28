@@ -43,7 +43,7 @@ create_confmats <- function(fmdat, scores = NULL, labels = NULL,
 #
 .validate.cmats <- function(cmats) {
   # Need to validate only once
-  if (is(cmats, "cmats") && attr(cmats, "validated")) {
+  if (methods::is(cmats, "cmats") && attr(cmats, "validated")) {
     return(cmats)
   }
 
