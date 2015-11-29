@@ -7,4 +7,4 @@ env:
   global:
     - CRAN=http://cran.rstudio.com
     - NOT_CRAN=true
-    - _R_CHECK_CRAN_INCOMING_=fals
+    - _R_CHECK_CRAN_INCOMING_=false
