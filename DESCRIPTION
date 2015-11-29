@@ -14,7 +14,7 @@ Depends: R (>= 3.2.1)
 License: GPL-3
 LazyData: TRUE
 Suggests:
-    testthat (>= 1.0-6),
+    testthat (>= 0.11.0),
     knitr (>= 1.11),
     rmarkdown (>= 0.8.1)
 LinkingTo: Rcpp
