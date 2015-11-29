@@ -4,21 +4,21 @@ Title: Calculate Accurate Precision-Recall and ROC Curves
 Version: 0.1
 Date: 2015-08-04
 Authors@R: c(
-    person("Takaya", "Saito", email = "takaya.saito@ii.uib.no", role = c("aut", "cre")),
+    person("Takaya", "Saito", email = "takaya.saito@outlook.com", role = c("aut", "cre")),
     person("Marc", "Rehmsmeier", email = "marc.rehmsmeier@ii.uib.no", role = c("aut")))
 Description: precrec is a package for calculating accuate Precision-Recall
     and ROC curves.
 URL: https://github.com/takayasaito/precrec
 BugReports: https://github.com/takayasaito/precrec/issues
 Depends: R (>= 3.2.1)
-License: GPL (>= 2)
+License: GPL-3
 LazyData: TRUE
-Suggests: 
+Suggests:
     testthat (>= 1.0-6),
     knitr (>= 1.11),
     rmarkdown (>= 0.8.1)
 LinkingTo: Rcpp
-Imports: 
+Imports:
     Rcpp (>= 0.12.2),
     ggplot2 (>= 1.0.1),
     assertthat (>= 0.1),

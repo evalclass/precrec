@@ -2,6 +2,8 @@
 precrec
 =======
 
+[![Travis-CI Build Status](https://travis-ci.org/takayasaito/precrec.svg?branch=master)](https://travis-ci.org/takayasaito/precrec)
+
 The aim of `precrec` is to provide various tools that enable robust performance evaluations of binary classifiers. Specifically, `precrec` offers accurate calculations of ROC and Precision-Recall curves.
 
 All the main calculations of `precrec` are implemented with C++/[Rcpp](https://cran.r-project.org/web/packages/Rcpp). The package structure and the coding style of `precrec` are based on two Hadley Wickham's books - [Advanced R](http://adv-r.had.co.nz/) and [R packages](http://r-pkgs.had.co.nz/).
@@ -11,7 +13,7 @@ See our website - [Classifier evaluation with imbalanced datasets](https://class
 Installation
 ------------
 
--   ~~Install the release version of `precrec` from CRAN with `install.packages("precrec")`~~ (Not available at CRAN yet).
+-   Install the release version of `precrec` from CRAN with `install.packages("precrec")`.
 
 -   Alternatively, you can install a development version of `precrec` from [our GitHub repository](https://github.com/takayasaito/precrec). To install it:
 
