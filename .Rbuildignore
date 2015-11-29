@@ -8,3 +8,4 @@
 ^README_files$
 ^README-.*\.png$
 ^NEWS\.md$
+^LICENSE$
