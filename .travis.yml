@@ -1,4 +1,4 @@
-# Sample .travis.yml for R projects
+# .travis.yml for precrec
 
 language: r
 warnings_are_errors: true
