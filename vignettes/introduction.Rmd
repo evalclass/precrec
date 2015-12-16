@@ -54,10 +54,6 @@ The `autoplot` function outputs ROC and Precision-Recall curves by using the
 # The ggplot2 package is required 
 library(ggplot2)
 
-# The grid and gridExtra packages are required to use multiple panels with autoplot
-library(grid)
-library(gridExtra)
-
 # Show ROC and Precision-Recall plots
 autoplot(sscurves)
 
@@ -305,7 +301,7 @@ Measure     Description
 ----------- --------------------------
       error Error rate
    accuracy Accuracy
-specificity Specificity, TFR, 1 - FPR
+specificity Specificity, TNR, 1 - FPR
 sensitivity Sensitivity, TPR, Recall
   precision Precision, PPV
         
@@ -330,3 +326,6 @@ autoplot(mmpoins, c("specificity", "sensitivity"))
 # Show normalized threshold values vs. precision
 autoplot(mmpoins, "precision")
 ```
+
+## 8. External links
+See our website - [Classifier evaluation with imbalanced datasets](https://classeval.wordpress.com/) - for useful tips for performance evaluation on binary classifiers. In addition, we have summarized potential pitfalls of ROC plots with imbalanced datasets. See our paper - [The Precision-Recall Plot Is More Informative than the ROC Plot When Evaluating Binary Classifiers on Imbalanced Datasets](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0118432) - for more details.
