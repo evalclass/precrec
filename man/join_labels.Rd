@@ -30,7 +30,7 @@ l2 <- c(1, 1, 0, 0)
 l3 <- c(0, 1, 0, 1)
 labels1 <- join_labels(l1, l2, l3)
 
-## Add three numeric vectors
+## Add a matrix and a numeric vector
 a1 <- matrix(rep(c(1, 0), 4), 4, 2)
 labels2 <- join_labels(a1, l3)
 

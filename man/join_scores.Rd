@@ -22,7 +22,7 @@ The \code{join_scores} function returns a list that
 }
 \description{
 The \code{join_scores} function takes predicted scores from multiple models
-  and convert them to a list.
+  and converts them to a list.
 }
 \examples{
 
@@ -32,7 +32,7 @@ s2 <- c(5, 6, 7, 8)
 s3 <- c(2, 4, 6, 8)
 scores1 <- join_scores(s1, s2, s3)
 
-## Add three numeric vectors
+## Add a matrix and a numeric vector
 a1 <- matrix(seq(8), 4, 2)
 scores2 <- join_scores(a1, s3)
 

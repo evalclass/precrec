@@ -9,17 +9,17 @@
   \item{np}{number of positives: 500}
   \item{nn}{number of negatives: 500}
   \item{labels}{labels of observed data}
-  \item{random_scores}{scores of random performance level}
-  \item{poor_er_scores}{scores of poor early retrieval level}
-  \item{good_er_scores}{scores of good early retrieval level}
-  \item{excel_scores}{scores of excellent level}
-  \item{perf_scores}{scores of perfect level}
+  \item{random_scores}{scores of a random performance level}
+  \item{poor_er_scores}{scores of a poor early retrieval level}
+  \item{good_er_scores}{scores of a good early retrieval level}
+  \item{excel_scores}{scores of an excellent level}
+  \item{perf_scores}{scores of the perfect level}
 }}
 \usage{
 data(B500)
 }
 \description{
-A list contains labels and scores of five different levels.
+A list contains labels and scores of five different performance levels.
 All scores were randomly generated.
 }
 \keyword{datasets}
