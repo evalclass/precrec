@@ -15,7 +15,7 @@
 data(P10N10)
 }
 \description{
-A list contains labels and scores with tied scores
+A list contains labels and scores for 10 positives and 10 negatives.
 }
 \keyword{datasets}
 

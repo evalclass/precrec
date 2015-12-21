@@ -1,7 +1,7 @@
 #' Join scores of multiple models into a list
 #'
 #' The \code{join_scores} function takes predicted scores from multiple models
-#'   and convert them to a list.
+#'   and converts them to a list.
 #'
 #' @param ... Multiple datasets. They can be vectors, arrays, matrices,
 #'   data frames, and lists.
@@ -27,7 +27,7 @@
 #' s3 <- c(2, 4, 6, 8)
 #' scores1 <- join_scores(s1, s2, s3)
 #'
-#' ## Add three numeric vectors
+#' ## Add a matrix and a numeric vector
 #' a1 <- matrix(seq(8), 4, 2)
 #' scores2 <- join_scores(a1, s3)
 #'
@@ -74,7 +74,7 @@ join_scores <- function(..., byrow = FALSE, chklen = TRUE) {
 #' l3 <- c(0, 1, 0, 1)
 #' labels1 <- join_labels(l1, l2, l3)
 #'
-#' ## Add three numeric vectors
+#' ## Add a matrix and a numeric vector
 #' a1 <- matrix(rep(c(1, 0), 4), 4, 2)
 #' labels2 <- join_labels(a1, l3)
 #'

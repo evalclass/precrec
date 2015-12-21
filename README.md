@@ -2,7 +2,7 @@
 precrec
 =======
 
-[![Travis-CI Build Status](https://travis-ci.org/takayasaito/precrec.svg?branch=master)](https://travis-ci.org/takayasaito/precrec)
+[![Travis-CI Build Status](https://travis-ci.org/takayasaito/precrec.svg?branch=master)](https://travis-ci.org/takayasaito/precrec) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/precrec)](http://cran.r-project.org/package=precrec)
 
 The aim of `precrec` is to provide various tools that enable robust performance evaluations of binary classifiers. Specifically, `precrec` offers accurate calculations of ROC and Precision-Recall curves.
 
@@ -82,10 +82,6 @@ The `autoplot` function outputs ROC and Precision-Recall curves by using the `gg
 ``` r
 # The ggplot2 package is required 
 library(ggplot2)
-
-# The grid and gridExtra packages are required to use multiple panels with autoplot
-library(grid)
-library(gridExtra)
 
 # Show ROC and Precision-Recall plots
 autoplot(sscurves)
