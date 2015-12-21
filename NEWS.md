@@ -1,3 +1,10 @@
+# precrec 0.2
+
+* Improved several documents
+    * several help files (.Rd)
+    * package vignette
+    * README
+
 # precrec 0.1
 
 * The first release version of `precrec`
