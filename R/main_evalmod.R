@@ -1,11 +1,11 @@
 #' Evaluate models and calculate performance evaluation measures
 #'
-#' The \code{evalmod} function takes predicted scores and binary labels
-#'   and calculates ROC and Precision-Recall curves. In addition, it can
-#'   calculate several basic performance evaluation measures, such as accuracy,
-#'   error rate, and precision.
+#' The \code{evalmod} function calculates ROC and Precision-Recall curves for
+#'   specified prediction scores and binary labels. It also calculate several
+#'   basic performance evaluation measures, such as accuracy, error rate, and
+#'   precision, by specifying \code{mode} as "basic".
 #'
-#' @param mdat An \code{mdat} object created by the \code{\link{mmdata}}
+#' @param mdat An \code{S3} object created by the \code{\link{mmdata}}
 #'   function. It contains formatted scores and labels.
 #'   The \code{evalmod} function ignores the following arguments
 #'   when \code{mdat} is specified.
@@ -72,12 +72,10 @@
 #'
 #' @param calc_avg A logical value to specify whether average curves should
 #'   be calculated. It is effective only when \code{dsids} contains multiple
-#'   dataset IDs. For instance, the \code{evalmod} function calculates
-#'   the average curves for the model "m1"
-#'   when \code{modnames = c("m1", "m1", "m1")} and \code{dsids = c(1, 2, 3)}
-#'   are specified. The average curve is created by linearly connecting
-#'   point-wise averages, and the calculation points are defined
-#'   by \code{x_bins}.
+#'   dataset IDs. For instance, the function calculates the average for the
+#'   model "m1" when \code{modnames} is \code{c("m1", "m1", "m1")} and
+#'   \code{dsids} is \code{c(1, 2, 3)}. The calculation points are defined by
+#'   \code{x_bins}.
 #'
 #' @param cb_alpha A numeric value with range [0, 1] to specify the alpha
 #'   value of the point-wise confidence bounds calculation. It is effective only
@@ -97,7 +95,7 @@
 #'   the additional values on the x-axis should be
 #'   \code{c(0, 0.25, 0.5, 0.75, 1)} when \code{x_bins = 4}.
 #'
-#' @return The \code{evalmod} function returns an S3 object
+#' @return The \code{evalmod} function returns an \code{S3} object
 #'   that contains performance evaluation measures. The number of models and
 #'   the number of datasets can be controlled by \code{modnames} and
 #'   \code{dsids}. For example, the number of models is "single" and the number
@@ -106,46 +104,45 @@
 #'
 #' \enumerate{
 #'
-#'   \item  The \code{evalmod} function returns one of the following S3 objects
-#'   when \code{mode} is "prcroc".
+#'   \item  The \code{evalmod} function returns one of the following \code{S3}
+#'   objects when \code{mode} is "prcroc".
 #'   The objects contain ROC and Precision-Recall curves.
 #'
-#'   \tabular{lllll}{
-#'     \strong{S3 object}
-#'     \tab \tab \strong{# of models}
-#'     \tab \tab \strong{# of test datasets} \cr
+#'   \tabular{lll}{
+#'     \strong{\code{S3} object}
+#'     \tab \strong{# of models}
+#'     \tab \strong{# of test datasets} \cr
 #'
-#'     sscurves \tab \tab single   \tab \tab single   \cr
-#'     mscurves \tab \tab multiple \tab \tab single   \cr
-#'     smcurves \tab \tab single   \tab \tab multiple \cr
-#'     mmcurves \tab \tab multiple \tab \tab multiple
+#'     sscurves \tab single   \tab single   \cr
+#'     mscurves \tab multiple \tab single   \cr
+#'     smcurves \tab single   \tab multiple \cr
+#'     mmcurves \tab multiple \tab multiple
 #'   }
 #'
-#'   \item The \code{evalmod} function returns one of the following S3 objects
-#'   when \code{mode} is "basic".
+#'   \item The \code{evalmod} function returns one of the following \code{S3}
+#'   objects when \code{mode} is "basic".
 #'   They contain five different basic evaluation measures; error rate,
 #'   accuracy, specificity, sensitivity, and precision.
 #'
-#'   \tabular{lllll}{
-#'     \strong{S3 object}
-#'     \tab \tab \strong{# of models}
-#'     \tab \tab \strong{# of test datasets} \cr
+#'   \tabular{lll}{
+#'     \strong{\code{S3} object}
+#'     \tab \strong{# of models}
+#'     \tab \strong{# of test datasets} \cr
 #'
-#'     sspoints \tab \tab single   \tab \tab single   \cr
-#'     mspoints \tab \tab multiple \tab \tab single   \cr
-#'     smpoints \tab \tab single   \tab \tab multiple \cr
-#'     mmpoints \tab \tab multiple \tab \tab multiple
+#'     sspoints \tab single   \tab single   \cr
+#'     mspoints \tab multiple \tab single   \cr
+#'     smpoints \tab single   \tab multiple \cr
+#'     mmpoints \tab multiple \tab multiple
 #'   }
 #' }
 #'
-#' Different S3 objects have different default behaviors of S3 generics,
-#' such as \code{\link{plot}}, \code{\link{autoplot}},
-#' and \code{\link{fortify}}.
+#' Different \code{S3} objects have different default behaviors of \code{S3}
+#'   generics, such as \code{\link{plot}}, \code{\link{autoplot}}, and
+#'   \code{\link{fortify}}.
 #'
 #' @seealso \code{\link{plot}} for plotting curves with the general R plot.
 #'   \code{\link{autoplot}} and \code{\link{fortify}} for plotting curves
-#'   with \code{\link[ggplot2]{ggplot2}}.
-#'   \code{\link{mmdata}} for formatting input data.
+#'   with \pkg{ggplot2}. \code{\link{mmdata}} for formatting input data.
 #'   \code{\link{join_scores}} and \code{\link{join_labels}} for formatting
 #'   scores and labels with multiple datasets.
 #'   \code{\link{create_sim_samples}} for generating random samples
@@ -172,7 +169,7 @@
 #' ### Multiple models & single test dataset
 #' ###
 #'
-#'  ## Create sample datasets with 100 positives and 100 negatives
+#' ## Create sample datasets with 100 positives and 100 negatives
 #' samps <- create_sim_samples(1, 100, 100, "all")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 #'                modnames = samps[["modnames"]])
