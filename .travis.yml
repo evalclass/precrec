@@ -8,7 +8,7 @@ env:
     - CRAN=http://cran.rstudio.com
     - NOT_CRAN=true
     - _R_CHECK_CRAN_INCOMING_=false
-r_packages:
+r_github_packages:
   - jimhester/covr
 after_success:
   - Rscript -e 'library(covr);codecov()'
