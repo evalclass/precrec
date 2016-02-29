@@ -8,7 +8,7 @@ In this version I have:
 
 * Updated the version.
     
-    * 0.2.0 -> 0.3.1
+    * 0.2.0 -> 0.3.2
     
 ## Test environments
 * local OS X Yosemite, R 3.2.3
