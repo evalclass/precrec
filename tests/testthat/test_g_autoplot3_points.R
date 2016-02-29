@@ -114,7 +114,7 @@ test_that("autoplot for multiple sspoints returns grob", {
                     labels = P10N10$labels)
 
   pp <- ggplot2::autoplot(points, ret_grob = TRUE)
-  expect_true(all(class(pp) == c("gtable", "grob", "gDesc")))
+  expect_true(is(pp, "grob"))
 })
 
 test_that("autoplot mspoints", {
@@ -142,7 +142,7 @@ test_that("autoplot for multiple mspoints returns grob", {
   points <- ap3_create_mspoints()
 
   pp <- ggplot2::autoplot(points, show_legend = FALSE, ret_grob = TRUE)
-  expect_true(all(class(pp) == c("gtable", "grob", "gDesc")))
+  expect_true(is(pp, "grob"))
 })
 
 test_that("autoplot smpoints", {
@@ -173,7 +173,7 @@ test_that("autoplot for multiple smpoints returns grob", {
   points <- ap3_create_smpoints()
 
   pp <- ggplot2::autoplot(points, show_legend = FALSE, ret_grob = TRUE)
-  expect_true(all(class(pp) == c("gtable", "grob", "gDesc")))
+  expect_true(is(pp, "grob"))
 })
 
 test_that("autoplot mmpoints", {
@@ -206,5 +206,5 @@ test_that("autoplot for multiple mmpoints returns grob", {
   points <- ap3_create_mmpoints()
 
   pp <- ggplot2::autoplot(points, show_legend = FALSE, ret_grob = TRUE)
-  expect_true(all(class(pp) == c("gtable", "grob", "gDesc")))
+  expect_true(is(pp, "grob"))
 })

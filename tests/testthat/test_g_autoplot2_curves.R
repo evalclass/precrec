@@ -99,7 +99,7 @@ test_that("autoplot for multiple sscurves returns grob", {
   curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 
   pp <- ggplot2::autoplot(curves, ret_grob = TRUE)
-  expect_true(all(class(pp) == c("gtable", "grob", "gDesc")))
+  expect_true(is(pp, "grob"))
 })
 
 test_that("autoplot mscurves", {
@@ -125,7 +125,7 @@ test_that("autoplot for multiple mscurves returns grob", {
   curves <- ap2_create_mscurves()
 
   pp <- ggplot2::autoplot(curves, show_legend = FALSE, ret_grob = TRUE)
-  expect_true(all(class(pp) == c("gtable", "grob", "gDesc")))
+  expect_true(is(pp, "grob"))
 })
 
 test_that("autoplot single smcurve", {
@@ -154,7 +154,7 @@ test_that("autoplot for multiple smcurves retruns grob", {
   curves <- ap2_create_smcurves()
 
   pp <- ggplot2::autoplot(curves, show_legend = FALSE, ret_grob = TRUE)
-  expect_true(all(class(pp) == c("gtable", "grob", "gDesc")))
+  expect_true(is(pp, "grob"))
 })
 
 test_that("autoplot mmcurves", {
@@ -185,6 +185,6 @@ test_that("autoplot multiple mmcurves returns grob", {
   curves <- ap2_create_mmcurves()
 
   pp <- ggplot2::autoplot(curves, show_legend = FALSE, ret_grob = TRUE)
-  expect_true(all(class(pp) == c("gtable", "grob", "gDesc")))
+  expect_true(is(pp, "grob"))
 })
 

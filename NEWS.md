@@ -1,3 +1,12 @@
+# precrec 0.3
+
+* Improved the testing enviroment
+    * unit tests
+    * codecov
+    
+* Improved several documents
+
+
 # precrec 0.2
 
 * Improved several documents
