@@ -2,13 +2,11 @@
 precrec
 =======
 
-[![Travis-CI Build Status](https://travis-ci.org/takayasaito/precrec.svg?branch=master)](https://travis-ci.org/takayasaito/precrec) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/precrec)](http://cran.r-project.org/package=precrec)
+[![Travis-CI Build Status](https://travis-ci.org/takayasaito/precrec.svg?branch=master)](https://travis-ci.org/takayasaito/precrec) [![codecov.io](https://codecov.io/github/takayasaito/precrec/coverage.svg?branch=master)](https://codecov.io/github/takayasaito/precrec?branch=master) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/precrec)](http://cran.r-project.org/package=precrec)
 
 The aim of `precrec` is to provide various tools that enable robust performance evaluations of binary classifiers. Specifically, `precrec` offers accurate calculations of ROC and Precision-Recall curves.
 
-All the main calculations of `precrec` are implemented with C++/[Rcpp](https://cran.r-project.org/web/packages/Rcpp). The package structure and the coding style of `precrec` are based on two Hadley Wickham's books - [Advanced R](http://adv-r.had.co.nz/) and [R packages](http://r-pkgs.had.co.nz/).
-
-See our website - [Classifier evaluation with imbalanced datasets](https://classeval.wordpress.com/) - for useful tips for performance evaluation on binary classifiers. In addition, we have summarized potential pitfalls of ROC plots with imbalanced datasets. See our paper - [The Precision-Recall Plot Is More Informative than the ROC Plot When Evaluating Binary Classifiers on Imbalanced Datasets](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0118432) - for more details.
+All the main calculations of `precrec` are implemented with C++/[Rcpp](https://cran.r-project.org/package=Rcpp). The package structure and the coding style of `precrec` are based on two Hadley Wickham's books - [Advanced R](http://adv-r.had.co.nz/) and [R packages](http://r-pkgs.had.co.nz/).
 
 Installation
 ------------
@@ -24,7 +22,7 @@ Installation
 
     2.  Install `devtools` from CRAN with `install.packages("devtools")`.
 
-    3.  Install `precrec` from the GitHub repository with `devtools::install_github("/takayasaito/precrec")`
+    3.  Install `precrec` from the GitHub repository with `devtools::install_github("/takayasaito/precrec")`.
 
 Functions
 ---------
@@ -52,9 +50,9 @@ Moreover, the `precrec` package provides five S3 generics for the S3 object crea
 Documentation
 -------------
 
-A package vignette - Introduction to precrec - contains the descriptions of the functions with several useful examples. View the vignette with `vignette("introduction", package = "precrec")`.
+A package vignette - [Introduction to precrec](https://cran.r-project.org/web/packages/precrec/vignettes/introduction.html) - contains the descriptions of the functions with several useful examples. View the vignette with `vignette("introduction", package = "precrec")`.
 
-All the five functions and the S3 generics except for `print` have their own help pages with examples.
+All the five functions and the S3 generics except for `print` have their own help pages with examples. CRAN provides a pdf version of all combined help files as a reference manual ([pdf](https://cran.r-project.org/web/packages/precrec/precrec.pdf)).
 
 Examples
 --------
@@ -88,3 +86,8 @@ autoplot(sscurves)
 ```
 
 ![](README_files/figure-markdown_github/unnamed-chunk-2-1.png)
+
+External links
+--------------
+
+See our website - [Classifier evaluation with imbalanced datasets](https://classeval.wordpress.com/) - for useful tips for performance evaluation on binary classifiers. In addition, we have summarized potential pitfalls of ROC plots with imbalanced datasets. See our paper - [The Precision-Recall Plot Is More Informative than the ROC Plot When Evaluating Binary Classifiers on Imbalanced Datasets](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0118432) - for more details.

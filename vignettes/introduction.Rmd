@@ -47,6 +47,7 @@ plot(sscurves)
 plot(sscurves, "PRC")
 ```
 
+
 #### Examples of the `autoplot` function
 The `autoplot` function outputs ROC and Precision-Recall curves by using the 
 `ggplot2` package.
@@ -60,6 +61,7 @@ autoplot(sscurves)
 # Show a Precision-Recall plot
 autoplot(sscurves, "PRC")
 ```
+
 
 #### Examples of the `auc` function
 The `auc` function outputs a data frame with the AUC (Area Under the Curve)
@@ -186,6 +188,7 @@ All the five S3 generics offered by this package are also effective for the S3 o
 autoplot(mscurves)
 ```
 
+
 ## 4. Performance evaluation of multiple test datasets
 The `evalmod` function calculate performance evaluation for multiple 
 test datasets when different test dataset IDs are specified with the `mmdata` 
@@ -219,6 +222,7 @@ autoplot(smcurves, "PRC")
 autoplot(smcurves, "PRC", raw_curves = TRUE)
 ```
 
+
 ## 5. Evaluation of multiple models and multiple test datasets
 The `evalmod` function calculate performance evaluation for multiple models and
 multiple test datasets when different model names and test dataset IDs are specified with the `mmdata` or the `evalmod` function.
@@ -251,6 +255,7 @@ autoplot(mmcurves, "PRC")
 # Show average Precision-Recall curves with the 95% confidence bounds
 autoplot(mmcurves, "PRC", show_cb = TRUE)
 ```
+
 
 ## 6. Simulation with balanced and imbalanced datasets
 It is easy to simulate various scenarios, such as balanced vs. imbalanced 
@@ -293,6 +298,7 @@ autoplot(simcurves1)
 autoplot(simcurves2)
 ```
 
+
 ## 7. Basic performance evaluation measures
 The `evalmod` function also calculates basic evaluation measures - error, 
 accuracy, specificity, sensitivity, and precision.
@@ -326,6 +332,7 @@ autoplot(mmpoins, c("specificity", "sensitivity"))
 # Show normalized threshold values vs. precision
 autoplot(mmpoins, "precision")
 ```
+
 
 ## 8. External links
 See our website - [Classifier evaluation with imbalanced datasets](https://classeval.wordpress.com/) - for useful tips for performance evaluation on binary classifiers. In addition, we have summarized potential pitfalls of ROC plots with imbalanced datasets. See our paper - [The Precision-Recall Plot Is More Informative than the ROC Plot When Evaluating Binary Classifiers on Imbalanced Datasets](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0118432) - for more details.
