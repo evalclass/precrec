@@ -9,6 +9,6 @@ env:
     - NOT_CRAN=true
     - _R_CHECK_CRAN_INCOMING_=false
 r_packages:
-  - covr
+  - jimhester/covr
 after_success:
   - Rscript -e 'library(covr);codecov()'
