@@ -6,7 +6,7 @@ precrec
 
 The aim of `precrec` is to provide various tools that enable robust performance evaluations of binary classifiers. Specifically, `precrec` offers accurate calculations of ROC and Precision-Recall curves.
 
-All the main calculations of `precrec` are implemented with C++/[Rcpp](https://cran.r-project.org/web/packages/Rcpp). The package structure and the coding style of `precrec` are based on two Hadley Wickham's books - [Advanced R](http://adv-r.had.co.nz/) and [R packages](http://r-pkgs.had.co.nz/).
+All the main calculations of `precrec` are implemented with C++/[Rcpp](https://cran.r-project.org/package=Rcpp). The package structure and the coding style of `precrec` are based on two Hadley Wickham's books - [Advanced R](http://adv-r.had.co.nz/) and [R packages](http://r-pkgs.had.co.nz/).
 
 Installation
 ------------
