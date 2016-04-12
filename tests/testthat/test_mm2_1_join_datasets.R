@@ -15,8 +15,7 @@ test_that("'...' must be specified", {
 })
 
 test_that("'efunc_vtype' must be a function with 1 argument", {
-  expect_that(.join_datasets(c(0), efunc_vtype = function(a1) TRUE),
-              not(throws_error()))
+  expect_error(.join_datasets(c(0), efunc_vtype = function(a1) TRUE), NA)
 
   expect_err_msg <- function(efunc_vtype) {
     err_msg <- "efunc_vtype must be a function with 1 argument"
@@ -29,8 +28,7 @@ test_that("'efunc_vtype' must be a function with 1 argument", {
 })
 
 test_that("'efunc_nrow' must be a function with 2 arguments", {
-  expect_that(.join_datasets(c(0), efunc_nrow = function(a1, a2) TRUE),
-              not(throws_error()))
+  expect_error(.join_datasets(c(0), efunc_nrow = function(a1, a2) TRUE), NA)
 
   expect_err_msg <- function(efunc_nrow) {
     err_msg <- "efunc_nrow must be a function with 2 arguments"
@@ -43,8 +41,8 @@ test_that("'efunc_nrow' must be a function with 2 arguments", {
 })
 
 test_that("'byrow' should be TRUE or FALSE", {
-  expect_that(.join_datasets(c(0), byrow = TRUE), not(throws_error()))
-  expect_that(.join_datasets(c(0), byrow = FALSE), not(throws_error()))
+  expect_error(.join_datasets(c(0), byrow = TRUE), NA)
+  expect_error(.join_datasets(c(0), byrow = FALSE), NA)
 
   expect_err_msg <- function(err_msg, byrow) {
 
@@ -63,8 +61,8 @@ test_that("'byrow' should be TRUE or FALSE", {
 })
 
 test_that("'chklen' should be TRUE or FALSE", {
-  expect_that(.join_datasets(c(0), chklen = TRUE), not(throws_error()))
-  expect_that(.join_datasets(c(0), chklen = FALSE), not(throws_error()))
+  expect_error(.join_datasets(c(0), chklen = TRUE), NA)
+  expect_error(.join_datasets(c(0), chklen = FALSE), NA)
 
   expect_err_msg <- function(err_msg, chklen) {
 

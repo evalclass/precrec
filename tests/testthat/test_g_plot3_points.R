@@ -53,18 +53,15 @@ pt3_create_mmpoints <- function(raw_curves = FALSE) {
 
 ap3_test_basic_measures <- function(points, ...){
 
-  expect_that(plot(points, ...), not(throws_error()))
-  expect_that(plot(points, c("sensitivity", "specificity", "error",
-                             "accuracy", "precision"), ...),
-              not(throws_error()))
-  expect_that(plot(points, c("sensitivity", "specificity", "error",
-                             "precision"), ...), not(throws_error()))
-  expect_that(plot(points, c("sensitivity", "specificity", "precision"),
-                   ...), not(throws_error()))
-  expect_that(plot(points, c("sensitivity", "precision"),
-                   ...), not(throws_error()))
-
-  expect_that(plot(points, "precision", ...), not(throws_error()))
+  expect_error(plot(points, ...), NA)
+  expect_error(plot(points, c("sensitivity", "specificity", "error",
+                              "accuracy", "precision"), ...), NA)
+  expect_error(plot(points, c("sensitivity", "specificity", "error",
+                              "precision"), ...), NA)
+  expect_error(plot(points, c("sensitivity", "specificity", "precision"), ...),
+               NA)
+  expect_error(plot(points, c("sensitivity", "precision"), ...), NA)
+  expect_error(plot(points, "precision", ...), NA)
 }
 
 test_that("plot sspoints", {

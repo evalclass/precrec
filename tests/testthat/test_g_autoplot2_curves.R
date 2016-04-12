@@ -63,16 +63,16 @@ ap2_create_mmcurves <- function(raw_curves = FALSE) {
 
 ap2_test_roc_prc <- function(curves, ...){
   pp <- ggplot2::autoplot(curves, ...)
-  expect_that(pp, not(throws_error()))
+  expect_error(pp, NA)
 
   pp <- ggplot2::autoplot(curves, c("ROC", "PRC"), ...)
-  expect_that(pp, not(throws_error()))
+  expect_error(pp, NA)
 
   pp <- ggplot2::autoplot(curves, "ROC", ...)
-  expect_that(pp, not(throws_error()))
+  expect_error(pp, NA)
 
   pp <- ggplot2::autoplot(curves, "PRC", ...)
-  expect_that(pp, not(throws_error()))
+  expect_error(pp, NA)
 }
 
 test_that("autoplot sscurves", {
