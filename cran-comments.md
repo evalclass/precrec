@@ -12,7 +12,7 @@ In this version I have:
 * local OS X Yosemite, R 3.2.4 Revised
 * local CentOS 6.7, R 3.2.3
 * local Windows 10, R 3.2.4 Revised
-* win-builder (devel and release)
+* win-builder, 3.3.0 beta
 * Ubuntu 12.04.5 LTS (on travis-ci), R 3.2.4 Revised
 
 ## R CMD check results
@@ -20,5 +20,5 @@ In this version I have:
 
 * One **NOTE** from the package size test on **local CentOS 6.7, R 3.2.3**.
   
-    It happens because the the size of the package c++ library `precrec.so` was 3.8 MB. 
+    It happens because the the size of the package c++ library `precrec.so` was 3.9 MB. 
     It is almost 1 MB in other test environments.
