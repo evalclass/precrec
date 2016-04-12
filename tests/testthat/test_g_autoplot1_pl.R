@@ -23,7 +23,7 @@ test_that("autoplot fmdat", {
 
   pp <- ggplot2::autoplot(fmdat)
   expect_true(all(class(pp) == c("gg", "ggplot")))
-  expect_that(pp, not(throws_error()))
+  expect_error(pp, NA)
 })
 
 test_that("autoplot cmat", {
@@ -39,7 +39,7 @@ test_that("autoplot cmat", {
 
   pp <- ggplot2::autoplot(cmat)
   expect_true(all(class(pp) == c("gg", "ggplot")))
-  expect_that(pp, not(throws_error()))
+  expect_error(pp, NA)
 })
 
 
@@ -56,5 +56,5 @@ test_that("autoplot pevals", {
 
   pp <- ggplot2::autoplot(pevals)
   expect_true(all(class(pp) == c("gg", "ggplot")))
-  expect_that(pp, not(throws_error()))
+  expect_error(pp, NA)
 })

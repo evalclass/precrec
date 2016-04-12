@@ -63,28 +63,28 @@ ap3_create_mmpoints <- function(raw_curves = FALSE) {
 
 ap3_test_basic_measures <- function(curves, raw_curves = FALSE, ...){
   pp <- ggplot2::autoplot(curves, raw_curves = raw_curves, ...)
-  expect_that(pp, not(throws_error()))
+  expect_error(pp, NA)
 
   pp <- ggplot2::autoplot(curves, c("sensitivity", "specificity", "error",
                                     "accuracy", "precision"),
                           raw_curves = raw_curves, ...)
-  expect_that(pp, not(throws_error()))
+  expect_error(pp, NA)
 
   pp <- ggplot2::autoplot(curves, c("sensitivity", "specificity", "error",
                                     "precision"),
                           raw_curves = raw_curves, ...)
-  expect_that(pp, not(throws_error()))
+  expect_error(pp, NA)
 
   pp <- ggplot2::autoplot(curves, c("sensitivity", "specificity", "precision"),
                           raw_curves = raw_curves, ...)
-  expect_that(pp, not(throws_error()))
+  expect_error(pp, NA)
 
   pp <- ggplot2::autoplot(curves, c("sensitivity", "precision"),
                           raw_curves = raw_curves, ...)
-  expect_that(pp, not(throws_error()))
+  expect_error(pp, NA)
 
   pp <- ggplot2::autoplot(curves, "precision", raw_curves = raw_curves, ...)
-  expect_that(pp, not(throws_error()))
+  expect_error(pp, NA)
 }
 
 test_that("autoplot sspoints", {
