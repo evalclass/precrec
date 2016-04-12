@@ -20,8 +20,8 @@ test_that("'...' must be specified", {
 })
 
 test_that("'byrow' should be TRUE or FALSE", {
-  expect_that(join_labels(c(0, 1), byrow = TRUE), not(throws_error()))
-  expect_that(join_labels(c(0, 1), byrow = FALSE), not(throws_error()))
+  expect_error(join_labels(c(0, 1), byrow = TRUE), NA)
+  expect_error(join_labels(c(0, 1), byrow = FALSE), NA)
 
   expect_err_msg <- function(err_msg, byrow) {
     eval(bquote(expect_error(join_labels(c(0), byrow = byrow), err_msg)))
@@ -39,8 +39,8 @@ test_that("'byrow' should be TRUE or FALSE", {
 })
 
 test_that("'chklen' should be TRUE or FALSE", {
-  expect_that(join_labels(c(0, 1), chklen = TRUE), not(throws_error()))
-  expect_that(join_labels(c(0, 1), chklen = FALSE), not(throws_error()))
+  expect_error(join_labels(c(0, 1), chklen = TRUE), NA)
+  expect_error(join_labels(c(0, 1), chklen = FALSE), NA)
 
   expect_err_msg <- function(err_msg, chklen) {
 

@@ -52,11 +52,10 @@ pt2_create_mmcurves <- function(raw_curves = FALSE) {
 }
 
 ap2_test_roc_prc <- function(curves, ...){
-
-  expect_that(plot(curves, ...), not(throws_error()))
-  expect_that(plot(curves, c("ROC", "PRC"), ...), not(throws_error()))
-  expect_that(plot(curves, "ROC", ...), not(throws_error()))
-  expect_that(plot(curves, "PRC", ...), not(throws_error()))
+  expect_error(plot(curves, ...), NA)
+  expect_error(plot(curves, c("ROC", "PRC"), ...), NA)
+  expect_error(plot(curves, "ROC", ...), NA)
+  expect_error(plot(curves, "PRC", ...), NA)
 }
 
 test_that("plot sscurves", {
@@ -111,9 +110,9 @@ test_that("plot() accepts type", {
   on.exit(dev.off())
 
   curves <- pt2_create_mmcurves()
-  expect_that(plot(curves, type = "l"), not(throws_error()))
-  expect_that(plot(curves, type = "p"), not(throws_error()))
-  expect_that(plot(curves, type = "b"), not(throws_error()))
+  expect_error(plot(curves, type = "l"), NA)
+  expect_error(plot(curves, type = "p"), NA)
+  expect_error(plot(curves, type = "b"), NA)
 })
 
 test_that("plot() accepts show_cb", {
@@ -121,8 +120,8 @@ test_that("plot() accepts show_cb", {
   on.exit(dev.off())
 
   curves <- pt2_create_mmcurves()
-  expect_that(plot(curves, show_cb = TRUE), not(throws_error()))
-  expect_that(plot(curves, show_cb = FALSE), not(throws_error()))
+  expect_error(plot(curves, show_cb = TRUE), NA)
+  expect_error(plot(curves, show_cb = FALSE), NA)
 })
 
 test_that("plot() accepts raw_curves", {
@@ -130,8 +129,8 @@ test_that("plot() accepts raw_curves", {
   on.exit(dev.off())
 
   curves <- pt2_create_mmcurves(raw_curves = TRUE)
-  expect_that(plot(curves, raw_curves = TRUE), not(throws_error()))
-  expect_that(plot(curves, raw_curves = FALSE), not(throws_error()))
+  expect_error(plot(curves, raw_curves = TRUE), NA)
+  expect_error(plot(curves, raw_curves = FALSE), NA)
 })
 
 test_that("plot() accepts show_legend", {
@@ -139,6 +138,6 @@ test_that("plot() accepts show_legend", {
   on.exit(dev.off())
 
   curves <- pt2_create_mmcurves()
-  expect_that(plot(curves, show_legend = TRUE), not(throws_error()))
-  expect_that(plot(curves, show_legend = FALSE), not(throws_error()))
+  expect_error(plot(curves, show_legend = TRUE), NA)
+  expect_error(plot(curves, show_legend = FALSE), NA)
 })
