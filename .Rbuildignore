@@ -9,3 +9,4 @@
 ^README-.*\.png$
 ^NEWS\.md$
 ^LICENSE$
+^appveyor\.yml$
