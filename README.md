@@ -2,7 +2,7 @@
 precrec
 =======
 
-[![Travis-CI Build Status](https://travis-ci.org/takayasaito/precrec.svg?branch=master)](https://travis-ci.org/takayasaito/precrec) [![codecov.io](https://codecov.io/github/takayasaito/precrec/coverage.svg?branch=master)](https://codecov.io/github/takayasaito/precrec?branch=master) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/precrec)](http://cran.r-project.org/package=precrec)
+[![Travis](https://img.shields.io/travis/takayasaito/precrec.svg?maxAge=2592000)](https://travis-ci.org/takayasaito/precrec) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/takayasaito/precrec?branch=master&svg=true)](https://ci.appveyor.com/project/takayasaito/precrec) [![Codecov](https://img.shields.io/codecov/c/github/takayasaito/precrec.svg?maxAge=2592000)](https://codecov.io/github/takayasaito/precrec?branch=master) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/precrec)](http://cran.r-project.org/package=precrec)
 
 The aim of `precrec` is to provide various tools that enable robust performance evaluations of binary classifiers. Specifically, `precrec` offers accurate calculations of ROC and Precision-Recall curves.
 
@@ -22,7 +22,7 @@ Installation
 
     2.  Install `devtools` from CRAN with `install.packages("devtools")`.
 
-    3.  Install `precrec` from the GitHub repository with `devtools::install_github("/takayasaito/precrec")`.
+    3.  Install `precrec` from the GitHub repository with `devtools::install_github("takayasaito/precrec")`.
 
 Functions
 ---------
@@ -85,7 +85,7 @@ library(ggplot2)
 autoplot(sscurves)
 ```
 
-![](README_files/figure-markdown_github/unnamed-chunk-2-1.png)
+![](https://rawgit.com/takayasaito/precrec/master/README_files/figure-markdown_github/unnamed-chunk-2-1.png)
 
 External links
 --------------
