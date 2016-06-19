@@ -110,7 +110,8 @@ autoplot.mmcurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
 #' @export
 autoplot.sspoints <- function(object,
                               curvetype = c("error", "accuracy", "specificity",
-                                            "sensitivity", "precision"), ...) {
+                                            "sensitivity", "precision", "mcc"),
+                              ...) {
 
   arglist <- .get_autoplot_arglist(def_curvetype = curvetype, def_type = "p",
                                    def_show_cb = FALSE, def_raw_curves = TRUE,
@@ -129,7 +130,8 @@ autoplot.sspoints <- function(object,
 #' @export
 autoplot.mspoints <- function(object,
                               curvetype = c("error", "accuracy", "specificity",
-                                            "sensitivity", "precision"), ...) {
+                                            "sensitivity", "precision", "mcc"),
+                              ...) {
 
   arglist <- .get_autoplot_arglist(def_curvetype = curvetype, def_type = "p",
                                    def_show_cb = FALSE, def_raw_curves = TRUE,
@@ -147,7 +149,8 @@ autoplot.mspoints <- function(object,
 #' @export
 autoplot.smpoints <- function(object,
                               curvetype = c("error", "accuracy", "specificity",
-                                            "sensitivity", "precision"), ...) {
+                                            "sensitivity", "precision", "mcc"),
+                              ...) {
 
   arglist <- .get_autoplot_arglist(def_curvetype = curvetype, def_type = "p",
                                    def_show_cb = TRUE, def_raw_curves = FALSE,
@@ -164,7 +167,8 @@ autoplot.smpoints <- function(object,
 #' @export
 autoplot.mmpoints <- function(object,
                               curvetype = c("error", "accuracy", "specificity",
-                                            "sensitivity", "precision"), ...) {
+                                            "sensitivity", "precision", "mcc"),
+                              ...) {
 
   arglist <- .get_autoplot_arglist(def_curvetype = curvetype, def_type = "p",
                                    def_show_cb = FALSE, def_raw_curves = FALSE,

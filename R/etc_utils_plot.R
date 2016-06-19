@@ -283,6 +283,12 @@ NULL
       if (!is.na(pmatch(sval, "precision")) || sval == "ppv") {
         return("precision")
       }
+
+      if (!is.na(pmatch(sval, "matthews correlation coefficient"))
+          || sval == "mcc") {
+        return("mcc")
+      }
+
     }
 
     val
@@ -582,7 +588,7 @@ NULL
     tlist[["ctype"]] <- "prcs"
   } else {
     mnames <- list(error = "err", accuracy = "acc", specificity = "sp",
-                   sensitivity = "sn", precision = "prec")
+                   sensitivity = "sn", precision = "prec", mcc = "mcc")
     main <- paste0(toupper(substring(curvetype, 1, 1)), substring(curvetype,2))
     tlist[["main"]] <- main
     tlist[["xlab"]] <- "threshold"

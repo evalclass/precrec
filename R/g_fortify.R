@@ -50,18 +50,21 @@ fortify.pevals <- function(model, ...) {
   curve_df <- data.frame(x = rep(1:n, 6),
                          y = c(pb[["error"]], pb[["accuracy"]],
                                pb[["specificity"]], pb[["sensitivity"]],
-                               1 - pb[["specificity"]], pb[["precision"]]),
+                               1 - pb[["specificity"]], pb[["precision"]],
+                               pb[["mcc"]]),
                          group = factor(c(rep("error", n),
                                           rep("accuracy", n),
                                           rep("specificity", n),
                                           rep("sensitivity", n),
                                           rep("1 - specificity", n),
-                                          rep("precision", n)),
+                                          rep("precision", n),
+                                          rep("mcc", n)),
                                         levels = c("error", "accuracy",
                                                    "specificity",
                                                    "sensitivity",
                                                    "1 - specificity",
-                                                   "precision")))
+                                                   "precision",
+                                                   "mcc")))
 }
 
 #' @rdname fortify

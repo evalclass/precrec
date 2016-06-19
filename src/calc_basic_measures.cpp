@@ -1,4 +1,5 @@
 #include <Rcpp.h>
+#include <cmath>
 #include <vector>
 #include <string>
 
@@ -24,6 +25,7 @@ Rcpp::List calc_basic_measures(int np,
   std::vector<double> sp(n);        // Specificity
   std::vector<double> sn(n);        // Sensitivity
   std::vector<double> prec(n);      // Precision
+  std::vector<double> mcc(n);       // Matthews correlation coefficient
 
   // Vector size must be >1
   if (n < 2) {
@@ -43,6 +45,9 @@ Rcpp::List calc_basic_measures(int np,
     if (i > 0) {
       prec[i] = tps[i] / (tps[i] + fps[i]);
     }
+    mcc[i] = ((tps[i] * tns[i]) - (fps[i] * fns[i]))
+              / ::sqrt((tps[i] + fps[i]) * (tps[i] + fns[i])
+                        * (tns[i] + fps[i]) * (tns[i] + fns[i]));
   }
 
   // Update the precision value of the highest rank
@@ -55,6 +60,7 @@ Rcpp::List calc_basic_measures(int np,
   df["specificity"] = sp;
   df["sensitivity"] = sn;
   df["precision"] = prec;
+  df["mcc"] = mcc;
 
   ret_val["basic"] = df;
   ret_val["errmsg"] = errmsg;
