@@ -461,12 +461,12 @@ NULL
                                              color = 'modname'))
 
     if (type == "l") {
-      p <- p + ggplot2::geom_line()
+      p <- p + ggplot2::geom_line(na.rm = TRUE)
     } else if (type == "b" || type == "p") {
       if (type == "b") {
-        p <- p + ggplot2::geom_line(alpha = 0.25)
+        p <- p + ggplot2::geom_line(alpha = 0.25, na.rm = TRUE)
       }
-      p <- p + ggplot2::geom_point()
+      p <- p + ggplot2::geom_point(na.rm = TRUE)
     }
 
   } else if (show_cb) {
@@ -475,29 +475,30 @@ NULL
                                              ymin = 'ymin', ymax = 'ymax'))
     if (type == "l") {
       p <- p + ggplot2::geom_smooth(ggplot2::aes_string(color = 'modname'),
-                                    stat = "identity")
+                                    stat = "identity", na.rm = TRUE)
     } else if (type == "b" || type == "p") {
       p <- p + ggplot2::geom_ribbon(ggplot2::aes_string(min = 'ymin',
                                                         ymax = 'ymax'),
                                     stat = "identity", alpha = 0.25,
-                                    fill = "grey25")
+                                    fill = "grey25", na.rm = TRUE)
       if (type == "b") {
         p <- p + ggplot2::geom_line(ggplot2::aes_string(color = 'modname'),
-                                    alpha = 0.25)
+                                    alpha = 0.25, na.rm = TRUE)
       }
       p <- p + ggplot2::geom_point(ggplot2::aes_string(x = 'x', y = 'y',
-                                                       color = 'modname'))
+                                                       color = 'modname'),
+                                   na.rm = TRUE)
     }
   } else {
     p <- ggplot2::ggplot(curve_df, ggplot2::aes_string(x = 'x', y = 'y',
                                                        color = 'modname'))
     if (type == "l") {
-      p <- p + ggplot2::geom_line()
+      p <- p + ggplot2::geom_line(na.rm = TRUE)
     } else if (type == "b" || type == "p") {
       if (type == "b") {
-        p <- p + ggplot2::geom_line(alpha = 0.25)
+        p <- p + ggplot2::geom_line(alpha = 0.25, na.rm = TRUE)
       }
-      p <- p + ggplot2::geom_point()
+      p <- p + ggplot2::geom_point(na.rm = TRUE)
     }
   }
 

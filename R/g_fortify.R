@@ -47,7 +47,7 @@ fortify.pevals <- function(model, ...) {
   # === Prepare a data frame for ggplot2 ===
   pb <- model[["basic"]]
   n <- length(pb[["error"]])
-  curve_df <- data.frame(x = rep(1:n, 6),
+  curve_df <- data.frame(x = rep(1:n, 7),
                          y = c(pb[["error"]], pb[["accuracy"]],
                                pb[["specificity"]], pb[["sensitivity"]],
                                1 - pb[["specificity"]], pb[["precision"]],
