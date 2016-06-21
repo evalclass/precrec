@@ -289,6 +289,10 @@ NULL
         return("mcc")
       }
 
+      if (!is.na(pmatch(sval, "fscore")) || !is.na(pmatch(sval, "f1score"))) {
+        return("fscore")
+      }
+
     }
 
     val
@@ -371,7 +375,11 @@ NULL
                  raw_curves = raw_curves, add_np_nn = add_np_nn,
                  show_legend = show_legend2)
   }
-  if (length(curvetype) == 5) {
+  if (length(curvetype) > 4 && length(curvetype) %% 3 == 2) {
+    graphics::plot(1, type = "n", axes = FALSE, xlab = "", ylab = "")
+  }
+  if (length(curvetype) > 4 && length(curvetype) %% 3 == 1) {
+    graphics::plot(1, type = "n", axes = FALSE, xlab = "", ylab = "")
     graphics::plot(1, type = "n", axes = FALSE, xlab = "", ylab = "")
   }
 
@@ -409,19 +417,25 @@ NULL
     mat1 <- c(1, 2, 3, 4, 5, 5)
     mat2 <- c(1, 2, 3, 4)
     heights = c(0.425, 0.425, 0.15)
-  } else if (ctype_len > 4) {
+  } else if (ctype_len == 5 || ctype_len == 6) {
     nrow1 <- 3
     ncol1 <- 3
     mat1 <- c(1, 2, 3, 4, 5, 6, 7, 7, 7)
     mat2 <- c(1, 2, 3, 4, 5, 6)
     heights = c(0.425, 0.425, 0.15)
+  } else if (ctype_len > 6) {
+    nrow1 <- 4
+    ncol1 <- 3
+    mat1 <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10)
+    mat2 <- c(1, 2, 3, 4, 5, 6, 7, 8, 9)
+    heights = c(0.28, 0.28, 0.28, 0.16)
   }
 
   if (show_legend) {
     m <- matrix(mat1, nrow = nrow1, ncol = ncol1, byrow = TRUE)
     graphics::layout(mat = m, heights = heights)
   } else {
-    m <- matrix(mat2, nrow = nrow1 - 1, ncol = ncol1)
+    m <- matrix(mat2, nrow = nrow1 - 1, ncol = ncol1, byrow = TRUE)
     graphics::layout(mat = m)
   }
 }
@@ -443,11 +457,17 @@ NULL
     line_col <- .make_multi_colors(obj)
   }
 
+  if (curvetype == "mcc") {
+    ylim = c(-1, 1)
+  } else {
+    ylim = c(0, 1)
+  }
+
   # === Create a plot ===
   mats <- .make_matplot_mats(obj[[curvetype]])
   graphics::matplot(mats[["x"]], mats[["y"]], type = type, lty = 1, pch = 19,
                     col = line_col, main = main, xlab = xlab, ylab = ylab,
-                    ylim = c(0, 1), xlim = c(0, 1))
+                    ylim = ylim, xlim = c(0, 1))
 }
 
 #
@@ -603,7 +623,8 @@ NULL
     tlist[["ctype"]] <- "prcs"
   } else {
     mnames <- list(error = "err", accuracy = "acc", specificity = "sp",
-                   sensitivity = "sn", precision = "prec", mcc = "mcc")
+                   sensitivity = "sn", precision = "prec", mcc = "mcc",
+                   fscore = "fscore")
     main <- paste0(toupper(substring(curvetype, 1, 1)), substring(curvetype,2))
     tlist[["main"]] <- main
     tlist[["xlab"]] <- "threshold"

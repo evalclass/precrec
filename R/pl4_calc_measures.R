@@ -58,7 +58,8 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
       || length(pb[["specificity"]]) != n
       || length(pb[["sensitivity"]]) != n
       || length(pb[["precision"]]) != n
-      || length(pb[["mcc"]]) != n) {
+      || length(pb[["mcc"]]) != n
+      || length(pb[["fscore"]]) != n) {
     stop("Evaluation vectors must be all the same lengths", call. = FALSE)
   }
 
@@ -100,6 +101,11 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
   assertthat::assert_that(is.atomic(pb[["mcc"]]),
                           is.vector(pb[["mcc"]]),
                           is.numeric(pb[["mcc"]]))
+
+  # F-score
+  assertthat::assert_that(is.atomic(pb[["fscore"]]),
+                          is.vector(pb[["fscore"]]),
+                          is.numeric(pb[["fscore"]]))
 
   attr(pevals, "validated") <- TRUE
   pevals

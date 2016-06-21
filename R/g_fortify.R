@@ -47,24 +47,26 @@ fortify.pevals <- function(model, ...) {
   # === Prepare a data frame for ggplot2 ===
   pb <- model[["basic"]]
   n <- length(pb[["error"]])
-  curve_df <- data.frame(x = rep(1:n, 7),
+  curve_df <- data.frame(x = rep(1:n, 8),
                          y = c(pb[["error"]], pb[["accuracy"]],
                                pb[["specificity"]], pb[["sensitivity"]],
                                1 - pb[["specificity"]], pb[["precision"]],
-                               pb[["mcc"]]),
+                               pb[["mcc"]], pb[["fscore"]]),
                          group = factor(c(rep("error", n),
                                           rep("accuracy", n),
                                           rep("specificity", n),
                                           rep("sensitivity", n),
                                           rep("1 - specificity", n),
                                           rep("precision", n),
-                                          rep("mcc", n)),
+                                          rep("mcc", n),
+                                          rep("fscore", n)),
                                         levels = c("error", "accuracy",
                                                    "specificity",
                                                    "sensitivity",
                                                    "1 - specificity",
                                                    "precision",
-                                                   "mcc")))
+                                                   "mcc",
+                                                   "fscore")))
 }
 
 #' @rdname fortify
