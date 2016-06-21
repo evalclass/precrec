@@ -261,7 +261,7 @@
   }
   roc_prc <- cfunc(curvetype, c("ROC", "PRC"), 2)
   basic_eval <- cfunc(curvetype, c("error", "accuracy", "specificity",
-                                   "sensitivity", "precision"), 5)
+                                   "sensitivity", "precision", "mcc"), 6)
 
   if (!roc_prc && !basic_eval) {
     stop("Invalid curvetype", call. = FALSE)

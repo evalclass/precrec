@@ -62,6 +62,7 @@ print.beval_info <- function(x, ...) {
   cat("      sp:   specificity\n")
   cat("      sn:   sensitivity\n")
   cat("      prec: precision\n")
+  cat("      mcc:  Matthews correlation coefficient\n")
   cat("\n\n")
 
   eval_summary <- attr(x, "eval_summary")
@@ -69,7 +70,7 @@ print.beval_info <- function(x, ...) {
                                    justify = "right")
   colnames(eval_summary) <- c("Model", "ID", "Meas.", "Min.",
                               "1st Qu.", "Median", "Mean", "3rd Qu.", "Max.")
-  evaltypes <- c("rank", "err", "acc", "sp", "sn", "prec")
+  evaltypes <- c("rank", "err", "acc", "sp", "sn", "prec", "mcc")
   eval_summary[, "Meas."] <- evaltypes
 
   print.data.frame(eval_summary, print.gap = 1)

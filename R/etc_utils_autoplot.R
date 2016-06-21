@@ -461,12 +461,12 @@ NULL
                                              color = 'modname'))
 
     if (type == "l") {
-      p <- p + ggplot2::geom_line()
+      p <- p + ggplot2::geom_line(na.rm = TRUE)
     } else if (type == "b" || type == "p") {
       if (type == "b") {
-        p <- p + ggplot2::geom_line(alpha = 0.25)
+        p <- p + ggplot2::geom_line(alpha = 0.25, na.rm = TRUE)
       }
-      p <- p + ggplot2::geom_point()
+      p <- p + ggplot2::geom_point(na.rm = TRUE)
     }
 
   } else if (show_cb) {
@@ -475,29 +475,31 @@ NULL
                                              ymin = 'ymin', ymax = 'ymax'))
     if (type == "l") {
       p <- p + ggplot2::geom_smooth(ggplot2::aes_string(color = 'modname'),
-                                    stat = "identity")
+                                    stat = "identity", na.rm = TRUE)
     } else if (type == "b" || type == "p") {
-      p <- p + ggplot2::geom_ribbon(ggplot2::aes_string(min = 'ymin',
-                                                        ymax = 'ymax'),
+      p <- p + ggplot2::geom_ribbon(ggplot2::aes_string(ymin = 'ymin',
+                                                        ymax = 'ymax',
+                                                        group = 'modname'),
                                     stat = "identity", alpha = 0.25,
-                                    fill = "grey25")
+                                    fill = "grey25", na.rm = TRUE)
       if (type == "b") {
         p <- p + ggplot2::geom_line(ggplot2::aes_string(color = 'modname'),
-                                    alpha = 0.25)
+                                    alpha = 0.25, na.rm = TRUE)
       }
       p <- p + ggplot2::geom_point(ggplot2::aes_string(x = 'x', y = 'y',
-                                                       color = 'modname'))
+                                                       color = 'modname'),
+                                   na.rm = TRUE)
     }
   } else {
     p <- ggplot2::ggplot(curve_df, ggplot2::aes_string(x = 'x', y = 'y',
                                                        color = 'modname'))
     if (type == "l") {
-      p <- p + ggplot2::geom_line()
+      p <- p + ggplot2::geom_line(na.rm = TRUE)
     } else if (type == "b" || type == "p") {
       if (type == "b") {
-        p <- p + ggplot2::geom_line(alpha = 0.25)
+        p <- p + ggplot2::geom_line(alpha = 0.25, na.rm = TRUE)
       }
-      p <- p + ggplot2::geom_point()
+      p <- p + ggplot2::geom_point(na.rm = TRUE)
     }
   }
 
@@ -508,8 +510,15 @@ NULL
   } else {
     func_g <- .geom_basic_point
   }
+
+  ylim = c(0, 1)
+  ratio = 1
+  if (curvetype == "mcc") {
+    ylim = c(-1, 1)
+    ratio = 0.5
+  }
   p <- func_g(p, object[[1]], show_legend = show_legend, add_np_nn = add_np_nn,
-              curve_df = curve_df, ...)
+              curve_df = curve_df, ylim = ylim, ratio = ratio, ...)
 
   p
 }
@@ -588,13 +597,13 @@ NULL
 # Geom_line for Precision-Recall
 #
 .geom_basic_point <- function(p, object, show_legend = TRUE,
-                              curve_df = curve_df, ...) {
+                              curve_df = curve_df, ylim, ratio, ...) {
 
   s <- curve_df[["curvetype"]][1]
   main <- paste0(toupper(substring(s, 1, 1)), substring(s,2))
 
-  p <- p + ggplot2::scale_y_continuous(limits = c(0.0, 1.0))
-  p <- p + ggplot2::coord_fixed(ratio = 1)
+  p <- p + ggplot2::scale_y_continuous(limits = ylim)
+  p <- p + ggplot2::coord_fixed(ratio = ratio)
 
   p <- .geom_basic(p, main, "threshold", s, show_legend)
 

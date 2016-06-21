@@ -19,8 +19,8 @@
                       calc_avg, cb_alpha)
   }
   eval_names <- c("error", "accuracy", "specificity", "sensitivity",
-                  "precision")
-  grp_row_names <- c("err", "acc", "sp", "sn", "prec")
+                  "precision", "mcc")
+  grp_row_names <- c("err", "acc", "sp", "sn", "prec", "mcc")
   grp_points <- lapply(eval_names, grpfunc)
   names(grp_points)<- grp_row_names
 
@@ -81,7 +81,15 @@
     if (dataset_type == "multiple" && calc_avg) {
       modnames <- attr(mdat, "data_info")[["modnames"]]
       uniq_modnames <- attr(mdat, "uniq_modnames")
-      avgcurves <- calc_avg_basic(pevals, modnames, uniq_modnames, cb_alpha)
+      if (eval_type == "mcc") {
+        minval = -1.0
+        maxval = 1.0
+      } else {
+        minval = 0.0
+        maxval = 1.0
+      }
+      avgcurves <- calc_avg_basic(pevals, modnames, uniq_modnames, cb_alpha,
+                                  minval, maxval)
     } else {
       avgcurves <- NA
     }
@@ -117,7 +125,7 @@
   modnames <- attr(mdat, "data_info")[["modnames"]]
   dsids <- attr(mdat, "data_info")[["dsids"]]
   evaltypes <- c("threshold", "error", "accuracy", "specificity",
-                 "sensitivity", "precision")
+                 "sensitivity", "precision", "mcc")
   elen <- length(evaltypes)
 
   sbasic <- data.frame(modnames = rep(modnames, each = elen),
@@ -134,7 +142,7 @@
   for (i in seq_along(lpoints)) {
     for (j in seq_along(evaltypes)) {
       vals <- lpoints[[i]][["basic"]][[evaltypes[j]]]
-      sbasic[(i - 1) * length(evaltypes) + j, 4:9] <- summary(vals)
+      sbasic[(i - 1) * length(evaltypes) + j, 4:9] <- summary(vals)[1:6]
     }
   }
 
@@ -151,7 +159,7 @@
   }
 
   # Validate class items and attributes
-  item_names <- c("err", "acc", "sp", "sn", "prec")
+  item_names <- c("err", "acc", "sp", "sn", "prec", "mcc")
   attr_names <- c("eval_summary", "grp_avg", "data_info", "uniq_modnames",
                   "uniq_dsids", "model_type", "dataset_type", "args",
                   "validated")

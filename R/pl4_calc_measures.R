@@ -57,7 +57,8 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
   if (length(pb[["accuracy"]]) != n
       || length(pb[["specificity"]]) != n
       || length(pb[["sensitivity"]]) != n
-      || length(pb[["precision"]]) != n) {
+      || length(pb[["precision"]]) != n
+      || length(pb[["mcc"]]) != n) {
     stop("Evaluation vectors must be all the same lengths", call. = FALSE)
   }
 
@@ -94,6 +95,11 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
                           is.vector(pb[["precision"]]),
                           is.numeric(pb[["precision"]]),
                           pb[["precision"]][1] == pb[["precision"]][2])
+
+  # Matthews correlation coefficient
+  assertthat::assert_that(is.atomic(pb[["mcc"]]),
+                          is.vector(pb[["mcc"]]),
+                          is.numeric(pb[["mcc"]]))
 
   attr(pevals, "validated") <- TRUE
   pevals

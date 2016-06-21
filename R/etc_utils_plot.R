@@ -283,6 +283,12 @@ NULL
       if (!is.na(pmatch(sval, "precision")) || sval == "ppv") {
         return("precision")
       }
+
+      if (!is.na(pmatch(sval, "matthews correlation coefficient"))
+          || sval == "mcc") {
+        return("mcc")
+      }
+
     }
 
     val
@@ -483,8 +489,13 @@ NULL
   grp_avg <- attr(obj, "grp_avg")
   avgcurves <- grp_avg[[curvetype]]
 
+  if (curvetype == "mcc") {
+    ylim = c(-1, 1)
+  } else {
+    ylim = c(0, 1)
+  }
   graphics::plot(1, type = "n", main = main, xlab = xlab, ylab = ylab,
-                 ylim = c(0, 1), xlim = c(0, 1))
+                 ylim = ylim, xlim = c(0, 1))
 
   if (length(avgcurves) == 1) {
     lcols <- "blue"
@@ -503,10 +514,20 @@ NULL
 .add_curve_with_ci <- function(avgcurves, type, idx, pcol, lcol, show_cb) {
   x <- avgcurves[[idx]][["x"]]
   y <- avgcurves[[idx]][["y_avg"]]
+  naidx <- is.na(y)
+
+  if (any(naidx)) {
+    x <- x[!naidx]
+    y <- y[!naidx]
+  }
 
   if (show_cb) {
     ymin <- avgcurves[[idx]][["y_ci_l"]]
     ymax <- avgcurves[[idx]][["y_ci_h"]]
+    if (any(naidx)) {
+      ymin <- ymin[!naidx]
+      ymax <- ymax[!naidx]
+    }
 
     g <- grDevices::col2rgb(pcol)
     graphics::polygon(c(x, rev(x)), c(ymin, rev(ymax)), border = FALSE,
@@ -582,7 +603,7 @@ NULL
     tlist[["ctype"]] <- "prcs"
   } else {
     mnames <- list(error = "err", accuracy = "acc", specificity = "sp",
-                   sensitivity = "sn", precision = "prec")
+                   sensitivity = "sn", precision = "prec", mcc = "mcc")
     main <- paste0(toupper(substring(curvetype, 1, 1)), substring(curvetype,2))
     tlist[["main"]] <- main
     tlist[["xlab"]] <- "threshold"
