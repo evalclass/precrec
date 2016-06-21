@@ -81,7 +81,15 @@
     if (dataset_type == "multiple" && calc_avg) {
       modnames <- attr(mdat, "data_info")[["modnames"]]
       uniq_modnames <- attr(mdat, "uniq_modnames")
-      avgcurves <- calc_avg_basic(pevals, modnames, uniq_modnames, cb_alpha)
+      if (eval_type == "mcc") {
+        minval = -1.0
+        maxval = 1.0
+      } else {
+        minval = 0.0
+        maxval = 1.0
+      }
+      avgcurves <- calc_avg_basic(pevals, modnames, uniq_modnames, cb_alpha,
+                                  minval, maxval)
     } else {
       avgcurves <- NA
     }

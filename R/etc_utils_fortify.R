@@ -210,9 +210,9 @@
 #' mmdf <- fortify(mmpoints)
 #'
 #' ## Plot threshold vs. precision
-#' df_prec <- subset(smdf, curvetype == "precision")
+#' df_prec <- subset(mmdf, curvetype == "precision")
 #' p_prec <- ggplot(df_prec, aes(x = x, y = y, ymin = ymin, ymax = ymax))
-#' p_prec <- p_prec + geom_ribbon(aes(min = ymin, ymax = ymax),
+#' p_prec <- p_prec + geom_ribbon(aes(min = ymin, ymax = ymax, group = modname),
 #'                                stat = "identity", alpha = 0.25,
 #'                                fill = "grey25")
 #' p_prec <- p_prec + geom_point(aes(x = x, y = y, color = modname))
