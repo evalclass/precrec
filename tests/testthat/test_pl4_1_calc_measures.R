@@ -130,7 +130,7 @@ test_that("calc_measures() reterns correct evaluation values", {
   expect_equal(pb[["precision"]], c(1, 1, 0.5, 2/3, 0.5))
   expect_equal(pb[["mcc"]], c(NA, 0.5773503, 0, 0.5773503, NA),
                tolerance = 1e-4)
-
+  expect_equal(pb[["fscore"]], c(0, 2/3, 0.5, 0.8, 2/3), tolerance = 1e-4)
 })
 
 pl4_create_ms_dat <- function() {
@@ -189,7 +189,7 @@ test_that("ss test data", {
   expect_equal(pb[["precision"]], c(0, 0, 0.5, 1/3, 0.5))
   expect_equal(pb[["mcc"]], c(NA, -0.5773503, 0, -0.5773503, NA),
                tolerance = 1e-4)
-
+  expect_equal(pb[["fscore"]], c(0, 0, 0.5, 0.4, 2/3), tolerance = 1e-4)
 })
 
 test_that("ms test data", {
@@ -205,6 +205,8 @@ test_that("ms test data", {
   expect_equal(pb1[["precision"]], c(1, 1, 1, 2/3, 0.75))
   expect_equal(pb1[["mcc"]], c(NA, 1/3, 0.5773503, -1/3, NA),
                tolerance = 1e-4)
+  expect_equal(pb1[["fscore"]], c(0, 0.5, 0.8, 2/3, 0.8571429),
+               tolerance = 1e-4)
 
   pevals2 <- calc_measures(scores = msdat[["scores"]][[2]],
                            labels = msdat[["labels"]][[2]])
@@ -216,6 +218,7 @@ test_that("ms test data", {
   expect_equal(pb2[["precision"]], c(1, 1, 1, 1, 0.75))
   expect_equal(pb2[["mcc"]], c(NA, 1/3, 0.5773503, 1, NA),
                tolerance = 1e-4)
+  expect_equal(pb2[["fscore"]], c(0, 0.5, 0.8, 1, 0.8571429), tolerance = 1e-4)
 
   pevals3 <- calc_measures(scores = msdat[["scores"]][[3]],
                            labels = msdat[["labels"]][[3]])
@@ -226,6 +229,8 @@ test_that("ms test data", {
   expect_equal(pb3[["sensitivity"]], c(0, 1/3, 1/3, 2/3, 1))
   expect_equal(pb3[["precision"]], c(1, 1, 0.5, 2/3, 0.75))
   expect_equal(pb3[["mcc"]], c(NA, 1/3, -0.5773503, -1/3, NA),
+               tolerance = 1e-4)
+  expect_equal(pb3[["fscore"]], c(0, 0.5, 0.4, 2/3, 0.8571429),
                tolerance = 1e-4)
 
 })
@@ -243,6 +248,8 @@ test_that("sm test data", {
   expect_equal(pb1[["precision"]], c(1, 1, 1, 2/3, 0.75))
   expect_equal(pb1[["mcc"]], c(NA, 1/3, 0.5773503, -1/3, NA),
                tolerance = 1e-4)
+  expect_equal(pb1[["fscore"]], c(0, 0.5, 0.8, 2/3, 0.8571429),
+               tolerance = 1e-4)
 
   pevals2 <- calc_measures(scores = smdat[["scores"]][[2]],
                            labels = smdat[["labels"]][[2]])
@@ -254,6 +261,7 @@ test_that("sm test data", {
   expect_equal(pb2[["precision"]], c(1, 1, 1, 1, 0.75))
   expect_equal(pb2[["mcc"]], c(NA, 1/3, 0.5773503, 1, NA),
                tolerance = 1e-4)
+  expect_equal(pb2[["fscore"]], c(0, 0.5, 0.8, 1, 0.8571429), tolerance = 1e-4)
 
   pevals3 <- calc_measures(scores = smdat[["scores"]][[3]],
                            labels = smdat[["labels"]][[3]])
@@ -264,6 +272,8 @@ test_that("sm test data", {
   expect_equal(pb3[["sensitivity"]], c(0, 1/3, 1/3, 2/3, 1))
   expect_equal(pb3[["precision"]], c(1, 1, 0.5, 2/3, 0.75))
   expect_equal(pb3[["mcc"]], c(NA, 1/3, -0.5773503, -1/3, NA),
+               tolerance = 1e-4)
+  expect_equal(pb3[["fscore"]], c(0, 0.5, 0.4, 2/3, 0.8571429),
                tolerance = 1e-4)
 
 })
@@ -281,6 +291,8 @@ test_that("mm test data", {
   expect_equal(pb1[["precision"]], c(1, 1, 1, 2/3, 0.75))
   expect_equal(pb1[["mcc"]], c(NA, 1/3, 0.5773503, -1/3, NA),
                tolerance = 1e-4)
+  expect_equal(pb1[["fscore"]], c(0, 0.5, 0.8, 2/3, 0.8571429),
+               tolerance = 1e-4)
 
   pevals2 <- calc_measures(scores = mmdat[["scores"]][[2]],
                            labels = mmdat[["labels"]][[2]])
@@ -292,6 +304,7 @@ test_that("mm test data", {
   expect_equal(pb2[["precision"]], c(1, 1, 1, 1, 0.75))
   expect_equal(pb2[["mcc"]], c(NA, 1/3, 0.5773503, 1, NA),
                tolerance = 1e-4)
+  expect_equal(pb2[["fscore"]], c(0, 0.5, 0.8, 1, 0.8571429), tolerance = 1e-4)
 
   pevals3 <- calc_measures(scores = mmdat[["scores"]][[3]],
                            labels = mmdat[["labels"]][[3]])
@@ -303,6 +316,8 @@ test_that("mm test data", {
   expect_equal(pb3[["precision"]], c(1, 1, 0.5, 2/3, 0.75))
   expect_equal(pb3[["mcc"]], c(NA, 1/3, -0.5773503, -1/3, NA),
                tolerance = 1e-4)
+  expect_equal(pb3[["fscore"]], c(0, 0.5, 0.4, 2/3, 0.8571429),
+               tolerance = 1e-4)
 
   pevals4 <- calc_measures(scores = mmdat[["scores"]][[3]],
                            labels = mmdat[["labels"]][[3]])
@@ -313,6 +328,8 @@ test_that("mm test data", {
   expect_equal(pb4[["sensitivity"]], c(0, 1/3, 1/3, 2/3, 1))
   expect_equal(pb4[["precision"]], c(1, 1, 0.5, 2/3, 0.75))
   expect_equal(pb4[["mcc"]], c(NA, 1/3, -0.5773503, -1/3, NA),
+               tolerance = 1e-4)
+  expect_equal(pb4[["fscore"]], c(0, 0.5, 0.4, 2/3, 0.8571429),
                tolerance = 1e-4)
 
 })

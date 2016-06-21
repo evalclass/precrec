@@ -19,8 +19,8 @@
                       calc_avg, cb_alpha)
   }
   eval_names <- c("error", "accuracy", "specificity", "sensitivity",
-                  "precision", "mcc")
-  grp_row_names <- c("err", "acc", "sp", "sn", "prec", "mcc")
+                  "precision", "mcc", "fscore")
+  grp_row_names <- c("err", "acc", "sp", "sn", "prec", "mcc", "fscore")
   grp_points <- lapply(eval_names, grpfunc)
   names(grp_points)<- grp_row_names
 
@@ -125,7 +125,7 @@
   modnames <- attr(mdat, "data_info")[["modnames"]]
   dsids <- attr(mdat, "data_info")[["dsids"]]
   evaltypes <- c("threshold", "error", "accuracy", "specificity",
-                 "sensitivity", "precision", "mcc")
+                 "sensitivity", "precision", "mcc", "fscore")
   elen <- length(evaltypes)
 
   sbasic <- data.frame(modnames = rep(modnames, each = elen),
@@ -159,7 +159,7 @@
   }
 
   # Validate class items and attributes
-  item_names <- c("err", "acc", "sp", "sn", "prec", "mcc")
+  item_names <- c("err", "acc", "sp", "sn", "prec", "mcc", "fscore")
   attr_names <- c("eval_summary", "grp_avg", "data_info", "uniq_modnames",
                   "uniq_dsids", "model_type", "dataset_type", "args",
                   "validated")

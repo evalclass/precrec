@@ -245,7 +245,7 @@ NULL
   } else if (new_mode == "basic") {
     curvetype_names <- list(error = "err", accuracy = "acc",
                             specificity = "sp", sensitivity = "sn",
-                            precision = "prec", mcc = "mcc")
+                            precision = "prec", mcc = "mcc", fscore = "fscore")
   }
 
   # Make dsis-modname pairs

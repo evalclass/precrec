@@ -67,7 +67,7 @@ plot.mmcurves <- function(x, y = NULL, ...) {
 plot.sspoints <- function(x, y = NULL, ...) {
 
   mnames <- c("error", "accuracy", "specificity",  "sensitivity", "precision",
-              "mcc")
+              "mcc", "fscore")
   arglist <- .get_plot_arglist(y, def_curvetype = mnames, def_type = "p",
                                def_show_cb = FALSE, def_raw_curves = TRUE,
                                def_add_np_nn = TRUE, def_show_legend = FALSE,
@@ -86,7 +86,7 @@ plot.sspoints <- function(x, y = NULL, ...) {
 plot.mspoints <- function(x, y = NULL, ...) {
 
   mnames <- c("error", "accuracy", "specificity",  "sensitivity", "precision",
-              "mcc")
+              "mcc", "fscore")
   arglist <- .get_plot_arglist(y, def_curvetype = mnames, def_type = "p",
                                def_show_cb = FALSE, def_raw_curves = TRUE,
                                def_add_np_nn = TRUE, def_show_legend = TRUE,
@@ -104,7 +104,7 @@ plot.mspoints <- function(x, y = NULL, ...) {
 plot.smpoints <- function(x, y = NULL, ...) {
 
   mnames <- c("error", "accuracy", "specificity",  "sensitivity", "precision",
-              "mcc")
+              "mcc", "fscore")
   arglist <- .get_plot_arglist(y, def_curvetype = mnames, def_type = "p",
                                def_show_cb = TRUE, def_raw_curves = FALSE,
                                def_add_np_nn = TRUE, def_show_legend = FALSE,
@@ -121,7 +121,7 @@ plot.smpoints <- function(x, y = NULL, ...) {
 plot.mmpoints <- function(x, y = NULL, ...) {
 
   mnames <- c("error", "accuracy", "specificity",  "sensitivity", "precision",
-              "mcc")
+              "mcc", "fscore")
   arglist <- .get_plot_arglist(y, def_curvetype = mnames, def_type = "p",
                                def_show_cb = FALSE, def_raw_curves = FALSE,
                                def_add_np_nn = TRUE, def_show_legend = TRUE,

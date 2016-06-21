@@ -27,6 +27,7 @@ Rcpp::List calc_basic_measures(int np,
   std::vector<double> prec(n);      // Precision
   std::vector<double> mcc(n);       // Matthews correlation coefficient
   double tpfp, tpfn, tnfp, tnfn;    // For mcc calculation
+  std::vector<double> fscore(n);    // F1Score
 
   // Vector size must be >1
   if (n < 2) {
@@ -58,6 +59,7 @@ Rcpp::List calc_basic_measures(int np,
       mcc[i] = ((tps[i] * tns[i]) - (fps[i] * fns[i]))
                / ::sqrt(tpfp * tpfn * tnfp * tnfn);
     }
+    fscore[i] = (2 * tps[i]) / (2 * tps[i] + fps[i] + fns[i]);
   }
 
   // Update the precision value of the highest rank
@@ -71,6 +73,7 @@ Rcpp::List calc_basic_measures(int np,
   df["sensitivity"] = sn;
   df["precision"] = prec;
   df["mcc"] = mcc;
+  df["fscore"] = fscore;
 
   ret_val["basic"] = df;
   ret_val["errmsg"] = errmsg;
