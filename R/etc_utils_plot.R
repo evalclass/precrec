@@ -435,7 +435,7 @@ NULL
     m <- matrix(mat1, nrow = nrow1, ncol = ncol1, byrow = TRUE)
     graphics::layout(mat = m, heights = heights)
   } else {
-    m <- matrix(mat2, nrow = nrow1 - 1, ncol = ncol1)
+    m <- matrix(mat2, nrow = nrow1 - 1, ncol = ncol1, byrow = TRUE)
     graphics::layout(mat = m)
   }
 }
