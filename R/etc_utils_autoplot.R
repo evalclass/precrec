@@ -477,7 +477,8 @@ NULL
                                              ymin = 'ymin', ymax = 'ymax'))
     if (type == "l") {
       p <- p + ggplot2::geom_smooth(ggplot2::aes_string(color = 'modname'),
-                                    stat = "identity", na.rm = TRUE)
+                                    stat = "identity", na.rm = TRUE,
+                                    size = 0.5)
     } else if (type == "b" || type == "p") {
       p <- p + ggplot2::geom_ribbon(ggplot2::aes_string(ymin = 'ymin',
                                                         ymax = 'ymax',
