@@ -131,6 +131,7 @@ test_that("calc_measures() reterns correct evaluation values", {
   expect_equal(pb[["mcc"]], c(NA, 0.5773503, 0, 0.5773503, NA),
                tolerance = 1e-4)
   expect_equal(pb[["fscore"]], c(0, 2/3, 0.5, 0.8, 2/3), tolerance = 1e-4)
+
 })
 
 pl4_create_ms_dat <- function() {
