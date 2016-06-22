@@ -83,7 +83,6 @@ calc_avg_basic <- function(epoints, modnames, uniq_modnames, cb_alpha, minval,
   .validate_basic(avgobj, class_name, func_name, item_names, attr_names,
                   arg_names)
 
-
   attr(avgobj, "validated") <- TRUE
   avgobj
 }

@@ -4,7 +4,7 @@
 #include <string>
 
 //
-// Calculate confusion matrices for all possible threshold values
+// Calculate confusion matrices for all ranks
 //
 // [[Rcpp::export]]
 Rcpp::List calc_basic_measures(int np,
@@ -19,7 +19,7 @@ Rcpp::List calc_basic_measures(int np,
   Rcpp::DataFrame df;
   std::string errmsg = "";
   int n = tps.size();               // Input data size
-  std::vector<double> threshold(n); // Error-rate
+  std::vector<double> rank(n);      // Normalized rank
   std::vector<double> errrate(n);   // Error-rate
   std::vector<double> acc(n);       // Accuracy
   std::vector<double> sp(n);        // Specificity
@@ -36,10 +36,10 @@ Rcpp::List calc_basic_measures(int np,
     return ret_val;
   }
 
-  // Calculate evaluation measures for all thresholds
+  // Calculate evaluation measures for ranks
   // n should be >1
   for (int i = 0; i < n; ++i) {
-    threshold[i] = double(i) / double(n - 1);
+    rank[i] = double(i) / double(n - 1);
     errrate[i] = (fps[i] + fns[i]) / (np + nn);
     acc[i] = 1 - errrate[i];
     sp[i] = tns[i] / nn;
@@ -66,7 +66,7 @@ Rcpp::List calc_basic_measures(int np,
   prec[0] = prec[1];
 
   // Return a list with P, N, and basic evaluation measures
-  df["threshold"] = threshold;
+  df["rank"] = rank;
   df["error"] = errrate;
   df["accuracy"] = acc;
   df["specificity"] = sp;

@@ -21,7 +21,8 @@ reformat_data <- function(scores, labels,
   fmtlabs <- .factor_labels(labels, posclass, validate = FALSE)
 
   # === Create an S3 object ===
-  s3obj <- structure(list(labels = fmtlabs[["labels"]],
+  s3obj <- structure(list(scores = scores,
+                          labels = fmtlabs[["labels"]],
                           ranks = ranks,
                           rank_idx = rank_idx),
                      class = "fmdat")

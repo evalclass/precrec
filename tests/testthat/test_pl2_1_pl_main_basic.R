@@ -189,3 +189,70 @@ test_that("point object contains basic measure objects", {
   f_check_object(mdat4, "multiple", "multiple", "mm", 4)
 
 })
+
+
+test_that("scores and labels are stored as basic measures", {
+  sspoints <- evalmod(mode = "basic", scores = c(0.1, 0.2, 0, 0.3),
+                      labels = c(1, 0, 0, 1))
+  expect_equal(sspoints[["score"]][[1]][["x"]], c(0, 0.25, 0.5, 0.75, 1))
+  expect_equal(sspoints[["score"]][[1]][["y"]], c(NA, 0.3, 0.2, 0.1, 0))
+  expect_equal(sspoints[["label"]][[1]][["x"]], c(0, 0.25, 0.5, 0.75, 1))
+  expect_equal(sspoints[["label"]][[1]][["y"]], c(NA, 1, -1, 1, -1))
+
+  s1 <- c(1, 2, 3, 4)
+  s2 <- c(5, 6, 7, 8)
+  s3 <- c(2, 4, 6, 8)
+  scores <- join_scores(s1, s2, s3)
+
+  l1 <- c(1, 0, 1, 1)
+  l2 <- c(0, 1, 1, 1)
+  l3 <- c(1, 1, 0, 1)
+  labels <- join_labels(l1, l2, l3)
+
+  mspoints <- evalmod(mode = "basic", scores = scores, labels = labels)
+  expect_equal(mspoints[["score"]][[1]][["x"]], c(0, 0.25, 0.5, 0.75, 1))
+  expect_equal(mspoints[["score"]][[1]][["y"]], c(NA, 4, 3, 2, 1))
+  expect_equal(mspoints[["label"]][[1]][["x"]], c(0, 0.25, 0.5, 0.75, 1))
+  expect_equal(mspoints[["label"]][[1]][["y"]], c(NA, 1, 1, -1, 1))
+
+  expect_equal(mspoints[["score"]][[2]][["x"]], c(0, 0.25, 0.5, 0.75, 1))
+  expect_equal(mspoints[["score"]][[2]][["y"]], c(NA, 8, 7, 6, 5))
+  expect_equal(mspoints[["label"]][[2]][["x"]], c(0, 0.25, 0.5, 0.75, 1))
+  expect_equal(mspoints[["label"]][[2]][["y"]], c(NA, 1, 1, 1, -1))
+
+  expect_equal(mspoints[["score"]][[3]][["x"]], c(0, 0.25, 0.5, 0.75, 1))
+  expect_equal(mspoints[["score"]][[3]][["y"]], c(NA, 8, 6, 4, 2))
+  expect_equal(mspoints[["label"]][[3]][["x"]], c(0, 0.25, 0.5, 0.75, 1))
+  expect_equal(mspoints[["label"]][[3]][["y"]], c(NA, 1, -1, 1, 1))
+
+  smpoints <- evalmod(mode = "basic", scores = scores, labels = labels,
+                      dsids = c(1, 2, 3))
+
+  avgscores <- attr(smpoints, "grp_avg")[["score"]]
+  expect_equal(avgscores[[1]][["x"]], c(0, 0.25, 0.5, 0.75, 1))
+  expect_equal(avgscores[[1]][["y_avg"]], c(NA, 6.666667, 5.333333, 4,
+                                            2.666667),
+               tolerance = 1e-3)
+  expect_equal(avgscores[[1]][["y_se"]], c(NA, 1.333333, 1.201850, 1.154701,
+                                           1.201850),
+               tolerance = 1e-3)
+  expect_equal(avgscores[[1]][["y_ci_h"]], c(NA, 9.279952, 7.688917, 6.263171,
+                                             5.022250),
+               tolerance = 1e-3)
+  expect_equal(avgscores[[1]][["y_ci_l"]], c(NA, 4.0533814, 2.9777498,
+                                             1.7368285 ,0.3110831),
+               tolerance = 1e-3)
+
+  avglabels <- attr(smpoints, "grp_avg")[["label"]]
+  expect_equal(avglabels[[1]][["x"]], c(0, 0.25, 0.5, 0.75, 1))
+  expect_equal(avglabels[[1]][["y_avg"]], c(NA, 1, 1/3, 1/3, 1/3),
+               tolerance = 1e-3)
+  expect_equal(avglabels[[1]][["y_se"]], c(NA, 0, 2/3, 2/3, 2/3),
+               tolerance = 1e-3)
+  expect_equal(avglabels[[1]][["y_ci_h"]], c(NA, 1, 1, 1, 1),
+               tolerance = 1e-3)
+  expect_equal(avglabels[[1]][["y_ci_l"]], c(NA, 1, -0.9733093, -0.9733093,
+                                             -0.9733093),
+               tolerance = 1e-3)
+
+})

@@ -50,7 +50,7 @@ pl6_calc_avg_basic <- function(mdat, eval_type = "err", cb_alpha = 0.05) {
   lpoints <- lapply(seq_along(mdat), plfunc)
 
   grp_func <- function(s) {
-    list(x = lpoints[[s]][["basic"]][["threshold"]],
+    list(x = lpoints[[s]][["basic"]][["rank"]],
          y = lpoints[[s]][["basic"]][[eval_names[[eval_type]]]])
   }
   pevals <- lapply(seq_along(lpoints), grp_func)

@@ -9,7 +9,7 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
                            ...)
   .validate(cmats)
 
-  # === Create confusion matrices for all possible threshold values ===
+  # === Create confusion matrices for all ranks ===
   # Call a cpp function via Rcpp interface
   pevals <- calc_basic_measures(attr(cmats, "np"), attr(cmats, "nn"),
                                 cmats[["tp"]], cmats[["fp"]],
@@ -21,6 +21,20 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
 
   # Set attributes
   attr(s3obj, "modname") <- attr(cmats, "modname")
+  if (all(is.na(attr(cmats, "src")))){
+    s3obj[["basic"]][["score"]] <- rep(NA,
+                                       length(s3obj[["basic"]][["rank"]]))
+    s3obj[["basic"]][["label"]] <- rep(NA,
+                                       length(s3obj[["basic"]][["rank"]]))
+  } else {
+    ridx <- attr(cmats, "src")[["rank_idx"]]
+    tscores <- attr(cmats, "src")[["scores"]][ridx]
+    tlabels <- as.numeric(attr(cmats, "src")[["labels"]])[ridx]
+    tlabels <- tlabels - 1
+    tlabels[tlabels == 0] <- -1
+    s3obj[["basic"]][["score"]] <- c(NA, tscores)
+    s3obj[["basic"]][["label"]] <- c(NA, tlabels)
+  }
   attr(s3obj, "dsid") <- attr(cmats, "dsid")
   attr(s3obj, "nn") <- attr(cmats, "nn")
   attr(s3obj, "np") <- attr(cmats, "np")
@@ -59,9 +73,19 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
       || length(pb[["sensitivity"]]) != n
       || length(pb[["precision"]]) != n
       || length(pb[["mcc"]]) != n
-      || length(pb[["fscore"]]) != n) {
+      || length(pb[["fscore"]]) != n
+      || length(pb[["score"]]) != n
+      || length(pb[["label"]]) != n) {
     stop("Evaluation vectors must be all the same lengths", call. = FALSE)
   }
+
+  # Scores
+  assertthat::assert_that(is.atomic(pb[["score"]]),
+                          is.vector(pb[["score"]]))
+
+  # Labels
+  assertthat::assert_that(is.atomic(pb[["label"]]),
+                          is.vector(pb[["label"]]))
 
   # Error rate
   assertthat::assert_that(is.atomic(pb[["error"]]),

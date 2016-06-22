@@ -50,8 +50,6 @@ test_that("'modname' must be a character vector", {
   expect_err_msg(err_msg, factor(c(0.1, 0.2)))
   expect_err_msg(err_msg, list("1"))
   expect_err_msg(err_msg, data.frame("1"))
-#  expect_err_msg(err_msg, array("1"))
-#  expect_err_msg(err_msg, matrix("1"))
 })
 
 test_that("labels, ranks, and rank_idx must be the same length", {
@@ -90,10 +88,10 @@ test_that("reformat_data() accepts 'ties_method'", {
 })
 
 
-test_that("'fmdat' contains a list with 3 items", {
+test_that("'fmdat' contains a list with 4 items", {
   fmdat <- reformat_data(c(0.1, 0.2, 0), c(1, 0, 1))
 
   expect_true(is.list(fmdat))
-  expect_equal(length(fmdat), 3)
+  expect_equal(length(fmdat), 4)
 })
 

@@ -96,13 +96,13 @@ Rcpp::List calc_avg_points(const Rcpp::List& points,
 
     // ci upper bound
     ci_h_y[i] = avg_y[i] + ci_q * se_y[i];
-    if (ci_h_y[i] > maxval) {
+    if (maxval != ::NA_REAL && ci_h_y[i] > maxval) {
       ci_h_y[i] = maxval;
     }
 
     // ci lower bound
     ci_l_y[i] = avg_y[i] - ci_q * se_y[i];
-    if (ci_l_y[i] < minval) {
+    if (minval != ::NA_REAL && ci_l_y[i] < minval) {
       ci_l_y[i] = minval;
     }
   }
