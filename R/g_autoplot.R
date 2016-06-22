@@ -14,7 +14,7 @@ autoplot.fmdat <- function(object, ...) {
 }
 
 #
-# Plot TPs, FNs, FPs, TNs by threshold IDs
+# Plot TPs, FNs, FPs, TNs by ranks
 #
 autoplot.cmats <- function(object, ...) {
   curve_df <- .prepare_autoplot(object)
@@ -23,12 +23,12 @@ autoplot.cmats <- function(object, ...) {
   p <- ggplot2::ggplot(curve_df,
                        ggplot2::aes_string(x = 'x', y = 'y', color = 'group'))
   p <- p + ggplot2::geom_line()
-  p <- .geom_basic(p, "TPs, FNs, FPs, and TNs by threshold IDs",
-                   "threshold ID", "count", show_legend = TRUE)
+  p <- .geom_basic(p, "TPs, FNs, FPs, and TNs by ranks",
+                   "rank", "count", show_legend = TRUE)
 }
 
 #
-# Plot basic evaluation measures by threshold IDs
+# Plot basic evaluation measures by rank
 #
 autoplot.pevals <- function(object, ...) {
   curve_df <- .prepare_autoplot(object)
@@ -39,8 +39,8 @@ autoplot.pevals <- function(object, ...) {
   p <- p + ggplot2::geom_line()
   p <- p + ggplot2::facet_wrap(~ group, ncol = 2)
 
-  p <- .geom_basic(p, "Evaluation measures by threshold IDs",
-                   "threshold ID", "evaluation value", show_legend = FALSE)
+  p <- .geom_basic(p, "Evaluation measures by ranks",
+                   "normalized rank", "evaluation value", show_legend = FALSE)
 }
 
 #' @rdname autoplot

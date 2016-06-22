@@ -65,7 +65,7 @@
 }
 
 #
-# Get evaluation measures at all threshold values by models
+# Get evaluation measures at all ranks by models
 #
 .summarize_points <- function(lpoints, eval_type, class_name, mdat,
                               dataset_type, calc_avg, cb_alpha) {
@@ -73,7 +73,7 @@
   if (!is.null(lpoints)) {
     # Summarize basic evaluation measures
     grp_func <- function(s) {
-      list(x = lpoints[[s]][["basic"]][["threshold"]],
+      list(x = lpoints[[s]][["basic"]][["rank"]],
            y = lpoints[[s]][["basic"]][[eval_type]])
     }
     pevals <- lapply(seq_along(lpoints), grp_func)
@@ -128,7 +128,7 @@
   # Summarize AUC of ROC or PRC curves
   modnames <- attr(mdat, "data_info")[["modnames"]]
   dsids <- attr(mdat, "data_info")[["dsids"]]
-  evaltypes <- c("threshold", "score", "label", "error", "accuracy",
+  evaltypes <- c("rank", "score", "label", "error", "accuracy",
                  "specificity","sensitivity", "precision", "mcc", "fscore")
   elen <- length(evaltypes)
 

@@ -9,7 +9,7 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
                            ...)
   .validate(cmats)
 
-  # === Create confusion matrices for all possible threshold values ===
+  # === Create confusion matrices for all ranks ===
   # Call a cpp function via Rcpp interface
   pevals <- calc_basic_measures(attr(cmats, "np"), attr(cmats, "nn"),
                                 cmats[["tp"]], cmats[["fp"]],
@@ -23,9 +23,9 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
   attr(s3obj, "modname") <- attr(cmats, "modname")
   if (all(is.na(attr(cmats, "src")))){
     s3obj[["basic"]][["score"]] <- rep(NA,
-                                       length(s3obj[["basic"]][["threshold"]]))
+                                       length(s3obj[["basic"]][["rank"]]))
     s3obj[["basic"]][["label"]] <- rep(NA,
-                                       length(s3obj[["basic"]][["threshold"]]))
+                                       length(s3obj[["basic"]][["rank"]]))
   } else {
     ridx <- attr(cmats, "src")[["rank_idx"]]
     tscores <- attr(cmats, "src")[["scores"]][ridx]

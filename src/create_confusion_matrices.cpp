@@ -14,7 +14,7 @@ void solve_ties(std::vector<double>& tp, std::vector<double>& fp,
                 int curpos, int ties);
 
 //
-// Calculate confusion matrices for all possible threshold values
+// Calculate confusion matrices for ranks
 //
 // [[Rcpp::export]]
 Rcpp::List create_confusion_matrices(const Rcpp::IntegerVector& olabs,
@@ -72,7 +72,7 @@ void calc_tp_fp(const Rcpp::IntegerVector& olabs,
   fp[0] = 0;
   sorted_ranks[0] = ranks[rank_idx[0] - 1] - 1;
 
-  // Iterate all thresholds
+  // Iterate all ranks
   for (int i = 0; i < n; ++i) {
     int idx = rank_idx[i] - 1;
 

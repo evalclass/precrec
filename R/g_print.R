@@ -56,7 +56,7 @@ print.beval_info <- function(x, ...) {
   cat("\n")
   cat("    === Basic performance evaluation measures ===\n\n")
   cat("     ## Performance measures (Meas.)\n")
-  cat("      rank:   threshold rank\n")
+  cat("      rank:   normalized rank\n")
   cat("      score:  score\n")
   cat("      label:  label\n")
   cat("      err:    error rate\n")

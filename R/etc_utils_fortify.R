@@ -85,7 +85,7 @@
 #' ## Fortify sspoints
 #' ssdf <- fortify(sscurves)
 #'
-#' ## Plot threshold vs. precision
+#' ## Plot normalized ranks vs. precision
 #' p_prec <- ggplot(subset(ssdf, curvetype == "precision"), aes(x = x, y = y))
 #' p_prec <- p_prc + geom_point()
 #' \dontrun{p_prec}
@@ -124,7 +124,7 @@
 #' ## Fortify mspoints
 #' msdf <- fortify(mscurves)
 #'
-#' ## Plot threshold vs. precision
+#' ## Plot normalized ranks vs. precision
 #' df_prec <- subset(msdf, curvetype == "precision")
 #' p_prec <- ggplot(df_prec, aes(x = x, y = y, color = modname))
 #' p_prec <- p_prc + geom_point()
@@ -165,7 +165,7 @@
 #' ## Fortify smpoints
 #' smdf <- fortify(smpoints)
 #'
-#' ## Plot threshold vs. precision
+#' ## Plot normalized ranks vs. precision
 #' df_prec <- subset(smdf, curvetype == "precision")
 #' p_prec <- ggplot(df_prec, aes(x = x, y = y, ymin = ymin, ymax = ymax))
 #' p_prec <- p_prec + geom_ribbon(aes(min = ymin, ymax = ymax),
@@ -209,7 +209,7 @@
 #' ## Fortify mmpoints
 #' mmdf <- fortify(mmpoints)
 #'
-#' ## Plot threshold vs. precision
+#' ## Plot normalized ranks vs. precision
 #' df_prec <- subset(mmdf, curvetype == "precision")
 #' p_prec <- ggplot(df_prec, aes(x = x, y = y, ymin = ymin, ymax = ymax))
 #' p_prec <- p_prec + geom_ribbon(aes(min = ymin, ymax = ymax, group = modname),

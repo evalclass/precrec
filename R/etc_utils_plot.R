@@ -60,11 +60,13 @@
 #'           \strong{curvetype}
 #'           \tab \strong{description} \cr
 #'
-#'           error \tab Normalized threshold values vs. error rate \cr
-#'           accuracy \tab Normalized threshold values vs. accuracy \cr
-#'           specificity \tab Normalized threshold values vs. specificity \cr
-#'           sensitivity \tab Normalized threshold values vs. sensitivity \cr
-#'           precision \tab Normalized threshold values vs. precision
+#'           error \tab Normalized ranks vs. error rate \cr
+#'           accuracy \tab Normalized ranks vs. accuracy \cr
+#'           specificity \tab Normalized ranks vs. specificity \cr
+#'           sensitivity \tab Normalized ranks vs. sensitivity \cr
+#'           precision \tab Normalized ranks vs. precision \cr
+#'           mcc \tab Normalized ranks vs. Matthews correlation coefficient \cr
+#'           fscore \tab Normalized ranks vs. F-score
 #'        }
 #'        Multiple \code{curvetype} can be combined, such as
 #'        \code{c("precision", "sensitivity")}.
@@ -126,10 +128,10 @@
 #' sspoints <- evalmod(mode = "basic", scores = P10N10$scores,
 #'                     labels = P10N10$labels)
 #'
-#' ## Plot threshold values vs. basic evaluation measures
+#' ## Plot normalized ranks vs. basic evaluation measures
 #' plot(sspoints)
 #'
-#' ## Plot threshold vs. precision
+#' ## Plot normalized ranks vs. precision
 #' plot(sspoints, curvetype = "precision")
 #'
 #'}
@@ -157,7 +159,7 @@
 #' ## Generate an mspoints object that contains basic evaluation measures
 #' mspoints <- evalmod(mdat, mode = "basic")
 #'
-#' ## Plot threshold values vs. basic evaluation measures
+#' ## Plot normalized ranks vs. basic evaluation measures
 #' plot(mspoints)
 #'
 #' ## Hide the legend
@@ -192,7 +194,7 @@
 #' ## Generate an smpoints object that contains basic evaluation measures
 #' smpoints <- evalmod(mdat, mode = "basic")
 #'
-#' ## Plot threshold values vs. average basic evaluation measures
+#' ## Plot normalized ranks vs. average basic evaluation measures
 #' plot(smpoints)
 #'
 #'}
@@ -224,7 +226,7 @@
 #' ## Generate an mmpoints object that contains basic evaluation measures
 #' mmpoints <- evalmod(mdat, mode = "basic")
 #'
-#' ## Plot threshold values vs. average basic evaluation measures
+#' ## Plot normalized ranks vs. average basic evaluation measures
 #' plot(mmpoints)
 #'}
 #'
@@ -638,7 +640,7 @@ NULL
                    precision = "prec", mcc = "mcc", fscore = "fscore")
     main <- paste0(toupper(substring(curvetype, 1, 1)), substring(curvetype, 2))
     tlist[["main"]] <- main
-    tlist[["xlab"]] <- "threshold"
+    tlist[["xlab"]] <- "normalized rank"
     tlist[["ylab"]] <- curvetype
     tlist[["ctype"]] <- mnames[[curvetype]]
   }
