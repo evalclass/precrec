@@ -336,7 +336,8 @@ autoplot(mmpoins, c("mcc", "fscore"))
 ```
 
 ### Normalized ranks and predicted scores
-The `autoplot` function can also plot normalized ranks vs. scores and labels.
+In addition to the basic measures, the `autoplot` function can plot normalized 
+ranks vs. scores and labels.
 ```{r, fig.width=7, fig.show='hold'}
 # Show normalized ranks vs. scores and labels
 autoplot(mmpoins, c("score", "label"))

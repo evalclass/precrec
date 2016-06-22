@@ -606,7 +606,11 @@ NULL
                               curve_df = curve_df, ylim, ratio, ...) {
 
   s <- curve_df[["curvetype"]][1]
-  main <- paste0(toupper(substring(s, 1, 1)), substring(s,2))
+  if (s == "mcc") {
+    main <- "MCC"
+  } else {
+    main <- paste0(toupper(substring(s, 1, 1)), substring(s,2))
+  }
 
   p <- p + ggplot2::scale_y_continuous(limits = ylim)
   if (!is.null(ratio)) {

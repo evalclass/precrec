@@ -638,7 +638,11 @@ NULL
     mnames <- list(score = "score", label = "label", error = "err",
                    accuracy = "acc", specificity = "sp", sensitivity = "sn",
                    precision = "prec", mcc = "mcc", fscore = "fscore")
-    main <- paste0(toupper(substring(curvetype, 1, 1)), substring(curvetype, 2))
+    if (curvetype == "mcc") {
+      main <- "MCC"
+    } else {
+      main <- paste0(toupper(substring(curvetype, 1, 1)), substring(curvetype, 2))
+    }
     tlist[["main"]] <- main
     tlist[["xlab"]] <- "normalized rank"
     tlist[["ylab"]] <- curvetype
