@@ -57,6 +57,8 @@ print.beval_info <- function(x, ...) {
   cat("    === Basic performance evaluation measures ===\n\n")
   cat("     ## Performance measures (Meas.)\n")
   cat("      rank:   threshold rank\n")
+  cat("      score:  score\n")
+  cat("      label:  label\n")
   cat("      err:    error rate\n")
   cat("      acc:    accuracy\n")
   cat("      sp:     specificity\n")
@@ -71,7 +73,8 @@ print.beval_info <- function(x, ...) {
                                    justify = "right")
   colnames(eval_summary) <- c("Model", "ID", "Meas.", "Min.",
                               "1st Qu.", "Median", "Mean", "3rd Qu.", "Max.")
-  evaltypes <- c("rank", "err", "acc", "sp", "sn", "prec", "mcc", "fscore")
+  evaltypes <- c("rank", "score", "label", "err", "acc", "sp", "sn", "prec",
+                 "mcc", "fscore")
   eval_summary[, "Meas."] <- evaltypes
 
   print.data.frame(eval_summary, print.gap = 1)

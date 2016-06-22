@@ -182,7 +182,7 @@
 #' autoplot(mspoints)
 #'
 #' ## Hide the legend
-#'autoplot(mspoints, show_legend = FALSE)
+#' autoplot(mspoints, show_legend = FALSE)
 #'
 #'}
 #'
@@ -513,9 +513,12 @@ NULL
 
   ylim = c(0, 1)
   ratio = 1
-  if (curvetype == "mcc") {
+  if (curvetype == "mcc" || curvetype == "label") {
     ylim = c(-1, 1)
     ratio = 0.5
+  } else if (curvetype == "score") {
+    ylim = NULL
+    ratio = NULL
   }
   p <- func_g(p, object[[1]], show_legend = show_legend, add_np_nn = add_np_nn,
               curve_df = curve_df, ylim = ylim, ratio = ratio, ...)
@@ -603,7 +606,9 @@ NULL
   main <- paste0(toupper(substring(s, 1, 1)), substring(s,2))
 
   p <- p + ggplot2::scale_y_continuous(limits = ylim)
-  p <- p + ggplot2::coord_fixed(ratio = ratio)
+  if (!is.null(ratio)) {
+    p <- p + ggplot2::coord_fixed(ratio = ratio)
+  }
 
   p <- .geom_basic(p, main, "threshold", s, show_legend)
 

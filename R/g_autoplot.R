@@ -109,7 +109,8 @@ autoplot.mmcurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
 #' @rdname autoplot
 #' @export
 autoplot.sspoints <- function(object,
-                              curvetype = c("error", "accuracy", "specificity",
+                              curvetype = c("score", "label", "error",
+                                            "accuracy", "specificity",
                                             "sensitivity", "precision", "mcc",
                                             "fscore"),
                               ...) {
@@ -130,7 +131,8 @@ autoplot.sspoints <- function(object,
 #' @rdname autoplot
 #' @export
 autoplot.mspoints <- function(object,
-                              curvetype = c("error", "accuracy", "specificity",
+                              curvetype = c("score", "label", "error",
+                                            "accuracy", "specificity",
                                             "sensitivity", "precision", "mcc",
                                             "fscore"),
                               ...) {
@@ -150,7 +152,8 @@ autoplot.mspoints <- function(object,
 #' @rdname autoplot
 #' @export
 autoplot.smpoints <- function(object,
-                              curvetype = c("error", "accuracy", "specificity",
+                              curvetype = c("score", "label", "error",
+                                            "accuracy", "specificity",
                                             "sensitivity", "precision", "mcc",
                                             "fscore"),
                               ...) {
@@ -169,7 +172,8 @@ autoplot.smpoints <- function(object,
 #' @rdname autoplot
 #' @export
 autoplot.mmpoints <- function(object,
-                              curvetype = c("error", "accuracy", "specificity",
+                              curvetype = c("score", "label", "error",
+                                            "accuracy", "specificity",
                                             "sensitivity", "precision", "mcc",
                                             "fscore"),
                               ...) {

@@ -293,6 +293,13 @@ NULL
         return("fscore")
       }
 
+      if (!is.na(pmatch(sval, "score"))) {
+        return("score")
+      }
+
+      if (!is.na(pmatch(sval, "label"))) {
+        return("label")
+      }
     }
 
     val
@@ -423,7 +430,7 @@ NULL
     mat1 <- c(1, 2, 3, 4, 5, 6, 7, 7, 7)
     mat2 <- c(1, 2, 3, 4, 5, 6)
     heights = c(0.425, 0.425, 0.15)
-  } else if (ctype_len > 6) {
+  } else if (ctype_len == 7 || ctype_len == 8 || ctype_len == 9) {
     nrow1 <- 4
     ncol1 <- 3
     mat1 <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10)
@@ -457,8 +464,10 @@ NULL
     line_col <- .make_multi_colors(obj)
   }
 
-  if (curvetype == "mcc") {
+  if (curvetype == "mcc" || curvetype == "label") {
     ylim = c(-1, 1)
+  } else if (curvetype == "score") {
+    ylim = .get_value_range(obj, curvetype)
   } else {
     ylim = c(0, 1)
   }
@@ -509,8 +518,10 @@ NULL
   grp_avg <- attr(obj, "grp_avg")
   avgcurves <- grp_avg[[curvetype]]
 
-  if (curvetype == "mcc") {
+  if (curvetype == "mcc" || curvetype == "label") {
     ylim = c(-1, 1)
+  } else if (curvetype == "score") {
+    ylim = .get_value_range(obj, curvetype)
   } else {
     ylim = c(0, 1)
   }
@@ -622,10 +633,10 @@ NULL
     tlist[["ylab"]] <- "Precision"
     tlist[["ctype"]] <- "prcs"
   } else {
-    mnames <- list(error = "err", accuracy = "acc", specificity = "sp",
-                   sensitivity = "sn", precision = "prec", mcc = "mcc",
-                   fscore = "fscore")
-    main <- paste0(toupper(substring(curvetype, 1, 1)), substring(curvetype,2))
+    mnames <- list(score = "score", label = "label", error = "err",
+                   accuracy = "acc", specificity = "sp", sensitivity = "sn",
+                   precision = "prec", mcc = "mcc", fscore = "fscore")
+    main <- paste0(toupper(substring(curvetype, 1, 1)), substring(curvetype, 2))
     tlist[["main"]] <- main
     tlist[["xlab"]] <- "threshold"
     tlist[["ylab"]] <- curvetype
@@ -652,4 +663,34 @@ NULL
                      col = grDevices::rainbow(length(gnames)),
                      horiz = TRUE)
   }
+}
+
+#
+# Get value range
+#
+.get_value_range <- function(obj, curvetype) {
+  curves <- obj[[curvetype]]
+  grp_avg <- attr(obj, "grp_avg")
+  avgcurves <- grp_avg[[curvetype]]
+
+  max_score <- NA
+  min_score <- NA
+
+  if (!all(is.na(avgcurves))) {
+    for (i in 1:length(avgcurves)) {
+      max_score <- max(max_score, max(avgcurves[[i]][["y_ci_h"]], na.rm = TRUE),
+                       na.rm = TRUE)
+      min_score <- min(min_score, min(avgcurves[[i]][["y_ci_l"]], na.rm = TRUE),
+                       na.rm = TRUE)
+    }
+  } else {
+    for (i in 1:length(curves)) {
+      max_score <- max(max_score, max(curves[[i]][["y"]], na.rm = TRUE),
+                       na.rm = TRUE)
+      min_score <- min(min_score, min(curves[[i]][["y"]], na.rm = TRUE),
+                       na.rm = TRUE)
+    }
+  }
+
+  c(min_score, max_score)
 }
