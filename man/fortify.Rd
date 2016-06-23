@@ -110,7 +110,7 @@ p_prc <- p_prc + geom_line()
 sspoints <- evalmod(mode = "basic", scores = P10N10$scores,
                     labels = P10N10$labels)
 ## Fortify sspoints
-ssdf <- fortify(sscurves)
+ssdf <- fortify(sspoints)
 
 ## Plot normalized ranks vs. precision
 p_prec <- ggplot(subset(ssdf, curvetype == "precision"), aes(x = x, y = y))
@@ -149,7 +149,7 @@ p_prc <- p_prc + geom_line()
 mspoints <- evalmod(mdat, mode = "basic")
 
 ## Fortify mspoints
-msdf <- fortify(mscurves)
+msdf <- fortify(mspoints)
 
 ## Plot normalized ranks vs. precision
 df_prec <- subset(msdf, curvetype == "precision")

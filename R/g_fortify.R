@@ -76,46 +76,50 @@ fortify.pevals <- function(model, ...) {
 #' @rdname fortify
 #' @export
 fortify.sscurves <- function(model, raw_curves = TRUE, ...) {
-  .fortify_common(model, raw_curves = raw_curves, ...)
+  .dataframe_common(model, raw_curves = TRUE, check_ggplot = TRUE, ...)
 }
 
 #' @rdname fortify
 #' @export
 fortify.mscurves <- function(model, raw_curves = TRUE, ...) {
-  .fortify_common(model, raw_curves = raw_curves, ...)
+  .dataframe_common(model, raw_curves = TRUE, check_ggplot = TRUE, ...)
 }
 
 #' @rdname fortify
 #' @export
 fortify.smcurves <- function(model, raw_curves = FALSE, ...) {
-  .fortify_common(model, raw_curves = raw_curves, ...)
+  .dataframe_common(model, raw_curves = raw_curves, check_ggplot = TRUE, ...)
 }
 
 #' @rdname fortify
 #' @export
 fortify.mmcurves <- function(model, raw_curves = FALSE, ...) {
-  .fortify_common(model, raw_curves = raw_curves, ...)
+  .dataframe_common(model, raw_curves = raw_curves, check_ggplot = TRUE, ...)
 }
 #' @rdname fortify
 #' @export
 fortify.sspoints <- function(model, raw_curves = TRUE, ...) {
-  .fortify_common(model, mode = "basic", raw_curves = raw_curves, ...)
+  .dataframe_common(model, mode = "basic", raw_curves = TRUE,
+                    check_ggplot = TRUE, ...)
 }
 
 #' @rdname fortify
 #' @export
 fortify.mspoints <- function(model, raw_curves = TRUE, ...) {
-  .fortify_common(model, mode = "basic", raw_curves = raw_curves, ...)
+  .dataframe_common(model, mode = "basic", raw_curves = TRUE,
+                    check_ggplot = TRUE, ...)
 }
 
 #' @rdname fortify
 #' @export
 fortify.smpoints <- function(model, raw_curves = FALSE, ...) {
-  .fortify_common(model, mode = "basic", raw_curves = raw_curves, ...)
+  .dataframe_common(model, mode = "basic", raw_curves = raw_curves,
+                    check_ggplot = TRUE, ...)
 }
 
 #' @rdname fortify
 #' @export
 fortify.mmpoints <- function(model, raw_curves = FALSE, ...) {
-  .fortify_common(model, mode = "basic", raw_curves = raw_curves, ...)
+  .dataframe_common(model, mode = "basic", raw_curves = raw_curves,
+                    check_ggplot = TRUE, ...)
 }
