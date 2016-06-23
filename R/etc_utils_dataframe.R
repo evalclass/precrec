@@ -94,7 +94,7 @@
 #' mspoints <- evalmod(mdat, mode = "basic")
 #'
 #' ## Convert mspoints to a data frame
-#' mspoints.df <- as.data.frame(mscurves)
+#' mspoints.df <- as.data.frame(mspoints)
 #'
 #'
 #' #############################################################################
@@ -196,6 +196,14 @@ NULL
   } else {
     curve_df <- .dataframe_curve_avg(obj, uniq_modnames, uniq_dsids, modnames,
                                    dsids, dsid_modnames, curvetype_names)
+  }
+
+  if (!check_ggplot) {
+    if ("dsid_modname" %in% names(curve_df)) {
+      curve_df <- subset(curve_df, select = -dsid_modname)
+    }
+    colnum <- ncol(curve_df)
+    names(curve_df) <- c(names(curve_df)[1:(colnum-1)], "type")
   }
 
   curve_df

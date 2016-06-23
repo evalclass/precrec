@@ -130,7 +130,7 @@ mscurves.df <- as.data.frame(mscurves)
 mspoints <- evalmod(mdat, mode = "basic")
 
 ## Convert mspoints to a data frame
-mspoints.df <- as.data.frame(mscurves)
+mspoints.df <- as.data.frame(mspoints)
 
 
 #############################################################################
