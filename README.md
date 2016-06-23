@@ -35,15 +35,16 @@ The `precrec` package provides the following five functions.
 | join\_labels         | Join observed labels of multiple test datasets into a list |
 | create\_sim\_samples | Create random samples for simulations                      |
 
-Moreover, the `precrec` package provides five S3 generics for the S3 object created by the `evalmod` function.
+Moreover, the `precrec` package provides six S3 generics for the S3 object created by the `evalmod` function.
 
-| S3 generic | Package  | Description                                                    |
-|------------|:---------|:---------------------------------------------------------------|
-| print      | base     | Print the calculation results and the summary of the test data |
-| plot       | graphics | Plot performance evaluation measures                           |
-| autoplot   | ggplot2  | Plot performance evaluation measures with ggplot2              |
-| fortify    | ggplot2  | Prepare a data frame for ggplot2                               |
-| auc        | precrec  | Make a data frame with AUC scores                              |
+| S3 generic    | Package  | Description                                                    |
+|:--------------|:---------|:---------------------------------------------------------------|
+| print         | base     | Print the calculation results and the summary of the test data |
+| as.data.frame | base     | Convert a precrec object to a data frame                       |
+| plot          | graphics | Plot performance evaluation measures                           |
+| autoplot      | ggplot2  | Plot performance evaluation measures with ggplot2              |
+| fortify       | ggplot2  | Prepare a data frame for ggplot2                               |
+| auc           | precrec  | Make a data frame with AUC scores                              |
 
 Documentation
 -------------
