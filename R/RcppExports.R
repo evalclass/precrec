@@ -9,8 +9,8 @@ calc_avg_curve <- function(curves, x_bins, ci_q) {
     .Call('precrec_calc_avg_curve', PACKAGE = 'precrec', curves, x_bins, ci_q)
 }
 
-calc_avg_points <- function(points, ci_q) {
-    .Call('precrec_calc_avg_points', PACKAGE = 'precrec', points, ci_q)
+calc_avg_points <- function(points, ci_q, minval, maxval) {
+    .Call('precrec_calc_avg_points', PACKAGE = 'precrec', points, ci_q, minval, maxval)
 }
 
 calc_basic_measures <- function(np, nn, tps, fps, tns, fns) {

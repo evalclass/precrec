@@ -66,6 +66,22 @@ ap3_test_basic_measures <- function(curves, raw_curves = FALSE, ...){
   expect_error(pp, NA)
 
   pp <- ggplot2::autoplot(curves, c("sensitivity", "specificity", "error",
+                                    "accuracy", "precision", "mcc", "score",
+                                    "label"),
+                          raw_curves = raw_curves, ...)
+  expect_error(pp, NA)
+
+  pp <- ggplot2::autoplot(curves, c("sensitivity", "specificity", "error",
+                                    "accuracy", "precision", "mcc", "score"),
+                          raw_curves = raw_curves, ...)
+  expect_error(pp, NA)
+
+  pp <- ggplot2::autoplot(curves, c("sensitivity", "specificity", "error",
+                                    "accuracy", "precision", "mcc"),
+                          raw_curves = raw_curves, ...)
+  expect_error(pp, NA)
+
+  pp <- ggplot2::autoplot(curves, c("sensitivity", "specificity", "error",
                                     "accuracy", "precision"),
                           raw_curves = raw_curves, ...)
   expect_error(pp, NA)

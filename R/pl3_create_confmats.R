@@ -1,5 +1,5 @@
 #
-# Calculate confusion matrices for all possible threshold values
+# Calculate confusion matrices for all ranks
 #
 create_confmats <- function(fmdat, scores = NULL, labels = NULL,
                             keep_fmdat = FALSE, ...) {
@@ -9,7 +9,7 @@ create_confmats <- function(fmdat, scores = NULL, labels = NULL,
   fmdat <- .create_src_obj(fmdat, "fmdat", reformat_data, scores, labels, ...)
   .validate(fmdat)
 
-  # === Create confusion matrices for all possible threshold values ===
+  # === Create confusion matrices for all ranks ===
   # Call a cpp function via Rcpp interface
   cmats <- create_confusion_matrices(fmdat[["labels"]], fmdat[["ranks"]],
                                      fmdat[["rank_idx"]])

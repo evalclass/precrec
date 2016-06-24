@@ -14,7 +14,7 @@ int interpolate_prc(const Rcpp::NumericVector& tps,
                     int n);
 
 //
-// Calculate confusion matrices for all possible threshold values
+// Calculate precision-recall curve
 //
 // [[Rcpp::export]]
 Rcpp::List create_prc_curve(const Rcpp::NumericVector& tps,

@@ -83,9 +83,9 @@
 #' sspoints <- evalmod(mode = "basic", scores = P10N10$scores,
 #'                     labels = P10N10$labels)
 #' ## Fortify sspoints
-#' ssdf <- fortify(sscurves)
+#' ssdf <- fortify(sspoints)
 #'
-#' ## Plot threshold vs. precision
+#' ## Plot normalized ranks vs. precision
 #' p_prec <- ggplot(subset(ssdf, curvetype == "precision"), aes(x = x, y = y))
 #' p_prec <- p_prc + geom_point()
 #' \dontrun{p_prec}
@@ -122,9 +122,9 @@
 #' mspoints <- evalmod(mdat, mode = "basic")
 #'
 #' ## Fortify mspoints
-#' msdf <- fortify(mscurves)
+#' msdf <- fortify(mspoints)
 #'
-#' ## Plot threshold vs. precision
+#' ## Plot normalized ranks vs. precision
 #' df_prec <- subset(msdf, curvetype == "precision")
 #' p_prec <- ggplot(df_prec, aes(x = x, y = y, color = modname))
 #' p_prec <- p_prc + geom_point()
@@ -165,7 +165,7 @@
 #' ## Fortify smpoints
 #' smdf <- fortify(smpoints)
 #'
-#' ## Plot threshold vs. precision
+#' ## Plot normalized ranks vs. precision
 #' df_prec <- subset(smdf, curvetype == "precision")
 #' p_prec <- ggplot(df_prec, aes(x = x, y = y, ymin = ymin, ymax = ymax))
 #' p_prec <- p_prec + geom_ribbon(aes(min = ymin, ymax = ymax),
@@ -209,10 +209,10 @@
 #' ## Fortify mmpoints
 #' mmdf <- fortify(mmpoints)
 #'
-#' ## Plot threshold vs. precision
-#' df_prec <- subset(smdf, curvetype == "precision")
+#' ## Plot normalized ranks vs. precision
+#' df_prec <- subset(mmdf, curvetype == "precision")
 #' p_prec <- ggplot(df_prec, aes(x = x, y = y, ymin = ymin, ymax = ymax))
-#' p_prec <- p_prec + geom_ribbon(aes(min = ymin, ymax = ymax),
+#' p_prec <- p_prec + geom_ribbon(aes(min = ymin, ymax = ymax, group = modname),
 #'                                stat = "identity", alpha = 0.25,
 #'                                fill = "grey25")
 #' p_prec <- p_prec + geom_point(aes(x = x, y = y, color = modname))
@@ -220,114 +220,3 @@
 #'
 #' @name fortify
 NULL
-
-#
-# Make a dataframe for plotting
-#
-.fortify_common <- function(obj, mode = "rocprc", raw_curves = TRUE, ...) {
-  # === Check package availability  ===
-  .load_ggplot2()
-
-  # === Validate input arguments ===
-  .validate(obj)
-  new_mode <- .pmatch_mode(mode)
-  .check_mode(new_mode, obj)
-  .check_raw_curves(raw_curves, obj)
-
-  # Prepare variables
-  uniq_modnames <- attr(obj, "uniq_modnames")
-  uniq_dsids <- attr(obj, "uniq_dsids")
-  modnames <- attr(obj, "data_info")[["modnames"]]
-  dsids <- attr(obj, "data_info")[["dsids"]]
-
-  if (new_mode == "rocprc") {
-    curvetype_names <- list(ROC = "rocs", PRC = "prcs")
-  } else if (new_mode == "basic") {
-    curvetype_names <- list(error = "err", accuracy = "acc",
-                            specificity = "sp", sensitivity = "sn",
-                            precision = "prec")
-  }
-
-  # Make dsis-modname pairs
-  i <- 1
-  dsid_modnames <- vector(mode = "character",
-                          length = length(uniq_modnames) * length(uniq_dsids))
-  for (modname in uniq_modnames) {
-    for (dsid in uniq_dsids) {
-      dsid_modnames[i] <- paste(modname, dsid, sep = ":")
-      i <- i + 1
-    }
-  }
-
-  # Create curve_df
-  if (raw_curves) {
-    curve_df <- .fortify_curve(obj, uniq_modnames, uniq_dsids, modnames,
-                               dsids, dsid_modnames, curvetype_names)
-  } else {
-    curve_df <- .fortify_curve_avg(obj, uniq_modnames, uniq_dsids, modnames,
-                                   dsids, dsid_modnames, curvetype_names)
-  }
-
-  curve_df
-}
-
-#
-# Make a dataframe for plotting with regular curves
-#
-.fortify_curve <- function(obj, uniq_modnames, uniq_dsids, modnames, dsids,
-                           dsid_modnames, curvetype_names) {
-
-  curve_df <- NULL
-  for (curvetype in names(curvetype_names)) {
-    curves <- obj[[curvetype_names[[curvetype]]]]
-    for (i in seq_along(curves)) {
-      x <- curves[[i]][["x"]]
-      y <- curves[[i]][["y"]]
-
-      modname <- factor(rep(modnames[i], length(x)), levels = uniq_modnames)
-      dsid <- factor(rep(dsids[i], length(x)), levels = uniq_dsids)
-      dsid_modname <- factor(rep(paste(modnames[i], dsids[i], sep = ":"),
-                                 length(x)),
-                             levels = dsid_modnames)
-      curvename <- factor(rep(curvetype, length(x)),
-                          levels = names(curvetype_names))
-      curve_df <- rbind(curve_df, data.frame(x = x, y = y, modname = modname,
-                                             dsid = dsid,
-                                             dsid_modname = dsid_modname,
-                                             curvetype = curvename))
-    }
-  }
-
-  curve_df
-}
-
-#
-# Make a dataframe for plotting with average curves
-#
-.fortify_curve_avg <- function(obj, uniq_modnames, uniq_dsids, modnames, dsids,
-                               dsid_modnames, curvetype_names) {
-
-  grp_avg <- attr(obj, "grp_avg")
-  curve_df <- NULL
-  for (curvetype in names(curvetype_names)) {
-    avgcurves <- grp_avg[[curvetype_names[[curvetype]]]]
-
-    for (i in seq_along(avgcurves)) {
-      x <- avgcurves[[i]][["x"]]
-      y <- avgcurves[[i]][["y_avg"]]
-      ymin <- avgcurves[[i]][["y_ci_l"]]
-      ymax <- avgcurves[[i]][["y_ci_h"]]
-
-      modname <- factor(rep(uniq_modnames[i], length(x)),
-                        levels = uniq_modnames)
-      curvename <- factor(rep(curvetype, length(x)),
-                          levels = names(curvetype_names))
-      curve_df <- rbind(curve_df, data.frame(x = x, y = y,
-                                             ymin = ymin, ymax = ymax,
-                                             modname = modname,
-                                             curvetype = curvename))
-    }
-  }
-
-  curve_df
-}

@@ -47,66 +47,79 @@ fortify.pevals <- function(model, ...) {
   # === Prepare a data frame for ggplot2 ===
   pb <- model[["basic"]]
   n <- length(pb[["error"]])
-  curve_df <- data.frame(x = rep(1:n, 6),
-                         y = c(pb[["error"]], pb[["accuracy"]],
+  curve_df <- data.frame(x = rep(1:n, 10),
+                         y = c(pb[["score"]], pb[["label"]],
+                               pb[["error"]], pb[["accuracy"]],
                                pb[["specificity"]], pb[["sensitivity"]],
-                               1 - pb[["specificity"]], pb[["precision"]]),
-                         group = factor(c(rep("error", n),
+                               1 - pb[["specificity"]], pb[["precision"]],
+                               pb[["mcc"]], pb[["fscore"]]),
+                         group = factor(c(rep("score", n),
+                                          rep("label", n),
+                                          rep("error", n),
                                           rep("accuracy", n),
                                           rep("specificity", n),
                                           rep("sensitivity", n),
                                           rep("1 - specificity", n),
-                                          rep("precision", n)),
-                                        levels = c("error", "accuracy",
+                                          rep("precision", n),
+                                          rep("mcc", n),
+                                          rep("fscore", n)),
+                                        levels = c("score", "label",
+                                                   "error", "accuracy",
                                                    "specificity",
                                                    "sensitivity",
                                                    "1 - specificity",
-                                                   "precision")))
+                                                   "precision",
+                                                   "mcc",
+                                                   "fscore")))
 }
 
 #' @rdname fortify
 #' @export
 fortify.sscurves <- function(model, raw_curves = TRUE, ...) {
-  .fortify_common(model, raw_curves = raw_curves, ...)
+  .dataframe_common(model, raw_curves = TRUE, check_ggplot = TRUE, ...)
 }
 
 #' @rdname fortify
 #' @export
 fortify.mscurves <- function(model, raw_curves = TRUE, ...) {
-  .fortify_common(model, raw_curves = raw_curves, ...)
+  .dataframe_common(model, raw_curves = TRUE, check_ggplot = TRUE, ...)
 }
 
 #' @rdname fortify
 #' @export
 fortify.smcurves <- function(model, raw_curves = FALSE, ...) {
-  .fortify_common(model, raw_curves = raw_curves, ...)
+  .dataframe_common(model, raw_curves = raw_curves, check_ggplot = TRUE, ...)
 }
 
 #' @rdname fortify
 #' @export
 fortify.mmcurves <- function(model, raw_curves = FALSE, ...) {
-  .fortify_common(model, raw_curves = raw_curves, ...)
+  .dataframe_common(model, raw_curves = raw_curves, check_ggplot = TRUE, ...)
 }
 #' @rdname fortify
 #' @export
 fortify.sspoints <- function(model, raw_curves = TRUE, ...) {
-  .fortify_common(model, mode = "basic", raw_curves = raw_curves, ...)
+  .dataframe_common(model, mode = "basic", raw_curves = TRUE,
+                    check_ggplot = TRUE, ...)
 }
 
 #' @rdname fortify
 #' @export
 fortify.mspoints <- function(model, raw_curves = TRUE, ...) {
-  .fortify_common(model, mode = "basic", raw_curves = raw_curves, ...)
+  .dataframe_common(model, mode = "basic", raw_curves = TRUE,
+                    check_ggplot = TRUE, ...)
 }
 
 #' @rdname fortify
 #' @export
 fortify.smpoints <- function(model, raw_curves = FALSE, ...) {
-  .fortify_common(model, mode = "basic", raw_curves = raw_curves, ...)
+  .dataframe_common(model, mode = "basic", raw_curves = raw_curves,
+                    check_ggplot = TRUE, ...)
 }
 
 #' @rdname fortify
 #' @export
 fortify.mmpoints <- function(model, raw_curves = FALSE, ...) {
-  .fortify_common(model, mode = "basic", raw_curves = raw_curves, ...)
+  .dataframe_common(model, mode = "basic", raw_curves = raw_curves,
+                    check_ggplot = TRUE, ...)
 }

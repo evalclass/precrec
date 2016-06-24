@@ -2,11 +2,9 @@
 precrec
 =======
 
-[![Travis-CI Build Status](https://travis-ci.org/takayasaito/precrec.svg?branch=master)](https://travis-ci.org/takayasaito/precrec) [![codecov.io](https://codecov.io/github/takayasaito/precrec/coverage.svg?branch=master)](https://codecov.io/github/takayasaito/precrec?branch=master) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/precrec)](http://cran.r-project.org/package=precrec)
+[![Travis](https://img.shields.io/travis/takayasaito/precrec.svg?maxAge=2592000)](https://travis-ci.org/takayasaito/precrec) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/takayasaito/precrec?branch=master&svg=true)](https://ci.appveyor.com/project/takayasaito/precrec) [![Codecov](https://img.shields.io/codecov/c/github/takayasaito/precrec.svg?maxAge=2592000)](https://codecov.io/github/takayasaito/precrec?branch=master) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/precrec)](http://cran.r-project.org/package=precrec)
 
-The aim of `precrec` is to provide various tools that enable robust performance evaluations of binary classifiers. Specifically, `precrec` offers accurate calculations of ROC and Precision-Recall curves.
-
-All the main calculations of `precrec` are implemented with C++/[Rcpp](https://cran.r-project.org/package=Rcpp). The package structure and the coding style of `precrec` are based on two Hadley Wickham's books - [Advanced R](http://adv-r.had.co.nz/) and [R packages](http://r-pkgs.had.co.nz/).
+The aim of `precrec` is to provide various tools that enable robust performance evaluations of binary classifiers. Specifically, `precrec` offers accurate calculations of ROC and Precision-Recall curves. All the main calculations of `precrec` are implemented with C++/[Rcpp](https://cran.r-project.org/package=Rcpp).
 
 Installation
 ------------
@@ -22,7 +20,7 @@ Installation
 
     2.  Install `devtools` from CRAN with `install.packages("devtools")`.
 
-    3.  Install `precrec` from the GitHub repository with `devtools::install_github("/takayasaito/precrec")`.
+    3.  Install `precrec` from the GitHub repository with `devtools::install_github("takayasaito/precrec")`.
 
 Functions
 ---------
@@ -37,15 +35,16 @@ The `precrec` package provides the following five functions.
 | join\_labels         | Join observed labels of multiple test datasets into a list |
 | create\_sim\_samples | Create random samples for simulations                      |
 
-Moreover, the `precrec` package provides five S3 generics for the S3 object created by the `evalmod` function.
+Moreover, the `precrec` package provides six S3 generics for the S3 object created by the `evalmod` function.
 
-| S3 generic | Package  | Description                                                    |
-|------------|:---------|:---------------------------------------------------------------|
-| print      | base     | Print the calculation results and the summary of the test data |
-| plot       | graphics | Plot performance evaluation measures                           |
-| autoplot   | ggplot2  | Plot performance evaluation measures with ggplot2              |
-| fortify    | ggplot2  | Prepare a data frame for ggplot2                               |
-| auc        | precrec  | Make a data frame with AUC scores                              |
+| S3 generic    | Package  | Description                                                    |
+|:--------------|:---------|:---------------------------------------------------------------|
+| print         | base     | Print the calculation results and the summary of the test data |
+| as.data.frame | base     | Convert a precrec object to a data frame                       |
+| plot          | graphics | Plot performance evaluation measures                           |
+| autoplot      | ggplot2  | Plot performance evaluation measures with ggplot2              |
+| fortify       | ggplot2  | Prepare a data frame for ggplot2                               |
+| auc           | precrec  | Make a data frame with AUC scores                              |
 
 Documentation
 -------------
@@ -85,9 +84,11 @@ library(ggplot2)
 autoplot(sscurves)
 ```
 
-![](README_files/figure-markdown_github/unnamed-chunk-2-1.png)
+![](https://rawgit.com/takayasaito/precrec/master/README_files/figure-markdown_github/unnamed-chunk-2-1.png)
 
 External links
 --------------
 
 See our website - [Classifier evaluation with imbalanced datasets](https://classeval.wordpress.com/) - for useful tips for performance evaluation on binary classifiers. In addition, we have summarized potential pitfalls of ROC plots with imbalanced datasets. See our paper - [The Precision-Recall Plot Is More Informative than the ROC Plot When Evaluating Binary Classifiers on Imbalanced Datasets](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0118432) - for more details.
+
+The package structure and the coding style of `precrec` are based on two Hadley Wickham's books - [Advanced R](http://adv-r.had.co.nz/) and [R packages](http://r-pkgs.had.co.nz/).

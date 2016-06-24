@@ -28,8 +28,9 @@
 #'   \describe{
 #'     \item{"rocprc"}{ROC and Precision-Recall curves}
 #'     \item{"prcroc"}{Same as above}
-#'     \item{"basic"}{Threshold values vs. accuracy, error rate, specificity,
-#'                    sensitivity, or precision}
+#'     \item{"basic"}{Normalized ranks vs. accuracy, error rate, specificity,
+#'                    sensitivity, precision, Matthews correlation coefficient,
+#'                    and F-score. }
 #'   }
 #'
 #' @param scores A numeric dataset of predicted scores. It can be a vector,

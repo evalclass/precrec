@@ -1,8 +1,8 @@
 Package: precrec
 Type: Package
 Title: Calculate Accurate Precision-Recall and Receiver Operator Characteristics Curves
-Version: 0.3.2
-Date: 2016-04-12
+Version: 0.4.0
+Date: 2016-06-24
 Authors@R: c(
     person("Takaya", "Saito", email = "takaya.saito@outlook.com", role = c("aut", "cre")),
     person("Marc", "Rehmsmeier", email = "marc.rehmsmeier@ii.uib.no", role = c("aut")))
@@ -20,7 +20,7 @@ Suggests:
 LinkingTo: Rcpp
 Imports:
     Rcpp (>= 0.12.2),
-    ggplot2 (>= 1.0.1),
+    ggplot2 (>= 2.1.0),
     assertthat (>= 0.1),
     grid,
     gridExtra (>= 2.0.0),

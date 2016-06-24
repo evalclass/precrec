@@ -8,7 +8,7 @@
   # === Create ROC and Precision-Recall curves ===
   # Create points
   plfunc <- function(s) {
-    cdat <- create_confmats(mdat[[s]])
+    cdat <- create_confmats(mdat[[s]], keep_fmdat = TRUE)
     pevals <- calc_measures(cdat)
   }
   lpoints <- lapply(seq_along(mdat), plfunc)
@@ -18,9 +18,10 @@
     .summarize_points(lpoints, m, "pointgrp", mdat, dataset_type,
                       calc_avg, cb_alpha)
   }
-  eval_names <- c("error", "accuracy", "specificity", "sensitivity",
-                  "precision")
-  grp_row_names <- c("err", "acc", "sp", "sn", "prec")
+  eval_names <- c("score", "label", "error", "accuracy", "specificity",
+                  "sensitivity", "precision", "mcc", "fscore")
+  grp_row_names <- c("score", "label", "err", "acc", "sp", "sn", "prec", "mcc",
+                     "fscore")
   grp_points <- lapply(eval_names, grpfunc)
   names(grp_points)<- grp_row_names
 
@@ -64,7 +65,7 @@
 }
 
 #
-# Get evaluation measures at all threshold values by models
+# Get evaluation measures at all ranks by models
 #
 .summarize_points <- function(lpoints, eval_type, class_name, mdat,
                               dataset_type, calc_avg, cb_alpha) {
@@ -72,7 +73,7 @@
   if (!is.null(lpoints)) {
     # Summarize basic evaluation measures
     grp_func <- function(s) {
-      list(x = lpoints[[s]][["basic"]][["threshold"]],
+      list(x = lpoints[[s]][["basic"]][["rank"]],
            y = lpoints[[s]][["basic"]][[eval_type]])
     }
     pevals <- lapply(seq_along(lpoints), grp_func)
@@ -81,7 +82,18 @@
     if (dataset_type == "multiple" && calc_avg) {
       modnames <- attr(mdat, "data_info")[["modnames"]]
       uniq_modnames <- attr(mdat, "uniq_modnames")
-      avgcurves <- calc_avg_basic(pevals, modnames, uniq_modnames, cb_alpha)
+      if (eval_type == "mcc" || eval_type == "label") {
+        minval = -1.0
+        maxval = 1.0
+      } else if (eval_type == "score") {
+        minval = NA_real_
+        maxval = NA_real_
+      } else {
+        minval = 0.0
+        maxval = 1.0
+      }
+      avgcurves <- calc_avg_basic(pevals, modnames, uniq_modnames, cb_alpha,
+                                  minval, maxval)
     } else {
       avgcurves <- NA
     }
@@ -116,8 +128,8 @@
   # Summarize AUC of ROC or PRC curves
   modnames <- attr(mdat, "data_info")[["modnames"]]
   dsids <- attr(mdat, "data_info")[["dsids"]]
-  evaltypes <- c("threshold", "error", "accuracy", "specificity",
-                 "sensitivity", "precision")
+  evaltypes <- c("rank", "score", "label", "error", "accuracy",
+                 "specificity","sensitivity", "precision", "mcc", "fscore")
   elen <- length(evaltypes)
 
   sbasic <- data.frame(modnames = rep(modnames, each = elen),
@@ -134,7 +146,7 @@
   for (i in seq_along(lpoints)) {
     for (j in seq_along(evaltypes)) {
       vals <- lpoints[[i]][["basic"]][[evaltypes[j]]]
-      sbasic[(i - 1) * length(evaltypes) + j, 4:9] <- summary(vals)
+      sbasic[(i - 1) * length(evaltypes) + j, 4:9] <- summary(vals)[1:6]
     }
   }
 
@@ -151,7 +163,8 @@
   }
 
   # Validate class items and attributes
-  item_names <- c("err", "acc", "sp", "sn", "prec")
+  item_names <- c("score", "label", "err", "acc", "sp", "sn", "prec", "mcc",
+                  "fscore")
   attr_names <- c("eval_summary", "grp_avg", "data_info", "uniq_modnames",
                   "uniq_dsids", "model_type", "dataset_type", "args",
                   "validated")

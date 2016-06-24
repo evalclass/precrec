@@ -60,11 +60,13 @@
 #'           \strong{curvetype}
 #'           \tab \strong{description} \cr
 #'
-#'           error \tab Normalized threshold values vs. error rate \cr
-#'           accuracy \tab Normalized threshold values vs. accuracy \cr
-#'           specificity \tab Normalized threshold values vs. specificity \cr
-#'           sensitivity \tab Normalized threshold values vs. sensitivity \cr
-#'           precision \tab Normalized threshold values vs. precision
+#'           error \tab Normalized ranks vs. error rate \cr
+#'           accuracy \tab Normalized ranks vs. accuracy \cr
+#'           specificity \tab Normalized ranks vs. specificity \cr
+#'           sensitivity \tab Normalized ranks vs. sensitivity \cr
+#'           precision \tab Normalized ranks vs. precision \cr
+#'           mcc \tab Normalized ranks vs. Matthews correlation coefficient \cr
+#'           fscore \tab Normalized ranks vs. F-score
 #'        }
 #'        Multiple \code{curvetype} can be combined, such as
 #'        \code{c("precision", "sensitivity")}.
@@ -126,10 +128,10 @@
 #' sspoints <- evalmod(mode = "basic", scores = P10N10$scores,
 #'                     labels = P10N10$labels)
 #'
-#' ## Plot threshold values vs. basic evaluation measures
+#' ## Plot normalized ranks vs. basic evaluation measures
 #' plot(sspoints)
 #'
-#' ## Plot threshold vs. precision
+#' ## Plot normalized ranks vs. precision
 #' plot(sspoints, curvetype = "precision")
 #'
 #'}
@@ -157,7 +159,7 @@
 #' ## Generate an mspoints object that contains basic evaluation measures
 #' mspoints <- evalmod(mdat, mode = "basic")
 #'
-#' ## Plot threshold values vs. basic evaluation measures
+#' ## Plot normalized ranks vs. basic evaluation measures
 #' plot(mspoints)
 #'
 #' ## Hide the legend
@@ -192,7 +194,7 @@
 #' ## Generate an smpoints object that contains basic evaluation measures
 #' smpoints <- evalmod(mdat, mode = "basic")
 #'
-#' ## Plot threshold values vs. average basic evaluation measures
+#' ## Plot normalized ranks vs. average basic evaluation measures
 #' plot(smpoints)
 #'
 #'}
@@ -224,7 +226,7 @@
 #' ## Generate an mmpoints object that contains basic evaluation measures
 #' mmpoints <- evalmod(mdat, mode = "basic")
 #'
-#' ## Plot threshold values vs. average basic evaluation measures
+#' ## Plot normalized ranks vs. average basic evaluation measures
 #' plot(mmpoints)
 #'}
 #'
@@ -282,6 +284,23 @@ NULL
 
       if (!is.na(pmatch(sval, "precision")) || sval == "ppv") {
         return("precision")
+      }
+
+      if (!is.na(pmatch(sval, "matthews correlation coefficient"))
+          || sval == "mcc") {
+        return("mcc")
+      }
+
+      if (!is.na(pmatch(sval, "fscore")) || !is.na(pmatch(sval, "f1score"))) {
+        return("fscore")
+      }
+
+      if (!is.na(pmatch(sval, "score"))) {
+        return("score")
+      }
+
+      if (!is.na(pmatch(sval, "label"))) {
+        return("label")
       }
     }
 
@@ -365,7 +384,11 @@ NULL
                  raw_curves = raw_curves, add_np_nn = add_np_nn,
                  show_legend = show_legend2)
   }
-  if (length(curvetype) == 5) {
+  if (length(curvetype) > 4 && length(curvetype) %% 3 == 2) {
+    graphics::plot(1, type = "n", axes = FALSE, xlab = "", ylab = "")
+  }
+  if (length(curvetype) > 4 && length(curvetype) %% 3 == 1) {
+    graphics::plot(1, type = "n", axes = FALSE, xlab = "", ylab = "")
     graphics::plot(1, type = "n", axes = FALSE, xlab = "", ylab = "")
   }
 
@@ -403,19 +426,25 @@ NULL
     mat1 <- c(1, 2, 3, 4, 5, 5)
     mat2 <- c(1, 2, 3, 4)
     heights = c(0.425, 0.425, 0.15)
-  } else if (ctype_len > 4) {
+  } else if (ctype_len == 5 || ctype_len == 6) {
     nrow1 <- 3
     ncol1 <- 3
     mat1 <- c(1, 2, 3, 4, 5, 6, 7, 7, 7)
     mat2 <- c(1, 2, 3, 4, 5, 6)
     heights = c(0.425, 0.425, 0.15)
+  } else if (ctype_len == 7 || ctype_len == 8 || ctype_len == 9) {
+    nrow1 <- 4
+    ncol1 <- 3
+    mat1 <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10)
+    mat2 <- c(1, 2, 3, 4, 5, 6, 7, 8, 9)
+    heights = c(0.28, 0.28, 0.28, 0.16)
   }
 
   if (show_legend) {
     m <- matrix(mat1, nrow = nrow1, ncol = ncol1, byrow = TRUE)
     graphics::layout(mat = m, heights = heights)
   } else {
-    m <- matrix(mat2, nrow = nrow1 - 1, ncol = ncol1)
+    m <- matrix(mat2, nrow = nrow1 - 1, ncol = ncol1, byrow = TRUE)
     graphics::layout(mat = m)
   }
 }
@@ -437,11 +466,19 @@ NULL
     line_col <- .make_multi_colors(obj)
   }
 
+  if (curvetype == "mcc" || curvetype == "label") {
+    ylim = c(-1, 1)
+  } else if (curvetype == "score") {
+    ylim = .get_value_range(obj, curvetype)
+  } else {
+    ylim = c(0, 1)
+  }
+
   # === Create a plot ===
   mats <- .make_matplot_mats(obj[[curvetype]])
   graphics::matplot(mats[["x"]], mats[["y"]], type = type, lty = 1, pch = 19,
                     col = line_col, main = main, xlab = xlab, ylab = ylab,
-                    ylim = c(0, 1), xlim = c(0, 1))
+                    ylim = ylim, xlim = c(0, 1))
 }
 
 #
@@ -483,8 +520,15 @@ NULL
   grp_avg <- attr(obj, "grp_avg")
   avgcurves <- grp_avg[[curvetype]]
 
+  if (curvetype == "mcc" || curvetype == "label") {
+    ylim = c(-1, 1)
+  } else if (curvetype == "score") {
+    ylim = .get_value_range(obj, curvetype)
+  } else {
+    ylim = c(0, 1)
+  }
   graphics::plot(1, type = "n", main = main, xlab = xlab, ylab = ylab,
-                 ylim = c(0, 1), xlim = c(0, 1))
+                 ylim = ylim, xlim = c(0, 1))
 
   if (length(avgcurves) == 1) {
     lcols <- "blue"
@@ -503,10 +547,20 @@ NULL
 .add_curve_with_ci <- function(avgcurves, type, idx, pcol, lcol, show_cb) {
   x <- avgcurves[[idx]][["x"]]
   y <- avgcurves[[idx]][["y_avg"]]
+  naidx <- is.na(y)
+
+  if (any(naidx)) {
+    x <- x[!naidx]
+    y <- y[!naidx]
+  }
 
   if (show_cb) {
     ymin <- avgcurves[[idx]][["y_ci_l"]]
     ymax <- avgcurves[[idx]][["y_ci_h"]]
+    if (any(naidx)) {
+      ymin <- ymin[!naidx]
+      ymax <- ymax[!naidx]
+    }
 
     g <- grDevices::col2rgb(pcol)
     graphics::polygon(c(x, rev(x)), c(ymin, rev(ymax)), border = FALSE,
@@ -581,11 +635,16 @@ NULL
     tlist[["ylab"]] <- "Precision"
     tlist[["ctype"]] <- "prcs"
   } else {
-    mnames <- list(error = "err", accuracy = "acc", specificity = "sp",
-                   sensitivity = "sn", precision = "prec")
-    main <- paste0(toupper(substring(curvetype, 1, 1)), substring(curvetype,2))
+    mnames <- list(score = "score", label = "label", error = "err",
+                   accuracy = "acc", specificity = "sp", sensitivity = "sn",
+                   precision = "prec", mcc = "mcc", fscore = "fscore")
+    if (curvetype == "mcc") {
+      main <- "MCC"
+    } else {
+      main <- paste0(toupper(substring(curvetype, 1, 1)), substring(curvetype, 2))
+    }
     tlist[["main"]] <- main
-    tlist[["xlab"]] <- "threshold"
+    tlist[["xlab"]] <- "normalized rank"
     tlist[["ylab"]] <- curvetype
     tlist[["ctype"]] <- mnames[[curvetype]]
   }
@@ -610,4 +669,34 @@ NULL
                      col = grDevices::rainbow(length(gnames)),
                      horiz = TRUE)
   }
+}
+
+#
+# Get value range
+#
+.get_value_range <- function(obj, curvetype) {
+  curves <- obj[[curvetype]]
+  grp_avg <- attr(obj, "grp_avg")
+  avgcurves <- grp_avg[[curvetype]]
+
+  max_score <- NA
+  min_score <- NA
+
+  if (!all(is.na(avgcurves))) {
+    for (i in 1:length(avgcurves)) {
+      max_score <- max(max_score, max(avgcurves[[i]][["y_ci_h"]], na.rm = TRUE),
+                       na.rm = TRUE)
+      min_score <- min(min_score, min(avgcurves[[i]][["y_ci_l"]], na.rm = TRUE),
+                       na.rm = TRUE)
+    }
+  } else {
+    for (i in 1:length(curves)) {
+      max_score <- max(max_score, max(curves[[i]][["y"]], na.rm = TRUE),
+                       na.rm = TRUE)
+      min_score <- min(min_score, min(curves[[i]][["y"]], na.rm = TRUE),
+                       na.rm = TRUE)
+    }
+  }
+
+  c(min_score, max_score)
 }

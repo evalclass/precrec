@@ -31,14 +31,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // calc_avg_points
-Rcpp::List calc_avg_points(const Rcpp::List& points, double ci_q);
-RcppExport SEXP precrec_calc_avg_points(SEXP pointsSEXP, SEXP ci_qSEXP) {
+Rcpp::List calc_avg_points(const Rcpp::List& points, double ci_q, double minval, double maxval);
+RcppExport SEXP precrec_calc_avg_points(SEXP pointsSEXP, SEXP ci_qSEXP, SEXP minvalSEXP, SEXP maxvalSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< const Rcpp::List& >::type points(pointsSEXP);
     Rcpp::traits::input_parameter< double >::type ci_q(ci_qSEXP);
-    __result = Rcpp::wrap(calc_avg_points(points, ci_q));
+    Rcpp::traits::input_parameter< double >::type minval(minvalSEXP);
+    Rcpp::traits::input_parameter< double >::type maxval(maxvalSEXP);
+    __result = Rcpp::wrap(calc_avg_points(points, ci_q, minval, maxval));
     return __result;
 END_RCPP
 }

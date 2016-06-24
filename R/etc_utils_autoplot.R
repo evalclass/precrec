@@ -57,11 +57,13 @@
 #'       \strong{curvetype}
 #'       \tab \strong{description} \cr
 #'
-#'       error \tab Normalized threshold values vs. error rate \cr
-#'       accuracy \tab Normalized threshold values vs. accuracy \cr
-#'       specificity \tab Normalized threshold values vs. specificity \cr
-#'       sensitivity \tab Normalized threshold values vs. sensitivity \cr
-#'       precision \tab Normalized threshold values vs. precision
+#'       error \tab Normalized ranks vs. error rate \cr
+#'       accuracy \tab Normalized ranks vs. accuracy \cr
+#'       specificity \tab Normalized ranks vs. specificity \cr
+#'       sensitivity \tab Normalized ranks vs. sensitivity \cr
+#'       precision \tab Normalized ranks vs. precision \cr
+#'       mcc \tab Normalized ranks vs. Matthews correlation coefficient \cr
+#'       fscore \tab Normalized ranks vs. F-score
 #'    }
 #'    Multiple \code{curvetype} can be combined, such as
 #'    \code{c("precision", "sensitivity")}.
@@ -147,10 +149,10 @@
 #' sspoints <- evalmod(mode = "basic", scores = P10N10$scores,
 #'                     labels = P10N10$labels)
 #'
-#' ## Threshold values vs. basic evaluation measures
+#' ## Normalized ranks vs. basic evaluation measures
 #' autoplot(sspoints)
 #'
-#' ## Threshold vs. precision
+#' ## Normalized ranks vs. precision
 #' autoplot(sspoints, curvetype = "precision")
 #'
 #'}
@@ -178,11 +180,11 @@
 #' ## Generate an mspoints object that contains basic evaluation measures
 #' mspoints <- evalmod(mdat, mode = "basic")
 #'
-#' ## Threshold values vs. basic evaluation measures
+#' ## Normalized ranks vs. basic evaluation measures
 #' autoplot(mspoints)
 #'
 #' ## Hide the legend
-#'autoplot(mspoints, show_legend = FALSE)
+#' autoplot(mspoints, show_legend = FALSE)
 #'
 #'}
 #'
@@ -213,7 +215,7 @@
 #' ## Generate an smpoints object that contains basic evaluation measures
 #' smpoints <- evalmod(mdat, mode = "basic")
 #'
-#' ## Threshold values vs. average basic evaluation measures
+#' ## Normalized ranks vs. average basic evaluation measures
 #' autoplot(smpoints)
 #'
 #'}
@@ -245,7 +247,7 @@
 #' ## Generate an mmpoints object that contains basic evaluation measures
 #' mmpoints <- evalmod(mdat, mode = "basic")
 #'
-#' ## Threshold values vs. average basic evaluation measures
+#' ## Normalized ranks vs. average basic evaluation measures
 #' autoplot(mmpoints)
 #'
 #'}
@@ -461,12 +463,12 @@ NULL
                                              color = 'modname'))
 
     if (type == "l") {
-      p <- p + ggplot2::geom_line()
+      p <- p + ggplot2::geom_line(na.rm = TRUE)
     } else if (type == "b" || type == "p") {
       if (type == "b") {
-        p <- p + ggplot2::geom_line(alpha = 0.25)
+        p <- p + ggplot2::geom_line(alpha = 0.25, na.rm = TRUE)
       }
-      p <- p + ggplot2::geom_point()
+      p <- p + ggplot2::geom_point(na.rm = TRUE)
     }
 
   } else if (show_cb) {
@@ -475,29 +477,32 @@ NULL
                                              ymin = 'ymin', ymax = 'ymax'))
     if (type == "l") {
       p <- p + ggplot2::geom_smooth(ggplot2::aes_string(color = 'modname'),
-                                    stat = "identity")
+                                    stat = "identity", na.rm = TRUE,
+                                    size = 0.5)
     } else if (type == "b" || type == "p") {
-      p <- p + ggplot2::geom_ribbon(ggplot2::aes_string(min = 'ymin',
-                                                        ymax = 'ymax'),
+      p <- p + ggplot2::geom_ribbon(ggplot2::aes_string(ymin = 'ymin',
+                                                        ymax = 'ymax',
+                                                        group = 'modname'),
                                     stat = "identity", alpha = 0.25,
-                                    fill = "grey25")
+                                    fill = "grey25", na.rm = TRUE)
       if (type == "b") {
         p <- p + ggplot2::geom_line(ggplot2::aes_string(color = 'modname'),
-                                    alpha = 0.25)
+                                    alpha = 0.25, na.rm = TRUE)
       }
       p <- p + ggplot2::geom_point(ggplot2::aes_string(x = 'x', y = 'y',
-                                                       color = 'modname'))
+                                                       color = 'modname'),
+                                   na.rm = TRUE)
     }
   } else {
     p <- ggplot2::ggplot(curve_df, ggplot2::aes_string(x = 'x', y = 'y',
                                                        color = 'modname'))
     if (type == "l") {
-      p <- p + ggplot2::geom_line()
+      p <- p + ggplot2::geom_line(na.rm = TRUE)
     } else if (type == "b" || type == "p") {
       if (type == "b") {
-        p <- p + ggplot2::geom_line(alpha = 0.25)
+        p <- p + ggplot2::geom_line(alpha = 0.25, na.rm = TRUE)
       }
-      p <- p + ggplot2::geom_point()
+      p <- p + ggplot2::geom_point(na.rm = TRUE)
     }
   }
 
@@ -508,8 +513,18 @@ NULL
   } else {
     func_g <- .geom_basic_point
   }
+
+  ylim = c(0, 1)
+  ratio = 1
+  if (curvetype == "mcc" || curvetype == "label") {
+    ylim = c(-1, 1)
+    ratio = 0.5
+  } else if (curvetype == "score") {
+    ylim = NULL
+    ratio = NULL
+  }
   p <- func_g(p, object[[1]], show_legend = show_legend, add_np_nn = add_np_nn,
-              curve_df = curve_df, ...)
+              curve_df = curve_df, ylim = ylim, ratio = ratio, ...)
 
   p
 }
@@ -588,15 +603,21 @@ NULL
 # Geom_line for Precision-Recall
 #
 .geom_basic_point <- function(p, object, show_legend = TRUE,
-                              curve_df = curve_df, ...) {
+                              curve_df = curve_df, ylim, ratio, ...) {
 
   s <- curve_df[["curvetype"]][1]
-  main <- paste0(toupper(substring(s, 1, 1)), substring(s,2))
+  if (s == "mcc") {
+    main <- "MCC"
+  } else {
+    main <- paste0(toupper(substring(s, 1, 1)), substring(s,2))
+  }
 
-  p <- p + ggplot2::scale_y_continuous(limits = c(0.0, 1.0))
-  p <- p + ggplot2::coord_fixed(ratio = 1)
+  p <- p + ggplot2::scale_y_continuous(limits = ylim)
+  if (!is.null(ratio)) {
+    p <- p + ggplot2::coord_fixed(ratio = ratio)
+  }
 
-  p <- .geom_basic(p, main, "threshold", s, show_legend)
+  p <- .geom_basic(p, main, "normalized rank", s, show_legend)
 
   p
 }
