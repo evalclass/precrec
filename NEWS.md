@@ -1,3 +1,12 @@
+# precrec 0.4
+
+* Add new measures
+    * Matthews correlation coefficient
+    * F-score
+    
+* New generic function
+    * as.data.frame works on precrec S3 objects
+
 # precrec 0.3
 
 * Improved the testing enviroment
