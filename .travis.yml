@@ -1,5 +1,9 @@
 # .travis.yml for precrec
 
+branches:
+  only:
+    - master
+    - develop
 language: r
 warnings_are_errors: true
 sudo: required
