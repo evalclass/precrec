@@ -225,6 +225,9 @@ evalmod <- function(mdat, mode = "rocprc", scores = NULL, labels = NULL,
   # Validation
   new_mode <- .pmatch_mode(mode)
   new_ties_method <- .pmatch_tiesmethod(ties_method)
+  if (x_bins == 0) {
+    x_bins <- 1
+  }
   .validate_evalmod_args(new_mode, modnames, dsids, posclass, na_worst,
                          new_ties_method, calc_avg, cb_alpha, raw_curves,
                          x_bins)
