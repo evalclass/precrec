@@ -1,13 +1,11 @@
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-precrec
+Precrec
 =======
 
 [![Travis](https://img.shields.io/travis/takayasaito/precrec.svg?maxAge=2592000)](https://travis-ci.org/takayasaito/precrec) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/takayasaito/precrec?branch=master&svg=true)](https://ci.appveyor.com/project/takayasaito/precrec) [![codecov.io](https://codecov.io/github/takayasaito/precrec/coverage.svg?branch=master)](https://codecov.io/github/takayasaito/precrec?branch=master) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/precrec)](http://cran.r-project.org/package=precrec)
 
-The aim of `precrec` is to provide various tools that enable robust performance evaluations of binary classifiers. Specifically, `precrec` offers accurate calculations of ROC and Precision-Recall curves. All the main calculations of `precrec` are implemented with C++/[Rcpp](https://cran.r-project.org/package=Rcpp).
+The aim of `precrec` is to provide an integrated platform that enables robust performance evaluations of binary classifiers. Specifically, `precrec` offers accurate calculations of ROC and Precision-Recall curves. All the main calculations of `precrec` are implemented with C++/[Rcpp](https://cran.r-project.org/package=Rcpp).
 
-`precrec` is accurate
----------------------
+### Top accuracy
 
 `precrec` provides accurate precision-recall curves.
 
@@ -17,15 +15,13 @@ The aim of `precrec` is to provide various tools that enable robust performance 
 
 Because of this accuracy `precrec` calculates correct AUC scores.
 
-`precrec` is fast
------------------
+### Ultra fast
 
-`precrec` is much faster than most other performance evaluation tools.
+`precrec` calculates curvres in a matter of seconds even for fairly large datasets. It is much faster than most other performance evaluation tools.
 
-Multiple evaluation metrics
----------------------------
+### Various evaluation metrics
 
-`precrec` concurrently calculates precision-recall and ROC curves as well as their AUCs by default. It can also calculate basic measures.
+`precrec` concurrently calculates precision-recall and ROC curves as well as their AUCs by default. It also offers basic evaluation measures.
 
 -   Error rate
 -   Accuracy
@@ -35,8 +31,9 @@ Multiple evaluation metrics
 -   Matthews correlation coefficient
 -   F-score
 
-Multiple features
------------------
+### Multiple features
+
+`precrec` provides several useful features that lack in many other evaluation tools.
 
 -   Handling multiple models and multiple test sets
 -   Calculation of confidence interval bands when multiple test sets are specified
