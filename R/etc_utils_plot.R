@@ -466,19 +466,25 @@ NULL
     line_col <- .make_multi_colors(obj)
   }
 
-  if (curvetype == "mcc" || curvetype == "label") {
-    ylim = c(-1, 1)
+  if (curvetype == "ROC" || curvetype == "PRC") {
+    xlim <- attr(x, "xlim")
+    ylim <- attr(x, "ylim")
+  } else if (curvetype == "mcc" || curvetype == "label") {
+    xlim <- c(0, 1)
+    ylim <- c(-1, 1)
   } else if (curvetype == "score") {
-    ylim = .get_value_range(obj, curvetype)
+    xlim <- c(0, 1)
+    ylim <- .get_value_range(obj, curvetype)
   } else {
-    ylim = c(0, 1)
+    xlim <- c(0, 1)
+    ylim <- c(0, 1)
   }
 
   # === Create a plot ===
   mats <- .make_matplot_mats(obj[[curvetype]])
   graphics::matplot(mats[["x"]], mats[["y"]], type = type, lty = 1, pch = 19,
                     col = line_col, main = main, xlab = xlab, ylab = ylab,
-                    ylim = ylim, xlim = c(0, 1))
+                    ylim = ylim, xlim = xlim)
 }
 
 #
