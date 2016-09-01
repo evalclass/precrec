@@ -92,8 +92,8 @@
   # Set attributes
   attr(s3obj, "data_info") <- attr(mdat, "data_info")
   attr(s3obj, "curve_type") <- curve_type
-  attr(s3obj, "xlim") <- c(0, 0.5)
-  attr(s3obj, "ylim") <- c(0, 0.5)
+  attr(s3obj, "xlim") <- c(0, 1)
+  attr(s3obj, "ylim") <- c(0, 1)
   attr(s3obj, "uniq_modnames") <- attr(mdat, "uniq_modnames")
   attr(s3obj, "uniq_dsids") <- attr(mdat, "uniq_dsids")
   attr(s3obj, "avgcurves") <- avgcurves

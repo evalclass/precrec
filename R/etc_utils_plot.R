@@ -466,21 +466,9 @@ NULL
     line_col <- .make_multi_colors(obj)
   }
 
-  if (curvetype == "ROC" || curvetype == "PRC") {
-    xlim <- attr(x, "xlim")
-    ylim <- attr(x, "ylim")
-  } else if (curvetype == "mcc" || curvetype == "label") {
-    xlim <- c(0, 1)
-    ylim <- c(-1, 1)
-  } else if (curvetype == "score") {
-    xlim <- c(0, 1)
-    ylim <- .get_value_range(obj, curvetype)
-  } else {
-    xlim <- c(0, 1)
-    ylim <- c(0, 1)
-  }
-
   # === Create a plot ===
+  xlim <- .get_xlim(obj, curvetype)
+  ylim <- .get_ylim(obj, curvetype)
   mats <- .make_matplot_mats(obj[[curvetype]])
   graphics::matplot(mats[["x"]], mats[["y"]], type = type, lty = 1, pch = 19,
                     col = line_col, main = main, xlab = xlab, ylab = ylab,
@@ -526,15 +514,10 @@ NULL
   grp_avg <- attr(obj, "grp_avg")
   avgcurves <- grp_avg[[curvetype]]
 
-  if (curvetype == "mcc" || curvetype == "label") {
-    ylim = c(-1, 1)
-  } else if (curvetype == "score") {
-    ylim = .get_value_range(obj, curvetype)
-  } else {
-    ylim = c(0, 1)
-  }
+  xlim <- .get_xlim(obj, curvetype)
+  ylim <- .get_ylim(obj, curvetype)
   graphics::plot(1, type = "n", main = main, xlab = xlab, ylab = ylab,
-                 ylim = ylim, xlim = c(0, 1))
+                 ylim = ylim, xlim = xlim)
 
   if (length(avgcurves) == 1) {
     lcols <- "blue"
@@ -706,3 +689,34 @@ NULL
 
   c(min_score, max_score)
 }
+
+#
+# Get xlim
+#
+.get_xlim <- function(obj, curvetype) {
+  if (curvetype == "rocs" || curvetype == "prcs") {
+    xlim <- attr(obj[[curvetype]], "xlim")
+  } else if (curvetype == "mcc" || curvetype == "label") {
+    xlim <- c(0, 1)
+  } else if (curvetype == "score") {
+    xlim <- c(0, 1)
+  } else {
+    xlim <- c(0, 1)
+  }
+}
+
+#
+# Get ylim
+#
+.get_ylim <- function(obj, curvetype) {
+  if (curvetype == "rocs" || curvetype == "prcs") {
+    ylim <- attr(obj[[curvetype]], "ylim")
+  } else if (curvetype == "mcc" || curvetype == "label") {
+    ylim <- c(-1, 1)
+  } else if (curvetype == "score") {
+    ylim <- .get_value_range(obj, curvetype)
+  } else {
+    ylim <- c(0, 1)
+  }
+}
+
