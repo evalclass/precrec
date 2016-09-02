@@ -407,37 +407,37 @@ NULL
     ncol1 <- 1
     mat1 <- c(1, 2)
     mat2 <- c(1)
-    heights = c(0.85, 0.15)
+    heights <- c(0.85, 0.15)
   } else  if (ctype_len == 2) {
     nrow1 <- 2
     ncol1 <- 2
     mat1 <- c(1, 2, 3, 3)
     mat2 <- c(1, 2)
-    heights = c(0.85, 0.15)
+    heights <- c(0.85, 0.15)
   } else if (ctype_len == 3) {
     nrow1 <- 2
     ncol1 <- 3
     mat1 <- c(1, 2, 3, 4, 4, 4)
     mat2 <- c(1, 2, 3)
-    heights = c(0.85, 0.15)
+    heights <- c(0.85, 0.15)
   } else if (ctype_len == 4) {
     nrow1 <- 3
     ncol1 <- 2
     mat1 <- c(1, 2, 3, 4, 5, 5)
     mat2 <- c(1, 2, 3, 4)
-    heights = c(0.425, 0.425, 0.15)
+    heights <- c(0.425, 0.425, 0.15)
   } else if (ctype_len == 5 || ctype_len == 6) {
     nrow1 <- 3
     ncol1 <- 3
     mat1 <- c(1, 2, 3, 4, 5, 6, 7, 7, 7)
     mat2 <- c(1, 2, 3, 4, 5, 6)
-    heights = c(0.425, 0.425, 0.15)
+    heights <- c(0.425, 0.425, 0.15)
   } else if (ctype_len == 7 || ctype_len == 8 || ctype_len == 9) {
     nrow1 <- 4
     ncol1 <- 3
     mat1 <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10)
     mat2 <- c(1, 2, 3, 4, 5, 6, 7, 8, 9)
-    heights = c(0.28, 0.28, 0.28, 0.16)
+    heights <- c(0.28, 0.28, 0.28, 0.16)
   }
 
   if (show_legend) {
