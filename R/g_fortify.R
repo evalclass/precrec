@@ -96,6 +96,7 @@ fortify.smcurves <- function(model, raw_curves = FALSE, ...) {
 fortify.mmcurves <- function(model, raw_curves = FALSE, ...) {
   .dataframe_common(model, raw_curves = raw_curves, check_ggplot = TRUE, ...)
 }
+
 #' @rdname fortify
 #' @export
 fortify.sspoints <- function(model, raw_curves = TRUE, ...) {

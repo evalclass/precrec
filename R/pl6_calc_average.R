@@ -59,6 +59,8 @@ calc_avg_basic <- function(epoints, modnames, uniq_modnames, cb_alpha, minval,
   # Set attributes
   attr(s3obj, "uniq_modnames") <- uniq_modnames
   attr(s3obj, "cb_zval") <- cb_zval
+  attr(s3obj, "pauc") <- NA
+  attr(s3obj, "spauc") <- NA
   attr(s3obj, "args") <- list(cb_alpha = cb_alpha,
                               x_bins = x_bins)
   attr(s3obj, "validated") <- FALSE
