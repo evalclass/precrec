@@ -5,7 +5,10 @@ Precrec
 
 The aim of `precrec` is to provide an integrated platform that enables robust performance evaluations of binary classifiers. Specifically, `precrec` offers accurate calculations of ROC and Precision-Recall curves. All the main calculations of `precrec` are implemented with C++/[Rcpp](https://cran.r-project.org/package=Rcpp).
 
-### Top accuracy
+Four great features of precrec
+------------------------------
+
+### 1. Super accurate
 
 `precrec` provides accurate precision-recall curves.
 
@@ -15,11 +18,11 @@ The aim of `precrec` is to provide an integrated platform that enables robust pe
 
 Because of this accuracy `precrec` calculates correct AUC scores.
 
-### Ultra fast
+### 2. Ultra fast
 
-`precrec` calculates curvres in a matter of seconds even for fairly large datasets. It is much faster than most other performance evaluation tools.
+`precrec` calculates curves in a matter of seconds even for fairly large datasets. It is much faster than most other performance evaluation tools.
 
-### Various evaluation metrics
+### 3. Various evaluation metrics
 
 `precrec` concurrently calculates precision-recall and ROC curves as well as their AUCs by default. It also offers basic evaluation measures.
 
@@ -31,12 +34,14 @@ Because of this accuracy `precrec` calculates correct AUC scores.
 -   Matthews correlation coefficient
 -   F-score
 
-### Multiple features
+### 4. Supporting functions
 
-`precrec` provides several useful features that lack in many other evaluation tools.
+`precrec` provides several useful functions that lack in many other evaluation tools.
 
 -   Handling multiple models and multiple test sets
+-   Handling tied scores and missing entries
 -   Calculation of confidence interval bands when multiple test sets are specified
+-   Calculation of partial AUCs
 -   Pre- and post-process functions for simple data preparation and curve analysis
 
 Installation
@@ -68,7 +73,7 @@ The `precrec` package provides the following five functions.
 | join\_labels         | Join observed labels of multiple test datasets into a list |
 | create\_sim\_samples | Create random samples for simulations                      |
 
-Moreover, the `precrec` package provides six S3 generics for the S3 object created by the `evalmod` function.
+Moreover, the `precrec` package provides seven S3 generics for the S3 object created by the `evalmod` function.
 
 | S3 generic    | Package  | Description                                                    |
 |:--------------|:---------|:---------------------------------------------------------------|
@@ -78,6 +83,7 @@ Moreover, the `precrec` package provides six S3 generics for the S3 object creat
 | autoplot      | ggplot2  | Plot performance evaluation measures with ggplot2              |
 | fortify       | ggplot2  | Prepare a data frame for ggplot2                               |
 | auc           | precrec  | Make a data frame with AUC scores                              |
+| part          | precrec  | Set partial curves and calculate AUC scores                    |
 
 Documentation
 -------------
