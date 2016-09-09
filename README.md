@@ -73,7 +73,7 @@ The `precrec` package provides the following five functions.
 | join\_labels         | Join observed labels of multiple test datasets into a list |
 | create\_sim\_samples | Create random samples for simulations                      |
 
-Moreover, the `precrec` package provides seven S3 generics for the S3 object created by the `evalmod` function.
+Moreover, the `precrec` package provides eight S3 generics for the S3 object created by the `evalmod` function. **N.B.** The R language specifies S3 objects and S3 generic functions as part of the most basic object-oriented system in R.
 
 | S3 generic    | Package  | Description                                                    |
 |:--------------|:---------|:---------------------------------------------------------------|
@@ -84,6 +84,7 @@ Moreover, the `precrec` package provides seven S3 generics for the S3 object cre
 | fortify       | ggplot2  | Prepare a data frame for ggplot2                               |
 | auc           | precrec  | Make a data frame with AUC scores                              |
 | part          | precrec  | Set partial curves and calculate AUC scores                    |
+| pauc          | precrec  | Make a data frame with pAUC scores                             |
 
 Documentation
 -------------
@@ -124,6 +125,17 @@ autoplot(sscurves)
 ```
 
 ![](https://rawgit.com/takayasaito/precrec/master/README_files/figure-markdown_github/unnamed-chunk-2-1.png)
+
+Citation
+--------
+
+*Precrec: fast and accurate precision-recall and ROC curve calculations in R*
+
+Takaya Saito; Marc Rehmsmeier
+
+Bioinformatics 2016;
+
+doi: 10.1093/bioinformatics/btw570
 
 External links
 --------------
