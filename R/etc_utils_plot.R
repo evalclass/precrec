@@ -407,37 +407,37 @@ NULL
     ncol1 <- 1
     mat1 <- c(1, 2)
     mat2 <- c(1)
-    heights = c(0.85, 0.15)
+    heights <- c(0.85, 0.15)
   } else  if (ctype_len == 2) {
     nrow1 <- 2
     ncol1 <- 2
     mat1 <- c(1, 2, 3, 3)
     mat2 <- c(1, 2)
-    heights = c(0.85, 0.15)
+    heights <- c(0.85, 0.15)
   } else if (ctype_len == 3) {
     nrow1 <- 2
     ncol1 <- 3
     mat1 <- c(1, 2, 3, 4, 4, 4)
     mat2 <- c(1, 2, 3)
-    heights = c(0.85, 0.15)
+    heights <- c(0.85, 0.15)
   } else if (ctype_len == 4) {
     nrow1 <- 3
     ncol1 <- 2
     mat1 <- c(1, 2, 3, 4, 5, 5)
     mat2 <- c(1, 2, 3, 4)
-    heights = c(0.425, 0.425, 0.15)
+    heights <- c(0.425, 0.425, 0.15)
   } else if (ctype_len == 5 || ctype_len == 6) {
     nrow1 <- 3
     ncol1 <- 3
     mat1 <- c(1, 2, 3, 4, 5, 6, 7, 7, 7)
     mat2 <- c(1, 2, 3, 4, 5, 6)
-    heights = c(0.425, 0.425, 0.15)
+    heights <- c(0.425, 0.425, 0.15)
   } else if (ctype_len == 7 || ctype_len == 8 || ctype_len == 9) {
     nrow1 <- 4
     ncol1 <- 3
     mat1 <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10)
     mat2 <- c(1, 2, 3, 4, 5, 6, 7, 8, 9)
-    heights = c(0.28, 0.28, 0.28, 0.16)
+    heights <- c(0.28, 0.28, 0.28, 0.16)
   }
 
   if (show_legend) {
@@ -466,19 +466,13 @@ NULL
     line_col <- .make_multi_colors(obj)
   }
 
-  if (curvetype == "mcc" || curvetype == "label") {
-    ylim = c(-1, 1)
-  } else if (curvetype == "score") {
-    ylim = .get_value_range(obj, curvetype)
-  } else {
-    ylim = c(0, 1)
-  }
-
   # === Create a plot ===
+  xlim <- .get_xlim(obj, curvetype)
+  ylim <- .get_ylim(obj, curvetype)
   mats <- .make_matplot_mats(obj[[curvetype]])
   graphics::matplot(mats[["x"]], mats[["y"]], type = type, lty = 1, pch = 19,
                     col = line_col, main = main, xlab = xlab, ylab = ylab,
-                    ylim = ylim, xlim = c(0, 1))
+                    ylim = ylim, xlim = xlim)
 }
 
 #
@@ -520,15 +514,10 @@ NULL
   grp_avg <- attr(obj, "grp_avg")
   avgcurves <- grp_avg[[curvetype]]
 
-  if (curvetype == "mcc" || curvetype == "label") {
-    ylim = c(-1, 1)
-  } else if (curvetype == "score") {
-    ylim = .get_value_range(obj, curvetype)
-  } else {
-    ylim = c(0, 1)
-  }
+  xlim <- .get_xlim(obj, curvetype)
+  ylim <- .get_ylim(obj, curvetype)
   graphics::plot(1, type = "n", main = main, xlab = xlab, ylab = ylab,
-                 ylim = ylim, xlim = c(0, 1))
+                 ylim = ylim, xlim = xlim)
 
   if (length(avgcurves) == 1) {
     lcols <- "blue"
@@ -699,4 +688,34 @@ NULL
   }
 
   c(min_score, max_score)
+}
+
+#
+# Get xlim
+#
+.get_xlim <- function(obj, curvetype) {
+  if (curvetype == "rocs" || curvetype == "prcs") {
+    xlim <- attr(obj[[curvetype]], "xlim")
+  } else if (curvetype == "mcc" || curvetype == "label") {
+    xlim <- c(0, 1)
+  } else if (curvetype == "score") {
+    xlim <- c(0, 1)
+  } else {
+    xlim <- c(0, 1)
+  }
+}
+
+#
+# Get ylim
+#
+.get_ylim <- function(obj, curvetype) {
+  if (curvetype == "rocs" || curvetype == "prcs") {
+    ylim <- attr(obj[[curvetype]], "ylim")
+  } else if (curvetype == "mcc" || curvetype == "label") {
+    ylim <- c(-1, 1)
+  } else if (curvetype == "score") {
+    ylim <- .get_value_range(obj, curvetype)
+  } else {
+    ylim <- c(0, 1)
+  }
 }

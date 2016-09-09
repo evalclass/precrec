@@ -355,3 +355,20 @@
                           assertthat::is.flag(ret_grob),
                           assertthat::noNA(ret_grob))
 }
+
+#
+# Check xlim and ylim
+#
+.check_limits <- function(xlim, ylim) {
+  assertthat::assert_that(is.vector(xlim) && is.numeric(xlim),
+                          length(xlim) == 2L,
+                          xlim[1] >= 0 && xlim[1] <= 1,
+                          xlim[2] >= 0 && xlim[2] <= 1,
+                          xlim[1] < xlim[2])
+
+  assertthat::assert_that(is.vector(ylim) && is.numeric(ylim),
+                          length(ylim) == 2L,
+                          ylim[1] >= 0 && ylim[1] <= 1,
+                          ylim[2] >= 0 && ylim[2] <= 1,
+                          ylim[1] < ylim[2])
+}

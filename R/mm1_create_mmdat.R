@@ -216,7 +216,7 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
 #
 .pmatch_tiesmethod <- function(val) {
   if (assertthat::is.string(val)) {
-    choices = c("equiv", "random", "first")
+    choices <- c("equiv", "random", "first")
     if (val %in% choices) {
       return(val)
     }

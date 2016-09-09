@@ -107,6 +107,10 @@ create_prc <- function(pevals, scores = NULL, labels = NULL, x_bins = 1000,
   attr(s3obj, "nn") <- attr(pevals, "nn")
   attr(s3obj, "np") <- attr(pevals, "np")
   attr(s3obj, "auc") <- auc[["auc"]]
+  attr(s3obj, "xlim") <- c(0, 1)
+  attr(s3obj, "ylim") <- c(0, 1)
+  attr(s3obj, "pauc") <- NA
+  attr(s3obj, "spauc") <- NA
   attr(s3obj, "args") <- c(list(x_bins = x_bins), list(...))
   attr(s3obj, "cpp_errmsg1") <- crv[["errmsg"]]
   attr(s3obj, "cpp_errmsg2") <- auc[["errmsg"]]

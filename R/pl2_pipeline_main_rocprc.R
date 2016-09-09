@@ -45,12 +45,14 @@
 
   # Set attributes
   attr(s3obj, "aucs") <- aucs
+  attr(s3obj, "paucs") <- NA
   attr(s3obj, "grp_avg") <- grp_avg
   attr(s3obj, "data_info") <- attr(mdat, "data_info")
   attr(s3obj, "uniq_modnames") <- attr(mdat, "uniq_modnames")
   attr(s3obj, "uniq_dsids") <- attr(mdat, "uniq_dsids")
   attr(s3obj, "model_type") <- model_type
   attr(s3obj, "dataset_type") <- dataset_type
+  attr(s3obj, "partial") <- FALSE
   attr(s3obj, "args") <- list(mode = "rocprc",
                               calc_avg = calc_avg,
                               cb_alpha = cb_alpha,
@@ -92,6 +94,8 @@
   # Set attributes
   attr(s3obj, "data_info") <- attr(mdat, "data_info")
   attr(s3obj, "curve_type") <- curve_type
+  attr(s3obj, "xlim") <- c(0, 1)
+  attr(s3obj, "ylim") <- c(0, 1)
   attr(s3obj, "uniq_modnames") <- attr(mdat, "uniq_modnames")
   attr(s3obj, "uniq_dsids") <- attr(mdat, "uniq_dsids")
   attr(s3obj, "avgcurves") <- avgcurves
@@ -119,7 +123,7 @@
                      stringsAsFactors = FALSE)
 
   for (i in seq_along(lcurves)) {
-    idx = ct_len * i - 1
+    idx <- ct_len * i - 1
     aucs[["aucs"]][idx:(idx + 1)] <- c(attr(lcurves[[i]][["roc"]], "auc"),
                                        attr(lcurves[[i]][["prc"]], "auc"))
   }
