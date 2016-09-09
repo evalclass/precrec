@@ -1,10 +1,48 @@
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-precrec
+Precrec
 =======
 
-[![Travis](https://img.shields.io/travis/takayasaito/precrec.svg?maxAge=2592000)](https://travis-ci.org/takayasaito/precrec) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/takayasaito/precrec?branch=master&svg=true)](https://ci.appveyor.com/project/takayasaito/precrec) [![Codecov](https://img.shields.io/codecov/c/github/takayasaito/precrec.svg?maxAge=2592000)](https://codecov.io/github/takayasaito/precrec?branch=master) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/precrec)](http://cran.r-project.org/package=precrec)
+[![Travis](https://img.shields.io/travis/takayasaito/precrec.svg?maxAge=2592000)](https://travis-ci.org/takayasaito/precrec) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/takayasaito/precrec?branch=master&svg=true)](https://ci.appveyor.com/project/takayasaito/precrec) [![codecov.io](https://codecov.io/github/takayasaito/precrec/coverage.svg?branch=master)](https://codecov.io/github/takayasaito/precrec?branch=master) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/precrec)](https://cran.r-project.org/package=precrec)
 
-The aim of `precrec` is to provide various tools that enable robust performance evaluations of binary classifiers. Specifically, `precrec` offers accurate calculations of ROC and Precision-Recall curves. All the main calculations of `precrec` are implemented with C++/[Rcpp](https://cran.r-project.org/package=Rcpp).
+The aim of `precrec` is to provide an integrated platform that enables robust performance evaluations of binary classifiers. Specifically, `precrec` offers accurate calculations of ROC and Precision-Recall curves. All the main calculations of `precrec` are implemented with C++/[Rcpp](https://cran.r-project.org/package=Rcpp).
+
+Four great features of precrec
+------------------------------
+
+### 1. Super accurate
+
+`precrec` provides accurate precision-recall curves.
+
+-   Non-linear interpolation
+-   Elongation to the y-axis to estimate the first point when necessary
+-   Use of score-wise threshold values instead of fixed bins
+
+Because of this accuracy `precrec` calculates correct AUC scores.
+
+### 2. Ultra fast
+
+`precrec` calculates curves in a matter of seconds even for fairly large datasets. It is much faster than most other performance evaluation tools.
+
+### 3. Various evaluation metrics
+
+`precrec` concurrently calculates precision-recall and ROC curves as well as their AUCs by default. It also offers basic evaluation measures.
+
+-   Error rate
+-   Accuracy
+-   Specificity
+-   Sensitivity, true positive rate (TPR), recall
+-   Precision, positive predictive value (PPV)
+-   Matthews correlation coefficient
+-   F-score
+
+### 4. Supporting functions
+
+`precrec` provides several useful functions that lack in many other evaluation tools.
+
+-   Handling multiple models and multiple test sets
+-   Handling tied scores and missing entries
+-   Calculation of confidence interval bands when multiple test sets are specified
+-   Calculation of partial AUCs
+-   Pre- and post-process functions for simple data preparation and curve analysis
 
 Installation
 ------------
@@ -14,7 +52,7 @@ Installation
 -   Alternatively, you can install a development version of `precrec` from [our GitHub repository](https://github.com/takayasaito/precrec). To install it:
 
     1.  Make sure you have a working development environment.
-        -   **Windows**: Install [Rtools](http://cran.r-project.org/bin/windows/Rtools/).
+        -   **Windows**: Install Rtools (available on the CRAN website).
         -   **Mac**: Install Xcode from the Mac App Store.
         -   **Linux**: Install a compiler and various development libraries (details vary across different flavors of Linux).
 
@@ -35,7 +73,7 @@ The `precrec` package provides the following five functions.
 | join\_labels         | Join observed labels of multiple test datasets into a list |
 | create\_sim\_samples | Create random samples for simulations                      |
 
-Moreover, the `precrec` package provides six S3 generics for the S3 object created by the `evalmod` function.
+Moreover, the `precrec` package provides eight S3 generics for the S3 object created by the `evalmod` function. **N.B.** The R language specifies S3 objects and S3 generic functions as part of the most basic object-oriented system in R.
 
 | S3 generic    | Package  | Description                                                    |
 |:--------------|:---------|:---------------------------------------------------------------|
@@ -45,6 +83,8 @@ Moreover, the `precrec` package provides six S3 generics for the S3 object creat
 | autoplot      | ggplot2  | Plot performance evaluation measures with ggplot2              |
 | fortify       | ggplot2  | Prepare a data frame for ggplot2                               |
 | auc           | precrec  | Make a data frame with AUC scores                              |
+| part          | precrec  | Set partial curves and calculate AUC scores                    |
+| pauc          | precrec  | Make a data frame with pAUC scores                             |
 
 Documentation
 -------------
@@ -85,6 +125,17 @@ autoplot(sscurves)
 ```
 
 ![](https://rawgit.com/takayasaito/precrec/master/README_files/figure-markdown_github/unnamed-chunk-2-1.png)
+
+Citation
+--------
+
+*Precrec: fast and accurate precision-recall and ROC curve calculations in R*
+
+Takaya Saito; Marc Rehmsmeier
+
+Bioinformatics 2016;
+
+doi: 10.1093/bioinformatics/btw570
 
 External links
 --------------

@@ -514,17 +514,34 @@ NULL
     func_g <- .geom_basic_point
   }
 
-  ylim = c(0, 1)
-  ratio = 1
-  if (curvetype == "mcc" || curvetype == "label") {
-    ylim = c(-1, 1)
-    ratio = 0.5
+  if (curvetype == "ROC") {
+    xlim <- attr(object[["rocs"]], "xlim")
+    ylim <- attr(object[["rocs"]], "ylim")
+  } else if (curvetype == "PRC") {
+    xlim <- attr(object[["prcs"]], "xlim")
+    ylim <- attr(object[["prcs"]], "ylim")
+  } else if (curvetype == "mcc" || curvetype == "label") {
+    xlim <- c(0, 1)
+    ylim <- c(-1, 1)
+    ratio <- 0.5
   } else if (curvetype == "score") {
-    ylim = NULL
-    ratio = NULL
+    xlim <- NULL
+    ylim <- NULL
+    ratio <- NULL
+  } else {
+    xlim <- c(0, 1)
+    ylim <- c(0, 1)
+    ratio <- 1
+  }
+  if (curvetype == "ROC" || curvetype == "PRC") {
+    if (all(xlim == c(0, 1)) && all(ylim == c(0, 1))) {
+      ratio = 1
+    } else {
+      ratio = NULL
+    }
   }
   p <- func_g(p, object[[1]], show_legend = show_legend, add_np_nn = add_np_nn,
-              curve_df = curve_df, ylim = ylim, ratio = ratio, ...)
+              curve_df = curve_df, xlim = xlim, ylim = ylim, ratio = ratio, ...)
 
   p
 }
@@ -560,7 +577,7 @@ NULL
 # Geom basic for ROC
 #
 .geom_basic_roc <- function(p, object, show_legend = TRUE, add_np_nn = TRUE,
-                            ...) {
+                            xlim, ylim, ratio, ...) {
   if (add_np_nn) {
     main <- .make_rocprc_title(object, "ROC")
   } else {
@@ -569,7 +586,11 @@ NULL
 
   p <- p + ggplot2::geom_abline(intercept = 0, slope = 1, colour = "grey",
                                 linetype = 3)
-  p <- p + ggplot2::coord_fixed(ratio = 1)
+  p <- p + ggplot2::scale_x_continuous(limits = xlim)
+  p <- p + ggplot2::scale_y_continuous(limits = ylim)
+  if (!is.null(ratio))  {
+    p <- p + ggplot2::coord_fixed(ratio = ratio)
+  }
 
   p <- .geom_basic(p, main, "1 - Specificity", "Sensitivity", show_legend)
 
@@ -580,7 +601,7 @@ NULL
 # Geom_line for Precision-Recall
 #
 .geom_basic_prc <- function(p, object, show_legend = TRUE, add_np_nn = TRUE,
-                            ...) {
+                            xlim, ylim, ratio, ...) {
   if (add_np_nn) {
     main <- .make_rocprc_title(object, "Precision-Recall")
   } else {
@@ -591,8 +612,11 @@ NULL
   nn <- attr(object, "data_info")[["nn"]]
   p <- p + ggplot2::geom_hline(yintercept = np / (np + nn), colour = "grey",
                                linetype = 3)
-  p <- p + ggplot2::scale_y_continuous(limits = c(0.0, 1.0))
-  p <- p + ggplot2::coord_fixed(ratio = 1)
+  p <- p + ggplot2::scale_x_continuous(limits = xlim)
+  p <- p + ggplot2::scale_y_continuous(limits = ylim)
+  if (!is.null(ratio))  {
+    p <- p + ggplot2::coord_fixed(ratio = ratio)
+  }
 
   p <- .geom_basic(p, main, "Recall", "Precision", show_legend)
 

@@ -41,6 +41,25 @@ print.curve_info <- function(x, ...) {
   print.data.frame(aucs, print.gap = 1)
   cat("\n")
 
+  if (attr(x, "partial")) {
+    cat("\n")
+
+    paucs <- attr(x, "paucs")
+    rownames(paucs) <- format(rownames(paucs), width = 4, justify = "right")
+    if (ncol(paucs) == 4) {
+      cat("    === partial AUCs (average curves only) ===\n")
+      colnames(paucs) <- c("Model name", "Curve type", "pAUC", "Standardized")
+    } else {
+      cat("    === partial AUCs ===\n")
+      colnames(paucs) <- c("Model name", "Dataset ID", "Curve type", "pAUC",
+                           "Standardized")
+    }
+
+    cat("\n")
+    print.data.frame(paucs, print.gap = 1)
+    cat("\n")
+  }
+
   print.mdat(x)
 }
 
