@@ -1,3 +1,7 @@
+# precrec 0.5
+
+* Add partial AUCs
+
 # precrec 0.4
 
 * Add new measures
