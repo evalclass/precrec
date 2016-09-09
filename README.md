@@ -1,7 +1,7 @@
 Precrec
 =======
 
-[![Travis](https://img.shields.io/travis/takayasaito/precrec.svg?maxAge=2592000)](https://travis-ci.org/takayasaito/precrec) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/takayasaito/precrec?branch=master&svg=true)](https://ci.appveyor.com/project/takayasaito/precrec) [![codecov.io](https://codecov.io/github/takayasaito/precrec/coverage.svg?branch=master)](https://codecov.io/github/takayasaito/precrec?branch=master) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/precrec)](http://cran.r-project.org/package=precrec)
+[![Travis](https://img.shields.io/travis/takayasaito/precrec.svg?maxAge=2592000)](https://travis-ci.org/takayasaito/precrec) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/takayasaito/precrec?branch=master&svg=true)](https://ci.appveyor.com/project/takayasaito/precrec) [![codecov.io](https://codecov.io/github/takayasaito/precrec/coverage.svg?branch=master)](https://codecov.io/github/takayasaito/precrec?branch=master) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/precrec)](https://cran.r-project.org/package=precrec)
 
 The aim of `precrec` is to provide an integrated platform that enables robust performance evaluations of binary classifiers. Specifically, `precrec` offers accurate calculations of ROC and Precision-Recall curves. All the main calculations of `precrec` are implemented with C++/[Rcpp](https://cran.r-project.org/package=Rcpp).
 
@@ -52,7 +52,7 @@ Installation
 -   Alternatively, you can install a development version of `precrec` from [our GitHub repository](https://github.com/takayasaito/precrec). To install it:
 
     1.  Make sure you have a working development environment.
-        -   **Windows**: Install [Rtools](http://cran.r-project.org/bin/windows/Rtools/).
+        -   **Windows**: Install Rtools (available on the CRAN website).
         -   **Mac**: Install Xcode from the Mac App Store.
         -   **Linux**: Install a compiler and various development libraries (details vary across different flavors of Linux).
 
