@@ -3,7 +3,7 @@
 branches:
   only:
     - master
-#    - develop
+    - develop
 language: r
 warnings_are_errors: true
 sudo: required
