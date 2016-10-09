@@ -1,3 +1,7 @@
+# precrec 0.5.1
+
+* Update README
+
 # precrec 0.5
 
 * Add partial AUCs

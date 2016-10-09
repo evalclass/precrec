@@ -1,14 +1,11 @@
-## Version 0.5.0
+## Version 0.5.1
 This is a submission for updating the already published package - precrec.
 In this version I have:
 
-* Added functions to calculate partial AUCs
-    * two S3 generics - part and pauc
-
-* Added citation
+* Updated DESCRIPTION and README.md
 
 * Updated the version.
-    * 0.4.0 -> 0.5.0
+    * 0.5.0 -> 0.5.1
     
 ## Test environments
 * local OS X Yosemite, R 3.3.1
@@ -25,3 +22,17 @@ In this version I have:
   
     It happens because the the size of the package c++ library `precrec.so` was 4.0 MB. 
     It is smaller than 1 MB when tested in other environments.
+
+* One **NOTE** from the CRAN incoming feasibility test on **win-builder**.
+
+    Possibly mis-spelled words in DESCRIPTION:  
+      ROC (3:48, 10:78)
+      
+      **It is spelt correctly.**
+
+    Found the following (possibly) invalid URLs:  
+      URL: https://cran.r-project.org/web/packages/precrec/precrec.pdf  
+      URL: https://cran.r-project.org/web/packages/precrec/vignettes/introduction.html
+      
+      **These URLs are not the direct links for the package.**
+      
