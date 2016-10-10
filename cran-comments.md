@@ -1,11 +1,11 @@
-## Version 0.5.1
+## Version 0.5.2
 This is a submission for updating the already published package - precrec.
 In this version I have:
 
 * Updated DESCRIPTION and README.md
 
 * Updated the version.
-    * 0.5.0 -> 0.5.1
+    * 0.5.0 -> 0.5.2
     
 ## Test environments
 * local OS X Yosemite, R 3.3.1
@@ -30,9 +30,3 @@ In this version I have:
       
       **It is spelt correctly.**
 
-    Found the following (possibly) invalid URLs:  
-      URL: https://cran.r-project.org/web/packages/precrec/precrec.pdf  
-      URL: https://cran.r-project.org/web/packages/precrec/vignettes/introduction.html
-      
-      **These URLs are not the direct links for the package.**
-      

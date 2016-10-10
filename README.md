@@ -89,9 +89,9 @@ Moreover, the `precrec` package provides eight S3 generics for the S3 object cre
 Documentation
 -------------
 
--   [Introduction to precrec](https://cran.r-project.org/web/packages/precrec/vignettes/introduction.html) - a package vignette that contains the descriptions of the functions with several useful examples. Click the link above or view the vignette with `vignette("introduction", package = "precrec")` in R.
+-   Introduction to precrec - a package vignette that contains the descriptions of the functions with several useful examples. View the vignette with `vignette("introduction", package = "precrec")` in R or click the link on the [precrec CRAN page](https://cran.r-project.org/package=precrec).
 
--   Help pages - all the eight functions and the S3 generics except for `print` have their own help pages with examples. CRAN provides a pdf version of all combined help files as a reference manual ([pdf](https://cran.r-project.org/web/packages/precrec/precrec.pdf)).
+-   Help pages - all the functions including the S3 generics except for `print` have their own help pages with plenty of examples. View the main help page with `help(package = "precrec")` in R. In addition, CRAN provides a pdf version of all combined help files as a reference manual on the [precrec CRAN page](https://cran.r-project.org/package=precrec).
 
 Examples
 --------
