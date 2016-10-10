@@ -1,4 +1,4 @@
-# precrec 0.5.1
+# precrec 0.5.2
 
 * Update README
 
