@@ -1,17 +1,24 @@
 # .travis.yml for precrec
 
-branches:
-  only:
-    - master
+#branches:
+#  only:
+#    - master
 #    - develop
+
+#env:
+#  global:
+#    - CRAN=http://cran.rstudio.com
+#    - NOT_CRAN=true
+#    - _R_CHECK_CRAN_INCOMING_=false
+
 language: r
+r:
+  - release
+  - devel
+cache: packages
+sudo: false
 warnings_are_errors: true
-sudo: required
-env:
-  global:
-    - CRAN=http://cran.rstudio.com
-    - NOT_CRAN=true
-    - _R_CHECK_CRAN_INCOMING_=false
+
 r_github_packages:
   - jimhester/covr
 after_success:
