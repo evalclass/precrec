@@ -1,13 +1,13 @@
 # .travis.yml for precrec
 
-os:
- - linux
- - osx
-
 branches:
   only:
     - master
     - develop
+
+os:
+ - linux
+ - osx
 
 language: r
 r:
@@ -17,18 +17,10 @@ cache: packages
 sudo: false
 warnings_are_errors: true
 
-before_install:
-  if [ "$TRAVIS_OS_NAME" == "osx" ] &&
-     [ "$TRAVIS_R_VERSION" == "devel" ]; then
-    Rscript -e 'install.packages("assertthat")';
-    Rscript -e 'install.packages("ggplot2")';
-    Rscript -e 'install.packages("gridExtra")';
-    Rscript -e 'install.packages("knitr")';
-    Rscript -e 'install.packages("rmarkdown")';
-    Rscript -e 'install.packages("testthat")';
-    Rscript -e 'install.packages("rex")';
-    Rscript -e 'install.packages("crayon")';
-  fi
+matrix:
+  exclude:
+  - os: osx
+    r: devel
 
 r_github_packages:
   - jimhester/covr
