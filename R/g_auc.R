@@ -28,7 +28,7 @@
 #'
 #' @examples
 #'
-#' #############################################################################
+#' ##################################################
 #' ### Single model & single test dataset
 #' ###
 #'
@@ -42,7 +42,7 @@
 #' auc(sscurves)
 #'
 #'
-#' #############################################################################
+#' ##################################################
 #' ### Multiple models & single test dataset
 #' ###
 #'
@@ -58,7 +58,7 @@
 #' auc(mscurves)
 #'
 #'
-#' #############################################################################
+#' ##################################################
 #' ### Single model & multiple test datasets
 #' ###
 #'
@@ -78,7 +78,7 @@
 #' sm_aucs_prc <- subset(sm_aucs, curvetypes == "PRC")
 #'
 #'
-#' #############################################################################
+#' ##################################################
 #' ### Multiple models & multiple test datasets
 #' ###
 #'
@@ -91,7 +91,7 @@
 #' ## Generate an mscurve object that contains ROC and Precision-Recall curves
 #' mmcurves <- evalmod(mdat, raw_curves = TRUE)
 #'
-#' ## Shows AUCs
+#' ## Get AUCs
 #' mm_aucs <- auc(mmcurves)
 #'
 #' ## Get AUCs of Precision-Recall
