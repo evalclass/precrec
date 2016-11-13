@@ -103,11 +103,9 @@
 #'
 #' @examples
 #'
-#' #############################################################################
+#' ##################################################
 #' ### Single model & single test dataset
 #' ###
-#'
-#'\dontrun{
 #'
 #' ## Load a dataset with 10 positives and 10 negatives
 #' data(P10N10)
@@ -134,13 +132,10 @@
 #' ## Plot normalized ranks vs. precision
 #' plot(sspoints, curvetype = "precision")
 #'
-#'}
 #'
-#' #############################################################################
+#' ##################################################
 #' ### Multiple models & single test dataset
 #' ###
-#'
-#'\dontrun{
 #'
 #' ## Create sample datasets with 100 positives and 100 negatives
 #' samps <- create_sim_samples(1, 100, 100, "all")
@@ -165,13 +160,10 @@
 #' ## Hide the legend
 #' plot(mspoints, show_legend = FALSE)
 #'
-#'}
 #'
-#' #############################################################################
+#' ##################################################
 #' ### Single model & multiple test datasets
 #' ###
-#'
-#'\dontrun{
 #'
 #' ## Create sample datasets with 100 positives and 100 negatives
 #' samps <- create_sim_samples(10, 100, 100, "good_er")
@@ -197,13 +189,10 @@
 #' ## Plot normalized ranks vs. average basic evaluation measures
 #' plot(smpoints)
 #'
-#'}
 #'
-#' #############################################################################
+#' ##################################################
 #' ### Multiple models & multiple test datasets
 #' ###
-#'
-#'\dontrun{
 #'
 #' ## Create sample datasets with 100 positives and 100 negatives
 #' samps <- create_sim_samples(10, 100, 100, "all")
@@ -228,7 +217,6 @@
 #'
 #' ## Plot normalized ranks vs. average basic evaluation measures
 #' plot(mmpoints)
-#'}
 #'
 #' @name plot
 NULL

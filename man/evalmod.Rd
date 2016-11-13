@@ -155,7 +155,7 @@ The \code{evalmod} function calculates ROC and Precision-Recall curves for
 }
 \examples{
 
-#############################################################################
+##################################################
 ### Single model & single test dataset
 ###
 
@@ -170,7 +170,7 @@ sspoints <- evalmod(mode = "basic", scores = P10N10$scores,
                     labels = P10N10$labels)
 
 
-#############################################################################
+##################################################
 ### Multiple models & single test dataset
 ###
 
@@ -186,7 +186,7 @@ mscurves <- evalmod(mdat)
 mspoints <- evalmod(mdat, mode = "basic")
 
 
-#############################################################################
+##################################################
 ### Single model & multiple test datasets
 ###
 
@@ -203,7 +203,7 @@ smcurves <- evalmod(mdat)
 smpoints <- evalmod(mdat, mode = "basic")
 
 
-#############################################################################
+##################################################
 ### Multiple models & multiple test datasets
 ###
 

@@ -142,18 +142,13 @@ The \code{autoplot} function plots performance evaluation measures
   by using \pkg{ggplot2} instead of the general R plot.
 }
 \examples{
-
 ## Load libraries
-## For autoplot
 library(ggplot2)
-## For grid.draw
 library(grid)
 
-#############################################################################
+##################################################
 ### Single model & single test dataset
 ###
-
-\dontrun{
 
 ## Load a dataset with 10 positives and 10 negatives
 data(P10N10)
@@ -185,13 +180,10 @@ autoplot(sspoints)
 ## Normalized ranks vs. precision
 autoplot(sspoints, curvetype = "precision")
 
-}
 
-#############################################################################
+##################################################
 ### Multiple models & single test dataset
 ###
-
-\dontrun{
 
 ## Create sample datasets with 100 positives and 100 negatives
 samps <- create_sim_samples(1, 100, 100, "all")
@@ -216,13 +208,10 @@ autoplot(mspoints)
 ## Hide the legend
 autoplot(mspoints, show_legend = FALSE)
 
-}
 
-#############################################################################
+##################################################
 ### Single model & multiple test datasets
 ###
-
-\dontrun{
 
 ## Create sample datasets with 100 positives and 100 negatives
 samps <- create_sim_samples(10, 100, 100, "good_er")
@@ -248,13 +237,10 @@ smpoints <- evalmod(mdat, mode = "basic")
 ## Normalized ranks vs. average basic evaluation measures
 autoplot(smpoints)
 
-}
 
-#############################################################################
+##################################################
 ### Multiple models & multiple test datasets
 ###
-
-\dontrun{
 
 ## Create sample datasets with 100 positives and 100 negatives
 samps <- create_sim_samples(10, 100, 100, "all")
@@ -279,8 +265,6 @@ mmpoints <- evalmod(mdat, mode = "basic")
 
 ## Normalized ranks vs. average basic evaluation measures
 autoplot(mmpoints)
-
-}
 
 }
 \seealso{

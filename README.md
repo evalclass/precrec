@@ -86,7 +86,7 @@ Moreover, the `precrec` package provides eight S3 generics for the S3 object cre
 | autoplot      | ggplot2  | Plot performance evaluation measures with ggplot2              |
 | fortify       | ggplot2  | Prepare a data frame for ggplot2                               |
 | auc           | precrec  | Make a data frame with AUC scores                              |
-| part          | precrec  | Set partial curves and calculate AUC scores                    |
+| part          | precrec  | Calculate partial curves and partial AUC scores                |
 | pauc          | precrec  | Make a data frame with pAUC scores                             |
 
 Documentation
