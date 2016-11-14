@@ -58,15 +58,7 @@ pl6_calc_avg_basic <- function(mdat, eval_type = "err", cb_alpha = 0.05) {
   modnames <- attr(mdat, "data_info")[["modnames"]]
   uniq_modnames <- attr(mdat, "uniq_modnames")
 
-  if (eval_type == "mcc") {
-    minval = -1.0
-    maxval = 1.0
-  } else {
-    minval = 0.0
-    maxval = 1.0
-  }
-  avgcurves <- calc_avg_basic(pevals, modnames, uniq_modnames, cb_alpha, minval,
-                              maxval)
+  avgcurves <- calc_avg_basic(pevals, modnames, uniq_modnames, cb_alpha)
 }
 
 test_that("calc_avg_basic() returns 'avgpoints'", {
@@ -115,9 +107,9 @@ test_that("sm test data", {
                tolerance = 1e-3)
   expect_equal(avg_sp[[1]][["y_se"]], c(0, 0, 0.3333, 0.3333, 0),
                tolerance = 1e-3)
-  expect_equal(avg_sp[[1]][["y_ci_h"]], c(1, 1, 1, 0.9866, 0),
+  expect_equal(avg_sp[[1]][["y_ci_h"]], c(1, 1, 1.32, 0.9866, 0),
                tolerance = 1e-3)
-  expect_equal(avg_sp[[1]][["y_ci_l"]], c(1, 1, 0.013333, 0, 0),
+  expect_equal(avg_sp[[1]][["y_ci_l"]], c(1, 1, 0.013333, -0.32, 0),
                tolerance = 1e-3)
 
   avg_sn <- pl6_calc_avg_basic(mdat, "sn")
@@ -137,7 +129,7 @@ test_that("sm test data", {
                tolerance = 1e-3)
   expect_equal(avg_prec[[1]][["y_se"]], c(0, 0, 0.1666, 0.1111, 0),
                tolerance = 1e-3)
-  expect_equal(avg_prec[[1]][["y_ci_h"]], c(1, 1, 1, 0.9955, 0.75),
+  expect_equal(avg_prec[[1]][["y_ci_h"]], c(1, 1, 1.15866, 0.9955, 0.75),
                tolerance = 1e-3)
   expect_equal(avg_prec[[1]][["y_ci_l"]], c(1, 1, 0.5066, 0.56, 0.75),
                tolerance = 1e-3)
@@ -206,9 +198,9 @@ test_that("mm test data", {
                tolerance = 1e-3)
   expect_equal(avg_sp[[1]][["y_se"]], c(0, 0, 0.5, 0, 0),
                tolerance = 1e-3)
-  expect_equal(avg_sp[[1]][["y_ci_h"]], c(1, 1, 1, 0, 0),
+  expect_equal(avg_sp[[1]][["y_ci_h"]], c(1, 1, 1.48, 0, 0),
                tolerance = 1e-3)
-  expect_equal(avg_sp[[1]][["y_ci_l"]], c(1, 1, 0, 0, 0),
+  expect_equal(avg_sp[[1]][["y_ci_l"]], c(1, 1, -0.48, 0, 0),
                tolerance = 1e-3)
 
   expect_equal(avg_sn[[1]][["x"]], c(0, 0.25, 0.5, 0.75, 1))
@@ -226,7 +218,7 @@ test_that("mm test data", {
                tolerance = 1e-3)
   expect_equal(avg_prec[[1]][["y_se"]], c(0, 0, 0.25, 0, 0),
                tolerance = 1e-3)
-  expect_equal(avg_prec[[1]][["y_ci_h"]], c(1, 1, 1, 0.6666, 0.75),
+  expect_equal(avg_prec[[1]][["y_ci_h"]], c(1, 1, 1.24, 0.6666, 0.75),
                tolerance = 1e-3)
   expect_equal(avg_prec[[1]][["y_ci_l"]], c(1, 1, 0.26, 0.6666, 0.75),
                tolerance = 1e-3)
@@ -236,9 +228,9 @@ test_that("mm test data", {
                tolerance = 1e-3)
   expect_equal(avg_mcc[[1]][["y_se"]], c(NA, 0, 0.5773503, 0, NA),
                tolerance = 1e-3)
-  expect_equal(avg_mcc[[1]][["y_ci_h"]], c(NA, 1/3, 1, -1/3, NA),
+  expect_equal(avg_mcc[[1]][["y_ci_h"]], c(NA, 1/3, 1.1316, -1/3, NA),
                tolerance = 1e-3)
-  expect_equal(avg_mcc[[1]][["y_ci_l"]], c(NA, 1/3, -1, -1/3, NA),
+  expect_equal(avg_mcc[[1]][["y_ci_l"]], c(NA, 1/3, -1.1316, -1/3, NA),
                tolerance = 1e-3)
 
   expect_equal(avg_fscore[[1]][["x"]], c(0, 0.25, 0.5, 0.75, 1))
@@ -260,7 +252,7 @@ test_that("mm test data", {
                tolerance = 1e-3)
   expect_equal(avg_err[[2]][["y_ci_h"]], c(0.75, 0.5, 0.99, 0.74, 0.25),
                tolerance = 1e-3)
-  expect_equal(avg_err[[2]][["y_ci_l"]], c(0.75, 0.5, 0.01, 0, 0.25),
+  expect_equal(avg_err[[2]][["y_ci_l"]], c(0.75, 0.5, 0.01, -0.24, 0.25),
                tolerance = 1e-3)
 
   expect_equal(avg_acc[[2]][["x"]], c(0, 0.25, 0.5, 0.75, 1))
@@ -268,7 +260,7 @@ test_that("mm test data", {
                tolerance = 1e-3)
   expect_equal(avg_acc[[2]][["y_se"]], c(0, 0, 0.25, 0.25, 0),
                tolerance = 1e-3)
-  expect_equal(avg_acc[[2]][["y_ci_h"]], c(0.25, 0.5, 0.99, 1, 0.75),
+  expect_equal(avg_acc[[2]][["y_ci_h"]], c(0.25, 0.5, 0.99, 1.24, 0.75),
                tolerance = 1e-3)
   expect_equal(avg_acc[[2]][["y_ci_l"]], c(0.25, 0.5, 0.01, 0.26, 0.75),
                tolerance = 1e-3)
@@ -278,9 +270,9 @@ test_that("mm test data", {
                tolerance = 1e-3)
   expect_equal(avg_sp[[2]][["y_se"]], c(0, 0, 0.5, 0.5, 0),
                tolerance = 1e-3)
-  expect_equal(avg_sp[[2]][["y_ci_h"]], c(1, 1, 1, 1, 0),
+  expect_equal(avg_sp[[2]][["y_ci_h"]], c(1, 1, 1.48, 1.48, 0),
                tolerance = 1e-3)
-  expect_equal(avg_sp[[2]][["y_ci_l"]], c(1, 1, 0, 0, 00),
+  expect_equal(avg_sp[[2]][["y_ci_l"]], c(1, 1, -0.48, -0.48, 00),
                tolerance = 1e-3)
 
   expect_equal(avg_sn[[2]][["x"]], c(0, 0.25, 0.5, 0.75, 1))
@@ -288,7 +280,7 @@ test_that("mm test data", {
                tolerance = 1e-3)
   expect_equal(avg_sn[[2]][["y_se"]], c(0, 0, 0.1666, 0.1666, 0),
                tolerance = 1e-3)
-  expect_equal(avg_sn[[2]][["y_ci_h"]], c(0, 0.3333, 0.8266, 1, 1),
+  expect_equal(avg_sn[[2]][["y_ci_h"]], c(0, 0.3333, 0.8266, 1.159836, 1),
                tolerance = 1e-3)
   expect_equal(avg_sn[[2]][["y_ci_l"]], c(0, 0.3333, 0.1733, 0.5066, 1),
                tolerance = 1e-3)
@@ -298,7 +290,7 @@ test_that("mm test data", {
                tolerance = 1e-3)
   expect_equal(avg_prec[[2]][["y_se"]], c(0, 0, 0.25, 0.1666, 0),
                tolerance = 1e-3)
-  expect_equal(avg_prec[[2]][["y_ci_h"]], c(1, 1, 1, 1, 0.75),
+  expect_equal(avg_prec[[2]][["y_ci_h"]], c(1, 1, 1.24, 1.159836, 0.75),
                tolerance = 1e-3)
   expect_equal(avg_prec[[2]][["y_ci_l"]], c(1, 1, 0.26, 0.5066, 0.75),
                tolerance = 1e-3)
@@ -308,9 +300,9 @@ test_that("mm test data", {
                tolerance = 1e-3)
   expect_equal(avg_mcc[[2]][["y_se"]], c(NA, 0, 0.5773503, 2/3, NA),
                tolerance = 1e-3)
-  expect_equal(avg_mcc[[2]][["y_ci_h"]], c(NA, 1/3, 1, 1, NA),
+  expect_equal(avg_mcc[[2]][["y_ci_h"]], c(NA, 1/3, 1.1316, 1.64, NA),
                tolerance = 1e-3)
-  expect_equal(avg_mcc[[2]][["y_ci_l"]], c(NA, 1/3, -1, -0.9733093, NA),
+  expect_equal(avg_mcc[[2]][["y_ci_l"]], c(NA, 1/3, -1.1316, -0.9733093, NA),
                tolerance = 1e-3)
 
   expect_equal(avg_fscore[[2]][["x"]], c(0, 0.25, 0.5, 0.75, 1))
@@ -318,7 +310,7 @@ test_that("mm test data", {
                tolerance = 1e-3)
   expect_equal(avg_fscore[[2]][["y_se"]], c(0, 0, 0.2, 0.1666667, 0),
                tolerance = 1e-3)
-  expect_equal(avg_fscore[[2]][["y_ci_h"]], c(0, 0.5, 0.9919928, 1,
+  expect_equal(avg_fscore[[2]][["y_ci_h"]], c(0, 0.5, 0.9919928, 1.16,
                                               0.8571429),
                tolerance = 1e-3)
   expect_equal(avg_fscore[[2]][["y_ci_l"]], c(0, 0.5, 0.2080072, 0.5066727,

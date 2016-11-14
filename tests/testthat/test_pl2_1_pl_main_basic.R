@@ -249,7 +249,7 @@ test_that("scores and labels are stored as basic measures", {
                tolerance = 1e-3)
   expect_equal(avglabels[[1]][["y_se"]], c(NA, 0, 2/3, 2/3, 2/3),
                tolerance = 1e-3)
-  expect_equal(avglabels[[1]][["y_ci_h"]], c(NA, 1, 1, 1, 1),
+  expect_equal(avglabels[[1]][["y_ci_h"]], c(NA, 1, 1.64, 1.64, 1.64),
                tolerance = 1e-3)
   expect_equal(avglabels[[1]][["y_ci_l"]], c(NA, 1, -0.9733093, -0.9733093,
                                              -0.9733093),
