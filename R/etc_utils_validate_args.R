@@ -230,6 +230,7 @@
 .validate_x_bins <- function(x_bins) {
   if (!is.null(x_bins) && !is.na(x_bins)) {
     assertthat::assert_that(assertthat::is.number(x_bins),
+                            x_bins %% 1 == 0,
                             x_bins >= 1L)
   }
 }

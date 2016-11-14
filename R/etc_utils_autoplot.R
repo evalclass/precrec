@@ -509,7 +509,7 @@ NULL
     ylim <- c(-1, 1)
     ratio <- 0.5
   } else if (curvetype == "score") {
-    xlim <- NULL
+    xlim <- c(0, 1)
     ylim <- NULL
     ratio <- NULL
   } else {
@@ -518,7 +518,7 @@ NULL
     ratio <- 1
   }
   if (curvetype == "ROC" || curvetype == "PRC") {
-    if (all(xlim == c(0, 1)) && all(ylim == c(0, 1))) {
+    if (all(xlim == ylim)) {
       ratio = 1
     } else {
       ratio = NULL
@@ -570,12 +570,7 @@ NULL
 
   p <- p + ggplot2::geom_abline(intercept = 0, slope = 1, colour = "grey",
                                 linetype = 3)
-  p <- p + ggplot2::scale_x_continuous(limits = xlim)
-  p <- p + ggplot2::scale_y_continuous(limits = ylim)
-  if (!is.null(ratio))  {
-    p <- p + ggplot2::coord_fixed(ratio = ratio)
-  }
-
+  p <-.set_coords(p, xlim, ylim, ratio)
   p <- .geom_basic(p, main, "1 - Specificity", "Sensitivity", show_legend)
 
   p
@@ -596,13 +591,22 @@ NULL
   nn <- attr(object, "data_info")[["nn"]]
   p <- p + ggplot2::geom_hline(yintercept = np / (np + nn), colour = "grey",
                                linetype = 3)
-  p <- p + ggplot2::scale_x_continuous(limits = xlim)
-  p <- p + ggplot2::scale_y_continuous(limits = ylim)
-  if (!is.null(ratio))  {
-    p <- p + ggplot2::coord_fixed(ratio = ratio)
-  }
-
+  p <- .set_coords(p, xlim, ylim, ratio)
   p <- .geom_basic(p, main, "Recall", "Precision", show_legend)
+
+  p
+}
+
+#
+# Set coordinates for ROC and precision-recall
+#
+.set_coords <- function(p, xlim, ylim, ratio) {
+
+  if (is.null(ratio))  {
+    p <- p + ggplot2::coord_cartesian(xlim = xlim, ylim = ylim)
+  } else {
+    p <- p + ggplot2::coord_fixed(ratio = ratio, xlim = xlim, ylim = ylim)
+  }
 
   p
 }
@@ -611,20 +615,17 @@ NULL
 # Geom_line for Precision-Recall
 #
 .geom_basic_point <- function(p, object, show_legend = TRUE,
-                              curve_df = curve_df, ylim, ratio, ...) {
+                              curve_df = curve_df, xlim, ylim, ratio, ...) {
 
   s <- curve_df[["curvetype"]][1]
   if (s == "mcc") {
     main <- "MCC"
+  } else if (s == "label") {
+    main <- "Label (1:pos, -1:neg)"
   } else {
     main <- paste0(toupper(substring(s, 1, 1)), substring(s,2))
   }
-
-  p <- p + ggplot2::scale_y_continuous(limits = ylim)
-  if (!is.null(ratio)) {
-    p <- p + ggplot2::coord_fixed(ratio = ratio)
-  }
-
+  p <- .set_coords(p, xlim, ylim, ratio)
   p <- .geom_basic(p, main, "normalized rank", s, show_legend)
 
   p
