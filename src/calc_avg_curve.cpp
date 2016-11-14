@@ -80,15 +80,9 @@ Rcpp::List calc_avg_curve(const Rcpp::List& curves,
 
     // ci upper bound
     ci_h_y[i] = avg_y[i] + ci_q * se_y[i];
-    if (ci_h_y[i] > 1.0) {
-      ci_h_y[i] = 1.0;
-    }
 
     // ci lower bound
     ci_l_y[i] = avg_y[i] - ci_q * se_y[i];
-    if (ci_l_y[i] < 0.0) {
-      ci_l_y[i] = 0.0;
-    }
   }
 
   // Return a list

@@ -617,6 +617,8 @@ NULL
                    precision = "prec", mcc = "mcc", fscore = "fscore")
     if (curvetype == "mcc") {
       main <- "MCC"
+    } else if (curvetype == "label") {
+      main <- "Label (1:pos, -1:neg)"
     } else {
       main <- paste0(toupper(substring(curvetype, 1, 1)), substring(curvetype, 2))
     }

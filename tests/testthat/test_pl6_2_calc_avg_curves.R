@@ -77,7 +77,7 @@ test_that("sm test data", {
                c(0, 0.1924, 0.1924, 0.1924, 0.1924, 0.1924, 0),
                tolerance = 1e-3)
   expect_equal(avg_roc[[1]][["y_ci_h"]],
-               c(0, 1, 1, 1, 1, 1, 1),
+               c(0, 1.043704, 1.043704, 1.043704, 1.043704, 1.043704, 1),
                tolerance = 1e-3)
   expect_equal(avg_roc[[1]][["y_ci_l"]],
                c(0, 0.2894, 0.2894, 0.2894, 0.2894, 0.2894, 1),
@@ -92,7 +92,7 @@ test_that("sm test data", {
                c(0, 0, 0, 0.1333, 0.1025, 0.0833, 0),
                tolerance = 1e-3)
   expect_equal(avg_prc[[1]][["y_ci_h"]],
-               c(1, 1, 1, 1, 0.9958, 0.9966, 0.75),
+               c(1, 1, 1, 1.127868, 0.9958, 0.9966, 0.75),
                tolerance = 1e-3)
   expect_equal(avg_prc[[1]][["y_ci_l"]],
                c(1, 1, 1, 0.6053, 0.5938, 0.67, 0.75),
@@ -126,7 +126,7 @@ test_that("mm test data", {
                tolerance = 1e-3)
   expect_equal(avg_prc[[1]][["y_se"]], c(0, 0, 0, 0.2, 0, 0, 0),
                tolerance = 1e-3)
-  expect_equal(avg_prc[[1]][["y_ci_h"]], c(1, 1, 1, 1, 0.6923, 0.75, 0.75),
+  expect_equal(avg_prc[[1]][["y_ci_h"]], c(1, 1, 1, 1.192, 0.6923, 0.75, 0.75),
                tolerance = 1e-3)
   expect_equal(avg_prc[[1]][["y_ci_l"]], c(1, 1, 1, 0.408, 0.6923, 0.75, 0.75),
                tolerance = 1e-3)
@@ -138,7 +138,8 @@ test_that("mm test data", {
   expect_equal(avg_roc[[2]][["y_se"]],
                c(0, 0.3333, 0.3333, 0.3333, 0.3333, 0.3333, 0),
                tolerance = 1e-3)
-  expect_equal(avg_roc[[2]][["y_ci_h"]], c(0, 1, 1, 1, 1, 1, 1),
+  expect_equal(avg_roc[[2]][["y_ci_h"]], c(0, 1.319868, 1.319868, 1.319868,
+                                           1.319868, 1.319868, 1),
                tolerance = 1e-3)
   expect_equal(avg_roc[[2]][["y_ci_l"]],
                c(0, 0.013333, 0.013333, 0.013333, 0.013333, 0.013333, 1),
@@ -149,7 +150,8 @@ test_that("mm test data", {
                tolerance = 1e-3)
   expect_equal(avg_prc[[2]][["y_se"]], c(0, 0, 0, 0.2, 0.1538, 0.125, 0),
                tolerance = 1e-3)
-  expect_equal(avg_prc[[2]][["y_ci_h"]], c(1, 1, 1, 1, 1, 1, 0.75),
+  expect_equal(avg_prc[[2]][["y_ci_h"]], c(1, 1, 1, 1.192, 1.147548, 1.12,
+                                           0.75),
                tolerance = 1e-3)
   expect_equal(avg_prc[[2]][["y_ci_l"]], c(1, 1, 1, 0.408, 0.5446, 0.63, 0.75),
                tolerance = 1e-3)

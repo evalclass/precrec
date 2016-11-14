@@ -9,8 +9,7 @@
 // Calculate average points
 //
 // [[Rcpp::export]]
-Rcpp::List calc_avg_points(const Rcpp::List& points,
-                           double ci_q, double minval, double maxval) {
+Rcpp::List calc_avg_points(const Rcpp::List& points, double ci_q) {
 
   // Variables
   Rcpp::List ret_val;
@@ -96,15 +95,9 @@ Rcpp::List calc_avg_points(const Rcpp::List& points,
 
     // ci upper bound
     ci_h_y[i] = avg_y[i] + ci_q * se_y[i];
-    if (maxval != ::NA_REAL && ci_h_y[i] > maxval) {
-      ci_h_y[i] = maxval;
-    }
 
     // ci lower bound
     ci_l_y[i] = avg_y[i] - ci_q * se_y[i];
-    if (minval != ::NA_REAL && ci_l_y[i] < minval) {
-      ci_l_y[i] = minval;
-    }
   }
 
   // Return a list

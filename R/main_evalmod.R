@@ -88,13 +88,12 @@
 #'   should be discarded after the average curves are calculated.
 #'   It is effective only when \code{calc_avg} is set to \code{TRUE}.
 #'
-#' @param x_bins A numeric value to specify the number of minimum bins
-#'   on the x-axis. The \code{evalmod} function calculates
-#'   evaluation measures for given \code{scores} and \code{labels}
-#'   and then additionally calculates the corresponding measures
-#'   to the values on the x-axis specified by \code{x_bins}. For instance,
-#'   the additional values on the x-axis should be
-#'   \code{c(0, 0.25, 0.5, 0.75, 1)} when \code{x_bins = 4}.
+#' @param x_bins An integer value to specify the number of minimum bins
+#'   on the x-axis. It is then used to define supporting poins. For instance,
+#'   the x-values of the supporting points will be \code{c(0, 0.5, 1)} and
+#'   \code{c(0, 0.25, 0.5, 0.75, 1)} when \code{x_bins = 2}
+#'   and \code{x_bins = 4}, respectively. All corresponding y-values of
+#'   the supporting points are calculated.
 #'
 #' @return The \code{evalmod} function returns an \code{S3} object
 #'   that contains performance evaluation measures. The number of models and
