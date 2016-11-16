@@ -130,11 +130,9 @@ The \code{plot} function creates a plot of performance evaluation measures.
 }
 \examples{
 
-#############################################################################
+##################################################
 ### Single model & single test dataset
 ###
-
-\dontrun{
 
 ## Load a dataset with 10 positives and 10 negatives
 data(P10N10)
@@ -161,13 +159,10 @@ plot(sspoints)
 ## Plot normalized ranks vs. precision
 plot(sspoints, curvetype = "precision")
 
-}
 
-#############################################################################
+##################################################
 ### Multiple models & single test dataset
 ###
-
-\dontrun{
 
 ## Create sample datasets with 100 positives and 100 negatives
 samps <- create_sim_samples(1, 100, 100, "all")
@@ -192,13 +187,10 @@ plot(mspoints)
 ## Hide the legend
 plot(mspoints, show_legend = FALSE)
 
-}
 
-#############################################################################
+##################################################
 ### Single model & multiple test datasets
 ###
-
-\dontrun{
 
 ## Create sample datasets with 100 positives and 100 negatives
 samps <- create_sim_samples(10, 100, 100, "good_er")
@@ -224,13 +216,10 @@ smpoints <- evalmod(mdat, mode = "basic")
 ## Plot normalized ranks vs. average basic evaluation measures
 plot(smpoints)
 
-}
 
-#############################################################################
+##################################################
 ### Multiple models & multiple test datasets
 ###
-
-\dontrun{
 
 ## Create sample datasets with 100 positives and 100 negatives
 samps <- create_sim_samples(10, 100, 100, "all")
@@ -255,7 +244,6 @@ mmpoints <- evalmod(mdat, mode = "basic")
 
 ## Plot normalized ranks vs. average basic evaluation measures
 plot(mmpoints)
-}
 
 }
 \seealso{

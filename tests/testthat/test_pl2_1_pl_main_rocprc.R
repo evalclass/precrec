@@ -66,9 +66,13 @@ test_that(".pl_main_rocprc() accepts 'x_bins'", {
   err_msg <- "x_bins is not a number"
   expect_err_msg(err_msg, mdat, c(10, 20))
 
+  err_msg <- "x_bins%%1 not equal to 0"
+  expect_err_msg(err_msg, mdat, 1.5)
+  expect_err_msg(err_msg, mdat, 0.001)
+
   err_msg <- "x_bins not greater than or equal to 1L"
   expect_err_msg(err_msg, mdat, 0)
-  expect_err_msg(err_msg, mdat, 0.001)
+
 
 })
 

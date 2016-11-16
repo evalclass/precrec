@@ -31,16 +31,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // calc_avg_points
-Rcpp::List calc_avg_points(const Rcpp::List& points, double ci_q, double minval, double maxval);
-RcppExport SEXP precrec_calc_avg_points(SEXP pointsSEXP, SEXP ci_qSEXP, SEXP minvalSEXP, SEXP maxvalSEXP) {
+Rcpp::List calc_avg_points(const Rcpp::List& points, double ci_q);
+RcppExport SEXP precrec_calc_avg_points(SEXP pointsSEXP, SEXP ci_qSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::List& >::type points(pointsSEXP);
     Rcpp::traits::input_parameter< double >::type ci_q(ci_qSEXP);
-    Rcpp::traits::input_parameter< double >::type minval(minvalSEXP);
-    Rcpp::traits::input_parameter< double >::type maxval(maxvalSEXP);
-    rcpp_result_gen = Rcpp::wrap(calc_avg_points(points, ci_q, minval, maxval));
+    rcpp_result_gen = Rcpp::wrap(calc_avg_points(points, ci_q));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -57,6 +55,37 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type tns(tnsSEXP);
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type fns(fnsSEXP);
     rcpp_result_gen = Rcpp::wrap(calc_basic_measures(np, nn, tps, fps, tns, fns));
+    return rcpp_result_gen;
+END_RCPP
+}
+// convert_curve_avg_df
+Rcpp::List convert_curve_avg_df(const Rcpp::List& obj, const Rcpp::CharacterVector& uniq_modnames, const Rcpp::IntegerVector& modnames, const Rcpp::List& curvetype_names);
+RcppExport SEXP precrec_convert_curve_avg_df(SEXP objSEXP, SEXP uniq_modnamesSEXP, SEXP modnamesSEXP, SEXP curvetype_namesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type obj(objSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::CharacterVector& >::type uniq_modnames(uniq_modnamesSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type modnames(modnamesSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type curvetype_names(curvetype_namesSEXP);
+    rcpp_result_gen = Rcpp::wrap(convert_curve_avg_df(obj, uniq_modnames, modnames, curvetype_names));
+    return rcpp_result_gen;
+END_RCPP
+}
+// convert_curve_df
+Rcpp::List convert_curve_df(const Rcpp::List& obj, const Rcpp::CharacterVector& uniq_modnames, const Rcpp::CharacterVector& uniq_dsids, const Rcpp::IntegerVector& modnames, const Rcpp::IntegerVector& dsids, const Rcpp::CharacterVector& dsid_modnames, const Rcpp::List& curvetype_names);
+RcppExport SEXP precrec_convert_curve_df(SEXP objSEXP, SEXP uniq_modnamesSEXP, SEXP uniq_dsidsSEXP, SEXP modnamesSEXP, SEXP dsidsSEXP, SEXP dsid_modnamesSEXP, SEXP curvetype_namesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type obj(objSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::CharacterVector& >::type uniq_modnames(uniq_modnamesSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::CharacterVector& >::type uniq_dsids(uniq_dsidsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type modnames(modnamesSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type dsids(dsidsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::CharacterVector& >::type dsid_modnames(dsid_modnamesSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type curvetype_names(curvetype_namesSEXP);
+    rcpp_result_gen = Rcpp::wrap(convert_curve_df(obj, uniq_modnames, uniq_dsids, modnames, dsids, dsid_modnames, curvetype_names));
     return rcpp_result_gen;
 END_RCPP
 }

@@ -1,0 +1,44 @@
+templates:
+  params:
+    bootswatch: cerulean
+
+reference:
+  - title: Package
+    contents:
+    - precrec
+  - title: Main
+    contents:
+    - evalmod
+  - title: Data preparation
+    contents:
+    - mmdata
+    - join_scores
+    - join_labels
+    - create_sim_samples
+  - title: Visualization
+    contents:
+    - plot
+    - autoplot
+    - fortify
+  - title: Data retrieval
+    contents:
+    - as.data.frame
+    - auc
+    - pauc
+  - title: Partical AUC and partial curve
+    contents:
+    - part
+  - title: Datasets
+    contents:
+    - P10N10
+    - B500
+    - B1000
+    - IB500
+    - IB1000
+
+navbar:
+  left:
+  - text: Introduction
+    href: articles/introduction.html
+  - text: Reference
+    href: reference/index.html

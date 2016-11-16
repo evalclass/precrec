@@ -5,10 +5,10 @@ Precrec
 
 The aim of the `precrec` package is to provide an integrated platform that enables robust performance evaluations of binary classifiers. Specifically, `precrec` offers accurate calculations of ROC (Receiver Operator Characteristics) and precision-recall curves. All the main calculations of `precrec` are implemented with C++/[Rcpp](https://cran.r-project.org/package=Rcpp).
 
-Four key features of precrec
+Five key features of precrec
 ----------------------------
 
-### 1. Super accurate
+### 1. Accurate curve calculations
 
 `precrec` provides accurate precision-recall curves.
 
@@ -16,15 +16,15 @@ Four key features of precrec
 -   Elongation to the y-axis to estimate the first point when necessary
 -   Use of score-wise threshold values instead of fixed bins
 
-Because of this accuracy `precrec` calculates correct AUC scores.
+`precrec` also calculates AUC scores with high accuracy.
 
-### 2. Ultra fast
+### 2. Super fast
 
-`precrec` calculates curves in a matter of seconds even for fairly large datasets. It is much faster than most other performance evaluation tools.
+`precrec` calculates curves in a matter of seconds even for a fairly large dataset. It is much faster than most other tools that calculate ROC and precision-recall curves.
 
 ### 3. Various evaluation metrics
 
-`precrec` concurrently calculates precision-recall and ROC curves as well as their AUCs by default. It also offers basic evaluation measures.
+Besides the AUCs of precision-recall and ROC curves, `precrec` offers basic evaluation measures.
 
 -   Error rate
 -   Accuracy
@@ -34,13 +34,16 @@ Because of this accuracy `precrec` calculates correct AUC scores.
 -   Matthews correlation coefficient
 -   F-score
 
-### 4. Supporting functions
+### 4. Confidence interval band
 
-`precrec` provides several useful functions that lack in many other evaluation tools.
+`precrec` calculates confidence intervals when multiple test sets are given. It automatically plots confidence bands for the averaged curve in that case.
+
+### 5. Supporting functions
+
+`precrec` provides several useful functions that lack in most other evaluation tools.
 
 -   Handling multiple models and multiple test sets
--   Handling tied scores and missing values
--   Calculation of confidence interval bands when multiple test sets are specified
+-   Handling tied scores and missing scores
 -   Calculation of partial AUCs
 -   Pre- and post-process functions for simple data preparation and curve analysis
 
@@ -83,7 +86,7 @@ Moreover, the `precrec` package provides eight S3 generics for the S3 object cre
 | autoplot      | ggplot2  | Plot performance evaluation measures with ggplot2              |
 | fortify       | ggplot2  | Prepare a data frame for ggplot2                               |
 | auc           | precrec  | Make a data frame with AUC scores                              |
-| part          | precrec  | Set partial curves and calculate AUC scores                    |
+| part          | precrec  | Calculate partial curves and partial AUC scores                |
 | pauc          | precrec  | Make a data frame with pAUC scores                             |
 
 Documentation
@@ -91,7 +94,7 @@ Documentation
 
 -   Introduction to precrec - a package vignette that contains the descriptions of the functions with several useful examples. View the vignette with `vignette("introduction", package = "precrec")` in R or click the link on the [precrec CRAN page](https://cran.r-project.org/package=precrec).
 
--   Help pages - all the functions including the S3 generics except for `print` have their own help pages with plenty of examples. View the main help page with `help(package = "precrec")` in R. In addition, CRAN provides a pdf version of all combined help files as a reference manual on the [precrec CRAN page](https://cran.r-project.org/package=precrec).
+-   Help pages - all the functions including the S3 generics except for `print` have their own help pages with plenty of examples. View the main help page with `help(package = "precrec")` in R. In addition, CRAN provides a pdf version of all combined help files as a reference manual, which is available on the [precrec CRAN page](https://cran.r-project.org/package=precrec).
 
 Examples
 --------

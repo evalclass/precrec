@@ -112,18 +112,13 @@
 #'   with the general R plot.
 #'
 #' @examples
-#'
 #' ## Load libraries
-#' ## For autoplot
 #' library(ggplot2)
-#' ## For grid.draw
 #' library(grid)
 #'
-#' #############################################################################
+#' ##################################################
 #' ### Single model & single test dataset
 #' ###
-#'
-#'\dontrun{
 #'
 #' ## Load a dataset with 10 positives and 10 negatives
 #' data(P10N10)
@@ -135,33 +130,30 @@
 #' autoplot(sscurves)
 #'
 #' ## Get a grob object for multiple plots
-#' pp1 <- autoplot(sscurves, ret_grob = TRUE)
-#' plot.new()
-#' grid.draw(pp1)
+#' \dontrun{pp1 <- autoplot(sscurves, ret_grob = TRUE)}
+#' \dontrun{plot.new()}
+#' \dontrun{grid.draw(pp1)}
 #'
 #' ## A ROC curve
-#' autoplot(sscurves, curvetype = "ROC")
+#' \dontrun{autoplot(sscurves, curvetype = "ROC")}
 #'
 #' ## A Precision-Recall curve
-#' autoplot(sscurves, curvetype = "PRC")
+#' \dontrun{autoplot(sscurves, curvetype = "PRC")}
 #'
 #' ## Generate an sspoints object that contains basic evaluation measures
 #' sspoints <- evalmod(mode = "basic", scores = P10N10$scores,
 #'                     labels = P10N10$labels)
 #'
 #' ## Normalized ranks vs. basic evaluation measures
-#' autoplot(sspoints)
+#' \dontrun{autoplot(sspoints)}
 #'
 #' ## Normalized ranks vs. precision
-#' autoplot(sspoints, curvetype = "precision")
+#' \dontrun{autoplot(sspoints, curvetype = "precision")}
 #'
-#'}
 #'
-#' #############################################################################
+#' ##################################################
 #' ### Multiple models & single test dataset
 #' ###
-#'
-#'\dontrun{
 #'
 #' ## Create sample datasets with 100 positives and 100 negatives
 #' samps <- create_sim_samples(1, 100, 100, "all")
@@ -175,24 +167,21 @@
 #' autoplot(mscurves)
 #'
 #' ## Hide the legend
-#' autoplot(mscurves, show_legend = FALSE)
+#' \dontrun{autoplot(mscurves, show_legend = FALSE)}
 #'
 #' ## Generate an mspoints object that contains basic evaluation measures
 #' mspoints <- evalmod(mdat, mode = "basic")
 #'
 #' ## Normalized ranks vs. basic evaluation measures
-#' autoplot(mspoints)
+#' \dontrun{autoplot(mspoints)}
 #'
 #' ## Hide the legend
-#' autoplot(mspoints, show_legend = FALSE)
+#' \dontrun{autoplot(mspoints, show_legend = FALSE)}
 #'
-#'}
 #'
-#' #############################################################################
+#' ##################################################
 #' ### Single model & multiple test datasets
 #' ###
-#'
-#'\dontrun{
 #'
 #' ## Create sample datasets with 100 positives and 100 negatives
 #' samps <- create_sim_samples(10, 100, 100, "good_er")
@@ -207,24 +196,21 @@
 #' autoplot(smcurves)
 #'
 #' ## Hide confidence bounds
-#' autoplot(smcurves, show_cb = FALSE)
+#' \dontrun{autoplot(smcurves, show_cb = FALSE)}
 #'
 #' ## Raw ROC and Precision-Recall curves
-#' autoplot(smcurves, raw_curves = TRUE)
+#' \dontrun{autoplot(smcurves, raw_curves = TRUE)}
 #'
 #' ## Generate an smpoints object that contains basic evaluation measures
 #' smpoints <- evalmod(mdat, mode = "basic")
 #'
 #' ## Normalized ranks vs. average basic evaluation measures
-#' autoplot(smpoints)
+#' \dontrun{autoplot(smpoints)}
 #'
-#'}
 #'
-#' #############################################################################
+#' ##################################################
 #' ### Multiple models & multiple test datasets
 #' ###
-#'
-#'\dontrun{
 #'
 #' ## Create sample datasets with 100 positives and 100 negatives
 #' samps <- create_sim_samples(10, 100, 100, "all")
@@ -239,18 +225,16 @@
 #' autoplot(mmcurves)
 #'
 #' ## Show confidence bounds
-#' autoplot(mmcurves, show_cb = TRUE)
+#' \dontrun{autoplot(mmcurves, show_cb = TRUE)}
 #'
 #' ## Raw ROC and Precision-Recall curves
-#' autoplot(mmcurves, raw_curves = TRUE)
+#' \dontrun{autoplot(mmcurves, raw_curves = TRUE)}
 #'
 #' ## Generate an mmpoints object that contains basic evaluation measures
 #' mmpoints <- evalmod(mdat, mode = "basic")
 #'
 #' ## Normalized ranks vs. average basic evaluation measures
-#' autoplot(mmpoints)
-#'
-#'}
+#' \dontrun{autoplot(mmpoints)}
 #'
 #' @name autoplot
 NULL
@@ -525,7 +509,7 @@ NULL
     ylim <- c(-1, 1)
     ratio <- 0.5
   } else if (curvetype == "score") {
-    xlim <- NULL
+    xlim <- c(0, 1)
     ylim <- NULL
     ratio <- NULL
   } else {
@@ -534,7 +518,7 @@ NULL
     ratio <- 1
   }
   if (curvetype == "ROC" || curvetype == "PRC") {
-    if (all(xlim == c(0, 1)) && all(ylim == c(0, 1))) {
+    if (all(xlim == ylim)) {
       ratio = 1
     } else {
       ratio = NULL
@@ -586,12 +570,7 @@ NULL
 
   p <- p + ggplot2::geom_abline(intercept = 0, slope = 1, colour = "grey",
                                 linetype = 3)
-  p <- p + ggplot2::scale_x_continuous(limits = xlim)
-  p <- p + ggplot2::scale_y_continuous(limits = ylim)
-  if (!is.null(ratio))  {
-    p <- p + ggplot2::coord_fixed(ratio = ratio)
-  }
-
+  p <-.set_coords(p, xlim, ylim, ratio)
   p <- .geom_basic(p, main, "1 - Specificity", "Sensitivity", show_legend)
 
   p
@@ -612,13 +591,22 @@ NULL
   nn <- attr(object, "data_info")[["nn"]]
   p <- p + ggplot2::geom_hline(yintercept = np / (np + nn), colour = "grey",
                                linetype = 3)
-  p <- p + ggplot2::scale_x_continuous(limits = xlim)
-  p <- p + ggplot2::scale_y_continuous(limits = ylim)
-  if (!is.null(ratio))  {
-    p <- p + ggplot2::coord_fixed(ratio = ratio)
-  }
-
+  p <- .set_coords(p, xlim, ylim, ratio)
   p <- .geom_basic(p, main, "Recall", "Precision", show_legend)
+
+  p
+}
+
+#
+# Set coordinates for ROC and precision-recall
+#
+.set_coords <- function(p, xlim, ylim, ratio) {
+
+  if (is.null(ratio))  {
+    p <- p + ggplot2::coord_cartesian(xlim = xlim, ylim = ylim)
+  } else {
+    p <- p + ggplot2::coord_fixed(ratio = ratio, xlim = xlim, ylim = ylim)
+  }
 
   p
 }
@@ -627,20 +615,17 @@ NULL
 # Geom_line for Precision-Recall
 #
 .geom_basic_point <- function(p, object, show_legend = TRUE,
-                              curve_df = curve_df, ylim, ratio, ...) {
+                              curve_df = curve_df, xlim, ylim, ratio, ...) {
 
   s <- curve_df[["curvetype"]][1]
   if (s == "mcc") {
     main <- "MCC"
+  } else if (s == "label") {
+    main <- "Label (1:pos, -1:neg)"
   } else {
     main <- paste0(toupper(substring(s, 1, 1)), substring(s,2))
   }
-
-  p <- p + ggplot2::scale_y_continuous(limits = ylim)
-  if (!is.null(ratio)) {
-    p <- p + ggplot2::coord_fixed(ratio = ratio)
-  }
-
+  p <- .set_coords(p, xlim, ylim, ratio)
   p <- .geom_basic(p, main, "normalized rank", s, show_legend)
 
   p

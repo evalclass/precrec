@@ -9,12 +9,20 @@ calc_avg_curve <- function(curves, x_bins, ci_q) {
     .Call('precrec_calc_avg_curve', PACKAGE = 'precrec', curves, x_bins, ci_q)
 }
 
-calc_avg_points <- function(points, ci_q, minval, maxval) {
-    .Call('precrec_calc_avg_points', PACKAGE = 'precrec', points, ci_q, minval, maxval)
+calc_avg_points <- function(points, ci_q) {
+    .Call('precrec_calc_avg_points', PACKAGE = 'precrec', points, ci_q)
 }
 
 calc_basic_measures <- function(np, nn, tps, fps, tns, fns) {
     .Call('precrec_calc_basic_measures', PACKAGE = 'precrec', np, nn, tps, fps, tns, fns)
+}
+
+convert_curve_avg_df <- function(obj, uniq_modnames, modnames, curvetype_names) {
+    .Call('precrec_convert_curve_avg_df', PACKAGE = 'precrec', obj, uniq_modnames, modnames, curvetype_names)
+}
+
+convert_curve_df <- function(obj, uniq_modnames, uniq_dsids, modnames, dsids, dsid_modnames, curvetype_names) {
+    .Call('precrec_convert_curve_df', PACKAGE = 'precrec', obj, uniq_modnames, uniq_dsids, modnames, dsids, dsid_modnames, curvetype_names)
 }
 
 create_confusion_matrices <- function(olabs, ranks, rank_idx) {

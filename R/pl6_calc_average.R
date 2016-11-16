@@ -10,17 +10,16 @@ calc_avg_rocprc <- function(curves, modnames, uniq_modnames, cb_alpha,
 #
 # Calculate the average points for a model
 #
-calc_avg_basic <- function(epoints, modnames, uniq_modnames, cb_alpha, minval,
-                           maxval) {
+calc_avg_basic <- function(epoints, modnames, uniq_modnames, cb_alpha) {
   .calc_avg_common(epoints, "point", "avgpoints", modnames, uniq_modnames,
-                   cb_alpha, NULL, minval, maxval)
+                   cb_alpha, NULL)
 }
 
 #
 # Calculate averages
 #
 .calc_avg_common <- function(obj, mode, class_name, modnames, uniq_modnames,
-                             cb_alpha, x_bins, minval = 0.0, maxval = 1.0) {
+                             cb_alpha, x_bins) {
 
   # === Validate input arguments ===
   if (is.null(x_bins) || is.na(x_bins)) {
@@ -46,7 +45,7 @@ calc_avg_basic <- function(epoints, modnames, uniq_modnames, cb_alpha, minval,
       .check_cpp_func_error(avgs, "calc_avg_curve")
 
     } else if (mode == "point") {
-      avgs <- calc_avg_points(obj_by_model[[i]], cb_zval, minval, maxval)
+      avgs <- calc_avg_points(obj_by_model[[i]], cb_zval)
       .check_cpp_func_error(avgs, "calc_avg_basic")
     }
     avgs[["avg"]]

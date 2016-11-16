@@ -1,3 +1,9 @@
+# precrec 0.6
+
+* Improve as.data.frame with Rcpp
+
+* Create github pages with pkgdown
+
 # precrec 0.5.2
 
 * Update README

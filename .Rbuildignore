@@ -2,11 +2,12 @@
 ^\.Rproj\.user$
 ^data-raw$
 ^\.travis\.yml$
-^NEWS.md$
 ^cran-comments\.md$
 ^README\.Rmd$
 ^README_files$
 ^README-.*\.png$
-^NEWS\.md$
+^NEWS$
 ^LICENSE$
 ^appveyor\.yml$
+^docs$
+^_pkgdown\.yml$
