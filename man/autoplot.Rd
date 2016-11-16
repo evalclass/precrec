@@ -157,7 +157,7 @@ data(P10N10)
 sscurves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 
 ## Plot both ROC and Precision-Recall curves
-\dontrun{autoplot(sscurves)}
+autoplot(sscurves)
 
 ## Get a grob object for multiple plots
 \dontrun{pp1 <- autoplot(sscurves, ret_grob = TRUE)}
@@ -194,7 +194,7 @@ mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 mscurves <- evalmod(mdat)
 
 ## ROC and Precision-Recall curves
-\dontrun{autoplot(mscurves)}
+autoplot(mscurves)
 
 ## Hide the legend
 \dontrun{autoplot(mscurves, show_legend = FALSE)}
@@ -223,7 +223,7 @@ mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 smcurves <- evalmod(mdat, raw_curves = TRUE)
 
 ## Average ROC and Precision-Recall curves
-\dontrun{autoplot(smcurves)}
+autoplot(smcurves)
 
 ## Hide confidence bounds
 \dontrun{autoplot(smcurves, show_cb = FALSE)}
@@ -252,7 +252,7 @@ mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 mmcurves <- evalmod(mdat, raw_curves = TRUE)
 
 ## Average ROC and Precision-Recall curves
-\dontrun{autoplot(mmcurves)}
+autoplot(mmcurves)
 
 ## Show confidence bounds
 \dontrun{autoplot(mmcurves, show_cb = TRUE)}

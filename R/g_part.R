@@ -67,7 +67,7 @@
 #' plot(sscurves.part)
 #'
 #' ## Plot partial curve with ggplot
-#' \dontrun{autoplot(sscurves.part)}
+#' autoplot(sscurves.part)
 #'
 #'
 #' ##################################################
@@ -92,7 +92,7 @@
 #' plot(mscurves.part)
 #'
 #' ## Plot partial curves with ggplot
-#' \dontrun{autoplot(mscurves.part)}
+#' autoplot(mscurves.part)
 #'
 #'
 #' ##################################################
@@ -118,7 +118,7 @@
 #' plot(smcurves.part)
 #'
 #' ## Plot partial curve with ggplot
-#' \dontrun{autoplot(smcurves.part)}
+#' autoplot(smcurves.part)
 #'
 #'
 #' ##################################################
@@ -144,7 +144,7 @@
 #' plot(mmcurves.part)
 #'
 #' ## Plot partial curves with ggplot
-#' \dontrun{autoplot(mmcurves.part)}
+#' autoplot(mmcurves.part)
 #'
 #' @export
 part <- function(curves, xlim, ylim, curvetype) UseMethod("part")

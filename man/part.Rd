@@ -88,7 +88,7 @@ sscurves.part
 plot(sscurves.part)
 
 ## Plot partial curve with ggplot
-\dontrun{autoplot(sscurves.part)}
+autoplot(sscurves.part)
 
 
 ##################################################
@@ -113,7 +113,7 @@ mscurves.part
 plot(mscurves.part)
 
 ## Plot partial curves with ggplot
-\dontrun{autoplot(mscurves.part)}
+autoplot(mscurves.part)
 
 
 ##################################################
@@ -139,7 +139,7 @@ smcurves.part
 plot(smcurves.part)
 
 ## Plot partial curve with ggplot
-\dontrun{autoplot(smcurves.part)}
+autoplot(smcurves.part)
 
 
 ##################################################
@@ -165,7 +165,7 @@ mmcurves.part
 plot(mmcurves.part)
 
 ## Plot partial curves with ggplot
-\dontrun{autoplot(mmcurves.part)}
+autoplot(mmcurves.part)
 
 }
 \seealso{
