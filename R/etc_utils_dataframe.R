@@ -156,12 +156,18 @@ NULL
     .load_ggplot2()
   }
 
-
   # === Validate input arguments ===
   .validate(obj)
   new_mode <- .pmatch_mode(mode)
   .check_mode(new_mode, obj)
   .check_raw_curves(raw_curves, obj)
+
+  arguments <- list(...)
+  if ("use_rcpp" %in% names(arguments)) {
+    use_rcpp <- arguments[["use_rcpp"]]
+  } else {
+    use_rcpp <- TRUE
+  }
 
   # Prepare variables
   uniq_modnames <- attr(obj, "uniq_modnames")
@@ -191,11 +197,31 @@ NULL
 
   # Create curve_df
   if (raw_curves) {
-    curve_df <- .dataframe_curve(obj, uniq_modnames, uniq_dsids, modnames,
-                               dsids, dsid_modnames, curvetype_names)
-  } else {
-    curve_df <- .dataframe_curve_avg(obj, uniq_modnames, uniq_dsids, modnames,
+    if (use_rcpp) {
+      list_df <- convert_curve_df(obj, uniq_modnames, as.character(uniq_dsids),
+                                  match(modnames, uniq_modnames),
+                                  match(dsids, uniq_dsids),
+                                  dsid_modnames, curvetype_names)
+      .check_cpp_func_error(list_df, "convert_curve_df")
+      curve_df <- list_df[["df"]]
+    } else {
+      curve_df <- .dataframe_curve(obj, uniq_modnames, uniq_dsids, modnames,
                                    dsids, dsid_modnames, curvetype_names)
+      warning("R version of .dataframe_common is used")
+    }
+  } else {
+    if (use_rcpp) {
+      list_df <- convert_curve_avg_df(attr(obj, "grp_avg"), uniq_modnames,
+                                      match(modnames, uniq_modnames),
+                                      curvetype_names)
+      .check_cpp_func_error(list_df, "convert_curve_avg_df")
+      curve_df <- list_df[["df"]]
+    } else {
+      curve_df <- .dataframe_curve_avg(obj, uniq_modnames, uniq_dsids, modnames,
+                                       dsids, dsid_modnames, curvetype_names)
+      warning("R version of .dataframe_common is used")
+    }
+
   }
 
   if (!check_ggplot) {
@@ -213,7 +239,7 @@ NULL
 # Make a dataframe for plotting with regular curves
 #
 .dataframe_curve <- function(obj, uniq_modnames, uniq_dsids, modnames, dsids,
-                           dsid_modnames, curvetype_names) {
+                             dsid_modnames, curvetype_names) {
 
   curve_df <- NULL
   for (curvetype in names(curvetype_names)) {
