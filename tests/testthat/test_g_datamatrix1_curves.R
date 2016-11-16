@@ -51,6 +51,14 @@ df1_create_mmcurves <- function(raw_curves = FALSE) {
   evalmod(mdat, raw_curves = raw_curves)
 }
 
+df1_comp_dfs <- function(df1, df2) {
+  expect_equal(names(df1), names(df2))
+
+  for (vname in names(df1)) {
+    expect_equal(df1[[vname]], df2[[vname]])
+  }
+}
+
 test_that("as.data.frame sscurves", {
 
   data(P10N10)
@@ -58,6 +66,9 @@ test_that("as.data.frame sscurves", {
 
   curve_df <- as.data.frame(curves)
   expect_true(is.data.frame(curve_df))
+
+  curve_df2 <- suppressWarnings(as.data.frame(curves, use_rcpp = FALSE))
+  df1_comp_dfs(curve_df, curve_df2)
 })
 
 test_that("as.data.frame mscurves", {
@@ -66,6 +77,10 @@ test_that("as.data.frame mscurves", {
 
   curve_df <- as.data.frame(curves)
   expect_true(is.data.frame(curve_df))
+
+  curve_df2 <- suppressWarnings(as.data.frame(curves, use_rcpp = FALSE))
+  df1_comp_dfs(curve_df, curve_df2)
+
 })
 
 test_that("as.data.frame smcurves", {
@@ -74,6 +89,9 @@ test_that("as.data.frame smcurves", {
 
   curve_df <- as.data.frame(curves)
   expect_true(is.data.frame(curve_df))
+
+  curve_df2 <- suppressWarnings(as.data.frame(curves, use_rcpp = FALSE))
+  df1_comp_dfs(curve_df, curve_df2)
 })
 
 test_that("as.data.frame mmcurves", {
@@ -82,4 +100,7 @@ test_that("as.data.frame mmcurves", {
 
   curve_df <- as.data.frame(curves)
   expect_true(is.data.frame(curve_df))
+
+  curve_df2 <- suppressWarnings(as.data.frame(curves, use_rcpp = FALSE))
+  df1_comp_dfs(curve_df, curve_df2)
 })
