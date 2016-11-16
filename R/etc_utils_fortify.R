@@ -52,6 +52,7 @@
 #'   \code{\link{autoplot}} for plotting with \pkg{ggplot2}.
 #'
 #' @examples
+#' \dontrun{
 #' ## Load library
 #' library(ggplot2)
 #'
@@ -100,8 +101,8 @@
 #' ### Multiple models & single test dataset
 #' ###
 #'
-#' ## Create sample datasets with 100 positives and 100 negatives
-#' samps <- create_sim_samples(1, 100, 100, "all")
+#' ## Create sample datasets with 10 positives and 10 negatives
+#' samps <- create_sim_samples(1, 10, 10, "all")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 #'                modnames = samps[["modnames"]])
 #'
@@ -146,8 +147,8 @@
 #' ### Single model & multiple test datasets
 #' ###
 #'
-#' ## Create sample datasets with 100 positives and 100 negatives
-#' samps <- create_sim_samples(10, 100, 100, "good_er")
+#' ## Create sample datasets with 10 positives and 10 negatives
+#' samps <- create_sim_samples(5, 10, 10, "good_er")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 #'                modnames = samps[["modnames"]],
 #'                dsids = samps[["dsids"]])
@@ -196,8 +197,8 @@
 #' ### Multiple models & multiple test datasets
 #' ###
 #'
-#' ## Create sample datasets with 100 positives and 100 negatives
-#' samps <- create_sim_samples(10, 100, 100, "all")
+#' ## Create sample datasets with 10 positives and 10 negatives
+#' samps <- create_sim_samples(5, 10, 10, "all")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 #'                modnames = samps[["modnames"]],
 #'                dsids = samps[["dsids"]])
@@ -240,6 +241,7 @@
 #'                                fill = "grey25")
 #' p_prec <- p_prec + geom_point(aes(x = x, y = y, color = modname))
 #' p_prec
+#' }
 #'
 #' @name fortify
 NULL

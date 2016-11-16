@@ -160,25 +160,25 @@ sscurves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 autoplot(sscurves)
 
 ## Get a grob object for multiple plots
-pp1 <- autoplot(sscurves, ret_grob = TRUE)
-plot.new()
-grid.draw(pp1)
+\dontrun{pp1 <- autoplot(sscurves, ret_grob = TRUE)}
+\dontrun{plot.new()}
+\dontrun{grid.draw(pp1)}
 
 ## A ROC curve
-autoplot(sscurves, curvetype = "ROC")
+\dontrun{autoplot(sscurves, curvetype = "ROC")}
 
 ## A Precision-Recall curve
-autoplot(sscurves, curvetype = "PRC")
+\dontrun{autoplot(sscurves, curvetype = "PRC")}
 
 ## Generate an sspoints object that contains basic evaluation measures
 sspoints <- evalmod(mode = "basic", scores = P10N10$scores,
                     labels = P10N10$labels)
 
 ## Normalized ranks vs. basic evaluation measures
-autoplot(sspoints)
+\dontrun{autoplot(sspoints)}
 
 ## Normalized ranks vs. precision
-autoplot(sspoints, curvetype = "precision")
+\dontrun{autoplot(sspoints, curvetype = "precision")}
 
 
 ##################################################
@@ -197,16 +197,16 @@ mscurves <- evalmod(mdat)
 autoplot(mscurves)
 
 ## Hide the legend
-autoplot(mscurves, show_legend = FALSE)
+\dontrun{autoplot(mscurves, show_legend = FALSE)}
 
 ## Generate an mspoints object that contains basic evaluation measures
 mspoints <- evalmod(mdat, mode = "basic")
 
 ## Normalized ranks vs. basic evaluation measures
-autoplot(mspoints)
+\dontrun{autoplot(mspoints)}
 
 ## Hide the legend
-autoplot(mspoints, show_legend = FALSE)
+\dontrun{autoplot(mspoints, show_legend = FALSE)}
 
 
 ##################################################
@@ -226,16 +226,16 @@ smcurves <- evalmod(mdat, raw_curves = TRUE)
 autoplot(smcurves)
 
 ## Hide confidence bounds
-autoplot(smcurves, show_cb = FALSE)
+\dontrun{autoplot(smcurves, show_cb = FALSE)}
 
 ## Raw ROC and Precision-Recall curves
-autoplot(smcurves, raw_curves = TRUE)
+\dontrun{autoplot(smcurves, raw_curves = TRUE)}
 
 ## Generate an smpoints object that contains basic evaluation measures
 smpoints <- evalmod(mdat, mode = "basic")
 
 ## Normalized ranks vs. average basic evaluation measures
-autoplot(smpoints)
+\dontrun{autoplot(smpoints)}
 
 
 ##################################################
@@ -255,16 +255,16 @@ mmcurves <- evalmod(mdat, raw_curves = TRUE)
 autoplot(mmcurves)
 
 ## Show confidence bounds
-autoplot(mmcurves, show_cb = TRUE)
+\dontrun{autoplot(mmcurves, show_cb = TRUE)}
 
 ## Raw ROC and Precision-Recall curves
-autoplot(mmcurves, raw_curves = TRUE)
+\dontrun{autoplot(mmcurves, raw_curves = TRUE)}
 
 ## Generate an mmpoints object that contains basic evaluation measures
 mmpoints <- evalmod(mdat, mode = "basic")
 
 ## Normalized ranks vs. average basic evaluation measures
-autoplot(mmpoints)
+\dontrun{autoplot(mmpoints)}
 
 }
 \seealso{
