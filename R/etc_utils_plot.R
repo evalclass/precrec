@@ -342,7 +342,6 @@ NULL
 # Plot ROC and Precision-Recall
 #
 .plot_multi <- function(x, arglist) {
-
   curvetype <- arglist[["curvetype"]]
   type <- arglist[["type"]]
   show_cb <- arglist[["show_cb"]]

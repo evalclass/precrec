@@ -71,7 +71,7 @@ auc(mscurves)
 ###
 
 ## Create sample datasets with 100 positives and 100 negatives
-samps <- create_sim_samples(10, 100, 100, "good_er")
+samps <- create_sim_samples(4, 100, 100, "good_er")
 mdat <- mmdata(samps[["scores"]], samps[["labels"]],
                modnames = samps[["modnames"]],
                dsids = samps[["dsids"]])
@@ -82,16 +82,21 @@ smcurves <- evalmod(mdat, raw_curves = TRUE)
 ## Get AUCs
 sm_aucs <- auc(smcurves)
 
+## Shows AUCs
+sm_aucs
+
 ## Get AUCs of Precision-Recall
 sm_aucs_prc <- subset(sm_aucs, curvetypes == "PRC")
 
+## Shows AUCs
+sm_aucs_prc
 
 ##################################################
 ### Multiple models & multiple test datasets
 ###
 
 ## Create sample datasets with 100 positives and 100 negatives
-samps <- create_sim_samples(10, 100, 100, "all")
+samps <- create_sim_samples(4, 100, 100, "all")
 mdat <- mmdata(samps[["scores"]], samps[["labels"]],
                modnames = samps[["modnames"]],
                dsids = samps[["dsids"]])
@@ -102,8 +107,14 @@ mmcurves <- evalmod(mdat, raw_curves = TRUE)
 ## Get AUCs
 mm_aucs <- auc(mmcurves)
 
+## Shows AUCs
+mm_aucs
+
 ## Get AUCs of Precision-Recall
 mm_aucs_prc <- subset(mm_aucs, curvetypes == "PRC")
+
+## Shows AUCs
+mm_aucs_prc
 
 }
 \seealso{

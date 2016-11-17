@@ -210,12 +210,28 @@ of the <code><a href='evalmod.html'>evalmod</a></code> function.</dd>
 <span class='co'>## Convert sscurves to a data frame</span>
 <span class='no'>sscurves.df</span> <span class='kw'>&lt;-</span> <span class='fu'>as.data.frame</span>(<span class='no'>sscurves</span>)
 
+<span class='co'>## Show data frame</span>
+<span class='fu'>head</span>(<span class='no'>sscurves.df</span>)</div><div class='output co'>#&gt;       x   y modname dsid type
+#&gt; 1 0.000 0.0      m1    1  ROC
+#&gt; 2 0.000 0.1      m1    1  ROC
+#&gt; 3 0.000 0.2      m1    1  ROC
+#&gt; 4 0.001 0.2      m1    1  ROC
+#&gt; 5 0.002 0.2      m1    1  ROC
+#&gt; 6 0.003 0.2      m1    1  ROC</div><div class='input'>
 <span class='co'>## Generate an sspoints object that contains basic evaluation measures</span>
 <span class='no'>sspoints</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"basic"</span>, <span class='kw'>scores</span> <span class='kw'>=</span> <span class='no'>P10N10</span>$<span class='no'>scores</span>,
                     <span class='kw'>labels</span> <span class='kw'>=</span> <span class='no'>P10N10</span>$<span class='no'>labels</span>)
 <span class='co'>## Convert sspoints to a data frame</span>
 <span class='no'>sspoints.df</span> <span class='kw'>&lt;-</span> <span class='fu'>as.data.frame</span>(<span class='no'>sspoints</span>)
 
+<span class='co'>## Show data frame</span>
+<span class='fu'>head</span>(<span class='no'>sspoints.df</span>)</div><div class='output co'>#&gt;      x  y modname dsid  type
+#&gt; 1 0.00 NA      m1    1 score
+#&gt; 2 0.05 20      m1    1 score
+#&gt; 3 0.10 19      m1    1 score
+#&gt; 4 0.15 18      m1    1 score
+#&gt; 5 0.20 17      m1    1 score
+#&gt; 6 0.25 16      m1    1 score</div><div class='input'>
 
 <span class='co'>##################################################</span>
 <span class='co'>### Multiple models &amp; single test dataset</span>
@@ -232,12 +248,28 @@ of the <code><a href='evalmod.html'>evalmod</a></code> function.</dd>
 <span class='co'>## Convert mscurves to a data frame</span>
 <span class='no'>mscurves.df</span> <span class='kw'>&lt;-</span> <span class='fu'>as.data.frame</span>(<span class='no'>mscurves</span>)
 
+<span class='co'>## Show data frame</span>
+<span class='fu'>head</span>(<span class='no'>mscurves.df</span>)</div><div class='output co'>#&gt;       x    y modname dsid type
+#&gt; 1 0.000 0.00  random    1  ROC
+#&gt; 2 0.000 0.01  random    1  ROC
+#&gt; 3 0.000 0.02  random    1  ROC
+#&gt; 4 0.001 0.02  random    1  ROC
+#&gt; 5 0.002 0.02  random    1  ROC
+#&gt; 6 0.003 0.02  random    1  ROC</div><div class='input'>
 <span class='co'>## Generate an mspoints object that contains basic evaluation measures</span>
 <span class='no'>mspoints</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"basic"</span>)
 
 <span class='co'>## Convert mspoints to a data frame</span>
 <span class='no'>mspoints.df</span> <span class='kw'>&lt;-</span> <span class='fu'>as.data.frame</span>(<span class='no'>mspoints</span>)
 
+<span class='co'>## Show data frame</span>
+<span class='fu'>head</span>(<span class='no'>mspoints.df</span>)</div><div class='output co'>#&gt;       x        y modname dsid  type
+#&gt; 1 0.000       NA  random    1 score
+#&gt; 2 0.005 2.755418  random    1 score
+#&gt; 3 0.010 2.682557  random    1 score
+#&gt; 4 0.015 2.564408  random    1 score
+#&gt; 5 0.020 2.211769  random    1 score
+#&gt; 6 0.025 2.126850  random    1 score</div><div class='input'>
 
 <span class='co'>##################################################</span>
 <span class='co'>### Single model &amp; multiple test datasets</span>
@@ -255,13 +287,28 @@ of the <code><a href='evalmod.html'>evalmod</a></code> function.</dd>
 <span class='co'>## Convert smcurves to a data frame</span>
 <span class='no'>smcurves.df</span> <span class='kw'>&lt;-</span> <span class='fu'>as.data.frame</span>(<span class='no'>smcurves</span>)
 
-
+<span class='co'>## Show data frame</span>
+<span class='fu'>head</span>(<span class='no'>smcurves.df</span>)</div><div class='output co'>#&gt;       x     y      ymin      ymax modname type
+#&gt; 1 0.000 0.000 0.0000000 0.0000000 good_er  ROC
+#&gt; 2 0.000 0.334 0.2528618 0.4151382 good_er  ROC
+#&gt; 3 0.001 0.334 0.2528618 0.4151382 good_er  ROC
+#&gt; 4 0.002 0.334 0.2528618 0.4151382 good_er  ROC
+#&gt; 5 0.003 0.334 0.2528618 0.4151382 good_er  ROC
+#&gt; 6 0.004 0.334 0.2528618 0.4151382 good_er  ROC</div><div class='input'>
 <span class='co'>## Generate an smpoints object that contains basic evaluation measures</span>
 <span class='no'>smpoints</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"basic"</span>)
 
 <span class='co'>## Convert smpoints to a data frame</span>
 <span class='no'>smpoints.df</span> <span class='kw'>&lt;-</span> <span class='fu'>as.data.frame</span>(<span class='no'>smpoints</span>)
 
+<span class='co'>## Show data frame</span>
+<span class='fu'>head</span>(<span class='no'>smpoints.df</span>)</div><div class='output co'>#&gt;       x         y      ymin      ymax modname  type
+#&gt; 1 0.000        NA        NA        NA good_er score
+#&gt; 2 0.005 0.9817259 0.9729559 0.9904959 good_er score
+#&gt; 3 0.010 0.9724147 0.9626556 0.9821739 good_er score
+#&gt; 4 0.015 0.9622373 0.9497315 0.9747430 good_er score
+#&gt; 5 0.020 0.9462811 0.9362615 0.9563008 good_er score
+#&gt; 6 0.025 0.9377157 0.9256513 0.9497802 good_er score</div><div class='input'>
 
 <span class='co'>##################################################</span>
 <span class='co'>### Multiple models &amp; multiple test datasets</span>
@@ -279,11 +326,29 @@ of the <code><a href='evalmod.html'>evalmod</a></code> function.</dd>
 <span class='co'>## Convert mmcurves to a data frame</span>
 <span class='no'>mmcurves.df</span> <span class='kw'>&lt;-</span> <span class='fu'>as.data.frame</span>(<span class='no'>mmcurves</span>)
 
+<span class='co'>## Show data frame</span>
+<span class='fu'>head</span>(<span class='no'>mmcurves.df</span>)</div><div class='output co'>#&gt;       x    y        ymin       ymax modname type
+#&gt; 1 0.000 0.00 0.000000000 0.00000000  random  ROC
+#&gt; 2 0.000 0.01 0.002843223 0.01715678  random  ROC
+#&gt; 3 0.001 0.01 0.002843223 0.01715678  random  ROC
+#&gt; 4 0.002 0.01 0.002843223 0.01715678  random  ROC
+#&gt; 5 0.003 0.01 0.002843223 0.01715678  random  ROC
+#&gt; 6 0.004 0.01 0.002843223 0.01715678  random  ROC</div><div class='input'>
 <span class='co'>## Generate an mmpoints object that contains basic evaluation measures</span>
 <span class='no'>mmpoints</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"basic"</span>)
 
 <span class='co'>## Convert mmpoints to a data frame</span>
-<span class='no'>mmpoints.df</span> <span class='kw'>&lt;-</span> <span class='fu'>as.data.frame</span>(<span class='no'>mmpoints</span>)</div></pre>
+<span class='no'>mmpoints.df</span> <span class='kw'>&lt;-</span> <span class='fu'>as.data.frame</span>(<span class='no'>mmpoints</span>)
+
+<span class='co'>## Show data frame</span>
+<span class='fu'>head</span>(<span class='no'>mmpoints.df</span>)</div><div class='output co'>#&gt;       x        y     ymin     ymax modname  type
+#&gt; 1 0.000       NA       NA       NA  random score
+#&gt; 2 0.005 2.739291 2.508815 2.969767  random score
+#&gt; 3 0.010 2.345126 2.261530 2.428722  random score
+#&gt; 4 0.015 2.180498 2.060028 2.300968  random score
+#&gt; 5 0.020 2.038010 1.933964 2.142056  random score
+#&gt; 6 0.025 1.962737 1.864846 2.060628  random score</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

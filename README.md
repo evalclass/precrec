@@ -48,7 +48,7 @@ In addition to precision-recall and ROC curves, `precrec` offers basic evaluatio
 
 -   Handling multiple models and multiple test sets
 -   Handling tied scores and missing scores
--   Pre- and post-process functions for simple data preparation and curve analysis
+-   Pre- and post-process functions of simple data preparation and curve analysis
 
 Installation
 ------------

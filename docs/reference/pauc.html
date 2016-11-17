@@ -166,13 +166,13 @@
 
 <span class='co'>## Shows pAUCs</span>
 <span class='fu'>pauc</span>(<span class='no'>mscurves.part</span>)</div><div class='output co'>#&gt;    modnames dsids curvetypes     paucs    spaucs
-#&gt; 1    random     1        ROC 0.1228000 0.3274667
-#&gt; 2    random     1        PRC 0.1947165 0.5192441
-#&gt; 3   poor_er     1        ROC 0.3065000 0.8173333
-#&gt; 4   poor_er     1        PRC 0.3750000 1.0000000
-#&gt; 5   good_er     1        ROC 0.3210000 0.8560000
-#&gt; 6   good_er     1        PRC 0.3679145 0.9811054
-#&gt; 7     excel     1        ROC 0.3716000 0.9909333
+#&gt; 1    random     1        ROC 0.1528000 0.4074667
+#&gt; 2    random     1        PRC 0.2248972 0.5997258
+#&gt; 3   poor_er     1        ROC 0.2490000 0.6640000
+#&gt; 4   poor_er     1        PRC 0.3215164 0.8573772
+#&gt; 5   good_er     1        ROC 0.3312000 0.8832000
+#&gt; 6   good_er     1        PRC 0.3742979 0.9981276
+#&gt; 7     excel     1        ROC 0.3722000 0.9925333
 #&gt; 8     excel     1        PRC 0.3750000 1.0000000
 #&gt; 9      perf     1        ROC 0.3750000 1.0000000
 #&gt; 10     perf     1        PRC 0.3750000 1.0000000</div><div class='input'>
@@ -181,7 +181,7 @@
 <span class='co'>###</span>
 
 <span class='co'>## Create sample datasets with 100 positives and 100 negatives</span>
-<span class='no'>samps</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_sim_samples.html'>create_sim_samples</a></span>(<span class='fl'>10</span>, <span class='fl'>100</span>, <span class='fl'>100</span>, <span class='st'>"good_er"</span>)
+<span class='no'>samps</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_sim_samples.html'>create_sim_samples</a></span>(<span class='fl'>4</span>, <span class='fl'>100</span>, <span class='fl'>100</span>, <span class='st'>"good_er"</span>)
 <span class='no'>mdat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mmdata.html'>mmdata</a></span>(<span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"scores"</span>]], <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"labels"</span>]],
                <span class='kw'>modnames</span> <span class='kw'>=</span> <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"modnames"</span>]],
                <span class='kw'>dsids</span> <span class='kw'>=</span> <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"dsids"</span>]])
@@ -193,33 +193,21 @@
 <span class='no'>smcurves.part</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='part.html'>part</a></span>(<span class='no'>smcurves</span>, <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.25</span>, <span class='fl'>0.75</span>))
 
 <span class='co'>## Shows pAUCs</span>
-<span class='fu'>pauc</span>(<span class='no'>smcurves.part</span>)</div><div class='output co'>#&gt;    modnames dsids curvetypes     paucs    spaucs
-#&gt; 1   good_er     1        ROC 0.4142000 0.8284000
-#&gt; 2   good_er     1        PRC 0.4514434 0.9028868
-#&gt; 3   good_er     2        ROC 0.4139000 0.8278000
-#&gt; 4   good_er     2        PRC 0.4295945 0.8591890
-#&gt; 5   good_er     3        ROC 0.4314000 0.8628000
-#&gt; 6   good_er     3        PRC 0.4555022 0.9110043
-#&gt; 7   good_er     4        ROC 0.4147000 0.8294000
-#&gt; 8   good_er     4        PRC 0.4468420 0.8936839
-#&gt; 9   good_er     5        ROC 0.4026000 0.8052000
-#&gt; 10  good_er     5        PRC 0.4066804 0.8133608
-#&gt; 11  good_er     6        ROC 0.4313000 0.8626000
-#&gt; 12  good_er     6        PRC 0.4463786 0.8927572
-#&gt; 13  good_er     7        ROC 0.4237000 0.8474000
-#&gt; 14  good_er     7        PRC 0.4364526 0.8729052
-#&gt; 15  good_er     8        ROC 0.3912000 0.7824000
-#&gt; 16  good_er     8        PRC 0.4175689 0.8351377
-#&gt; 17  good_er     9        ROC 0.4251000 0.8502000
-#&gt; 18  good_er     9        PRC 0.4413570 0.8827141
-#&gt; 19  good_er    10        ROC 0.3869000 0.7738000
-#&gt; 20  good_er    10        PRC 0.4249428 0.8498855</div><div class='input'>
+<span class='fu'>pauc</span>(<span class='no'>smcurves.part</span>)</div><div class='output co'>#&gt;   modnames dsids curvetypes     paucs    spaucs
+#&gt; 1  good_er     1        ROC 0.3858000 0.7716000
+#&gt; 2  good_er     1        PRC 0.3987139 0.7974278
+#&gt; 3  good_er     2        ROC 0.4270000 0.8540000
+#&gt; 4  good_er     2        PRC 0.4573763 0.9147525
+#&gt; 5  good_er     3        ROC 0.4186000 0.8372000
+#&gt; 6  good_er     3        PRC 0.4718847 0.9437694
+#&gt; 7  good_er     4        ROC 0.4307000 0.8614000
+#&gt; 8  good_er     4        PRC 0.4672641 0.9345281</div><div class='input'>
 <span class='co'>##################################################</span>
 <span class='co'>### Multiple models &amp; multiple test datasets</span>
 <span class='co'>###</span>
 
 <span class='co'>## Create sample datasets with 100 positives and 100 negatives</span>
-<span class='no'>samps</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_sim_samples.html'>create_sim_samples</a></span>(<span class='fl'>10</span>, <span class='fl'>100</span>, <span class='fl'>100</span>, <span class='st'>"all"</span>)
+<span class='no'>samps</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_sim_samples.html'>create_sim_samples</a></span>(<span class='fl'>4</span>, <span class='fl'>100</span>, <span class='fl'>100</span>, <span class='st'>"all"</span>)
 <span class='no'>mdat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mmdata.html'>mmdata</a></span>(<span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"scores"</span>]], <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"labels"</span>]],
                <span class='kw'>modnames</span> <span class='kw'>=</span> <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"modnames"</span>]],
                <span class='kw'>dsids</span> <span class='kw'>=</span> <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"dsids"</span>]])
@@ -231,107 +219,47 @@
 <span class='no'>mmcurves.part</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='part.html'>part</a></span>(<span class='no'>mmcurves</span>, <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>0.25</span>))
 
 <span class='co'>## Shows pAUCs</span>
-<span class='fu'>pauc</span>(<span class='no'>mmcurves.part</span>)</div><div class='output co'>#&gt;     modnames dsids curvetypes      paucs    spaucs
-#&gt; 1     random     1        ROC 0.01540000 0.0616000
-#&gt; 2     random     1        PRC 0.08752726 0.3501091
-#&gt; 3    poor_er     1        ROC 0.08540000 0.3416000
-#&gt; 4    poor_er     1        PRC 0.17666449 0.7066579
-#&gt; 5    good_er     1        ROC 0.14430000 0.5772000
-#&gt; 6    good_er     1        PRC 0.25000000 1.0000000
-#&gt; 7      excel     1        ROC 0.23080000 0.9232000
-#&gt; 8      excel     1        PRC 0.25000000 1.0000000
-#&gt; 9       perf     1        ROC 0.25000000 1.0000000
-#&gt; 10      perf     1        PRC 0.25000000 1.0000000
-#&gt; 11    random     2        ROC 0.02520000 0.1008000
-#&gt; 12    random     2        PRC 0.11451106 0.4580443
-#&gt; 13   poor_er     2        ROC 0.07510000 0.3004000
-#&gt; 14   poor_er     2        PRC 0.17323749 0.6929499
-#&gt; 15   good_er     2        ROC 0.13050000 0.5220000
-#&gt; 16   good_er     2        PRC 0.25000000 1.0000000
-#&gt; 17     excel     2        ROC 0.23300000 0.9320000
-#&gt; 18     excel     2        PRC 0.25000000 1.0000000
-#&gt; 19      perf     2        ROC 0.25000000 1.0000000
-#&gt; 20      perf     2        PRC 0.25000000 1.0000000
-#&gt; 21    random     3        ROC 0.03150000 0.1260000
-#&gt; 22    random     3        PRC 0.12316272 0.4926509
-#&gt; 23   poor_er     3        ROC 0.07220000 0.2888000
-#&gt; 24   poor_er     3        PRC 0.17810947 0.7124379
-#&gt; 25   good_er     3        ROC 0.14820000 0.5928000
-#&gt; 26   good_er     3        PRC 0.25000000 1.0000000
-#&gt; 27     excel     3        ROC 0.22600000 0.9040000
-#&gt; 28     excel     3        PRC 0.25000000 1.0000000
-#&gt; 29      perf     3        ROC 0.25000000 1.0000000
-#&gt; 30      perf     3        PRC 0.25000000 1.0000000
-#&gt; 31    random     4        ROC 0.04830000 0.1932000
-#&gt; 32    random     4        PRC 0.17432026 0.6972811
-#&gt; 33   poor_er     4        ROC 0.09680000 0.3872000
-#&gt; 34   poor_er     4        PRC 0.22237158 0.8894863
-#&gt; 35   good_er     4        ROC 0.13620000 0.5448000
-#&gt; 36   good_er     4        PRC 0.25000000 1.0000000
-#&gt; 37     excel     4        ROC 0.23820000 0.9528000
-#&gt; 38     excel     4        PRC 0.25000000 1.0000000
-#&gt; 39      perf     4        ROC 0.25000000 1.0000000
-#&gt; 40      perf     4        PRC 0.25000000 1.0000000
-#&gt; 41    random     5        ROC 0.01420000 0.0568000
-#&gt; 42    random     5        PRC 0.09084579 0.3633831
-#&gt; 43   poor_er     5        ROC 0.09560000 0.3824000
-#&gt; 44   poor_er     5        PRC 0.16691615 0.6676646
-#&gt; 45   good_er     5        ROC 0.12970000 0.5188000
-#&gt; 46   good_er     5        PRC 0.25000000 1.0000000
-#&gt; 47     excel     5        ROC 0.23430000 0.9372000
-#&gt; 48     excel     5        PRC 0.25000000 1.0000000
-#&gt; 49      perf     5        ROC 0.25000000 1.0000000
-#&gt; 50      perf     5        PRC 0.25000000 1.0000000
-#&gt; 51    random     6        ROC 0.03520000 0.1408000
-#&gt; 52    random     6        PRC 0.14035993 0.5614397
-#&gt; 53   poor_er     6        ROC 0.10130000 0.4052000
-#&gt; 54   poor_er     6        PRC 0.19541334 0.7816534
-#&gt; 55   good_er     6        ROC 0.14220000 0.5688000
-#&gt; 56   good_er     6        PRC 0.25000000 1.0000000
-#&gt; 57     excel     6        ROC 0.22840000 0.9136000
-#&gt; 58     excel     6        PRC 0.25000000 1.0000000
-#&gt; 59      perf     6        ROC 0.25000000 1.0000000
-#&gt; 60      perf     6        PRC 0.25000000 1.0000000
-#&gt; 61    random     7        ROC 0.04650000 0.1860000
-#&gt; 62    random     7        PRC 0.16169302 0.6467721
-#&gt; 63   poor_er     7        ROC 0.10290000 0.4116000
-#&gt; 64   poor_er     7        PRC 0.22964772 0.9185909
-#&gt; 65   good_er     7        ROC 0.15000000 0.6000000
-#&gt; 66   good_er     7        PRC 0.24044481 0.9617793
-#&gt; 67     excel     7        ROC 0.23510000 0.9404000
-#&gt; 68     excel     7        PRC 0.25000000 1.0000000
-#&gt; 69      perf     7        ROC 0.25000000 1.0000000
-#&gt; 70      perf     7        PRC 0.25000000 1.0000000
-#&gt; 71    random     8        ROC 0.05990000 0.2396000
-#&gt; 72    random     8        PRC 0.20643045 0.8257218
-#&gt; 73   poor_er     8        ROC 0.10950000 0.4380000
-#&gt; 74   poor_er     8        PRC 0.19253464 0.7701386
-#&gt; 75   good_er     8        ROC 0.11010000 0.4404000
-#&gt; 76   good_er     8        PRC 0.24737635 0.9895054
-#&gt; 77     excel     8        ROC 0.23120000 0.9248000
-#&gt; 78     excel     8        PRC 0.25000000 1.0000000
-#&gt; 79      perf     8        ROC 0.25000000 1.0000000
-#&gt; 80      perf     8        PRC 0.25000000 1.0000000
-#&gt; 81    random     9        ROC 0.03010000 0.1204000
-#&gt; 82    random     9        PRC 0.12509479 0.5003792
-#&gt; 83   poor_er     9        ROC 0.07860000 0.3144000
-#&gt; 84   poor_er     9        PRC 0.19975979 0.7990392
-#&gt; 85   good_er     9        ROC 0.13620000 0.5448000
-#&gt; 86   good_er     9        PRC 0.25000000 1.0000000
-#&gt; 87     excel     9        ROC 0.22100000 0.8840000
-#&gt; 88     excel     9        PRC 0.25000000 1.0000000
-#&gt; 89      perf     9        ROC 0.25000000 1.0000000
-#&gt; 90      perf     9        PRC 0.25000000 1.0000000
-#&gt; 91    random    10        ROC 0.02210000 0.0884000
-#&gt; 92    random    10        PRC 0.09916342 0.3966537
-#&gt; 93   poor_er    10        ROC 0.10230000 0.4092000
-#&gt; 94   poor_er    10        PRC 0.21467488 0.8586995
-#&gt; 95   good_er    10        ROC 0.15140000 0.6056000
-#&gt; 96   good_er    10        PRC 0.25000000 1.0000000
-#&gt; 97     excel    10        ROC 0.23300000 0.9320000
-#&gt; 98     excel    10        PRC 0.25000000 1.0000000
-#&gt; 99      perf    10        ROC 0.25000000 1.0000000
-#&gt; 100     perf    10        PRC 0.25000000 1.0000000</div><div class='input'>
+<span class='fu'>pauc</span>(<span class='no'>mmcurves.part</span>)</div><div class='output co'>#&gt;    modnames dsids curvetypes     paucs    spaucs
+#&gt; 1    random     1        ROC 0.0332000 0.1328000
+#&gt; 2    random     1        PRC 0.1343677 0.5374709
+#&gt; 3   poor_er     1        ROC 0.1179000 0.4716000
+#&gt; 4   poor_er     1        PRC 0.2178800 0.8715200
+#&gt; 5   good_er     1        ROC 0.1285000 0.5140000
+#&gt; 6   good_er     1        PRC 0.2496078 0.9984312
+#&gt; 7     excel     1        ROC 0.2271000 0.9084000
+#&gt; 8     excel     1        PRC 0.2500000 1.0000000
+#&gt; 9      perf     1        ROC 0.2500000 1.0000000
+#&gt; 10     perf     1        PRC 0.2500000 1.0000000
+#&gt; 11   random     2        ROC 0.0340000 0.1360000
+#&gt; 12   random     2        PRC 0.1190802 0.4763208
+#&gt; 13  poor_er     2        ROC 0.1228000 0.4912000
+#&gt; 14  poor_er     2        PRC 0.2380826 0.9523303
+#&gt; 15  good_er     2        ROC 0.1487000 0.5948000
+#&gt; 16  good_er     2        PRC 0.2500000 1.0000000
+#&gt; 17    excel     2        ROC 0.2412000 0.9648000
+#&gt; 18    excel     2        PRC 0.2500000 1.0000000
+#&gt; 19     perf     2        ROC 0.2500000 1.0000000
+#&gt; 20     perf     2        PRC 0.2500000 1.0000000
+#&gt; 21   random     3        ROC 0.0271000 0.1084000
+#&gt; 22   random     3        PRC 0.1234462 0.4937846
+#&gt; 23  poor_er     3        ROC 0.0996000 0.3984000
+#&gt; 24  poor_er     3        PRC 0.1935903 0.7743612
+#&gt; 25  good_er     3        ROC 0.1355000 0.5420000
+#&gt; 26  good_er     3        PRC 0.2500000 1.0000000
+#&gt; 27    excel     3        ROC 0.2399000 0.9596000
+#&gt; 28    excel     3        PRC 0.2500000 1.0000000
+#&gt; 29     perf     3        ROC 0.2500000 1.0000000
+#&gt; 30     perf     3        PRC 0.2500000 1.0000000
+#&gt; 31   random     4        ROC 0.0336000 0.1344000
+#&gt; 32   random     4        PRC 0.1300030 0.5200120
+#&gt; 33  poor_er     4        ROC 0.0938000 0.3752000
+#&gt; 34  poor_er     4        PRC 0.1697297 0.6789188
+#&gt; 35  good_er     4        ROC 0.1292000 0.5168000
+#&gt; 36  good_er     4        PRC 0.2404448 0.9617793
+#&gt; 37    excel     4        ROC 0.2381000 0.9524000
+#&gt; 38    excel     4        PRC 0.2500000 1.0000000
+#&gt; 39     perf     4        ROC 0.2500000 1.0000000
+#&gt; 40     perf     4        PRC 0.2500000 1.0000000</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

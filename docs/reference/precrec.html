@@ -78,8 +78,8 @@
     </div>
 
     
-    <p>The precrec package provides three categories of important functions:
-performance measure calculations, <code>S3</code> generics, and data preparation.</p>
+    <p>The precrec package contains several functions and <code>S3</code> generics to
+provide a robust platform for performance evaluation of binary classifiers.</p>
     
 
         
@@ -103,16 +103,6 @@ performance measure calculations, <code>S3</code> generics, and data preparation
     <code><a href='join_labels.html'>join_labels</a></code>        </td>
 </tr><tr><td> Join observed labels of multiple test datasets into a list </td>
 </tr></table></p>
-    
-    <h2 class="hasAnchor" id="performance-measure-calculations"><a class="anchor" href="#performance-measure-calculations"></a>Performance measure calculations</h2>
-
-    <p></p>
-    <p>The <code><a href='evalmod.html'>evalmod</a></code> function calculates ROC and Precision-Recall
-  curves and returns an <code>S3</code> object. The generated <code>S3</code> object can
-  be used with several different <code>S3</code> generics, such as <code>print</code> and
-  <code><a href='plot.html'>plot</a></code>. The <code><a href='evalmod.html'>evalmod</a></code> function can also
-  calculate basic evaluation measures - error rate, accuracy, specificity,
-  sensitivity, precision, Matthews correlation coefficient, and F-Score.</p>
     
     <h2 class="hasAnchor" id="s-generics"><a class="anchor" href="#s-generics"></a>S3 generics</h2>
 
@@ -153,6 +143,16 @@ performance measure calculations, <code>S3</code> generics, and data preparation
 <td> Calculate partial curves and partial AUC scores </td>
 </tr></table></p>
     
+    <h2 class="hasAnchor" id="performance-measure-calculations"><a class="anchor" href="#performance-measure-calculations"></a>Performance measure calculations</h2>
+
+    <p></p>
+    <p>The <code><a href='evalmod.html'>evalmod</a></code> function calculates ROC and Precision-Recall
+  curves and returns an <code>S3</code> object. The generated <code>S3</code> object can
+  be used with several different <code>S3</code> generics, such as <code>print</code> and
+  <code><a href='plot.html'>plot</a></code>. The <code><a href='evalmod.html'>evalmod</a></code> function can also
+  calculate basic evaluation measures - error rate, accuracy, specificity,
+  sensitivity, precision, Matthews correlation coefficient, and F-Score.</p>
+    
     <h2 class="hasAnchor" id="data-preparation"><a class="anchor" href="#data-preparation"></a>Data preparation</h2>
 
     <p></p>
@@ -187,9 +187,9 @@ and partial AUC scores, respectively.</p>
       
       <li><a href="#functions">Functions</a></li>
 
-      <li><a href="#performance-measure-calculations">Performance measure calculations</a></li>
-
       <li><a href="#s-generics">S3 generics</a></li>
+
+      <li><a href="#performance-measure-calculations">Performance measure calculations</a></li>
 
       <li><a href="#data-preparation">Data preparation</a></li>
 

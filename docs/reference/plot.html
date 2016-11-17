@@ -276,9 +276,9 @@ See the <strong>Value</strong> section of <code><a href='evalmod.html'>evalmod</
                     <span class='kw'>labels</span> <span class='kw'>=</span> <span class='no'>P10N10</span>$<span class='no'>labels</span>)
 
 <span class='co'>## Plot normalized ranks vs. basic evaluation measures</span>
-<span class='fu'>plot</span>(<span class='no'>sspoints</span>)</div><div class='output co'>#&gt; <span class='error'>Error in plot.new(): figure margins too large</span></div><div class='output co'>#&gt; <span class='error'>Error in .External.graphics(C_layout, num.rows, num.cols, mat, as.integer(num.figures),     col.widths = widths, row.heights = heights, cm.widths, cm.heights,     respect = as.integer(respect), respect.mat): invalid graphics state</span></div><div class='input'>
+<span class='fu'>plot</span>(<span class='no'>sspoints</span>)</div><img src='plot-8.png' alt='' width='540' height='400' /><div class='input'>
 <span class='co'>## Plot normalized ranks vs. precision</span>
-<span class='fu'>plot</span>(<span class='no'>sspoints</span>, <span class='kw'>curvetype</span> <span class='kw'>=</span> <span class='st'>"precision"</span>)</div><img src='plot-11.png' alt='' width='540' height='400' /><div class='input'>
+<span class='fu'>plot</span>(<span class='no'>sspoints</span>, <span class='kw'>curvetype</span> <span class='kw'>=</span> <span class='st'>"precision"</span>)</div><img src='plot-10.png' alt='' width='540' height='400' /><div class='input'>
 
 <span class='co'>##################################################</span>
 <span class='co'>### Multiple models &amp; single test dataset</span>
@@ -293,16 +293,16 @@ See the <strong>Value</strong> section of <code><a href='evalmod.html'>evalmod</
 <span class='no'>mscurves</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>)
 
 <span class='co'>## Plot both ROC and Precision-Recall curves</span>
-<span class='fu'>plot</span>(<span class='no'>mscurves</span>)</div><img src='plot-13.png' alt='' width='540' height='400' /><div class='input'>
+<span class='fu'>plot</span>(<span class='no'>mscurves</span>)</div><img src='plot-12.png' alt='' width='540' height='400' /><div class='input'>
 <span class='co'>## Hide the legend</span>
-<span class='fu'>plot</span>(<span class='no'>mscurves</span>, <span class='kw'>show_legend</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><img src='plot-15.png' alt='' width='540' height='400' /><div class='input'>
+<span class='fu'>plot</span>(<span class='no'>mscurves</span>, <span class='kw'>show_legend</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><img src='plot-14.png' alt='' width='540' height='400' /><div class='input'>
 <span class='co'>## Generate an mspoints object that contains basic evaluation measures</span>
 <span class='no'>mspoints</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"basic"</span>)
 
 <span class='co'>## Plot normalized ranks vs. basic evaluation measures</span>
-<span class='fu'>plot</span>(<span class='no'>mspoints</span>)</div><div class='output co'>#&gt; <span class='error'>Error in plot.new(): figure margins too large</span></div><div class='output co'>#&gt; <span class='error'>Error in .External.graphics(C_layout, num.rows, num.cols, mat, as.integer(num.figures),     col.widths = widths, row.heights = heights, cm.widths, cm.heights,     respect = as.integer(respect), respect.mat): invalid graphics state</span></div><div class='input'>
+<span class='fu'>plot</span>(<span class='no'>mspoints</span>)</div><img src='plot-16.png' alt='' width='540' height='400' /><div class='input'>
 <span class='co'>## Hide the legend</span>
-<span class='fu'>plot</span>(<span class='no'>mspoints</span>, <span class='kw'>show_legend</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in .External.graphics(C_layout, num.rows, num.cols, mat, as.integer(num.figures),     col.widths = widths, row.heights = heights, cm.widths, cm.heights,     respect = as.integer(respect), respect.mat): invalid graphics state</span></div><div class='input'>
+<span class='fu'>plot</span>(<span class='no'>mspoints</span>, <span class='kw'>show_legend</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><img src='plot-18.png' alt='' width='540' height='400' /><div class='input'>
 
 <span class='co'>##################################################</span>
 <span class='co'>### Single model &amp; multiple test datasets</span>
@@ -318,16 +318,16 @@ See the <strong>Value</strong> section of <code><a href='evalmod.html'>evalmod</
 <span class='no'>smcurves</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='co'>## Plot average ROC and Precision-Recall curves</span>
-<span class='fu'>plot</span>(<span class='no'>smcurves</span>)</div><div class='output co'>#&gt; <span class='error'>Error in .External.graphics(C_layout, num.rows, num.cols, mat, as.integer(num.figures),     col.widths = widths, row.heights = heights, cm.widths, cm.heights,     respect = as.integer(respect), respect.mat): invalid graphics state</span></div><div class='input'>
+<span class='fu'>plot</span>(<span class='no'>smcurves</span>)</div><img src='plot-20.png' alt='' width='540' height='400' /><div class='input'>
 <span class='co'>## Hide confidence bounds</span>
-<span class='fu'>plot</span>(<span class='no'>smcurves</span>, <span class='kw'>show_cb</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in .External.graphics(C_layout, num.rows, num.cols, mat, as.integer(num.figures),     col.widths = widths, row.heights = heights, cm.widths, cm.heights,     respect = as.integer(respect), respect.mat): invalid graphics state</span></div><div class='input'>
+<span class='fu'>plot</span>(<span class='no'>smcurves</span>, <span class='kw'>show_cb</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><img src='plot-22.png' alt='' width='540' height='400' /><div class='input'>
 <span class='co'>## Plot raw ROC and Precision-Recall curves</span>
-<span class='fu'>plot</span>(<span class='no'>smcurves</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in .External.graphics(C_layout, num.rows, num.cols, mat, as.integer(num.figures),     col.widths = widths, row.heights = heights, cm.widths, cm.heights,     respect = as.integer(respect), respect.mat): invalid graphics state</span></div><div class='input'>
+<span class='fu'>plot</span>(<span class='no'>smcurves</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><img src='plot-24.png' alt='' width='540' height='400' /><div class='input'>
 <span class='co'>## Generate an smpoints object that contains basic evaluation measures</span>
 <span class='no'>smpoints</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"basic"</span>)
 
 <span class='co'>## Plot normalized ranks vs. average basic evaluation measures</span>
-<span class='fu'>plot</span>(<span class='no'>smpoints</span>)</div><div class='output co'>#&gt; <span class='error'>Error in .External.graphics(C_layout, num.rows, num.cols, mat, as.integer(num.figures),     col.widths = widths, row.heights = heights, cm.widths, cm.heights,     respect = as.integer(respect), respect.mat): invalid graphics state</span></div><div class='input'>
+<span class='fu'>plot</span>(<span class='no'>smpoints</span>)</div><img src='plot-26.png' alt='' width='540' height='400' /><div class='input'>
 
 <span class='co'>##################################################</span>
 <span class='co'>### Multiple models &amp; multiple test datasets</span>
@@ -343,16 +343,16 @@ See the <strong>Value</strong> section of <code><a href='evalmod.html'>evalmod</
 <span class='no'>mmcurves</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='co'>## Plot average ROC and Precision-Recall curves</span>
-<span class='fu'>plot</span>(<span class='no'>mmcurves</span>)</div><div class='output co'>#&gt; <span class='error'>Error in .External.graphics(C_layout, num.rows, num.cols, mat, as.integer(num.figures),     col.widths = widths, row.heights = heights, cm.widths, cm.heights,     respect = as.integer(respect), respect.mat): invalid graphics state</span></div><div class='input'>
+<span class='fu'>plot</span>(<span class='no'>mmcurves</span>)</div><img src='plot-28.png' alt='' width='540' height='400' /><div class='input'>
 <span class='co'>## Show confidence bounds</span>
-<span class='fu'>plot</span>(<span class='no'>mmcurves</span>, <span class='kw'>show_cb</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in .External.graphics(C_layout, num.rows, num.cols, mat, as.integer(num.figures),     col.widths = widths, row.heights = heights, cm.widths, cm.heights,     respect = as.integer(respect), respect.mat): invalid graphics state</span></div><div class='input'>
+<span class='fu'>plot</span>(<span class='no'>mmcurves</span>, <span class='kw'>show_cb</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><img src='plot-30.png' alt='' width='540' height='400' /><div class='input'>
 <span class='co'>## Plot raw ROC and Precision-Recall curves</span>
-<span class='fu'>plot</span>(<span class='no'>mmcurves</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in .External.graphics(C_layout, num.rows, num.cols, mat, as.integer(num.figures),     col.widths = widths, row.heights = heights, cm.widths, cm.heights,     respect = as.integer(respect), respect.mat): invalid graphics state</span></div><div class='input'>
+<span class='fu'>plot</span>(<span class='no'>mmcurves</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><img src='plot-32.png' alt='' width='540' height='400' /><div class='input'>
 <span class='co'>## Generate an mmpoints object that contains basic evaluation measures</span>
 <span class='no'>mmpoints</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"basic"</span>)
 
 <span class='co'>## Plot normalized ranks vs. average basic evaluation measures</span>
-<span class='fu'>plot</span>(<span class='no'>mmpoints</span>)</div><div class='output co'>#&gt; <span class='error'>Error in .External.graphics(C_layout, num.rows, num.cols, mat, as.integer(num.figures),     col.widths = widths, row.heights = heights, cm.widths, cm.heights,     respect = as.integer(respect), respect.mat): invalid graphics state</span></div><div class='input'>
+<span class='fu'>plot</span>(<span class='no'>mmpoints</span>)</div><img src='plot-34.png' alt='' width='540' height='400' /><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

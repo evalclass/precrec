@@ -129,17 +129,71 @@ the following performance levels.
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='co'>## Create a set of samples with 10 positives and 10 negatives</span>
-<span class='co'>## for the random performance level</span>
+<span class='co'>##################################################</span>
+<span class='co'>### Create a set of samples with 10 positives and 10 negatives</span>
+<span class='co'>### for the random performance level</span>
+<span class='co'>###</span>
 <span class='no'>samps1</span> <span class='kw'>&lt;-</span> <span class='fu'>create_sim_samples</span>(<span class='fl'>1</span>, <span class='fl'>10</span>, <span class='fl'>10</span>, <span class='st'>"random"</span>)
 
-<span class='co'>## Create two sets of samples with 10 positives and 20 negatives</span>
-<span class='co'>## for the random and the poor early retrieval performance levels</span>
+<span class='co'>## Show the list structure</span>
+<span class='fu'>str</span>(<span class='no'>samps1</span>)</div><div class='output co'>#&gt; List of 4
+#&gt;  $ scores  :List of 1
+#&gt;   ..$ :List of 1
+#&gt;   .. ..$ : num [1:20] -0.5361 1.0082 -1.3957 0.0937 1.8347 ...
+#&gt;  $ labels  : num [1:20] 1 1 1 1 1 1 1 1 1 1 ...
+#&gt;  $ modnames: chr &quot;random&quot;
+#&gt;  $ dsids   : int 1</div><div class='input'>
+
+<span class='co'>##################################################</span>
+<span class='co'>### Create two sets of samples with 10 positives and 20 negatives</span>
+<span class='co'>### for the random and the poor early retrieval performance levels</span>
+<span class='co'>###</span>
 <span class='no'>samps2</span> <span class='kw'>&lt;-</span> <span class='fu'>create_sim_samples</span>(<span class='fl'>2</span>, <span class='fl'>10</span>, <span class='fl'>20</span>, <span class='fu'>c</span>(<span class='st'>"random"</span>, <span class='st'>"poor_er"</span>))
 
-<span class='co'>## Create 3 sets of samples with 5 positives and 5 negatives</span>
-<span class='co'>## for all 5 levels</span>
-<span class='no'>samps3</span> <span class='kw'>&lt;-</span> <span class='fu'>create_sim_samples</span>(<span class='fl'>3</span>, <span class='fl'>5</span>, <span class='fl'>5</span>, <span class='st'>"all"</span>)</div></pre>
+<span class='co'>## Show the list structure</span>
+<span class='fu'>str</span>(<span class='no'>samps2</span>)</div><div class='output co'>#&gt; List of 4
+#&gt;  $ scores  :List of 2
+#&gt;   ..$ :List of 2
+#&gt;   .. ..$ : num [1:30] -1.254 -0.667 -1.06 -0.736 -0.531 ...
+#&gt;   .. ..$ : num [1:30] 0.928 0.58 0.619 0.983 0.986 ...
+#&gt;   ..$ :List of 2
+#&gt;   .. ..$ : num [1:30] 1.267 0.784 0.136 0.717 1.261 ...
+#&gt;   .. ..$ : num [1:30] 0.995 0.936 0.679 0.844 0.647 ...
+#&gt;  $ labels  : num [1:30] 1 1 1 1 1 1 1 1 1 1 ...
+#&gt;  $ modnames: chr [1:4] &quot;random&quot; &quot;poor_er&quot; &quot;random&quot; &quot;poor_er&quot;
+#&gt;  $ dsids   : int [1:4] 1 1 2 2</div><div class='input'>
+
+<span class='co'>##################################################</span>
+<span class='co'>### Create 3 sets of samples with 5 positives and 5 negatives</span>
+<span class='co'>### for all 5 levels</span>
+<span class='co'>###</span>
+<span class='no'>samps3</span> <span class='kw'>&lt;-</span> <span class='fu'>create_sim_samples</span>(<span class='fl'>3</span>, <span class='fl'>5</span>, <span class='fl'>5</span>, <span class='st'>"all"</span>)
+
+<span class='co'>## Show the list structure</span>
+<span class='fu'>str</span>(<span class='no'>samps3</span>)</div><div class='output co'>#&gt; List of 4
+#&gt;  $ scores  :List of 3
+#&gt;   ..$ :List of 5
+#&gt;   .. ..$ : num [1:10] -0.393 1.128 -0.427 0.945 -1.528 ...
+#&gt;   .. ..$ : num [1:10] 0.715 0.739 0.869 0.945 0.695 ...
+#&gt;   .. ..$ : num [1:10] 0.342 0.829 0.534 0.791 0.412 ...
+#&gt;   .. ..$ : num [1:10] 2.54 3.77 4.71 4.13 3.89 ...
+#&gt;   .. ..$ : num [1:10] 1 1 1 1 1 0 0 0 0 0
+#&gt;   ..$ :List of 5
+#&gt;   .. ..$ : num [1:10] -0.531 0.7293 -0.5521 0.0318 -1.8913 ...
+#&gt;   .. ..$ : num [1:10] 0.819 0.901 0.74 0.542 0.995 ...
+#&gt;   .. ..$ : num [1:10] 0.944 0.401 0.743 0.786 0.392 ...
+#&gt;   .. ..$ : num [1:10] 2.47 2.39 2.06 3.11 1.58 ...
+#&gt;   .. ..$ : num [1:10] 1 1 1 1 1 0 0 0 0 0
+#&gt;   ..$ :List of 5
+#&gt;   .. ..$ : num [1:10] -0.822 -0.448 -1.451 -1.073 1.501 ...
+#&gt;   .. ..$ : num [1:10] 0.972 0.837 0.795 0.828 0.796 ...
+#&gt;   .. ..$ : num [1:10] 0.1501 0.7404 0.857 0.6114 0.0613 ...
+#&gt;   .. ..$ : num [1:10] 3.69 2.77 2.2 4.18 4.04 ...
+#&gt;   .. ..$ : num [1:10] 1 1 1 1 1 0 0 0 0 0
+#&gt;  $ labels  : num [1:10] 1 1 1 1 1 0 0 0 0 0
+#&gt;  $ modnames: chr [1:15] &quot;random&quot; &quot;poor_er&quot; &quot;good_er&quot; &quot;excel&quot; ...
+#&gt;  $ dsids   : int [1:15] 1 1 1 1 1 2 2 2 2 2 ...</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
