@@ -55,12 +55,12 @@
   <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
-      
+
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/takayasaito/precrec">
     <span class="fa fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul>
@@ -68,7 +68,7 @@
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
       </header>
 
       <div class="row">
@@ -77,18 +77,18 @@
     <h1>Evaluate models and calculate performance evaluation measures</h1>
     </div>
 
-    
+
     <p>The <code>evalmod</code> function calculates ROC and Precision-Recall curves for
   specified prediction scores and binary labels. It also calculate several
   basic performance evaluation measures, such as accuracy, error rate, and
   precision, by specifying <code>mode</code> as &quot;basic&quot;.</p>
-    
+
 
     <pre><span class='fu'>evalmod</span>(<span class='no'>mdat</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"rocprc"</span>, <span class='kw'>scores</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>modnames</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>dsids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>posclass</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>na_worst</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>ties_method</span> <span class='kw'>=</span> <span class='st'>"equiv"</span>, <span class='kw'>calc_avg</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>cb_alpha</span> <span class='kw'>=</span> <span class='fl'>0.05</span>,
   <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>x_bins</span> <span class='kw'>=</span> <span class='fl'>1000</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
       <dt>mdat</dt>
@@ -193,7 +193,7 @@ the x-values of the supporting points will be <code>c(0, 0.5, 1)</code> and
 and <code>x_bins = 4</code>, respectively. All corresponding y-values of
 the supporting points are calculated.</dd>
     </dl>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>The <code>evalmod</code> function returns an <code>S3</code> object
@@ -206,55 +206,87 @@ the supporting points are calculated.</dd>
 <li>  The <code>evalmod</code> function returns one of the following <code>S3</code>
   objects when <code>mode</code> is &quot;prcroc&quot;.
   The objects contain ROC and Precision-Recall curves.</p>
-    <p><table><tr><td>
-    <strong><code>S3</code> object</strong>
-    </td>
-<td> <strong># of models</strong>
-    </td>
-</tr><tr><td> <strong># of test datasets</strong> </td>
-<td></p>
-    <p>sscurves </td>
-</tr><tr><td> single   </td>
-<td> single   </td>
-</tr><tr><td>
-    mscurves </td>
-<td> multiple </td>
-</tr><tr><td> single   </td>
-<td>
-    smcurves </td>
-</tr><tr><td> single   </td>
-<td> multiple </td>
-</tr></table></p>
+    <p>
+<table width="100%">
+   <tr>
+      <td>
+         <strong>S3 object</strong>
+      </td>
+      <td>
+         <strong># of models</strong>
+      </td>
+      <td>
+         <strong># of test datasets</strong>
+      </td>
+   </tr>
+   <tr>
+      <td> sscurves </td>
+      <td> single   </td>
+      <td> single   </td>
+   </tr>
+   <tr>
+      <td> mscurves </td>
+      <td> multiple </td>
+      <td> single   </td>
+   </tr>
+   <tr>
+      <td> smcurves </td>
+      <td> single   </td>
+      <td> multiple </td>
+   </tr>
+   <tr>
+      <td> mmcurves </td>
+      <td> multiple </td>
+      <td> multiple </td>
+   </tr>
+</table>
+
+</p>
     <p></li>
 <li> The <code>evalmod</code> function returns one of the following <code>S3</code>
   objects when <code>mode</code> is &quot;basic&quot;.
   They contain five different basic evaluation measures; error rate,
   accuracy, specificity, sensitivity, and precision.</p>
-    <p><table><tr><td>
-    <strong><code>S3</code> object</strong>
-    </td>
-<td> <strong># of models</strong>
-    </td>
-</tr><tr><td> <strong># of test datasets</strong> </td>
-<td></p>
-    <p>sspoints </td>
-</tr><tr><td> single   </td>
-<td> single   </td>
-</tr><tr><td>
-    mspoints </td>
-<td> multiple </td>
-</tr><tr><td> single   </td>
-<td>
-    smpoints </td>
-</tr><tr><td> single   </td>
-<td> multiple </td>
-</tr></table>
+    <p>
+<table width="100%">
+   <tr>
+      <td>
+         <strong>S3 object</strong>
+      </td>
+      <td>
+         <strong># of models</strong>
+      </td>
+      <td>
+         <strong># of test datasets</strong>
+      </td>
+   </tr>
+   <tr>
+      <td> sspoints </td>
+      <td> single   </td>
+      <td> single   </td>
+   </tr>
+   <tr>
+      <td> mspoints </td>
+      <td> multiple </td>
+      <td> single   </td>
+   </tr>
+   <tr>
+      <td> smpoints </td>
+      <td> single   </td>
+      <td> multiple </td>
+   </tr>
+   <tr>
+      <td> mmpoints </td>
+      <td> multiple </td>
+      <td> multiple </td>
+   </tr>
+</table>
 </li>
 </ol></p>
     <p>Different <code>S3</code> objects have different default behaviors of <code>S3</code>
   generics, such as <code><a href='plot.html'>plot</a></code>, <code><a href='autoplot.html'>autoplot</a></code>, and
   <code><a href='fortify.html'>fortify</a></code>.</p>
-    
+
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <p><code><a href='plot.html'>plot</a></code> for plotting curves with the general R plot.
@@ -264,7 +296,7 @@ the supporting points are calculated.</dd>
   scores and labels with multiple datasets.
   <code><a href='create_sim_samples.html'>create_sim_samples</a></code> for generating random samples
   for simulations.</p>
-    
+
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
@@ -277,25 +309,25 @@ the supporting points are calculated.</dd>
 
 <span class='co'>## Generate an sscurve object that contains ROC and Precision-Recall curves</span>
 <span class='no'>sscurves</span> <span class='kw'>&lt;-</span> <span class='fu'>evalmod</span>(<span class='kw'>scores</span> <span class='kw'>=</span> <span class='no'>P10N10</span>$<span class='no'>scores</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='no'>P10N10</span>$<span class='no'>labels</span>)
-<span class='no'>sscurves</span></div><div class='output co'>#&gt; 
+<span class='no'>sscurves</span></div><div class='output co'>#&gt;
 #&gt;     === AUCs ===
-#&gt; 
+#&gt;
 #&gt;      Model name Dataset ID Curve type       AUC
 #&gt;    1         m1          1        ROC 0.7200000
 #&gt;    2         m1          1        PRC 0.7397716
-#&gt; 
-#&gt; 
+#&gt;
+#&gt;
 #&gt;     === Input data ===
-#&gt; 
+#&gt;
 #&gt;      Model name Dataset ID # of positives # of negatives
 #&gt;    1         m1          1             10             10
 #&gt; </div><div class='input'>
 <span class='co'>## Generate an sspoints object that contains basic evaluation measures</span>
 <span class='no'>sspoints</span> <span class='kw'>&lt;-</span> <span class='fu'>evalmod</span>(<span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"basic"</span>, <span class='kw'>scores</span> <span class='kw'>=</span> <span class='no'>P10N10</span>$<span class='no'>scores</span>,
                     <span class='kw'>labels</span> <span class='kw'>=</span> <span class='no'>P10N10</span>$<span class='no'>labels</span>)
-<span class='no'>sspoints</span></div><div class='output co'>#&gt; 
+<span class='no'>sspoints</span></div><div class='output co'>#&gt;
 #&gt;     === Basic performance evaluation measures ===
-#&gt; 
+#&gt;
 #&gt;      ## Performance measures (Meas.)
 #&gt;       rank:   normalized rank
 #&gt;       score:  score
@@ -307,8 +339,8 @@ the supporting points are calculated.</dd>
 #&gt;       prec:   precision
 #&gt;       mcc:    Matthews correlation coefficient
 #&gt;       fscore: F-score
-#&gt; 
-#&gt; 
+#&gt;
+#&gt;
 #&gt;      Model ID  Meas.    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
 #&gt;    1    m1  1   rank  0.0000  0.2500  0.5000  0.5000  0.7500  1.0000
 #&gt;    2    m1  1  score  5.0000  5.7500 14.0000 11.7500 15.2500 20.0000
@@ -320,10 +352,10 @@ the supporting points are calculated.</dd>
 #&gt;    8    m1  1   prec  0.5000  0.5750  0.6333  0.6892  0.7619  1.0000
 #&gt;    9    m1  1    mcc  0.1376  0.2238  0.2667  0.2756  0.3368  0.4364
 #&gt;   10    m1  1 fscore  0.0000  0.5333  0.6333  0.5580  0.6759  0.7200
-#&gt; 
-#&gt; 
+#&gt;
+#&gt;
 #&gt;     === Input data ===
-#&gt; 
+#&gt;
 #&gt;      Model name Dataset ID # of positives # of negatives
 #&gt;    1         m1          1             10             10
 #&gt; </div><div class='input'>
@@ -339,9 +371,9 @@ the supporting points are calculated.</dd>
 
 <span class='co'>## Generate an mscurve object that contains ROC and Precision-Recall curves</span>
 <span class='no'>mscurves</span> <span class='kw'>&lt;-</span> <span class='fu'>evalmod</span>(<span class='no'>mdat</span>)
-<span class='no'>mscurves</span></div><div class='output co'>#&gt; 
+<span class='no'>mscurves</span></div><div class='output co'>#&gt;
 #&gt;     === AUCs ===
-#&gt; 
+#&gt;
 #&gt;      Model name Dataset ID Curve type       AUC
 #&gt;    1     random          1        ROC 0.4991000
 #&gt;    2     random          1        PRC 0.5239905
@@ -353,10 +385,10 @@ the supporting points are calculated.</dd>
 #&gt;    8      excel          1        PRC 0.9851427
 #&gt;    9       perf          1        ROC 1.0000000
 #&gt;   10       perf          1        PRC 1.0000000
-#&gt; 
-#&gt; 
+#&gt;
+#&gt;
 #&gt;     === Input data ===
-#&gt; 
+#&gt;
 #&gt;      Model name Dataset ID # of positives # of negatives
 #&gt;    1     random          1            100            100
 #&gt;    2    poor_er          1            100            100
@@ -366,9 +398,9 @@ the supporting points are calculated.</dd>
 #&gt; </div><div class='input'>
 <span class='co'>## Generate an mspoints object that contains basic evaluation measures</span>
 <span class='no'>mspoints</span> <span class='kw'>&lt;-</span> <span class='fu'>evalmod</span>(<span class='no'>mdat</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"basic"</span>)
-<span class='no'>mspoints</span></div><div class='output co'>#&gt; 
+<span class='no'>mspoints</span></div><div class='output co'>#&gt;
 #&gt;     === Basic performance evaluation measures ===
-#&gt; 
+#&gt;
 #&gt;      ## Performance measures (Meas.)
 #&gt;       rank:   normalized rank
 #&gt;       score:  score
@@ -380,8 +412,8 @@ the supporting points are calculated.</dd>
 #&gt;       prec:   precision
 #&gt;       mcc:    Matthews correlation coefficient
 #&gt;       fscore: F-score
-#&gt; 
-#&gt; 
+#&gt;
+#&gt;
 #&gt;        Model ID  Meas.      Min.  1st Qu.   Median      Mean 3rd Qu.   Max.
 #&gt;    1  random  1   rank  0.000000  0.25000  0.50000  0.500000 0.75000 1.0000
 #&gt;    2  random  1  score -3.031000 -0.71380 -0.05042 -0.069690 0.63450 2.5680
@@ -433,10 +465,10 @@ the supporting points are calculated.</dd>
 #&gt;   48    perf  1   prec  0.500000  0.66670  1.00000  0.846100 1.00000 1.0000
 #&gt;   49    perf  1    mcc  0.070890  0.38230  0.57740  0.573500 0.77460 1.0000
 #&gt;   50    perf  1 fscore  0.000000  0.66670  0.76340  0.710400 0.87640 1.0000
-#&gt; 
-#&gt; 
+#&gt;
+#&gt;
 #&gt;     === Input data ===
-#&gt; 
+#&gt;
 #&gt;      Model name Dataset ID # of positives # of negatives
 #&gt;    1     random          1            100            100
 #&gt;    2    poor_er          1            100            100
@@ -457,9 +489,9 @@ the supporting points are calculated.</dd>
 
 <span class='co'>## Generate an smcurve object that contains ROC and Precision-Recall curves</span>
 <span class='no'>smcurves</span> <span class='kw'>&lt;-</span> <span class='fu'>evalmod</span>(<span class='no'>mdat</span>)
-<span class='no'>smcurves</span></div><div class='output co'>#&gt; 
+<span class='no'>smcurves</span></div><div class='output co'>#&gt;
 #&gt;     === AUCs ===
-#&gt; 
+#&gt;
 #&gt;      Model name Dataset ID Curve type       AUC
 #&gt;    1    good_er          1        ROC 0.8091000
 #&gt;    2    good_er          1        PRC 0.8415332
@@ -469,10 +501,10 @@ the supporting points are calculated.</dd>
 #&gt;    6    good_er          3        PRC 0.8387636
 #&gt;    7    good_er          4        ROC 0.8503000
 #&gt;    8    good_er          4        PRC 0.8864007
-#&gt; 
-#&gt; 
+#&gt;
+#&gt;
 #&gt;     === Input data ===
-#&gt; 
+#&gt;
 #&gt;      Model name Dataset ID # of positives # of negatives
 #&gt;    1    good_er          1            100            100
 #&gt;    2    good_er          2            100            100
@@ -481,9 +513,9 @@ the supporting points are calculated.</dd>
 #&gt; </div><div class='input'>
 <span class='co'>## Generate an smpoints object that contains basic evaluation measures</span>
 <span class='no'>smpoints</span> <span class='kw'>&lt;-</span> <span class='fu'>evalmod</span>(<span class='no'>mdat</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"basic"</span>)
-<span class='no'>smpoints</span></div><div class='output co'>#&gt; 
+<span class='no'>smpoints</span></div><div class='output co'>#&gt;
 #&gt;     === Basic performance evaluation measures ===
-#&gt; 
+#&gt;
 #&gt;      ## Performance measures (Meas.)
 #&gt;       rank:   normalized rank
 #&gt;       score:  score
@@ -495,8 +527,8 @@ the supporting points are calculated.</dd>
 #&gt;       prec:   precision
 #&gt;       mcc:    Matthews correlation coefficient
 #&gt;       fscore: F-score
-#&gt; 
-#&gt; 
+#&gt;
+#&gt;
 #&gt;        Model ID  Meas.       Min.  1st Qu. Median   Mean 3rd Qu.   Max.
 #&gt;    1 good_er  1   rank  0.0000000  0.25000 0.5000 0.5000  0.7500 1.0000
 #&gt;    2 good_er  1  score  0.0001116  0.11750 0.2855 0.3585  0.5730 0.9991
@@ -538,10 +570,10 @@ the supporting points are calculated.</dd>
 #&gt;   38 good_er  4   prec  0.5000000  0.60140 0.7857 0.7770  1.0000 1.0000
 #&gt;   39 good_er  4    mcc  0.0708900  0.30920 0.4118 0.4128  0.5553 0.6092
 #&gt;   40 good_er  4 fscore  0.0000000  0.66670 0.7131 0.6399  0.7381 0.7900
-#&gt; 
-#&gt; 
+#&gt;
+#&gt;
 #&gt;     === Input data ===
-#&gt; 
+#&gt;
 #&gt;      Model name Dataset ID # of positives # of negatives
 #&gt;    1    good_er          1            100            100
 #&gt;    2    good_er          2            100            100
@@ -561,9 +593,9 @@ the supporting points are calculated.</dd>
 
 <span class='co'>## Generate an mscurve object that contains ROC and Precision-Recall curves</span>
 <span class='no'>mmcurves</span> <span class='kw'>&lt;-</span> <span class='fu'>evalmod</span>(<span class='no'>mdat</span>)
-<span class='no'>mmcurves</span></div><div class='output co'>#&gt; 
+<span class='no'>mmcurves</span></div><div class='output co'>#&gt;
 #&gt;     === AUCs ===
-#&gt; 
+#&gt;
 #&gt;      Model name Dataset ID Curve type       AUC
 #&gt;    1     random          1        ROC 0.4537000
 #&gt;    2     random          1        PRC 0.4575203
@@ -605,10 +637,10 @@ the supporting points are calculated.</dd>
 #&gt;   38      excel          4        PRC 0.9865355
 #&gt;   39       perf          4        ROC 1.0000000
 #&gt;   40       perf          4        PRC 1.0000000
-#&gt; 
-#&gt; 
+#&gt;
+#&gt;
 #&gt;     === Input data ===
-#&gt; 
+#&gt;
 #&gt;      Model name Dataset ID # of positives # of negatives
 #&gt;    1     random          1            100            100
 #&gt;    2    poor_er          1            100            100
@@ -633,9 +665,9 @@ the supporting points are calculated.</dd>
 #&gt; </div><div class='input'>
 <span class='co'>## Generate an mmpoints object that contains basic evaluation measures</span>
 <span class='no'>mmpoints</span> <span class='kw'>&lt;-</span> <span class='fu'>evalmod</span>(<span class='no'>mdat</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"basic"</span>)
-<span class='no'>mmpoints</span></div><div class='output co'>#&gt; 
+<span class='no'>mmpoints</span></div><div class='output co'>#&gt;
 #&gt;     === Basic performance evaluation measures ===
-#&gt; 
+#&gt;
 #&gt;      ## Performance measures (Meas.)
 #&gt;       rank:   normalized rank
 #&gt;       score:  score
@@ -647,8 +679,8 @@ the supporting points are calculated.</dd>
 #&gt;       prec:   precision
 #&gt;       mcc:    Matthews correlation coefficient
 #&gt;       fscore: F-score
-#&gt; 
-#&gt; 
+#&gt;
+#&gt;
 #&gt;        Model ID  Meas.       Min.  1st Qu.   Median      Mean  3rd Qu.   Max.
 #&gt;    1  random  1   rank  0.000e+00  0.25000  0.50000  0.500000  0.75000 1.0000
 #&gt;    2  random  1  score -3.366e+00 -0.63840 -0.06593 -0.002629  0.71970 2.7710
@@ -762,10 +794,10 @@ the supporting points are calculated.</dd>
 #&gt;  110  random  3 fscore  0.000e+00  0.34670  0.54730  0.479100  0.64750 0.6667
 #&gt;  111 poor_er  3   rank  0.000e+00  0.25000  0.50000  0.500000  0.75000 1.0000
 #&gt;  [ reached getOption(&quot;max.print&quot;) -- omitted 89 rows ]
-#&gt; 
-#&gt; 
+#&gt;
+#&gt;
 #&gt;     === Input data ===
-#&gt; 
+#&gt;
 #&gt;      Model name Dataset ID # of positives # of negatives
 #&gt;    1     random          1            100            100
 #&gt;    2    poor_er          1            100            100
@@ -794,11 +826,11 @@ the supporting points are calculated.</dd>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
+
       <li><a href="#value">Value</a></li>
 
       <li><a href="#see-also">See also</a></li>
-      
+
       <li><a href="#examples">Examples</a></li>
     </ul>
 

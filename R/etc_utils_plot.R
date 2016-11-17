@@ -73,6 +73,7 @@
 #'     }
 #'   }
 #'   \item{type}{
+#'     A character to specifiy the line type as follows.
 #'     \describe{
 #'       \item{"l"}{lines}
 #'       \item{"p"}{points}
