@@ -112,6 +112,7 @@
 #'   with the general R plot.
 #'
 #' @examples
+#' \dontrun{
 #'
 #' ## Load libraries
 #' library(ggplot2)
@@ -236,6 +237,7 @@
 #'
 #' ## Normalized ranks vs. average basic evaluation measures
 #' autoplot(mmpoints)
+#' }
 #'
 #' @name autoplot
 NULL

@@ -142,6 +142,7 @@ The \code{autoplot} function plots performance evaluation measures
   by using \pkg{ggplot2} instead of the general R plot.
 }
 \examples{
+\dontrun{
 
 ## Load libraries
 library(ggplot2)
@@ -266,6 +267,7 @@ mmpoints <- evalmod(mdat, mode = "basic")
 
 ## Normalized ranks vs. average basic evaluation measures
 autoplot(mmpoints)
+}
 
 }
 \seealso{

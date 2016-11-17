@@ -52,6 +52,7 @@
 #'   \code{\link{autoplot}} for plotting with \pkg{ggplot2}.
 #'
 #' @examples
+#' \dontrun{
 #'
 #' ## Load library
 #' library(ggplot2)
@@ -241,6 +242,7 @@
 #'                                fill = "grey25")
 #' p_prec <- p_prec + geom_point(aes(x = x, y = y, color = modname))
 #' p_prec
+#' }
 #'
 #' @name fortify
 NULL
