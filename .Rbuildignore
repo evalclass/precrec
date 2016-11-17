@@ -9,3 +9,5 @@
 ^NEWS$
 ^LICENSE$
 ^appveyor\.yml$
+^docs$
+^_pkgdown\.yml$

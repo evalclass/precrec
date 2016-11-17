@@ -86,7 +86,10 @@ data(P10N10)
 
 ## Generate mdat object
 ssmdat1 <- mmdata(P10N10$scores, P10N10$labels)
+ssmdat1
 ssmdat2 <- mmdata(1:8, sample(c(0, 1), 8, replace = TRUE))
+ssmdat2
+
 
 ##################################################
 ### Multiple models & single test dataset
@@ -98,6 +101,7 @@ samps <- create_sim_samples(1, 100, 100, "all")
 ## Multiple models & single test dataset
 msmdat1 <- mmdata(samps[["scores"]], samps[["labels"]],
                   modnames = samps[["modnames"]])
+msmdat1
 
 ## Use join_scores and join_labels
 s1 <- c(1, 2, 3, 4)
@@ -109,6 +113,8 @@ l2 <- c(1, 0, 1, 1)
 labels <- join_labels(l1, l2)
 
 msmdat2 <- mmdata(scores, labels, modnames = c("ms1", "ms2"))
+msmdat2
+
 
 ##################################################
 ### Single model & multiple test datasets
@@ -121,6 +127,7 @@ samps <- create_sim_samples(10, 100, 100, "good_er")
 smmdat <- mmdata(samps[["scores"]], samps[["labels"]],
                  modnames = samps[["modnames"]],
                  dsids = samps[["dsids"]])
+smmdat
 
 
 ##################################################
@@ -134,6 +141,7 @@ samps <- create_sim_samples(10, 100, 100, "all")
 mmmdat <- mmdata(samps[["scores"]], samps[["labels"]],
                  modnames = samps[["modnames"]],
                  dsids = samps[["dsids"]])
+mmmdat
 
 }
 \seealso{

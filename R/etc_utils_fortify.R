@@ -53,6 +53,7 @@
 #'
 #' @examples
 #' \dontrun{
+#'
 #' ## Load library
 #' library(ggplot2)
 #'
@@ -93,7 +94,7 @@
 #'
 #' ## Plot normalized ranks vs. precision
 #' p_prec <- ggplot(subset(ssdf, curvetype == "precision"), aes(x = x, y = y))
-#' p_prec <- p_prc + geom_point()
+#' p_prec <- p_prec + geom_point()
 #' p_prec
 #'
 #'
@@ -139,7 +140,7 @@
 #' ## Plot normalized ranks vs. precision
 #' df_prec <- subset(msdf, curvetype == "precision")
 #' p_prec <- ggplot(df_prec, aes(x = x, y = y, color = modname))
-#' p_prec <- p_prc + geom_point()
+#' p_prec <- p_prec + geom_point()
 #' p_prec
 #'
 #'

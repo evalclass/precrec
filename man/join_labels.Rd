@@ -24,24 +24,48 @@ The \code{join_labels} function returns a list that
 \code{join_labels} takes observed labels and converts them to a list.
 }
 \examples{
-## Add three numeric vectors
+
+##################################################
+### Add three numeric vectors
+###
 l1 <- c(1, 0, 1, 1)
 l2 <- c(1, 1, 0, 0)
 l3 <- c(0, 1, 0, 1)
 labels1 <- join_labels(l1, l2, l3)
 
-## Add a matrix and a numeric vector
+## Show the list structure
+str(labels1)
+
+
+##################################################
+### Add a matrix and a numeric vector
+###
 a1 <- matrix(rep(c(1, 0), 4), 4, 2)
 labels2 <- join_labels(a1, l3)
 
-## Use byrow
+## Show the list structure
+str(labels2)
+
+
+##################################################
+### Use byrow
+###
 a2 <- matrix(rep(c(1, 0), 4), 2, 4, byrow = TRUE)
 labels3 <- join_labels(a2, l3, byrow = TRUE)
 
-## Use chklen
+## Show the list structure
+str(labels3)
+
+
+##################################################
+### Use chklen
+###
 l4 <- c(-1, 0, -1)
 l5 <- c(0, -1)
-scores4 <- join_labels(l4, l5, chklen = FALSE)
+labels4 <- join_labels(l4, l5, chklen = FALSE)
+
+## Show the list structure
+str(labels4)
 
 }
 \seealso{

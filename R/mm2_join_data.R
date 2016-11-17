@@ -21,24 +21,47 @@
 #'
 #' @examples
 #'
-#' ## Add three numeric vectors
+#' ##################################################
+#' ### Add three numeric vectors
+#' ###
 #' s1 <- c(1, 2, 3, 4)
 #' s2 <- c(5, 6, 7, 8)
 #' s3 <- c(2, 4, 6, 8)
 #' scores1 <- join_scores(s1, s2, s3)
 #'
-#' ## Add a matrix and a numeric vector
+#' ## Show the list structure
+#' str(scores1)
+#'
+#'
+#' ##################################################
+#' ### Add a matrix and a numeric vector
+#' ###
 #' a1 <- matrix(seq(8), 4, 2)
 #' scores2 <- join_scores(a1, s3)
 #'
-#' ## Use byrow
+#' ## Show the list structure
+#' str(scores2)
+#'
+#'
+#' ##################################################
+#' ### Use byrow
+#' ###
 #' a2 <- matrix(seq(8), 2, 4, byrow = TRUE)
 #' scores3 <- join_scores(a2, s3, byrow = TRUE)
 #'
-#' ## Use chklen
+#' ## Show the list structure
+#' str(scores3)
+#'
+#'
+#' ##################################################
+#' ### Use chklen
+#' ###
 #' s4 <- c(1, 2, 3)
 #' s5 <- c(5, 6, 7, 8)
 #' scores4 <- join_scores(s4, s5, chklen = FALSE)
+#'
+#' ## Show the list structure
+#' str(scores4)
 #'
 #' @export
 join_scores <- function(..., byrow = FALSE, chklen = TRUE) {
@@ -68,24 +91,48 @@ join_scores <- function(..., byrow = FALSE, chklen = TRUE) {
 #'   \code{\link{join_scores}} for formatting scores with multiple datasets.
 #'
 #' @examples
-#' ## Add three numeric vectors
+#'
+#' ##################################################
+#' ### Add three numeric vectors
+#' ###
 #' l1 <- c(1, 0, 1, 1)
 #' l2 <- c(1, 1, 0, 0)
 #' l3 <- c(0, 1, 0, 1)
 #' labels1 <- join_labels(l1, l2, l3)
 #'
-#' ## Add a matrix and a numeric vector
+#' ## Show the list structure
+#' str(labels1)
+#'
+#'
+#' ##################################################
+#' ### Add a matrix and a numeric vector
+#' ###
 #' a1 <- matrix(rep(c(1, 0), 4), 4, 2)
 #' labels2 <- join_labels(a1, l3)
 #'
-#' ## Use byrow
+#' ## Show the list structure
+#' str(labels2)
+#'
+#'
+#' ##################################################
+#' ### Use byrow
+#' ###
 #' a2 <- matrix(rep(c(1, 0), 4), 2, 4, byrow = TRUE)
 #' labels3 <- join_labels(a2, l3, byrow = TRUE)
 #'
-#' ## Use chklen
+#' ## Show the list structure
+#' str(labels3)
+#'
+#'
+#' ##################################################
+#' ### Use chklen
+#' ###
 #' l4 <- c(-1, 0, -1)
 #' l5 <- c(0, -1)
-#' scores4 <- join_labels(l4, l5, chklen = FALSE)
+#' labels4 <- join_labels(l4, l5, chklen = FALSE)
+#'
+#' ## Show the list structure
+#' str(labels4)
 #'
 #' @export
 join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
