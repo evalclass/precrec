@@ -44,6 +44,8 @@
 #'   of pAUCs.
 #'
 #' @examples
+#' \dontrun{
+#'
 #' ## Load library
 #' library(ggplot2)
 #'
@@ -145,6 +147,7 @@
 #'
 #' ## Plot partial curves with ggplot
 #' autoplot(mmcurves.part)
+#' }
 #'
 #' @export
 part <- function(curves, xlim, ylim, curvetype) UseMethod("part")

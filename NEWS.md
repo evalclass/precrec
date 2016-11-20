@@ -1,3 +1,7 @@
+# precrec 0.6.1
+
+* Improve github pages
+
 # precrec 0.6
 
 * Improve as.data.frame with Rcpp
