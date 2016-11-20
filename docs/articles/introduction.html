@@ -37,7 +37,7 @@
     <div class="page-header toc-ignore">
       <h1>Introduction to precrec</h1>
             
-            <h4 class="date">2016-11-16</h4>
+            <h4 class="date">2016-11-17</h4>
           </div>
 
     
@@ -85,7 +85,7 @@ sscurves &lt;-<span class="st"> </span><span class="kw"><a href="../reference/ev
 <td align="left">precrec</td>
 <td align="left">Make a data frame with pAUC scores</td>
 </tr></tbody></table><div id="example-of-the-plot-function" class="section level4">
-<h4 class="hasAnchor"><html><body><a href="#example-of-the-plot-function" class="anchor"> </a></body></html>Example of the <code>plot</code> function</h4>
+<h4 class="hasAnchor"><html><body><a href="#example-of-the-plot-function" class="anchor"> </a></body></html>Example of the plot function</h4>
 <p>The <code>plot</code> function outputs ROC and Precision-Recall curves</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Show ROC and Precision-Recall plots</span>
 <span class="kw"><a href="../reference/plot.html">plot</a></span>(sscurves)
@@ -95,7 +95,7 @@ sscurves &lt;-<span class="st"> </span><span class="kw"><a href="../reference/ev
 <p><img src="introduction_files/figure-html/unnamed-chunk-2-1.png" width="672"><img src="introduction_files/figure-html/unnamed-chunk-2-2.png" width="672"></p>
 </div>
 <div id="example-of-the-autoplot-function" class="section level4">
-<h4 class="hasAnchor"><html><body><a href="#example-of-the-autoplot-function" class="anchor"> </a></body></html>Example of the <code>autoplot</code> function</h4>
+<h4 class="hasAnchor"><html><body><a href="#example-of-the-autoplot-function" class="anchor"> </a></body></html>Example of the autoplot function</h4>
 <p>The <code>autoplot</code> function outputs ROC and Precision-Recall curves by using the <code>ggplot2</code> package.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The ggplot2 package is required </span>
 <span class="kw">library</span>(ggplot2)
@@ -108,7 +108,7 @@ sscurves &lt;-<span class="st"> </span><span class="kw"><a href="../reference/ev
 <p><img src="introduction_files/figure-html/unnamed-chunk-3-1.png" width="672"><img src="introduction_files/figure-html/unnamed-chunk-3-2.png" width="672"></p>
 </div>
 <div id="example-of-the-auc-function" class="section level4">
-<h4 class="hasAnchor"><html><body><a href="#example-of-the-auc-function" class="anchor"> </a></body></html>Example of the <code>auc</code> function</h4>
+<h4 class="hasAnchor"><html><body><a href="#example-of-the-auc-function" class="anchor"> </a></body></html>Example of the auc function</h4>
 <p>The <code>auc</code> function outputs a data frame with the AUC (Area Under the Curve) scores.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Get a data frame with AUC scores</span>
 aucs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/auc.html">auc</a></span>(sscurves)
@@ -142,7 +142,7 @@ knitr::<span class="kw">kable</span>(aucs_prc)</code></pre></div>
 <td align="right">0.7397716</td>
 </tr></tbody></table></div>
 <div id="example-of-the-as-data-frame-function" class="section level4">
-<h4 class="hasAnchor"><html><body><a href="#example-of-the-as-data-frame-function" class="anchor"> </a></body></html>Example of the <code>as.data.frame</code> function</h4>
+<h4 class="hasAnchor"><html><body><a href="#example-of-the-as-data-frame-function" class="anchor"> </a></body></html>Example of the as.data.frame function</h4>
 <p>The <code>as.data.frame</code> function converts a precrec object to a data frame.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Convert sscurves to a data frame</span>
 sscurves.df &lt;-<span class="st"> </span><span class="kw"><a href="../reference/as.data.frame.html">as.data.frame</a></span>(sscurves)
@@ -201,7 +201,7 @@ knitr::<span class="kw">kable</span>(<span class="kw">head</span>(sscurves.df))<
 </tr><tr class="even"><td align="left">create_sim_samples</td>
 <td align="left">Create random samples for simulations</td>
 </tr></tbody></table><div id="example-of-the-join_scores-function" class="section level3">
-<h3 class="hasAnchor"><html><body><a href="#example-of-the-join_scores-function" class="anchor"> </a></body></html>Example of the <code>join_scores</code> function</h3>
+<h3 class="hasAnchor"><html><body><a href="#example-of-the-join_scores-function" class="anchor"> </a></body></html>Example of the join_scores function</h3>
 <p>The <code>join_scores</code> function combines multiple score datasets.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">s1 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>)
 s2 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>)
@@ -214,7 +214,7 @@ scores1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/joi
 scores2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/join_scores.html">join_scores</a></span>(s1, s2, s3)</code></pre></div>
 </div>
 <div id="example-of-the-join_labels-function" class="section level3">
-<h3 class="hasAnchor"><html><body><a href="#example-of-the-join_labels-function" class="anchor"> </a></body></html>Example of the <code>join_labels</code> function</h3>
+<h3 class="hasAnchor"><html><body><a href="#example-of-the-join_labels-function" class="anchor"> </a></body></html>Example of the join_labels function</h3>
 <p>The <code>join_labels</code> function combines multiple score datasets.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">l1 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>)
 l2 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>)
@@ -225,7 +225,7 @@ labels1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/joi
 labels2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/join_labels.html">join_labels</a></span>(l1, l3)</code></pre></div>
 </div>
 <div id="example-of-the-mmdata-function" class="section level3">
-<h3 class="hasAnchor"><html><body><a href="#example-of-the-mmdata-function" class="anchor"> </a></body></html>Example of the <code>mmdata</code> function</h3>
+<h3 class="hasAnchor"><html><body><a href="#example-of-the-mmdata-function" class="anchor"> </a></body></html>Example of the mmdata function</h3>
 <p>The <code>mmdata</code> function makes an input dataset for the <code>evalmod</code> function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create an input dataset with two score vectors and one label vector</span>
 msmdat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mmdata.html">mmdata</a></span>(scores1, labels1)
@@ -237,7 +237,7 @@ smmdat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mmda
 mmmdat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mmdata.html">mmdata</a></span>(scores1, labels2, <span class="dt">modnames =</span> <span class="kw">c</span>(<span class="st">"mod1"</span>, <span class="st">"mod2"</span>), <span class="dt">dsids =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</code></pre></div>
 </div>
 <div id="example-of-the-create_sim_samples-function" class="section level3">
-<h3 class="hasAnchor"><html><body><a href="#example-of-the-create_sim_samples-function" class="anchor"> </a></body></html>Example of the <code>create_sim_samples</code> function</h3>
+<h3 class="hasAnchor"><html><body><a href="#example-of-the-create_sim_samples-function" class="anchor"> </a></body></html>Example of the create_sim_samples function</h3>
 <p>The <code>create_sim_samples</code> function is useful to make a random sample dataset with different performance levels.</p>
 <table class="table"><thead><tr class="header"><th align="left">Level name</th>
 <th align="left">Description</th>
@@ -294,7 +294,7 @@ mscurves &lt;-<span class="st"> </span><span class="kw"><a href="../reference/ev
 <span class="kw"><a href="../reference/autoplot.html">autoplot</a></span>(mscurves)</code></pre></div>
 <p><img src="introduction_files/figure-html/unnamed-chunk-12-1.png" width="672"></p>
 <div id="example-of-the-as-data-frame-function-1" class="section level4">
-<h4 class="hasAnchor"><html><body><a href="#example-of-the-as-data-frame-function-1" class="anchor"> </a></body></html>Example of the <code>as.data.frame</code> function</h4>
+<h4 class="hasAnchor"><html><body><a href="#example-of-the-as-data-frame-function-1" class="anchor"> </a></body></html>Example of the as.data.frame function</h4>
 <p>The <code>as.data.frame</code> function also works with this object.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Convert mscurves to a data frame</span>
 mscurves.df &lt;-<span class="st"> </span><span class="kw"><a href="../reference/as.data.frame.html">as.data.frame</a></span>(mscurves)
@@ -367,7 +367,7 @@ smcurves &lt;-<span class="st"> </span><span class="kw"><a href="../reference/ev
 <span class="kw"><a href="../reference/autoplot.html">autoplot</a></span>(smcurves, <span class="st">"PRC"</span>, <span class="dt">raw_curves =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <p><img src="introduction_files/figure-html/unnamed-chunk-16-1.png" width="672"><img src="introduction_files/figure-html/unnamed-chunk-16-2.png" width="672"></p>
 <div id="example-of-the-as-data-frame-function-2" class="section level4">
-<h4 class="hasAnchor"><html><body><a href="#example-of-the-as-data-frame-function-2" class="anchor"> </a></body></html>Example of the <code>as.data.frame</code> function</h4>
+<h4 class="hasAnchor"><html><body><a href="#example-of-the-as-data-frame-function-2" class="anchor"> </a></body></html>Example of the as.data.frame function</h4>
 <p>The <code>as.data.frame</code> function also works with this object.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Convert smcurves to a data frame</span>
 smcurves.df &lt;-<span class="st"> </span><span class="kw"><a href="../reference/as.data.frame.html">as.data.frame</a></span>(smcurves)
@@ -381,39 +381,39 @@ knitr::<span class="kw">kable</span>(<span class="kw">head</span>(smcurves.df))<
 <th align="left">modname</th>
 <th align="left">type</th>
 </tr></thead><tbody><tr class="odd"><td align="right">0.000</td>
-<td align="right">0.00</td>
+<td align="right">0.000</td>
 <td align="right">0.0000000</td>
 <td align="right">0.0000000</td>
 <td align="left">m1</td>
 <td align="left">ROC</td>
 </tr><tr class="even"><td align="right">0.000</td>
-<td align="right">0.49</td>
-<td align="right">0.4036257</td>
-<td align="right">0.5763743</td>
+<td align="right">0.535</td>
+<td align="right">0.4264543</td>
+<td align="right">0.6435457</td>
 <td align="left">m1</td>
 <td align="left">ROC</td>
 </tr><tr class="odd"><td align="right">0.001</td>
-<td align="right">0.49</td>
-<td align="right">0.4036257</td>
-<td align="right">0.5763743</td>
+<td align="right">0.535</td>
+<td align="right">0.4264543</td>
+<td align="right">0.6435457</td>
 <td align="left">m1</td>
 <td align="left">ROC</td>
 </tr><tr class="even"><td align="right">0.002</td>
-<td align="right">0.49</td>
-<td align="right">0.4036257</td>
-<td align="right">0.5763743</td>
+<td align="right">0.535</td>
+<td align="right">0.4264543</td>
+<td align="right">0.6435457</td>
 <td align="left">m1</td>
 <td align="left">ROC</td>
 </tr><tr class="odd"><td align="right">0.003</td>
-<td align="right">0.49</td>
-<td align="right">0.4036257</td>
-<td align="right">0.5763743</td>
+<td align="right">0.535</td>
+<td align="right">0.4264543</td>
+<td align="right">0.6435457</td>
 <td align="left">m1</td>
 <td align="left">ROC</td>
 </tr><tr class="even"><td align="right">0.004</td>
-<td align="right">0.49</td>
-<td align="right">0.4036257</td>
-<td align="right">0.5763743</td>
+<td align="right">0.535</td>
+<td align="right">0.4264543</td>
+<td align="right">0.6435457</td>
 <td align="left">m1</td>
 <td align="left">ROC</td>
 </tr></tbody></table></div>
@@ -448,7 +448,7 @@ mmcurves &lt;-<span class="st"> </span><span class="kw"><a href="../reference/ev
 <span class="kw"><a href="../reference/autoplot.html">autoplot</a></span>(mmcurves, <span class="st">"PRC"</span>, <span class="dt">show_cb =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <p><img src="introduction_files/figure-html/unnamed-chunk-20-1.png" width="672"><img src="introduction_files/figure-html/unnamed-chunk-20-2.png" width="672"></p>
 <div id="example-of-the-as-data-frame-function-3" class="section level4">
-<h4 class="hasAnchor"><html><body><a href="#example-of-the-as-data-frame-function-3" class="anchor"> </a></body></html>Example of the <code>as.data.frame</code> function</h4>
+<h4 class="hasAnchor"><html><body><a href="#example-of-the-as-data-frame-function-3" class="anchor"> </a></body></html>Example of the as.data.frame function</h4>
 <p>The <code>as.data.frame</code> function also works with this object.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Convert smcurves to a data frame</span>
 mmcurves.df &lt;-<span class="st"> </span><span class="kw"><a href="../reference/as.data.frame.html">as.data.frame</a></span>(mmcurves)
@@ -462,39 +462,39 @@ knitr::<span class="kw">kable</span>(<span class="kw">head</span>(mmcurves.df))<
 <th align="left">modname</th>
 <th align="left">type</th>
 </tr></thead><tbody><tr class="odd"><td align="right">0.000</td>
-<td align="right">0.000</td>
+<td align="right">0.00</td>
 <td align="right">0.0000000</td>
 <td align="right">0.0000000</td>
 <td align="left">random</td>
 <td align="left">ROC</td>
 </tr><tr class="even"><td align="right">0.000</td>
-<td align="right">0.095</td>
-<td align="right">0.0468332</td>
-<td align="right">0.1431668</td>
+<td align="right">0.11</td>
+<td align="right">0.0465695</td>
+<td align="right">0.1734305</td>
 <td align="left">random</td>
 <td align="left">ROC</td>
 </tr><tr class="odd"><td align="right">0.001</td>
-<td align="right">0.095</td>
-<td align="right">0.0468332</td>
-<td align="right">0.1431668</td>
+<td align="right">0.11</td>
+<td align="right">0.0465695</td>
+<td align="right">0.1734305</td>
 <td align="left">random</td>
 <td align="left">ROC</td>
 </tr><tr class="even"><td align="right">0.002</td>
-<td align="right">0.095</td>
-<td align="right">0.0468332</td>
-<td align="right">0.1431668</td>
+<td align="right">0.11</td>
+<td align="right">0.0465695</td>
+<td align="right">0.1734305</td>
 <td align="left">random</td>
 <td align="left">ROC</td>
 </tr><tr class="odd"><td align="right">0.003</td>
-<td align="right">0.095</td>
-<td align="right">0.0468332</td>
-<td align="right">0.1431668</td>
+<td align="right">0.11</td>
+<td align="right">0.0465695</td>
+<td align="right">0.1734305</td>
 <td align="left">random</td>
 <td align="left">ROC</td>
 </tr><tr class="even"><td align="right">0.004</td>
-<td align="right">0.095</td>
-<td align="right">0.0468332</td>
-<td align="right">0.1431668</td>
+<td align="right">0.11</td>
+<td align="right">0.0465695</td>
+<td align="right">0.1734305</td>
 <td align="left">random</td>
 <td align="left">ROC</td>
 </tr></tbody></table></div>
@@ -545,7 +545,7 @@ mmpoins &lt;-<span class="st"> </span><span class="kw"><a href="../reference/eva
 <p><img src="introduction_files/figure-html/unnamed-chunk-24-1.png" width="672"></p>
 </div>
 <div id="example-of-the-as-data-frame-function-4" class="section level4">
-<h4 class="hasAnchor"><html><body><a href="#example-of-the-as-data-frame-function-4" class="anchor"> </a></body></html>Example of the <code>as.data.frame</code> function</h4>
+<h4 class="hasAnchor"><html><body><a href="#example-of-the-as-data-frame-function-4" class="anchor"> </a></body></html>Example of the as.data.frame function</h4>
 <p>The <code>as.data.frame</code> function also works for the precrec objects of the basic measures.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Convert mmpoins to a data frame</span>
 mmpoins.df &lt;-<span class="st"> </span><span class="kw"><a href="../reference/as.data.frame.html">as.data.frame</a></span>(mmpoins)
@@ -565,33 +565,33 @@ knitr::<span class="kw">kable</span>(<span class="kw">head</span>(mmpoins.df))</
 <td align="left">random</td>
 <td align="left">score</td>
 </tr><tr class="even"><td align="right">0.05</td>
-<td align="right">1.7149170</td>
-<td align="right">1.4797944</td>
-<td align="right">1.9500395</td>
+<td align="right">1.9549470</td>
+<td align="right">1.6858828</td>
+<td align="right">2.2240113</td>
 <td align="left">random</td>
 <td align="left">score</td>
 </tr><tr class="odd"><td align="right">0.10</td>
-<td align="right">1.3707314</td>
-<td align="right">1.1712463</td>
-<td align="right">1.5702165</td>
+<td align="right">1.3947323</td>
+<td align="right">1.1912557</td>
+<td align="right">1.5982088</td>
 <td align="left">random</td>
 <td align="left">score</td>
 </tr><tr class="even"><td align="right">0.15</td>
-<td align="right">1.0185653</td>
-<td align="right">0.8627331</td>
-<td align="right">1.1743976</td>
+<td align="right">1.1130715</td>
+<td align="right">0.9388947</td>
+<td align="right">1.2872483</td>
 <td align="left">random</td>
 <td align="left">score</td>
 </tr><tr class="odd"><td align="right">0.20</td>
-<td align="right">0.8883452</td>
-<td align="right">0.7191876</td>
-<td align="right">1.0575028</td>
+<td align="right">0.8585388</td>
+<td align="right">0.6718039</td>
+<td align="right">1.0452738</td>
 <td align="left">random</td>
 <td align="left">score</td>
 </tr><tr class="even"><td align="right">0.25</td>
-<td align="right">0.7661082</td>
-<td align="right">0.6109877</td>
-<td align="right">0.9212287</td>
+<td align="right">0.6624048</td>
+<td align="right">0.5043089</td>
+<td align="right">0.8205007</td>
 <td align="left">random</td>
 <td align="left">score</td>
 </tr></tbody></table></div>
@@ -599,7 +599,7 @@ knitr::<span class="kw">kable</span>(<span class="kw">head</span>(mmpoins.df))</
 </div>
 <div id="partial-aucs" class="section level2">
 <h2 class="hasAnchor"><html><body><a href="#partial-aucs" class="anchor"> </a></body></html>7. Partial AUCs</h2>
-<p>The <code>part</code> function calculates partial AUCs and standardized partial AUCs of both ROC and precision-recall curves. Standardized pAUCs are standardized to the range between 0 and 1.</p>
+<p>The <code>part</code> function calculates partial AUCs and standardized partial AUCs of both ROC and precision-recall curves. Standardized pAUCs (spAUCs) are standardized to the score range between 0 and 1.</p>
 <div id="partial-auc-calculations" class="section level3">
 <h3 class="hasAnchor"><html><body><a href="#partial-auc-calculations" class="anchor"> </a></body></html>partial AUC calculations</h3>
 <p>It requires an S3 object produced by the <code>evalmod</code> function and uses <code>xlim</code> and <code>ylim</code> to specify the partial area of your choice. The <code>pauc</code> function outputs a data frame with the pAUC scores.</p>

@@ -163,10 +163,12 @@ data(P10N10)
 
 ## Generate an sscurve object that contains ROC and Precision-Recall curves
 sscurves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
+sscurves
 
 ## Generate an sspoints object that contains basic evaluation measures
 sspoints <- evalmod(mode = "basic", scores = P10N10$scores,
                     labels = P10N10$labels)
+sspoints
 
 
 ##################################################
@@ -180,9 +182,11 @@ mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 
 ## Generate an mscurve object that contains ROC and Precision-Recall curves
 mscurves <- evalmod(mdat)
+mscurves
 
 ## Generate an mspoints object that contains basic evaluation measures
 mspoints <- evalmod(mdat, mode = "basic")
+mspoints
 
 
 ##################################################
@@ -190,16 +194,18 @@ mspoints <- evalmod(mdat, mode = "basic")
 ###
 
 ## Create sample datasets with 100 positives and 100 negatives
-samps <- create_sim_samples(10, 100, 100, "good_er")
+samps <- create_sim_samples(4, 100, 100, "good_er")
 mdat <- mmdata(samps[["scores"]], samps[["labels"]],
                modnames = samps[["modnames"]],
                dsids = samps[["dsids"]])
 
 ## Generate an smcurve object that contains ROC and Precision-Recall curves
 smcurves <- evalmod(mdat)
+smcurves
 
 ## Generate an smpoints object that contains basic evaluation measures
 smpoints <- evalmod(mdat, mode = "basic")
+smpoints
 
 
 ##################################################
@@ -207,16 +213,18 @@ smpoints <- evalmod(mdat, mode = "basic")
 ###
 
 ## Create sample datasets with 100 positives and 100 negatives
-samps <- create_sim_samples(10, 100, 100, "all")
+samps <- create_sim_samples(4, 100, 100, "all")
 mdat <- mmdata(samps[["scores"]], samps[["labels"]],
                modnames = samps[["modnames"]],
                dsids = samps[["dsids"]])
 
 ## Generate an mscurve object that contains ROC and Precision-Recall curves
 mmcurves <- evalmod(mdat)
+mmcurves
 
 ## Generate an mmpoints object that contains basic evaluation measures
 mmpoints <- evalmod(mdat, mode = "basic")
+mmpoints
 
 }
 \seealso{

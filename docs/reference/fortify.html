@@ -186,196 +186,181 @@ of the <code><a href='evalmod.html'>evalmod</a></code> function.</dd>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>## Not run: ------------------------------------</span>
-<span class='co'># ## Load library</span>
-<span class='co'># library(ggplot2)</span>
-<span class='co'># </span>
-<span class='co'># ##################################################</span>
-<span class='co'># ### Single model &amp; single test dataset</span>
-<span class='co'># ###</span>
-<span class='co'># </span>
-<span class='co'># ## Load a dataset with 10 positives and 10 negatives</span>
-<span class='co'># data(P10N10)</span>
-<span class='co'># </span>
-<span class='co'># ## Generate an sscurve object that contains ROC and Precision-Recall curves</span>
-<span class='co'># sscurves &lt;- evalmod(scores = P10N10$scores, labels = P10N10$labels)</span>
-<span class='co'># </span>
-<span class='co'># ## Let ggplot internally call fortify</span>
-<span class='co'># p_rocprc &lt;- ggplot(sscurves, aes(x = x, y = y))</span>
-<span class='co'># p_rocprc &lt;- p_rocprc + geom_line()</span>
-<span class='co'># p_rocprc &lt;- p_rocprc + facet_wrap(~curvetype)</span>
-<span class='co'># p_rocprc</span>
-<span class='co'># </span>
-<span class='co'># ## Explicitly fortify sscurves</span>
-<span class='co'># ssdf &lt;- fortify(sscurves)</span>
-<span class='co'># </span>
-<span class='co'># ## Plot a ROC curve</span>
-<span class='co'># p_roc &lt;- ggplot(subset(ssdf, curvetype == "ROC"), aes(x = x, y = y))</span>
-<span class='co'># p_roc &lt;- p_roc + geom_line()</span>
-<span class='co'># p_roc</span>
-<span class='co'># </span>
-<span class='co'># ## Plot a Precision-Recall curve</span>
-<span class='co'># p_prc &lt;- ggplot(subset(ssdf, curvetype == "PRC"), aes(x = x, y = y))</span>
-<span class='co'># p_prc &lt;- p_prc + geom_line()</span>
-<span class='co'># p_prc</span>
-<span class='co'># </span>
-<span class='co'># ## Generate an sspoints object that contains basic evaluation measures</span>
-<span class='co'># sspoints &lt;- evalmod(mode = "basic", scores = P10N10$scores,</span>
-<span class='co'>#                     labels = P10N10$labels)</span>
-<span class='co'># ## Fortify sspoints</span>
-<span class='co'># ssdf &lt;- fortify(sspoints)</span>
-<span class='co'># </span>
-<span class='co'># ## Plot normalized ranks vs. precision</span>
-<span class='co'># p_prec &lt;- ggplot(subset(ssdf, curvetype == "precision"), aes(x = x, y = y))</span>
-<span class='co'># p_prec &lt;- p_prc + geom_point()</span>
-<span class='co'># p_prec</span>
-<span class='co'># </span>
-<span class='co'># </span>
-<span class='co'># ##################################################</span>
-<span class='co'># ### Multiple models &amp; single test dataset</span>
-<span class='co'># ###</span>
-<span class='co'># </span>
-<span class='co'># ## Create sample datasets with 10 positives and 10 negatives</span>
-<span class='co'># samps &lt;- create_sim_samples(1, 10, 10, "all")</span>
-<span class='co'># mdat &lt;- mmdata(samps[["scores"]], samps[["labels"]],</span>
-<span class='co'>#                modnames = samps[["modnames"]])</span>
-<span class='co'># </span>
-<span class='co'># ## Generate an mscurve object that contains ROC and Precision-Recall curves</span>
-<span class='co'># mscurves &lt;- evalmod(mdat)</span>
-<span class='co'># </span>
-<span class='co'># ## Let ggplot internally call fortify</span>
-<span class='co'># p_rocprc &lt;- ggplot(mscurves, aes(x = x, y = y, color = modname))</span>
-<span class='co'># p_rocprc &lt;- p_rocprc + geom_line()</span>
-<span class='co'># p_rocprc &lt;- p_rocprc + facet_wrap(~curvetype)</span>
-<span class='co'># p_rocprc</span>
-<span class='co'># </span>
-<span class='co'># ## Explicitly fortify mscurves</span>
-<span class='co'># msdf &lt;- fortify(mscurves)</span>
-<span class='co'># </span>
-<span class='co'># ## Plot ROC curve</span>
-<span class='co'># df_roc &lt;- subset(msdf, curvetype == "ROC")</span>
-<span class='co'># p_roc &lt;- ggplot(df_roc, aes(x = x, y = y, color = modname))</span>
-<span class='co'># p_roc &lt;- p_roc + geom_line()</span>
-<span class='co'># p_roc</span>
-<span class='co'># </span>
-<span class='co'># ## Fortified data frame can be used for plotting a Precision-Recall curve</span>
-<span class='co'># df_prc &lt;- subset(msdf, curvetype == "PRC")</span>
-<span class='co'># p_prc &lt;- ggplot(df_prc, aes(x = x, y = y, color = modname))</span>
-<span class='co'># p_prc &lt;- p_prc + geom_line()</span>
-<span class='co'># p_prc</span>
-<span class='co'># </span>
-<span class='co'># ## Generate an mspoints object that contains basic evaluation measures</span>
-<span class='co'># mspoints &lt;- evalmod(mdat, mode = "basic")</span>
-<span class='co'># </span>
-<span class='co'># ## Fortify mspoints</span>
-<span class='co'># msdf &lt;- fortify(mspoints)</span>
-<span class='co'># </span>
-<span class='co'># ## Plot normalized ranks vs. precision</span>
-<span class='co'># df_prec &lt;- subset(msdf, curvetype == "precision")</span>
-<span class='co'># p_prec &lt;- ggplot(df_prec, aes(x = x, y = y, color = modname))</span>
-<span class='co'># p_prec &lt;- p_prc + geom_point()</span>
-<span class='co'># p_prec</span>
-<span class='co'># </span>
-<span class='co'># </span>
-<span class='co'># ##################################################</span>
-<span class='co'># ### Single model &amp; multiple test datasets</span>
-<span class='co'># ###</span>
-<span class='co'># </span>
-<span class='co'># ## Create sample datasets with 10 positives and 10 negatives</span>
-<span class='co'># samps &lt;- create_sim_samples(5, 10, 10, "good_er")</span>
-<span class='co'># mdat &lt;- mmdata(samps[["scores"]], samps[["labels"]],</span>
-<span class='co'>#                modnames = samps[["modnames"]],</span>
-<span class='co'>#                dsids = samps[["dsids"]])</span>
-<span class='co'># </span>
-<span class='co'># ## Generate an smcurve object that contains ROC and Precision-Recall curves</span>
-<span class='co'># smcurves &lt;- evalmod(mdat, raw_curves = TRUE)</span>
-<span class='co'># </span>
-<span class='co'># ## Let ggplot internally call fortify</span>
-<span class='co'># p_rocprc &lt;- ggplot(smcurves, aes(x = x, y = y, ymin = ymin, ymax = ymax))</span>
-<span class='co'># p_rocprc &lt;- p_rocprc + geom_smooth(stat = "identity")</span>
-<span class='co'># p_rocprc &lt;- p_rocprc + facet_wrap(~curvetype)</span>
-<span class='co'># p_rocprc</span>
-<span class='co'># </span>
-<span class='co'># ## Explicitly fortify smcurves</span>
-<span class='co'># smdf &lt;- fortify(smcurves)</span>
-<span class='co'># </span>
-<span class='co'># ## Plot average ROC curve</span>
-<span class='co'># df_roc &lt;- subset(smdf, curvetype == "ROC")</span>
-<span class='co'># p_roc &lt;- ggplot(df_roc, aes(x = x, y = y, ymin = ymin, ymax = ymax))</span>
-<span class='co'># p_roc &lt;- p_roc + geom_smooth(stat = "identity")</span>
-<span class='co'># p_roc</span>
-<span class='co'># </span>
-<span class='co'># ## Plot average Precision-Recall curve</span>
-<span class='co'># df_prc &lt;- subset(smdf, curvetype == "PRC")</span>
-<span class='co'># p_prc &lt;- ggplot(df_prc, aes(x = x, y = y, ymin = ymin, ymax = ymax))</span>
-<span class='co'># p_prc &lt;- p_prc + geom_smooth(stat = "identity")</span>
-<span class='co'># p_prc</span>
-<span class='co'># </span>
-<span class='co'># ## Generate an smpoints object that contains basic evaluation measures</span>
-<span class='co'># smpoints &lt;- evalmod(mdat, mode = "basic")</span>
-<span class='co'># </span>
-<span class='co'># ## Fortify smpoints</span>
-<span class='co'># smdf &lt;- fortify(smpoints)</span>
-<span class='co'># </span>
-<span class='co'># ## Plot normalized ranks vs. precision</span>
-<span class='co'># df_prec &lt;- subset(smdf, curvetype == "precision")</span>
-<span class='co'># p_prec &lt;- ggplot(df_prec, aes(x = x, y = y, ymin = ymin, ymax = ymax))</span>
-<span class='co'># p_prec &lt;- p_prec + geom_ribbon(aes(min = ymin, ymax = ymax),</span>
-<span class='co'>#                                stat = "identity", alpha = 0.25,</span>
-<span class='co'>#                                fill = "grey25")</span>
-<span class='co'># p_prec &lt;- p_prec + geom_point(aes(x = x, y = y))</span>
-<span class='co'># p_prec</span>
-<span class='co'># </span>
-<span class='co'># </span>
-<span class='co'># ##################################################</span>
-<span class='co'># ### Multiple models &amp; multiple test datasets</span>
-<span class='co'># ###</span>
-<span class='co'># </span>
-<span class='co'># ## Create sample datasets with 10 positives and 10 negatives</span>
-<span class='co'># samps &lt;- create_sim_samples(5, 10, 10, "all")</span>
-<span class='co'># mdat &lt;- mmdata(samps[["scores"]], samps[["labels"]],</span>
-<span class='co'>#                modnames = samps[["modnames"]],</span>
-<span class='co'>#                dsids = samps[["dsids"]])</span>
-<span class='co'># </span>
-<span class='co'># ## Generate an mscurve object that contains ROC and Precision-Recall curves</span>
-<span class='co'># mmcurves &lt;- evalmod(mdat, raw_curves = TRUE)</span>
-<span class='co'># </span>
-<span class='co'># ## Let ggplot internally call fortify</span>
-<span class='co'># p_rocprc &lt;- ggplot(mmcurves, aes(x = x, y = y, ymin = ymin, ymax = ymax))</span>
-<span class='co'># p_rocprc &lt;- p_rocprc + geom_smooth(aes(color = modname), stat = "identity")</span>
-<span class='co'># p_rocprc &lt;- p_rocprc + facet_wrap(~curvetype)</span>
-<span class='co'># p_rocprc</span>
-<span class='co'># </span>
-<span class='co'># ## Explicitly fortify mmcurves</span>
-<span class='co'># mmdf &lt;- fortify(mmcurves)</span>
-<span class='co'># </span>
-<span class='co'># ## Plot average ROC curve</span>
-<span class='co'># df_roc &lt;- subset(mmdf, curvetype == "ROC")</span>
-<span class='co'># p_roc &lt;- ggplot(df_roc, aes(x = x, y = y, ymin = ymin, ymax = ymax))</span>
-<span class='co'># p_roc &lt;- p_roc + geom_smooth(aes(color = modname), stat = "identity")</span>
-<span class='co'># p_roc</span>
-<span class='co'># </span>
-<span class='co'># ## Plot average Precision-Recall curve</span>
-<span class='co'># df_prc &lt;- subset(mmdf, curvetype == "PRC")</span>
-<span class='co'># p_prc &lt;- ggplot(df_prc, aes(x = x, y = y, ymin = ymin, ymax = ymax))</span>
-<span class='co'># p_prc &lt;- p_prc + geom_smooth(aes(color = modname), stat = "identity")</span>
-<span class='co'># p_prc</span>
-<span class='co'># </span>
-<span class='co'># ## Generate an mmpoints object that contains basic evaluation measures</span>
-<span class='co'># mmpoints &lt;- evalmod(mdat, mode = "basic")</span>
-<span class='co'># </span>
-<span class='co'># ## Fortify mmpoints</span>
-<span class='co'># mmdf &lt;- fortify(mmpoints)</span>
-<span class='co'># </span>
-<span class='co'># ## Plot normalized ranks vs. precision</span>
-<span class='co'># df_prec &lt;- subset(mmdf, curvetype == "precision")</span>
-<span class='co'># p_prec &lt;- ggplot(df_prec, aes(x = x, y = y, ymin = ymin, ymax = ymax))</span>
-<span class='co'># p_prec &lt;- p_prec + geom_ribbon(aes(min = ymin, ymax = ymax, group = modname),</span>
-<span class='co'>#                                stat = "identity", alpha = 0.25,</span>
-<span class='co'>#                                fill = "grey25")</span>
-<span class='co'># p_prec &lt;- p_prec + geom_point(aes(x = x, y = y, color = modname))</span>
-<span class='co'># p_prec</span>
-<span class='co'>## ---------------------------------------------</span></div></pre>
+    <pre class="examples"><div class='input'>
+<span class='co'>## Load library</span>
+<span class='fu'>library</span>(<span class='no'>ggplot2</span>)
+
+<span class='co'>##################################################</span>
+<span class='co'>### Single model &amp; single test dataset</span>
+<span class='co'>###</span>
+
+<span class='co'>## Load a dataset with 10 positives and 10 negatives</span>
+<span class='fu'>data</span>(<span class='no'>P10N10</span>)
+
+<span class='co'>## Generate an sscurve object that contains ROC and Precision-Recall curves</span>
+<span class='no'>sscurves</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='kw'>scores</span> <span class='kw'>=</span> <span class='no'>P10N10</span>$<span class='no'>scores</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='no'>P10N10</span>$<span class='no'>labels</span>)
+
+<span class='co'>## Let ggplot internally call fortify</span>
+<span class='no'>p_rocprc</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='no'>sscurves</span>, <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>))
+<span class='no'>p_rocprc</span> <span class='kw'>&lt;-</span> <span class='no'>p_rocprc</span> + <span class='fu'>geom_line</span>()
+<span class='no'>p_rocprc</span> <span class='kw'>&lt;-</span> <span class='no'>p_rocprc</span> + <span class='fu'>facet_wrap</span>(~<span class='no'>curvetype</span>)
+<span class='no'>p_rocprc</span></div><img src='fortify-2.png' alt='' width='540' height='400' /><div class='input'>
+<span class='co'>## Explicitly fortify sscurves</span>
+<span class='no'>ssdf</span> <span class='kw'>&lt;-</span> <span class='fu'>fortify</span>(<span class='no'>sscurves</span>)
+
+<span class='co'>## Plot a ROC curve</span>
+<span class='no'>p_roc</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='fu'>subset</span>(<span class='no'>ssdf</span>, <span class='no'>curvetype</span> <span class='kw'>==</span> <span class='st'>"ROC"</span>), <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>))
+<span class='no'>p_roc</span> <span class='kw'>&lt;-</span> <span class='no'>p_roc</span> + <span class='fu'>geom_line</span>()
+<span class='no'>p_roc</span></div><img src='fortify-4.png' alt='' width='540' height='400' /><div class='input'>
+<span class='co'>## Plot a Precision-Recall curve</span>
+<span class='no'>p_prc</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='fu'>subset</span>(<span class='no'>ssdf</span>, <span class='no'>curvetype</span> <span class='kw'>==</span> <span class='st'>"PRC"</span>), <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>))
+<span class='no'>p_prc</span> <span class='kw'>&lt;-</span> <span class='no'>p_prc</span> + <span class='fu'>geom_line</span>()
+<span class='no'>p_prc</span></div><img src='fortify-6.png' alt='' width='540' height='400' /><div class='input'>
+<span class='co'>## Generate an sspoints object that contains basic evaluation measures</span>
+<span class='no'>sspoints</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"basic"</span>, <span class='kw'>scores</span> <span class='kw'>=</span> <span class='no'>P10N10</span>$<span class='no'>scores</span>,
+                    <span class='kw'>labels</span> <span class='kw'>=</span> <span class='no'>P10N10</span>$<span class='no'>labels</span>)
+<span class='co'>## Fortify sspoints</span>
+<span class='no'>ssdf</span> <span class='kw'>&lt;-</span> <span class='fu'>fortify</span>(<span class='no'>sspoints</span>)
+
+<span class='co'>## Plot normalized ranks vs. precision</span>
+<span class='no'>p_prec</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='fu'>subset</span>(<span class='no'>ssdf</span>, <span class='no'>curvetype</span> <span class='kw'>==</span> <span class='st'>"precision"</span>), <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>))
+<span class='no'>p_prec</span> <span class='kw'>&lt;-</span> <span class='no'>p_prec</span> + <span class='fu'>geom_point</span>()
+<span class='no'>p_prec</span></div><img src='fortify-8.png' alt='' width='540' height='400' /><div class='input'>
+
+<span class='co'>##################################################</span>
+<span class='co'>### Multiple models &amp; single test dataset</span>
+<span class='co'>###</span>
+
+<span class='co'>## Create sample datasets with 10 positives and 10 negatives</span>
+<span class='no'>samps</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_sim_samples.html'>create_sim_samples</a></span>(<span class='fl'>1</span>, <span class='fl'>10</span>, <span class='fl'>10</span>, <span class='st'>"all"</span>)
+<span class='no'>mdat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mmdata.html'>mmdata</a></span>(<span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"scores"</span>]], <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"labels"</span>]],
+               <span class='kw'>modnames</span> <span class='kw'>=</span> <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"modnames"</span>]])
+
+<span class='co'>## Generate an mscurve object that contains ROC and Precision-Recall curves</span>
+<span class='no'>mscurves</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>)
+
+<span class='co'>## Let ggplot internally call fortify</span>
+<span class='no'>p_rocprc</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='no'>mscurves</span>, <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='no'>modname</span>))
+<span class='no'>p_rocprc</span> <span class='kw'>&lt;-</span> <span class='no'>p_rocprc</span> + <span class='fu'>geom_line</span>()
+<span class='no'>p_rocprc</span> <span class='kw'>&lt;-</span> <span class='no'>p_rocprc</span> + <span class='fu'>facet_wrap</span>(~<span class='no'>curvetype</span>)
+<span class='no'>p_rocprc</span></div><img src='fortify-10.png' alt='' width='540' height='400' /><div class='input'>
+<span class='co'>## Explicitly fortify mscurves</span>
+<span class='no'>msdf</span> <span class='kw'>&lt;-</span> <span class='fu'>fortify</span>(<span class='no'>mscurves</span>)
+
+<span class='co'>## Plot ROC curve</span>
+<span class='no'>df_roc</span> <span class='kw'>&lt;-</span> <span class='fu'>subset</span>(<span class='no'>msdf</span>, <span class='no'>curvetype</span> <span class='kw'>==</span> <span class='st'>"ROC"</span>)
+<span class='no'>p_roc</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='no'>df_roc</span>, <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='no'>modname</span>))
+<span class='no'>p_roc</span> <span class='kw'>&lt;-</span> <span class='no'>p_roc</span> + <span class='fu'>geom_line</span>()
+<span class='no'>p_roc</span></div><img src='fortify-12.png' alt='' width='540' height='400' /><div class='input'>
+<span class='co'>## Fortified data frame can be used for plotting a Precision-Recall curve</span>
+<span class='no'>df_prc</span> <span class='kw'>&lt;-</span> <span class='fu'>subset</span>(<span class='no'>msdf</span>, <span class='no'>curvetype</span> <span class='kw'>==</span> <span class='st'>"PRC"</span>)
+<span class='no'>p_prc</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='no'>df_prc</span>, <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='no'>modname</span>))
+<span class='no'>p_prc</span> <span class='kw'>&lt;-</span> <span class='no'>p_prc</span> + <span class='fu'>geom_line</span>()
+<span class='no'>p_prc</span></div><img src='fortify-14.png' alt='' width='540' height='400' /><div class='input'>
+<span class='co'>## Generate an mspoints object that contains basic evaluation measures</span>
+<span class='no'>mspoints</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"basic"</span>)
+
+<span class='co'>## Fortify mspoints</span>
+<span class='no'>msdf</span> <span class='kw'>&lt;-</span> <span class='fu'>fortify</span>(<span class='no'>mspoints</span>)
+
+<span class='co'>## Plot normalized ranks vs. precision</span>
+<span class='no'>df_prec</span> <span class='kw'>&lt;-</span> <span class='fu'>subset</span>(<span class='no'>msdf</span>, <span class='no'>curvetype</span> <span class='kw'>==</span> <span class='st'>"precision"</span>)
+<span class='no'>p_prec</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='no'>df_prec</span>, <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='no'>modname</span>))
+<span class='no'>p_prec</span> <span class='kw'>&lt;-</span> <span class='no'>p_prec</span> + <span class='fu'>geom_point</span>()
+<span class='no'>p_prec</span></div><img src='fortify-16.png' alt='' width='540' height='400' /><div class='input'>
+
+<span class='co'>##################################################</span>
+<span class='co'>### Single model &amp; multiple test datasets</span>
+<span class='co'>###</span>
+
+<span class='co'>## Create sample datasets with 10 positives and 10 negatives</span>
+<span class='no'>samps</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_sim_samples.html'>create_sim_samples</a></span>(<span class='fl'>5</span>, <span class='fl'>10</span>, <span class='fl'>10</span>, <span class='st'>"good_er"</span>)
+<span class='no'>mdat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mmdata.html'>mmdata</a></span>(<span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"scores"</span>]], <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"labels"</span>]],
+               <span class='kw'>modnames</span> <span class='kw'>=</span> <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"modnames"</span>]],
+               <span class='kw'>dsids</span> <span class='kw'>=</span> <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"dsids"</span>]])
+
+<span class='co'>## Generate an smcurve object that contains ROC and Precision-Recall curves</span>
+<span class='no'>smcurves</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
+<span class='co'>## Let ggplot internally call fortify</span>
+<span class='no'>p_rocprc</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='no'>smcurves</span>, <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>, <span class='kw'>ymin</span> <span class='kw'>=</span> <span class='no'>ymin</span>, <span class='kw'>ymax</span> <span class='kw'>=</span> <span class='no'>ymax</span>))
+<span class='no'>p_rocprc</span> <span class='kw'>&lt;-</span> <span class='no'>p_rocprc</span> + <span class='fu'>geom_smooth</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"identity"</span>)
+<span class='no'>p_rocprc</span> <span class='kw'>&lt;-</span> <span class='no'>p_rocprc</span> + <span class='fu'>facet_wrap</span>(~<span class='no'>curvetype</span>)
+<span class='no'>p_rocprc</span></div><img src='fortify-18.png' alt='' width='540' height='400' /><div class='input'>
+<span class='co'>## Explicitly fortify smcurves</span>
+<span class='no'>smdf</span> <span class='kw'>&lt;-</span> <span class='fu'>fortify</span>(<span class='no'>smcurves</span>)
+
+<span class='co'>## Plot average ROC curve</span>
+<span class='no'>df_roc</span> <span class='kw'>&lt;-</span> <span class='fu'>subset</span>(<span class='no'>smdf</span>, <span class='no'>curvetype</span> <span class='kw'>==</span> <span class='st'>"ROC"</span>)
+<span class='no'>p_roc</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='no'>df_roc</span>, <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>, <span class='kw'>ymin</span> <span class='kw'>=</span> <span class='no'>ymin</span>, <span class='kw'>ymax</span> <span class='kw'>=</span> <span class='no'>ymax</span>))
+<span class='no'>p_roc</span> <span class='kw'>&lt;-</span> <span class='no'>p_roc</span> + <span class='fu'>geom_smooth</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"identity"</span>)
+<span class='no'>p_roc</span></div><img src='fortify-20.png' alt='' width='540' height='400' /><div class='input'>
+<span class='co'>## Plot average Precision-Recall curve</span>
+<span class='no'>df_prc</span> <span class='kw'>&lt;-</span> <span class='fu'>subset</span>(<span class='no'>smdf</span>, <span class='no'>curvetype</span> <span class='kw'>==</span> <span class='st'>"PRC"</span>)
+<span class='no'>p_prc</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='no'>df_prc</span>, <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>, <span class='kw'>ymin</span> <span class='kw'>=</span> <span class='no'>ymin</span>, <span class='kw'>ymax</span> <span class='kw'>=</span> <span class='no'>ymax</span>))
+<span class='no'>p_prc</span> <span class='kw'>&lt;-</span> <span class='no'>p_prc</span> + <span class='fu'>geom_smooth</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"identity"</span>)
+<span class='no'>p_prc</span></div><img src='fortify-22.png' alt='' width='540' height='400' /><div class='input'>
+<span class='co'>## Generate an smpoints object that contains basic evaluation measures</span>
+<span class='no'>smpoints</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"basic"</span>)
+
+<span class='co'>## Fortify smpoints</span>
+<span class='no'>smdf</span> <span class='kw'>&lt;-</span> <span class='fu'>fortify</span>(<span class='no'>smpoints</span>)
+
+<span class='co'>## Plot normalized ranks vs. precision</span>
+<span class='no'>df_prec</span> <span class='kw'>&lt;-</span> <span class='fu'>subset</span>(<span class='no'>smdf</span>, <span class='no'>curvetype</span> <span class='kw'>==</span> <span class='st'>"precision"</span>)
+<span class='no'>p_prec</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='no'>df_prec</span>, <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>, <span class='kw'>ymin</span> <span class='kw'>=</span> <span class='no'>ymin</span>, <span class='kw'>ymax</span> <span class='kw'>=</span> <span class='no'>ymax</span>))
+<span class='no'>p_prec</span> <span class='kw'>&lt;-</span> <span class='no'>p_prec</span> + <span class='fu'>geom_ribbon</span>(<span class='fu'>aes</span>(<span class='kw'>min</span> <span class='kw'>=</span> <span class='no'>ymin</span>, <span class='kw'>ymax</span> <span class='kw'>=</span> <span class='no'>ymax</span>),
+                               <span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"identity"</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.25</span>,
+                               <span class='kw'>fill</span> <span class='kw'>=</span> <span class='st'>"grey25"</span>)
+<span class='no'>p_prec</span> <span class='kw'>&lt;-</span> <span class='no'>p_prec</span> + <span class='fu'>geom_point</span>(<span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>))
+<span class='no'>p_prec</span></div><img src='fortify-24.png' alt='' width='540' height='400' /><div class='input'>
+
+<span class='co'>##################################################</span>
+<span class='co'>### Multiple models &amp; multiple test datasets</span>
+<span class='co'>###</span>
+
+<span class='co'>## Create sample datasets with 10 positives and 10 negatives</span>
+<span class='no'>samps</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_sim_samples.html'>create_sim_samples</a></span>(<span class='fl'>5</span>, <span class='fl'>10</span>, <span class='fl'>10</span>, <span class='st'>"all"</span>)
+<span class='no'>mdat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mmdata.html'>mmdata</a></span>(<span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"scores"</span>]], <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"labels"</span>]],
+               <span class='kw'>modnames</span> <span class='kw'>=</span> <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"modnames"</span>]],
+               <span class='kw'>dsids</span> <span class='kw'>=</span> <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"dsids"</span>]])
+
+<span class='co'>## Generate an mscurve object that contains ROC and Precision-Recall curves</span>
+<span class='no'>mmcurves</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
+<span class='co'>## Let ggplot internally call fortify</span>
+<span class='no'>p_rocprc</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='no'>mmcurves</span>, <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>, <span class='kw'>ymin</span> <span class='kw'>=</span> <span class='no'>ymin</span>, <span class='kw'>ymax</span> <span class='kw'>=</span> <span class='no'>ymax</span>))
+<span class='no'>p_rocprc</span> <span class='kw'>&lt;-</span> <span class='no'>p_rocprc</span> + <span class='fu'>geom_smooth</span>(<span class='fu'>aes</span>(<span class='kw'>color</span> <span class='kw'>=</span> <span class='no'>modname</span>), <span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"identity"</span>)
+<span class='no'>p_rocprc</span> <span class='kw'>&lt;-</span> <span class='no'>p_rocprc</span> + <span class='fu'>facet_wrap</span>(~<span class='no'>curvetype</span>)
+<span class='no'>p_rocprc</span></div><img src='fortify-26.png' alt='' width='540' height='400' /><div class='input'>
+<span class='co'>## Explicitly fortify mmcurves</span>
+<span class='no'>mmdf</span> <span class='kw'>&lt;-</span> <span class='fu'>fortify</span>(<span class='no'>mmcurves</span>)
+
+<span class='co'>## Plot average ROC curve</span>
+<span class='no'>df_roc</span> <span class='kw'>&lt;-</span> <span class='fu'>subset</span>(<span class='no'>mmdf</span>, <span class='no'>curvetype</span> <span class='kw'>==</span> <span class='st'>"ROC"</span>)
+<span class='no'>p_roc</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='no'>df_roc</span>, <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>, <span class='kw'>ymin</span> <span class='kw'>=</span> <span class='no'>ymin</span>, <span class='kw'>ymax</span> <span class='kw'>=</span> <span class='no'>ymax</span>))
+<span class='no'>p_roc</span> <span class='kw'>&lt;-</span> <span class='no'>p_roc</span> + <span class='fu'>geom_smooth</span>(<span class='fu'>aes</span>(<span class='kw'>color</span> <span class='kw'>=</span> <span class='no'>modname</span>), <span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"identity"</span>)
+<span class='no'>p_roc</span></div><img src='fortify-28.png' alt='' width='540' height='400' /><div class='input'>
+<span class='co'>## Plot average Precision-Recall curve</span>
+<span class='no'>df_prc</span> <span class='kw'>&lt;-</span> <span class='fu'>subset</span>(<span class='no'>mmdf</span>, <span class='no'>curvetype</span> <span class='kw'>==</span> <span class='st'>"PRC"</span>)
+<span class='no'>p_prc</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='no'>df_prc</span>, <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>, <span class='kw'>ymin</span> <span class='kw'>=</span> <span class='no'>ymin</span>, <span class='kw'>ymax</span> <span class='kw'>=</span> <span class='no'>ymax</span>))
+<span class='no'>p_prc</span> <span class='kw'>&lt;-</span> <span class='no'>p_prc</span> + <span class='fu'>geom_smooth</span>(<span class='fu'>aes</span>(<span class='kw'>color</span> <span class='kw'>=</span> <span class='no'>modname</span>), <span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"identity"</span>)
+<span class='no'>p_prc</span></div><img src='fortify-30.png' alt='' width='540' height='400' /><div class='input'>
+<span class='co'>## Generate an mmpoints object that contains basic evaluation measures</span>
+<span class='no'>mmpoints</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"basic"</span>)
+
+<span class='co'>## Fortify mmpoints</span>
+<span class='no'>mmdf</span> <span class='kw'>&lt;-</span> <span class='fu'>fortify</span>(<span class='no'>mmpoints</span>)
+
+<span class='co'>## Plot normalized ranks vs. precision</span>
+<span class='no'>df_prec</span> <span class='kw'>&lt;-</span> <span class='fu'>subset</span>(<span class='no'>mmdf</span>, <span class='no'>curvetype</span> <span class='kw'>==</span> <span class='st'>"precision"</span>)
+<span class='no'>p_prec</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='no'>df_prec</span>, <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>, <span class='kw'>ymin</span> <span class='kw'>=</span> <span class='no'>ymin</span>, <span class='kw'>ymax</span> <span class='kw'>=</span> <span class='no'>ymax</span>))
+<span class='no'>p_prec</span> <span class='kw'>&lt;-</span> <span class='no'>p_prec</span> + <span class='fu'>geom_ribbon</span>(<span class='fu'>aes</span>(<span class='kw'>min</span> <span class='kw'>=</span> <span class='no'>ymin</span>, <span class='kw'>ymax</span> <span class='kw'>=</span> <span class='no'>ymax</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='no'>modname</span>),
+                               <span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"identity"</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.25</span>,
+                               <span class='kw'>fill</span> <span class='kw'>=</span> <span class='st'>"grey25"</span>)
+<span class='no'>p_prec</span> <span class='kw'>&lt;-</span> <span class='no'>p_prec</span> + <span class='fu'>geom_point</span>(<span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='no'>modname</span>))
+<span class='no'>p_prec</span></div><img src='fortify-32.png' alt='' width='540' height='400' /><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

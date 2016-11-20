@@ -6,8 +6,8 @@
 \alias{precrec-package}
 \title{precrec: A package for computing accurate ROC and Precision-Recall curves}
 \description{
-The precrec package provides three categories of important functions:
-performance measure calculations, \code{S3} generics, and data preparation.
+The precrec package contains several functions and \code{S3} generics to
+provide a robust platform for performance evaluation of binary classifiers.
 }
 \section{Functions}{
 
@@ -21,16 +21,6 @@ The precrec package provides the following five functions.
     \code{\link{join_labels}}        \tab Join observed labels of multiple test datasets into a list \cr
     \code{\link{create_sim_samples}} \tab Create random samples for simulations
   }
-}
-
-\section{Performance measure calculations}{
-
-The \code{\link{evalmod}} function calculates ROC and Precision-Recall
-  curves and returns an \code{S3} object. The generated \code{S3} object can
-  be used with several different \code{S3} generics, such as \code{print} and
-  \code{\link{plot}}. The \code{\link{evalmod}} function can also
-  calculate basic evaluation measures - error rate, accuracy, specificity,
-  sensitivity, precision, Matthews correlation coefficient, and F-Score.
 }
 
 \section{S3 generics}{
@@ -49,6 +39,16 @@ The precrec package provides eight different \code{S3} generics for the
     \code{\link{part}}     \tab precrec   \tab Calculate partial curves and partial AUC scores \cr
     \code{\link{pauc}}     \tab precrec   \tab Make a data frame with pAUC scores
   }
+}
+
+\section{Performance measure calculations}{
+
+The \code{\link{evalmod}} function calculates ROC and Precision-Recall
+  curves and returns an \code{S3} object. The generated \code{S3} object can
+  be used with several different \code{S3} generics, such as \code{print} and
+  \code{\link{plot}}. The \code{\link{evalmod}} function can also
+  calculate basic evaluation measures - error rate, accuracy, specificity,
+  sensitivity, precision, Matthews correlation coefficient, and F-Score.
 }
 
 \section{Data preparation}{

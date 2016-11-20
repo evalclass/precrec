@@ -43,8 +43,8 @@
 <div class="page-header"><h1 class="hasAnchor"><a href="#precrec" class="anchor"> </a>Precrec</h1></div>
 
 <p>The aim of the <code>precrec</code> package is to provide an integrated platform that enables robust performance evaluations of binary classifiers. Specifically, <code>precrec</code> offers accurate calculations of ROC (Receiver Operator Characteristics) and precision-recall curves. All the main calculations of <code>precrec</code> are implemented with C++/<a href="https://cran.r-project.org/package=Rcpp">Rcpp</a>.</p>
-<div id="five-key-features-of-precrec" class="section level2">
-<h2 class="hasAnchor"><a href="#five-key-features-of-precrec" class="anchor"> </a>Five key features of precrec</h2>
+<div id="six-key-features-of-precrec" class="section level2">
+<h2 class="hasAnchor"><a href="#six-key-features-of-precrec" class="anchor"> </a>Six key features of precrec</h2>
 <div id="accurate-curve-calculations" class="section level3">
 <h3 class="hasAnchor"><a href="#accurate-curve-calculations" class="anchor"> </a>1. Accurate curve calculations</h3>
 <p><code>precrec</code> provides accurate precision-recall curves.</p>
@@ -59,7 +59,7 @@
 </div>
 <div id="various-evaluation-metrics" class="section level3">
 <h3 class="hasAnchor"><a href="#various-evaluation-metrics" class="anchor"> </a>3. Various evaluation metrics</h3>
-<p>Besides the AUCs of precision-recall and ROC curves, <code>precrec</code> offers basic evaluation measures.</p>
+<p>In addition to precision-recall and ROC curves, <code>precrec</code> offers basic evaluation measures.</p>
 <ul><li>Error rate</li>
 <li>Accuracy</li>
 <li>Specificity</li>
@@ -70,15 +70,18 @@
 </ul></div>
 <div id="confidence-interval-band" class="section level3">
 <h3 class="hasAnchor"><a href="#confidence-interval-band" class="anchor"> </a>4. Confidence interval band</h3>
-<p><code>precrec</code> calculates confidence intervals when multiple test sets are given. It automatically plots confidence bands for the averaged curve in that case.</p>
+<p><code>precrec</code> calculates confidence intervals when multiple test sets are given. It automatically shows confidence bands about the averaged curve in the corresponding plot.</p>
+</div>
+<div id="calculation-of-partial-aucs-and-visualization-of-partial-curves" class="section level3">
+<h3 class="hasAnchor"><a href="#calculation-of-partial-aucs-and-visualization-of-partial-curves" class="anchor"> </a>5. Calculation of partial AUCs and visualization of partial curves</h3>
+<p><code>precrec</code> calculates partial AUCs for specified x and y ranges. It can also draw partial ROC and precision-recall curves for the specified ranges.</p>
 </div>
 <div id="supporting-functions" class="section level3">
-<h3 class="hasAnchor"><a href="#supporting-functions" class="anchor"> </a>5. Supporting functions</h3>
+<h3 class="hasAnchor"><a href="#supporting-functions" class="anchor"> </a>6. Supporting functions</h3>
 <p><code>precrec</code> provides several useful functions that lack in most other evaluation tools.</p>
 <ul><li>Handling multiple models and multiple test sets</li>
 <li>Handling tied scores and missing scores</li>
-<li>Calculation of partial AUCs</li>
-<li>Pre- and post-process functions for simple data preparation and curve analysis</li>
+<li>Pre- and post-process functions of simple data preparation and curve analysis</li>
 </ul></div>
 </div>
 <div id="installation" class="section level2">
@@ -140,8 +143,8 @@
 </tr></tbody></table></div>
 <div id="documentation" class="section level2">
 <h2 class="hasAnchor"><a href="#documentation" class="anchor"> </a>Documentation</h2>
-<ul><li><p>Introduction to precrec - a package vignette that contains the descriptions of the functions with several useful examples. View the vignette with <code><a href="articles/introduction.html">vignette("introduction", package = "precrec")</a></code> in R or click the link on the <a href="https://cran.r-project.org/package=precrec">precrec CRAN page</a>.</p></li>
-<li><p>Help pages - all the functions including the S3 generics except for <code>print</code> have their own help pages with plenty of examples. View the main help page with <code>help(package = "precrec")</code> in R. In addition, CRAN provides a pdf version of all combined help files as a reference manual, which is available on the <a href="https://cran.r-project.org/package=precrec">precrec CRAN page</a>.</p></li>
+<ul><li><p><a href="http://takayasaito.github.io/precrec/articles/introduction.html">Introduction to precrec</a> - a package vignette that contains the descriptions of the functions with several useful examples. View the vignette with <code><a href="articles/introduction.html">vignette("introduction", package = "precrec")</a></code> in R. The HTML version is also available on the <a href="http://takayasaito.github.io/precrec/articles/introduction.html">GitPages</a>.</p></li>
+<li><p><a href="http://takayasaito.github.io/precrec/reference">Help pages</a> - all the functions including the S3 generics except for <code>print</code> have their own help pages with plenty of examples. View the main help page with <code>help(package = "precrec")</code> in R. The HTML version is also available on the <a href="http://takayasaito.github.io/precrec/reference">GitPages</a>.</p></li>
 </ul></div>
 <div id="examples" class="section level2">
 <h2 class="hasAnchor"><a href="#examples" class="anchor"> </a>Examples</h2>
@@ -188,7 +191,7 @@ sscurves &lt;-<span class="st"> </span><span class="kw"><a href="reference/evalm
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Links</h2><ul class="list-unstyled"><li>Download from CRAN at <br><a href="https://cran.r-project.org/package=precrec">https://&#8203;cran.r-project.org/&#8203;package=precrec</a></li>
-<li>Browse source code at <br><a href="https://github.com/takayasaito/precrec">https://&#8203;github.com/&#8203;takayasaito/&#8203;precrec</a></li>
+<li>Browse source code at <br><a href="http://takayasaito.github.io/precrec">http://&#8203;takayasaito.github.io/&#8203;precrec</a></li>
 <li>Report a bug at <br><a href="https://github.com/takayasaito/precrec/issues">https://&#8203;github.com/&#8203;takayasaito/&#8203;precrec/&#8203;issues</a></li>
 </ul><h2>License</h2>
 <p><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></p>
