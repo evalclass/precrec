@@ -5,8 +5,8 @@ Precrec
 
 The aim of the `precrec` package is to provide an integrated platform that enables robust performance evaluations of binary classifiers. Specifically, `precrec` offers accurate calculations of ROC (Receiver Operator Characteristics) and precision-recall curves. All the main calculations of `precrec` are implemented with C++/[Rcpp](https://cran.r-project.org/package=Rcpp).
 
-Five key features of precrec
-----------------------------
+Six key features of precrec
+---------------------------
 
 ### 1. Accurate curve calculations
 
@@ -24,7 +24,7 @@ Five key features of precrec
 
 ### 3. Various evaluation metrics
 
-Besides the AUCs of precision-recall and ROC curves, `precrec` offers basic evaluation measures.
+In addition to precision-recall and ROC curves, `precrec` offers basic evaluation measures.
 
 -   Error rate
 -   Accuracy
@@ -36,16 +36,19 @@ Besides the AUCs of precision-recall and ROC curves, `precrec` offers basic eval
 
 ### 4. Confidence interval band
 
-`precrec` calculates confidence intervals when multiple test sets are given. It automatically plots confidence bands for the averaged curve in that case.
+`precrec` calculates confidence intervals when multiple test sets are given. It automatically shows confidence bands about the averaged curve in the corresponding plot.
 
-### 5. Supporting functions
+### 5. Calculation of partial AUCs and visualization of partial curves
+
+`precrec` calculates partial AUCs for specified x and y ranges. It can also draw partial ROC and precision-recall curves for the specified ranges.
+
+### 6. Supporting functions
 
 `precrec` provides several useful functions that lack in most other evaluation tools.
 
 -   Handling multiple models and multiple test sets
 -   Handling tied scores and missing scores
--   Calculation of partial AUCs
--   Pre- and post-process functions for simple data preparation and curve analysis
+-   Pre- and post-process functions of simple data preparation and curve analysis
 
 Installation
 ------------
@@ -92,9 +95,9 @@ Moreover, the `precrec` package provides eight S3 generics for the S3 object cre
 Documentation
 -------------
 
--   Introduction to precrec - a package vignette that contains the descriptions of the functions with several useful examples. View the vignette with `vignette("introduction", package = "precrec")` in R or click the link on the [precrec CRAN page](https://cran.r-project.org/package=precrec).
+-   [Introduction to precrec](http://takayasaito.github.io/precrec/articles/introduction.html) - a package vignette that contains the descriptions of the functions with several useful examples. View the vignette with `vignette("introduction", package = "precrec")` in R. The HTML version is also available on the [GitPages](http://takayasaito.github.io/precrec/articles/introduction.html).
 
--   Help pages - all the functions including the S3 generics except for `print` have their own help pages with plenty of examples. View the main help page with `help(package = "precrec")` in R. In addition, CRAN provides a pdf version of all combined help files as a reference manual, which is available on the [precrec CRAN page](https://cran.r-project.org/package=precrec).
+-   [Help pages](http://takayasaito.github.io/precrec/reference) - all the functions including the S3 generics except for `print` have their own help pages with plenty of examples. View the main help page with `help(package = "precrec")` in R. The HTML version is also available on the [GitPages](http://takayasaito.github.io/precrec/reference).
 
 Examples
 --------
@@ -138,7 +141,7 @@ Takaya Saito; Marc Rehmsmeier
 
 Bioinformatics 2016;
 
-doi: [10.1093/bioinformatics/btw570](http://dx.doi.org/10.1093/bioinformatics/btw570)
+doi: [10.1093/bioinformatics/btw570](https://doi.org/10.1093/bioinformatics/btw570)
 
 External links
 --------------

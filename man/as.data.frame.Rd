@@ -104,11 +104,17 @@ sscurves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 ## Convert sscurves to a data frame
 sscurves.df <- as.data.frame(sscurves)
 
+## Show data frame
+head(sscurves.df)
+
 ## Generate an sspoints object that contains basic evaluation measures
 sspoints <- evalmod(mode = "basic", scores = P10N10$scores,
                     labels = P10N10$labels)
 ## Convert sspoints to a data frame
 sspoints.df <- as.data.frame(sspoints)
+
+## Show data frame
+head(sspoints.df)
 
 
 ##################################################
@@ -126,11 +132,17 @@ mscurves <- evalmod(mdat)
 ## Convert mscurves to a data frame
 mscurves.df <- as.data.frame(mscurves)
 
+## Show data frame
+head(mscurves.df)
+
 ## Generate an mspoints object that contains basic evaluation measures
 mspoints <- evalmod(mdat, mode = "basic")
 
 ## Convert mspoints to a data frame
 mspoints.df <- as.data.frame(mspoints)
+
+## Show data frame
+head(mspoints.df)
 
 
 ##################################################
@@ -149,12 +161,17 @@ smcurves <- evalmod(mdat, raw_curves = TRUE)
 ## Convert smcurves to a data frame
 smcurves.df <- as.data.frame(smcurves)
 
+## Show data frame
+head(smcurves.df)
 
 ## Generate an smpoints object that contains basic evaluation measures
 smpoints <- evalmod(mdat, mode = "basic")
 
 ## Convert smpoints to a data frame
 smpoints.df <- as.data.frame(smpoints)
+
+## Show data frame
+head(smpoints.df)
 
 
 ##################################################
@@ -173,11 +190,17 @@ mmcurves <- evalmod(mdat, raw_curves = TRUE)
 ## Convert mmcurves to a data frame
 mmcurves.df <- as.data.frame(mmcurves)
 
+## Show data frame
+head(mmcurves.df)
+
 ## Generate an mmpoints object that contains basic evaluation measures
 mmpoints <- evalmod(mdat, mode = "basic")
 
 ## Convert mmpoints to a data frame
 mmpoints.df <- as.data.frame(mmpoints)
+
+## Show data frame
+head(mmpoints.df)
 
 }
 \seealso{

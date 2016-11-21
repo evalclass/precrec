@@ -44,6 +44,8 @@
 #'   of pAUCs.
 #'
 #' @examples
+#' \dontrun{
+#'
 #' ## Load library
 #' library(ggplot2)
 #'
@@ -100,7 +102,7 @@
 #' ###
 #'
 #' ## Create sample datasets with 100 positives and 100 negatives
-#' samps <- create_sim_samples(10, 100, 100, "good_er")
+#' samps <- create_sim_samples(4, 100, 100, "good_er")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 #'                modnames = samps[["modnames"]],
 #'                dsids = samps[["dsids"]])
@@ -126,7 +128,7 @@
 #' ###
 #'
 #' ## Create sample datasets with 100 positives and 100 negatives
-#' samps <- create_sim_samples(10, 100, 100, "all")
+#' samps <- create_sim_samples(4, 100, 100, "all")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 #'                modnames = samps[["modnames"]],
 #'                dsids = samps[["dsids"]])
@@ -145,6 +147,7 @@
 #'
 #' ## Plot partial curves with ggplot
 #' autoplot(mmcurves.part)
+#' }
 #'
 #' @export
 part <- function(curves, xlim, ylim, curvetype) UseMethod("part")

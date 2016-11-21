@@ -55,12 +55,12 @@
   <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
-      
+
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/takayasaito/precrec">
     <span class="fa fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul>
@@ -68,7 +68,7 @@
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
       </header>
 
       <div class="row">
@@ -77,10 +77,10 @@
     <h1>Plot performance evaluation measures with ggplot2</h1>
     </div>
 
-    
+
     <p>The <code>autoplot</code> function plots performance evaluation measures
   by using <span class="pkg">ggplot2</span> instead of the general R plot.</p>
-    
+
 
     <pre><span class='co'># S3 method for sscurves</span>
 <span class='fu'>autoplot</span>(<span class='no'>object</span>, <span class='kw'>curvetype</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"ROC"</span>, <span class='st'>"PRC"</span>), <span class='no'>...</span>)
@@ -109,7 +109,7 @@
 <span class='co'># S3 method for mmpoints</span>
 <span class='fu'>autoplot</span>(<span class='no'>object</span>, <span class='kw'>curvetype</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"score"</span>, <span class='st'>"label"</span>, <span class='st'>"error"</span>,
   <span class='st'>"accuracy"</span>, <span class='st'>"specificity"</span>, <span class='st'>"sensitivity"</span>, <span class='st'>"precision"</span>, <span class='st'>"mcc"</span>, <span class='st'>"fscore"</span>), <span class='no'>...</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
       <dt>object</dt>
@@ -120,50 +120,81 @@
 <ol>
 <li> ROC and Precision-Recall curves (<code>mode = &quot;rocprc&quot;</code>)
 
-  <table><tr><td>
-    <strong><code>S3</code> object</strong>
-    </td>
-<td> <strong># of models</strong>
-    </td>
-</tr><tr><td> <strong># of test datasets</strong> </td>
-<td>
-
-    sscurves </td>
-</tr><tr><td> single   </td>
-<td> single   </td>
-</tr><tr><td>
-    mscurves </td>
-<td> multiple </td>
-</tr><tr><td> single   </td>
-<td>
-    smcurves </td>
-</tr><tr><td> single   </td>
-<td> multiple </td>
-</tr></table>
+<p>
+<table width="100%">
+   <tr>
+      <td>
+         <strong>S3 object</strong>
+      </td>
+      <td>
+         <strong># of models</strong>
+      </td>
+      <td>
+         <strong># of test datasets</strong>
+      </td>
+   </tr>
+   <tr>
+      <td> sscurves </td>
+      <td> single   </td>
+      <td> single   </td>
+   </tr>
+   <tr>
+      <td> mscurves </td>
+      <td> multiple </td>
+      <td> single   </td>
+   </tr>
+   <tr>
+      <td> smcurves </td>
+      <td> single   </td>
+      <td> multiple </td>
+   </tr>
+   <tr>
+      <td> mmcurves </td>
+      <td> multiple </td>
+      <td> multiple </td>
+   </tr>
+</table>
+</p>
 
   </li>
 <li> Basic evaluation measures (<code>mode = &quot;basic&quot;</code>)
 
-  <table><tr><td>
-    <strong><code>S3</code> object</strong>
-    </td>
-<td> <strong># of models</strong>
-    </td>
-</tr><tr><td> <strong># of test datasets</strong> </td>
-<td>
+<p>
+<table width="100%">
+   <tr>
+      <td>
+         <strong>S3 object</strong>
+      </td>
+      <td>
+         <strong># of models</strong>
+      </td>
+      <td>
+         <strong># of test datasets</strong>
+      </td>
+   </tr>
+   <tr>
+      <td> sspoints </td>
+      <td> single   </td>
+      <td> single   </td>
+   </tr>
+   <tr>
+      <td> mspoints </td>
+      <td> multiple </td>
+      <td> single   </td>
+   </tr>
+   <tr>
+      <td> smpoints </td>
+      <td> single   </td>
+      <td> multiple </td>
+   </tr>
+   <tr>
+      <td> mmpoints </td>
+      <td> multiple </td>
+      <td> multiple </td>
+   </tr>
+</table>
+</p>
 
-    sspoints </td>
-</tr><tr><td> single   </td>
-<td> single   </td>
-</tr><tr><td>
-    mspoints </td>
-<td> multiple </td>
-</tr><tr><td> single   </td>
-<td>
-    smpoints </td>
-</tr><tr><td> single   </td>
-<td> multiple </td>
-</tr></table>
 </li>
 </ol>
 
@@ -173,44 +204,75 @@ See the <strong>Value</strong> section of <code><a href='evalmod.html'>evalmod</
       <dd>A character vector with the following curve types.
 <ol>
 <li> ROC and Precision-Recall curves (mode = &quot;rocprc&quot;)
-    <table><tr><td>
-      <strong>curvetype</strong>
-      </td>
-</tr><tr><td> <strong>description</strong> </td>
-</tr><tr><td>
 
-      ROC </td>
-</tr><tr><td> ROC curve </td>
-</tr></table>
+<p>
+<table width="100%">
+   <tr>
+      <td>
+         <strong>curvetype</strong>
+      </td>
+      <td>
+         <strong>description</strong>
+      </td>
+   </tr>
+   <tr>
+      <td> ROC </td>
+      <td> ROC curve </td>
+   </tr>
+   <tr>
+      <td> PRC </td>
+      <td> Precision-Recall curve </td>
+   </tr>
+</table>
+</p>
+
     Multiple <code>curvetype</code> can be combined, such as
     <code>c(&quot;ROC&quot;, &quot;PRC&quot;)</code>.
 
   </li>
 <li> Basic evaluation measures (mode = &quot;basic&quot;)
-    <table><tr><td>
-      <strong>curvetype</strong>
-      </td>
-</tr><tr><td> <strong>description</strong> </td>
-</tr><tr><td>
 
-      error </td>
-</tr><tr><td> Normalized ranks vs. error rate </td>
-</tr><tr><td>
-      accuracy </td>
-</tr><tr><td> Normalized ranks vs. accuracy </td>
-</tr><tr><td>
-      specificity </td>
-</tr><tr><td> Normalized ranks vs. specificity </td>
-</tr><tr><td>
-      sensitivity </td>
-</tr><tr><td> Normalized ranks vs. sensitivity </td>
-</tr><tr><td>
-      precision </td>
-</tr><tr><td> Normalized ranks vs. precision </td>
-</tr><tr><td>
-      mcc </td>
-</tr><tr><td> Normalized ranks vs. Matthews correlation coefficient </td>
-</tr></table>
+<p>
+<table width="100%">
+   <tr>
+      <td>
+         <strong>curvetype</strong>
+      </td>
+      <td>
+         <strong>description</strong>
+      </td>
+   </tr>
+   <tr>
+      <td> error </td>
+      <td> Normalized ranks vs. error rate </td>
+   </tr>
+   <tr>
+      <td> accuracy </td>
+      <td> Normalized ranks vs. accuracy </td>
+   </tr>
+   <tr>
+      <td> specificity </td>
+      <td> Normalized ranks vs. specificity </td>
+   </tr>
+   <tr>
+      <td> sensitivity </td>
+      <td> Normalized ranks vs. sensitivity </td>
+   </tr>
+   <tr>
+      <td> precision </td>
+      <td> Normalized ranks vs. precision </td>
+   </tr>
+   <tr>
+      <td> mcc </td>
+      <td> Normalized ranks vs. Matthews correlation coefficient </td>
+   </tr>
+   <tr>
+      <td> fscore </td>
+      <td> Normalized ranks vs.F-Score </td>
+   </tr>
+</table>
+</p>
+
    Multiple <code>curvetype</code> can be combined, such as
    <code>c(&quot;precision&quot;, &quot;sensitivity&quot;)</code>.
 </li>
@@ -220,7 +282,7 @@ See the <strong>Value</strong> section of <code><a href='evalmod.html'>evalmod</
       <dd>Following additional arguments can be specified.
 
 <dl class='dl-horizontal'>
-  <dt>type</dt><dd>
+  <dt>type</dt><dd> A character to specifiy the line type as follows.
     <dl class='dl-horizontal'>
       <dt>&quot;l&quot;</dt><dd>lines</dd>
       <dt>&quot;p&quot;</dt><dd>points</dd>
@@ -253,22 +315,23 @@ See the <strong>Value</strong> section of <code><a href='evalmod.html'>evalmod</
 </dl>
 </dd>
     </dl>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>The <code>autoplot</code> function returns a <code>ggplot</code> object
   for a single-panel plot and a frame-grob object for a multiple-panel plot.</p>
-    
+
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <p><code><a href='evalmod.html'>evalmod</a></code> for generating an <code>S3</code> object.
   <code><a href='fortify.html'>fortify</a></code> for converting a curves and points object
   to a data frame.  <code><a href='plot.html'>plot</a></code> for plotting the equivalent curves
   with the general R plot.</p>
-    
+
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>## Load libraries</span>
+    <pre class="examples"><div class='input'>
+<span class='co'>## Load libraries</span>
 <span class='fu'>library</span>(<span class='no'>ggplot2</span>)
 <span class='fu'>library</span>(<span class='no'>grid</span>)
 
@@ -285,26 +348,20 @@ See the <strong>Value</strong> section of <code><a href='evalmod.html'>evalmod</
 <span class='co'>## Plot both ROC and Precision-Recall curves</span>
 <span class='fu'>autoplot</span>(<span class='no'>sscurves</span>)</div><img src='autoplot-2.png' alt='' width='540' height='400' /><div class='input'>
 <span class='co'>## Get a grob object for multiple plots</span>
-<span class='co'>## Not run: pp1 &amp;lt;- autoplot(sscurves, ret_grob = TRUE)</span>
-<span class='co'>## Not run: plot.new()</span>
-<span class='co'>## Not run: grid.draw(pp1)</span>
-
+<span class='no'>pp1</span> <span class='kw'>&lt;-</span> <span class='fu'>autoplot</span>(<span class='no'>sscurves</span>, <span class='kw'>ret_grob</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>plot.new</span>()</div><div class='input'><span class='fu'>grid.draw</span>(<span class='no'>pp1</span>)</div><img src='autoplot-5.png' alt='' width='540' height='400' /><div class='input'>
 <span class='co'>## A ROC curve</span>
-<span class='co'>## Not run: autoplot(sscurves, curvetype = &amp;quot;ROC&amp;quot;)</span>
-
+<span class='fu'>autoplot</span>(<span class='no'>sscurves</span>, <span class='kw'>curvetype</span> <span class='kw'>=</span> <span class='st'>"ROC"</span>)</div><img src='autoplot-7.png' alt='' width='540' height='400' /><div class='input'>
 <span class='co'>## A Precision-Recall curve</span>
-<span class='co'>## Not run: autoplot(sscurves, curvetype = &amp;quot;PRC&amp;quot;)</span>
-
+<span class='fu'>autoplot</span>(<span class='no'>sscurves</span>, <span class='kw'>curvetype</span> <span class='kw'>=</span> <span class='st'>"PRC"</span>)</div><img src='autoplot-9.png' alt='' width='540' height='400' /><div class='input'>
 <span class='co'>## Generate an sspoints object that contains basic evaluation measures</span>
 <span class='no'>sspoints</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"basic"</span>, <span class='kw'>scores</span> <span class='kw'>=</span> <span class='no'>P10N10</span>$<span class='no'>scores</span>,
                     <span class='kw'>labels</span> <span class='kw'>=</span> <span class='no'>P10N10</span>$<span class='no'>labels</span>)
 
 <span class='co'>## Normalized ranks vs. basic evaluation measures</span>
-<span class='co'>## Not run: autoplot(sspoints)</span>
-
+<span class='fu'>autoplot</span>(<span class='no'>sspoints</span>)</div><img src='autoplot-11.png' alt='' width='540' height='400' /><div class='input'>
 <span class='co'>## Normalized ranks vs. precision</span>
-<span class='co'>## Not run: autoplot(sspoints, curvetype = &amp;quot;precision&amp;quot;)</span>
-
+<span class='fu'>autoplot</span>(<span class='no'>sspoints</span>, <span class='kw'>curvetype</span> <span class='kw'>=</span> <span class='st'>"precision"</span>)</div><img src='autoplot-13.png' alt='' width='540' height='400' /><div class='input'>
 
 <span class='co'>##################################################</span>
 <span class='co'>### Multiple models &amp; single test dataset</span>
@@ -319,19 +376,16 @@ See the <strong>Value</strong> section of <code><a href='evalmod.html'>evalmod</
 <span class='no'>mscurves</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>)
 
 <span class='co'>## ROC and Precision-Recall curves</span>
-<span class='fu'>autoplot</span>(<span class='no'>mscurves</span>)</div><img src='autoplot-4.png' alt='' width='540' height='400' /><div class='input'>
+<span class='fu'>autoplot</span>(<span class='no'>mscurves</span>)</div><img src='autoplot-15.png' alt='' width='540' height='400' /><div class='input'>
 <span class='co'>## Hide the legend</span>
-<span class='co'>## Not run: autoplot(mscurves, show_legend = FALSE)</span>
-
+<span class='fu'>autoplot</span>(<span class='no'>mscurves</span>, <span class='kw'>show_legend</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><img src='autoplot-17.png' alt='' width='540' height='400' /><div class='input'>
 <span class='co'>## Generate an mspoints object that contains basic evaluation measures</span>
 <span class='no'>mspoints</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"basic"</span>)
 
 <span class='co'>## Normalized ranks vs. basic evaluation measures</span>
-<span class='co'>## Not run: autoplot(mspoints)</span>
-
+<span class='fu'>autoplot</span>(<span class='no'>mspoints</span>)</div><img src='autoplot-19.png' alt='' width='540' height='400' /><div class='input'>
 <span class='co'>## Hide the legend</span>
-<span class='co'>## Not run: autoplot(mspoints, show_legend = FALSE)</span>
-
+<span class='fu'>autoplot</span>(<span class='no'>mspoints</span>, <span class='kw'>show_legend</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><img src='autoplot-21.png' alt='' width='540' height='400' /><div class='input'>
 
 <span class='co'>##################################################</span>
 <span class='co'>### Single model &amp; multiple test datasets</span>
@@ -347,19 +401,16 @@ See the <strong>Value</strong> section of <code><a href='evalmod.html'>evalmod</
 <span class='no'>smcurves</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='co'>## Average ROC and Precision-Recall curves</span>
-<span class='fu'>autoplot</span>(<span class='no'>smcurves</span>)</div><img src='autoplot-6.png' alt='' width='540' height='400' /><div class='input'>
+<span class='fu'>autoplot</span>(<span class='no'>smcurves</span>)</div><img src='autoplot-23.png' alt='' width='540' height='400' /><div class='input'>
 <span class='co'>## Hide confidence bounds</span>
-<span class='co'>## Not run: autoplot(smcurves, show_cb = FALSE)</span>
-
+<span class='fu'>autoplot</span>(<span class='no'>smcurves</span>, <span class='kw'>show_cb</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><img src='autoplot-25.png' alt='' width='540' height='400' /><div class='input'>
 <span class='co'>## Raw ROC and Precision-Recall curves</span>
-<span class='co'>## Not run: autoplot(smcurves, raw_curves = TRUE)</span>
-
+<span class='fu'>autoplot</span>(<span class='no'>smcurves</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><img src='autoplot-27.png' alt='' width='540' height='400' /><div class='input'>
 <span class='co'>## Generate an smpoints object that contains basic evaluation measures</span>
 <span class='no'>smpoints</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"basic"</span>)
 
 <span class='co'>## Normalized ranks vs. average basic evaluation measures</span>
-<span class='co'>## Not run: autoplot(smpoints)</span>
-
+<span class='fu'>autoplot</span>(<span class='no'>smpoints</span>)</div><img src='autoplot-29.png' alt='' width='540' height='400' /><div class='input'>
 
 <span class='co'>##################################################</span>
 <span class='co'>### Multiple models &amp; multiple test datasets</span>
@@ -375,28 +426,27 @@ See the <strong>Value</strong> section of <code><a href='evalmod.html'>evalmod</
 <span class='no'>mmcurves</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='co'>## Average ROC and Precision-Recall curves</span>
-<span class='fu'>autoplot</span>(<span class='no'>mmcurves</span>)</div><img src='autoplot-8.png' alt='' width='540' height='400' /><div class='input'>
+<span class='fu'>autoplot</span>(<span class='no'>mmcurves</span>)</div><img src='autoplot-31.png' alt='' width='540' height='400' /><div class='input'>
 <span class='co'>## Show confidence bounds</span>
-<span class='co'>## Not run: autoplot(mmcurves, show_cb = TRUE)</span>
-
+<span class='fu'>autoplot</span>(<span class='no'>mmcurves</span>, <span class='kw'>show_cb</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><img src='autoplot-33.png' alt='' width='540' height='400' /><div class='input'>
 <span class='co'>## Raw ROC and Precision-Recall curves</span>
-<span class='co'>## Not run: autoplot(mmcurves, raw_curves = TRUE)</span>
-
+<span class='fu'>autoplot</span>(<span class='no'>mmcurves</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><img src='autoplot-35.png' alt='' width='540' height='400' /><div class='input'>
 <span class='co'>## Generate an mmpoints object that contains basic evaluation measures</span>
 <span class='no'>mmpoints</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"basic"</span>)
 
 <span class='co'>## Normalized ranks vs. average basic evaluation measures</span>
-<span class='co'>## Not run: autoplot(mmpoints)</span></div></pre>
+<span class='fu'>autoplot</span>(<span class='no'>mmpoints</span>)</div><img src='autoplot-37.png' alt='' width='540' height='400' /><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
+
       <li><a href="#value">Value</a></li>
 
       <li><a href="#see-also">See also</a></li>
-      
+
       <li><a href="#examples">Examples</a></li>
     </ul>
 

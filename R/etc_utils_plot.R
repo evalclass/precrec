@@ -73,6 +73,7 @@
 #'     }
 #'   }
 #'   \item{type}{
+#'     A character to specifiy the line type as follows.
 #'     \describe{
 #'       \item{"l"}{lines}
 #'       \item{"p"}{points}
@@ -342,7 +343,6 @@ NULL
 # Plot ROC and Precision-Recall
 #
 .plot_multi <- function(x, arglist) {
-
   curvetype <- arglist[["curvetype"]]
   type <- arglist[["type"]]
   show_cb <- arglist[["show_cb"]]

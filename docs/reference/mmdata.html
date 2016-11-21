@@ -174,7 +174,18 @@ in <code>scores</code>.
 
 <span class='co'>## Generate mdat object</span>
 <span class='no'>ssmdat1</span> <span class='kw'>&lt;-</span> <span class='fu'>mmdata</span>(<span class='no'>P10N10</span>$<span class='no'>scores</span>, <span class='no'>P10N10</span>$<span class='no'>labels</span>)
-<span class='no'>ssmdat2</span> <span class='kw'>&lt;-</span> <span class='fu'>mmdata</span>(<span class='fl'>1</span>:<span class='fl'>8</span>, <span class='fu'>sample</span>(<span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>1</span>), <span class='fl'>8</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))
+<span class='no'>ssmdat1</span></div><div class='output co'>#&gt; 
+#&gt;     === Input data ===
+#&gt; 
+#&gt;      Model name Dataset ID # of positives # of negatives
+#&gt;    1         m1          1             10             10
+#&gt; </div><div class='input'><span class='no'>ssmdat2</span> <span class='kw'>&lt;-</span> <span class='fu'>mmdata</span>(<span class='fl'>1</span>:<span class='fl'>8</span>, <span class='fu'>sample</span>(<span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>1</span>), <span class='fl'>8</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))
+<span class='no'>ssmdat2</span></div><div class='output co'>#&gt; 
+#&gt;     === Input data ===
+#&gt; 
+#&gt;      Model name Dataset ID # of positives # of negatives
+#&gt;    1         m1          1              5              3
+#&gt; </div><div class='input'>
 
 <span class='co'>##################################################</span>
 <span class='co'>### Multiple models &amp; single test dataset</span>
@@ -186,7 +197,16 @@ in <code>scores</code>.
 <span class='co'>## Multiple models &amp; single test dataset</span>
 <span class='no'>msmdat1</span> <span class='kw'>&lt;-</span> <span class='fu'>mmdata</span>(<span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"scores"</span>]], <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"labels"</span>]],
                   <span class='kw'>modnames</span> <span class='kw'>=</span> <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"modnames"</span>]])
-
+<span class='no'>msmdat1</span></div><div class='output co'>#&gt; 
+#&gt;     === Input data ===
+#&gt; 
+#&gt;      Model name Dataset ID # of positives # of negatives
+#&gt;    1     random          1            100            100
+#&gt;    2    poor_er          1            100            100
+#&gt;    3    good_er          1            100            100
+#&gt;    4      excel          1            100            100
+#&gt;    5       perf          1            100            100
+#&gt; </div><div class='input'>
 <span class='co'>## Use join_scores and join_labels</span>
 <span class='no'>s1</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span>)
 <span class='no'>s2</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>5</span>, <span class='fl'>6</span>, <span class='fl'>7</span>, <span class='fl'>8</span>)
@@ -197,6 +217,13 @@ in <code>scores</code>.
 <span class='no'>labels</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='join_labels.html'>join_labels</a></span>(<span class='no'>l1</span>, <span class='no'>l2</span>)
 
 <span class='no'>msmdat2</span> <span class='kw'>&lt;-</span> <span class='fu'>mmdata</span>(<span class='no'>scores</span>, <span class='no'>labels</span>, <span class='kw'>modnames</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"ms1"</span>, <span class='st'>"ms2"</span>))
+<span class='no'>msmdat2</span></div><div class='output co'>#&gt; 
+#&gt;     === Input data ===
+#&gt; 
+#&gt;      Model name Dataset ID # of positives # of negatives
+#&gt;    1        ms1          1              1              3
+#&gt;    2        ms2          1              1              3
+#&gt; </div><div class='input'>
 
 <span class='co'>##################################################</span>
 <span class='co'>### Single model &amp; multiple test datasets</span>
@@ -209,7 +236,21 @@ in <code>scores</code>.
 <span class='no'>smmdat</span> <span class='kw'>&lt;-</span> <span class='fu'>mmdata</span>(<span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"scores"</span>]], <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"labels"</span>]],
                  <span class='kw'>modnames</span> <span class='kw'>=</span> <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"modnames"</span>]],
                  <span class='kw'>dsids</span> <span class='kw'>=</span> <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"dsids"</span>]])
-
+<span class='no'>smmdat</span></div><div class='output co'>#&gt; 
+#&gt;     === Input data ===
+#&gt; 
+#&gt;      Model name Dataset ID # of positives # of negatives
+#&gt;    1    good_er          1            100            100
+#&gt;    2    good_er          2            100            100
+#&gt;    3    good_er          3            100            100
+#&gt;    4    good_er          4            100            100
+#&gt;    5    good_er          5            100            100
+#&gt;    6    good_er          6            100            100
+#&gt;    7    good_er          7            100            100
+#&gt;    8    good_er          8            100            100
+#&gt;    9    good_er          9            100            100
+#&gt;   10    good_er         10            100            100
+#&gt; </div><div class='input'>
 
 <span class='co'>##################################################</span>
 <span class='co'>### Multiple models &amp; multiple test datasets</span>
@@ -221,7 +262,63 @@ in <code>scores</code>.
 <span class='co'>## Multiple models &amp; multiple test datasets</span>
 <span class='no'>mmmdat</span> <span class='kw'>&lt;-</span> <span class='fu'>mmdata</span>(<span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"scores"</span>]], <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"labels"</span>]],
                  <span class='kw'>modnames</span> <span class='kw'>=</span> <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"modnames"</span>]],
-                 <span class='kw'>dsids</span> <span class='kw'>=</span> <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"dsids"</span>]])</div></pre>
+                 <span class='kw'>dsids</span> <span class='kw'>=</span> <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"dsids"</span>]])
+<span class='no'>mmmdat</span></div><div class='output co'>#&gt; 
+#&gt;     === Input data ===
+#&gt; 
+#&gt;      Model name Dataset ID # of positives # of negatives
+#&gt;    1     random          1            100            100
+#&gt;    2    poor_er          1            100            100
+#&gt;    3    good_er          1            100            100
+#&gt;    4      excel          1            100            100
+#&gt;    5       perf          1            100            100
+#&gt;    6     random          2            100            100
+#&gt;    7    poor_er          2            100            100
+#&gt;    8    good_er          2            100            100
+#&gt;    9      excel          2            100            100
+#&gt;   10       perf          2            100            100
+#&gt;   11     random          3            100            100
+#&gt;   12    poor_er          3            100            100
+#&gt;   13    good_er          3            100            100
+#&gt;   14      excel          3            100            100
+#&gt;   15       perf          3            100            100
+#&gt;   16     random          4            100            100
+#&gt;   17    poor_er          4            100            100
+#&gt;   18    good_er          4            100            100
+#&gt;   19      excel          4            100            100
+#&gt;   20       perf          4            100            100
+#&gt;   21     random          5            100            100
+#&gt;   22    poor_er          5            100            100
+#&gt;   23    good_er          5            100            100
+#&gt;   24      excel          5            100            100
+#&gt;   25       perf          5            100            100
+#&gt;   26     random          6            100            100
+#&gt;   27    poor_er          6            100            100
+#&gt;   28    good_er          6            100            100
+#&gt;   29      excel          6            100            100
+#&gt;   30       perf          6            100            100
+#&gt;   31     random          7            100            100
+#&gt;   32    poor_er          7            100            100
+#&gt;   33    good_er          7            100            100
+#&gt;   34      excel          7            100            100
+#&gt;   35       perf          7            100            100
+#&gt;   36     random          8            100            100
+#&gt;   37    poor_er          8            100            100
+#&gt;   38    good_er          8            100            100
+#&gt;   39      excel          8            100            100
+#&gt;   40       perf          8            100            100
+#&gt;   41     random          9            100            100
+#&gt;   42    poor_er          9            100            100
+#&gt;   43    good_er          9            100            100
+#&gt;   44      excel          9            100            100
+#&gt;   45       perf          9            100            100
+#&gt;   46     random         10            100            100
+#&gt;   47    poor_er         10            100            100
+#&gt;   48    good_er         10            100            100
+#&gt;   49      excel         10            100            100
+#&gt;   50       perf         10            100            100
+#&gt; </div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
