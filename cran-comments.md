@@ -27,8 +27,19 @@ In this version I have:
 
 * One **NOTE** from the CRAN incoming feasibility test on **win-builder**.
 
-    Possibly mis-spelled words in DESCRIPTION:  
-      ROC (3:48, 10:78)
-      
-      **It is spelt correctly.**
+    * Possibly mis-spelled words in DESCRIPTION:
+        ROC (3:48, 10:78)
 
+    * Found the following (possibly) invalid URLs:  
+        URL: https://doi.org/10.1093/bioinformatics/btw570  
+          From: README.md  
+          Status: 400  
+          Message: Bad Request
+
+    * Found the following (possibly) invalid DOIs:  
+        DOI: 10.1093/bioinformatics/btw570  
+          From: inst/CITATION  
+          Status: Bad Request  
+          Message: 400 
+      
+    **ROC is spelt correctly. Both URL and DOI are correct.**
