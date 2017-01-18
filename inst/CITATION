@@ -5,12 +5,14 @@ citEntry(entry = "Article",
   author       = personList(as.person("Takaya Saito"),
                    as.person("Marc Rehmsmeier")),
   journal      = "Bioinformatics",
-  year         = "2016",
+  year         = "2017",
+  volume       = "33 (1)",
+  pages        = "145-147",
   doi          = "10.1093/bioinformatics/btw570",
 
   textVersion  =
-  paste("Takaya Saito and Marc Rehmsmeier (2016).",
+  paste("Takaya Saito and Marc Rehmsmeier (2017).",
         "Precrec: fast and accurate precision-recall and ROC curve calculations in R.",
-        "Bioinformatics.",
+        "Bioinformatics (2017) 33 (1): 145-147.",
         "doi: 10.1093/bioinformatics/btw570")
 )

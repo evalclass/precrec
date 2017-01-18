@@ -13,8 +13,8 @@ print.mdat <- function(x, ...) {
   data_info <- attr(x, "data_info")
   rownames(data_info) <- format(rownames(data_info), width = 4,
                                 justify = "right")
-  colnames(data_info) <- c("Model name", "Dataset ID", "# of positives",
-                           "# of negatives")
+  colnames(data_info) <- c("Model name", "Dataset ID", "# of negatives",
+                           "# of positives")
 
   print.data.frame(data_info, print.gap = 1)
 
