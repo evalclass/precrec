@@ -1,3 +1,7 @@
+# precrec 0.6.2
+
+* Fix mdat print
+
 # precrec 0.6.1
 
 * Improve github pages
