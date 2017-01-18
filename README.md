@@ -95,9 +95,9 @@ Moreover, the `precrec` package provides eight S3 generics for the S3 object cre
 Documentation
 -------------
 
--   [Introduction to precrec](http://takayasaito.github.io/precrec/articles/introduction.html) - a package vignette that contains the descriptions of the functions with several useful examples. View the vignette with `vignette("introduction", package = "precrec")` in R. The HTML version is also available on the [GitPages](http://takayasaito.github.io/precrec/articles/introduction.html).
+-   [Introduction to precrec](http://takayasaito.github.io/precrec/articles/introduction.html) - a package vignette that contains the descriptions of the functions with several useful examples. View the vignette with `vignette("introduction", package = "precrec")` in R. The HTML version is also available on the [GitHub Pages](http://takayasaito.github.io/precrec/articles/introduction.html).
 
--   [Help pages](http://takayasaito.github.io/precrec/reference) - all the functions including the S3 generics except for `print` have their own help pages with plenty of examples. View the main help page with `help(package = "precrec")` in R. The HTML version is also available on the [GitPages](http://takayasaito.github.io/precrec/reference).
+-   [Help pages](http://takayasaito.github.io/precrec/reference) - all the functions including the S3 generics except for `print` have their own help pages with plenty of examples. View the main help page with `help(package = "precrec")` in R. The HTML version is also available on the [GitHub Pages](http://takayasaito.github.io/precrec/reference).
 
 Examples
 --------
@@ -139,7 +139,7 @@ Citation
 
 Takaya Saito; Marc Rehmsmeier
 
-Bioinformatics 2016;
+Bioinformatics 2017; 33 (1): 145-147.
 
 doi: [10.1093/bioinformatics/btw570](https://doi.org/10.1093/bioinformatics/btw570)
 
