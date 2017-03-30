@@ -236,4 +236,3 @@ mmpoints
   \code{\link{create_sim_samples}} for generating random samples
   for simulations.
 }
-

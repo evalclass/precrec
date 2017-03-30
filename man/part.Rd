@@ -2,10 +2,10 @@
 % Please edit documentation in R/g_part.R
 \name{part}
 \alias{part}
-\alias{part.mmcurves}
+\alias{part.sscurves}
 \alias{part.mscurves}
 \alias{part.smcurves}
-\alias{part.sscurves}
+\alias{part.mmcurves}
 \title{Calculate partial AUCs}
 \usage{
 part(curves, xlim, ylim, curvetype)
@@ -176,4 +176,3 @@ autoplot(mmcurves.part)
   performance evaluation measures. \code{\link{pauc}} for retieving a dataset
   of pAUCs.
 }
-

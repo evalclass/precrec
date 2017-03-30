@@ -18,4 +18,3 @@ data(P10N10)
 A list contains labels and scores for 10 positives and 10 negatives.
 }
 \keyword{datasets}
-
