@@ -75,52 +75,64 @@ fortify.pevals <- function(model, ...) {
 
 #' @rdname fortify
 #' @export
-fortify.sscurves <- function(model, raw_curves = TRUE, ...) {
-  .dataframe_common(model, raw_curves = TRUE, check_ggplot = TRUE, ...)
+fortify.sscurves <- function(model, raw_curves = TRUE, trim_points = FALSE,
+                             ...) {
+  .dataframe_common(model, raw_curves = TRUE, trim_points = trim_points,
+                    check_ggplot = TRUE, ...)
 }
 
 #' @rdname fortify
 #' @export
-fortify.mscurves <- function(model, raw_curves = TRUE, ...) {
-  .dataframe_common(model, raw_curves = TRUE, check_ggplot = TRUE, ...)
+fortify.mscurves <- function(model, raw_curves = TRUE, trim_points = FALSE,
+                             ...) {
+  .dataframe_common(model, raw_curves = TRUE, trim_points = trim_points,
+                    check_ggplot = TRUE, ...)
 }
 
 #' @rdname fortify
 #' @export
-fortify.smcurves <- function(model, raw_curves = FALSE, ...) {
-  .dataframe_common(model, raw_curves = raw_curves, check_ggplot = TRUE, ...)
+fortify.smcurves <- function(model, raw_curves = FALSE, trim_points = FALSE,
+                             ...) {
+  .dataframe_common(model, raw_curves = raw_curves, trim_points = trim_points,
+                    check_ggplot = TRUE, ...)
 }
 
 #' @rdname fortify
 #' @export
-fortify.mmcurves <- function(model, raw_curves = FALSE, ...) {
-  .dataframe_common(model, raw_curves = raw_curves, check_ggplot = TRUE, ...)
+fortify.mmcurves <- function(model, raw_curves = FALSE, trim_points = FALSE,
+                             ...) {
+  .dataframe_common(model, raw_curves = raw_curves, trim_points = trim_points,
+                    check_ggplot = TRUE, ...)
 }
 
 #' @rdname fortify
 #' @export
-fortify.sspoints <- function(model, raw_curves = TRUE, ...) {
+fortify.sspoints <- function(model, raw_curves = TRUE, trim_points = FALSE,
+                             ...) {
   .dataframe_common(model, mode = "basic", raw_curves = TRUE,
-                    check_ggplot = TRUE, ...)
+                    check_ggplot = TRUE, trim_points = FALSE, ...)
 }
 
 #' @rdname fortify
 #' @export
-fortify.mspoints <- function(model, raw_curves = TRUE, ...) {
+fortify.mspoints <- function(model, raw_curves = TRUE, trim_points = FALSE,
+                             ...) {
   .dataframe_common(model, mode = "basic", raw_curves = TRUE,
-                    check_ggplot = TRUE, ...)
+                    check_ggplot = TRUE, trim_points = FALSE, ...)
 }
 
 #' @rdname fortify
 #' @export
-fortify.smpoints <- function(model, raw_curves = FALSE, ...) {
+fortify.smpoints <- function(model, raw_curves = FALSE, trim_points = FALSE,
+                             ...) {
   .dataframe_common(model, mode = "basic", raw_curves = raw_curves,
-                    check_ggplot = TRUE, ...)
+                    check_ggplot = TRUE, trim_points = FALSE, ...)
 }
 
 #' @rdname fortify
 #' @export
-fortify.mmpoints <- function(model, raw_curves = FALSE, ...) {
+fortify.mmpoints <- function(model, raw_curves = FALSE, trim_points = FALSE,
+                             ...) {
   .dataframe_common(model, mode = "basic", raw_curves = raw_curves,
-                    check_ggplot = TRUE, ...)
+                    check_ggplot = TRUE, trim_points = FALSE, ...)
 }

@@ -2,14 +2,14 @@
 % Please edit documentation in R/etc_utils_autoplot.R, R/g_autoplot.R
 \name{autoplot}
 \alias{autoplot}
-\alias{autoplot.mmcurves}
-\alias{autoplot.mmpoints}
-\alias{autoplot.mscurves}
-\alias{autoplot.mspoints}
-\alias{autoplot.smcurves}
-\alias{autoplot.smpoints}
 \alias{autoplot.sscurves}
+\alias{autoplot.mscurves}
+\alias{autoplot.smcurves}
+\alias{autoplot.mmcurves}
 \alias{autoplot.sspoints}
+\alias{autoplot.mspoints}
+\alias{autoplot.smpoints}
+\alias{autoplot.mmpoints}
 \title{Plot performance evaluation measures with ggplot2}
 \usage{
 \method{autoplot}{sscurves}(object, curvetype = c("ROC", "PRC"), ...)
@@ -131,6 +131,12 @@ See the \strong{Value} section of \code{\link{evalmod}} for more details.}
     The \code{\link[grid]{grid.draw}} function takes a \code{grob} object and
     shows a plot. It is effective only when a multiple-panel plot is
     generated, for example, when \code{curvetype} is \code{c("ROC", "PRC")}.
+  }
+  \item{trim_points}{
+    A Boolean value to decide whether the points should be trimmed
+    when \code{mode = "rocprc"}. The points are trimmed according to
+    \code{x_bins} of the \code{\link{evalmod}} function.
+    The default values is \code{TRUE}.
   }
 }}
 }
@@ -277,4 +283,3 @@ autoplot(mmpoints)
   to a data frame.  \code{\link{plot}} for plotting the equivalent curves
   with the general R plot.
 }
-
