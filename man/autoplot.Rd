@@ -132,9 +132,9 @@ See the \strong{Value} section of \code{\link{evalmod}} for more details.}
     shows a plot. It is effective only when a multiple-panel plot is
     generated, for example, when \code{curvetype} is \code{c("ROC", "PRC")}.
   }
-  \item{trim_points}{
-    A Boolean value to decide whether the points should be trimmed
-    when \code{mode = "rocprc"}. The points are trimmed according to
+  \item{reduce_points}{
+    A Boolean value to decide whether the points should be reduced
+    when \code{mode = "rocprc"}. The points are reduced according to
     \code{x_bins} of the \code{\link{evalmod}} function.
     The default values is \code{TRUE}.
   }

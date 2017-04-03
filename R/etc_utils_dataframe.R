@@ -173,7 +173,8 @@ NULL
 # Make a dataframe for plotting
 #
 .dataframe_common <- function(obj, mode = "rocprc", raw_curves = TRUE,
-                              trim_points = FALSE, check_ggplot = FALSE, ...) {
+                              reduce_points = FALSE, check_ggplot = FALSE,
+                              ...) {
   # === Check package availability  ===
   if (check_ggplot) {
     .load_ggplot2()
@@ -200,7 +201,7 @@ NULL
 
   if (new_mode == "rocprc") {
     curvetype_names <- list(ROC = "rocs", PRC = "prcs")
-    if (trim_points) {
+    if (reduce_points) {
       x_bins <- attr(obj, "args")$x_bins
     } else {
       x_bins <- 0

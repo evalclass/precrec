@@ -49,9 +49,9 @@ void add_to_vec(std::vector<int>& vec, int size, int value, int start_idx) {
 }
 
 //
-// Set trimmed points
+// Set reduced points
 //
-int set_trimmed_points(const Rcpp::NumericVector& from_vec,
+int set_reduced_points(const Rcpp::NumericVector& from_vec,
                        std::vector<bool>& points,
                        const int x_bins) {
 
@@ -76,9 +76,9 @@ int set_trimmed_points(const Rcpp::NumericVector& from_vec,
 
 
 //
-// Copy trimmed points
+// Copy reduced points
 //
-void copy_trimmed_xy_vec(const Rcpp::NumericVector& from_vec,
+void copy_reduced_xy_vec(const Rcpp::NumericVector& from_vec,
                          std::vector<double>& to_vec,
                          int start_idx,
                          std::vector<bool>& points) {

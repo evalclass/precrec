@@ -102,9 +102,9 @@
 #'     shows a plot. It is effective only when a multiple-panel plot is
 #'     generated, for example, when \code{curvetype} is \code{c("ROC", "PRC")}.
 #'   }
-#'   \item{trim_points}{
-#'     A Boolean value to decide whether the points should be trimmed
-#'     when \code{mode = "rocprc"}. The points are trimmed according to
+#'   \item{reduce_points}{
+#'     A Boolean value to decide whether the points should be reduced
+#'     when \code{mode = "rocprc"}. The points are reduced according to
 #'     \code{x_bins} of the \code{\link{evalmod}} function.
 #'     The default values is \code{TRUE}.
 #'   }
@@ -255,7 +255,7 @@ NULL
 .get_autoplot_arglist <- function(def_curvetype, def_type, def_show_cb,
                                   def_raw_curves, def_add_np_nn,
                                   def_show_legend, def_ret_grob,
-                                  def_trim_points, ...) {
+                                  def_reduce_points, ...) {
 
   arglist <- list(...)
 
@@ -287,8 +287,8 @@ NULL
     arglist[["ret_grob"]] <- def_ret_grob
   }
 
-  if (is.null(arglist[["trim_points"]])){
-    arglist[["trim_points"]] <- def_trim_points
+  if (is.null(arglist[["reduce_points"]])){
+    arglist[["reduce_points"]] <- def_reduce_points
   }
 
   arglist
@@ -360,7 +360,7 @@ NULL
   add_np_nn <- arglist[["add_np_nn"]]
   show_legend <- arglist[["show_legend"]]
   ret_grob <- arglist[["ret_grob"]]
-  trim_points <- arglist[["trim_points"]]
+  reduce_points <- arglist[["reduce_points"]]
 
   # === Check package availability  ===
   .load_ggplot2()
@@ -375,12 +375,12 @@ NULL
 
   # === Create a ggplot object for ROC&PRC, ROC, or PRC ===
   curve_df <- ggplot2::fortify(object, raw_curves = raw_curves,
-                               trim_points = trim_points)
+                               reduce_points = reduce_points)
 
   func_plot <- function(ctype) {
     .autoplot_single(object, curve_df, curvetype = ctype, type = type,
                      show_cb = show_cb, raw_curves = raw_curves,
-                     trim_points = trim_points, show_legend = show_legend,
+                     reduce_points = reduce_points, show_legend = show_legend,
                      add_np_nn = add_np_nn)
   }
   lcurves <- lapply(curvetype, func_plot)
@@ -451,13 +451,13 @@ NULL
 #
 .autoplot_single <- function(object, curve_df, curvetype = "ROC", type = "l",
                              show_cb = FALSE, raw_curves = FALSE,
-                             trim_points = TRUE, show_legend = FALSE,
+                             reduce_points = TRUE, show_legend = FALSE,
                              add_np_nn = TRUE, ...) {
 
   curve_df <- .prepare_autoplot(object, curve_df = curve_df,
                                 curvetype = curvetype,
                                 raw_curves = raw_curves,
-                                trim_points = trim_points, ...)
+                                reduce_points = reduce_points, ...)
 
   # === Create a ggplot object ===
   if (raw_curves) {

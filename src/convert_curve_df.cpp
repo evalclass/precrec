@@ -22,9 +22,9 @@ Rcpp::List convert_curve_df(const Rcpp::List& obj,
   std::string errmsg = "";
   std::string lblctype;
   std::string idxctype;
-  bool trim_points = false;
+  bool reduce_points = false;
   if (x_bins > 1){
-    trim_points = true;
+    reduce_points = true;
   }
   int vec_size = calc_vec_size(obj, curvetype_names);
 
@@ -49,12 +49,12 @@ Rcpp::List convert_curve_df(const Rcpp::List& obj,
       Rcpp::NumericVector x = Rcpp::as<Rcpp::NumericVector>(xys["x"]);
       Rcpp::NumericVector y = Rcpp::as<Rcpp::NumericVector>(xys["y"]);
 
-      if (trim_points){
+      if (reduce_points){
         vec_points.resize(x.size(), false);
-        n = set_trimmed_points(x, vec_points, x_bins);
+        n = set_reduced_points(x, vec_points, x_bins);
 
-        copy_trimmed_xy_vec(x, vec_xs, start_idx, vec_points);
-        copy_trimmed_xy_vec(y, vec_ys, start_idx, vec_points);
+        copy_reduced_xy_vec(x, vec_xs, start_idx, vec_points);
+        copy_reduced_xy_vec(y, vec_ys, start_idx, vec_points);
       } else {
         n = x.size();
         copy_xy_vec(x, vec_xs, start_idx);
@@ -70,7 +70,7 @@ Rcpp::List convert_curve_df(const Rcpp::List& obj,
     }
   }
 
-  if (trim_points){
+  if (reduce_points){
     vec_xs.resize(start_idx);
     vec_ys.resize(start_idx);
     vec_modname.resize(start_idx);
