@@ -66,6 +66,23 @@ autoplot(sscurves, "PRC")
 ```
 
 
+Reduced supporting points make the plotting speed faster for large data sets. 
+
+```{r, fig.show = 'hide', results = 'hold'}
+
+# 5 data sets with 50000 positives and 50000 negatives
+samp1 <- create_sim_samples(5, 50000, 50000)
+
+# Calculate curves
+eval1 <- evalmod(scores = samp1$scores, labels = samp1$labels)
+
+# Reduced supporting points
+system.time(autoplot(eval1))
+
+# Full supporting points
+system.time(autoplot(eval1, reduce_points = FALSE))
+```
+
 #### Example of the auc function
 The `auc` function outputs a data frame with the AUC (Area Under the Curve)
 scores.

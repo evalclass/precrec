@@ -165,11 +165,18 @@ data(P10N10)
 ## Generate an sscurve object that contains ROC and Precision-Recall curves
 sscurves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 
-## Plot both ROC and Precision-Recall curves (reduced supporting points - fast)
+## Plot both ROC and Precision-Recall curves
 autoplot(sscurves)
 
-## Plot both ROC and Precision-Recall curves (full supporting points - slow)
-autoplot(sscurves, reduce_points = FALSE)
+## Reduced/Full supporting points
+sampss <- create_sim_samples(1, 50000, 50000)
+evalss <- evalmod(scores = sampss$scores, labels = sampss$labels)
+
+# Reduced supporting point
+system.time(autoplot(evalss))
+
+# Full supporting points
+system.time(autoplot(evalss, reduce_points = FALSE))
 
 ## Get a grob object for multiple plots
 pp1 <- autoplot(sscurves, ret_grob = TRUE)
@@ -205,11 +212,18 @@ mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 ## Generate an mscurve object that contains ROC and Precision-Recall curves
 mscurves <- evalmod(mdat)
 
-## ROC and Precision-Recall curves (reduced supporting points - fast)
+## ROC and Precision-Recall curves
 autoplot(mscurves)
 
-## ROC and Precision-Recall curves (full supporting points - slow)
-autoplot(mscurves, reduce_points = FALSE)
+## Reduced/Full supporting points
+sampms <- create_sim_samples(5, 50000, 50000)
+evalms <- evalmod(scores = sampms$scores, labels = sampms$labels)
+
+# Reduced supporting point
+system.time(autoplot(evalms))
+
+# Full supporting points
+system.time(autoplot(evalms, reduce_points = FALSE))
 
 ## Hide the legend
 autoplot(mscurves, show_legend = FALSE)
@@ -237,17 +251,25 @@ mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 ## Generate an smcurve object that contains ROC and Precision-Recall curves
 smcurves <- evalmod(mdat, raw_curves = TRUE)
 
-## Average ROC and Precision-Recall curves (reduced supporting points - fast)
+## Average ROC and Precision-Recall curves
 autoplot(smcurves)
-
-## Average ROC and Precision-Recall curves (full supporting points - slow)
-autoplot(smcurves, reduce_points = FALSE)
 
 ## Hide confidence bounds
 autoplot(smcurves, show_cb = FALSE)
 
 ## Raw ROC and Precision-Recall curves
 autoplot(smcurves, raw_curves = TRUE)
+
+## Reduced/Full supporting points
+sampsm <- create_sim_samples(4, 5000, 5000)
+mdatsm <- mmdata(sampsm$scores, sampsm$labels, expd_first = "dsids")
+evalsm <- evalmod(mdatsm, raw_curves = TRUE)
+
+# Reduced supporting point
+system.time(autoplot(evalsm, raw_curves = TRUE))
+
+# Full supporting points
+system.time(autoplot(evalsm, raw_curves = TRUE, reduce_points = FALSE))
 
 ## Generate an smpoints object that contains basic evaluation measures
 smpoints <- evalmod(mdat, mode = "basic")
@@ -269,17 +291,26 @@ mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 ## Generate an mscurve object that contains ROC and Precision-Recall curves
 mmcurves <- evalmod(mdat, raw_curves = TRUE)
 
-## Average ROC and Precision-Recall curves (reduced supporting points - fast)
+## Average ROC and Precision-Recall curves
 autoplot(mmcurves)
-
-## Average ROC and Precision-Recall curves (full supporting points - slow)
-autoplot(mmcurves, reduce_points = FALSE)
 
 ## Show confidence bounds
 autoplot(mmcurves, show_cb = TRUE)
 
 ## Raw ROC and Precision-Recall curves
 autoplot(mmcurves, raw_curves = TRUE)
+
+## Reduced/Full supporting points
+sampmm <- create_sim_samples(4, 5000, 5000)
+mdatmm <- mmdata(sampmm$scores, sampmm$labels, modnames = c("m1", "m2"),
+                 dsids = c(1, 2), expd_first = "modnames")
+evalmm <- evalmod(mdatmm, raw_curves = TRUE)
+
+# Reduced supporting point
+system.time(autoplot(evalmm, raw_curves = TRUE))
+
+# Full supporting points
+system.time(autoplot(evalmm, raw_curves = TRUE, reduce_points = FALSE))
 
 ## Generate an mmpoints object that contains basic evaluation measures
 mmpoints <- evalmod(mdat, mode = "basic")
