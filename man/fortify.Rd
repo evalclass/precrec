@@ -76,6 +76,10 @@ shown instead of the average curve. It is effective only
 when \code{raw_curves} is set to \code{TRUE}
 of the \code{\link{evalmod}} function.}
 
+\item{reduce_points}{A Boolean value to decide whether the points should
+be reduced. The points are reduced according to \code{x_bins}
+of the \code{\link{evalmod}} function. The default values is \code{FALSE}.}
+
 \item{...}{Not used by this method.}
 }
 \value{

@@ -165,8 +165,11 @@ data(P10N10)
 ## Generate an sscurve object that contains ROC and Precision-Recall curves
 sscurves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 
-## Plot both ROC and Precision-Recall curves
+## Plot both ROC and Precision-Recall curves (reduced supporting points - fast)
 autoplot(sscurves)
+
+## Plot both ROC and Precision-Recall curves (full supporting points - slow)
+autoplot(sscurves, reduce_points = FALSE)
 
 ## Get a grob object for multiple plots
 pp1 <- autoplot(sscurves, ret_grob = TRUE)
@@ -202,8 +205,11 @@ mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 ## Generate an mscurve object that contains ROC and Precision-Recall curves
 mscurves <- evalmod(mdat)
 
-## ROC and Precision-Recall curves
+## ROC and Precision-Recall curves (reduced supporting points - fast)
 autoplot(mscurves)
+
+## ROC and Precision-Recall curves (full supporting points - slow)
+autoplot(mscurves, reduce_points = FALSE)
 
 ## Hide the legend
 autoplot(mscurves, show_legend = FALSE)
@@ -231,8 +237,11 @@ mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 ## Generate an smcurve object that contains ROC and Precision-Recall curves
 smcurves <- evalmod(mdat, raw_curves = TRUE)
 
-## Average ROC and Precision-Recall curves
+## Average ROC and Precision-Recall curves (reduced supporting points - fast)
 autoplot(smcurves)
+
+## Average ROC and Precision-Recall curves (full supporting points - slow)
+autoplot(smcurves, reduce_points = FALSE)
 
 ## Hide confidence bounds
 autoplot(smcurves, show_cb = FALSE)
@@ -260,8 +269,11 @@ mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 ## Generate an mscurve object that contains ROC and Precision-Recall curves
 mmcurves <- evalmod(mdat, raw_curves = TRUE)
 
-## Average ROC and Precision-Recall curves
+## Average ROC and Precision-Recall curves (reduced supporting points - fast)
 autoplot(mmcurves)
+
+## Average ROC and Precision-Recall curves (full supporting points - slow)
+autoplot(mmcurves, reduce_points = FALSE)
 
 ## Show confidence bounds
 autoplot(mmcurves, show_cb = TRUE)
