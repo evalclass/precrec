@@ -1,11 +1,11 @@
-## Version 0.7.0
+## Version 0.7.1
 This is a submission for updating the already published package - precrec.
 In this version I have:
 
 * Reduce supporting points to make plotting speed faster for ggplot 
 
 * Updated the version.
-    * 0.6.2 -> 0.7.0
+    * 0.6.2 -> 0.7.1
     
 ## Test environments
 * local OS X Yosemite, R 3.3.3
@@ -27,24 +27,12 @@ In this version I have:
   
     * installed size is 7.3Mb    
          sub-directories of 1Mb or more: data 1.5MB, libs 4.9MB   
-
-
-* One **NOTE** from the package size test on **travis-ci, R Under developmen**.
-    * checking compiled code ... NOTE   
-        File ‘precrec/libs/precrec.so’:   
-        Found no calls to: ‘R\_registerRoutines’, ‘R\_useDynamicSymbols’
         
   
-* Two **NOTE**s on **win-builder**.
+* One **NOTE** on **win-builder**.
 
     * Possibly mis-spelled words in DESCRIPTION:
-        ROC (3:48, 10:78) 
-
-    * checking compiled code ... NOTE   
-        File 'precrec/libs/i386/precrec.dll':    
-            Found no calls to: 'R\_registerRoutines', 'R\_useDynamicSymbols'    
-        File 'precrec/libs/x64/precrec.dll':    
-            Found no calls to: 'R\_registerRoutines', 'R\_useDynamicSymbols'    
+        ROC (3:48, 10:78)  
   
 
 * One **NOTE** from the "checking compiled code"" test on **AppVeyor**.
