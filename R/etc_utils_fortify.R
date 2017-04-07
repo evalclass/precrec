@@ -42,6 +42,10 @@
 #'   when \code{raw_curves} is set to \code{TRUE}
 #'   of the \code{\link{evalmod}} function.
 #'
+#' @param reduce_points A Boolean value to decide whether the points should
+#'   be reduced. The points are reduced according to \code{x_bins}
+#'   of the \code{\link{evalmod}} function. The default values is \code{FALSE}.
+#'
 #' @param ... Not used by this method.
 #'
 #' @return The \code{fortify} function returns a data frame for

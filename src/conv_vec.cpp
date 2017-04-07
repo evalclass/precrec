@@ -1,4 +1,5 @@
 #include <Rcpp.h>
+#include <vector>
 #include <string>
 
 //
@@ -28,23 +29,68 @@ int calc_vec_size(const Rcpp::List& obj,
 //
 // Copy vector
 //
-int copy_xy_vec(const Rcpp::NumericVector& from_vec,
-                Rcpp::NumericVector& to_vec,
-                int start_idx) {
+void copy_xy_vec(const Rcpp::NumericVector& from_vec,
+                 std::vector<double>& to_vec,
+                 int start_idx) {
 
   for (unsigned i = 0; i < from_vec.size(); i++) {
     to_vec[start_idx+i] = from_vec[i];
   }
-
-  return (int)from_vec.size();
 }
 
 //
-// Create vector
+// Add to vector
 //
-void create_vec(Rcpp::IntegerVector& vec, int size, int value, int start_idx) {
+void add_to_vec(std::vector<int>& vec, int size, int value, int start_idx) {
 
   for (unsigned i = 0; i < size; i++) {
     vec[start_idx+i] = value;
   }
 }
+
+//
+// Set reduced points
+//
+int set_reduced_points(const Rcpp::NumericVector& from_vec,
+                       std::vector<bool>& points,
+                       const int x_bins) {
+
+  double x_pos = 0.0;
+  double step = 1.0 / x_bins;
+  double eps = std::numeric_limits<double>::epsilon() * x_bins;
+  int n = 0;
+
+  for (unsigned i = 0; i < from_vec.size(); i++) {
+    int count = (int)(from_vec[i] / step);
+    x_pos = (double)count * step;
+    if (fabs(x_pos - from_vec[i]) <= eps) {
+      points[i] = true;
+      n++;
+    } else {
+      points[i] = false;
+    }
+  }
+
+  return n;
+}
+
+
+//
+// Copy reduced points
+//
+void copy_reduced_xy_vec(const Rcpp::NumericVector& from_vec,
+                         std::vector<double>& to_vec,
+                         int start_idx,
+                         std::vector<bool>& points) {
+
+  int idx = 0;
+
+  for (unsigned i = 0; i < from_vec.size(); i++) {
+    if (points[i]) {
+      to_vec[start_idx+idx] = from_vec[i];
+      idx++;
+    }
+  }
+
+}
+

@@ -74,4 +74,3 @@ str(scores4)
   \code{\link{mmdata}} for formatting input data.
   \code{\link{join_labels}} for formatting labels with multiple datasets.
 }
-

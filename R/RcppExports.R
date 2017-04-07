@@ -17,12 +17,12 @@ calc_basic_measures <- function(np, nn, tps, fps, tns, fns) {
     .Call('precrec_calc_basic_measures', PACKAGE = 'precrec', np, nn, tps, fps, tns, fns)
 }
 
-convert_curve_avg_df <- function(obj, uniq_modnames, modnames, curvetype_names) {
-    .Call('precrec_convert_curve_avg_df', PACKAGE = 'precrec', obj, uniq_modnames, modnames, curvetype_names)
+convert_curve_avg_df <- function(obj, uniq_modnames, modnames, curvetype_names, x_bins) {
+    .Call('precrec_convert_curve_avg_df', PACKAGE = 'precrec', obj, uniq_modnames, modnames, curvetype_names, x_bins)
 }
 
-convert_curve_df <- function(obj, uniq_modnames, uniq_dsids, modnames, dsids, dsid_modnames, curvetype_names) {
-    .Call('precrec_convert_curve_df', PACKAGE = 'precrec', obj, uniq_modnames, uniq_dsids, modnames, dsids, dsid_modnames, curvetype_names)
+convert_curve_df <- function(obj, uniq_modnames, uniq_dsids, modnames, dsids, dsid_modnames, curvetype_names, x_bins) {
+    .Call('precrec_convert_curve_df', PACKAGE = 'precrec', obj, uniq_modnames, uniq_dsids, modnames, dsids, dsid_modnames, curvetype_names, x_bins)
 }
 
 create_confusion_matrices <- function(olabs, ranks, rank_idx) {

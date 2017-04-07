@@ -55,12 +55,12 @@
   <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
-
+      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/takayasaito/precrec">
     <span class="fa fa-github fa-lg"></span>
-
+     
   </a>
 </li>
       </ul>
@@ -68,7 +68,7 @@
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-
+      
       </header>
 
       <div class="row">
@@ -200,21 +200,25 @@ See the <strong>Value</strong> section of <code><a href='evalmod.html'>evalmod</
 shown instead of the average curve. It is effective only
 when <code>raw_curves</code> is set to <code>TRUE</code>
 of the <code><a href='evalmod.html'>evalmod</a></code> function.</dd>
+      <dt>reduce_points</dt>
+      <dd>A Boolean value to decide whether the points should
+be reduced. The points are reduced according to <code>x_bins</code>
+of the <code><a href='evalmod.html'>evalmod</a></code> function. The default values is <code>FALSE</code>.</dd>
       <dt>...</dt>
       <dd>Not used by this method.</dd>
     </dl>
-
+    
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>The <code>fortify</code> function returns a data frame for
   <span class="pkg">ggplot2</span>.</p>
-
+    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <p><code><a href='evalmod.html'>evalmod</a></code> for generating <code>S3</code> objects with
   performance evaluation measures.
   <code><a href='autoplot.html'>autoplot</a></code> for plotting with <span class="pkg">ggplot2</span>.</p>
-
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
@@ -397,11 +401,11 @@ of the <code><a href='evalmod.html'>evalmod</a></code> function.</dd>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-
+      
       <li><a href="#value">Value</a></li>
 
       <li><a href="#see-also">See also</a></li>
-
+      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

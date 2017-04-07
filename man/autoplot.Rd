@@ -2,14 +2,14 @@
 % Please edit documentation in R/etc_utils_autoplot.R, R/g_autoplot.R
 \name{autoplot}
 \alias{autoplot}
-\alias{autoplot.mmcurves}
-\alias{autoplot.mmpoints}
-\alias{autoplot.mscurves}
-\alias{autoplot.mspoints}
-\alias{autoplot.smcurves}
-\alias{autoplot.smpoints}
 \alias{autoplot.sscurves}
+\alias{autoplot.mscurves}
+\alias{autoplot.smcurves}
+\alias{autoplot.mmcurves}
 \alias{autoplot.sspoints}
+\alias{autoplot.mspoints}
+\alias{autoplot.smpoints}
+\alias{autoplot.mmpoints}
 \title{Plot performance evaluation measures with ggplot2}
 \usage{
 \method{autoplot}{sscurves}(object, curvetype = c("ROC", "PRC"), ...)
@@ -132,6 +132,12 @@ See the \strong{Value} section of \code{\link{evalmod}} for more details.}
     shows a plot. It is effective only when a multiple-panel plot is
     generated, for example, when \code{curvetype} is \code{c("ROC", "PRC")}.
   }
+  \item{reduce_points}{
+    A Boolean value to decide whether the points should be reduced
+    when \code{mode = "rocprc"}. The points are reduced according to
+    \code{x_bins} of the \code{\link{evalmod}} function.
+    The default values is \code{TRUE}.
+  }
 }}
 }
 \value{
@@ -161,6 +167,16 @@ sscurves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 
 ## Plot both ROC and Precision-Recall curves
 autoplot(sscurves)
+
+## Reduced/Full supporting points
+sampss <- create_sim_samples(1, 50000, 50000)
+evalss <- evalmod(scores = sampss$scores, labels = sampss$labels)
+
+# Reduced supporting point
+system.time(autoplot(evalss))
+
+# Full supporting points
+system.time(autoplot(evalss, reduce_points = FALSE))
 
 ## Get a grob object for multiple plots
 pp1 <- autoplot(sscurves, ret_grob = TRUE)
@@ -199,6 +215,16 @@ mscurves <- evalmod(mdat)
 ## ROC and Precision-Recall curves
 autoplot(mscurves)
 
+## Reduced/Full supporting points
+sampms <- create_sim_samples(5, 50000, 50000)
+evalms <- evalmod(scores = sampms$scores, labels = sampms$labels)
+
+# Reduced supporting point
+system.time(autoplot(evalms))
+
+# Full supporting points
+system.time(autoplot(evalms, reduce_points = FALSE))
+
 ## Hide the legend
 autoplot(mscurves, show_legend = FALSE)
 
@@ -234,6 +260,17 @@ autoplot(smcurves, show_cb = FALSE)
 ## Raw ROC and Precision-Recall curves
 autoplot(smcurves, raw_curves = TRUE)
 
+## Reduced/Full supporting points
+sampsm <- create_sim_samples(4, 5000, 5000)
+mdatsm <- mmdata(sampsm$scores, sampsm$labels, expd_first = "dsids")
+evalsm <- evalmod(mdatsm, raw_curves = TRUE)
+
+# Reduced supporting point
+system.time(autoplot(evalsm, raw_curves = TRUE))
+
+# Full supporting points
+system.time(autoplot(evalsm, raw_curves = TRUE, reduce_points = FALSE))
+
 ## Generate an smpoints object that contains basic evaluation measures
 smpoints <- evalmod(mdat, mode = "basic")
 
@@ -263,6 +300,18 @@ autoplot(mmcurves, show_cb = TRUE)
 ## Raw ROC and Precision-Recall curves
 autoplot(mmcurves, raw_curves = TRUE)
 
+## Reduced/Full supporting points
+sampmm <- create_sim_samples(4, 5000, 5000)
+mdatmm <- mmdata(sampmm$scores, sampmm$labels, modnames = c("m1", "m2"),
+                 dsids = c(1, 2), expd_first = "modnames")
+evalmm <- evalmod(mdatmm, raw_curves = TRUE)
+
+# Reduced supporting point
+system.time(autoplot(evalmm, raw_curves = TRUE))
+
+# Full supporting points
+system.time(autoplot(evalmm, raw_curves = TRUE, reduce_points = FALSE))
+
 ## Generate an mmpoints object that contains basic evaluation measures
 mmpoints <- evalmod(mdat, mode = "basic")
 
@@ -277,4 +326,3 @@ autoplot(mmpoints)
   to a data frame.  \code{\link{plot}} for plotting the equivalent curves
   with the general R plot.
 }
-

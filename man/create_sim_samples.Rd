@@ -74,4 +74,3 @@ str(samps3)
 \code{\link{mmdata}} for formatting input data.
   \code{\link{evalmod}} for calculation evaluation measures.
 }
-
