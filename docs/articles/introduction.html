@@ -56,7 +56,7 @@
     <div class="page-header toc-ignore">
       <h1>Introduction to precrec</h1>
             
-            <h4 class="date">2017-01-18</h4>
+            <h4 class="date">2017-04-06</h4>
           </div>
 
     
@@ -151,6 +151,21 @@ sscurves &lt;-<span class="st"> </span><span class="kw"><a href="../reference/ev
 <span class="co"># Show a Precision-Recall plot</span>
 <span class="kw"><a href="../reference/autoplot.html">autoplot</a></span>(sscurves, <span class="st">"PRC"</span>)</code></pre></div>
 <p><img src="introduction_files/figure-html/unnamed-chunk-3-1.png" width="672"><img src="introduction_files/figure-html/unnamed-chunk-3-2.png" width="672"></p>
+<p>Reduced supporting points make the plotting speed faster for large data sets.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 5 data sets with 50000 positives and 50000 negatives</span>
+samp1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/create_sim_samples.html">create_sim_samples</a></span>(<span class="dv">5</span>, <span class="dv">50000</span>, <span class="dv">50000</span>)
+
+<span class="co"># Calculate curves</span>
+eval1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/evalmod.html">evalmod</a></span>(<span class="dt">scores =</span> samp1$scores, <span class="dt">labels =</span> samp1$labels)
+
+<span class="co"># Reduced supporting points</span>
+<span class="kw">system.time</span>(<span class="kw"><a href="../reference/autoplot.html">autoplot</a></span>(eval1))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Full supporting points</span>
+<span class="kw">system.time</span>(<span class="kw"><a href="../reference/autoplot.html">autoplot</a></span>(eval1, <span class="dt">reduce_points =</span> <span class="ot">FALSE</span>))</code></pre></div>
+<pre><code>##    user  system elapsed 
+##   1.035   0.077   1.167 
+##    user  system elapsed 
+##  19.089   2.233  21.440</code></pre>
 </div>
 <div id="example-of-the-auc-function" class="section level4">
 <h4 class="hasAnchor">
@@ -636,49 +651,49 @@ knitr::<span class="kw">kable</span>(<span class="kw">head</span>(mmcurves.df))<
 <tbody>
 <tr class="odd">
 <td align="right">0.000</td>
-<td align="right">0.00</td>
-<td align="right">0.0000000</td>
-<td align="right">0.0000000</td>
+<td align="right">0.000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
 <td align="left">random</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="even">
 <td align="right">0.000</td>
-<td align="right">0.08</td>
-<td align="right">0.0139157</td>
-<td align="right">0.1460843</td>
+<td align="right">0.075</td>
+<td align="right">0.03264</td>
+<td align="right">0.11736</td>
 <td align="left">random</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="odd">
 <td align="right">0.001</td>
-<td align="right">0.08</td>
-<td align="right">0.0139157</td>
-<td align="right">0.1460843</td>
+<td align="right">0.075</td>
+<td align="right">0.03264</td>
+<td align="right">0.11736</td>
 <td align="left">random</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="even">
 <td align="right">0.002</td>
-<td align="right">0.08</td>
-<td align="right">0.0139157</td>
-<td align="right">0.1460843</td>
+<td align="right">0.075</td>
+<td align="right">0.03264</td>
+<td align="right">0.11736</td>
 <td align="left">random</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="odd">
 <td align="right">0.003</td>
-<td align="right">0.08</td>
-<td align="right">0.0139157</td>
-<td align="right">0.1460843</td>
+<td align="right">0.075</td>
+<td align="right">0.03264</td>
+<td align="right">0.11736</td>
 <td align="left">random</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="even">
 <td align="right">0.004</td>
-<td align="right">0.08</td>
-<td align="right">0.0139157</td>
-<td align="right">0.1460843</td>
+<td align="right">0.075</td>
+<td align="right">0.03264</td>
+<td align="right">0.11736</td>
 <td align="left">random</td>
 <td align="left">ROC</td>
 </tr>
@@ -784,41 +799,41 @@ knitr::<span class="kw">kable</span>(<span class="kw">head</span>(mmpoins.df))</
 </tr>
 <tr class="even">
 <td align="right">0.05</td>
-<td align="right">1.9940159</td>
-<td align="right">1.7647629</td>
-<td align="right">2.2232688</td>
+<td align="right">1.9937460</td>
+<td align="right">1.7300069</td>
+<td align="right">2.2574851</td>
 <td align="left">random</td>
 <td align="left">score</td>
 </tr>
 <tr class="odd">
 <td align="right">0.10</td>
-<td align="right">1.5211422</td>
-<td align="right">1.3730281</td>
-<td align="right">1.6692563</td>
+<td align="right">1.4750517</td>
+<td align="right">1.3166370</td>
+<td align="right">1.6334664</td>
 <td align="left">random</td>
 <td align="left">score</td>
 </tr>
 <tr class="even">
 <td align="right">0.15</td>
-<td align="right">1.2531201</td>
-<td align="right">1.0762637</td>
-<td align="right">1.4299766</td>
+<td align="right">1.2070296</td>
+<td align="right">1.0688229</td>
+<td align="right">1.3452363</td>
 <td align="left">random</td>
 <td align="left">score</td>
 </tr>
 <tr class="odd">
 <td align="right">0.20</td>
-<td align="right">0.9196268</td>
-<td align="right">0.7729303</td>
-<td align="right">1.0663232</td>
+<td align="right">1.0352159</td>
+<td align="right">0.8804146</td>
+<td align="right">1.1900172</td>
 <td align="left">random</td>
 <td align="left">score</td>
 </tr>
 <tr class="even">
 <td align="right">0.25</td>
-<td align="right">0.6706638</td>
-<td align="right">0.5549800</td>
-<td align="right">0.7863476</td>
+<td align="right">0.8087075</td>
+<td align="right">0.6708783</td>
+<td align="right">0.9465366</td>
 <td align="left">random</td>
 <td align="left">score</td>
 </tr>
