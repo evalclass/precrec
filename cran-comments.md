@@ -1,16 +1,16 @@
-## Version 0.6.2
+## Version 0.7.0
 This is a submission for updating the already published package - precrec.
 In this version I have:
 
-* Fix column names of S3 print function for mdat 
+* Reduce supporting points to make plotting speed faster for ggplot 
 
 * Updated the version.
-    * 0.6.1 -> 0.6.2
+    * 0.6.2 -> 0.7.0
     
 ## Test environments
-* local OS X Yosemite, R 3.3.2
-* local CentOS 6.7, R 3.3.2
-* local Windows 10, R 3.3.2
+* local OS X Yosemite, R 3.3.3
+* local CentOS 6.7, R 3.3.3
+* local Windows 10, R 3.3.3
 * win-builder, Under development (unstable)
 * Ubuntu 12.04.5 LTS (on travis-ci), R 3.3.2
 * Windows Server 2012 R2 x64 (on AppVeyor), 3.3.2 Patched
