@@ -1,6 +1,6 @@
 # precrec 0.7
 
-* Add reduced_points option to autoplot
+* Add reduce_points option to autoplot
 
 # precrec 0.6.2
 
