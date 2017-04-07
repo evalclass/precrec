@@ -11,21 +11,43 @@ In this version I have:
 * local OS X Yosemite, R 3.3.3
 * local CentOS 6.7, R 3.3.3
 * local Windows 10, R 3.3.3
-* win-builder, Under development (unstable)
-* Ubuntu 12.04.5 LTS (on travis-ci), R 3.3.2
-* Windows Server 2012 R2 x64 (on AppVeyor), 3.3.2 Patched
+* win-builder, R Under development (unstable)
+* Ubuntu 12.04.5 LTS (on travis-ci), R 3.3.3 & R Under development 
+* Windows Server 2012 R2 x64 (on AppVeyor), 3.3.3 Patched
 
 ## R CMD check results
 * There were no ERRORs or WARNINGs.
 
-* One **NOTE** from the package size test on **local CentOS 6.7, R 3.3.2**.
+* One **NOTE** from the package size test on **local CentOS 6.7, R 3.3.3**.
   
-    It happens because the the size of the package c++ library `precrec.so` was 5.4 MB. 
-    It is smaller than 1 MB when tested in other environments.
+    * It happens because the the size of the package c++ library `precrec.so` was 5.6 MB.     
+          
 
-* One **NOTE** from the CRAN incoming feasibility test on **win-builder**.
+* One **NOTE** from the package size test on **travis-ci, R 3.3.3**.
+  
+    * installed size is 7.3Mb    
+         sub-directories of 1Mb or more: data 1.5MB, libs 4.9MB   
+
+
+* One **NOTE** from the package size test on **travis-ci, R Under developmen**.
+    * checking compiled code ... NOTE   
+        File ‘precrec/libs/precrec.so’:   
+        Found no calls to: ‘R\_registerRoutines’, ‘R\_useDynamicSymbols’
+        
+  
+* Two **NOTE**s on **win-builder**.
 
     * Possibly mis-spelled words in DESCRIPTION:
-        ROC (3:48, 10:78)
-      
-    **ROC is spelt correctly.**
+        ROC (3:48, 10:78) 
+
+    * checking compiled code ... NOTE   
+        File 'precrec/libs/i386/precrec.dll':    
+            Found no calls to: 'R\_registerRoutines', 'R\_useDynamicSymbols'    
+        File 'precrec/libs/x64/precrec.dll':    
+            Found no calls to: 'R\_registerRoutines', 'R\_useDynamicSymbols'    
+  
+
+* One **NOTE** from the "checking compiled code"" test on **AppVeyor**.
+
+    * Warning in read\_symbols\_from_dll(so, rarch) :
+       this requires 'objdump.exe' to be on the PATH   
