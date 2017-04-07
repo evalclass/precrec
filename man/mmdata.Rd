@@ -149,4 +149,3 @@ mmmdat
   \code{\link{join_scores}} and \code{\link{join_labels}} for formatting
   scores and labels with multiple datasets.
 }
-

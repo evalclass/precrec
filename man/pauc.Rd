@@ -115,4 +115,3 @@ pauc(mmcurves.part)
   performance evaluation measures. \code{\link{part}} for calculation of
   pAUCs. \code{\link{auc}} for retieving a dataset of AUCs.
 }
-

@@ -2,14 +2,14 @@
 % Please edit documentation in R/etc_utils_plot.R, R/g_plot.R
 \name{plot}
 \alias{plot}
-\alias{plot.mmcurves}
-\alias{plot.mmpoints}
-\alias{plot.mscurves}
-\alias{plot.mspoints}
-\alias{plot.smcurves}
-\alias{plot.smpoints}
 \alias{plot.sscurves}
+\alias{plot.mscurves}
+\alias{plot.smcurves}
+\alias{plot.mmcurves}
 \alias{plot.sspoints}
+\alias{plot.mspoints}
+\alias{plot.smpoints}
+\alias{plot.mmpoints}
 \title{Plot performance evaluation measures}
 \usage{
 \method{plot}{sscurves}(x, y = NULL, ...)
@@ -252,4 +252,3 @@ plot(mmpoints)
   \code{\link{autoplot}} for plotting the equivalent curves
   with \pkg{ggplot2}.
 }
-

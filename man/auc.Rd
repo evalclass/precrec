@@ -122,4 +122,3 @@ mm_aucs_prc
   performance evaluation measures. \code{\link{pauc}} for retieving a dataset
   of pAUCs.
 }
-

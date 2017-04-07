@@ -71,6 +71,29 @@ test_that("fortify sscurves", {
   expect_true(is.list(curve_df))
 })
 
+test_that("sscurves - reduce points", {
+  if (!ft2_check_libs()) {
+    skip("Libraries cannot be loaded")
+  }
+
+  samp1 <- create_sim_samples(1, 5000, 5000)
+  curves1 <- evalmod(scores = samp1$scores, labels = samp1$labels)
+  curve_df1a <- ggplot2::fortify(curves1)
+  expect_gte(nrow(curve_df1a), 10000)
+
+  curve_df1b <- ggplot2::fortify(curves1, reduce_points = TRUE)
+  expect_lte(nrow(curve_df1b), 10000)
+
+
+  curves2 <- evalmod(scores = samp1$scores, labels = samp1$labels,
+                     x_bins = 100)
+  curve_df2a <- ggplot2::fortify(curves2)
+  expect_gte(nrow(curve_df2a), 1000)
+
+  curve_df2b <- ggplot2::fortify(curves2, reduce_points = TRUE)
+  expect_lte(nrow(curve_df2b), 1000)
+})
+
 test_that("fortify mscurves", {
   if (!ft2_check_libs()) {
     skip("Libraries cannot be loaded")
@@ -80,6 +103,28 @@ test_that("fortify mscurves", {
 
   curve_df <- ggplot2::fortify(curves)
   expect_true(is.list(curve_df))
+})
+
+test_that("mscurves - reduce points", {
+  if (!ft2_check_libs()) {
+    skip("Libraries cannot be loaded")
+  }
+
+  samp2 <- create_sim_samples(4, 5000, 5000)
+  curves1 <- evalmod(scores = samp2$scores, labels = samp2$labels)
+  curve_df1a <- ggplot2::fortify(curves1)
+  expect_gte(nrow(curve_df1a), 40000)
+
+  curve_df1b <- ggplot2::fortify(curves1, reduce_points = TRUE)
+  expect_lte(nrow(curve_df1b), 40000)
+
+  curves2 <- evalmod(scores = samp2$scores, labels = samp2$labels,
+                     x_bins = 100)
+  curve_df2a <- ggplot2::fortify(curves2)
+  expect_gte(nrow(curve_df2a), 4000)
+
+  curve_df2b <- ggplot2::fortify(curves2, reduce_points = TRUE)
+  expect_lte(nrow(curve_df2b), 4000)
 })
 
 test_that("fortify smcurves", {
@@ -93,6 +138,31 @@ test_that("fortify smcurves", {
   expect_true(is.list(curve_df))
 })
 
+test_that("smcurves - reduce points", {
+  if (!ft2_check_libs()) {
+    skip("Libraries cannot be loaded")
+  }
+
+  samp3 <- create_sim_samples(4, 5000, 5000)
+  mdat3 <- mmdata(samp3$scores, samp3$labels, expd_first = "dsids")
+
+  curves1 <- evalmod(mdat3, raw_curves = TRUE)
+  curve_df1a <- ggplot2::fortify(curves1, raw_curves = TRUE)
+  expect_gte(nrow(curve_df1a), 40000)
+
+  curve_df1b <- ggplot2::fortify(curves1, raw_curves = TRUE,
+                                 reduce_points = TRUE)
+  expect_lte(nrow(curve_df1b), 40000)
+
+  curves2 <- evalmod(mdat3, x_bins = 100, raw_curves = TRUE)
+  curve_df2a <- ggplot2::fortify(curves2, raw_curves = TRUE)
+  expect_gte(nrow(curve_df2a), 4000)
+
+  curve_df2b <- ggplot2::fortify(curves2, raw_curves = TRUE,
+                                 reduce_points = TRUE)
+  expect_lte(nrow(curve_df2b), 4000)
+})
+
 test_that("fortify mmcurves", {
   if (!ft2_check_libs()) {
     skip("Libraries cannot be loaded")
@@ -102,4 +172,30 @@ test_that("fortify mmcurves", {
 
   curve_df <- ggplot2::fortify(curves)
   expect_true(is.list(curve_df))
+})
+
+test_that("mmcurves - reduce points", {
+  if (!ft2_check_libs()) {
+    skip("Libraries cannot be loaded")
+  }
+
+  samp4 <- create_sim_samples(4, 5000, 5000)
+  mdat4 <- mmdata(samp4$scores, samp4$labels, modnames = c("m1", "m2"),
+                  dsids = c(1, 2), expd_first = "modnames")
+
+  curves1 <- evalmod(mdat4, raw_curves = TRUE)
+  curve_df1a <- ggplot2::fortify(curves1, raw_curves = TRUE)
+  expect_gte(nrow(curve_df1a), 40000)
+
+  curve_df1b <- ggplot2::fortify(curves1, raw_curves = TRUE,
+                                 reduce_points = TRUE)
+  expect_lte(nrow(curve_df1b), 40000)
+
+  curves2 <- evalmod(mdat4, x_bins = 100, raw_curves = TRUE)
+  curve_df2a <- ggplot2::fortify(curves2, raw_curves = TRUE)
+  expect_gte(nrow(curve_df2a), 4000)
+
+  curve_df2b <- ggplot2::fortify(curves2, raw_curves = TRUE,
+                                 reduce_points = TRUE)
+  expect_lte(nrow(curve_df2b), 4000)
 })

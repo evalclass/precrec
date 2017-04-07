@@ -173,7 +173,8 @@ NULL
 # Make a dataframe for plotting
 #
 .dataframe_common <- function(obj, mode = "rocprc", raw_curves = TRUE,
-                              check_ggplot = FALSE, ...) {
+                              reduce_points = FALSE, check_ggplot = FALSE,
+                              ...) {
   # === Check package availability  ===
   if (check_ggplot) {
     .load_ggplot2()
@@ -200,11 +201,18 @@ NULL
 
   if (new_mode == "rocprc") {
     curvetype_names <- list(ROC = "rocs", PRC = "prcs")
+    if (reduce_points) {
+      x_bins <- attr(obj, "args")$x_bins
+    } else {
+      x_bins <- 0
+    }
+
   } else if (new_mode == "basic") {
     curvetype_names <- list(score = "score", label = "label", error = "err",
                             accuracy = "acc", specificity = "sp",
                             sensitivity = "sn", precision = "prec", mcc = "mcc",
                             fscore = "fscore")
+    x_bins <- 0
   }
 
   # Make dsis-modname pairs
@@ -224,7 +232,7 @@ NULL
       list_df <- convert_curve_df(obj, uniq_modnames, as.character(uniq_dsids),
                                   match(modnames, uniq_modnames),
                                   match(dsids, uniq_dsids),
-                                  dsid_modnames, curvetype_names)
+                                  dsid_modnames, curvetype_names, x_bins)
       .check_cpp_func_error(list_df, "convert_curve_df")
       curve_df <- list_df[["df"]]
     } else {
@@ -236,7 +244,7 @@ NULL
     if (use_rcpp) {
       list_df <- convert_curve_avg_df(attr(obj, "grp_avg"), uniq_modnames,
                                       match(modnames, uniq_modnames),
-                                      curvetype_names)
+                                      curvetype_names, x_bins)
       .check_cpp_func_error(list_df, "convert_curve_avg_df")
       curve_df <- list_df[["df"]]
     } else {

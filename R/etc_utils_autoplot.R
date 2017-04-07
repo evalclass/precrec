@@ -102,6 +102,12 @@
 #'     shows a plot. It is effective only when a multiple-panel plot is
 #'     generated, for example, when \code{curvetype} is \code{c("ROC", "PRC")}.
 #'   }
+#'   \item{reduce_points}{
+#'     A Boolean value to decide whether the points should be reduced
+#'     when \code{mode = "rocprc"}. The points are reduced according to
+#'     \code{x_bins} of the \code{\link{evalmod}} function.
+#'     The default values is \code{TRUE}.
+#'   }
 #' }
 #'
 #' @return The \code{autoplot} function returns a \code{ggplot} object
@@ -131,6 +137,16 @@
 #'
 #' ## Plot both ROC and Precision-Recall curves
 #' autoplot(sscurves)
+#'
+#' ## Reduced/Full supporting points
+#' sampss <- create_sim_samples(1, 50000, 50000)
+#' evalss <- evalmod(scores = sampss$scores, labels = sampss$labels)
+#'
+#' # Reduced supporting point
+#' system.time(autoplot(evalss))
+#'
+#' # Full supporting points
+#' system.time(autoplot(evalss, reduce_points = FALSE))
 #'
 #' ## Get a grob object for multiple plots
 #' pp1 <- autoplot(sscurves, ret_grob = TRUE)
@@ -169,6 +185,16 @@
 #' ## ROC and Precision-Recall curves
 #' autoplot(mscurves)
 #'
+#' ## Reduced/Full supporting points
+#' sampms <- create_sim_samples(5, 50000, 50000)
+#' evalms <- evalmod(scores = sampms$scores, labels = sampms$labels)
+#'
+#' # Reduced supporting point
+#' system.time(autoplot(evalms))
+#'
+#' # Full supporting points
+#' system.time(autoplot(evalms, reduce_points = FALSE))
+#'
 #' ## Hide the legend
 #' autoplot(mscurves, show_legend = FALSE)
 #'
@@ -204,6 +230,17 @@
 #' ## Raw ROC and Precision-Recall curves
 #' autoplot(smcurves, raw_curves = TRUE)
 #'
+#' ## Reduced/Full supporting points
+#' sampsm <- create_sim_samples(4, 5000, 5000)
+#' mdatsm <- mmdata(sampsm$scores, sampsm$labels, expd_first = "dsids")
+#' evalsm <- evalmod(mdatsm, raw_curves = TRUE)
+#'
+#' # Reduced supporting point
+#' system.time(autoplot(evalsm, raw_curves = TRUE))
+#'
+#' # Full supporting points
+#' system.time(autoplot(evalsm, raw_curves = TRUE, reduce_points = FALSE))
+#'
 #' ## Generate an smpoints object that contains basic evaluation measures
 #' smpoints <- evalmod(mdat, mode = "basic")
 #'
@@ -233,6 +270,18 @@
 #' ## Raw ROC and Precision-Recall curves
 #' autoplot(mmcurves, raw_curves = TRUE)
 #'
+#' ## Reduced/Full supporting points
+#' sampmm <- create_sim_samples(4, 5000, 5000)
+#' mdatmm <- mmdata(sampmm$scores, sampmm$labels, modnames = c("m1", "m2"),
+#'                  dsids = c(1, 2), expd_first = "modnames")
+#' evalmm <- evalmod(mdatmm, raw_curves = TRUE)
+#'
+#' # Reduced supporting point
+#' system.time(autoplot(evalmm, raw_curves = TRUE))
+#'
+#' # Full supporting points
+#' system.time(autoplot(evalmm, raw_curves = TRUE, reduce_points = FALSE))
+#'
 #' ## Generate an mmpoints object that contains basic evaluation measures
 #' mmpoints <- evalmod(mdat, mode = "basic")
 #'
@@ -248,7 +297,8 @@ NULL
 #
 .get_autoplot_arglist <- function(def_curvetype, def_type, def_show_cb,
                                   def_raw_curves, def_add_np_nn,
-                                  def_show_legend, def_ret_grob, ...) {
+                                  def_show_legend, def_ret_grob,
+                                  def_reduce_points, ...) {
 
   arglist <- list(...)
 
@@ -278,6 +328,10 @@ NULL
 
   if (is.null(arglist[["ret_grob"]])){
     arglist[["ret_grob"]] <- def_ret_grob
+  }
+
+  if (is.null(arglist[["reduce_points"]])){
+    arglist[["reduce_points"]] <- def_reduce_points
   }
 
   arglist
@@ -349,6 +403,7 @@ NULL
   add_np_nn <- arglist[["add_np_nn"]]
   show_legend <- arglist[["show_legend"]]
   ret_grob <- arglist[["ret_grob"]]
+  reduce_points <- arglist[["reduce_points"]]
 
   # === Check package availability  ===
   .load_ggplot2()
@@ -362,12 +417,14 @@ NULL
   .check_ret_grob(ret_grob)
 
   # === Create a ggplot object for ROC&PRC, ROC, or PRC ===
-  curve_df <- ggplot2::fortify(object, raw_curves = raw_curves)
+  curve_df <- ggplot2::fortify(object, raw_curves = raw_curves,
+                               reduce_points = reduce_points)
 
   func_plot <- function(ctype) {
     .autoplot_single(object, curve_df, curvetype = ctype, type = type,
                      show_cb = show_cb, raw_curves = raw_curves,
-                     show_legend = show_legend, add_np_nn = add_np_nn)
+                     reduce_points = reduce_points, show_legend = show_legend,
+                     add_np_nn = add_np_nn)
   }
   lcurves <- lapply(curvetype, func_plot)
   names(lcurves) <- curvetype
@@ -437,11 +494,13 @@ NULL
 #
 .autoplot_single <- function(object, curve_df, curvetype = "ROC", type = "l",
                              show_cb = FALSE, raw_curves = FALSE,
-                             show_legend = FALSE, add_np_nn = TRUE, ...) {
+                             reduce_points = TRUE, show_legend = FALSE,
+                             add_np_nn = TRUE, ...) {
 
   curve_df <- .prepare_autoplot(object, curve_df = curve_df,
                                 curvetype = curvetype,
-                                raw_curves = raw_curves, ...)
+                                raw_curves = raw_curves,
+                                reduce_points = reduce_points, ...)
 
   # === Create a ggplot object ===
   if (raw_curves) {

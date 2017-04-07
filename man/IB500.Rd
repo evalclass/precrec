@@ -23,4 +23,3 @@ A list contains labels and scores of five different performance levels.
 All scores were randomly generated.
 }
 \keyword{datasets}
-

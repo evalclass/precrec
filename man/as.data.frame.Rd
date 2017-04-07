@@ -2,14 +2,14 @@
 % Please edit documentation in R/etc_utils_dataframe.R, R/g_dataframe.R
 \name{as.data.frame}
 \alias{as.data.frame}
-\alias{as.data.frame.mmcurves}
-\alias{as.data.frame.mmpoints}
-\alias{as.data.frame.mscurves}
-\alias{as.data.frame.mspoints}
-\alias{as.data.frame.smcurves}
-\alias{as.data.frame.smpoints}
 \alias{as.data.frame.sscurves}
+\alias{as.data.frame.mscurves}
+\alias{as.data.frame.smcurves}
+\alias{as.data.frame.mmcurves}
 \alias{as.data.frame.sspoints}
+\alias{as.data.frame.mspoints}
+\alias{as.data.frame.smpoints}
+\alias{as.data.frame.mmpoints}
 \title{Convert a curves and points object to a data frame}
 \usage{
 \method{as.data.frame}{sscurves}(x, row.names = NULL, optional = FALSE,
@@ -207,4 +207,3 @@ head(mmpoints.df)
 \code{\link{evalmod}} for generating \code{S3} objects with
   performance evaluation measures.
 }
-
