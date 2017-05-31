@@ -91,17 +91,25 @@ fortify.mscurves <- function(model, raw_curves = TRUE, reduce_points = FALSE,
 
 #' @rdname fortify
 #' @export
-fortify.smcurves <- function(model, raw_curves = FALSE, reduce_points = FALSE,
+fortify.smcurves <- function(model, raw_curves = NULL, reduce_points = FALSE,
                              ...) {
-  .dataframe_common(model, raw_curves = raw_curves,
+
+  arglist <- .get_fortify_arglist(attr(model, "args"),
+                                  def_raw_curves = raw_curves, ...)
+
+  .dataframe_common(model, raw_curves = arglist[["raw_curves"]],
                     reduce_points = reduce_points, check_ggplot = TRUE, ...)
 }
 
 #' @rdname fortify
 #' @export
-fortify.mmcurves <- function(model, raw_curves = FALSE, reduce_points = FALSE,
+fortify.mmcurves <- function(model, raw_curves = NULL, reduce_points = FALSE,
                              ...) {
-  .dataframe_common(model, raw_curves = raw_curves,
+
+  arglist <- .get_fortify_arglist(attr(model, "args"),
+                                  def_raw_curves = raw_curves, ...)
+
+  .dataframe_common(model, raw_curves = arglist[["raw_curves"]],
                     reduce_points = reduce_points, check_ggplot = TRUE, ...)
 }
 
@@ -123,16 +131,24 @@ fortify.mspoints <- function(model, raw_curves = TRUE, reduce_points = FALSE,
 
 #' @rdname fortify
 #' @export
-fortify.smpoints <- function(model, raw_curves = FALSE, reduce_points = FALSE,
+fortify.smpoints <- function(model, raw_curves = NULL, reduce_points = FALSE,
                              ...) {
-  .dataframe_common(model, mode = "basic", raw_curves = raw_curves,
+
+  arglist <- .get_fortify_arglist(attr(model, "args"),
+                                  def_raw_curves = raw_curves, ...)
+
+  .dataframe_common(model, mode = "basic", raw_curves = arglist[["raw_curves"]],
                     check_ggplot = TRUE, reduce_points = FALSE, ...)
 }
 
 #' @rdname fortify
 #' @export
-fortify.mmpoints <- function(model, raw_curves = FALSE, reduce_points = FALSE,
+fortify.mmpoints <- function(model, raw_curves = NULL, reduce_points = FALSE,
                              ...) {
-  .dataframe_common(model, mode = "basic", raw_curves = raw_curves,
+
+  arglist <- .get_fortify_arglist(attr(model, "args"),
+                                  def_raw_curves = raw_curves, ...)
+
+  .dataframe_common(model, mode = "basic", raw_curves = arglist[["raw_curves"]],
                     check_ggplot = TRUE, reduce_points = FALSE, ...)
 }

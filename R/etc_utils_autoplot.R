@@ -316,10 +316,12 @@ NULL
   }
 
   if (is.null(arglist[["raw_curves"]])){
-    if (is.null(def_raw_curves) && !is.null(evalmod_args[["raw_curves"]])) {
+    if (!is.null(def_raw_curves)) {
+      arglist[["raw_curves"]] <- def_raw_curves
+    } else if (!is.null(evalmod_args[["raw_curves"]])) {
       arglist[["raw_curves"]] <- evalmod_args[["raw_curves"]]
     } else {
-      arglist[["raw_curves"]] <- def_raw_curves
+      arglist[["raw_curves"]] <- FALSE
     }
   }
 

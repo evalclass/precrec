@@ -250,3 +250,22 @@
 #'
 #' @name fortify
 NULL
+
+
+#
+# Process ... for curve objects
+#
+.get_fortify_arglist <- function(evalmod_args, def_raw_curves, ...) {
+
+  arglist <- list(...)
+
+  if (!is.null(def_raw_curves)) {
+    arglist[["raw_curves"]] <- def_raw_curves
+  } else if (!is.null(evalmod_args[["raw_curves"]])) {
+    arglist[["raw_curves"]] <- evalmod_args[["raw_curves"]]
+  } else {
+    arglist[["raw_curves"]] <- FALSE
+  }
+
+  arglist
+}

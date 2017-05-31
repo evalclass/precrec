@@ -18,10 +18,10 @@
 \method{fortify}{mscurves}(model, raw_curves = TRUE, reduce_points = FALSE,
   ...)
 
-\method{fortify}{smcurves}(model, raw_curves = FALSE, reduce_points = FALSE,
+\method{fortify}{smcurves}(model, raw_curves = NULL, reduce_points = FALSE,
   ...)
 
-\method{fortify}{mmcurves}(model, raw_curves = FALSE, reduce_points = FALSE,
+\method{fortify}{mmcurves}(model, raw_curves = NULL, reduce_points = FALSE,
   ...)
 
 \method{fortify}{sspoints}(model, raw_curves = TRUE, reduce_points = FALSE,
@@ -30,10 +30,10 @@
 \method{fortify}{mspoints}(model, raw_curves = TRUE, reduce_points = FALSE,
   ...)
 
-\method{fortify}{smpoints}(model, raw_curves = FALSE, reduce_points = FALSE,
+\method{fortify}{smpoints}(model, raw_curves = NULL, reduce_points = FALSE,
   ...)
 
-\method{fortify}{mmpoints}(model, raw_curves = FALSE, reduce_points = FALSE,
+\method{fortify}{mmpoints}(model, raw_curves = NULL, reduce_points = FALSE,
   ...)
 }
 \arguments{
