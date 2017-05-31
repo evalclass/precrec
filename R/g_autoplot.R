@@ -47,8 +47,9 @@ autoplot.pevals <- function(object, ...) {
 #' @export
 autoplot.sscurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
 
-  arglist <- .get_autoplot_arglist(def_curvetype = curvetype, def_type = "l",
-                                   def_show_cb = FALSE, def_raw_curves = TRUE,
+  arglist <- .get_autoplot_arglist(attr(object, "args"),
+                                   def_curvetype = curvetype, def_type = "l",
+                                   def_show_cb = FALSE, def_raw_curves = NULL,
                                    def_add_np_nn = TRUE,
                                    def_show_legend = FALSE,
                                    def_ret_grob = FALSE,
@@ -65,8 +66,9 @@ autoplot.sscurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
 #' @export
 autoplot.mscurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
 
-  arglist <- .get_autoplot_arglist(def_curvetype = curvetype, def_type = "l",
-                                   def_show_cb = FALSE, def_raw_curves = TRUE,
+  arglist <- .get_autoplot_arglist(attr(object, "args"),
+                                   def_curvetype = curvetype, def_type = "l",
+                                   def_show_cb = FALSE, def_raw_curves = NULL,
                                    def_add_np_nn = TRUE,
                                    def_show_legend = TRUE,
                                    def_ret_grob = FALSE,
@@ -82,8 +84,9 @@ autoplot.mscurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
 #' @export
 autoplot.smcurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
 
-  arglist <- .get_autoplot_arglist(def_curvetype = curvetype, def_type = "l",
-                                   def_show_cb = TRUE, def_raw_curves = FALSE,
+  arglist <- .get_autoplot_arglist(attr(object, "args"),
+                                   def_curvetype = curvetype, def_type = "l",
+                                   def_show_cb = TRUE, def_raw_curves = NULL,
                                    def_add_np_nn = TRUE,
                                    def_show_legend = FALSE,
                                    def_ret_grob = FALSE,
@@ -98,8 +101,9 @@ autoplot.smcurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
 #' @export
 autoplot.mmcurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
 
-  arglist <- .get_autoplot_arglist(def_curvetype = curvetype, def_type = "l",
-                                   def_show_cb = FALSE, def_raw_curves = FALSE,
+  arglist <- .get_autoplot_arglist(attr(object, "args"),
+                                   def_curvetype = curvetype, def_type = "l",
+                                   def_show_cb = FALSE, def_raw_curves = NULL,
                                    def_add_np_nn = TRUE,
                                    def_show_legend = TRUE,
                                    def_ret_grob = FALSE,
@@ -119,8 +123,9 @@ autoplot.sspoints <- function(object,
                                             "fscore"),
                               ...) {
 
-  arglist <- .get_autoplot_arglist(def_curvetype = curvetype, def_type = "p",
-                                   def_show_cb = FALSE, def_raw_curves = TRUE,
+  arglist <- .get_autoplot_arglist(attr(object, "args"),
+                                   def_curvetype = curvetype, def_type = "p",
+                                   def_show_cb = FALSE, def_raw_curves = NULL,
                                    def_add_np_nn = TRUE,
                                    def_show_legend = FALSE,
                                    def_ret_grob = FALSE,
@@ -142,8 +147,9 @@ autoplot.mspoints <- function(object,
                                             "fscore"),
                               ...) {
 
-  arglist <- .get_autoplot_arglist(def_curvetype = curvetype, def_type = "p",
-                                   def_show_cb = FALSE, def_raw_curves = TRUE,
+  arglist <- .get_autoplot_arglist(attr(object, "args"),
+                                   def_curvetype = curvetype, def_type = "p",
+                                   def_show_cb = FALSE, def_raw_curves = NULL,
                                    def_add_np_nn = TRUE,
                                    def_show_legend = TRUE,
                                    def_ret_grob = FALSE,
@@ -164,8 +170,9 @@ autoplot.smpoints <- function(object,
                                             "fscore"),
                               ...) {
 
-  arglist <- .get_autoplot_arglist(def_curvetype = curvetype, def_type = "p",
-                                   def_show_cb = TRUE, def_raw_curves = FALSE,
+  arglist <- .get_autoplot_arglist(attr(object, "args"),
+                                   def_curvetype = curvetype, def_type = "p",
+                                   def_show_cb = TRUE, def_raw_curves = NULL,
                                    def_add_np_nn = TRUE,
                                    def_show_legend = FALSE,
                                    def_ret_grob = FALSE,
@@ -185,8 +192,9 @@ autoplot.mmpoints <- function(object,
                                             "fscore"),
                               ...) {
 
-  arglist <- .get_autoplot_arglist(def_curvetype = curvetype, def_type = "p",
-                                   def_show_cb = FALSE, def_raw_curves = FALSE,
+  arglist <- .get_autoplot_arglist(attr(object, "args"),
+                                   def_curvetype = curvetype, def_type = "p",
+                                   def_show_cb = FALSE, def_raw_curves = NULL,
                                    def_add_np_nn = TRUE,
                                    def_show_legend = TRUE,
                                    def_ret_grob = FALSE,
