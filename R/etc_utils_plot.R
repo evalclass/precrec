@@ -302,7 +302,8 @@ NULL
 #
 # Process ... for curve objects
 #
-.get_plot_arglist <- function(y, def_curvetype, def_type, def_show_cb,
+.get_plot_arglist <- function(evalmod_args, y,
+                              def_curvetype, def_type, def_show_cb,
                               def_raw_curves, def_add_np_nn, def_show_legend,
                               ...) {
   arglist <- list(...)
@@ -324,7 +325,13 @@ NULL
   }
 
   if (is.null(arglist[["raw_curves"]])){
-    arglist[["raw_curves"]] <- def_raw_curves
+    if (!is.null(def_raw_curves)) {
+      arglist[["raw_curves"]] <- def_raw_curves
+    } else if (!is.null(evalmod_args[["raw_curves"]])) {
+      arglist[["raw_curves"]] <- evalmod_args[["raw_curves"]]
+    } else {
+      arglist[["raw_curves"]] <- FALSE
+    }
   }
 
   if (is.null(arglist[["add_np_nn"]])){

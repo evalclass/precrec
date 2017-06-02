@@ -227,10 +227,9 @@ test_that("autoplot for multiple mmpoints returns grob", {
 
 test_that("autoplot raw_curve option sspoints", {
   get_args <- function(curves, ...) {
-    curvetype <- c("score", "label", "error", "accuracy", "specificity",
-                   "sensitivity", "precision", "mcc", "fscore")
     args <- .get_autoplot_arglist(attr(curves, "args"),
-                                  def_curvetype = curvetype, def_type = "p",
+                                  def_curvetype = .get_metric_names("basic"),
+                                  def_type = "p",
                                   def_show_cb = FALSE, def_raw_curves = NULL,
                                   def_add_np_nn = TRUE,
                                   def_show_legend = FALSE,
@@ -254,10 +253,9 @@ test_that("autoplot raw_curve option sspoints", {
 
 test_that("autoplot raw_curve option mspoints", {
   get_args <- function(curves, ...) {
-    curvetype <- c("score", "label", "error", "accuracy", "specificity",
-                   "sensitivity", "precision", "mcc", "fscore")
     args <- .get_autoplot_arglist(attr(curves, "args"),
-                                  def_curvetype = curvetype, def_type = "p",
+                                  def_curvetype = .get_metric_names("basic"),
+                                  def_type = "p",
                                   def_show_cb = FALSE, def_raw_curves = NULL,
                                   def_add_np_nn = TRUE,
                                   def_show_legend = TRUE,
@@ -279,10 +277,9 @@ test_that("autoplot raw_curve option mspoints", {
 
 test_that("autoplot raw_curve option smpoints", {
   get_args <- function(curves, ...) {
-    curvetype <- c("score", "label", "error", "accuracy", "specificity",
-                   "sensitivity", "precision", "mcc", "fscore")
     args <- .get_autoplot_arglist(attr(curves, "args"),
-                                  def_curvetype = curvetype, def_type = "p",
+                                  def_curvetype = .get_metric_names("basic"),
+                                  def_type = "p",
                                   def_show_cb = TRUE, def_raw_curves = NULL,
                                   def_add_np_nn = TRUE,
                                   def_show_legend = FALSE,
@@ -315,10 +312,9 @@ test_that("autoplot raw_curve option smpoints", {
 
 test_that("autoplot raw_curve option mmpoints", {
   get_args <- function(curves, ...) {
-    curvetype <- c("score", "label", "error", "accuracy", "specificity",
-                   "sensitivity", "precision", "mcc", "fscore")
     args <- .get_autoplot_arglist(attr(curves, "args"),
-                                  def_curvetype = curvetype, def_type = "p",
+                                  def_curvetype = .get_metric_names("basic"),
+                                  def_type = "p",
                                   def_show_cb = FALSE, def_raw_curves = NULL,
                                   def_add_np_nn = TRUE,
                                   def_show_legend = TRUE,

@@ -66,7 +66,7 @@
 #' @docType package
 #' @name precrec
 #'
-#' @useDynLib precrec, .registration = TRUE
+#' @useDynLib precrec
 #' @importFrom Rcpp sourceCpp
 #' @importFrom ggplot2 autoplot
 #' @importFrom ggplot2 fortify

@@ -116,11 +116,7 @@ autoplot.mmcurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
 
 #' @rdname autoplot
 #' @export
-autoplot.sspoints <- function(object,
-                              curvetype = c("score", "label", "error",
-                                            "accuracy", "specificity",
-                                            "sensitivity", "precision", "mcc",
-                                            "fscore"),
+autoplot.sspoints <- function(object, curvetype = .get_metric_names("basic"),
                               ...) {
 
   arglist <- .get_autoplot_arglist(attr(object, "args"),
@@ -140,11 +136,7 @@ autoplot.sspoints <- function(object,
 
 #' @rdname autoplot
 #' @export
-autoplot.mspoints <- function(object,
-                              curvetype = c("score", "label", "error",
-                                            "accuracy", "specificity",
-                                            "sensitivity", "precision", "mcc",
-                                            "fscore"),
+autoplot.mspoints <- function(object, curvetype = .get_metric_names("basic"),
                               ...) {
 
   arglist <- .get_autoplot_arglist(attr(object, "args"),
@@ -163,11 +155,7 @@ autoplot.mspoints <- function(object,
 
 #' @rdname autoplot
 #' @export
-autoplot.smpoints <- function(object,
-                              curvetype = c("score", "label", "error",
-                                            "accuracy", "specificity",
-                                            "sensitivity", "precision", "mcc",
-                                            "fscore"),
+autoplot.smpoints <- function(object, curvetype = .get_metric_names("basic"),
                               ...) {
 
   arglist <- .get_autoplot_arglist(attr(object, "args"),
@@ -185,11 +173,7 @@ autoplot.smpoints <- function(object,
 
 #' @rdname autoplot
 #' @export
-autoplot.mmpoints <- function(object,
-                              curvetype = c("score", "label", "error",
-                                            "accuracy", "specificity",
-                                            "sensitivity", "precision", "mcc",
-                                            "fscore"),
+autoplot.mmpoints <- function(object, curvetype = .get_metric_names("basic"),
                               ...) {
 
   arglist <- .get_autoplot_arglist(attr(object, "args"),

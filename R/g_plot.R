@@ -2,7 +2,8 @@
 #' @export
 plot.sscurves <- function(x, y = NULL, ...) {
 
-  arglist <- .get_plot_arglist(y, def_curvetype = c("ROC", "PRC"),
+  arglist <- .get_plot_arglist(attr(x, "args"), y,
+                               def_curvetype = c("ROC", "PRC"),
                                def_type = "l", def_show_cb = FALSE,
                                def_raw_curves = TRUE, def_add_np_nn = TRUE,
                                def_show_legend = FALSE, ...)
@@ -19,7 +20,8 @@ plot.sscurves <- function(x, y = NULL, ...) {
 #' @export
 plot.mscurves <- function(x, y = NULL, ...) {
 
-  arglist <- .get_plot_arglist(y, def_curvetype = c("ROC", "PRC"),
+  arglist <- .get_plot_arglist(attr(x, "args"), y,
+                               def_curvetype = c("ROC", "PRC"),
                                def_type = "l", def_show_cb = FALSE,
                                def_raw_curves = TRUE, def_add_np_nn = TRUE,
                                def_show_legend = TRUE, ...)
@@ -36,9 +38,10 @@ plot.mscurves <- function(x, y = NULL, ...) {
 #' @export
 plot.smcurves <- function(x, y = NULL, ...) {
 
-  arglist <- .get_plot_arglist(y, def_curvetype = c("ROC", "PRC"),
+  arglist <- .get_plot_arglist(attr(x, "args"), y,
+                               def_curvetype = c("ROC", "PRC"),
                                def_type = "l", def_show_cb = TRUE,
-                               def_raw_curves = FALSE, def_add_np_nn = TRUE,
+                               def_raw_curves = NULL, def_add_np_nn = TRUE,
                                def_show_legend = FALSE, ...)
 
   arglist[["curvetype"]] <- .pmatch_curvetype_rocprc(arglist[["curvetype"]])
@@ -51,9 +54,10 @@ plot.smcurves <- function(x, y = NULL, ...) {
 #' @export
 plot.mmcurves <- function(x, y = NULL, ...) {
 
-  arglist <- .get_plot_arglist(y, def_curvetype = c("ROC", "PRC"),
+  arglist <- .get_plot_arglist(attr(x, "args"), y,
+                               def_curvetype = c("ROC", "PRC"),
                                def_type = "l", def_show_cb = FALSE,
-                               def_raw_curves = FALSE, def_add_np_nn = TRUE,
+                               def_raw_curves = NULL, def_add_np_nn = TRUE,
                                def_show_legend = TRUE, ...)
 
   arglist[["curvetype"]] <- .pmatch_curvetype_rocprc(arglist[["curvetype"]])
@@ -66,9 +70,9 @@ plot.mmcurves <- function(x, y = NULL, ...) {
 #' @export
 plot.sspoints <- function(x, y = NULL, ...) {
 
-  mnames <- c("score", "label", "error", "accuracy", "specificity",
-              "sensitivity", "precision", "mcc", "fscore")
-  arglist <- .get_plot_arglist(y, def_curvetype = mnames, def_type = "p",
+  arglist <- .get_plot_arglist(attr(x, "args"), y,
+                               def_curvetype = .get_metric_names("basic"),
+                               def_type = "p",
                                def_show_cb = FALSE, def_raw_curves = TRUE,
                                def_add_np_nn = TRUE, def_show_legend = FALSE,
                                ...)
@@ -85,9 +89,9 @@ plot.sspoints <- function(x, y = NULL, ...) {
 #' @export
 plot.mspoints <- function(x, y = NULL, ...) {
 
-  mnames <- c("score", "label", "error", "accuracy", "specificity",
-              "sensitivity", "precision", "mcc", "fscore")
-  arglist <- .get_plot_arglist(y, def_curvetype = mnames, def_type = "p",
+  arglist <- .get_plot_arglist(attr(x, "args"), y,
+                               def_curvetype = .get_metric_names("basic"),
+                               def_type = "p",
                                def_show_cb = FALSE, def_raw_curves = TRUE,
                                def_add_np_nn = TRUE, def_show_legend = TRUE,
                                ...)
@@ -103,10 +107,10 @@ plot.mspoints <- function(x, y = NULL, ...) {
 #' @export
 plot.smpoints <- function(x, y = NULL, ...) {
 
-  mnames <- c("score", "label", "error", "accuracy", "specificity",
-              "sensitivity", "precision", "mcc", "fscore")
-  arglist <- .get_plot_arglist(y, def_curvetype = mnames, def_type = "p",
-                               def_show_cb = TRUE, def_raw_curves = FALSE,
+  arglist <- .get_plot_arglist(attr(x, "args"), y,
+                               def_curvetype = .get_metric_names("basic"),
+                               def_type = "p",
+                               def_show_cb = TRUE, def_raw_curves = NULL,
                                def_add_np_nn = TRUE, def_show_legend = FALSE,
                                ...)
 
@@ -120,10 +124,10 @@ plot.smpoints <- function(x, y = NULL, ...) {
 #' @export
 plot.mmpoints <- function(x, y = NULL, ...) {
 
-  mnames <- c("score", "label", "error", "accuracy", "specificity",
-              "sensitivity", "precision", "mcc", "fscore")
-  arglist <- .get_plot_arglist(y, def_curvetype = mnames, def_type = "p",
-                               def_show_cb = FALSE, def_raw_curves = FALSE,
+  arglist <- .get_plot_arglist(attr(x, "args"), y,
+                               def_curvetype = .get_metric_names("basic"),
+                               def_type = "p",
+                               def_show_cb = FALSE, def_raw_curves = NULL,
                                def_add_np_nn = TRUE, def_show_legend = TRUE,
                                ...)
 
