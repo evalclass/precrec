@@ -12,10 +12,10 @@
 \alias{fortify.mmpoints}
 \title{Convert a curves and points object to a data frame for ggplot2}
 \usage{
-\method{fortify}{sscurves}(model, raw_curves = TRUE, reduce_points = FALSE,
+\method{fortify}{sscurves}(model, raw_curves = NULL, reduce_points = FALSE,
   ...)
 
-\method{fortify}{mscurves}(model, raw_curves = TRUE, reduce_points = FALSE,
+\method{fortify}{mscurves}(model, raw_curves = NULL, reduce_points = FALSE,
   ...)
 
 \method{fortify}{smcurves}(model, raw_curves = NULL, reduce_points = FALSE,
@@ -24,10 +24,10 @@
 \method{fortify}{mmcurves}(model, raw_curves = NULL, reduce_points = FALSE,
   ...)
 
-\method{fortify}{sspoints}(model, raw_curves = TRUE, reduce_points = FALSE,
+\method{fortify}{sspoints}(model, raw_curves = NULL, reduce_points = FALSE,
   ...)
 
-\method{fortify}{mspoints}(model, raw_curves = TRUE, reduce_points = FALSE,
+\method{fortify}{mspoints}(model, raw_curves = NULL, reduce_points = FALSE,
   ...)
 
 \method{fortify}{smpoints}(model, raw_curves = NULL, reduce_points = FALSE,

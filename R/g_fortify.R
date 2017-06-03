@@ -75,7 +75,7 @@ fortify.pevals <- function(model, ...) {
 
 #' @rdname fortify
 #' @export
-fortify.sscurves <- function(model, raw_curves = TRUE, reduce_points = FALSE,
+fortify.sscurves <- function(model, raw_curves = NULL, reduce_points = FALSE,
                              ...) {
   .dataframe_common(model, raw_curves = TRUE, reduce_points = reduce_points,
                     check_ggplot = TRUE, ...)
@@ -83,7 +83,7 @@ fortify.sscurves <- function(model, raw_curves = TRUE, reduce_points = FALSE,
 
 #' @rdname fortify
 #' @export
-fortify.mscurves <- function(model, raw_curves = TRUE, reduce_points = FALSE,
+fortify.mscurves <- function(model, raw_curves = NULL, reduce_points = FALSE,
                              ...) {
   .dataframe_common(model, raw_curves = TRUE, reduce_points = reduce_points,
                     check_ggplot = TRUE, ...)
@@ -115,7 +115,7 @@ fortify.mmcurves <- function(model, raw_curves = NULL, reduce_points = FALSE,
 
 #' @rdname fortify
 #' @export
-fortify.sspoints <- function(model, raw_curves = TRUE, reduce_points = FALSE,
+fortify.sspoints <- function(model, raw_curves = NULL, reduce_points = FALSE,
                              ...) {
   .dataframe_common(model, mode = "basic", raw_curves = TRUE,
                     check_ggplot = TRUE, reduce_points = FALSE, ...)
@@ -123,7 +123,7 @@ fortify.sspoints <- function(model, raw_curves = TRUE, reduce_points = FALSE,
 
 #' @rdname fortify
 #' @export
-fortify.mspoints <- function(model, raw_curves = TRUE, reduce_points = FALSE,
+fortify.mspoints <- function(model, raw_curves = NULL, reduce_points = FALSE,
                              ...) {
   .dataframe_common(model, mode = "basic", raw_curves = TRUE,
                     check_ggplot = TRUE, reduce_points = FALSE, ...)

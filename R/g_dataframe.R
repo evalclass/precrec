@@ -26,7 +26,7 @@ as.data.frame.smcurves <- function(x, row.names = NULL, optional = FALSE,
                                    raw_curves = NULL, ...) {
 
   arglist <- .get_dataframe_arglist(attr(x, "args"),
-                                    def_raw_curves = NULL, ...)
+                                    def_raw_curves = raw_curves, ...)
 
   .dataframe_common(x, raw_curves = arglist[["raw_curves"]], ...)
 }
@@ -37,7 +37,7 @@ as.data.frame.mmcurves <- function(x, row.names = NULL, optional = FALSE,
                                    raw_curves = NULL, ...) {
 
   arglist <- .get_dataframe_arglist(attr(x, "args"),
-                                    def_raw_curves = NULL, ...)
+                                    def_raw_curves = raw_curves, ...)
 
   .dataframe_common(x, raw_curves = arglist[["raw_curves"]], ...)
 }
@@ -72,7 +72,7 @@ as.data.frame.smpoints <- function(x, row.names = NULL, optional = FALSE,
                                    raw_curves = NULL, ...) {
 
   arglist <- .get_dataframe_arglist(attr(x, "args"),
-                                    def_raw_curves = NULL, ...)
+                                    def_raw_curves = raw_curves, ...)
 
   .dataframe_common(x, mode = "basic", raw_curves = arglist[["raw_curves"]],
                     ...)
@@ -84,7 +84,7 @@ as.data.frame.mmpoints <- function(x, row.names = NULL, optional = FALSE,
                                    raw_curves = NULL, ...) {
 
   arglist <- .get_dataframe_arglist(attr(x, "args"),
-                                    def_raw_curves = NULL, ...)
+                                    def_raw_curves = raw_curves, ...)
 
   .dataframe_common(x, mode = "basic", raw_curves = arglist[["raw_curves"]],
                     ...)
