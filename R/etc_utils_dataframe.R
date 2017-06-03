@@ -326,3 +326,24 @@ NULL
 
   curve_df
 }
+
+#
+# Process ... for curve objects
+#
+.get_dataframe_arglist <- function(evalmod_args, def_raw_curves, ...) {
+
+  arglist <- list(...)
+
+  if (is.null(arglist[["raw_curves"]])){
+    if (!is.null(def_raw_curves)) {
+      arglist[["raw_curves"]] <- def_raw_curves
+    } else if (!is.null(evalmod_args[["raw_curves"]])) {
+      arglist[["raw_curves"]] <- evalmod_args[["raw_curves"]]
+    } else {
+      arglist[["raw_curves"]] <- FALSE
+    }
+  }
+
+  arglist
+}
+
