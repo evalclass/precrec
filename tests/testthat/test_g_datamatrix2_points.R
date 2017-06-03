@@ -105,3 +105,99 @@ test_that("as.data.frame mmpoints", {
   curve_df2 <- suppressWarnings(as.data.frame(curves, use_rcpp = FALSE))
   df2_comp_dfs(curve_df, curve_df2)
 })
+
+test_that("as.data.frame raw_curve option sspoints", {
+  get_args <- function(x, y = NULL, ...) {
+    arglist <- .get_dataframe_arglist(attr(x, "args"),
+                                      def_raw_curves = TRUE, ...)
+  }
+
+  data(P10N10)
+  points1 <- evalmod(mode = "basic", scores = P10N10$scores,
+                     labels = P10N10$labels)
+
+  args1a <- get_args(points1, raw_curves = TRUE)
+  expect_true(args1a[["raw_curves"]])
+
+  args1b <- get_args(points1, raw_curves = FALSE)
+  expect_false(args1b[["raw_curves"]])
+
+  args1c <- get_args(points1)
+  expect_true(args1c[["raw_curves"]])
+})
+
+test_that("as.data.frame raw_curve option mspoints", {
+  get_args <- function(x, y = NULL, ...) {
+    arglist <- .get_dataframe_arglist(attr(x, "args"),
+                                      def_raw_curves = TRUE, ...)
+  }
+
+  points1 <- df2_create_mscurves()
+
+  args1a <- get_args(points1, raw_curves = TRUE)
+  expect_true(args1a[["raw_curves"]])
+
+  args1b <- get_args(points1, raw_curves = FALSE)
+  expect_false(args1b[["raw_curves"]])
+
+  args1c <- get_args(points1)
+  expect_true(args1c[["raw_curves"]])
+})
+
+test_that("as.data.frame raw_curve option smpoints", {
+  get_args <- function(x, y = NULL, ...) {
+    arglist <- .get_dataframe_arglist(attr(x, "args"),
+                                      def_raw_curves = NULL, ...)
+  }
+
+  points1 <- df2_create_smcurves()
+
+  args1a <- get_args(points1, raw_curves = TRUE)
+  expect_true(args1a[["raw_curves"]])
+
+  args1b <- get_args(points1, raw_curves = FALSE)
+  expect_false(args1b[["raw_curves"]])
+
+  args1c <- get_args(points1)
+  expect_false(args1c[["raw_curves"]])
+
+  points2 <- df2_create_smcurves(raw_curves = TRUE)
+
+  args2a <- get_args(points2, raw_curves = TRUE)
+  expect_true(args2a[["raw_curves"]])
+
+  args2b <- get_args(points2, raw_curves = FALSE)
+  expect_false(args2b[["raw_curves"]])
+
+  args2c <- get_args(points2)
+  expect_true(args2c[["raw_curves"]])
+})
+
+test_that("as.data.frame raw_curve option mmpoints", {
+  get_args <- function(x, y = NULL, ...) {
+    arglist <- .get_dataframe_arglist(attr(x, "args"),
+                                      def_raw_curves = NULL, ...)
+  }
+
+  points1 <- df2_create_mmcurves()
+
+  args1a <- get_args(points1, raw_curves = TRUE)
+  expect_true(args1a[["raw_curves"]])
+
+  args1b <- get_args(points1, raw_curves = FALSE)
+  expect_false(args1b[["raw_curves"]])
+
+  args1c <- get_args(points1)
+  expect_false(args1c[["raw_curves"]])
+
+  points2 <- df2_create_mmcurves(raw_curves = TRUE)
+
+  args2a <- get_args(points2, raw_curves = TRUE)
+  expect_true(args2a[["raw_curves"]])
+
+  args2b <- get_args(points2, raw_curves = FALSE)
+  expect_false(args2b[["raw_curves"]])
+
+  args2c <- get_args(points2)
+  expect_true(args2c[["raw_curves"]])
+})

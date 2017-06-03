@@ -295,7 +295,8 @@ NULL
 #
 # Process ... for curve objects
 #
-.get_autoplot_arglist <- function(def_curvetype, def_type, def_show_cb,
+.get_autoplot_arglist <- function(evalmod_args,
+                                  def_curvetype, def_type, def_show_cb,
                                   def_raw_curves, def_add_np_nn,
                                   def_show_legend, def_ret_grob,
                                   def_reduce_points, ...) {
@@ -315,7 +316,13 @@ NULL
   }
 
   if (is.null(arglist[["raw_curves"]])){
-    arglist[["raw_curves"]] <- def_raw_curves
+    if (!is.null(def_raw_curves)) {
+      arglist[["raw_curves"]] <- def_raw_curves
+    } else if (!is.null(evalmod_args[["raw_curves"]])) {
+      arglist[["raw_curves"]] <- evalmod_args[["raw_curves"]]
+    } else {
+      arglist[["raw_curves"]] <- FALSE
+    }
   }
 
   if (is.null(arglist[["add_np_nn"]])){
