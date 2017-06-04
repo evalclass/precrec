@@ -49,7 +49,7 @@ Rcpp::List create_prc_curve(const Rcpp::NumericVector& tps,
     }
 
     // Interpolate two points
-    if ((i != 0) && ((sn[i] - sn[i-1]) > x_interval)) {
+    if (i != 0) {
       n = interpolate_prc(tps, fps, sn, pr, i, x_interval, rec, prec, n);
     }
 
