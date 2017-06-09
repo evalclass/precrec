@@ -62,7 +62,7 @@ test_that("labels, ranks, and rank_idx must be the same length", {
 
 test_that("reformat_data() accepts 'na_worst'", {
   expect_equal_ranks <- function(scores, labels, na_worst, ranks) {
-    fmdat <- reformat_data(scores, labels, na_worst = na_worst)
+    fmdat <- reformat_data(scores, labels, na.last = na_worst)
     eval(bquote(expect_equal(fmdat[["ranks"]], ranks)))
   }
 

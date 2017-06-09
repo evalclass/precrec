@@ -15,7 +15,7 @@
 #'     \item \code{modnames}
 #'     \item \code{dsids}
 #'     \item \code{posclass}
-#'     \item \code{na_worst}
+#'     \item \code{na.last}
 #'     \item \code{ties.method}
 #'   }
 #'   These arguments are internally passed to the \code{\link{mmdata}} function
@@ -57,7 +57,7 @@
 #'   \code{1} and \code{-1}. The positive label will be automatically
 #'   detected when \code{posclass} is \code{NULL}.
 #
-#' @param na_worst A Boolean value for controlling the treatment of NAs
+#' @param na.last A Boolean value for controlling the treatment of NAs
 #'   in \code{scores}.
 #'   \describe{
 #'     \item{TRUE}{NAs are treated as the highest score}
@@ -225,17 +225,18 @@
 #' @export
 evalmod <- function(mdat, mode = "rocprc", scores = NULL, labels = NULL,
                     modnames = NULL, dsids = NULL,
-                    posclass = NULL, na_worst = TRUE, ties.method = "equiv",
+                    posclass = NULL, na.last = TRUE, ties.method = "equiv",
                     calc_avg = TRUE, cb_alpha = 0.05, raw_curves = FALSE,
                     x_bins = 1000, ...) {
 
   # Validation
   new_mode <- .pmatch_mode(mode)
   new_ties_method <- .pmatch_tiesmethod(ties.method, ...)
+  new_na_worst <- .get_new_naworst(na.last, ...)
   if (x_bins == 0) {
     x_bins <- 1
   }
-  .validate_evalmod_args(new_mode, modnames, dsids, posclass, na_worst,
+  .validate_evalmod_args(new_mode, modnames, dsids, posclass, new_na_worst,
                          new_ties_method, calc_avg, cb_alpha, raw_curves,
                          x_bins)
 
@@ -245,7 +246,7 @@ evalmod <- function(mdat, mode = "rocprc", scores = NULL, labels = NULL,
   } else {
     mdat <- mmdata(scores, labels,
                    modnames = modnames, dsids = dsids, posclass = posclass,
-                   na_worst = na_worst, ties.method = new_ties_method)
+                   na.last = new_na_worst, ties.method = new_ties_method)
   }
 
   # Call pipeline controller

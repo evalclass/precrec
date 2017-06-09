@@ -129,10 +129,10 @@
 #
 # Validate na_worst
 #
-.validate_na_worst <- function(na_worst) {
-  if (!is.null(na_worst)) {
-    assertthat::assert_that(assertthat::is.flag(na_worst),
-                            assertthat::noNA(na_worst))
+.validate_na_worst <- function(na.last) {
+  if (!is.null(na.last)) {
+    assertthat::assert_that(assertthat::is.flag(na.last),
+                            assertthat::noNA(na.last))
   }
 }
 

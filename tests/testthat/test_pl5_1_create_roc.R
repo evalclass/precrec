@@ -46,7 +46,7 @@ test_that("create_roc() accepts arguments for reformat_data()", {
 
   roc_curve <- create_roc(scores = c(0.1, 0.2, 0),
                           labels = c(1, 0, 1),
-                          na_worst = TRUE,
+                          na.last = TRUE,
                           ties.method = "first",
                           keep_pevals = TRUE,
                           keep_fmdat = TRUE)
@@ -59,13 +59,13 @@ test_that("create_roc() accepts arguments for reformat_data()", {
 test_that("create_roc() accepts na_worst argument", {
   expect_equal_ranks <- function(scores, na_worst, ranks) {
     roc_curve <- create_roc(scores = scores, labels = c(1, 0, 1),
-                            na_worst = na_worst,
+                            na.last = na_worst,
                             keep_pevals = TRUE,
                             keep_fmdat = TRUE)
 
     fmdat <- .get_obj(roc_curve, "fmdat")
 
-    eval(bquote(expect_equal(.get_obj_arg(roc_curve, NULL, "na_worst"),
+    eval(bquote(expect_equal(.get_obj_arg(roc_curve, NULL, "na.last"),
                              na_worst)))
     eval(bquote(expect_equal(.get_obj_arg(fmdat, NULL, "na_worst"), na_worst)))
     eval(bquote(expect_equal(fmdat[["ranks"]], ranks)))

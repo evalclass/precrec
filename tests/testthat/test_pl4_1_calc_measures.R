@@ -45,7 +45,7 @@ test_that("calc_measures() accepts arguments for reformat_data()", {
 
   pevals <- calc_measures(scores = c(0.1, 0.2, 0),
                           labels = c(1, 0, 1),
-                          na_worst = TRUE,
+                          na.last = TRUE,
                           ties.method = "first",
                           keep_fmdat = TRUE)
 
@@ -58,12 +58,12 @@ test_that("calc_measures() accepts na_worst argument", {
   expect_equal_ranks <- function(scores, na_worst, ranks) {
     pevals <- calc_measures(scores = scores,
                             labels = c(1, 0, 1),
-                            na_worst = na_worst,
+                            na.last = na_worst,
                             keep_fmdat = TRUE)
 
     fmdat <- .get_obj(pevals, "fmdat")
 
-    eval(bquote(expect_equal(.get_obj_arg(pevals, NULL, "na_worst"), na_worst)))
+    eval(bquote(expect_equal(.get_obj_arg(pevals, NULL, "na.last"), na_worst)))
     eval(bquote(expect_equal(.get_obj_arg(fmdat, NULL, "na_worst"), na_worst)))
     eval(bquote(expect_equal(fmdat[["ranks"]], ranks)))
 

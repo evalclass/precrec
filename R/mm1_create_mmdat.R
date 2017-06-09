@@ -28,7 +28,7 @@
 #'   \code{1} and \code{-1}. The positive label will be automatically
 #'   detected when \code{posclass} is \code{NULL}.
 #
-#' @param na_worst A Boolean value for controlling the treatment of NAs
+#' @param na.last A Boolean value for controlling the treatment of NAs
 #'   in \code{scores}.
 #'   \describe{
 #'     \item{TRUE}{NAs are treated as the highest score}
@@ -139,7 +139,7 @@
 #'
 #' @export
 mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
-                   posclass = NULL, na_worst = TRUE, ties.method = "equiv",
+                   posclass = NULL, na.last = TRUE, ties.method = "equiv",
                    expd_first = "modnames", ...) {
 
   # === Join datasets ===
@@ -158,9 +158,10 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
 
   # === Validate arguments and variables ===
   new_ties_method <- .pmatch_tiesmethod(ties.method, ...)
+  new_na_worst <- .get_new_naworst(na.last, ...)
   .validate_mmdata_args(lscores, llabels, new_modnames, new_dsids,
                         posclass = posclass,
-                        na_worst = na_worst, ties_method = new_ties_method,
+                        na_worst = new_na_worst, ties_method = new_ties_method,
                         expd_first = new_expd_first)
 
   # Replicate labels
@@ -171,7 +172,7 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   # === Reformat input data ===
   func_fmdat <- function(i) {
     reformat_data(lscores[[i]], llabels[[i]], posclass = posclass,
-                  na_worst = na_worst, ties.method = new_ties_method,
+                  na.last = new_na_worst, ties.method = new_ties_method,
                   modname = new_modnames[i], dsid = new_dsids[i], ...)
   }
   mmdat <- lapply(seq_along(lscores), func_fmdat)
@@ -189,7 +190,7 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   attr(s3obj, "uniq_modnames") <- unique(new_modnames)
   attr(s3obj, "uniq_dsids") <- unique(new_dsids)
   attr(s3obj, "args") <- list(posclass = posclass,
-                              na_worst = na_worst,
+                              na_worst = new_na_worst,
                               ties_method = new_ties_method,
                               expd_first = new_expd_first)
   attr(s3obj, "validated") <- FALSE
@@ -248,6 +249,20 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
     }
 
   }
+
+  val
+}
+
+#
+# Get na worst value
+#
+.get_new_naworst <- function(val, ...) {
+  arglist <- list(...)
+  if (!is.null(arglist[["na_worst"]])) {
+    val = arglist[["na_worst"]]
+  }
+
+  assertthat::is.flag(val)
 
   val
 }
