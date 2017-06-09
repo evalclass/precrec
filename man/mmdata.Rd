@@ -5,7 +5,7 @@
 \title{Reformat input data for performance evaluation calculation}
 \usage{
 mmdata(scores, labels, modnames = NULL, dsids = NULL, posclass = NULL,
-  na_worst = TRUE, ties_method = "equiv", expd_first = "modnames", ...)
+  na_worst = TRUE, ties.method = "equiv", expd_first = "modnames", ...)
 }
 \arguments{
 \item{scores}{A numeric dataset of predicted scores. It can be a vector,
@@ -39,7 +39,7 @@ in \code{scores}.
   \item{FALSE}{NAs are treated as the lowest score}
 }}
 
-\item{ties_method}{A string for controlling ties in \code{scores}.
+\item{ties.method}{A string for controlling ties in \code{scores}.
 \describe{
   \item{"equiv"}{Ties are equivalently ranked}
   \item{"first"}{Ties are ranked in an increasing order as appeared}

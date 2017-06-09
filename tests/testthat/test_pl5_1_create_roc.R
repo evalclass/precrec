@@ -47,7 +47,7 @@ test_that("create_roc() accepts arguments for reformat_data()", {
   roc_curve <- create_roc(scores = c(0.1, 0.2, 0),
                           labels = c(1, 0, 1),
                           na_worst = TRUE,
-                          ties_method = "first",
+                          ties.method = "first",
                           keep_pevals = TRUE,
                           keep_fmdat = TRUE)
 
@@ -94,13 +94,13 @@ test_that("create_roc() accepts ties_method argument", {
   expect_equal_ranks <- function(ties_method, ranks) {
     roc_curve <- create_roc(scores = c(0.1, 0.2, 0.2, 0.2, 0.3),
                             labels = c(1, 0, 1, 1, 1),
-                            ties_method = ties_method,
+                            ties.method = ties_method,
                             keep_pevals = TRUE,
                             keep_fmdat = TRUE)
 
     fmdat <- .get_obj(roc_curve, "fmdat")
 
-    eval(bquote(expect_equal(.get_obj_arg(roc_curve, NULL, "ties_method"),
+    eval(bquote(expect_equal(.get_obj_arg(roc_curve, NULL, "ties.method"),
                              ties_method)))
     eval(bquote(expect_equal(.get_obj_arg(fmdat, NULL, "ties_method"),
                              ties_method)))

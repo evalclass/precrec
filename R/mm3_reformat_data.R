@@ -4,16 +4,19 @@
 reformat_data <- function(scores, labels,
                           modname = as.character(NA), dsid = 1L,
                           posclass = NULL, na_worst = TRUE,
-                          ties_method = "equiv", ...) {
+                          ties.method = "equiv", ...) {
+
+  new_ties_method <- .pmatch_tiesmethod(ties.method, ...)
 
   # === Validate input arguments ===
   .validate_reformat_data_args(scores, labels, modname = modname, dsid = dsid,
                                posclass = posclass, na_worst = na_worst,
-                               ties_method = ties_method, ...)
+                               ties_method = new_ties_method, ...)
 
   # === Reformat input data ===
   # Get score ranks and sorted indices
-  sranks <- .rank_scores(scores, na_worst, ties_method, validate = FALSE)
+  sranks <- .rank_scores(scores, na_worst, ties_method = new_ties_method,
+                         validate = FALSE)
   ranks <- sranks[["ranks"]]
   rank_idx <- sranks[["rank_idx"]]
 
@@ -33,7 +36,7 @@ reformat_data <- function(scores, labels,
   attr(s3obj, "nn") <- fmtlabs[["nn"]]
   attr(s3obj, "np") <- fmtlabs[["np"]]
   attr(s3obj, "args") <- list(posclass = posclass, na_worst = na_worst,
-                              ties_method = ties_method,
+                              ties_method = new_ties_method,
                               modname = modname, dsid = dsid)
   attr(s3obj, "validated") <- FALSE
 

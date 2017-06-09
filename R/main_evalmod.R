@@ -16,7 +16,7 @@
 #'     \item \code{dsids}
 #'     \item \code{posclass}
 #'     \item \code{na_worst}
-#'     \item \code{ties_method}
+#'     \item \code{ties.method}
 #'   }
 #'   These arguments are internally passed to the \code{\link{mmdata}} function
 #'   when \code{mdat} is unspecified.
@@ -64,7 +64,7 @@
 #'     \item{FALSE}{NAs are treated as the lowest score}
 #'   }
 #'
-#' @param ties_method A string for controlling ties in \code{scores}.
+#' @param ties.method A string for controlling ties in \code{scores}.
 #'   \describe{
 #'     \item{"equiv"}{Ties are equivalently ranked}
 #'     \item{"first"}{Ties are ranked in an increasing order as appeared}
@@ -225,13 +225,13 @@
 #' @export
 evalmod <- function(mdat, mode = "rocprc", scores = NULL, labels = NULL,
                     modnames = NULL, dsids = NULL,
-                    posclass = NULL, na_worst = TRUE, ties_method = "equiv",
+                    posclass = NULL, na_worst = TRUE, ties.method = "equiv",
                     calc_avg = TRUE, cb_alpha = 0.05, raw_curves = FALSE,
-                    x_bins = 1000) {
+                    x_bins = 1000, ...) {
 
   # Validation
   new_mode <- .pmatch_mode(mode)
-  new_ties_method <- .pmatch_tiesmethod(ties_method)
+  new_ties_method <- .pmatch_tiesmethod(ties.method, ...)
   if (x_bins == 0) {
     x_bins <- 1
   }
@@ -245,7 +245,7 @@ evalmod <- function(mdat, mode = "rocprc", scores = NULL, labels = NULL,
   } else {
     mdat <- mmdata(scores, labels,
                    modnames = modnames, dsids = dsids, posclass = posclass,
-                   na_worst = na_worst, ties_method = new_ties_method)
+                   na_worst = na_worst, ties.method = new_ties_method)
   }
 
   # Call pipeline controller

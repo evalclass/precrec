@@ -35,7 +35,7 @@
 #'     \item{FALSE}{NAs are treated as the lowest score}
 #'   }
 #'
-#' @param ties_method A string for controlling ties in \code{scores}.
+#' @param ties.method A string for controlling ties in \code{scores}.
 #'   \describe{
 #'     \item{"equiv"}{Ties are equivalently ranked}
 #'     \item{"first"}{Ties are ranked in an increasing order as appeared}
@@ -139,7 +139,7 @@
 #'
 #' @export
 mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
-                   posclass = NULL, na_worst = TRUE, ties_method = "equiv",
+                   posclass = NULL, na_worst = TRUE, ties.method = "equiv",
                    expd_first = "modnames", ...) {
 
   # === Join datasets ===
@@ -157,7 +157,7 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
                           stringsAsFactors = FALSE)
 
   # === Validate arguments and variables ===
-  new_ties_method <- .pmatch_tiesmethod(ties_method)
+  new_ties_method <- .pmatch_tiesmethod(ties.method, ...)
   .validate_mmdata_args(lscores, llabels, new_modnames, new_dsids,
                         posclass = posclass,
                         na_worst = na_worst, ties_method = new_ties_method,
@@ -171,7 +171,7 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   # === Reformat input data ===
   func_fmdat <- function(i) {
     reformat_data(lscores[[i]], llabels[[i]], posclass = posclass,
-                  na_worst = na_worst, ties_method = new_ties_method,
+                  na_worst = na_worst, ties.method = new_ties_method,
                   modname = new_modnames[i], dsid = new_dsids[i], ...)
   }
   mmdat <- lapply(seq_along(lscores), func_fmdat)
@@ -190,7 +190,7 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   attr(s3obj, "uniq_dsids") <- unique(new_dsids)
   attr(s3obj, "args") <- list(posclass = posclass,
                               na_worst = na_worst,
-                              ties_method = ties_method,
+                              ties_method = new_ties_method,
                               expd_first = new_expd_first)
   attr(s3obj, "validated") <- FALSE
 
@@ -222,7 +222,13 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
 #
 # Check partial match - ties method
 #
-.pmatch_tiesmethod <- function(val) {
+.pmatch_tiesmethod <- function(val, ...) {
+
+  arglist <- list(...)
+  if (!is.null(arglist[["ties_method"]])) {
+    val = arglist[["ties_method"]]
+  }
+
   if (assertthat::is.string(val)) {
     choices <- c("equiv", "random", "first")
     if (val %in% choices) {

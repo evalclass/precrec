@@ -145,7 +145,7 @@
 
     choices = c("equiv", "random", "first")
     if (!(ties_method %in% choices)) {
-      stop(gettextf("ties_method must be one of %s",
+      stop(gettextf("ties.method must be one of %s",
                     paste(dQuote(choices), collapse = ", ")), call. = FALSE)
     }
   }

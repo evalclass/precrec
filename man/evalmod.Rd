@@ -6,8 +6,8 @@
 \usage{
 evalmod(mdat, mode = "rocprc", scores = NULL, labels = NULL,
   modnames = NULL, dsids = NULL, posclass = NULL, na_worst = TRUE,
-  ties_method = "equiv", calc_avg = TRUE, cb_alpha = 0.05,
-  raw_curves = FALSE, x_bins = 1000)
+  ties.method = "equiv", calc_avg = TRUE, cb_alpha = 0.05,
+  raw_curves = FALSE, x_bins = 1000, ...)
 }
 \arguments{
 \item{mdat}{An \code{S3} object created by the \code{\link{mmdata}}
@@ -21,7 +21,7 @@ when \code{mdat} is specified.
   \item \code{dsids}
   \item \code{posclass}
   \item \code{na_worst}
-  \item \code{ties_method}
+  \item \code{ties.method}
 }
 These arguments are internally passed to the \code{\link{mmdata}} function
 when \code{mdat} is unspecified.
@@ -69,7 +69,7 @@ in \code{scores}.
   \item{FALSE}{NAs are treated as the lowest score}
 }}
 
-\item{ties_method}{A string for controlling ties in \code{scores}.
+\item{ties.method}{A string for controlling ties in \code{scores}.
 \describe{
   \item{"equiv"}{Ties are equivalently ranked}
   \item{"first"}{Ties are ranked in an increasing order as appeared}
