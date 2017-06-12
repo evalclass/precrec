@@ -3,11 +3,11 @@
 #
 reformat_data <- function(scores, labels,
                           modname = as.character(NA), dsid = 1L,
-                          posclass = NULL, na.last = TRUE,
-                          ties.method = "equiv", ...) {
+                          posclass = NULL, na_worst = TRUE,
+                          ties_method = "equiv", ...) {
 
-  new_ties_method <- .pmatch_tiesmethod(ties.method, ...)
-  new_na_worst <- .get_new_naworst(na.last, ...)
+  new_ties_method <- .pmatch_tiesmethod(ties_method, ...)
+  new_na_worst <- .get_new_naworst(na_worst, ...)
 
   # === Validate input arguments ===
   .validate_reformat_data_args(scores, labels, modname = modname, dsid = dsid,

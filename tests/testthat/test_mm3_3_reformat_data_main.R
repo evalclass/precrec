@@ -62,7 +62,7 @@ test_that("labels, ranks, and rank_idx must be the same length", {
 
 test_that("reformat_data() accepts 'na_worst'", {
   expect_equal_ranks <- function(scores, labels, na_worst, ranks) {
-    fmdat <- reformat_data(scores, labels, na.last = na_worst)
+    fmdat <- reformat_data(scores, labels, na_worst = na_worst)
     eval(bquote(expect_equal(fmdat[["ranks"]], ranks)))
   }
 
@@ -78,7 +78,7 @@ test_that("reformat_data() accepts 'ties_method'", {
   expect_equal_ranks <- function(ties_method, ranks) {
     scores <- c(0.1, 0.2, 0.2, 0.2, 0.3)
     labels <- c(1, 0, 1, 0, 1)
-    fmdat <- reformat_data(scores, labels, ties.method = ties_method)
+    fmdat <- reformat_data(scores, labels, ties_method = ties_method)
     eval(bquote(expect_equal(fmdat[["ranks"]], ranks)))
   }
 

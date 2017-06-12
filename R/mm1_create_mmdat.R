@@ -27,15 +27,15 @@
 #'   from \code{1} to \code{-1} when \code{labels} contains
 #'   \code{1} and \code{-1}. The positive label will be automatically
 #'   detected when \code{posclass} is \code{NULL}.
-#
-#' @param na.last A Boolean value for controlling the treatment of NAs
+#'
+#' @param na_worst A Boolean value for controlling the treatment of NAs
 #'   in \code{scores}.
 #'   \describe{
-#'     \item{TRUE}{NAs are treated as the highest score}
-#'     \item{FALSE}{NAs are treated as the lowest score}
+#'     \item{TRUE}{All NAs are treated as the worst scores}
+#'     \item{FALSE}{All NAs are treated as the best scores}
 #'   }
 #'
-#' @param ties.method A string for controlling ties in \code{scores}.
+#' @param ties_method A string for controlling ties in \code{scores}.
 #'   \describe{
 #'     \item{"equiv"}{Ties are equivalently ranked}
 #'     \item{"first"}{Ties are ranked in an increasing order as appeared}
@@ -139,7 +139,7 @@
 #'
 #' @export
 mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
-                   posclass = NULL, na.last = TRUE, ties.method = "equiv",
+                   posclass = NULL, na_worst = TRUE, ties_method = "equiv",
                    expd_first = "modnames", ...) {
 
   # === Join datasets ===
@@ -157,8 +157,8 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
                           stringsAsFactors = FALSE)
 
   # === Validate arguments and variables ===
-  new_ties_method <- .pmatch_tiesmethod(ties.method, ...)
-  new_na_worst <- .get_new_naworst(na.last, ...)
+  new_ties_method <- .pmatch_tiesmethod(ties_method, ...)
+  new_na_worst <- .get_new_naworst(na_worst, ...)
   .validate_mmdata_args(lscores, llabels, new_modnames, new_dsids,
                         posclass = posclass,
                         na_worst = new_na_worst, ties_method = new_ties_method,
@@ -172,7 +172,7 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   # === Reformat input data ===
   func_fmdat <- function(i) {
     reformat_data(lscores[[i]], llabels[[i]], posclass = posclass,
-                  na.last = new_na_worst, ties.method = new_ties_method,
+                  na_worst = new_na_worst, ties_method = new_ties_method,
                   modname = new_modnames[i], dsid = new_dsids[i], ...)
   }
   mmdat <- lapply(seq_along(lscores), func_fmdat)
@@ -225,27 +225,48 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
 #
 .pmatch_tiesmethod <- function(val, ...) {
 
+  set_ties_dot_method <- FALSE
   arglist <- list(...)
-  if (!is.null(arglist[["ties_method"]])) {
-    val = arglist[["ties_method"]]
+  if (!is.null(arglist[["ties.method"]])) {
+    val = arglist[["ties.method"]]
+    set_ties_dot_method <- TRUE
   }
 
   if (assertthat::is.string(val)) {
-    choices <- c("equiv", "random", "first")
-    if (val %in% choices) {
-      return(val)
-    }
+    if (!set_ties_dot_method) {
+      choices <- c("equiv", "random", "first")
+      if (val %in% choices) {
+        return(val)
+      }
 
-    if (!is.na(pmatch(val, "equiv"))) {
-      return("equiv")
-    }
+      if (!is.na(pmatch(val, "equiv"))) {
+        return("equiv")
+      }
 
-    if (!is.na(pmatch(val, "random"))) {
-      return("random")
-    }
+      if (!is.na(pmatch(val, "random"))) {
+        return("random")
+      }
 
-    if (!is.na(pmatch(val, "first"))) {
-      return("first")
+      if (!is.na(pmatch(val, "first"))) {
+        return("first")
+      }
+    } else {
+      choices <- c("average", "random", "last")
+      if (val %in% choices) {
+        return(val)
+      }
+
+      if (!is.na(pmatch(val, "average"))) {
+        return("equiv")
+      }
+
+      if (!is.na(pmatch(val, "random"))) {
+        return("random")
+      }
+
+      if (!is.na(pmatch(val, "last"))) {
+        return("first")
+      }
     }
 
   }
@@ -257,12 +278,18 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
 # Get na worst value
 #
 .get_new_naworst <- function(val, ...) {
+  set_na_last <- FALSE
   arglist <- list(...)
-  if (!is.null(arglist[["na_worst"]])) {
-    val = arglist[["na_worst"]]
+  if (!is.null(arglist[["na.last"]])) {
+    val = arglist[["na.last"]]
+    set_na_last <- TRUE
   }
 
   assertthat::is.flag(val)
+
+  if (set_na_last) {
+    val <- !val
+  }
 
   val
 }

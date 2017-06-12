@@ -47,8 +47,8 @@ test_that("create_curves() accepts arguments for reformat_data()", {
 
   curves <- create_curves(scores = c(0.1, 0.2, 0),
                           labels = c(1, 0, 1),
-                          na.last = TRUE,
-                          ties.method = "first",
+                          na_worst = TRUE,
+                          ties_method = "first",
                           keep_pevals = TRUE,
                           keep_fmdat = TRUE)
 
@@ -59,13 +59,13 @@ test_that("create_curves() accepts arguments for reformat_data()", {
 test_that("create_curves() accepts na_worst argument", {
   expect_equal_ranks <- function(scores, na_worst, ranks) {
     curves <- create_curves(scores = scores, labels = c(1, 0, 1),
-                            na.last = na_worst,
+                            na_worst = na_worst,
                             keep_pevals = TRUE,
                             keep_fmdat = TRUE)
 
     fmdat <- .get_obj(curves, "fmdat")
 
-    eval(bquote(expect_equal(.get_obj_arg(curves, NULL, "na.last"), na_worst)))
+    eval(bquote(expect_equal(.get_obj_arg(curves, NULL, "na_worst"), na_worst)))
     eval(bquote(expect_equal(.get_obj_arg(fmdat, NULL, "na_worst"), na_worst)))
     eval(bquote(expect_equal(fmdat[["ranks"]], ranks)))
 
@@ -93,13 +93,13 @@ test_that("create_curves() accepts ties_method argument", {
   expect_equal_ranks <- function(ties_method, ranks) {
     curves <- create_curves(scores = c(0.1, 0.2, 0.2, 0.2, 0.3),
                             labels = c(1, 0, 1, 1, 1),
-                            ties.method = ties_method,
+                            ties_method = ties_method,
                             keep_pevals = TRUE,
                             keep_fmdat = TRUE)
 
     fmdat <- .get_obj(curves, "fmdat")
 
-    eval(bquote(expect_equal(.get_obj_arg(curves, NULL, "ties.method"),
+    eval(bquote(expect_equal(.get_obj_arg(curves, NULL, "ties_method"),
                              ties_method)))
     eval(bquote(expect_equal(.get_obj_arg(fmdat, NULL, "ties_method"),
                              ties_method)))

@@ -50,17 +50,17 @@ test_that("Length of 'scores' must be >=1", {
   expect_err_msg(as.numeric())
 })
 
-test_that("'na.last' should be TRUE or FALSE", {
+test_that("'na_worst' should be TRUE or FALSE", {
   expect_err_msg <- function(err_msg, na_worst) {
     scores <- c(1.1, 2.2)
     eval(bquote(expect_error(.rank_scores(scores, na_worst = na_worst),
                              err_msg)))
   }
 
-  err_msg <- "na.last contains 1 missing values"
+  err_msg <- "na_worst contains 1 missing values"
   expect_err_msg(err_msg, NA)
 
-  err_msg <- "na.last is not a flag"
+  err_msg <- "na_worst is not a flag"
   expect_err_msg(err_msg, list(c(TRUE, FALSE)))
   expect_err_msg(err_msg, data.frame(c(TRUE, FALSE)))
   expect_err_msg(err_msg, "T")
@@ -80,7 +80,7 @@ test_that("'ties_method' should be one of the three options", {
   err_msg <- "ties_method is not a string"
   expect_err_msg(err_msg, c("equiv", "first"))
 
-  err_msg <- "ties.method must be one of"
+  err_msg <- "ties_method must be one of"
   expect_err_msg(err_msg, c("avg"))
   expect_err_msg(err_msg, c("max"))
 })

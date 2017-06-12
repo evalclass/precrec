@@ -6,7 +6,7 @@
 \usage{
 evalmod(mdat, mode = "rocprc", scores = NULL, labels = NULL,
   modnames = NULL, dsids = NULL, posclass = NULL, na_worst = TRUE,
-  ties.method = "equiv", calc_avg = TRUE, cb_alpha = 0.05,
+  ties_method = "equiv", calc_avg = TRUE, cb_alpha = 0.05,
   raw_curves = FALSE, x_bins = 1000, ...)
 }
 \arguments{
@@ -21,7 +21,7 @@ when \code{mdat} is specified.
   \item \code{dsids}
   \item \code{posclass}
   \item \code{na_worst}
-  \item \code{ties.method}
+  \item \code{ties_method}
 }
 These arguments are internally passed to the \code{\link{mmdata}} function
 when \code{mdat} is unspecified.
@@ -65,11 +65,11 @@ detected when \code{posclass} is \code{NULL}.}
 \item{na_worst}{A Boolean value for controlling the treatment of NAs
 in \code{scores}.
 \describe{
-  \item{TRUE}{NAs are treated as the highest score}
-  \item{FALSE}{NAs are treated as the lowest score}
+  \item{TRUE}{All NAs are treated as the worst scores}
+  \item{FALSE}{All NAs are treated as the best scores}
 }}
 
-\item{ties.method}{A string for controlling ties in \code{scores}.
+\item{ties_method}{A string for controlling ties in \code{scores}.
 \describe{
   \item{"equiv"}{Ties are equivalently ranked}
   \item{"first"}{Ties are ranked in an increasing order as appeared}

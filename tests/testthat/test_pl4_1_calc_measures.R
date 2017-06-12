@@ -45,8 +45,8 @@ test_that("calc_measures() accepts arguments for reformat_data()", {
 
   pevals <- calc_measures(scores = c(0.1, 0.2, 0),
                           labels = c(1, 0, 1),
-                          na.last = TRUE,
-                          ties.method = "first",
+                          na_worst = TRUE,
+                          ties_method = "first",
                           keep_fmdat = TRUE)
 
   expect_equal(.get_obj_arg(pevals, "fmdat", "na_worst"), TRUE)
@@ -58,12 +58,12 @@ test_that("calc_measures() accepts na_worst argument", {
   expect_equal_ranks <- function(scores, na_worst, ranks) {
     pevals <- calc_measures(scores = scores,
                             labels = c(1, 0, 1),
-                            na.last = na_worst,
+                            na_worst = na_worst,
                             keep_fmdat = TRUE)
 
     fmdat <- .get_obj(pevals, "fmdat")
 
-    eval(bquote(expect_equal(.get_obj_arg(pevals, NULL, "na.last"), na_worst)))
+    eval(bquote(expect_equal(.get_obj_arg(pevals, NULL, "na_worst"), na_worst)))
     eval(bquote(expect_equal(.get_obj_arg(fmdat, NULL, "na_worst"), na_worst)))
     eval(bquote(expect_equal(fmdat[["ranks"]], ranks)))
 
@@ -90,12 +90,12 @@ test_that("calc_measures() accepts ties_method argument", {
   expect_equal_ranks <- function(ties_method, ranks) {
     pevals <- calc_measures(scores = c(0.1, 0.2, 0.2, 0.2, 0.3),
                             labels = c(1, 0, 1, 1, 1),
-                            ties.method = ties_method,
+                            ties_method = ties_method,
                             keep_fmdat = TRUE)
 
     fmdat <- .get_obj(pevals, "fmdat")
 
-    eval(bquote(expect_equal(.get_obj_arg(pevals, NULL, "ties.method"),
+    eval(bquote(expect_equal(.get_obj_arg(pevals, NULL, "ties_method"),
                              ties_method)))
     eval(bquote(expect_equal(.get_obj_arg(fmdat, NULL, "ties_method"),
                              ties_method)))

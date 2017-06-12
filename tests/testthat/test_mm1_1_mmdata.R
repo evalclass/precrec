@@ -144,15 +144,15 @@ test_that("mmdata() accepts 'na_worst'", {
   s1 <- c(1, 2, 3, 4)
   l1 <- c(1, 0, 1, 0)
 
-  mdat <- mmdata(s1, l1, na.last = FALSE)
+  mdat <- mmdata(s1, l1, na_worst = FALSE)
   expect_equal(attr(mdat[[1]], "args")[["na_worst"]], FALSE)
 
-  mdat <- mmdata(s1, l1, na.last = TRUE)
+  mdat <- mmdata(s1, l1, na_worst = TRUE)
   expect_equal(attr(mdat[[1]], "args")[["na_worst"]], TRUE)
 
   expect_err_msg <- function(s1, l1, na_worst) {
-    err_msg <- "na.last contains 1 missing values"
-    eval(bquote(expect_error(mmdata(s1, l1, na.last = na_worst), err_msg)))
+    err_msg <- "na_worst contains 1 missing values"
+    eval(bquote(expect_error(mmdata(s1, l1, na_worst = na_worst), err_msg)))
   }
   expect_err_msg(s1, l1, as.logical(NA))
   expect_err_msg(s1, l1, NA)
@@ -163,18 +163,18 @@ test_that("mmdata() accepts 'ties_method'", {
   s1 <- c(1, 2, 3, 4)
   l1 <- c(1, 0, 1, 0)
 
-  mdat <- mmdata(s1, l1, ties.method = "equiv")
+  mdat <- mmdata(s1, l1, ties_method = "equiv")
   expect_equal(attr(mdat[[1]], "args")[["ties_method"]], "equiv")
 
-  mdat <- mmdata(s1, l1, ties.method = "random")
+  mdat <- mmdata(s1, l1, ties_method = "random")
   expect_equal(attr(mdat[[1]], "args")[["ties_method"]], "random")
 
-  mdat <- mmdata(s1, l1, ties.method = "first")
+  mdat <- mmdata(s1, l1, ties_method = "first")
   expect_equal(attr(mdat[[1]], "args")[["ties_method"]], "first")
 
   expect_err_msg <- function(s1, l1, ties_method) {
-    err_msg <- "ties.method must be one of "
-    eval(bquote(expect_error(mmdata(s1, l1, ties.method = ties_method),
+    err_msg <- "ties_method must be one of "
+    eval(bquote(expect_error(mmdata(s1, l1, ties_method = ties_method),
                              err_msg)))
   }
   expect_err_msg(s1, l1, "min")

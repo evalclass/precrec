@@ -15,8 +15,8 @@
 #'     \item \code{modnames}
 #'     \item \code{dsids}
 #'     \item \code{posclass}
-#'     \item \code{na.last}
-#'     \item \code{ties.method}
+#'     \item \code{na_worst}
+#'     \item \code{ties_method}
 #'   }
 #'   These arguments are internally passed to the \code{\link{mmdata}} function
 #'   when \code{mdat} is unspecified.
@@ -57,14 +57,14 @@
 #'   \code{1} and \code{-1}. The positive label will be automatically
 #'   detected when \code{posclass} is \code{NULL}.
 #
-#' @param na.last A Boolean value for controlling the treatment of NAs
+#' @param na_worst A Boolean value for controlling the treatment of NAs
 #'   in \code{scores}.
 #'   \describe{
-#'     \item{TRUE}{NAs are treated as the highest score}
-#'     \item{FALSE}{NAs are treated as the lowest score}
+#'     \item{TRUE}{All NAs are treated as the worst scores}
+#'     \item{FALSE}{All NAs are treated as the best scores}
 #'   }
 #'
-#' @param ties.method A string for controlling ties in \code{scores}.
+#' @param ties_method A string for controlling ties in \code{scores}.
 #'   \describe{
 #'     \item{"equiv"}{Ties are equivalently ranked}
 #'     \item{"first"}{Ties are ranked in an increasing order as appeared}
@@ -225,14 +225,14 @@
 #' @export
 evalmod <- function(mdat, mode = "rocprc", scores = NULL, labels = NULL,
                     modnames = NULL, dsids = NULL,
-                    posclass = NULL, na.last = TRUE, ties.method = "equiv",
+                    posclass = NULL, na_worst = TRUE, ties_method = "equiv",
                     calc_avg = TRUE, cb_alpha = 0.05, raw_curves = FALSE,
                     x_bins = 1000, ...) {
 
   # Validation
   new_mode <- .pmatch_mode(mode)
-  new_ties_method <- .pmatch_tiesmethod(ties.method, ...)
-  new_na_worst <- .get_new_naworst(na.last, ...)
+  new_ties_method <- .pmatch_tiesmethod(ties_method, ...)
+  new_na_worst <- .get_new_naworst(na_worst, ...)
   if (x_bins == 0) {
     x_bins <- 1
   }
@@ -246,7 +246,7 @@ evalmod <- function(mdat, mode = "rocprc", scores = NULL, labels = NULL,
   } else {
     mdat <- mmdata(scores, labels,
                    modnames = modnames, dsids = dsids, posclass = posclass,
-                   na.last = new_na_worst, ties.method = new_ties_method)
+                   na_worst = new_na_worst, ties_method = new_ties_method)
   }
 
   # Call pipeline controller
