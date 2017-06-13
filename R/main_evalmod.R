@@ -31,6 +31,7 @@
 #'     \item{"basic"}{Normalized ranks vs. accuracy, error rate, specificity,
 #'                    sensitivity, precision, Matthews correlation coefficient,
 #'                    and F-score. }
+#'     \item{"aucroc"}{Fast AUC(ROC) calculation with the U statistic}
 #'   }
 #'
 #' @param scores A numeric dataset of predicted scores. It can be a vector,
@@ -243,15 +244,20 @@ evalmod <- function(mdat, mode = "rocprc", scores = NULL, labels = NULL,
   # Create mdat if not provided
   if (!missing(mdat)) {
     .validate(mdat)
+    if (attr(mdat, "args")[["mode"]] == "aucroc") {
+      new_mode <- attr(mdat, "args")[["mode"]]
+    }
   } else {
     mdat <- mmdata(scores, labels,
                    modnames = modnames, dsids = dsids, posclass = posclass,
-                   na_worst = new_na_worst, ties_method = new_ties_method)
+                   na_worst = new_na_worst, ties_method = new_ties_method,
+                   mode = new_mode)
   }
 
   # Call pipeline controller
   pl_main(mdat, mode = new_mode, calc_avg = calc_avg, cb_alpha = cb_alpha,
-          raw_curves = raw_curves, x_bins = x_bins, validate = FALSE)
+          raw_curves = raw_curves, x_bins = x_bins, na_worst = new_na_worst,
+          ties_method = new_ties_method, validate = FALSE)
 
 }
 

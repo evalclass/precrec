@@ -59,6 +59,17 @@
 #'            and \code{modnames} and \code{dsids} are unspecified.}
 #'   }
 #'
+#' @param mode A string that specifies the types of evaluation measures
+#'   that the \code{evalmod} function calculates.
+#'   \describe{
+#'     \item{"rocprc"}{ROC and Precision-Recall curves}
+#'     \item{"prcroc"}{Same as above}
+#'     \item{"basic"}{Normalized ranks vs. accuracy, error rate, specificity,
+#'                    sensitivity, precision, Matthews correlation coefficient,
+#'                    and F-score. }
+#'     \item{"aucroc"}{Fast AUC(ROC) calculation with the U statistic}
+#'   }
+#'
 #' @param ... Not used by this method.
 #'
 #' @return The \code{mmdata} function returns an \code{mdat} object
@@ -140,7 +151,7 @@
 #' @export
 mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
                    posclass = NULL, na_worst = TRUE, ties_method = "equiv",
-                   expd_first = "modnames", ...) {
+                   expd_first = "modnames", mode = "rocprc", ...) {
 
   # === Join datasets ===
   lscores <- join_scores(scores, chklen = FALSE)
@@ -157,12 +168,13 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
                           stringsAsFactors = FALSE)
 
   # === Validate arguments and variables ===
+  new_mode <- .pmatch_mode(mode)
   new_ties_method <- .pmatch_tiesmethod(ties_method, ...)
   new_na_worst <- .get_new_naworst(na_worst, ...)
   .validate_mmdata_args(lscores, llabels, new_modnames, new_dsids,
                         posclass = posclass,
                         na_worst = new_na_worst, ties_method = new_ties_method,
-                        expd_first = new_expd_first)
+                        expd_first = new_expd_first, mode = new_mode)
 
   # Replicate labels
   if (length(lscores) != 1 && length(llabels) == 1) {
@@ -173,7 +185,8 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   func_fmdat <- function(i) {
     reformat_data(lscores[[i]], llabels[[i]], posclass = posclass,
                   na_worst = new_na_worst, ties_method = new_ties_method,
-                  modname = new_modnames[i], dsid = new_dsids[i], ...)
+                  modname = new_modnames[i], dsid = new_dsids[i],
+                  mode = new_mode, ...)
   }
   mmdat <- lapply(seq_along(lscores), func_fmdat)
 
@@ -192,7 +205,8 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   attr(s3obj, "args") <- list(posclass = posclass,
                               na_worst = new_na_worst,
                               ties_method = new_ties_method,
-                              expd_first = new_expd_first)
+                              expd_first = new_expd_first,
+                              mode = new_mode)
   attr(s3obj, "validated") <- FALSE
 
   # Call .validate.mdat()
@@ -359,7 +373,7 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
 # Validate arguments of mmdata()
 #
 .validate_mmdata_args <- function(lscores, llabels, modnames, dsids, posclass,
-                                  na_worst, ties_method, expd_first) {
+                                  na_worst, ties_method, expd_first, mode) {
 
   # Check lscores and llabels
   if (length(llabels) != 1 && length(lscores) != length(llabels)) {
@@ -384,6 +398,9 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
 
   # Check expd_first
   .validate_expd_first(expd_first)
+
+  # Check mode
+  .validate_mode(mode)
 
   # Chekc the length of modnames and dsids
   if (length(modnames) != length(dsids)) {
@@ -410,7 +427,7 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   item_names <- NULL
   attr_names <- c("data_info", "uniq_modnames", "uniq_dsids", "args",
                   "validated")
-  arg_names <- c("posclass", "na_worst", "ties_method", "expd_first")
+  arg_names <- c("posclass", "na_worst", "ties_method", "expd_first", "mode")
   .validate_basic(mdat, "mdat", "mmdata", item_names, attr_names,
                   arg_names)
 

@@ -36,6 +36,7 @@ that the \code{evalmod} function calculates.
   \item{"basic"}{Normalized ranks vs. accuracy, error rate, specificity,
                  sensitivity, precision, Matthews correlation coefficient,
                  and F-score. }
+  \item{"aucroc"}{Fast AUC(ROC) calculation with the U statistic}
 }}
 
 \item{scores}{A numeric dataset of predicted scores. It can be a vector,

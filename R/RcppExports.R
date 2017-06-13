@@ -17,6 +17,10 @@ calc_basic_measures <- function(np, nn, tps, fps, tns, fns) {
     .Call('precrec_calc_basic_measures', PACKAGE = 'precrec', np, nn, tps, fps, tns, fns)
 }
 
+calc_uauc <- function(np, nn, scores, olabs, na_worst, ties_method) {
+    .Call('precrec_calc_uauc', PACKAGE = 'precrec', np, nn, scores, olabs, na_worst, ties_method)
+}
+
 convert_curve_avg_df <- function(obj, uniq_modnames, modnames, curvetype_names, x_bins) {
     .Call('precrec_convert_curve_avg_df', PACKAGE = 'precrec', obj, uniq_modnames, modnames, curvetype_names, x_bins)
 }
@@ -41,7 +45,7 @@ format_labels <- function(labels, posclass) {
     .Call('precrec_format_labels', PACKAGE = 'precrec', labels, posclass)
 }
 
-get_score_ranks <- function(scores, na_last, ties_method) {
-    .Call('precrec_get_score_ranks', PACKAGE = 'precrec', scores, na_last, ties_method)
+get_score_ranks <- function(scores, na_worst, ties_method) {
+    .Call('precrec_get_score_ranks', PACKAGE = 'precrec', scores, na_worst, ties_method)
 }
 

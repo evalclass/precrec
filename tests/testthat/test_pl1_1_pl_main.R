@@ -10,10 +10,12 @@ test_that(".pmatch_mode() returns 'rocprc' or 'basic'", {
   expect_equal(.pmatch_mode("rocprc"), "rocprc")
   expect_equal(.pmatch_mode("prcroc"), "rocprc")
   expect_equal(.pmatch_mode("basic"), "basic")
+  expect_equal(.pmatch_mode("aucroc"), "aucroc")
 
   expect_equal(.pmatch_mode("r"), "rocprc")
   expect_equal(.pmatch_mode("p"), "rocprc")
   expect_equal(.pmatch_mode("b"), "basic")
+  expect_equal(.pmatch_mode("a"), "aucroc")
 
   expect_equal(.pmatch_mode("A"), "A")
   expect_equal(.pmatch_mode(1), 1)

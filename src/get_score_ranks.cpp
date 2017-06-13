@@ -27,7 +27,7 @@ class CompDVec {
 //
 // [[Rcpp::export]]
 Rcpp::List get_score_ranks(const Rcpp::NumericVector& scores,
-                           const bool& na_last,
+                           const bool& na_worst,
                            const std::string& ties_method) {
 
   // Variables
@@ -41,7 +41,7 @@ Rcpp::List get_score_ranks(const Rcpp::NumericVector& scores,
   std::vector<int> sorted_idx(scores.size());
   for (int i = 0; i < scores.size(); ++i) {
     if (Rcpp::NumericVector::is_na(scores[i])) {
-      if (na_last) {
+      if (na_worst) {
         svals[i] = DBL_MIN;
       } else {
         svals[i] = DBL_MAX;

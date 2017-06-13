@@ -41,7 +41,8 @@
 .validate_mode <- function(mode) {
   assertthat::assert_that(assertthat::is.string(mode),
                           (mode == "rocprc"
-                           || mode == "basic"))
+                           || mode == "basic"
+                           || mode == "aucroc"))
 }
 
 #
