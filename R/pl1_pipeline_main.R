@@ -73,7 +73,10 @@ pl_main <- function(mdat, mode = "rocprc", calc_avg = TRUE, cb_alpha = 0.05,
 
   # Validate mdat
   .validate(mdat)
-
+  if (mode != "aucroc" && !is.null(mdat) &&  length(mdat) > 0
+      && is(mdat[[1]], "sdat")) {
+    stop("Invalid 'mode' value in 'mdata'", call. = FALSE)
+  }
 
   # Check mode
   .validate_mode(mode)

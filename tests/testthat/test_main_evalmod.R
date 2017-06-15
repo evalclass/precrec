@@ -50,3 +50,61 @@ test_that("m3 scores", {
                                            0.4285714286, 0.5),
                tolerance = 1e-2)
 })
+
+test_that("'mode' must be consistent between 'mmdata' and 'evalmode'", {
+  s1 <- c(1, 2, 3, 4)
+  s2 <- c(5, 6, 7, 8)
+  s3 <- c(2, 4, 6, 8)
+  scores <- join_scores(s1, s2, s3)
+
+  l1 <- c(1, 0, 1, 0)
+  l2 <- c(1, 1, 0, 0)
+  l3 <- c(0, 1, 0, 1)
+  labels <- join_labels(l1, l2, l3)
+
+  md1 <- mmdata(scores, labels)
+  expect_equal(attr(md1, "args")[["mode"]], "rocprc")
+
+  expect_error(em1_1 <- evalmod(md1), NA)
+  expect_equal(attr(em1_1, "args")[["mode"]], "rocprc")
+
+  expect_error(em1_2 <- evalmod(md1, mode = 'rocprc'), NA)
+  expect_equal(attr(em1_2, "args")[["mode"]], "rocprc")
+
+  expect_error(em1_3 <- evalmod(md1, mode = 'basic'), NA)
+  expect_equal(attr(em1_3, "args")[["mode"]], "basic")
+
+  expect_error(em1_4 <- evalmod(md1, mode = 'aucroc'), NA)
+  expect_equal(attr(em1_4, "args")[["mode"]], "aucroc")
+
+
+  md2 <- mmdata(scores, labels, mode = 'basic')
+  expect_equal(attr(md2, "args")[["mode"]], "basic")
+
+  expect_error(em2_1 <- evalmod(md2), NA)
+  expect_equal(attr(em2_1, "args")[["mode"]], "basic")
+
+  expect_error(em2_2 <- evalmod(md2, mode = 'rocprc'), NA)
+  expect_equal(attr(em2_2, "args")[["mode"]], "rocprc")
+
+  expect_error(em2_3 <- evalmod(md2, mode = 'basic'), NA)
+  expect_equal(attr(em2_3, "args")[["mode"]], "basic")
+
+  expect_error(em2_4 <- evalmod(md2, mode = 'aucroc'), NA)
+  expect_equal(attr(em2_4, "args")[["mode"]], "aucroc")
+
+
+  md3 <- mmdata(scores, labels, mode = 'aucroc')
+  expect_equal(attr(md3, "args")[["mode"]], "aucroc")
+
+  expect_error(em3_1 <- evalmod(md3), NA)
+  expect_equal(attr(em3_1, "args")[["mode"]], "aucroc")
+
+  expect_error(em3_2 <- evalmod(md3, mode = 'rocprc'), "Invalid 'mode':")
+
+  expect_error(em3_3 <- evalmod(md3, mode = 'basic'), "Invalid 'mode':")
+
+  expect_error(em3_4 <- evalmod(md3, mode = 'aucroc'), NA)
+  expect_equal(attr(em3_4, "args")[["mode"]], "aucroc")
+
+})

@@ -21,7 +21,8 @@
   attr(s3obj, "uniq_dsids") <- attr(mdat, "uniq_dsids")
   attr(s3obj, "model_type") <- model_type
   attr(s3obj, "dataset_type") <- dataset_type
-  attr(s3obj, "args") <- list(calc_avg = calc_avg,
+  attr(s3obj, "args") <- list(mode = "aucroc",
+                              calc_avg = calc_avg,
                               cb_alpha = cb_alpha,
                               raw_curves = raw_curves,
                               na_worst = na_worst,
@@ -45,7 +46,7 @@
   item_names <- NULL
   attr_names <- c("data_info", "uniq_modnames", "uniq_dsids",
                   "model_type", "dataset_type", "args", "validated")
-  arg_names <- c("calc_avg", "cb_alpha", "raw_curves", "na_worst",
+  arg_names <- c("mode", "calc_avg", "cb_alpha", "raw_curves", "na_worst",
                  "ties_method")
   .validate_basic(aucroc, "aucroc", ".pl_main_aucroc", item_names,
                   attr_names, arg_names)
