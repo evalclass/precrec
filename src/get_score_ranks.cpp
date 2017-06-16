@@ -2,25 +2,13 @@
 #include <vector>       // std::vector
 #include <string>       // std::string
 #include <cfloat>       // DBL_MIN, DBL_MAX
-#include <algorithm>    // std::random_shuffle, std::sort, std::stable_sort
+#include "sort_indices_by_scores.h"
 
 // Prototype
 void update_ties(std::vector<int>& ranks,
                  std::vector<int>& rank_idx,
                  std::vector<int>& tied_idx,
                  const std::string& ties_method);
-
-// Class for sorting
-class CompDVec {
-    std::vector<double>& _vals;
-
-  public:
-    CompDVec(std::vector<double>& vals): _vals(vals) {}
-
-    bool operator() (const int& a, const int& b) const {
-      return _vals[a] > _vals[b];
-    }
-};
 
 //
 // Get ranks and index of scores
@@ -36,16 +24,20 @@ Rcpp::List get_score_ranks(const Rcpp::NumericVector& scores,
   std::vector<int> ranks(scores.size());
   std::vector<int> rank_idx(scores.size());
 
+  // Determin NA values
+  double na_val;
+  if (na_worst) {
+    na_val = DBL_MIN;
+  } else {
+    na_val = DBL_MAX;
+  }
+
   // Update NAs
   std::vector<double> svals(scores.size());
   std::vector<int> sorted_idx(scores.size());
   for (int i = 0; i < scores.size(); ++i) {
     if (Rcpp::NumericVector::is_na(scores[i])) {
-      if (na_worst) {
-        svals[i] = DBL_MIN;
-      } else {
-        svals[i] = DBL_MAX;
-      }
+      svals[i] = na_val;
     } else {
       svals[i] = scores[i];
     }
@@ -53,12 +45,7 @@ Rcpp::List get_score_ranks(const Rcpp::NumericVector& scores,
   }
 
   // Sort scores
-  CompDVec fcomp(svals);
-  if (ties_method == "first") {
-    std::stable_sort(sorted_idx.begin(), sorted_idx.end(), fcomp);
-  } else {
-    std::sort(sorted_idx.begin(), sorted_idx.end(), fcomp);
-  }
+  sort_indices(sorted_idx, svals, ties_method);
 
   // Set ranks
   for (unsigned i = 0; i < sorted_idx.size(); ++i) {
