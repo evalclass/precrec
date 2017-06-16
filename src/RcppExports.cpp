@@ -59,13 +59,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // calc_uauc
-Rcpp::List calc_uauc(int np, int nn, const Rcpp::NumericVector& scores, const Rcpp::IntegerVector& olabs, const bool& na_worst, const std::string& ties_method);
+Rcpp::List calc_uauc(unsigned np, unsigned nn, const Rcpp::NumericVector& scores, const Rcpp::IntegerVector& olabs, const bool& na_worst, const std::string& ties_method);
 RcppExport SEXP precrec_calc_uauc(SEXP npSEXP, SEXP nnSEXP, SEXP scoresSEXP, SEXP olabsSEXP, SEXP na_worstSEXP, SEXP ties_methodSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type np(npSEXP);
-    Rcpp::traits::input_parameter< int >::type nn(nnSEXP);
+    Rcpp::traits::input_parameter< unsigned >::type np(npSEXP);
+    Rcpp::traits::input_parameter< unsigned >::type nn(nnSEXP);
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type scores(scoresSEXP);
     Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type olabs(olabsSEXP);
     Rcpp::traits::input_parameter< const bool& >::type na_worst(na_worstSEXP);

@@ -24,28 +24,9 @@ Rcpp::List get_score_ranks(const Rcpp::NumericVector& scores,
   std::vector<int> ranks(scores.size());
   std::vector<int> rank_idx(scores.size());
 
-  // Determin NA values
-  double na_val;
-  if (na_worst) {
-    na_val = DBL_MIN;
-  } else {
-    na_val = DBL_MAX;
-  }
-
-  // Update NAs
-  std::vector<double> svals(scores.size());
-  std::vector<int> sorted_idx(scores.size());
-  for (int i = 0; i < scores.size(); ++i) {
-    if (Rcpp::NumericVector::is_na(scores[i])) {
-      svals[i] = na_val;
-    } else {
-      svals[i] = scores[i];
-    }
-    sorted_idx[i] = i;
-  }
-
   // Sort scores
-  sort_indices(sorted_idx, svals, ties_method);
+  std::vector<int> sorted_idx(scores.size());
+  sort_indices(sorted_idx, scores, na_worst, ties_method, true);
 
   // Set ranks
   for (unsigned i = 0; i < sorted_idx.size(); ++i) {
@@ -56,24 +37,24 @@ Rcpp::List get_score_ranks(const Rcpp::NumericVector& scores,
   // Update ties
   if (ties_method == "equiv" || ties_method == "random") {
     std::vector<int> tied_idx;
-    double prev_val = svals[rank_idx[0]];
+    double prev_val = scores[rank_idx[0]];
     bool tied = false;
     for (unsigned i = 1; i < rank_idx.size(); ++i) {
       if (tied) {
-        if (prev_val != svals[rank_idx[i]]) {
+        if (prev_val != scores[rank_idx[i]]) {
           update_ties(ranks, rank_idx, tied_idx, ties_method);
           tied_idx.clear();
           tied = false;
         } else {
           tied_idx.push_back(rank_idx[i]);
         }
-      } else if (prev_val == svals[rank_idx[i]]) {
+      } else if (prev_val == scores[rank_idx[i]]) {
         tied_idx.push_back(rank_idx[i - 1]);
         tied_idx.push_back(rank_idx[i]);
         tied = true;
       }
 
-      prev_val = svals[rank_idx[i]];
+      prev_val = scores[rank_idx[i]];
     }
 
     if (tied) {
