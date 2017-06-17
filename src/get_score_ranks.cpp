@@ -25,46 +25,42 @@ Rcpp::List get_score_ranks(const Rcpp::NumericVector& scores,
   std::vector<int> rank_idx(scores.size());
 
   // Sort scores
-  std::vector<int> sorted_idx(scores.size());
-  sort_indices(sorted_idx, scores, na_worst, ties_method, true);
+  std::vector<std::pair<unsigned, double > > sorted_idx(scores.size());
+  make_index_pairs(sorted_idx, scores, na_worst);
+  sort_indices(sorted_idx, ties_method, true);
 
   // Set ranks
   for (unsigned i = 0; i < sorted_idx.size(); ++i) {
-     ranks[sorted_idx[i]] = i + 1;
-     rank_idx[i] = sorted_idx[i];
+     ranks[sorted_idx[i].first] = i + 1;
+     rank_idx[i] = sorted_idx[i].first + 1;
   }
 
   // Update ties
   if (ties_method == "equiv" || ties_method == "random") {
     std::vector<int> tied_idx;
-    double prev_val = scores[rank_idx[0]];
+    double prev_val = sorted_idx[0].second;
     bool tied = false;
-    for (unsigned i = 1; i < rank_idx.size(); ++i) {
+    for (unsigned i = 1; i < sorted_idx.size(); ++i) {
       if (tied) {
-        if (prev_val != scores[rank_idx[i]]) {
+        if (prev_val != sorted_idx[i].second) {
           update_ties(ranks, rank_idx, tied_idx, ties_method);
           tied_idx.clear();
           tied = false;
         } else {
-          tied_idx.push_back(rank_idx[i]);
+          tied_idx.push_back(sorted_idx[i].first);
         }
-      } else if (prev_val == scores[rank_idx[i]]) {
-        tied_idx.push_back(rank_idx[i - 1]);
-        tied_idx.push_back(rank_idx[i]);
+      } else if (prev_val == sorted_idx[i].second) {
+        tied_idx.push_back(sorted_idx[i-1].first);
+        tied_idx.push_back(sorted_idx[i].first);
         tied = true;
       }
 
-      prev_val = scores[rank_idx[i]];
+      prev_val = sorted_idx[i].second;
     }
 
     if (tied) {
       update_ties(ranks, rank_idx, tied_idx, ties_method);
     }
-  }
-
-  // Add 1 to rank_idx
-  for (unsigned i = 0; i < rank_idx.size(); ++i) {
-    rank_idx[i] = rank_idx[i] + 1;
   }
 
   // Return result

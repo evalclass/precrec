@@ -28,12 +28,13 @@ Rcpp::List calc_uauc(unsigned np, unsigned nn,
   std::vector<int> rank_idx(scores.size());
 
   // Sort neg scores
-  std::vector<int> sorted_idx(scores.size());
-  sort_indices(sorted_idx, scores, na_worst, ties_method, false);
+  std::vector<std::pair<unsigned, double > > sorted_idx(scores.size());
+  make_index_pairs(sorted_idx, scores, na_worst);
+  sort_indices(sorted_idx, ties_method, false);
 
   // Calculate U statistic
   for (unsigned i = 0; i < sorted_idx.size(); ++i) {
-    if (olabs[sorted_idx[i]] == 2) {
+    if (olabs[sorted_idx[i].first] == 2) {
       ranksum += (i + 1);
     }
   }

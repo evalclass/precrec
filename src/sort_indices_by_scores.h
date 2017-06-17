@@ -6,36 +6,17 @@
 #include <string>       // std::string
 #include <algorithm>    // std::sort, std::stable_sort
 
-// Classes for sorting
-class CompDVecDesc {
-    const std::vector<double>& _vals;
-
-  public:
-    CompDVecDesc(const std::vector<double>& vals): _vals(vals) {}
-
-    bool operator() (const int& a, const int& b) const {
-      return _vals[a] > _vals[b];
-    }
-};
-
-class CompDVecAsc {
-    const std::vector<double>& _vals;
-
-  public:
-    CompDVecAsc(const std::vector<double>& vals): _vals(vals) {}
-
-    bool operator() (const int& a, const int& b) const {
-      return _vals[a] < _vals[b];
-    }
-
-};
+//
+// Make pairs for sorting
+//
+void make_index_pairs(std::vector<std::pair<unsigned, double > >& indices,
+                      const Rcpp::NumericVector& scores,
+                      const bool& na_worst);
 
 //
 // Sort indices by scores
 //
-void sort_indices(std::vector<int>& indices,
-                  const Rcpp::NumericVector& scores,
-                  const bool& na_worst,
+void sort_indices(std::vector<std::pair<unsigned, double > >& indices,
                   const std::string& ties_method,
                   bool desc);
 

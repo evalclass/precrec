@@ -1,13 +1,28 @@
 #include "sort_indices_by_scores.h"
+#include <ctime>
 
 //
-// Sort indices by scores
+// Comp functions
 //
-void sort_indices(std::vector<int>& indices,
-                  const Rcpp::NumericVector& scores,
-                  const bool& na_worst,
-                  const std::string& ties_method,
-                  bool desc) {
+
+bool comp_asc(const std::pair<unsigned, double > &a,
+              const std::pair<unsigned, double > &b)
+{
+       return a.second < b.second;
+}
+
+bool comp_desc(const std::pair<unsigned, double > &a,
+               const std::pair<unsigned, double > &b)
+{
+       return a.second > b.second;
+}
+
+//
+// Make pairs
+//
+void make_index_pairs(std::vector<std::pair<unsigned, double > >& indices,
+                      const Rcpp::NumericVector& scores,
+                      const bool& na_worst) {
 
   // Determin NA values
   double na_val;
@@ -18,30 +33,35 @@ void sort_indices(std::vector<int>& indices,
   }
 
   // Update NAs
-  std::vector<double> svals(scores.size());
-  for (int i = 0; i < scores.size(); ++i) {
+  for (unsigned i = 0; i < scores.size(); ++i) {
     if (Rcpp::NumericVector::is_na(scores[i])) {
-      svals[i] = na_val;
+      indices[i] = std::make_pair(i, na_val);
     } else {
-      svals[i] = scores[i];
-    }
-    indices[i] = i;
-  }
-
-  // Sort scores
-  if (desc) {
-    CompDVecDesc fcompd(svals);
-    if (ties_method == "first") {
-      std::stable_sort(indices.begin(), indices.end(), fcompd);
-    } else {
-      std::sort(indices.begin(), indices.end(), fcompd);
-    }
-  } else {
-    CompDVecAsc fcompa(svals);
-    if (ties_method == "first") {
-      std::stable_sort(indices.begin(), indices.end(), fcompa);
-    } else {
-      std::sort(indices.begin(), indices.end(), fcompa);
+      indices[i] = std::make_pair(i, scores[i]);
     }
   }
 }
+
+//
+// Sort indices by scores
+//
+void sort_indices(std::vector<std::pair<unsigned, double > >& indices,
+                  const std::string& ties_method,
+                  bool desc) {
+
+  bool (*comp_func)(const std::pair<unsigned, double > &,
+                    const std::pair<unsigned, double > &);
+  if (desc) {
+    comp_func = &comp_desc;
+  } else {
+    comp_func = &comp_asc;
+  }
+
+  // Sort scores
+  if (ties_method == "first") {
+    std::stable_sort(indices.begin(), indices.end(), comp_func);
+  } else {
+    std::sort(indices.begin(), indices.end(), comp_func);
+  }
+}
+
