@@ -101,3 +101,35 @@ print.beval_info <- function(x, ...) {
 
   print.mdat(x)
 }
+
+#
+# Print the summary of AUC(ROC) with U statistic
+#
+#' @export
+print.aucroc <- function(x, ...) {
+  # === Validate input arguments ===
+  .validate(x)
+
+  # === print ===
+  cat("\n")
+  cat("    === Input data ===\n\n")
+
+  data_info <- attr(x, "data_info")
+  rownames(data_info) <- format(rownames(data_info), width = 4,
+                                justify = "right")
+  colnames(data_info) <- c("Model name", "Dataset ID", "# of negatives",
+                           "# of positives")
+
+  print.data.frame(data_info, print.gap = 1)
+  cat("\n\n")
+
+  cat("    === AUCs ===\n")
+  cat("\n")
+
+  aucs <- as.data.frame(x)
+  rownames(aucs) <- format(rownames(aucs), width = 4, justify = "right")
+  colnames(aucs) <- c("Model name", "Dataset ID", "AUC", "U")
+
+  print.data.frame(aucs, print.gap = 1)
+  cat("\n")
+}

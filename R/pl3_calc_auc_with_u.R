@@ -58,9 +58,9 @@ calc_auc_with_u <- function(sdat, scores = NULL, labels = NULL, na_worst = TRUE,
                   arg_names)
 
   # AUC
-  assertthat::assert_that(assertthat::is.number(uauc[["auc"]]),
-                          uauc[["auc"]] >= 0,
-                          uauc[["auc"]] <= 1)
+  auc <- uauc[["auc"]]
+  assertthat::assert_that(assertthat::is.number(auc),
+                          auc >= 0, auc <= 1)
 
   attr(uauc, "validated") <- TRUE
   uauc

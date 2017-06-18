@@ -8,12 +8,16 @@
 
   # === Calculate AUC ROC ===
   plfunc <- function(s) {
-    uauc <- calc_auc_with_u(mdat[[s]], na_worst = na_worst, ties_method = ties_method)
+    uauc <- calc_auc_with_u(mdat[[s]], na_worst = na_worst,
+                            ties_method = ties_method)
   }
   aucrocs <- lapply(seq_along(mdat), plfunc)
+  auc.df <- .summarize_uauc_results(aucrocs, attr(mdat, "uniq_modnames"),
+                                    attr(mdat, "uniq_dsids"), calc_avg,
+                                    cb_alpha, raw_curves)
 
   # === Create an S3 object ===
-  s3obj <- structure(aucrocs, class = "aucroc")
+  s3obj <- structure(auc.df, class = "aucroc")
 
   # Set attributes
   attr(s3obj, "data_info") <- attr(mdat, "data_info")
@@ -54,3 +58,34 @@
   attr(aucroc, "validated") <- TRUE
   aucroc
 }
+
+#
+# Create a dataframe with AUCs
+#
+.summarize_uauc_results <- function(aucs, uniq_modnames, uniq_dsids,
+                                    calc_avg, cb_alpha, raw_curves) {
+  auc_df <- NA
+
+  if (!is.null(aucs)) {
+    n <- length(aucs)
+    vmodname <- factor(character(n), levels = uniq_modnames)
+    vdsid <- factor(character(n), levels = uniq_dsids)
+    vaucs <- numeric(n)
+    vustat <- numeric(n)
+
+    for (i in seq_along(aucs)) {
+      vmodname[i] <- attr(aucs[[i]], "modname")
+      vdsid[i] <- attr(aucs[[i]], "dsid")
+      vaucs[i] <- aucs[[i]]$auc
+      vustat[i] <- aucs[[i]]$ustat
+    }
+
+    auc_df <- data.frame(modname = vmodname,
+                         dsid = vdsid,
+                         aucs = vaucs,
+                         ustat = vustat)
+  }
+
+  list(uaucs = auc_df)
+}
+

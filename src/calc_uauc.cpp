@@ -16,36 +16,62 @@ Rcpp::List calc_uauc(unsigned np, unsigned nn,
   Rcpp::List ret_val;
   std::string errmsg = "";
   double auc = 0;
-  double ranksum = 0;
   double ustat = 0;
   double np_dbl = (double)np;
   double nn_dbl = (double)nn;
 
-  int idx = 0;
+  // Determin NA values
+  double na_val;
+  if (na_worst) {
+    na_val = DBL_MIN;
+  } else {
+    na_val = DBL_MAX;
+  }
 
-  // Variables
-  std::vector<int> ranks(scores.size());
-  std::vector<int> rank_idx(scores.size());
+  // Create pos and neg vectors
+  std::vector<double> pos_vec(np);
+  std::vector<double> neg_vec(nn);
+  unsigned pos_idx = 0;
+  unsigned neg_idx = 0;
+  double s;
+  for (unsigned i = 0; i < olabs.size(); ++i) {
+    if (Rcpp::NumericVector::is_na(scores[i])) {
+      s = na_val;
+    } else {
+      s = scores[i];
+    }
+
+    if (olabs[i] == 2) {
+      pos_vec[pos_idx] = s;
+      pos_idx++;
+    } else {
+      neg_vec[neg_idx] = s;
+      neg_idx++;
+    }
+
+  }
 
   // Sort neg scores
-  std::vector<std::pair<unsigned, double > > sorted_idx(scores.size());
-  make_index_pairs(sorted_idx, scores, na_worst);
-  sort_indices(sorted_idx, ties_method, false);
+  std::sort(neg_vec.begin(), neg_vec.end());
+  std::sort(pos_vec.begin(), pos_vec.end());
 
   // Calculate U statistic
-  for (unsigned i = 0; i < sorted_idx.size(); ++i) {
-    if (olabs[sorted_idx[i].first] == 2) {
-      ranksum += (i + 1);
+  pos_idx = 0;
+  neg_idx = 0;
+  while (pos_idx < pos_vec.size()) {
+    if (neg_idx < neg_vec.size() && pos_vec[pos_idx] >= neg_vec[neg_idx]) {
+      neg_idx++;
+    } else {
+      ustat += (double)neg_idx;
+      pos_idx++;
     }
   }
-  ustat = ranksum - np_dbl * (np_dbl + 1) / 2;
 
   // Calculate AUC
   auc = ustat / (np_dbl * nn_dbl);
 
   // Return a list
   ret_val["auc"] = auc;
-  ret_val["ranksum"] = ranksum;
   ret_val["ustat"] = ustat;
   ret_val["errmsg"] = errmsg;
 
