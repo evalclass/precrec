@@ -64,3 +64,14 @@
 
   mnames
 }
+
+#
+# Load data.table
+#
+.load_data_table <- function() {
+  loaded = TRUE
+  if (!requireNamespace("data.table", quietly = TRUE)) {
+    loaded = FALSE
+  }
+  loaded
+}

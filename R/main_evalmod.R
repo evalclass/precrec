@@ -31,6 +31,7 @@
 #'     \item{"basic"}{Normalized ranks vs. accuracy, error rate, specificity,
 #'                    sensitivity, precision, Matthews correlation coefficient,
 #'                    and F-score. }
+#'     \item{"aucroc"}{Fast AUC(ROC) calculation with the U statistic}
 #'   }
 #'
 #' @param scores A numeric dataset of predicted scores. It can be a vector,
@@ -60,8 +61,8 @@
 #' @param na_worst A Boolean value for controlling the treatment of NAs
 #'   in \code{scores}.
 #'   \describe{
-#'     \item{TRUE}{NAs are treated as the highest score}
-#'     \item{FALSE}{NAs are treated as the lowest score}
+#'     \item{TRUE}{All NAs are treated as the worst scores}
+#'     \item{FALSE}{All NAs are treated as the best scores}
 #'   }
 #'
 #' @param ties_method A string for controlling ties in \code{scores}.
@@ -223,35 +224,66 @@
 #' mmpoints
 #'
 #' @export
-evalmod <- function(mdat, mode = "rocprc", scores = NULL, labels = NULL,
+evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
                     modnames = NULL, dsids = NULL,
                     posclass = NULL, na_worst = TRUE, ties_method = "equiv",
                     calc_avg = TRUE, cb_alpha = 0.05, raw_curves = FALSE,
-                    x_bins = 1000) {
+                    x_bins = 1000, ...) {
 
   # Validation
-  new_mode <- .pmatch_mode(mode)
-  new_ties_method <- .pmatch_tiesmethod(ties_method)
+  new_mode <- .get_new_mode(mode, mdat, "rocprc")
+  new_ties_method <- .pmatch_tiesmethod(ties_method, ...)
+  new_na_worst <- .get_new_naworst(na_worst, ...)
   if (x_bins == 0) {
     x_bins <- 1
   }
-  .validate_evalmod_args(new_mode, modnames, dsids, posclass, na_worst,
+  .validate_evalmod_args(new_mode, modnames, dsids, posclass, new_na_worst,
                          new_ties_method, calc_avg, cb_alpha, raw_curves,
                          x_bins)
 
   # Create mdat if not provided
-  if (!missing(mdat)) {
-    .validate(mdat)
-  } else {
+  if (missing(mdat)) {
     mdat <- mmdata(scores, labels,
                    modnames = modnames, dsids = dsids, posclass = posclass,
-                   na_worst = na_worst, ties_method = new_ties_method)
+                   na_worst = new_na_worst, ties_method = new_ties_method,
+                   mode = new_mode)
   }
+  .validate(mdat)
 
   # Call pipeline controller
   pl_main(mdat, mode = new_mode, calc_avg = calc_avg, cb_alpha = cb_alpha,
-          raw_curves = raw_curves, x_bins = x_bins, validate = FALSE)
+          raw_curves = raw_curves, x_bins = x_bins, na_worst = new_na_worst,
+          ties_method = new_ties_method, validate = FALSE)
 
+}
+
+#
+# Get a mode
+#
+.get_new_mode <- function(mode, mdat, def_mode = "rocprc") {
+  mdat_mode <- NA
+  if (!missing(mdat)) {
+    .validate(mdat)
+    mdat_mode <- attr(mdat, "args")[["mode"]]
+  }
+
+  new_mode <- NA
+  if (!is.null(mode)) {
+    new_mode <- .pmatch_mode(mode)
+    if (new_mode != "aucroc" && !is.na(mdat_mode) &&  mdat_mode == "aucroc") {
+      stop(paste0("Invalid 'mode': evalmod <- '", new_mode,
+                  "'', mmdata <- '", mdat_mode, "'"),
+           call. = FALSE)
+    }
+  } else if (!is.na(mdat_mode)) {
+    new_mode <- mdat_mode
+  }
+
+  if (is.null(new_mode) || is.na(new_mode)) {
+    new_mode <- def_mode
+  }
+
+  new_mode
 }
 
 #

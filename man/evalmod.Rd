@@ -4,10 +4,10 @@
 \alias{evalmod}
 \title{Evaluate models and calculate performance evaluation measures}
 \usage{
-evalmod(mdat, mode = "rocprc", scores = NULL, labels = NULL,
+evalmod(mdat, mode = NULL, scores = NULL, labels = NULL,
   modnames = NULL, dsids = NULL, posclass = NULL, na_worst = TRUE,
   ties_method = "equiv", calc_avg = TRUE, cb_alpha = 0.05,
-  raw_curves = FALSE, x_bins = 1000)
+  raw_curves = FALSE, x_bins = 1000, ...)
 }
 \arguments{
 \item{mdat}{An \code{S3} object created by the \code{\link{mmdata}}
@@ -36,6 +36,7 @@ that the \code{evalmod} function calculates.
   \item{"basic"}{Normalized ranks vs. accuracy, error rate, specificity,
                  sensitivity, precision, Matthews correlation coefficient,
                  and F-score. }
+  \item{"aucroc"}{Fast AUC(ROC) calculation with the U statistic}
 }}
 
 \item{scores}{A numeric dataset of predicted scores. It can be a vector,
@@ -65,8 +66,8 @@ detected when \code{posclass} is \code{NULL}.}
 \item{na_worst}{A Boolean value for controlling the treatment of NAs
 in \code{scores}.
 \describe{
-  \item{TRUE}{NAs are treated as the highest score}
-  \item{FALSE}{NAs are treated as the lowest score}
+  \item{TRUE}{All NAs are treated as the worst scores}
+  \item{FALSE}{All NAs are treated as the best scores}
 }}
 
 \item{ties_method}{A string for controlling ties in \code{scores}.

@@ -51,7 +51,8 @@ create_confmats <- function(fmdat, scores = NULL, labels = NULL,
   item_names <- c("pos_num", "neg_num", "tp", "fp", "tn", "fn", "ranks")
   attr_names <- c("modname", "dsid", "nn", "np", "args", "cpp_errmsg",
                   "src", "validated")
-  arg_names <- c("na_worst", "ties_method", "modname", "dsid", "keep_fmdat")
+  arg_names <- c("na_worst", "na.last", "ties_method", "ties.method",
+                 "modname", "dsid", "keep_fmdat")
   .validate_basic(cmats, "cmats", "create_confmats", item_names, attr_names,
                   arg_names)
 

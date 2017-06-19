@@ -165,7 +165,7 @@ create_prc <- function(pevals, scores = NULL, labels = NULL, x_bins = 1000,
   item_names <- c("x", "y", "orig_points")
   attr_names <- c("modname", "dsid", "nn", "np", "auc", "args",
                   "cpp_errmsg1", "cpp_errmsg2", "src", "validated")
-  arg_names <- c("x_bins", "na_worst", "ties_method",
+  arg_names <- c("x_bins", "na_worst", "na.last", "ties_method", "ties.method",
                  "modname", "dsid", "keep_fmdat", "keep_cmats")
   .validate_basic(obj, class_name, func_name, item_names, attr_names,
                   arg_names)
@@ -198,8 +198,8 @@ create_prc <- function(pevals, scores = NULL, labels = NULL, x_bins = 1000,
   item_names <- c("roc", "prc")
   attr_names <- c("modname", "dsid", "nn", "np", "args", "src",
                   "validated")
-  arg_names <- c("x_bins", "na_worst", "ties_method", "modname", "dsid",
-                 "keep_fmdat", "keep_cmats")
+  arg_names <- c("x_bins", "na_worst", "na.last", "ties_method", "ties.method",
+                 "modname", "dsid", "keep_fmdat", "keep_cmats")
   .validate_basic(curves, "curves", "calc_measures", item_names, attr_names,
                   arg_names)
 

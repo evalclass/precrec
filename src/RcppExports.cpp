@@ -58,6 +58,39 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// calc_uauc
+Rcpp::List calc_uauc(unsigned np, unsigned nn, const Rcpp::NumericVector& scores, const Rcpp::IntegerVector& olabs, const bool& na_worst, const std::string& ties_method);
+RcppExport SEXP precrec_calc_uauc(SEXP npSEXP, SEXP nnSEXP, SEXP scoresSEXP, SEXP olabsSEXP, SEXP na_worstSEXP, SEXP ties_methodSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< unsigned >::type np(npSEXP);
+    Rcpp::traits::input_parameter< unsigned >::type nn(nnSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type scores(scoresSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type olabs(olabsSEXP);
+    Rcpp::traits::input_parameter< const bool& >::type na_worst(na_worstSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type ties_method(ties_methodSEXP);
+    rcpp_result_gen = Rcpp::wrap(calc_uauc(np, nn, scores, olabs, na_worst, ties_method));
+    return rcpp_result_gen;
+END_RCPP
+}
+// calc_uauc_frank
+Rcpp::List calc_uauc_frank(unsigned np, unsigned nn, const Rcpp::NumericVector& scores, const Rcpp::IntegerVector& olabs, const bool& na_last, const std::string& ties_method, Rcpp::Function frank);
+RcppExport SEXP precrec_calc_uauc_frank(SEXP npSEXP, SEXP nnSEXP, SEXP scoresSEXP, SEXP olabsSEXP, SEXP na_lastSEXP, SEXP ties_methodSEXP, SEXP frankSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< unsigned >::type np(npSEXP);
+    Rcpp::traits::input_parameter< unsigned >::type nn(nnSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type scores(scoresSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type olabs(olabsSEXP);
+    Rcpp::traits::input_parameter< const bool& >::type na_last(na_lastSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type ties_method(ties_methodSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Function >::type frank(frankSEXP);
+    rcpp_result_gen = Rcpp::wrap(calc_uauc_frank(np, nn, scores, olabs, na_last, ties_method, frank));
+    return rcpp_result_gen;
+END_RCPP
+}
 // convert_curve_avg_df
 Rcpp::List convert_curve_avg_df(const Rcpp::List& obj, const Rcpp::CharacterVector& uniq_modnames, const Rcpp::IntegerVector& modnames, const Rcpp::List& curvetype_names, const int x_bins);
 RcppExport SEXP precrec_convert_curve_avg_df(SEXP objSEXP, SEXP uniq_modnamesSEXP, SEXP modnamesSEXP, SEXP curvetype_namesSEXP, SEXP x_binsSEXP) {
@@ -147,15 +180,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // get_score_ranks
-Rcpp::List get_score_ranks(const Rcpp::NumericVector& scores, const bool& na_last, const std::string& ties_method);
-RcppExport SEXP precrec_get_score_ranks(SEXP scoresSEXP, SEXP na_lastSEXP, SEXP ties_methodSEXP) {
+Rcpp::List get_score_ranks(const Rcpp::NumericVector& scores, const bool& na_worst, const std::string& ties_method);
+RcppExport SEXP precrec_get_score_ranks(SEXP scoresSEXP, SEXP na_worstSEXP, SEXP ties_methodSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type scores(scoresSEXP);
-    Rcpp::traits::input_parameter< const bool& >::type na_last(na_lastSEXP);
+    Rcpp::traits::input_parameter< const bool& >::type na_worst(na_worstSEXP);
     Rcpp::traits::input_parameter< const std::string& >::type ties_method(ties_methodSEXP);
-    rcpp_result_gen = Rcpp::wrap(get_score_ranks(scores, na_last, ties_method));
+    rcpp_result_gen = Rcpp::wrap(get_score_ranks(scores, na_worst, ties_method));
     return rcpp_result_gen;
 END_RCPP
 }

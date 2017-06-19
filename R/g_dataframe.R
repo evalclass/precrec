@@ -89,3 +89,10 @@ as.data.frame.mmpoints <- function(x, row.names = NULL, optional = FALSE,
   .dataframe_common(x, mode = "basic", raw_curves = arglist[["raw_curves"]],
                     ...)
 }
+
+#' @rdname as.data.frame
+#' @export
+as.data.frame.aucroc <- function(x, row.names = NULL, optional = FALSE, ...) {
+  x$uaucs
+}
+
