@@ -80,10 +80,10 @@
       vustat[i] <- aucs[[i]]$ustat
     }
 
-    auc_df <- data.frame(modname = vmodname,
-                         dsid = vdsid,
+    auc_df <- data.frame(modnames = vmodname,
+                         dsids = vdsid,
                          aucs = vaucs,
-                         ustat = vustat)
+                         ustats = vustat)
   }
 
   list(uaucs = auc_df)

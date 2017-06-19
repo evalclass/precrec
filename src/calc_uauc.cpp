@@ -69,6 +69,11 @@ Rcpp::List calc_uauc(unsigned np, unsigned nn,
 
   // Calculate AUC
   auc = ustat / (np_dbl * nn_dbl);
+  if (auc < 0) {
+    auc = 0;
+  } else if (auc > 1) {
+    auc = 1;
+  }
 
   // Return a list
   ret_val["auc"] = auc;

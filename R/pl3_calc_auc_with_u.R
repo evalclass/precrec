@@ -2,7 +2,8 @@
 # Calculate AUCs with U statistic
 #
 calc_auc_with_u <- function(sdat, scores = NULL, labels = NULL, na_worst = TRUE,
-                            ties_method = "equiv", keep_sdat = FALSE, ...) {
+                            ties_method = "equiv", keep_sdat = FALSE,
+                            ustat_method = "frank", ...) {
 
   # === Validate input arguments ===
   # Create sdat from scores and labels if sdat is missing
@@ -12,9 +13,37 @@ calc_auc_with_u <- function(sdat, scores = NULL, labels = NULL, na_worst = TRUE,
 
   # === Calculate AUCs (ROC) ===
   # Call a cpp function via Rcpp interface
-  uauc <- calc_uauc(attr(sdat, "np"), attr(sdat, "nn"), sdat[["scores"]],
-                    sdat[["labels"]], na_worst, ties_method)
-  .check_cpp_func_error(uauc, "calc_uauc")
+  dt_loaded <- TRUE
+  if (ustat_method == "frank") {
+    dt_loaded <- .load_data_table()
+    if (dt_loaded) {
+      if (na_worst) {
+        na.last <- FALSE
+      } else {
+        na.last <- TRUE
+      }
+      if (ties_method == "random") {
+        ties.method <- "random"
+      } else {
+        ties.method <- "average"
+      }
+
+      frank_func <- function(x) {
+        data.table::frank(x, na.last = na.last, ties.method = ties.method)
+      }
+
+      uauc <- calc_uauc_frank(attr(sdat, "np"), attr(sdat, "nn"),
+                              sdat[["scores"]], sdat[["labels"]],
+                              na.last, ties.method, frank_func)
+      .check_cpp_func_error(uauc, "calc_uauc_fsort")
+    }
+  }
+
+  if (ustat_method == "sort" || (ustat_method == "frank" && !dt_loaded)) {
+    uauc <- calc_uauc(attr(sdat, "np"), attr(sdat, "nn"), sdat[["scores"]],
+                      sdat[["labels"]], na_worst, ties_method)
+    .check_cpp_func_error(uauc, "calc_uauc")
+  }
 
   # === Create an S3 object ===
   cpp_errmsg <- uauc[["errmsg"]]
@@ -65,4 +94,3 @@ calc_auc_with_u <- function(sdat, scores = NULL, labels = NULL, na_worst = TRUE,
   attr(uauc, "validated") <- TRUE
   uauc
 }
-

@@ -74,6 +74,7 @@
 #' @importFrom graphics abline layout legend lines matplot par plot plot.new polygon
 #' @importFrom methods is
 #' @importFrom stats qnorm rbeta rnorm
+#' @importFrom data.table frank
 #'
 NULL
 
