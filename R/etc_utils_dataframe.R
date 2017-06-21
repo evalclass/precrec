@@ -33,6 +33,15 @@
 #'     smpoints \tab single   \tab multiple \cr
 #'     mmpoints \tab multiple \tab multiple
 #'   }
+#'
+#'   \item Fast AUC (ROC) calculation with the U statistic (mode = "aucroc")
+#'   \tabular{lll}{
+#'     \strong{\code{S3} object}
+#'     \tab \strong{# of models}
+#'     \tab \strong{# of test datasets} \cr
+#'
+#'     aucroc \tab -   \tab -
+#'   }
 #' }
 #'
 #' See the \strong{Value} section of \code{\link{evalmod}} for more details.
@@ -165,6 +174,28 @@
 #'
 #' ## Show data frame
 #' head(mmpoints.df)
+#'
+#' ##################################################
+#' ### AUC with the U statistic
+#' ###
+#'
+#' ## mode = "aucroc"
+#' data(P10N10)
+#' uauc1 <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
+#'                  mode="aucroc")
+#'
+#' # as.data.frame 'aucroc'
+#' as.data.frame(uauc1)
+#'
+#' ## mode = "aucroc"
+#' samps <- create_sim_samples(10, 100, 100, "all")
+#' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
+#'                modnames = samps[["modnames"]],
+#'                dsids = samps[["dsids"]])
+#' uauc2 <- evalmod(mdat, mode="aucroc")
+#'
+#' # as.data.frame 'aucroc'
+#' head(as.data.frame(uauc2))
 #'
 #' @name as.data.frame
 NULL
