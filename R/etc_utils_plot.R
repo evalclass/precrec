@@ -323,6 +323,10 @@ NULL
   if (is.null(arglist[["show_cb"]])){
     arglist[["show_cb"]] <- def_show_cb
   }
+  if (!evalmod_args[["calc_avg"]] && arglist[["show_cb"]]) {
+    stop("Invalid show_cb. Inconsistent with calc_avg of evalmod.",
+         call. = FALSE)
+  }
 
   if (is.null(arglist[["raw_curves"]])){
     if (!is.null(def_raw_curves)) {
@@ -332,6 +336,10 @@ NULL
     } else {
       arglist[["raw_curves"]] <- FALSE
     }
+  }
+  if (!evalmod_args[["raw_curves"]] && arglist[["raw_curves"]]) {
+    stop("Invalid raw_curves. Inconsistent with the value of evalmod.",
+         call. = FALSE)
   }
 
   if (is.null(arglist[["add_np_nn"]])){
@@ -352,10 +360,19 @@ NULL
 .plot_multi <- function(x, arglist) {
   curvetype <- arglist[["curvetype"]]
   type <- arglist[["type"]]
-  show_cb <- arglist[["show_cb"]]
   raw_curves <- arglist[["raw_curves"]]
   add_np_nn <- arglist[["add_np_nn"]]
   show_legend <- arglist[["show_legend"]]
+
+  show_cb <- arglist[["show_cb"]]
+  if (!attr(x, "args")$calc_avg) {
+    show_cb = FALSE
+  }
+
+  raw_curves <- arglist[["raw_curves"]]
+  if (show_cb) {
+    raw_curves = FALSE
+  }
 
   # === Validate input arguments ===
   .validate(x)
@@ -584,7 +601,10 @@ NULL
   }
 
   # === Create a plot ===
-  if (raw_curves) {
+  if (show_cb) {
+    .plot_avg(x, type, tlist[["ctype"]], main, tlist[["xlab"]],
+              tlist[["ylab"]], show_cb)
+  } else if (raw_curves) {
     .matplot_wrapper(x, type, tlist[["ctype"]], main, tlist[["xlab"]],
                      tlist[["ylab"]])
   } else {

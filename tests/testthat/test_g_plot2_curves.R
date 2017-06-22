@@ -196,8 +196,7 @@ test_that("plot raw_curve option smcurves", {
 
   curves1 <- pt2_create_smcurves()
 
-  args1a <- get_args(curves1, raw_curves = TRUE)
-  expect_true(args1a[["raw_curves"]])
+  expect_error(get_args(curves1, raw_curves = TRUE), "Invalid raw_curves.")
 
   args1b <- get_args(curves1, raw_curves = FALSE)
   expect_false(args1b[["raw_curves"]])
@@ -228,8 +227,7 @@ test_that("plot raw_curve option mmcurves", {
 
   curves1 <- pt2_create_mmcurves()
 
-  args1a <- get_args(curves1, raw_curves = TRUE)
-  expect_true(args1a[["raw_curves"]])
+  expect_error(get_args(curves1, raw_curves = TRUE), "Invalid raw_curves.")
 
   args1b <- get_args(curves1, raw_curves = FALSE)
   expect_false(args1b[["raw_curves"]])
