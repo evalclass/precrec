@@ -12,10 +12,10 @@ install:
 
 # Adapt as necessary starting from here
 
-#branches:
-#  only:
-#    - master
-#    - develop
+branches:
+  only:
+    - master
+    - develop
 
 skip_tags: true
 

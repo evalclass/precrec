@@ -1,9 +1,9 @@
 # .travis.yml for precrec
 
-#branches:
-#  only:
-#    - master
-#    - develop
+branches:
+  only:
+    - master
+    - develop
 
 os:
  - linux
