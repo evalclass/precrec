@@ -64,6 +64,7 @@
 #'
 #' @examples
 #'
+#' \dontrun{
 #' ##################################################
 #' ### Single model & single test dataset
 #' ###
@@ -196,6 +197,7 @@
 #'
 #' # as.data.frame 'aucroc'
 #' head(as.data.frame(uauc2))
+#' }
 #'
 #' @name as.data.frame
 NULL
