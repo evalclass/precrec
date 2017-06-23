@@ -5,6 +5,11 @@
                            calc_avg = TRUE, cb_alpha = 0.05,
                            raw_curves = FALSE) {
 
+  if (dataset_type == "single") {
+    calc_avg <- FALSE
+    raw_curves <- TRUE
+  }
+
   # === Create ROC and Precision-Recall curves ===
   # Create points
   plfunc <- function(s) {

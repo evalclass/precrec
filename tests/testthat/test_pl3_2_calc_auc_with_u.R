@@ -49,3 +49,136 @@ test_that("calc_auc_with_u() accepts arguments for reformat_data()", {
 
   expect_equal(.get_obj_arg(aucs, "sdat", "na_worst"), TRUE)
 })
+
+pl3_create_ms_dat <- function() {
+  s1 <- c(1, 2, 3, 4)
+  s2 <- c(5, 6, 7, 8)
+  s3 <- c(2, 4, 6, 8)
+  scores <- join_scores(s1, s2, s3)
+
+  l1 <- c(1, 0, 1, 1)
+  l2 <- c(0, 1, 1, 1)
+  l3 <- c(1, 1, 0, 1)
+  labels <- join_labels(l1, l2, l3)
+
+  list(scores = scores, labels = labels)
+}
+
+pl3_create_sm_dat <- function() {
+  s1 <- c(1, 2, 3, 4)
+  s2 <- c(5, 6, 7, 8)
+  s3 <- c(2, 4, 6, 8)
+  scores <- join_scores(s1, s2, s3)
+
+  l1 <- c(1, 0, 1, 1)
+  l2 <- c(0, 1, 1, 1)
+  l3 <- c(1, 1, 0, 1)
+  labels <- join_labels(l1, l2, l3)
+
+  list(scores = scores, labels = labels)
+}
+
+pl3_create_mm_dat <- function() {
+  s1 <- c(1, 2, 3, 4)
+  s2 <- c(5, 6, 7, 8)
+  s3 <- c(2, 4, 6, 8)
+  s4 <- c(2, 4, 6, 8)
+  scores <- join_scores(s1, s2, s3, s4)
+
+  l1 <- c(1, 0, 1, 1)
+  l2 <- c(0, 1, 1, 1)
+  l3 <- c(1, 1, 0, 1)
+  l4 <- c(1, 1, 0, 1)
+  labels <- join_labels(l1, l2, l3, l4)
+
+  list(scores = scores, labels = labels)
+}
+
+test_that("ss test data", {
+  scores <- c(1, 2, 3, 4)
+  labels <- c(1, 0, 1, 0)
+
+  curves <- evalmod(scores = scores, labels = labels)
+  aucs <- auc(curves)
+  aucs <- subset(aucs, curvetypes == "ROC")$aucs
+
+  uaucs1 <- calc_auc_with_u(scores = scores, labels = labels)
+  expect_equal(aucs, uaucs1$auc, tolerance = 1e-4)
+
+  uaucs2 <- calc_auc_with_u(scores = scores, labels = labels,
+                            ustat_method = "sort")
+  expect_equal(aucs, uaucs2$auc, tolerance = 1e-4)
+
+})
+
+test_that("ms test data", {
+  msdat <- pl3_create_ms_dat()
+  scores <- msdat[["scores"]]
+  labels <- msdat[["labels"]]
+
+  curves <- evalmod(scores = scores, labels = labels)
+  aucs <- auc(curves)
+  aucs <- subset(aucs, curvetypes == "ROC")$aucs
+
+
+  for (i in seq_along(aucs)){
+    s <- msdat[["scores"]][[i]]
+    l <- msdat[["labels"]][[i]]
+
+    uaucs1 <- calc_auc_with_u(scores = s, labels = l)
+    expect_equal(aucs[i], uaucs1$auc, tolerance = 1e-4)
+
+    uaucs2 <- calc_auc_with_u(scores = s, labels = l,
+                              ustat_method = "sort")
+    expect_equal(aucs[i], uaucs2$auc, tolerance = 1e-4)
+  }
+})
+
+test_that("sm test data", {
+  smdat <- pl3_create_sm_dat()
+  scores <- smdat[["scores"]]
+  labels <- smdat[["labels"]]
+
+  curves <- evalmod(scores = scores, labels = labels)
+  aucs <- auc(curves)
+  aucs <- subset(aucs, curvetypes == "ROC")$aucs
+
+  for (i in seq_along(aucs)){
+    s <- smdat[["scores"]][[i]]
+    l <- smdat[["labels"]][[i]]
+
+    uaucs1 <- calc_auc_with_u(scores = s, labels = l)
+    expect_equal(aucs[i], uaucs1$auc, tolerance = 1e-4)
+
+    uaucs2 <- calc_auc_with_u(scores = s, labels = l,
+                              ustat_method = "sort")
+    expect_equal(aucs[i], uaucs2$auc, tolerance = 1e-4)
+  }
+
+
+})
+
+test_that("mm test data", {
+  mmdat <- pl3_create_mm_dat()
+  scores <- mmdat[["scores"]]
+  labels <- mmdat[["labels"]]
+
+  curves <- evalmod(scores = scores, labels = labels)
+  aucs <- auc(curves)
+  aucs <- subset(aucs, curvetypes == "ROC")$aucs
+
+
+  for (i in seq_along(aucs)){
+    s <- mmdat[["scores"]][[i]]
+    l <- mmdat[["labels"]][[i]]
+
+    uaucs1 <- calc_auc_with_u(scores = s, labels = l)
+    expect_equal(aucs[i], uaucs1$auc, tolerance = 1e-4)
+
+    uaucs2 <- calc_auc_with_u(scores = s, labels = l,
+                              ustat_method = "sort")
+    expect_equal(aucs[i], uaucs2$auc, tolerance = 1e-4)
+  }
+
+})
+

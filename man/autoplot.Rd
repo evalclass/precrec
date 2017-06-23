@@ -252,13 +252,13 @@ mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 smcurves <- evalmod(mdat, raw_curves = TRUE)
 
 ## Average ROC and Precision-Recall curves
-autoplot(smcurves)
+autoplot(smcurves, raw_curves = FALSE)
 
 ## Hide confidence bounds
-autoplot(smcurves, show_cb = FALSE)
+autoplot(smcurves, raw_curves = FALSE, show_cb = FALSE)
 
 ## Raw ROC and Precision-Recall curves
-autoplot(smcurves, raw_curves = TRUE)
+autoplot(smcurves, raw_curves = TRUE, show_cb = FALSE)
 
 ## Reduced/Full supporting points
 sampsm <- create_sim_samples(4, 5000, 5000)
@@ -292,10 +292,10 @@ mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 mmcurves <- evalmod(mdat, raw_curves = TRUE)
 
 ## Average ROC and Precision-Recall curves
-autoplot(mmcurves)
+autoplot(mmcurves, raw_curves = FALSE)
 
 ## Show confidence bounds
-autoplot(mmcurves, show_cb = TRUE)
+autoplot(mmcurves, raw_curves = FALSE, show_cb = TRUE)
 
 ## Raw ROC and Precision-Recall curves
 autoplot(mmcurves, raw_curves = TRUE)

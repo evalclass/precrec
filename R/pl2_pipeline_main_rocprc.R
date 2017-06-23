@@ -5,6 +5,11 @@
                             calc_avg = TRUE, cb_alpha = 0.05,
                             raw_curves = FALSE, x_bins = 1000) {
 
+  if (!missing(dataset_type) && dataset_type == "single") {
+    calc_avg <- FALSE
+    raw_curves <- TRUE
+  }
+
   # === Create ROC and Precision-Recall curves ===
   # Create curves
   plfunc <- function(s) {

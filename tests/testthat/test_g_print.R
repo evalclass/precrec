@@ -144,3 +144,12 @@ test_that("print mmpoints", {
   expect_output(print(points), "=== Basic performance evaluation measures ===")
   expect_output(print(points), "=== Input data ===")
 })
+
+test_that("print aucroc", {
+  mdat <- pr_create_mmdat()
+  aucroc <- evalmod(mdat, mode = "aucroc")
+
+  expect_output(print(aucroc), "=== Input data ===")
+  expect_output(print(aucroc), "=== AUCs ===")
+})
+
