@@ -38,7 +38,12 @@ get_file_path <- function(file_name, subdir = "reference") {
   normalizePath(paste(sep="/", get_site_path(subdir), file_name))
 }
 
-update_main <- function() {
+update_main <- function(call_pkgdown = FALSE) {
+  if (call_pkgdown) {
+    library(pkgdown)
+    pkgdown::build_site()
+  }
+
   update_html(get_file_path("precrec.html"),
               c("five functions",
                 "eight different"),
@@ -87,4 +92,4 @@ update_main <- function() {
               c("mode_rocprcr", "curve_type"))
 }
 
-update_main()
+update_main(call_pkgdown = TRUE)
