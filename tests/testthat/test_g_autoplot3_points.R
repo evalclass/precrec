@@ -248,7 +248,7 @@ test_that("autoplot raw_curve option sspoints", {
   expect_false(args1b[["raw_curves"]])
 
   args1c <- get_args(points1)
-  expect_false(args1c[["raw_curves"]])
+  expect_true(args1c[["raw_curves"]])
 })
 
 test_that("autoplot raw_curve option mspoints", {
@@ -272,7 +272,7 @@ test_that("autoplot raw_curve option mspoints", {
   expect_false(args1b[["raw_curves"]])
 
   args1c <- get_args(points1)
-  expect_false(args1c[["raw_curves"]])
+  expect_true(args1c[["raw_curves"]])
 })
 
 test_that("autoplot raw_curve option smpoints", {
@@ -289,8 +289,7 @@ test_that("autoplot raw_curve option smpoints", {
 
   points1 <- ap3_create_smpoints()
 
-  args1a <- get_args(points1, raw_curves = TRUE)
-  expect_true(args1a[["raw_curves"]])
+  expect_error(get_args(points1, raw_curves = TRUE), "Invalid raw_curves.")
 
   args1b <- get_args(points1, raw_curves = FALSE)
   expect_false(args1b[["raw_curves"]])
@@ -324,8 +323,7 @@ test_that("autoplot raw_curve option mmpoints", {
 
   points1 <- ap3_create_mmpoints()
 
-  args1a <- get_args(points1, raw_curves = TRUE)
-  expect_true(args1a[["raw_curves"]])
+  expect_error(get_args(points1, raw_curves = TRUE), "Invalid raw_curves.")
 
   args1b <- get_args(points1, raw_curves = FALSE)
   expect_false(args1b[["raw_curves"]])
