@@ -131,6 +131,7 @@ The \code{plot} function creates a plot of performance evaluation measures.
 }
 \examples{
 
+\dontrun{
 ##################################################
 ### Single model & single test dataset
 ###
@@ -203,13 +204,13 @@ mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 smcurves <- evalmod(mdat, raw_curves = TRUE)
 
 ## Plot average ROC and Precision-Recall curves
-plot(smcurves)
+plot(smcurves, raw_curves = FALSE)
 
 ## Hide confidence bounds
-plot(smcurves, show_cb = FALSE)
+plot(smcurves, raw_curves = FALSE, show_cb = FALSE)
 
 ## Plot raw ROC and Precision-Recall curves
-plot(smcurves, raw_curves = TRUE)
+plot(smcurves, raw_curves = TRUE, show_cb = FALSE)
 
 ## Generate an smpoints object that contains basic evaluation measures
 smpoints <- evalmod(mdat, mode = "basic")
@@ -232,10 +233,10 @@ mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 mmcurves <- evalmod(mdat, raw_curves = TRUE)
 
 ## Plot average ROC and Precision-Recall curves
-plot(mmcurves)
+plot(mmcurves, raw_curves = FALSE)
 
 ## Show confidence bounds
-plot(mmcurves, show_cb = TRUE)
+plot(mmcurves, raw_curves = FALSE, show_cb = TRUE)
 
 ## Plot raw ROC and Precision-Recall curves
 plot(mmcurves, raw_curves = TRUE)
@@ -246,6 +247,7 @@ mmpoints <- evalmod(mdat, mode = "basic")
 ## Plot normalized ranks vs. average basic evaluation measures
 plot(mmpoints)
 
+}
 }
 \seealso{
 \code{\link{evalmod}} for generating an \code{S3} object.

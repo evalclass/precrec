@@ -6,14 +6,16 @@ context("PL 1: Pipeline main")
 #      pl_main(mdat, mode, calc_avg, cb_alpha, raw_curves, x_bins)
 #
 
-test_that(".pmatch_mode() returns 'rocprc' or 'basic'", {
+test_that(".pmatch_mode() returns 'rocprc', 'basic' or 'aucroc'", {
   expect_equal(.pmatch_mode("rocprc"), "rocprc")
   expect_equal(.pmatch_mode("prcroc"), "rocprc")
   expect_equal(.pmatch_mode("basic"), "basic")
+  expect_equal(.pmatch_mode("aucroc"), "aucroc")
 
   expect_equal(.pmatch_mode("r"), "rocprc")
   expect_equal(.pmatch_mode("p"), "rocprc")
   expect_equal(.pmatch_mode("b"), "basic")
+  expect_equal(.pmatch_mode("a"), "aucroc")
 
   expect_equal(.pmatch_mode("A"), "A")
   expect_equal(.pmatch_mode(1), 1)
@@ -92,7 +94,7 @@ pl1_create_mdat_mm <- function() {
                  expd_first = "modnames")
 }
 
-test_that("pl_main() returns 'sscurves' or 'sspoints'", {
+test_that("pl_main() returns 'sscurves', 'sspoints', 'aucroc'", {
   s1 <- c(1, 2, 3, 4)
   l1 <- c(1, 0, 1, 0)
 
@@ -103,9 +105,12 @@ test_that("pl_main() returns 'sscurves' or 'sspoints'", {
 
   pl <- pl_main(mdat, "basic")
   expect_true(is(pl, "sspoints"))
+
+  pl <- pl_main(mdat, "aucroc")
+  expect_true(is(pl, "aucroc"))
 })
 
-test_that("pl_main() returns 'mscurves' or 'mspoints'", {
+test_that("pl_main() returns 'mscurves', 'mspoints', 'aucroc'", {
   mdat <- pl1_create_mdat_ms()
 
   pl <- pl_main(mdat)
@@ -113,9 +118,12 @@ test_that("pl_main() returns 'mscurves' or 'mspoints'", {
 
   pl <- pl_main(mdat, "basic")
   expect_true(is(pl, "mspoints"))
+
+  pl <- pl_main(mdat, "aucroc")
+  expect_true(is(pl, "aucroc"))
 })
 
-test_that("pl_main() returns 'smcurves' or 'smpoints'", {
+test_that("pl_main() returns 'smcurves', 'smpoints', 'aucroc'", {
   mdat <- pl1_create_mdat_sm()
 
   pl <- pl_main(mdat)
@@ -123,9 +131,12 @@ test_that("pl_main() returns 'smcurves' or 'smpoints'", {
 
   pl <- pl_main(mdat, "basic")
   expect_true(is(pl, "smpoints"))
+
+  pl <- pl_main(mdat, "aucroc")
+  expect_true(is(pl, "aucroc"))
 })
 
-test_that("pl_main() returns 'mmcurves' or 'mmpoints'", {
+test_that("pl_main() returns 'mmcurves', 'mmpoints', 'aucroc'", {
   mdat <- pl1_create_mdat_mm()
 
   pl <- pl_main(mdat)
@@ -133,6 +144,9 @@ test_that("pl_main() returns 'mmcurves' or 'mmpoints'", {
 
   pl <- pl_main(mdat, "basic")
   expect_true(is(pl, "mmpoints"))
+
+  pl <- pl_main(mdat, "aucroc")
+  expect_true(is(pl, "aucroc"))
 })
 
 test_that("pl_main() accepts 'calc_avg'", {

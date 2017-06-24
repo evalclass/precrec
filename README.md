@@ -1,3 +1,4 @@
+
 Precrec
 =======
 
@@ -61,7 +62,6 @@ Installation
         -   **Windows**: Install Rtools (available on the CRAN website).
         -   **Mac**: Install Xcode from the Mac App Store.
         -   **Linux**: Install a compiler and various development libraries (details vary across different flavors of Linux).
-
     2.  Install `devtools` from CRAN with `install.packages("devtools")`.
 
     3.  Install `precrec` from the GitHub repository with `devtools::install_github("takayasaito/precrec")`.

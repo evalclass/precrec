@@ -33,6 +33,15 @@
 #'     smpoints \tab single   \tab multiple \cr
 #'     mmpoints \tab multiple \tab multiple
 #'   }
+#'
+#'   \item Fast AUC (ROC) calculation with the U statistic (mode = "aucroc")
+#'   \tabular{lll}{
+#'     \strong{\code{S3} object}
+#'     \tab \strong{# of models}
+#'     \tab \strong{# of test datasets} \cr
+#'
+#'     aucroc \tab -   \tab -
+#'   }
 #' }
 #'
 #' See the \strong{Value} section of \code{\link{evalmod}} for more details.
@@ -55,6 +64,7 @@
 #'
 #' @examples
 #'
+#' \dontrun{
 #' ##################################################
 #' ### Single model & single test dataset
 #' ###
@@ -165,6 +175,29 @@
 #'
 #' ## Show data frame
 #' head(mmpoints.df)
+#'
+#' ##################################################
+#' ### AUC with the U statistic
+#' ###
+#'
+#' ## mode = "aucroc"
+#' data(P10N10)
+#' uauc1 <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
+#'                  mode="aucroc")
+#'
+#' # as.data.frame 'aucroc'
+#' as.data.frame(uauc1)
+#'
+#' ## mode = "aucroc"
+#' samps <- create_sim_samples(10, 100, 100, "all")
+#' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
+#'                modnames = samps[["modnames"]],
+#'                dsids = samps[["dsids"]])
+#' uauc2 <- evalmod(mdat, mode="aucroc")
+#'
+#' # as.data.frame 'aucroc'
+#' head(as.data.frame(uauc2))
+#' }
 #'
 #' @name as.data.frame
 NULL
@@ -326,3 +359,24 @@ NULL
 
   curve_df
 }
+
+#
+# Process ... for curve objects
+#
+.get_dataframe_arglist <- function(evalmod_args, def_raw_curves, ...) {
+
+  arglist <- list(...)
+
+  if (is.null(arglist[["raw_curves"]])){
+    if (!is.null(def_raw_curves)) {
+      arglist[["raw_curves"]] <- def_raw_curves
+    } else if (!is.null(evalmod_args[["raw_curves"]])) {
+      arglist[["raw_curves"]] <- evalmod_args[["raw_curves"]]
+    } else {
+      arglist[["raw_curves"]] <- FALSE
+    }
+  }
+
+  arglist
+}
+

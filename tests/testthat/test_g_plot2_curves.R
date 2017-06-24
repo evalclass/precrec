@@ -141,3 +141,108 @@ test_that("plot() accepts show_legend", {
   expect_error(plot(curves, show_legend = TRUE), NA)
   expect_error(plot(curves, show_legend = FALSE), NA)
 })
+
+test_that("plot raw_curve option sscurves", {
+  get_args <- function(x, y = NULL, ...) {
+    args <- .get_plot_arglist(attr(x, "args"), y,
+                             def_curvetype = c("ROC", "PRC"),
+                             def_type = "l", def_show_cb = FALSE,
+                             def_raw_curves = TRUE, def_add_np_nn = TRUE,
+                             def_show_legend = FALSE, ...)
+  }
+
+  data(P10N10)
+  curves1 <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
+
+  args1a <- get_args(curves1, raw_curves = TRUE)
+  expect_true(args1a[["raw_curves"]])
+
+  args1b <- get_args(curves1, raw_curves = FALSE)
+  expect_false(args1b[["raw_curves"]])
+
+  args1c <- get_args(curves1)
+  expect_true(args1c[["raw_curves"]])
+})
+
+test_that("plot raw_curve option mscurves", {
+  get_args <- function(x, y = NULL, ...) {
+    args <- .get_plot_arglist(attr(x, "args"), y,
+                              def_curvetype = c("ROC", "PRC"),
+                              def_type = "l", def_show_cb = FALSE,
+                              def_raw_curves = TRUE, def_add_np_nn = TRUE,
+                              def_show_legend = TRUE, ...)
+  }
+
+  curves1 <- pt2_create_mscurves()
+
+  args1a <- get_args(curves1, raw_curves = TRUE)
+  expect_true(args1a[["raw_curves"]])
+
+  args1b <- get_args(curves1, raw_curves = FALSE)
+  expect_false(args1b[["raw_curves"]])
+
+  args1c <- get_args(curves1)
+  expect_true(args1c[["raw_curves"]])
+})
+
+test_that("plot raw_curve option smcurves", {
+  get_args <- function(x, y = NULL, ...) {
+    args <- .get_plot_arglist(attr(x, "args"), y,
+                              def_curvetype = c("ROC", "PRC"),
+                              def_type = "l", def_show_cb = TRUE,
+                              def_raw_curves = NULL, def_add_np_nn = TRUE,
+                              def_show_legend = FALSE, ...)
+  }
+
+  curves1 <- pt2_create_smcurves()
+
+  expect_error(get_args(curves1, raw_curves = TRUE), "Invalid raw_curves.")
+
+  args1b <- get_args(curves1, raw_curves = FALSE)
+  expect_false(args1b[["raw_curves"]])
+
+  args1c <- get_args(curves1)
+  expect_false(args1c[["raw_curves"]])
+
+  curves2 <- pt2_create_smcurves(raw_curves = TRUE)
+
+  args2a <- get_args(curves2, raw_curves = TRUE)
+  expect_true(args2a[["raw_curves"]])
+
+  args2b <- get_args(curves2, raw_curves = FALSE)
+  expect_false(args2b[["raw_curves"]])
+
+  args2c <- get_args(curves2)
+  expect_true(args2c[["raw_curves"]])
+})
+
+test_that("plot raw_curve option mmcurves", {
+  get_args <- function(x, y = NULL, ...) {
+    args <- .get_plot_arglist(attr(x, "args"), y,
+                              def_curvetype = c("ROC", "PRC"),
+                              def_type = "l", def_show_cb = FALSE,
+                              def_raw_curves = NULL, def_add_np_nn = TRUE,
+                              def_show_legend = TRUE, ...)
+  }
+
+  curves1 <- pt2_create_mmcurves()
+
+  expect_error(get_args(curves1, raw_curves = TRUE), "Invalid raw_curves.")
+
+  args1b <- get_args(curves1, raw_curves = FALSE)
+  expect_false(args1b[["raw_curves"]])
+
+  args1c <- get_args(curves1)
+  expect_false(args1c[["raw_curves"]])
+
+  curves2 <- pt2_create_mmcurves(raw_curves = TRUE)
+
+  args2a <- get_args(curves2, raw_curves = TRUE)
+  expect_true(args2a[["raw_curves"]])
+
+  args2b <- get_args(curves2, raw_curves = FALSE)
+  expect_false(args2b[["raw_curves"]])
+
+  args2c <- get_args(curves2)
+  expect_true(args2c[["raw_curves"]])
+})

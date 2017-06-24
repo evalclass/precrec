@@ -47,7 +47,7 @@ Rcpp::List create_roc_curve(const Rcpp::NumericVector& tps,
     }
 
     // Interpolate two points
-    if ((i != 0) && ((sp[i-1] - sp[i]) > x_interval)) {
+    if (i != 0) {
       n = interpolate_roc(sp, sn, i, x_interval, fpr, tpr, n);
     }
 

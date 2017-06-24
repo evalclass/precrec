@@ -20,7 +20,7 @@ test_that(".pmatch_tiesmethod() returns 'equiv', 'random', 'first'", {
   expect_equal(.pmatch_tiesmethod(NULL), NULL)
 })
 
-test_that(".pmatch_tiesmethod() returns 'dsids' or 'modnames'", {
+test_that(".pmatch_expd_first() returns 'dsids' or 'modnames'", {
   expect_equal(.pmatch_expd_first("dsids"), "dsids")
   expect_equal(.pmatch_expd_first("modnames"), "modnames")
 
@@ -78,6 +78,27 @@ test_that("'scores' and 'labels' should be the same lengths", {
   labels <- join_labels(l1, l2)
 
   expect_err_msg(scores, labels)
+})
+
+test_that("mmdata() accepts 'mode'", {
+  s1 <- c(1, 2, 3, 4)
+  s2 <- c(5, 6, 7, 8)
+  s3 <- c(2, 4, 6, 8)
+  scores <- join_scores(s1, s2, s3)
+
+  l1 <- c(1, 0, 1, 0)
+  l2 <- c(1, 1, 0, 0)
+  l3 <- c(0, 1, 0, 1)
+  labels <- join_labels(l1, l2, l3)
+
+  mdat <- mmdata(scores, labels, mode = "aucroc")
+
+  expect_true(is(mdat, "mdat"))
+  expect_equal(length(mdat), 3)
+
+  expect_true(is(mdat[[1]], "sdat"))
+  expect_true(is(mdat[[2]], "sdat"))
+  expect_true(is(mdat[[3]], "sdat"))
 })
 
 test_that("mmdata() accepts 'modnames'", {

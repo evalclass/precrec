@@ -222,13 +222,13 @@
 #' smcurves <- evalmod(mdat, raw_curves = TRUE)
 #'
 #' ## Average ROC and Precision-Recall curves
-#' autoplot(smcurves)
+#' autoplot(smcurves, raw_curves = FALSE)
 #'
 #' ## Hide confidence bounds
-#' autoplot(smcurves, show_cb = FALSE)
+#' autoplot(smcurves, raw_curves = FALSE, show_cb = FALSE)
 #'
 #' ## Raw ROC and Precision-Recall curves
-#' autoplot(smcurves, raw_curves = TRUE)
+#' autoplot(smcurves, raw_curves = TRUE, show_cb = FALSE)
 #'
 #' ## Reduced/Full supporting points
 #' sampsm <- create_sim_samples(4, 5000, 5000)
@@ -262,10 +262,10 @@
 #' mmcurves <- evalmod(mdat, raw_curves = TRUE)
 #'
 #' ## Average ROC and Precision-Recall curves
-#' autoplot(mmcurves)
+#' autoplot(mmcurves, raw_curves = FALSE)
 #'
 #' ## Show confidence bounds
-#' autoplot(mmcurves, show_cb = TRUE)
+#' autoplot(mmcurves, raw_curves = FALSE, show_cb = TRUE)
 #'
 #' ## Raw ROC and Precision-Recall curves
 #' autoplot(mmcurves, raw_curves = TRUE)
@@ -295,7 +295,8 @@ NULL
 #
 # Process ... for curve objects
 #
-.get_autoplot_arglist <- function(def_curvetype, def_type, def_show_cb,
+.get_autoplot_arglist <- function(evalmod_args,
+                                  def_curvetype, def_type, def_show_cb,
                                   def_raw_curves, def_add_np_nn,
                                   def_show_legend, def_ret_grob,
                                   def_reduce_points, ...) {
@@ -313,9 +314,23 @@ NULL
   if (is.null(arglist[["show_cb"]])){
     arglist[["show_cb"]] <- def_show_cb
   }
+  if (!evalmod_args[["calc_avg"]] && arglist[["show_cb"]]) {
+    stop("Invalid show_cb. Inconsistent with calc_avg of evalmod.",
+         call. = FALSE)
+  }
 
   if (is.null(arglist[["raw_curves"]])){
-    arglist[["raw_curves"]] <- def_raw_curves
+    if (!is.null(def_raw_curves)) {
+      arglist[["raw_curves"]] <- def_raw_curves
+    } else if (!is.null(evalmod_args[["raw_curves"]])) {
+      arglist[["raw_curves"]] <- evalmod_args[["raw_curves"]]
+    } else {
+      arglist[["raw_curves"]] <- FALSE
+    }
+  }
+  if (!evalmod_args[["raw_curves"]] && arglist[["raw_curves"]]) {
+    stop("Invalid raw_curves. Inconsistent with the value of evalmod.",
+         call. = FALSE)
   }
 
   if (is.null(arglist[["add_np_nn"]])){
@@ -398,12 +413,20 @@ NULL
 .autoplot_multi <- function(object, arglist) {
   curvetype <- arglist[["curvetype"]]
   type <- arglist[["type"]]
-  show_cb <- arglist[["show_cb"]]
-  raw_curves <- arglist[["raw_curves"]]
   add_np_nn <- arglist[["add_np_nn"]]
   show_legend <- arglist[["show_legend"]]
   ret_grob <- arglist[["ret_grob"]]
   reduce_points <- arglist[["reduce_points"]]
+
+  show_cb <- arglist[["show_cb"]]
+  if (!attr(object, "args")$calc_avg) {
+    show_cb = FALSE
+  }
+
+  raw_curves <- arglist[["raw_curves"]]
+  if (show_cb) {
+    raw_curves = FALSE
+  }
 
   # === Check package availability  ===
   .load_ggplot2()
@@ -503,22 +526,7 @@ NULL
                                 reduce_points = reduce_points, ...)
 
   # === Create a ggplot object ===
-  if (raw_curves) {
-    p <- ggplot2::ggplot(curve_df,
-                         ggplot2::aes_string(x = 'x', y = 'y',
-                                             group = 'dsid_modname',
-                                             color = 'modname'))
-
-    if (type == "l") {
-      p <- p + ggplot2::geom_line(na.rm = TRUE)
-    } else if (type == "b" || type == "p") {
-      if (type == "b") {
-        p <- p + ggplot2::geom_line(alpha = 0.25, na.rm = TRUE)
-      }
-      p <- p + ggplot2::geom_point(na.rm = TRUE)
-    }
-
-  } else if (show_cb) {
+  if (show_cb) {
     p <- ggplot2::ggplot(curve_df,
                          ggplot2::aes_string(x = 'x', y = 'y',
                                              ymin = 'ymin', ymax = 'ymax'))
@@ -540,6 +548,21 @@ NULL
                                                        color = 'modname'),
                                    na.rm = TRUE)
     }
+  } else if (raw_curves) {
+    p <- ggplot2::ggplot(curve_df,
+                         ggplot2::aes_string(x = 'x', y = 'y',
+                                             group = 'dsid_modname',
+                                             color = 'modname'))
+
+    if (type == "l") {
+      p <- p + ggplot2::geom_line(na.rm = TRUE)
+    } else if (type == "b" || type == "p") {
+      if (type == "b") {
+        p <- p + ggplot2::geom_line(alpha = 0.25, na.rm = TRUE)
+      }
+      p <- p + ggplot2::geom_point(na.rm = TRUE)
+    }
+
   } else {
     p <- ggplot2::ggplot(curve_df, ggplot2::aes_string(x = 'x', y = 'y',
                                                        color = 'modname'))

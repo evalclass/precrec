@@ -199,3 +199,55 @@ test_that("mmcurves - reduce points", {
                                  reduce_points = TRUE)
   expect_lte(nrow(curve_df2b), 4000)
 })
+
+test_that("fortify raw_curve option smcurves", {
+  curves1 <- ft2_create_smcurves()
+
+  args1a <- .get_fortify_arglist(attr(curves1, "args"), def_raw_curves = TRUE)
+  expect_true(args1a[["raw_curves"]])
+
+  args1b <- .get_fortify_arglist(attr(curves1, "args"), def_raw_curves = FALSE)
+  expect_false(args1b[["raw_curves"]])
+
+  args1c <- .get_fortify_arglist(attr(curves1, "args"), def_raw_curves = NULL)
+  expect_false(args1c[["raw_curves"]])
+
+
+  curves2 <- ft2_create_smcurves(raw_curves = TRUE)
+
+  args2a <- .get_fortify_arglist(attr(curves2, "args"), def_raw_curves = TRUE)
+  expect_true(args2a[["raw_curves"]])
+
+  args2b <- .get_fortify_arglist(attr(curves2, "args"), def_raw_curves = FALSE)
+  expect_false(args2b[["raw_curves"]])
+
+  args2c <- .get_fortify_arglist(attr(curves2, "args"), def_raw_curves = NULL)
+  expect_true(args2c[["raw_curves"]])
+
+})
+
+test_that("fortify raw_curve option mmcurves", {
+  curves1 <- ft2_create_mmcurves()
+
+  args1a <- .get_fortify_arglist(attr(curves1, "args"), def_raw_curves = TRUE)
+  expect_true(args1a[["raw_curves"]])
+
+  args1b <- .get_fortify_arglist(attr(curves1, "args"), def_raw_curves = FALSE)
+  expect_false(args1b[["raw_curves"]])
+
+  args1c <- .get_fortify_arglist(attr(curves1, "args"), def_raw_curves = NULL)
+  expect_false(args1c[["raw_curves"]])
+
+  curves2 <- ft2_create_mmcurves(raw_curves = TRUE)
+
+  args2a <- .get_fortify_arglist(attr(curves2, "args"), def_raw_curves = TRUE)
+  expect_true(args2a[["raw_curves"]])
+
+  args2b <- .get_fortify_arglist(attr(curves2, "args"), def_raw_curves = FALSE)
+  expect_false(args2b[["raw_curves"]])
+
+  args2c <- .get_fortify_arglist(attr(curves2, "args"), def_raw_curves = NULL)
+  expect_true(args2c[["raw_curves"]])
+
+})
+

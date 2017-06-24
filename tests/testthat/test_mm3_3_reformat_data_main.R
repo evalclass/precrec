@@ -14,6 +14,16 @@ test_that("reformat_data() reterns a 'fmdat' object", {
   expect_true(is(fmdat3, "fmdat"))
 })
 
+test_that("reformat_data() accepts 'mode'", {
+  fmdat1 <- reformat_data(c(0.1, 0.2, 0), c(1, 0, 1), mode = "aucroc")
+  fmdat2 <- reformat_data(c(0.1, 0.2, 0.3), c(0, 1, 1), mode = "aucroc")
+  fmdat3 <- reformat_data(c(0.3, 0.1, 0.2), c(-1, -1, 1), mode = "aucroc")
+
+  expect_true(is(fmdat1, "sdat"))
+  expect_true(is(fmdat2, "sdat"))
+  expect_true(is(fmdat3, "sdat"))
+})
+
 test_that("'scores' and 'labels' must be specified", {
   expect_err_msg <- function(scores, labels, err_msg) {
     eval(bquote(expect_error(reformat_data(scores, labels), err_msg)))
@@ -86,7 +96,6 @@ test_that("reformat_data() accepts 'ties_method'", {
   expect_equal_ranks("first", c(5, 2, 3, 4, 1))
 
 })
-
 
 test_that("'fmdat' contains a list with 4 items", {
   fmdat <- reformat_data(c(0.1, 0.2, 0), c(1, 0, 1))

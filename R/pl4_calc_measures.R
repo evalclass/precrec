@@ -60,7 +60,8 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
   item_names <- c("basic")
   attr_names <- c("modname", "dsid", "nn", "np", "args", "cpp_errmsg",
                   "src", "validated")
-  arg_names <- c("na_worst", "ties_method", "modname", "dsid", "keep_fmdat")
+  arg_names <- c("na_worst", "na.last", "ties.method", "ties_method",
+                 "modname", "dsid", "keep_fmdat")
   .validate_basic(pevals, "pevals", "calc_measures", item_names, attr_names,
                   arg_names)
 

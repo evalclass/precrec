@@ -12,28 +12,28 @@
 \alias{fortify.mmpoints}
 \title{Convert a curves and points object to a data frame for ggplot2}
 \usage{
-\method{fortify}{sscurves}(model, raw_curves = TRUE, reduce_points = FALSE,
+\method{fortify}{sscurves}(model, raw_curves = NULL, reduce_points = FALSE,
   ...)
 
-\method{fortify}{mscurves}(model, raw_curves = TRUE, reduce_points = FALSE,
+\method{fortify}{mscurves}(model, raw_curves = NULL, reduce_points = FALSE,
   ...)
 
-\method{fortify}{smcurves}(model, raw_curves = FALSE, reduce_points = FALSE,
+\method{fortify}{smcurves}(model, raw_curves = NULL, reduce_points = FALSE,
   ...)
 
-\method{fortify}{mmcurves}(model, raw_curves = FALSE, reduce_points = FALSE,
+\method{fortify}{mmcurves}(model, raw_curves = NULL, reduce_points = FALSE,
   ...)
 
-\method{fortify}{sspoints}(model, raw_curves = TRUE, reduce_points = FALSE,
+\method{fortify}{sspoints}(model, raw_curves = NULL, reduce_points = FALSE,
   ...)
 
-\method{fortify}{mspoints}(model, raw_curves = TRUE, reduce_points = FALSE,
+\method{fortify}{mspoints}(model, raw_curves = NULL, reduce_points = FALSE,
   ...)
 
-\method{fortify}{smpoints}(model, raw_curves = FALSE, reduce_points = FALSE,
+\method{fortify}{smpoints}(model, raw_curves = NULL, reduce_points = FALSE,
   ...)
 
-\method{fortify}{mmpoints}(model, raw_curves = FALSE, reduce_points = FALSE,
+\method{fortify}{mmpoints}(model, raw_curves = NULL, reduce_points = FALSE,
   ...)
 }
 \arguments{
@@ -197,13 +197,13 @@ mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 smcurves <- evalmod(mdat, raw_curves = TRUE)
 
 ## Let ggplot internally call fortify
-p_rocprc <- ggplot(smcurves, aes(x = x, y = y, ymin = ymin, ymax = ymax))
+p_rocprc <- ggplot(smcurves, aes(x = x, y = y, group = dsid))
 p_rocprc <- p_rocprc + geom_smooth(stat = "identity")
 p_rocprc <- p_rocprc + facet_wrap(~curvetype)
 p_rocprc
 
 ## Explicitly fortify smcurves
-smdf <- fortify(smcurves)
+smdf <- fortify(smcurves, raw_curves = FALSE)
 
 ## Plot average ROC curve
 df_roc <- subset(smdf, curvetype == "ROC")
@@ -247,13 +247,13 @@ mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 mmcurves <- evalmod(mdat, raw_curves = TRUE)
 
 ## Let ggplot internally call fortify
-p_rocprc <- ggplot(mmcurves, aes(x = x, y = y, ymin = ymin, ymax = ymax))
+p_rocprc <- ggplot(mmcurves, aes(x = x, y = y, group = dsid))
 p_rocprc <- p_rocprc + geom_smooth(aes(color = modname), stat = "identity")
 p_rocprc <- p_rocprc + facet_wrap(~curvetype)
 p_rocprc
 
 ## Explicitly fortify mmcurves
-mmdf <- fortify(mmcurves)
+mmdf <- fortify(mmcurves, raw_curves = FALSE)
 
 ## Plot average ROC curve
 df_roc <- subset(mmdf, curvetype == "ROC")

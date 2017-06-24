@@ -1,3 +1,9 @@
+# precrec 0.8
+
+* Add 'aucroc' mode for fast AUC (ROC)
+
+* Change how to treat 'show_cb' and 'raw_curves' options
+
 # precrec 0.7.1
 
 * Add precrec_init.c to avoid CRAN warnings

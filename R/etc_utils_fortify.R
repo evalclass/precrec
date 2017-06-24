@@ -162,13 +162,13 @@
 #' smcurves <- evalmod(mdat, raw_curves = TRUE)
 #'
 #' ## Let ggplot internally call fortify
-#' p_rocprc <- ggplot(smcurves, aes(x = x, y = y, ymin = ymin, ymax = ymax))
+#' p_rocprc <- ggplot(smcurves, aes(x = x, y = y, group = dsid))
 #' p_rocprc <- p_rocprc + geom_smooth(stat = "identity")
 #' p_rocprc <- p_rocprc + facet_wrap(~curvetype)
 #' p_rocprc
 #'
 #' ## Explicitly fortify smcurves
-#' smdf <- fortify(smcurves)
+#' smdf <- fortify(smcurves, raw_curves = FALSE)
 #'
 #' ## Plot average ROC curve
 #' df_roc <- subset(smdf, curvetype == "ROC")
@@ -212,13 +212,13 @@
 #' mmcurves <- evalmod(mdat, raw_curves = TRUE)
 #'
 #' ## Let ggplot internally call fortify
-#' p_rocprc <- ggplot(mmcurves, aes(x = x, y = y, ymin = ymin, ymax = ymax))
+#' p_rocprc <- ggplot(mmcurves, aes(x = x, y = y, group = dsid))
 #' p_rocprc <- p_rocprc + geom_smooth(aes(color = modname), stat = "identity")
 #' p_rocprc <- p_rocprc + facet_wrap(~curvetype)
 #' p_rocprc
 #'
 #' ## Explicitly fortify mmcurves
-#' mmdf <- fortify(mmcurves)
+#' mmdf <- fortify(mmcurves, raw_curves = FALSE)
 #'
 #' ## Plot average ROC curve
 #' df_roc <- subset(mmdf, curvetype == "ROC")
@@ -250,3 +250,22 @@
 #'
 #' @name fortify
 NULL
+
+
+#
+# Process ... for curve objects
+#
+.get_fortify_arglist <- function(evalmod_args, def_raw_curves, ...) {
+
+  arglist <- list(...)
+
+  if (!is.null(def_raw_curves)) {
+    arglist[["raw_curves"]] <- def_raw_curves
+  } else if (!is.null(evalmod_args[["raw_curves"]])) {
+    arglist[["raw_curves"]] <- evalmod_args[["raw_curves"]]
+  } else {
+    arglist[["raw_curves"]] <- FALSE
+  }
+
+  arglist
+}

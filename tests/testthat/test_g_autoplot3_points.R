@@ -224,3 +224,121 @@ test_that("autoplot for multiple mmpoints returns grob", {
   pp <- ggplot2::autoplot(points, show_legend = FALSE, ret_grob = TRUE)
   expect_true(is(pp, "grob"))
 })
+
+test_that("autoplot raw_curve option sspoints", {
+  get_args <- function(curves, ...) {
+    args <- .get_autoplot_arglist(attr(curves, "args"),
+                                  def_curvetype = .get_metric_names("basic"),
+                                  def_type = "p",
+                                  def_show_cb = FALSE, def_raw_curves = NULL,
+                                  def_add_np_nn = TRUE,
+                                  def_show_legend = FALSE,
+                                  def_ret_grob = FALSE,
+                                  def_reduce_points = FALSE, ...)
+  }
+
+  data(P10N10)
+  points1 <- evalmod(mode = "basic", scores = P10N10$scores,
+                     labels = P10N10$labels)
+
+  args1a <- get_args(points1, raw_curves = TRUE)
+  expect_true(args1a[["raw_curves"]])
+
+  args1b <- get_args(points1, raw_curves = FALSE)
+  expect_false(args1b[["raw_curves"]])
+
+  args1c <- get_args(points1)
+  expect_true(args1c[["raw_curves"]])
+})
+
+test_that("autoplot raw_curve option mspoints", {
+  get_args <- function(curves, ...) {
+    args <- .get_autoplot_arglist(attr(curves, "args"),
+                                  def_curvetype = .get_metric_names("basic"),
+                                  def_type = "p",
+                                  def_show_cb = FALSE, def_raw_curves = NULL,
+                                  def_add_np_nn = TRUE,
+                                  def_show_legend = TRUE,
+                                  def_ret_grob = FALSE,
+                                  def_reduce_points = FALSE, ...)
+  }
+
+  points1 <- ap3_create_mspoints()
+
+  args1a <- get_args(points1, raw_curves = TRUE)
+  expect_true(args1a[["raw_curves"]])
+
+  args1b <- get_args(points1, raw_curves = FALSE)
+  expect_false(args1b[["raw_curves"]])
+
+  args1c <- get_args(points1)
+  expect_true(args1c[["raw_curves"]])
+})
+
+test_that("autoplot raw_curve option smpoints", {
+  get_args <- function(curves, ...) {
+    args <- .get_autoplot_arglist(attr(curves, "args"),
+                                  def_curvetype = .get_metric_names("basic"),
+                                  def_type = "p",
+                                  def_show_cb = TRUE, def_raw_curves = NULL,
+                                  def_add_np_nn = TRUE,
+                                  def_show_legend = FALSE,
+                                  def_ret_grob = FALSE,
+                                  def_reduce_points = FALSE, ...)
+  }
+
+  points1 <- ap3_create_smpoints()
+
+  expect_error(get_args(points1, raw_curves = TRUE), "Invalid raw_curves.")
+
+  args1b <- get_args(points1, raw_curves = FALSE)
+  expect_false(args1b[["raw_curves"]])
+
+  args1c <- get_args(points1)
+  expect_false(args1c[["raw_curves"]])
+
+  points2 <- ap3_create_smpoints(raw_curves = TRUE)
+
+  args2a <- get_args(points2, raw_curves = TRUE)
+  expect_true(args2a[["raw_curves"]])
+
+  args2b <- get_args(points2, raw_curves = FALSE)
+  expect_false(args2b[["raw_curves"]])
+
+  args2c <- get_args(points2)
+  expect_true(args2c[["raw_curves"]])
+})
+
+test_that("autoplot raw_curve option mmpoints", {
+  get_args <- function(curves, ...) {
+    args <- .get_autoplot_arglist(attr(curves, "args"),
+                                  def_curvetype = .get_metric_names("basic"),
+                                  def_type = "p",
+                                  def_show_cb = FALSE, def_raw_curves = NULL,
+                                  def_add_np_nn = TRUE,
+                                  def_show_legend = TRUE,
+                                  def_ret_grob = FALSE,
+                                  def_reduce_points = FALSE, ...)
+  }
+
+  points1 <- ap3_create_mmpoints()
+
+  expect_error(get_args(points1, raw_curves = TRUE), "Invalid raw_curves.")
+
+  args1b <- get_args(points1, raw_curves = FALSE)
+  expect_false(args1b[["raw_curves"]])
+
+  args1c <- get_args(points1)
+  expect_false(args1c[["raw_curves"]])
+
+  points2 <- ap3_create_mmpoints(raw_curves = TRUE)
+
+  args2a <- get_args(points2, raw_curves = TRUE)
+  expect_true(args2a[["raw_curves"]])
+
+  args2b <- get_args(points2, raw_curves = FALSE)
+  expect_false(args2b[["raw_curves"]])
+
+  args2c <- get_args(points2)
+  expect_true(args2c[["raw_curves"]])
+})

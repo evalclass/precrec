@@ -50,3 +50,28 @@
 
   obj
 }
+
+#
+# Get names of evaluation metrics
+#
+.get_metric_names <- function(mode) {
+  if (mode == "rocprc" || mode == "prcroc") {
+    mnames <- c("ROC", "PRC")
+  } else if (mode == "basic") {
+    mnames <-  c("score", "label", "error", "accuracy", "specificity",
+                 "sensitivity", "precision", "mcc", "fscore")
+  }
+
+  mnames
+}
+
+#
+# Load data.table
+#
+.load_data_table <- function() {
+  loaded = TRUE
+  if (!requireNamespace("data.table", quietly = TRUE)) {
+    loaded = FALSE
+  }
+  loaded
+}

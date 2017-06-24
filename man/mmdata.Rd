@@ -5,7 +5,8 @@
 \title{Reformat input data for performance evaluation calculation}
 \usage{
 mmdata(scores, labels, modnames = NULL, dsids = NULL, posclass = NULL,
-  na_worst = TRUE, ties_method = "equiv", expd_first = "modnames", ...)
+  na_worst = TRUE, ties_method = "equiv", expd_first = "modnames",
+  mode = "rocprc", ...)
 }
 \arguments{
 \item{scores}{A numeric dataset of predicted scores. It can be a vector,
@@ -35,8 +36,8 @@ detected when \code{posclass} is \code{NULL}.}
 \item{na_worst}{A Boolean value for controlling the treatment of NAs
 in \code{scores}.
 \describe{
-  \item{TRUE}{NAs are treated as the highest score}
-  \item{FALSE}{NAs are treated as the lowest score}
+  \item{TRUE}{All NAs are treated as the worst scores}
+  \item{FALSE}{All NAs are treated as the best scores}
 }}
 
 \item{ties_method}{A string for controlling ties in \code{scores}.
@@ -62,6 +63,17 @@ in \code{scores}.
            when two vectors are passed as input,
            and \code{modnames} and \code{dsids} are unspecified.}
   }}
+
+\item{mode}{A string that specifies the types of evaluation measures
+that the \code{evalmod} function calculates.
+\describe{
+  \item{"rocprc"}{ROC and Precision-Recall curves}
+  \item{"prcroc"}{Same as above}
+  \item{"basic"}{Normalized ranks vs. accuracy, error rate, specificity,
+                 sensitivity, precision, Matthews correlation coefficient,
+                 and F-score. }
+  \item{"aucroc"}{Fast AUC(ROC) calculation with the U statistic}
+}}
 
 \item{...}{Not used by this method.}
 }

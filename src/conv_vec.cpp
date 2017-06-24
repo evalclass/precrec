@@ -1,6 +1,4 @@
-#include <Rcpp.h>
-#include <vector>
-#include <string>
+#include "conv_vec.h"
 
 //
 // Calculate vector size

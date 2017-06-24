@@ -4,10 +4,10 @@
 \alias{evalmod}
 \title{Evaluate models and calculate performance evaluation measures}
 \usage{
-evalmod(mdat, mode = "rocprc", scores = NULL, labels = NULL,
+evalmod(mdat, mode = NULL, scores = NULL, labels = NULL,
   modnames = NULL, dsids = NULL, posclass = NULL, na_worst = TRUE,
   ties_method = "equiv", calc_avg = TRUE, cb_alpha = 0.05,
-  raw_curves = FALSE, x_bins = 1000)
+  raw_curves = FALSE, x_bins = 1000, ...)
 }
 \arguments{
 \item{mdat}{An \code{S3} object created by the \code{\link{mmdata}}
@@ -36,6 +36,7 @@ that the \code{evalmod} function calculates.
   \item{"basic"}{Normalized ranks vs. accuracy, error rate, specificity,
                  sensitivity, precision, Matthews correlation coefficient,
                  and F-score. }
+  \item{"aucroc"}{Fast AUC(ROC) calculation with the U statistic}
 }}
 
 \item{scores}{A numeric dataset of predicted scores. It can be a vector,
@@ -65,8 +66,8 @@ detected when \code{posclass} is \code{NULL}.}
 \item{na_worst}{A Boolean value for controlling the treatment of NAs
 in \code{scores}.
 \describe{
-  \item{TRUE}{NAs are treated as the highest score}
-  \item{FALSE}{NAs are treated as the lowest score}
+  \item{TRUE}{All NAs are treated as the worst scores}
+  \item{FALSE}{All NAs are treated as the best scores}
 }}
 
 \item{ties_method}{A string for controlling ties in \code{scores}.
@@ -99,6 +100,8 @@ the x-values of the supporting points will be \code{c(0, 0.5, 1)} and
 \code{c(0, 0.25, 0.5, 0.75, 1)} when \code{x_bins = 2}
 and \code{x_bins = 4}, respectively. All corresponding y-values of
 the supporting points are calculated.}
+
+\item{...}{Not used by this method.}
 }
 \value{
 The \code{evalmod} function returns an \code{S3} object
@@ -107,6 +110,10 @@ The \code{evalmod} function returns an \code{S3} object
   \code{dsids}. For example, the number of models is "single" and the number
   of test datasets is "multiple" when \code{modnames = c("m1", "m1", "m1")}
   and \code{dsids = c(1, 2, 3)} are specified.
+
+Different \code{S3} objects have different default behaviors of \code{S3}
+  generics, such as \code{\link{plot}}, \code{\link{autoplot}}, and
+  \code{\link{fortify}}.
 
 \enumerate{
 
@@ -140,11 +147,11 @@ The \code{evalmod} function returns an \code{S3} object
     smpoints \tab single   \tab multiple \cr
     mmpoints \tab multiple \tab multiple
   }
-}
 
-Different \code{S3} objects have different default behaviors of \code{S3}
-  generics, such as \code{\link{plot}}, \code{\link{autoplot}}, and
-  \code{\link{fortify}}.
+  \item The \code{evalmod} function returns the \code{aucroc} S3 object
+  when \code{mode} is "aucroc", which can be used with 'print' and 'as.data.frame'.
+
+}
 }
 \description{
 The \code{evalmod} function calculates ROC and Precision-Recall curves for
@@ -225,6 +232,48 @@ mmcurves
 ## Generate an mmpoints object that contains basic evaluation measures
 mmpoints <- evalmod(mdat, mode = "basic")
 mmpoints
+
+
+##################################################
+### AUC with the U statistic
+###
+
+## mode = "aucroc" returns 'aucroc' S3 object
+data(P10N10)
+
+# 'aucroc' S3 object
+uauc1 <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
+                 mode="aucroc")
+
+# print 'aucroc'
+uauc1
+
+# as.data.frame 'aucroc'
+as.data.frame(uauc1)
+
+## It is 2-3 times faster than mode = "rocprc"
+# A sample of 100,000
+samp1 <- create_sim_samples(1, 50000, 50000)
+
+# a function to test mode = "rocprc"
+func_evalmod_rocprc <- function(samp) {
+   curves <- evalmod(scores = samp$scores, labels = samp$labels)
+   aucs <- auc(curves)
+}
+
+# a function to test mode = "aucroc"
+func_evalmod_aucroc <- function(samp) {
+  uaucs <- evalmod(scores = samp$scores, labels = samp$labels, mode="aucroc")
+  as.data.frame(uaucs)
+}
+
+# Process time
+system.time(res1 <- func_evalmod_rocprc(samp1))
+system.time(res2 <- func_evalmod_aucroc(samp1))
+
+# AUCs
+res1
+res2
 
 }
 \seealso{

@@ -2,7 +2,8 @@
 # Control the main pipeline iterations
 #
 pl_main <- function(mdat, mode = "rocprc", calc_avg = TRUE, cb_alpha = 0.05,
-                    raw_curves = FALSE, x_bins = 1000, validate = TRUE) {
+                    raw_curves = FALSE, x_bins = 1000, na_worst = TRUE,
+                    ties_method = "equiv", validate = TRUE) {
 
   # === Validation ===
   new_mode <- .pmatch_mode(mode)
@@ -24,6 +25,11 @@ pl_main <- function(mdat, mode = "rocprc", calc_avg = TRUE, cb_alpha = 0.05,
     .pl_main_basic(mdat, model_type, dataset_type, class_name_pf,
                    calc_avg = calc_avg, cb_alpha = cb_alpha,
                    raw_curves = raw_curves)
+  } else if (new_mode == "aucroc") {
+    .pl_main_aucroc(mdat, model_type, dataset_type, class_name_pf,
+                    calc_avg = calc_avg, cb_alpha = cb_alpha,
+                    raw_curves = raw_curves, na_worst = na_worst,
+                    ties_method = ties_method)
   }
 }
 
@@ -49,6 +55,11 @@ pl_main <- function(mdat, mode = "rocprc", calc_avg = TRUE, cb_alpha = 0.05,
     if (!is.na(pmatch(val, "basic"))) {
       return("basic")
     }
+
+    if (!is.na(pmatch(val, "aucroc"))) {
+      return("aucroc")
+    }
+
   }
 
   val
@@ -62,7 +73,10 @@ pl_main <- function(mdat, mode = "rocprc", calc_avg = TRUE, cb_alpha = 0.05,
 
   # Validate mdat
   .validate(mdat)
-
+  if (mode != "aucroc" && !is.null(mdat) &&  length(mdat) > 0
+      && is(mdat[[1]], "sdat")) {
+    stop("Invalid 'mode' value in 'mdata'", call. = FALSE)
+  }
 
   # Check mode
   .validate_mode(mode)

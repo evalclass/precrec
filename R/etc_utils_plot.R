@@ -104,6 +104,7 @@
 #'
 #' @examples
 #'
+#' \dontrun{
 #' ##################################################
 #' ### Single model & single test dataset
 #' ###
@@ -176,13 +177,13 @@
 #' smcurves <- evalmod(mdat, raw_curves = TRUE)
 #'
 #' ## Plot average ROC and Precision-Recall curves
-#' plot(smcurves)
+#' plot(smcurves, raw_curves = FALSE)
 #'
 #' ## Hide confidence bounds
-#' plot(smcurves, show_cb = FALSE)
+#' plot(smcurves, raw_curves = FALSE, show_cb = FALSE)
 #'
 #' ## Plot raw ROC and Precision-Recall curves
-#' plot(smcurves, raw_curves = TRUE)
+#' plot(smcurves, raw_curves = TRUE, show_cb = FALSE)
 #'
 #' ## Generate an smpoints object that contains basic evaluation measures
 #' smpoints <- evalmod(mdat, mode = "basic")
@@ -205,10 +206,10 @@
 #' mmcurves <- evalmod(mdat, raw_curves = TRUE)
 #'
 #' ## Plot average ROC and Precision-Recall curves
-#' plot(mmcurves)
+#' plot(mmcurves, raw_curves = FALSE)
 #'
 #' ## Show confidence bounds
-#' plot(mmcurves, show_cb = TRUE)
+#' plot(mmcurves, raw_curves = FALSE, show_cb = TRUE)
 #'
 #' ## Plot raw ROC and Precision-Recall curves
 #' plot(mmcurves, raw_curves = TRUE)
@@ -219,6 +220,7 @@
 #' ## Plot normalized ranks vs. average basic evaluation measures
 #' plot(mmpoints)
 #'
+#'}
 #' @name plot
 NULL
 
@@ -302,7 +304,8 @@ NULL
 #
 # Process ... for curve objects
 #
-.get_plot_arglist <- function(y, def_curvetype, def_type, def_show_cb,
+.get_plot_arglist <- function(evalmod_args, y,
+                              def_curvetype, def_type, def_show_cb,
                               def_raw_curves, def_add_np_nn, def_show_legend,
                               ...) {
   arglist <- list(...)
@@ -322,9 +325,23 @@ NULL
   if (is.null(arglist[["show_cb"]])){
     arglist[["show_cb"]] <- def_show_cb
   }
+  if (!evalmod_args[["calc_avg"]] && arglist[["show_cb"]]) {
+    stop("Invalid show_cb. Inconsistent with calc_avg of evalmod.",
+         call. = FALSE)
+  }
 
   if (is.null(arglist[["raw_curves"]])){
-    arglist[["raw_curves"]] <- def_raw_curves
+    if (!is.null(def_raw_curves)) {
+      arglist[["raw_curves"]] <- def_raw_curves
+    } else if (!is.null(evalmod_args[["raw_curves"]])) {
+      arglist[["raw_curves"]] <- evalmod_args[["raw_curves"]]
+    } else {
+      arglist[["raw_curves"]] <- FALSE
+    }
+  }
+  if (!evalmod_args[["raw_curves"]] && arglist[["raw_curves"]]) {
+    stop("Invalid raw_curves. Inconsistent with the value of evalmod.",
+         call. = FALSE)
   }
 
   if (is.null(arglist[["add_np_nn"]])){
@@ -345,10 +362,19 @@ NULL
 .plot_multi <- function(x, arglist) {
   curvetype <- arglist[["curvetype"]]
   type <- arglist[["type"]]
-  show_cb <- arglist[["show_cb"]]
   raw_curves <- arglist[["raw_curves"]]
   add_np_nn <- arglist[["add_np_nn"]]
   show_legend <- arglist[["show_legend"]]
+
+  show_cb <- arglist[["show_cb"]]
+  if (!attr(x, "args")$calc_avg) {
+    show_cb = FALSE
+  }
+
+  raw_curves <- arglist[["raw_curves"]]
+  if (show_cb) {
+    raw_curves = FALSE
+  }
 
   # === Validate input arguments ===
   .validate(x)
@@ -577,7 +603,10 @@ NULL
   }
 
   # === Create a plot ===
-  if (raw_curves) {
+  if (show_cb) {
+    .plot_avg(x, type, tlist[["ctype"]], main, tlist[["xlab"]],
+              tlist[["ylab"]], show_cb)
+  } else if (raw_curves) {
     .matplot_wrapper(x, type, tlist[["ctype"]], main, tlist[["xlab"]],
                      tlist[["ylab"]])
   } else {
