@@ -75,8 +75,9 @@ update_main <- function(call_pkgdown = FALSE) {
 
   update_html(get_file_path("as.data.frame.html"),
               c("ROC and Precision-Recall ",
-                "Basic evaluation"),
-              c("mode_rocprcr", "mode_basic"))
+                "Basic evaluation",
+                "Fast AUC"),
+              c("mode_rocprcr", "mode_basic", "mode_aucroc"))
 
   update_html(get_file_path("auc.html"),
               "accepts the following",

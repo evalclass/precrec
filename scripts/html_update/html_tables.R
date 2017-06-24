@@ -19,7 +19,7 @@ get_tab_precrec_funcs <- function() {
     "    <td> Reformat input data for performance evaluation calculation </td>",
     "  </tr>",
     "  <tr>",
-    "    <td><a href='join_scores.html'>join_scores</a></code> </td>",
+    "    <td><code><a href='join_scores.html'>join_scores</a></code> </td>",
     "    <td> Join scores of multiple models into a list </td>",
     "  </tr>",
     "  <tr>",
@@ -139,6 +139,23 @@ get_tab_mode_basic <- function() {
     "      <td> mmpoints </td>",
     "      <td> multiple </td>",
     "      <td> multiple </td>",
+    "   </tr>",
+    "</table>"
+  )
+}
+
+get_tab_mode_aucroc <- function() {
+  c(
+    "<table width=\"100%\">",
+    "   <tr>",
+    "      <td><strong><code>S3</code> object</strong></td>",
+    "      <td> <strong># of models</strong></td>",
+    "      <td> <strong># of test datasets</strong> </td>",
+    "   </tr>",
+    "   <tr>",
+    "      <td>aucroc</td>",
+    "      <td> - </td>",
+    "      <td> - </td>",
     "   </tr>",
     "</table>"
   )
