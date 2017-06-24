@@ -57,12 +57,12 @@
   <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
-
+      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/takayasaito/precrec">
     <span class="fa fa-github fa-lg"></span>
-
+     
   </a>
 </li>
       </ul>
@@ -70,7 +70,7 @@
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-
+      
       </header>
 
       <div class="row">
@@ -79,10 +79,10 @@
     <h1>Plot performance evaluation measures with ggplot2</h1>
     </div>
 
-
+    
     <p>The <code>autoplot</code> function plots performance evaluation measures
   by using <span class="pkg">ggplot2</span> instead of the general R plot.</p>
-
+    
 
     <pre class="usage"><span class='co'># S3 method for sscurves</span>
 <span class='fu'>autoplot</span>(<span class='no'>object</span>, <span class='kw'>curvetype</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"ROC"</span>, <span class='st'>"PRC"</span>), <span class='no'>...</span>)
@@ -111,7 +111,7 @@
 <span class='co'># S3 method for mmpoints</span>
 <span class='fu'>autoplot</span>(<span class='no'>object</span>, <span class='kw'>curvetype</span> <span class='kw'>=</span> <span class='fu'>.get_metric_names</span>(<span class='st'>"basic"</span>),
   <span class='no'>...</span>)</pre>
-
+    
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -124,15 +124,9 @@
 <p></p>
 <table width="100%">
    <tr>
-      <td>
-         <strong>S3 object</strong>
-      </td>
-      <td>
-         <strong># of models</strong>
-      </td>
-      <td>
-         <strong># of test datasets</strong>
-      </td>
+      <td><strong>S3 object</strong> </td>
+      <td><strong># of models</strong> </td>
+      <td><strong># of test datasets</strong> </td>
    </tr>
    <tr>
       <td> sscurves </td>
@@ -160,15 +154,9 @@
 <p></p>
 <table width="100%">
    <tr>
-      <td>
-         <strong>S3 object</strong>
-      </td>
-      <td>
-         <strong># of models</strong>
-      </td>
-      <td>
-         <strong># of test datasets</strong>
-      </td>
+      <td><strong>S3 object</strong> </td>
+      <td><strong># of models</strong> </td>
+      <td><strong># of test datasets</strong> </td>
    </tr>
    <tr>
       <td> sspoints </td>
@@ -202,12 +190,8 @@
 <li><p>ROC and Precision-Recall curves (mode = "rocprc")</p>
 <table width="100%">
    <tr>
-      <td>
-         <strong>curvetype</strong>
-      </td>
-      <td>
-         <strong>description</strong>
-      </td>
+      <td><strong>curvetype</strong> </td>
+      <td><strong>description</strong> </td>
    </tr>
    <tr>
       <td> ROC </td>
@@ -220,14 +204,11 @@
 </table>
 <p>Multiple <code>curvetype</code> can be combined, such as
     <code>c("ROC", "PRC")</code>.</p></li>
-<li><p>Basic evaluation measures (mode = "basic")</p><table width="100%">
+<li><p>Basic evaluation measures (mode = "basic")</p>
+<table width="100%">
    <tr>
-      <td>
-         <strong>curvetype</strong>
-      </td>
-      <td>
-         <strong>description</strong>
-      </td>
+      <td><strong>curvetype</strong> </td>
+      <td><strong>description</strong> </td>
    </tr>
    <tr>
       <td> error </td>
@@ -255,7 +236,7 @@
    </tr>
    <tr>
       <td> fscore </td>
-      <td> Normalized ranks vs.F-Score </td>
+      <td> Normalized ranks vs. F-Score </td>
    </tr>
 </table>
 <p>Multiple <code>curvetype</code> can be combined, such as
@@ -292,19 +273,19 @@
 </dl></td>
     </tr>
     </table>
-
+    
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>The <code>autoplot</code> function returns a <code>ggplot</code> object
   for a single-panel plot and a frame-grob object for a multiple-panel plot.</p>
-
+    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <p><code><a href='evalmod.html'>evalmod</a></code> for generating an <code>S3</code> object.
   <code><a href='fortify.html'>fortify</a></code> for converting a curves and points object
   to a data frame.  <code><a href='plot.html'>plot</a></code> for plotting the equivalent curves
   with the general R plot.</p>
-
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
@@ -330,11 +311,11 @@
 <span class='no'>evalss</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='kw'>scores</span> <span class='kw'>=</span> <span class='no'>sampss</span>$<span class='no'>scores</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='no'>sampss</span>$<span class='no'>labels</span>)
 
 <span class='co'># Reduced supporting point</span>
-<span class='fu'>system.time</span>(<span class='fu'>autoplot</span>(<span class='no'>evalss</span>))</div><img src='autoplot-4.png' alt='' width='540' height='400' /><div class='output co'>#&gt;    user  system elapsed
-#&gt;   0.545   0.033   0.612 </div><div class='input'>
+<span class='fu'>system.time</span>(<span class='fu'>autoplot</span>(<span class='no'>evalss</span>))</div><img src='autoplot-4.png' alt='' width='540' height='400' /><div class='output co'>#&gt;    user  system elapsed 
+#&gt;   0.649   0.035   0.713 </div><div class='input'>
 <span class='co'># Full supporting points</span>
-<span class='fu'>system.time</span>(<span class='fu'>autoplot</span>(<span class='no'>evalss</span>, <span class='kw'>reduce_points</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>))</div><img src='autoplot-7.png' alt='' width='540' height='400' /><div class='output co'>#&gt;    user  system elapsed
-#&gt;   3.246   0.293   3.573 </div><div class='input'>
+<span class='fu'>system.time</span>(<span class='fu'>autoplot</span>(<span class='no'>evalss</span>, <span class='kw'>reduce_points</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>))</div><img src='autoplot-7.png' alt='' width='540' height='400' /><div class='output co'>#&gt;    user  system elapsed 
+#&gt;   3.856   0.293   4.221 </div><div class='input'>
 <span class='co'>## Get a grob object for multiple plots</span>
 <span class='no'>pp1</span> <span class='kw'>&lt;-</span> <span class='fu'>autoplot</span>(<span class='no'>sscurves</span>, <span class='kw'>ret_grob</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 <span class='fu'>plot.new</span>()</div><div class='input'><span class='fu'>grid.draw</span>(<span class='no'>pp1</span>)</div><img src='autoplot-11.png' alt='' width='540' height='400' /><div class='input'>
@@ -370,11 +351,11 @@
 <span class='no'>evalms</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='kw'>scores</span> <span class='kw'>=</span> <span class='no'>sampms</span>$<span class='no'>scores</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='no'>sampms</span>$<span class='no'>labels</span>)
 
 <span class='co'># Reduced supporting point</span>
-<span class='fu'>system.time</span>(<span class='fu'>autoplot</span>(<span class='no'>evalms</span>))</div><img src='autoplot-23.png' alt='' width='540' height='400' /><div class='output co'>#&gt;    user  system elapsed
-#&gt;   0.934   0.088   1.055 </div><div class='input'>
+<span class='fu'>system.time</span>(<span class='fu'>autoplot</span>(<span class='no'>evalms</span>))</div><img src='autoplot-23.png' alt='' width='540' height='400' /><div class='output co'>#&gt;    user  system elapsed 
+#&gt;   1.181   0.068   1.281 </div><div class='input'>
 <span class='co'># Full supporting points</span>
-<span class='fu'>system.time</span>(<span class='fu'>autoplot</span>(<span class='no'>evalms</span>, <span class='kw'>reduce_points</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>))</div><img src='autoplot-26.png' alt='' width='540' height='400' /><div class='output co'>#&gt;    user  system elapsed
-#&gt;  15.716   1.890  17.681 </div><div class='input'>
+<span class='fu'>system.time</span>(<span class='fu'>autoplot</span>(<span class='no'>evalms</span>, <span class='kw'>reduce_points</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>))</div><img src='autoplot-26.png' alt='' width='540' height='400' /><div class='output co'>#&gt;    user  system elapsed 
+#&gt;  15.170   1.887  17.149 </div><div class='input'>
 <span class='co'>## Hide the legend</span>
 <span class='fu'>autoplot</span>(<span class='no'>mscurves</span>, <span class='kw'>show_legend</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><img src='autoplot-29.png' alt='' width='540' height='400' /><div class='input'>
 <span class='co'>## Generate an mspoints object that contains basic evaluation measures</span>
@@ -410,11 +391,11 @@
 <span class='no'>evalsm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdatsm</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='co'># Reduced supporting point</span>
-<span class='fu'>system.time</span>(<span class='fu'>autoplot</span>(<span class='no'>evalsm</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))</div><img src='autoplot-41.png' alt='' width='540' height='400' /><div class='output co'>#&gt;    user  system elapsed
-#&gt;   0.614   0.031   0.672 </div><div class='input'>
+<span class='fu'>system.time</span>(<span class='fu'>autoplot</span>(<span class='no'>evalsm</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))</div><img src='autoplot-41.png' alt='' width='540' height='400' /><div class='output co'>#&gt;    user  system elapsed 
+#&gt;   0.500   0.031   0.557 </div><div class='input'>
 <span class='co'># Full supporting points</span>
-<span class='fu'>system.time</span>(<span class='fu'>autoplot</span>(<span class='no'>evalsm</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>reduce_points</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>))</div><img src='autoplot-44.png' alt='' width='540' height='400' /><div class='output co'>#&gt;    user  system elapsed
-#&gt;   0.618   0.026   0.673 </div><div class='input'>
+<span class='fu'>system.time</span>(<span class='fu'>autoplot</span>(<span class='no'>evalsm</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>reduce_points</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>))</div><img src='autoplot-44.png' alt='' width='540' height='400' /><div class='output co'>#&gt;    user  system elapsed 
+#&gt;   2.790   0.086   3.038 </div><div class='input'>
 <span class='co'>## Generate an smpoints object that contains basic evaluation measures</span>
 <span class='no'>smpoints</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"basic"</span>)
 
@@ -447,11 +428,11 @@
 <span class='no'>evalmm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdatmm</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='co'># Reduced supporting point</span>
-<span class='fu'>system.time</span>(<span class='fu'>autoplot</span>(<span class='no'>evalmm</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))</div><img src='autoplot-55.png' alt='' width='540' height='400' /><div class='output co'>#&gt;    user  system elapsed
-#&gt;   0.838   0.044   0.915 </div><div class='input'>
+<span class='fu'>system.time</span>(<span class='fu'>autoplot</span>(<span class='no'>evalmm</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))</div><img src='autoplot-55.png' alt='' width='540' height='400' /><div class='output co'>#&gt;    user  system elapsed 
+#&gt;   0.780   0.040   0.849 </div><div class='input'>
 <span class='co'># Full supporting points</span>
-<span class='fu'>system.time</span>(<span class='fu'>autoplot</span>(<span class='no'>evalmm</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>reduce_points</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>))</div><img src='autoplot-58.png' alt='' width='540' height='400' /><div class='output co'>#&gt;    user  system elapsed
-#&gt;   1.722   0.223   1.977 </div><div class='input'>
+<span class='fu'>system.time</span>(<span class='fu'>autoplot</span>(<span class='no'>evalmm</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>reduce_points</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>))</div><img src='autoplot-58.png' alt='' width='540' height='400' /><div class='output co'>#&gt;    user  system elapsed 
+#&gt;   4.098   0.274   4.588 </div><div class='input'>
 <span class='co'>## Generate an mmpoints object that contains basic evaluation measures</span>
 <span class='no'>mmpoints</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"basic"</span>)
 
@@ -464,11 +445,11 @@
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-
+      
       <li><a href="#value">Value</a></li>
 
       <li><a href="#see-also">See also</a></li>
-
+      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

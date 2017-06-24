@@ -41,7 +41,7 @@ get_file_path <- function(file_name, subdir = "reference") {
 update_main <- function(call_pkgdown = FALSE) {
   if (call_pkgdown) {
     library(pkgdown)
-    pkgdown::build_site()
+    pkgdown::build_site(run_dont_run = TRUE)
   }
 
   update_html(get_file_path("precrec.html"),
