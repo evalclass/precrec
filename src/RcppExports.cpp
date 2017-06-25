@@ -58,6 +58,22 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// calc_uauc
+Rcpp::List calc_uauc(unsigned np, unsigned nn, const Rcpp::NumericVector& scores, const Rcpp::IntegerVector& olabs, const bool& na_worst, const std::string& ties_method);
+RcppExport SEXP precrec_calc_uauc(SEXP npSEXP, SEXP nnSEXP, SEXP scoresSEXP, SEXP olabsSEXP, SEXP na_worstSEXP, SEXP ties_methodSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< unsigned >::type np(npSEXP);
+    Rcpp::traits::input_parameter< unsigned >::type nn(nnSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type scores(scoresSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type olabs(olabsSEXP);
+    Rcpp::traits::input_parameter< const bool& >::type na_worst(na_worstSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type ties_method(ties_methodSEXP);
+    rcpp_result_gen = Rcpp::wrap(calc_uauc(np, nn, scores, olabs, na_worst, ties_method));
+    return rcpp_result_gen;
+END_RCPP
+}
 // calc_uauc_frank
 Rcpp::List calc_uauc_frank(unsigned np, unsigned nn, const Rcpp::NumericVector& scores, const Rcpp::IntegerVector& olabs, const bool& na_last, const std::string& ties_method, Rcpp::Function frank);
 RcppExport SEXP precrec_calc_uauc_frank(SEXP npSEXP, SEXP nnSEXP, SEXP scoresSEXP, SEXP olabsSEXP, SEXP na_lastSEXP, SEXP ties_methodSEXP, SEXP frankSEXP) {
@@ -72,22 +88,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const std::string& >::type ties_method(ties_methodSEXP);
     Rcpp::traits::input_parameter< Rcpp::Function >::type frank(frankSEXP);
     rcpp_result_gen = Rcpp::wrap(calc_uauc_frank(np, nn, scores, olabs, na_last, ties_method, frank));
-    return rcpp_result_gen;
-END_RCPP
-}
-// calc_uauc
-Rcpp::List calc_uauc(unsigned np, unsigned nn, const Rcpp::NumericVector& scores, const Rcpp::IntegerVector& olabs, const bool& na_worst, const std::string& ties_method);
-RcppExport SEXP precrec_calc_uauc(SEXP npSEXP, SEXP nnSEXP, SEXP scoresSEXP, SEXP olabsSEXP, SEXP na_worstSEXP, SEXP ties_methodSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< unsigned >::type np(npSEXP);
-    Rcpp::traits::input_parameter< unsigned >::type nn(nnSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type scores(scoresSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type olabs(olabsSEXP);
-    Rcpp::traits::input_parameter< const bool& >::type na_worst(na_worstSEXP);
-    Rcpp::traits::input_parameter< const std::string& >::type ties_method(ties_methodSEXP);
-    rcpp_result_gen = Rcpp::wrap(calc_uauc(np, nn, scores, olabs, na_worst, ties_method));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -191,4 +191,26 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(get_score_ranks(scores, na_worst, ties_method));
     return rcpp_result_gen;
 END_RCPP
+}
+
+static const R_CallMethodDef CallEntries[] = {
+    {"precrec_calc_auc", (DL_FUNC) &precrec_calc_auc, 2},
+    {"precrec_calc_avg_curve", (DL_FUNC) &precrec_calc_avg_curve, 3},
+    {"precrec_calc_avg_points", (DL_FUNC) &precrec_calc_avg_points, 2},
+    {"precrec_calc_basic_measures", (DL_FUNC) &precrec_calc_basic_measures, 6},
+    {"precrec_calc_uauc", (DL_FUNC) &precrec_calc_uauc, 6},
+    {"precrec_calc_uauc_frank", (DL_FUNC) &precrec_calc_uauc_frank, 7},
+    {"precrec_convert_curve_avg_df", (DL_FUNC) &precrec_convert_curve_avg_df, 5},
+    {"precrec_convert_curve_df", (DL_FUNC) &precrec_convert_curve_df, 8},
+    {"precrec_create_confusion_matrices", (DL_FUNC) &precrec_create_confusion_matrices, 3},
+    {"precrec_create_prc_curve", (DL_FUNC) &precrec_create_prc_curve, 5},
+    {"precrec_create_roc_curve", (DL_FUNC) &precrec_create_roc_curve, 5},
+    {"precrec_format_labels", (DL_FUNC) &precrec_format_labels, 2},
+    {"precrec_get_score_ranks", (DL_FUNC) &precrec_get_score_ranks, 3},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_precrec(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
 }
