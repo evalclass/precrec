@@ -5,7 +5,7 @@ get_html_table <- function(tab_name) {
 
 get_tab_precrec_funcs <- function() {
   c(
-    "<table width=\"100%\">",
+    "<table class=\"table\">",
     "  <tr>",
     "    <td><strong>Function</strong> </td>",
     "    <td> <strong>Description</strong></td>",
@@ -36,7 +36,7 @@ get_tab_precrec_funcs <- function() {
 
 get_tab_precrec_s3 <- function() {
   c(
-    "<table width=\"100%\">",
+    "<table class=\"table\">",
     "  <tr>",
     "    <td> <strong>S3 generic</strong> </td>",
     "    <td> <strong>Library</strong> </td>",
@@ -82,7 +82,7 @@ get_tab_precrec_s3 <- function() {
 
 get_tab_mode_rocprcr <- function() {
   c(
-    "<table width=\"100%\">",
+    "<table class=\"table\">",
     "   <tr>",
     "      <td><strong>S3 object</strong> </td>",
     "      <td><strong># of models</strong> </td>",
@@ -114,7 +114,7 @@ get_tab_mode_rocprcr <- function() {
 
 get_tab_mode_basic <- function() {
   c(
-    "<table width=\"100%\">",
+    "<table class=\"table\">",
     "   <tr>",
     "      <td><strong>S3 object</strong> </td>",
     "      <td><strong># of models</strong> </td>",
@@ -146,7 +146,7 @@ get_tab_mode_basic <- function() {
 
 get_tab_mode_aucroc <- function() {
   c(
-    "<table width=\"100%\">",
+    "<table class=\"table\">",
     "   <tr>",
     "      <td><strong><code>S3</code> object</strong></td>",
     "      <td> <strong># of models</strong></td>",
@@ -163,7 +163,7 @@ get_tab_mode_aucroc <- function() {
 
 get_tab_curve_type <- function() {
   c(
-    "<table width=\"100%\">",
+    "<table class=\"table\">",
     "   <tr>",
     "      <td><strong>curvetype</strong> </td>",
     "      <td><strong>description</strong> </td>",
@@ -182,7 +182,7 @@ get_tab_curve_type <- function() {
 
 get_tab_curve_type_basic <- function() {
   c(
-    "<table width=\"100%\">",
+    "<table class=\"table\">",
     "   <tr>",
     "      <td><strong>curvetype</strong> </td>",
     "      <td><strong>description</strong> </td>",
