@@ -61,8 +61,7 @@
 .validate_labels <- function(labels) {
   assertthat::assert_that(is.atomic(labels),
                           (is.vector(labels) || is.factor(labels)),
-                          length(labels) > 0L,
-                          length(unique(labels)) == 2L)
+                          length(labels) > 0L)
 }
 
 #

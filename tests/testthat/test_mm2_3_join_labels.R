@@ -123,10 +123,10 @@ test_that("join_labels() only accepts vectors or factors", {
   expect_err_msg(vec1, vec5)
 })
 
-test_that("join_labels() accepts two unique labels", {
+test_that("join_labels() accepts any number of unique labels", {
   expect_err_msg <- function(vec1, vec2) {
     err_msg <- "not equal to 2L"
-    eval(bquote(expect_error(join_labels(vec1, vec2), err_msg)))
+    eval(bquote(expect_error(join_labels(vec1, vec2), NA)))
   }
 
   vec1 <- c(1, 0)
