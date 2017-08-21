@@ -191,3 +191,21 @@ NULL
 #' @name P10N10
 #' @usage data(P10N10)
 NULL
+
+#' 5-fold cross validation sample.
+#'
+#' A data frame contains labels and scores for 5-fold test sets.
+#'
+#' @format A data frame with 4 columns.
+#' \describe{
+#'   \item{score1}{50 random scores}
+#'   \item{score2}{50 random scores}
+#'   \item{label}{50 lables as 'pos' or 'neg'}
+#'   \item{fold}{50 fold IDs as 1:5}
+#' }
+#'
+#' @docType data
+#' @keywords datasets
+#' @name M2N50F5
+#' @usage data(M2N50F5)
+NULL
