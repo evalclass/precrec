@@ -294,7 +294,7 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
     mdat <- mmdata(scores, labels,
                    modnames = modnames, dsids = dsids, posclass = posclass,
                    na_worst = new_na_worst, ties_method = new_ties_method,
-                   mode = new_mode)
+                   mode = new_mode, ...)
   }
   .validate(mdat)
 

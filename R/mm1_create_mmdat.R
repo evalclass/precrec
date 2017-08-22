@@ -151,11 +151,29 @@
 #' @export
 mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
                    posclass = NULL, na_worst = TRUE, ties_method = "equiv",
-                   expd_first = "modnames", mode = "rocprc", ...) {
+                   expd_first = NULL, mode = "rocprc",
+                   nfold_df = NULL, score_cols = NULL, lab_col = NULL,
+                   fold_col = NULL, ...) {
 
   # === Join datasets ===
-  lscores <- join_scores(scores, chklen = FALSE)
-  llabels <- join_labels(labels, chklen = FALSE)
+  if (!is.null(nfold_df) && !is.null(score_cols) && !is.null(lab_col)
+      && !is.null(fold_col)) {
+    nfold_list <- format_nfold(nfold_df, score_cols, lab_col, fold_col)
+    lscores <- nfold_list$scores
+    llabels <- nfold_list$labels
+    if (is.null(expd_first)) {
+      expd_first <- "dsids"
+    }
+  } else {
+    if(missing(scores) || missing(labels)) {
+      stop("'scores' and/or 'lables' are missing", call. = FALSE)
+    }
+    lscores <- join_scores(scores, chklen = FALSE)
+    llabels <- join_labels(labels, chklen = FALSE)
+    if (is.null(expd_first)) {
+      expd_first <- "modnames"
+    }
+  }
 
   # === Model names and dataset IDs ===
   new_expd_first <- .pmatch_expd_first(expd_first)
