@@ -639,7 +639,7 @@ NULL
       ratio = NULL
     }
   }
-  p <- func_g(p, object[[1]], show_legend = show_legend, add_np_nn = add_np_nn,
+  p <- func_g(p, object, show_legend = show_legend, add_np_nn = add_np_nn,
               curve_df = curve_df, xlim = xlim, ylim = ylim, ratio = ratio, ...)
 
   p
@@ -666,8 +666,9 @@ NULL
 # Make main title
 #
 .make_rocprc_title <- function(object, pt) {
-  np <- attr(object, "data_info")[["np"]]
-  nn <- attr(object, "data_info")[["nn"]]
+  pn_info <- .get_pn_info(object)
+  np <- pn_info$avg_np
+  nn <- pn_info$avg_nn
 
   main <- paste0(pt, " - P: ", np, ", N: ", nn)
 }
@@ -677,7 +678,10 @@ NULL
 #
 .geom_basic_roc <- function(p, object, show_legend = TRUE, add_np_nn = TRUE,
                             xlim, ylim, ratio, ...) {
-  if (add_np_nn) {
+
+  pn_info <- .get_pn_info(object)
+
+  if (add_np_nn && pn_info$is_consistant) {
     main <- .make_rocprc_title(object, "ROC")
   } else {
     main <- "ROC"
@@ -696,15 +700,16 @@ NULL
 #
 .geom_basic_prc <- function(p, object, show_legend = TRUE, add_np_nn = TRUE,
                             xlim, ylim, ratio, ...) {
-  if (add_np_nn) {
+
+  pn_info <- .get_pn_info(object)
+
+  if (add_np_nn && pn_info$is_consistant) {
     main <- .make_rocprc_title(object, "Precision-Recall")
   } else {
     main <- "Precision-Recall"
   }
 
-  np <- attr(object, "data_info")[["np"]]
-  nn <- attr(object, "data_info")[["nn"]]
-  p <- p + ggplot2::geom_hline(yintercept = np / (np + nn), colour = "grey",
+  p <- p + ggplot2::geom_hline(yintercept = pn_info$prc_base, colour = "grey",
                                linetype = 3)
   p <- .set_coords(p, xlim, ylim, ratio)
   p <- .geom_basic(p, main, "Recall", "Precision", show_legend)

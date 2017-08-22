@@ -615,10 +615,10 @@ NULL
   tlist <- .get_titiles(curvetype)
   main <- tlist[["main"]]
 
-  np <- attr(x, "data_info")[["np"]][[1]]
-  nn <- attr(x, "data_info")[["nn"]][[1]]
-
-  if (add_np_nn) {
+  pn_info <- .get_pn_info(x)
+  if (add_np_nn && pn_info$is_consistant) {
+    np <- pn_info$avg_np
+    nn <- pn_info$avg_nn
     main <- paste0(main, " - P: ", np, ", N: ", nn)
   }
 
@@ -646,7 +646,7 @@ NULL
     graphics::abline(a = 0, b = 1, col = "grey", lty = 3)
 
   } else if (curvetype == "PRC") {
-    graphics::abline(h = np / (np + nn), col = "grey", lty = 3)
+    graphics::abline(h = pn_info$prc_base, col = "grey", lty = 3)
   }
 
   .show_legend(x, show_legend)
