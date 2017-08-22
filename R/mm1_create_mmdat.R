@@ -70,6 +70,18 @@
 #'     \item{"aucroc"}{Fast AUC(ROC) calculation with the U statistic}
 #'   }
 #'
+#' @param nfold_df A data frame that contains at least one score column,
+#'   lable and fold columns.
+#'
+#' @param score_cols A character/numeric vector that specifies score columns
+#'   of \code{nfold_df}.
+#'
+#' @param lab_col A number/string that specifies the label column
+#'   of \code{nfold_df}.
+#'
+#' @param fold_col A number/string that specifies the fold column
+#'   of \code{nfold_df}.
+#'
 #' @param ... Not used by this method.
 #'
 #' @return The \code{mmdata} function returns an \code{mdat} object
@@ -79,6 +91,8 @@
 #' @seealso \code{\link{evalmod}} for calculation evaluation measures.
 #'   \code{\link{join_scores}} and \code{\link{join_labels}} for formatting
 #'   scores and labels with multiple datasets.
+#'   \code{\link{format_nfold}} for creating n-fold cross validation dataset
+#'   from data frame.
 #'
 #' @examples
 #'
@@ -147,6 +161,27 @@
 #'                  modnames = samps[["modnames"]],
 #'                  dsids = samps[["dsids"]])
 #' mmmdat
+#'
+#'
+#' ##################################################
+#' ### N-fold cross validation datasets
+#' ###
+#'
+#' ## Load test data
+#' data(M2N50F5)
+#' head(M2N50F5)
+#'
+#' ## Speficy nessesary columns to create mdat
+#' cvdat1 <- mmdata(nfold_df = M2N50F5, score_cols = c(1, 2),
+#'                  lab_col = 3, fold_col = 4,
+#'                  modnames = c("m1", "m2"), dsids = 1:5)
+#' cvdat1
+#'
+#' ## Use column names
+#' cvdat2 <- mmdata(nfold_df = M2N50F5, score_cols = c("score1", "score2"),
+#'                  lab_col = "label", fold_col = "fold",
+#'                  modnames = c("m1", "m2"), dsids = 1:5)
+#' cvdat2
 #'
 #' @export
 mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
