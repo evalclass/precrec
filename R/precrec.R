@@ -4,7 +4,7 @@
 #' provide a robust platform for performance evaluation of binary classifiers.
 #'
 #' @section Functions:
-#' The precrec package provides the following five functions.
+#' The precrec package provides the following six functions.
 #'
 #'   \tabular{ll}{
 #'     \strong{Function} \tab \strong{Description} \cr
@@ -12,7 +12,8 @@
 #'     \code{\link{mmdata}}             \tab Reformat input data for performance evaluation calculation \cr
 #'     \code{\link{join_scores}}        \tab Join scores of multiple models into a list \cr
 #'     \code{\link{join_labels}}        \tab Join observed labels of multiple test datasets into a list \cr
-#'     \code{\link{create_sim_samples}} \tab Create random samples for simulations
+#'     \code{\link{create_sim_samples}} \tab Create random samples for simulations \cr
+#'     \code{\link{format_nfold}}       \tab Create n-fold cross validation dataset from data frame
 #'   }
 #'
 #' @section S3 generics:
@@ -190,4 +191,22 @@ NULL
 #' @keywords datasets
 #' @name P10N10
 #' @usage data(P10N10)
+NULL
+
+#' 5-fold cross validation sample.
+#'
+#' A data frame contains labels and scores for 5-fold test sets.
+#'
+#' @format A data frame with 4 columns.
+#' \describe{
+#'   \item{score1}{50 random scores}
+#'   \item{score2}{50 random scores}
+#'   \item{label}{50 lables as 'pos' or 'neg'}
+#'   \item{fold}{50 fold IDs as 1:5}
+#' }
+#'
+#' @docType data
+#' @keywords datasets
+#' @name M2N50F5
+#' @usage data(M2N50F5)
 NULL

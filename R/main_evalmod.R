@@ -96,7 +96,8 @@
 #'   and \code{x_bins = 4}, respectively. All corresponding y-values of
 #'   the supporting points are calculated.
 #'
-#' @param ... Not used by this method.
+#' @param ... These additional arguments are passed to \code{\link{mmdata}}
+#'   for data preparation.
 #'
 #' @return The \code{evalmod} function returns an \code{S3} object
 #'   that contains performance evaluation measures. The number of models and
@@ -152,6 +153,8 @@
 #'   with \pkg{ggplot2}. \code{\link{mmdata}} for formatting input data.
 #'   \code{\link{join_scores}} and \code{\link{join_labels}} for formatting
 #'   scores and labels with multiple datasets.
+#'   \code{\link{format_nfold}} for creating n-fold cross validation dataset
+#'   from data frame.
 #'   \code{\link{create_sim_samples}} for generating random samples
 #'   for simulations.
 #'
@@ -221,13 +224,40 @@
 #'                modnames = samps[["modnames"]],
 #'                dsids = samps[["dsids"]])
 #'
-#' ## Generate an mscurve object that contains ROC and Precision-Recall curves
+#' ## Generate an mmcurve object that contains ROC and Precision-Recall curves
 #' mmcurves <- evalmod(mdat)
 #' mmcurves
 #'
 #' ## Generate an mmpoints object that contains basic evaluation measures
 #' mmpoints <- evalmod(mdat, mode = "basic")
 #' mmpoints
+#'
+#'
+#' ##################################################
+#' ### N-fold cross validation datasets
+#' ###
+#'
+#' ## Load test data
+#' data(M2N50F5)
+#'
+#' ## Speficy nessesary columns to create mdat
+#' cvdat <- mmdata(nfold_df = M2N50F5, score_cols = c(1, 2),
+#'                 lab_col = 3, fold_col = 4,
+#'                 modnames = c("m1", "m2"), dsids = 1:5)
+#'
+#' ## Generate an mmcurve object that contains ROC and Precision-Recall curves
+#' cvcurves <- evalmod(cvdat)
+#' cvcurves
+#'
+#' ## Generate an mmpoints object that contains basic evaluation measures
+#' cvpoints <- evalmod(cvdat, mode = "basic")
+#' cvpoints
+#'
+#' ## Specify mmdata arguments from evalmod
+#' cvcurves2 <- evalmod(nfold_df = M2N50F5, score_cols = c(1, 2),
+#'                      lab_col = 3, fold_col = 4,
+#'                      modnames = c("m1", "m2"), dsids = 1:5)
+#' cvcurves2
 #'
 #'
 #' ##################################################
@@ -294,7 +324,7 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
     mdat <- mmdata(scores, labels,
                    modnames = modnames, dsids = dsids, posclass = posclass,
                    na_worst = new_na_worst, ties_method = new_ties_method,
-                   mode = new_mode)
+                   mode = new_mode, ...)
   }
   .validate(mdat)
 

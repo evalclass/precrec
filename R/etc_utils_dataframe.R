@@ -176,6 +176,38 @@
 #' ## Show data frame
 #' head(mmpoints.df)
 #'
+#'
+#' ##################################################
+#' ### N-fold cross validation datasets
+#' ###
+#'
+#' ## Load test data
+#' data(M2N50F5)
+#'
+#' ## Speficy nessesary columns to create mdat
+#' cvdat <- mmdata(nfold_df = M2N50F5, score_cols = c(1, 2),
+#'                 lab_col = 3, fold_col = 4,
+#'                 modnames = c("m1", "m2"), dsids = 1:5)
+#'
+#' ## Generate an mmcurve object that contains ROC and Precision-Recall curves
+#' cvcurves <- evalmod(cvdat)
+#'
+#' ## Convert mmcurves to a data frame
+#' cvcurves.df <- as.data.frame(cvcurves)
+#'
+#' ## Show data frame
+#' head(cvcurves.df)
+#'
+#' ## Generate an mmpoints object that contains basic evaluation measures
+#' cvpoints <- evalmod(cvdat, mode = "basic")
+#'
+#' ## Convert mmpoints to a data frame
+#' cvpoints.df <- as.data.frame(cvpoints)
+#'
+#' ## Show data frame
+#' head(cvpoints.df)
+#'
+#'
 #' ##################################################
 #' ### AUC with the U statistic
 #' ###
