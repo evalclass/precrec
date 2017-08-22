@@ -62,6 +62,7 @@ Installation
         -   **Windows**: Install Rtools (available on the CRAN website).
         -   **Mac**: Install Xcode from the Mac App Store.
         -   **Linux**: Install a compiler and various development libraries (details vary across different flavors of Linux).
+
     2.  Install `devtools` from CRAN with `install.packages("devtools")`.
 
     3.  Install `precrec` from the GitHub repository with `devtools::install_github("takayasaito/precrec")`.
@@ -69,7 +70,7 @@ Installation
 Functions
 ---------
 
-The `precrec` package provides the following five functions.
+The `precrec` package provides the following six functions.
 
 | Function             | Description                                                |
 |:---------------------|:-----------------------------------------------------------|
@@ -78,6 +79,7 @@ The `precrec` package provides the following five functions.
 | join\_scores         | Join scores of multiple models into a list                 |
 | join\_labels         | Join observed labels of multiple test datasets into a list |
 | create\_sim\_samples | Create random samples for simulations                      |
+| format\_nfold        | Create n-fold cross validation dataset from data frame     |
 
 Moreover, the `precrec` package provides eight S3 generics for the S3 object created by the `evalmod` function. **N.B.** The R language specifies S3 objects and S3 generic functions as part of the most basic object-oriented system in R.
 

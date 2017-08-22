@@ -4,7 +4,7 @@
 #' provide a robust platform for performance evaluation of binary classifiers.
 #'
 #' @section Functions:
-#' The precrec package provides the following five functions.
+#' The precrec package provides the following six functions.
 #'
 #'   \tabular{ll}{
 #'     \strong{Function} \tab \strong{Description} \cr
@@ -12,7 +12,8 @@
 #'     \code{\link{mmdata}}             \tab Reformat input data for performance evaluation calculation \cr
 #'     \code{\link{join_scores}}        \tab Join scores of multiple models into a list \cr
 #'     \code{\link{join_labels}}        \tab Join observed labels of multiple test datasets into a list \cr
-#'     \code{\link{create_sim_samples}} \tab Create random samples for simulations
+#'     \code{\link{create_sim_samples}} \tab Create random samples for simulations \cr
+#'     \code{\link{format_nfold}}       \tab Create n-fold cross validation dataset from data frame
 #'   }
 #'
 #' @section S3 generics:
