@@ -69,9 +69,49 @@
 # Load data.table
 #
 .load_data_table <- function() {
-  loaded = TRUE
+  loaded <- TRUE
   if (!requireNamespace("data.table", quietly = TRUE)) {
-    loaded = FALSE
+    loaded <- FALSE
   }
   loaded
 }
+
+#
+# Get negative and positive numbers
+#
+.get_pn_info <- function(object) {
+  nps <- attr(object, "data_info")[["np"]]
+  nns <- attr(object, "data_info")[["nn"]]
+
+  is_consistant <- TRUE
+  prev_np <- NA
+  prev_nn <- NA
+  np_tot <- 0
+  nn_tot <- 0
+  n <- 0
+  for (i in seq_along(nps)) {
+    np <- nps[i]
+    nn <- nns[i]
+
+    if ((!is.na(prev_np) && np != prev_np)
+        ||  (!is.na(prev_nn) && nn != prev_nn)) {
+      is_consistant <- FALSE
+    }
+
+    np_tot <- np_tot + np
+    nn_tot <- nn_tot + nn
+    prev_np <- np
+    prev_nn <- nn
+    n <- n + 1
+  }
+
+  avg_np <- np_tot / n
+  avg_nn <- nn_tot / n
+
+  prc_base <- avg_np / (avg_np + avg_nn)
+
+  list(avg_np = avg_np, avg_nn = avg_nn, is_consistant = is_consistant,
+       prc_base = prc_base)
+
+}
+
