@@ -3,7 +3,7 @@
 branches:
   only:
     - master
-    - develop
+#    - develop
 
 os:
  - linux

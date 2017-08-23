@@ -30,6 +30,10 @@ get_tab_precrec_funcs <- function() {
     "    <td><code><a href='create_sim_samples.html'>create_sim_samples</a></code> </td>",
     "    <td> Randomly creates test datasets with different performance levels </td>",
     "  </tr>",
+    "  <tr>",
+    "    <td><code><a href='format_nfold.html'>format_nfold</a></code> </td>",
+    "    <td> Create n-fold cross validation dataset from data frame </td>",
+    "  </tr>",
     "</table>"
   )
 }
