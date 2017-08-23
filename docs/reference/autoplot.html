@@ -312,10 +312,10 @@
 
 <span class='co'># Reduced supporting point</span>
 <span class='fu'>system.time</span>(<span class='fu'>autoplot</span>(<span class='no'>evalss</span>))</div><img src='autoplot-4.png' alt='' width='540' height='400' /><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.533   0.034   0.599 </div><div class='input'>
+#&gt;   0.596   0.044   0.673 </div><div class='input'>
 <span class='co'># Full supporting points</span>
 <span class='fu'>system.time</span>(<span class='fu'>autoplot</span>(<span class='no'>evalss</span>, <span class='kw'>reduce_points</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>))</div><img src='autoplot-7.png' alt='' width='540' height='400' /><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   3.519   0.310   3.902 </div><div class='input'>
+#&gt;   3.738   0.338   4.148 </div><div class='input'>
 <span class='co'>## Get a grob object for multiple plots</span>
 <span class='no'>pp1</span> <span class='kw'>&lt;-</span> <span class='fu'>autoplot</span>(<span class='no'>sscurves</span>, <span class='kw'>ret_grob</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 <span class='fu'>plot.new</span>()</div><div class='input'><span class='fu'>grid.draw</span>(<span class='no'>pp1</span>)</div><img src='autoplot-11.png' alt='' width='540' height='400' /><div class='input'>
@@ -352,10 +352,10 @@
 
 <span class='co'># Reduced supporting point</span>
 <span class='fu'>system.time</span>(<span class='fu'>autoplot</span>(<span class='no'>evalms</span>))</div><img src='autoplot-23.png' alt='' width='540' height='400' /><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.879   0.080   0.991 </div><div class='input'>
+#&gt;   0.960   0.115   1.114 </div><div class='input'>
 <span class='co'># Full supporting points</span>
 <span class='fu'>system.time</span>(<span class='fu'>autoplot</span>(<span class='no'>evalms</span>, <span class='kw'>reduce_points</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>))</div><img src='autoplot-26.png' alt='' width='540' height='400' /><div class='output co'>#&gt;    user  system elapsed 
-#&gt;  15.720   1.852  17.658 </div><div class='input'>
+#&gt;  16.136   1.939  18.211 </div><div class='input'>
 <span class='co'>## Hide the legend</span>
 <span class='fu'>autoplot</span>(<span class='no'>mscurves</span>, <span class='kw'>show_legend</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><img src='autoplot-29.png' alt='' width='540' height='400' /><div class='input'>
 <span class='co'>## Generate an mspoints object that contains basic evaluation measures</span>
@@ -392,10 +392,10 @@
 
 <span class='co'># Reduced supporting point</span>
 <span class='fu'>system.time</span>(<span class='fu'>autoplot</span>(<span class='no'>evalsm</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))</div><img src='autoplot-41.png' alt='' width='540' height='400' /><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.509   0.024   0.559 </div><div class='input'>
+#&gt;   0.565   0.034   0.719 </div><div class='input'>
 <span class='co'># Full supporting points</span>
 <span class='fu'>system.time</span>(<span class='fu'>autoplot</span>(<span class='no'>evalsm</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>reduce_points</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>))</div><img src='autoplot-44.png' alt='' width='540' height='400' /><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   2.827   0.084   3.029 </div><div class='input'>
+#&gt;   2.890   0.108   3.139 </div><div class='input'>
 <span class='co'>## Generate an smpoints object that contains basic evaluation measures</span>
 <span class='no'>smpoints</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"basic"</span>)
 
@@ -429,15 +429,40 @@
 
 <span class='co'># Reduced supporting point</span>
 <span class='fu'>system.time</span>(<span class='fu'>autoplot</span>(<span class='no'>evalmm</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))</div><img src='autoplot-55.png' alt='' width='540' height='400' /><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.794   0.054   0.878 </div><div class='input'>
+#&gt;   0.888   0.081   1.006 </div><div class='input'>
 <span class='co'># Full supporting points</span>
 <span class='fu'>system.time</span>(<span class='fu'>autoplot</span>(<span class='no'>evalmm</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>reduce_points</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>))</div><img src='autoplot-58.png' alt='' width='540' height='400' /><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   5.698   0.288   6.073 </div><div class='input'>
+#&gt;   4.219   0.318   4.636 </div><div class='input'>
 <span class='co'>## Generate an mmpoints object that contains basic evaluation measures</span>
 <span class='no'>mmpoints</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"basic"</span>)
 
 <span class='co'>## Normalized ranks vs. average basic evaluation measures</span>
 <span class='fu'>autoplot</span>(<span class='no'>mmpoints</span>)</div><img src='autoplot-61.png' alt='' width='540' height='400' /><div class='input'>
+
+<span class='co'>##################################################</span>
+<span class='co'>### N-fold cross validation datasets</span>
+<span class='co'>###</span>
+
+<span class='co'>## Load test data</span>
+<span class='fu'>data</span>(<span class='no'>M2N50F5</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: data set ‘M2N50F5’ not found</span></div><div class='input'>
+<span class='co'>## Speficy nessesary columns to create mdat</span>
+<span class='no'>cvdat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mmdata.html'>mmdata</a></span>(<span class='kw'>nfold_df</span> <span class='kw'>=</span> <span class='no'>M2N50F5</span>, <span class='kw'>score_cols</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>),
+                <span class='kw'>lab_col</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>fold_col</span> <span class='kw'>=</span> <span class='fl'>4</span>,
+                <span class='kw'>modnames</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"m1"</span>, <span class='st'>"m2"</span>), <span class='kw'>dsids</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>5</span>)
+
+<span class='co'>## Generate an mmcurve object that contains ROC and Precision-Recall curves</span>
+<span class='no'>cvcurves</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>cvdat</span>)
+
+<span class='co'>## Average ROC and Precision-Recall curves</span>
+<span class='fu'>autoplot</span>(<span class='no'>cvcurves</span>)</div><img src='autoplot-65.png' alt='' width='540' height='400' /><div class='input'>
+<span class='co'>## Show confidence bounds</span>
+<span class='fu'>autoplot</span>(<span class='no'>cvcurves</span>, <span class='kw'>show_cb</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><img src='autoplot-67.png' alt='' width='540' height='400' /><div class='input'>
+<span class='co'>## Generate an mmpoints object that contains basic evaluation measures</span>
+<span class='no'>cvpoints</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>cvdat</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"basic"</span>)
+
+<span class='co'>## Normalized ranks vs. average basic evaluation measures</span>
+<span class='fu'>autoplot</span>(<span class='no'>cvpoints</span>)</div><img src='autoplot-69.png' alt='' width='540' height='400' /><div class='input'>
+
 
 </div></pre>
   </div>

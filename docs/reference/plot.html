@@ -372,6 +372,31 @@
 <span class='co'>## Plot normalized ranks vs. average basic evaluation measures</span>
 <span class='fu'>plot</span>(<span class='no'>mmpoints</span>)</div><img src='plot-34.png' alt='' width='540' height='400' /><div class='input'>
 
+<span class='co'>##################################################</span>
+<span class='co'>### N-fold cross validation datasets</span>
+<span class='co'>###</span>
+
+<span class='co'>## Load test data</span>
+<span class='fu'>data</span>(<span class='no'>M2N50F5</span>)
+
+<span class='co'>## Speficy nessesary columns to create mdat</span>
+<span class='no'>cvdat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mmdata.html'>mmdata</a></span>(<span class='kw'>nfold_df</span> <span class='kw'>=</span> <span class='no'>M2N50F5</span>, <span class='kw'>score_cols</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>),
+                <span class='kw'>lab_col</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>fold_col</span> <span class='kw'>=</span> <span class='fl'>4</span>,
+                <span class='kw'>modnames</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"m1"</span>, <span class='st'>"m2"</span>), <span class='kw'>dsids</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>5</span>)
+
+<span class='co'>## Generate an mmcurve object that contains ROC and Precision-Recall curves</span>
+<span class='no'>cvcurves</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>cvdat</span>)
+
+<span class='co'>## Average ROC and Precision-Recall curves</span>
+<span class='fu'>plot</span>(<span class='no'>cvcurves</span>)</div><img src='plot-36.png' alt='' width='540' height='400' /><div class='input'>
+<span class='co'>## Show confidence bounds</span>
+<span class='fu'>plot</span>(<span class='no'>cvcurves</span>, <span class='kw'>show_cb</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><img src='plot-38.png' alt='' width='540' height='400' /><div class='input'>
+<span class='co'>## Generate an mmpoints object that contains basic evaluation measures</span>
+<span class='no'>cvpoints</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>cvdat</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"basic"</span>)
+
+<span class='co'>## Normalized ranks vs. average basic evaluation measures</span>
+<span class='fu'>plot</span>(<span class='no'>cvpoints</span>)</div><img src='plot-40.png' alt='' width='540' height='400' /><div class='input'>
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

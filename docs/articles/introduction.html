@@ -56,16 +56,16 @@
     <div class="page-header toc-ignore">
       <h1>Introduction to precrec</h1>
             
-            <h4 class="date">2017-06-25</h4>
+            <h4 class="date">2017-08-23</h4>
           </div>
 
     
     
 <div class="contents">
 <p>The <code>precrec</code> package provides accurate computations of ROC and Precision-Recall curves.</p>
-<div id="roc-and-precision-recall-calculations" class="section level2">
+<div id="basic-functions" class="section level2">
 <h2 class="hasAnchor">
-<a href="#roc-and-precision-recall-calculations" class="anchor"></a>1. ROC and Precision-Recall calculations</h2>
+<a href="#basic-functions" class="anchor"></a>1. Basic functions</h2>
 <p>The <code>evalmod</code> function calculates ROC and Precision-Recall curves and returns an S3 object.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(precrec)
 
@@ -163,9 +163,9 @@ eval1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/evalm
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Full supporting points</span>
 <span class="kw">system.time</span>(<span class="kw"><a href="../reference/autoplot.html">autoplot</a></span>(eval1, <span class="dt">reduce_points =</span> <span class="ot">FALSE</span>))</code></pre></div>
 <pre><code>##    user  system elapsed 
-##   1.118   0.068   1.214 
+##   1.218   0.082   1.338 
 ##    user  system elapsed 
-##  15.588   1.717  17.364</code></pre>
+##  15.692   1.815  17.630</code></pre>
 </div>
 <div id="example-of-the-auc-function" class="section level4">
 <h4 class="hasAnchor">
@@ -399,9 +399,9 @@ samps3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/crea
 samps4 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/create_sim_samples.html">create_sim_samples</a></span>(<span class="dv">20</span>, <span class="dv">10</span>, <span class="dv">10</span>, <span class="st">"all"</span>)</code></pre></div>
 </div>
 </div>
-<div id="performance-evaluation-of-multiple-models" class="section level2">
+<div id="multiple-models" class="section level2">
 <h2 class="hasAnchor">
-<a href="#performance-evaluation-of-multiple-models" class="anchor"></a>3. Performance evaluation of multiple models</h2>
+<a href="#multiple-models" class="anchor"></a>3. Multiple models</h2>
 <p>The <code>evalmod</code> function calculate performance evaluation for multiple models when multiple model names are specified with the <code>mmdata</code> or the <code>evalmod</code> function.</p>
 <div id="data-preparation-1" class="section level3">
 <h3 class="hasAnchor">
@@ -416,9 +416,9 @@ msmdat2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mmd
 <span class="co"># Use a sample dataset created by the create_sim_samples function</span>
 msmdat3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mmdata.html">mmdata</a></span>(samps2[[<span class="st">"scores"</span>]], samps2[[<span class="st">"labels"</span>]], <span class="dt">modnames =</span> samps2[[<span class="st">"modnames"</span>]])</code></pre></div>
 </div>
-<div id="roc-and-precision-recall-calculations-1" class="section level3">
+<div id="roc-and-precision-recall-calculations" class="section level3">
 <h3 class="hasAnchor">
-<a href="#roc-and-precision-recall-calculations-1" class="anchor"></a>ROC and Precision-Recall calculations</h3>
+<a href="#roc-and-precision-recall-calculations" class="anchor"></a>ROC and Precision-Recall calculations</h3>
 <p>The <code>evalmod</code> function automatically detects multiple models.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Calculate ROC and Precision-Recall curves for multiple models</span>
 mscurves &lt;-<span class="st"> </span><span class="kw"><a href="../reference/evalmod.html">evalmod</a></span>(msmdat3)</code></pre></div>
@@ -450,42 +450,42 @@ knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">he
 <tbody>
 <tr class="odd">
 <td align="right">0.000</td>
-<td align="right">0.0</td>
+<td align="right">0</td>
 <td align="left">random</td>
 <td align="left">1</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="even">
-<td align="right">0.000</td>
-<td align="right">0.1</td>
-<td align="left">random</td>
-<td align="left">1</td>
-<td align="left">ROC</td>
-</tr>
-<tr class="odd">
 <td align="right">0.001</td>
-<td align="right">0.1</td>
-<td align="left">random</td>
-<td align="left">1</td>
-<td align="left">ROC</td>
-</tr>
-<tr class="even">
-<td align="right">0.002</td>
-<td align="right">0.1</td>
+<td align="right">0</td>
 <td align="left">random</td>
 <td align="left">1</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="odd">
-<td align="right">0.003</td>
-<td align="right">0.1</td>
+<td align="right">0.002</td>
+<td align="right">0</td>
 <td align="left">random</td>
 <td align="left">1</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="even">
+<td align="right">0.003</td>
+<td align="right">0</td>
+<td align="left">random</td>
+<td align="left">1</td>
+<td align="left">ROC</td>
+</tr>
+<tr class="odd">
 <td align="right">0.004</td>
-<td align="right">0.1</td>
+<td align="right">0</td>
+<td align="left">random</td>
+<td align="left">1</td>
+<td align="left">ROC</td>
+</tr>
+<tr class="even">
+<td align="right">0.005</td>
+<td align="right">0</td>
 <td align="left">random</td>
 <td align="left">1</td>
 <td align="left">ROC</td>
@@ -495,9 +495,9 @@ knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">he
 </div>
 </div>
 </div>
-<div id="performance-evaluation-of-multiple-test-datasets" class="section level2">
+<div id="multiple-test-sets" class="section level2">
 <h2 class="hasAnchor">
-<a href="#performance-evaluation-of-multiple-test-datasets" class="anchor"></a>4. Performance evaluation of multiple test datasets</h2>
+<a href="#multiple-test-sets" class="anchor"></a>4. Multiple test sets</h2>
 <p>The <code>evalmod</code> function calculate performance evaluation for multiple test datasets when different test dataset IDs are specified with the <code>mmdata</code> or the <code>evalmod</code> function.</p>
 <div id="data-preparation-2" class="section level3">
 <h3 class="hasAnchor">
@@ -509,9 +509,9 @@ smmdat1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mmd
 <span class="co"># Use a sample dataset created by the create_sim_samples function</span>
 smmdat2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mmdata.html">mmdata</a></span>(samps3[[<span class="st">"scores"</span>]], samps3[[<span class="st">"labels"</span>]], <span class="dt">dsids =</span> samps3[[<span class="st">"dsids"</span>]])</code></pre></div>
 </div>
-<div id="roc-and-precision-recall-calculations-2" class="section level3">
+<div id="roc-and-precision-recall-calculations-1" class="section level3">
 <h3 class="hasAnchor">
-<a href="#roc-and-precision-recall-calculations-2" class="anchor"></a>ROC and Precision-Recall calculations</h3>
+<a href="#roc-and-precision-recall-calculations-1" class="anchor"></a>ROC and Precision-Recall calculations</h3>
 <p>The <code>evalmod</code> function automatically detects multiple test datasets.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Calculate curves for multiple test datasets and keep all the curves</span>
 smcurves &lt;-<span class="st"> </span><span class="kw"><a href="../reference/evalmod.html">evalmod</a></span>(smmdat2, <span class="dt">raw_curves =</span> <span class="ot">TRUE</span>)</code></pre></div>
@@ -545,43 +545,43 @@ knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">he
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="right">0</td>
+<td align="right">0.000</td>
 <td align="right">0.0</td>
 <td align="left">m1</td>
 <td align="left">1</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="even">
-<td align="right">0</td>
+<td align="right">0.000</td>
 <td align="right">0.1</td>
 <td align="left">m1</td>
 <td align="left">1</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="odd">
-<td align="right">0</td>
+<td align="right">0.000</td>
 <td align="right">0.2</td>
 <td align="left">m1</td>
 <td align="left">1</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="even">
-<td align="right">0</td>
+<td align="right">0.000</td>
 <td align="right">0.3</td>
 <td align="left">m1</td>
 <td align="left">1</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="odd">
-<td align="right">0</td>
-<td align="right">0.4</td>
+<td align="right">0.001</td>
+<td align="right">0.3</td>
 <td align="left">m1</td>
 <td align="left">1</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="even">
-<td align="right">0</td>
-<td align="right">0.5</td>
+<td align="right">0.002</td>
+<td align="right">0.3</td>
 <td align="left">m1</td>
 <td align="left">1</td>
 <td align="left">ROC</td>
@@ -591,9 +591,9 @@ knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">he
 </div>
 </div>
 </div>
-<div id="evaluation-of-multiple-models-and-multiple-test-datasets" class="section level2">
+<div id="multiple-models-and-multiple-test-sets" class="section level2">
 <h2 class="hasAnchor">
-<a href="#evaluation-of-multiple-models-and-multiple-test-datasets" class="anchor"></a>5. Evaluation of multiple models and multiple test datasets</h2>
+<a href="#multiple-models-and-multiple-test-sets" class="anchor"></a>5. Multiple models and multiple test sets</h2>
 <p>The <code>evalmod</code> function calculates performance evaluation for multiple models and multiple test datasets when different model names and test dataset IDs are specified with the <code>mmdata</code> or the <code>evalmod</code> function.</p>
 <div id="data-preparation-3" class="section level3">
 <h3 class="hasAnchor">
@@ -606,9 +606,9 @@ mmmdat1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mmd
 mmmdat2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mmdata.html">mmdata</a></span>(samps4[[<span class="st">"scores"</span>]], samps4[[<span class="st">"labels"</span>]], 
                   <span class="dt">modnames =</span> samps4[[<span class="st">"modnames"</span>]], <span class="dt">dsids =</span> samps4[[<span class="st">"dsids"</span>]])</code></pre></div>
 </div>
-<div id="roc-and-precision-recall-calculations-3" class="section level3">
+<div id="roc-and-precision-recall-calculations-2" class="section level3">
 <h3 class="hasAnchor">
-<a href="#roc-and-precision-recall-calculations-3" class="anchor"></a>ROC and Precision-Recall calculations</h3>
+<a href="#roc-and-precision-recall-calculations-2" class="anchor"></a>ROC and Precision-Recall calculations</h3>
 <p>The <code>evalmod</code> function automatically detects multiple models and multiple test datasets.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Calculate curves for multiple models and multiple test datasets</span>
 mmcurves &lt;-<span class="st"> </span><span class="kw"><a href="../reference/evalmod.html">evalmod</a></span>(mmmdat2)</code></pre></div>
@@ -644,7 +644,7 @@ knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">he
 <tbody>
 <tr class="odd">
 <td align="right">0.000</td>
-<td align="right">0.00</td>
+<td align="right">0.000</td>
 <td align="right">0.0000000</td>
 <td align="right">0.0000000</td>
 <td align="left">random</td>
@@ -652,41 +652,41 @@ knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">he
 </tr>
 <tr class="even">
 <td align="right">0.000</td>
-<td align="right">0.06</td>
-<td align="right">0.0269579</td>
-<td align="right">0.0930421</td>
+<td align="right">0.055</td>
+<td align="right">0.0047783</td>
+<td align="right">0.1052217</td>
 <td align="left">random</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="odd">
 <td align="right">0.001</td>
-<td align="right">0.06</td>
-<td align="right">0.0269579</td>
-<td align="right">0.0930421</td>
+<td align="right">0.055</td>
+<td align="right">0.0047783</td>
+<td align="right">0.1052217</td>
 <td align="left">random</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="even">
 <td align="right">0.002</td>
-<td align="right">0.06</td>
-<td align="right">0.0269579</td>
-<td align="right">0.0930421</td>
+<td align="right">0.055</td>
+<td align="right">0.0047783</td>
+<td align="right">0.1052217</td>
 <td align="left">random</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="odd">
 <td align="right">0.003</td>
-<td align="right">0.06</td>
-<td align="right">0.0269579</td>
-<td align="right">0.0930421</td>
+<td align="right">0.055</td>
+<td align="right">0.0047783</td>
+<td align="right">0.1052217</td>
 <td align="left">random</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="even">
 <td align="right">0.004</td>
-<td align="right">0.06</td>
-<td align="right">0.0269579</td>
-<td align="right">0.0930421</td>
+<td align="right">0.055</td>
+<td align="right">0.0047783</td>
+<td align="right">0.1052217</td>
 <td align="left">random</td>
 <td align="left">ROC</td>
 </tr>
@@ -736,9 +736,104 @@ smcurves_cb2 &lt;-<span class="st"> </span><span class="kw"><a href="../referenc
 <p><img src="introduction_files/figure-html/unnamed-chunk-26-1.png" width="672"><img src="introduction_files/figure-html/unnamed-chunk-26-2.png" width="672"></p>
 </div>
 </div>
-<div id="basic-performance-evaluation-measures" class="section level2">
+<div id="cross-validation" class="section level2">
 <h2 class="hasAnchor">
-<a href="#basic-performance-evaluation-measures" class="anchor"></a>7. Basic performance evaluation measures</h2>
+<a href="#cross-validation" class="anchor"></a>7. Cross validation</h2>
+<p>The <code>format_nfold</code> function takes a data frame with scores, label and n-fold columns and convert it to a list for <code>evalmod</code> and <code>mmdata</code>.</p>
+<div id="example-of-a-data-frame-with-5-fold-data" class="section level4">
+<h4 class="hasAnchor">
+<a href="#example-of-a-data-frame-with-5-fold-data" class="anchor"></a>Example of a data frame with 5-fold data</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load data</span>
+<span class="kw">data</span>(M2N50F5)
+
+<span class="co"># Use knitr::kable to display the result in a table format</span>
+knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">head</span>(M2N50F5))</code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="right">score1</th>
+<th align="right">score2</th>
+<th align="left">label</th>
+<th align="right">fold</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">2.0606025</td>
+<td align="right">1.0689227</td>
+<td align="left">pos</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">0.3066092</td>
+<td align="right">0.1745491</td>
+<td align="left">pos</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="right">1.5597733</td>
+<td align="right">-1.5666375</td>
+<td align="left">pos</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">-0.6044989</td>
+<td align="right">1.1572727</td>
+<td align="left">pos</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="right">-0.2229031</td>
+<td align="right">0.6070042</td>
+<td align="left">pos</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="right">-0.7679551</td>
+<td align="right">-1.7908147</td>
+<td align="left">pos</td>
+<td align="right">5</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="example-of-the-format_nfold-function-with-5-fold-datasets" class="section level4">
+<h4 class="hasAnchor">
+<a href="#example-of-the-format_nfold-function-with-5-fold-datasets" class="anchor"></a>Example of the format_nfold function with 5-fold datasets</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Convert data frame to list</span>
+nfold_list1 =<span class="st"> </span><span class="kw"><a href="../reference/format_nfold.html">format_nfold</a></span>(<span class="dt">nfold_df =</span> M2N50F5,  <span class="dt">score_cols =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), 
+                           <span class="dt">lab_col =</span> <span class="dv">3</span>, <span class="dt">fold_col =</span> <span class="dv">4</span>)
+
+<span class="co"># Use column names</span>
+nfold_list2 =<span class="st"> </span><span class="kw"><a href="../reference/format_nfold.html">format_nfold</a></span>(<span class="dt">nfold_df =</span> M2N50F5, <span class="dt">score_cols =</span> <span class="kw">c</span>(<span class="st">"score1"</span>, <span class="st">"score2"</span>),
+                           <span class="dt">lab_col =</span> <span class="st">"label"</span>, <span class="dt">fold_col =</span> <span class="st">"fold"</span>)
+
+<span class="co"># Use the result for evalmod</span>
+cvcurves &lt;-<span class="st"> </span><span class="kw"><a href="../reference/evalmod.html">evalmod</a></span>(<span class="dt">scores =</span> nfold_list2<span class="op">$</span>scores, <span class="dt">labels =</span> nfold_list2<span class="op">$</span>labels,
+                    <span class="dt">modnames =</span> <span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">"m1"</span>, <span class="st">"m2"</span>), <span class="dt">each =</span> <span class="dv">5</span>), <span class="dt">dsids =</span> <span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">2</span>))
+<span class="kw"><a href="../reference/autoplot.html">autoplot</a></span>(cvcurves)</code></pre></div>
+<p><img src="introduction_files/figure-html/unnamed-chunk-28-1.png" width="672"></p>
+</div>
+<div id="evalmod-and-mmdata-with-cross-validation-datasets" class="section level3">
+<h3 class="hasAnchor">
+<a href="#evalmod-and-mmdata-with-cross-validation-datasets" class="anchor"></a>evalmod and mmdata with cross validation datasets</h3>
+<p>Both <code>evalmod</code> and <code>mmdata</code> function can directly take the arguments of the <code>format_nfold</code> function.</p>
+<div id="example-of-evalmod-and-mmdata-with-5-fold-data" class="section level4">
+<h4 class="hasAnchor">
+<a href="#example-of-evalmod-and-mmdata-with-5-fold-data" class="anchor"></a>Example of evalmod and mmdata with 5-fold data</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># mmdata</span>
+cvcurves2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mmdata.html">mmdata</a></span>(<span class="dt">nfold_df =</span> M2N50F5, <span class="dt">score_cols =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="dt">lab_col =</span> <span class="dv">3</span>, <span class="dt">fold_col =</span> <span class="dv">4</span>, 
+                    <span class="dt">modnames =</span> <span class="kw">c</span>(<span class="st">"m1"</span>, <span class="st">"m2"</span>), <span class="dt">dsids =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>)
+
+<span class="co"># evalmod</span>
+cvcurves3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/evalmod.html">evalmod</a></span>(<span class="dt">nfold_df =</span> M2N50F5, <span class="dt">score_cols =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="dt">lab_col =</span> <span class="dv">3</span>, <span class="dt">fold_col =</span> <span class="dv">4</span>, 
+                     <span class="dt">modnames =</span> <span class="kw">c</span>(<span class="st">"m1"</span>, <span class="st">"m2"</span>), <span class="dt">dsids =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>)
+<span class="kw"><a href="../reference/autoplot.html">autoplot</a></span>(cvcurves3)</code></pre></div>
+<p><img src="introduction_files/figure-html/unnamed-chunk-29-1.png" width="672"></p>
+</div>
+</div>
+</div>
+<div id="basic-performance-measures" class="section level2">
+<h2 class="hasAnchor">
+<a href="#basic-performance-measures" class="anchor"></a>8. Basic performance measures</h2>
 <p>The <code>evalmod</code> function also calculates basic evaluation measures - error, accuracy, specificity, sensitivity, and precision.</p>
 <table class="table">
 <thead><tr class="header">
@@ -795,14 +890,14 @@ mmpoins &lt;-<span class="st"> </span><span class="kw"><a href="../reference/eva
 
 <span class="co"># Show normalized ranks vs. Matthews correlation coefficient and F-score</span>
 <span class="kw"><a href="../reference/autoplot.html">autoplot</a></span>(mmpoins, <span class="kw">c</span>(<span class="st">"mcc"</span>, <span class="st">"fscore"</span>))</code></pre></div>
-<p><img src="introduction_files/figure-html/unnamed-chunk-28-1.png" width="672"><img src="introduction_files/figure-html/unnamed-chunk-28-2.png" width="672"><img src="introduction_files/figure-html/unnamed-chunk-28-3.png" width="672"></p>
+<p><img src="introduction_files/figure-html/unnamed-chunk-31-1.png" width="672"><img src="introduction_files/figure-html/unnamed-chunk-31-2.png" width="672"><img src="introduction_files/figure-html/unnamed-chunk-31-3.png" width="672"></p>
 <div id="normalized-ranks-and-predicted-scores" class="section level4">
 <h4 class="hasAnchor">
 <a href="#normalized-ranks-and-predicted-scores" class="anchor"></a>Normalized ranks and predicted scores</h4>
 <p>In addition to the basic measures, the <code>autoplot</code> function can plot normalized ranks vs. scores and labels.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Show normalized ranks vs. scores and labels</span>
 <span class="kw"><a href="../reference/autoplot.html">autoplot</a></span>(mmpoins, <span class="kw">c</span>(<span class="st">"score"</span>, <span class="st">"label"</span>))</code></pre></div>
-<p><img src="introduction_files/figure-html/unnamed-chunk-29-1.png" width="672"></p>
+<p><img src="introduction_files/figure-html/unnamed-chunk-32-1.png" width="672"></p>
 </div>
 <div id="example-of-the-as-data-frame-function-4" class="section level4">
 <h4 class="hasAnchor">
@@ -833,41 +928,41 @@ knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">he
 </tr>
 <tr class="even">
 <td align="right">0.05</td>
-<td align="right">1.7041484</td>
-<td align="right">1.5218808</td>
-<td align="right">1.8864160</td>
+<td align="right">1.7626405</td>
+<td align="right">1.6072042</td>
+<td align="right">1.9180767</td>
 <td align="left">random</td>
 <td align="left">score</td>
 </tr>
 <tr class="odd">
 <td align="right">0.10</td>
-<td align="right">1.2935823</td>
-<td align="right">1.1290767</td>
-<td align="right">1.4580880</td>
+<td align="right">1.4190996</td>
+<td align="right">1.2580831</td>
+<td align="right">1.5801160</td>
 <td align="left">random</td>
 <td align="left">score</td>
 </tr>
 <tr class="even">
 <td align="right">0.15</td>
-<td align="right">1.0674895</td>
-<td align="right">0.9204148</td>
-<td align="right">1.2145642</td>
+<td align="right">1.1231853</td>
+<td align="right">0.9658341</td>
+<td align="right">1.2805365</td>
 <td align="left">random</td>
 <td align="left">score</td>
 </tr>
 <tr class="odd">
 <td align="right">0.20</td>
-<td align="right">0.8930181</td>
-<td align="right">0.7451708</td>
-<td align="right">1.0408653</td>
+<td align="right">0.9444615</td>
+<td align="right">0.7858974</td>
+<td align="right">1.1030256</td>
 <td align="left">random</td>
 <td align="left">score</td>
 </tr>
 <tr class="even">
 <td align="right">0.25</td>
-<td align="right">0.7133063</td>
-<td align="right">0.5722747</td>
-<td align="right">0.8543378</td>
+<td align="right">0.8070471</td>
+<td align="right">0.6509105</td>
+<td align="right">0.9631837</td>
 <td align="left">random</td>
 <td align="left">score</td>
 </tr>
@@ -878,7 +973,7 @@ knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">he
 </div>
 <div id="partial-aucs" class="section level2">
 <h2 class="hasAnchor">
-<a href="#partial-aucs" class="anchor"></a>8. Partial AUCs</h2>
+<a href="#partial-aucs" class="anchor"></a>9. Partial AUCs</h2>
 <p>The <code>part</code> function calculates partial AUCs and standardized partial AUCs of both ROC and precision-recall curves. Standardized pAUCs (spAUCs) are standardized to the score range between 0 and 1.</p>
 <div id="partial-auc-calculations" class="section level3">
 <h3 class="hasAnchor">
@@ -927,12 +1022,12 @@ knitr<span class="op">::</span><span class="kw">kable</span>(paucs.df)</code></p
 <p>All the S3 generics are effective for the S3 object generated by this approach.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Show ROC and Precision-Recall curves</span>
 <span class="kw"><a href="../reference/autoplot.html">autoplot</a></span>(curves.part)</code></pre></div>
-<p><img src="introduction_files/figure-html/unnamed-chunk-32-1.png" width="672"></p>
+<p><img src="introduction_files/figure-html/unnamed-chunk-35-1.png" width="672"></p>
 </div>
 </div>
 <div id="fast-auc-roc-calculation" class="section level2">
 <h2 class="hasAnchor">
-<a href="#fast-auc-roc-calculation" class="anchor"></a>9. Fast AUC (ROC) calculation</h2>
+<a href="#fast-auc-roc-calculation" class="anchor"></a>10. Fast AUC (ROC) calculation</h2>
 <p>The area under the ROC curve can be calculated from the U statistic, which is the test statistic of the Mann–Whitney U test.</p>
 <div id="auc-calculation-with-the-u-statistic" class="section level3">
 <h3 class="hasAnchor">
@@ -962,9 +1057,9 @@ knitr<span class="op">::</span><span class="kw">kable</span>(aucs.df)</code></pr
 </table>
 </div>
 </div>
-<div id="simulation-with-balanced-and-imbalanced-datasets" class="section level2">
+<div id="balanced-and-imbalanced-datasets" class="section level2">
 <h2 class="hasAnchor">
-<a href="#simulation-with-balanced-and-imbalanced-datasets" class="anchor"></a>10. Simulation with balanced and imbalanced datasets</h2>
+<a href="#balanced-and-imbalanced-datasets" class="anchor"></a>11. Balanced and imbalanced datasets</h2>
 <p>It is easy to simulate various scenarios, such as balanced vs. imbalanced datasets, by using the <code>evalmod</code> and <code>create_sim_samples</code> functions.</p>
 <div id="data-preparation-4" class="section level3">
 <h3 class="hasAnchor">
@@ -979,9 +1074,9 @@ samps6 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/crea
 simmdat2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mmdata.html">mmdata</a></span>(samps6[[<span class="st">"scores"</span>]], samps6[[<span class="st">"labels"</span>]], 
                    <span class="dt">modnames =</span> samps6[[<span class="st">"modnames"</span>]], <span class="dt">dsids =</span> samps6[[<span class="st">"dsids"</span>]])</code></pre></div>
 </div>
-<div id="roc-and-precision-recall-calculations-4" class="section level3">
+<div id="roc-and-precision-recall-calculations-3" class="section level3">
 <h3 class="hasAnchor">
-<a href="#roc-and-precision-recall-calculations-4" class="anchor"></a>ROC and Precision-Recall calculations</h3>
+<a href="#roc-and-precision-recall-calculations-3" class="anchor"></a>ROC and Precision-Recall calculations</h3>
 <p>The <code>evalmod</code> function automatically detects multiple models and multiple test datasets.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Balanced dataset</span>
 simcurves1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/evalmod.html">evalmod</a></span>(simmdat1)
@@ -998,12 +1093,12 @@ simcurves2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 
 <span class="co"># Imbalanced dataset</span>
 <span class="kw"><a href="../reference/autoplot.html">autoplot</a></span>(simcurves2)</code></pre></div>
-<p><img src="introduction_files/figure-html/unnamed-chunk-36-1.png" width="672"><img src="introduction_files/figure-html/unnamed-chunk-36-2.png" width="672"></p>
+<p><img src="introduction_files/figure-html/unnamed-chunk-39-1.png" width="672"><img src="introduction_files/figure-html/unnamed-chunk-39-2.png" width="672"></p>
 </div>
 </div>
 <div id="citation" class="section level2">
 <h2 class="hasAnchor">
-<a href="#citation" class="anchor"></a>11. Citation</h2>
+<a href="#citation" class="anchor"></a>12. Citation</h2>
 <p><em>Precrec: fast and accurate precision-recall and ROC curve calculations in R</em></p>
 <p>Takaya Saito; Marc Rehmsmeier</p>
 <p>Bioinformatics 2017; 33 (1): 145-147.</p>
@@ -1011,7 +1106,7 @@ simcurves2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 </div>
 <div id="external-links" class="section level2">
 <h2 class="hasAnchor">
-<a href="#external-links" class="anchor"></a>12. External links</h2>
+<a href="#external-links" class="anchor"></a>13. External links</h2>
 <ul>
 <li><p><a href="https://classeval.wordpress.com/">Classifier evaluation with imbalanced datasets</a> - our web site that contains several pages with useful tips for performance evaluation on binary classifiers.</p></li>
 <li><p><a href="http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0118432">The Precision-Recall Plot Is More Informative than the ROC Plot When Evaluating Binary Classifiers on Imbalanced Datasets</a> - our paper that summarized potential pitfalls of ROC plots with imbalanced datasets and advantages of using precision-recall plots instead.</p></li>
@@ -1024,18 +1119,19 @@ simcurves2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
         <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#roc-and-precision-recall-calculations">1. ROC and Precision-Recall calculations</a></li>
+<li><a href="#basic-functions">1. Basic functions</a></li>
       <li><a href="#data-preparation">2. Data preparation</a></li>
-      <li><a href="#performance-evaluation-of-multiple-models">3. Performance evaluation of multiple models</a></li>
-      <li><a href="#performance-evaluation-of-multiple-test-datasets">4. Performance evaluation of multiple test datasets</a></li>
-      <li><a href="#evaluation-of-multiple-models-and-multiple-test-datasets">5. Evaluation of multiple models and multiple test datasets</a></li>
+      <li><a href="#multiple-models">3. Multiple models</a></li>
+      <li><a href="#multiple-test-sets">4. Multiple test sets</a></li>
+      <li><a href="#multiple-models-and-multiple-test-sets">5. Multiple models and multiple test sets</a></li>
       <li><a href="#confidence-interval-bands">6. Confidence interval bands</a></li>
-      <li><a href="#basic-performance-evaluation-measures">7. Basic performance evaluation measures</a></li>
-      <li><a href="#partial-aucs">8. Partial AUCs</a></li>
-      <li><a href="#fast-auc-roc-calculation">9. Fast AUC (ROC) calculation</a></li>
-      <li><a href="#simulation-with-balanced-and-imbalanced-datasets">10. Simulation with balanced and imbalanced datasets</a></li>
-      <li><a href="#citation">11. Citation</a></li>
-      <li><a href="#external-links">12. External links</a></li>
+      <li><a href="#cross-validation">7. Cross validation</a></li>
+      <li><a href="#basic-performance-measures">8. Basic performance measures</a></li>
+      <li><a href="#partial-aucs">9. Partial AUCs</a></li>
+      <li><a href="#fast-auc-roc-calculation">10. Fast AUC (ROC) calculation</a></li>
+      <li><a href="#balanced-and-imbalanced-datasets">11. Balanced and imbalanced datasets</a></li>
+      <li><a href="#citation">12. Citation</a></li>
+      <li><a href="#external-links">13. External links</a></li>
       </ul>
 </div>
       </div>
