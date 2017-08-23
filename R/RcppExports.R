@@ -2,54 +2,54 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 calc_auc <- function(xs, ys) {
-    .Call(precrec_calc_auc, xs, ys)
+    .Call(`_precrec_calc_auc`, xs, ys)
 }
 
 calc_avg_curve <- function(curves, x_bins, ci_q) {
-    .Call(precrec_calc_avg_curve, curves, x_bins, ci_q)
+    .Call(`_precrec_calc_avg_curve`, curves, x_bins, ci_q)
 }
 
 calc_avg_points <- function(points, ci_q) {
-    .Call(precrec_calc_avg_points, points, ci_q)
+    .Call(`_precrec_calc_avg_points`, points, ci_q)
 }
 
 calc_basic_measures <- function(np, nn, tps, fps, tns, fns) {
-    .Call(precrec_calc_basic_measures, np, nn, tps, fps, tns, fns)
+    .Call(`_precrec_calc_basic_measures`, np, nn, tps, fps, tns, fns)
 }
 
 calc_uauc_frank <- function(np, nn, scores, olabs, na_last, ties_method, frank) {
-    .Call(precrec_calc_uauc_frank, np, nn, scores, olabs, na_last, ties_method, frank)
+    .Call(`_precrec_calc_uauc_frank`, np, nn, scores, olabs, na_last, ties_method, frank)
 }
 
 calc_uauc <- function(np, nn, scores, olabs, na_worst, ties_method) {
-    .Call(precrec_calc_uauc, np, nn, scores, olabs, na_worst, ties_method)
+    .Call(`_precrec_calc_uauc`, np, nn, scores, olabs, na_worst, ties_method)
 }
 
 convert_curve_avg_df <- function(obj, uniq_modnames, modnames, curvetype_names, x_bins) {
-    .Call(precrec_convert_curve_avg_df, obj, uniq_modnames, modnames, curvetype_names, x_bins)
+    .Call(`_precrec_convert_curve_avg_df`, obj, uniq_modnames, modnames, curvetype_names, x_bins)
 }
 
 convert_curve_df <- function(obj, uniq_modnames, uniq_dsids, modnames, dsids, dsid_modnames, curvetype_names, x_bins) {
-    .Call(precrec_convert_curve_df, obj, uniq_modnames, uniq_dsids, modnames, dsids, dsid_modnames, curvetype_names, x_bins)
+    .Call(`_precrec_convert_curve_df`, obj, uniq_modnames, uniq_dsids, modnames, dsids, dsid_modnames, curvetype_names, x_bins)
 }
 
 create_confusion_matrices <- function(olabs, ranks, rank_idx) {
-    .Call(precrec_create_confusion_matrices, olabs, ranks, rank_idx)
+    .Call(`_precrec_create_confusion_matrices`, olabs, ranks, rank_idx)
 }
 
 create_prc_curve <- function(tps, fps, sn, pr, x_bins) {
-    .Call(precrec_create_prc_curve, tps, fps, sn, pr, x_bins)
+    .Call(`_precrec_create_prc_curve`, tps, fps, sn, pr, x_bins)
 }
 
 create_roc_curve <- function(tps, fps, sp, sn, x_bins) {
-    .Call(precrec_create_roc_curve, tps, fps, sp, sn, x_bins)
+    .Call(`_precrec_create_roc_curve`, tps, fps, sp, sn, x_bins)
 }
 
 format_labels <- function(labels, posclass) {
-    .Call(precrec_format_labels, labels, posclass)
+    .Call(`_precrec_format_labels`, labels, posclass)
 }
 
 get_score_ranks <- function(scores, na_worst, ties_method) {
-    .Call(precrec_get_score_ranks, scores, na_worst, ties_method)
+    .Call(`_precrec_get_score_ranks`, scores, na_worst, ties_method)
 }
 

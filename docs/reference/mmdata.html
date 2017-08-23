@@ -86,8 +86,9 @@
     
 
     <pre class="usage"><span class='fu'>mmdata</span>(<span class='no'>scores</span>, <span class='no'>labels</span>, <span class='kw'>modnames</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>dsids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>posclass</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>na_worst</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>ties_method</span> <span class='kw'>=</span> <span class='st'>"equiv"</span>, <span class='kw'>expd_first</span> <span class='kw'>=</span> <span class='st'>"modnames"</span>,
-  <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"rocprc"</span>, <span class='no'>...</span>)</pre>
+  <span class='kw'>na_worst</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>ties_method</span> <span class='kw'>=</span> <span class='st'>"equiv"</span>, <span class='kw'>expd_first</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"rocprc"</span>, <span class='kw'>nfold_df</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>score_cols</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>lab_col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>fold_col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -173,6 +174,26 @@ that the <code>evalmod</code> function calculates.</p><dl class='dl-horizontal'>
 </dl></td>
     </tr>
     <tr>
+      <th>nfold_df</th>
+      <td><p>A data frame that contains at least one score column,
+lable and fold columns.</p></td>
+    </tr>
+    <tr>
+      <th>score_cols</th>
+      <td><p>A character/numeric vector that specifies score columns
+of <code>nfold_df</code>.</p></td>
+    </tr>
+    <tr>
+      <th>lab_col</th>
+      <td><p>A number/string that specifies the label column
+of <code>nfold_df</code>.</p></td>
+    </tr>
+    <tr>
+      <th>fold_col</th>
+      <td><p>A number/string that specifies the fold column
+of <code>nfold_df</code>.</p></td>
+    </tr>
+    <tr>
       <th>...</th>
       <td><p>Not used by this method.</p></td>
     </tr>
@@ -188,7 +209,9 @@ that the <code>evalmod</code> function calculates.</p><dl class='dl-horizontal'>
 
     <p><code><a href='evalmod.html'>evalmod</a></code> for calculation evaluation measures.
   <code><a href='join_scores.html'>join_scores</a></code> and <code><a href='join_labels.html'>join_labels</a></code> for formatting
-  scores and labels with multiple datasets.</p>
+  scores and labels with multiple datasets.
+  <code><a href='format_nfold.html'>format_nfold</a></code> for creating n-fold cross validation dataset
+  from data frame.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -345,6 +368,58 @@ that the <code>evalmod</code> function calculates.</p><dl class='dl-horizontal'>
 #&gt;   48    good_er         10            100            100
 #&gt;   49      excel         10            100            100
 #&gt;   50       perf         10            100            100
+#&gt; </div><div class='input'>
+
+<span class='co'>##################################################</span>
+<span class='co'>### N-fold cross validation datasets</span>
+<span class='co'>###</span>
+
+<span class='co'>## Load test data</span>
+<span class='fu'>data</span>(<span class='no'>M2N50F5</span>)
+<span class='fu'>head</span>(<span class='no'>M2N50F5</span>)</div><div class='output co'>#&gt;       score1     score2 label fold
+#&gt; 1  2.0606025  1.0689227   pos    1
+#&gt; 2  0.3066092  0.1745491   pos    3
+#&gt; 3  1.5597733 -1.5666375   pos    1
+#&gt; 4 -0.6044989  1.1572727   pos    3
+#&gt; 5 -0.2229031  0.6070042   pos    5
+#&gt; 6 -0.7679551 -1.7908147   pos    5</div><div class='input'>
+<span class='co'>## Speficy nessesary columns to create mdat</span>
+<span class='no'>cvdat1</span> <span class='kw'>&lt;-</span> <span class='fu'>mmdata</span>(<span class='kw'>nfold_df</span> <span class='kw'>=</span> <span class='no'>M2N50F5</span>, <span class='kw'>score_cols</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>),
+                 <span class='kw'>lab_col</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>fold_col</span> <span class='kw'>=</span> <span class='fl'>4</span>,
+                 <span class='kw'>modnames</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"m1"</span>, <span class='st'>"m2"</span>), <span class='kw'>dsids</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>5</span>)
+<span class='no'>cvdat1</span></div><div class='output co'>#&gt; 
+#&gt;     === Input data ===
+#&gt; 
+#&gt;      Model name Dataset ID # of negatives # of positives
+#&gt;    1         m1          1              5              5
+#&gt;    2         m1          2              4              6
+#&gt;    3         m1          3              5              5
+#&gt;    4         m1          4              6              4
+#&gt;    5         m1          5              5              5
+#&gt;    6         m2          1              5              5
+#&gt;    7         m2          2              4              6
+#&gt;    8         m2          3              5              5
+#&gt;    9         m2          4              6              4
+#&gt;   10         m2          5              5              5
+#&gt; </div><div class='input'>
+<span class='co'>## Use column names</span>
+<span class='no'>cvdat2</span> <span class='kw'>&lt;-</span> <span class='fu'>mmdata</span>(<span class='kw'>nfold_df</span> <span class='kw'>=</span> <span class='no'>M2N50F5</span>, <span class='kw'>score_cols</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"score1"</span>, <span class='st'>"score2"</span>),
+                 <span class='kw'>lab_col</span> <span class='kw'>=</span> <span class='st'>"label"</span>, <span class='kw'>fold_col</span> <span class='kw'>=</span> <span class='st'>"fold"</span>,
+                 <span class='kw'>modnames</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"m1"</span>, <span class='st'>"m2"</span>), <span class='kw'>dsids</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>5</span>)
+<span class='no'>cvdat2</span></div><div class='output co'>#&gt; 
+#&gt;     === Input data ===
+#&gt; 
+#&gt;      Model name Dataset ID # of negatives # of positives
+#&gt;    1         m1          1              5              5
+#&gt;    2         m1          2              4              6
+#&gt;    3         m1          3              5              5
+#&gt;    4         m1          4              6              4
+#&gt;    5         m1          5              5              5
+#&gt;    6         m2          1              5              5
+#&gt;    7         m2          2              4              6
+#&gt;    8         m2          3              5              5
+#&gt;    9         m2          4              6              4
+#&gt;   10         m2          5              5              5
 #&gt; </div><div class='input'>
 </div></pre>
   </div>

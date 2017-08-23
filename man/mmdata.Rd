@@ -5,8 +5,9 @@
 \title{Reformat input data for performance evaluation calculation}
 \usage{
 mmdata(scores, labels, modnames = NULL, dsids = NULL, posclass = NULL,
-  na_worst = TRUE, ties_method = "equiv", expd_first = "modnames",
-  mode = "rocprc", ...)
+  na_worst = TRUE, ties_method = "equiv", expd_first = NULL,
+  mode = "rocprc", nfold_df = NULL, score_cols = NULL, lab_col = NULL,
+  fold_col = NULL, ...)
 }
 \arguments{
 \item{scores}{A numeric dataset of predicted scores. It can be a vector,
@@ -74,6 +75,18 @@ that the \code{evalmod} function calculates.
                  and F-score. }
   \item{"aucroc"}{Fast AUC(ROC) calculation with the U statistic}
 }}
+
+\item{nfold_df}{A data frame that contains at least one score column,
+lable and fold columns.}
+
+\item{score_cols}{A character/numeric vector that specifies score columns
+of \code{nfold_df}.}
+
+\item{lab_col}{A number/string that specifies the label column
+of \code{nfold_df}.}
+
+\item{fold_col}{A number/string that specifies the fold column
+of \code{nfold_df}.}
 
 \item{...}{Not used by this method.}
 }
@@ -155,9 +168,32 @@ mmmdat <- mmdata(samps[["scores"]], samps[["labels"]],
                  dsids = samps[["dsids"]])
 mmmdat
 
+
+##################################################
+### N-fold cross validation datasets
+###
+
+## Load test data
+data(M2N50F5)
+head(M2N50F5)
+
+## Speficy nessesary columns to create mdat
+cvdat1 <- mmdata(nfold_df = M2N50F5, score_cols = c(1, 2),
+                 lab_col = 3, fold_col = 4,
+                 modnames = c("m1", "m2"), dsids = 1:5)
+cvdat1
+
+## Use column names
+cvdat2 <- mmdata(nfold_df = M2N50F5, score_cols = c("score1", "score2"),
+                 lab_col = "label", fold_col = "fold",
+                 modnames = c("m1", "m2"), dsids = 1:5)
+cvdat2
+
 }
 \seealso{
 \code{\link{evalmod}} for calculation evaluation measures.
   \code{\link{join_scores}} and \code{\link{join_labels}} for formatting
   scores and labels with multiple datasets.
+  \code{\link{format_nfold}} for creating n-fold cross validation dataset
+  from data frame.
 }

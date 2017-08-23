@@ -208,7 +208,8 @@ the supporting points are calculated.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Not used by this method.</p></td>
+      <td><p>These additional arguments are passed to <code><a href='mmdata.html'>mmdata</a></code>
+for data preparation.</p></td>
     </tr>
     </table>
     
@@ -300,6 +301,8 @@ the supporting points are calculated.</p></td>
   with <span class="pkg">ggplot2</span>. <code><a href='mmdata.html'>mmdata</a></code> for formatting input data.
   <code><a href='join_scores.html'>join_scores</a></code> and <code><a href='join_labels.html'>join_labels</a></code> for formatting
   scores and labels with multiple datasets.
+  <code><a href='format_nfold.html'>format_nfold</a></code> for creating n-fold cross validation dataset
+  from data frame.
   <code><a href='create_sim_samples.html'>create_sim_samples</a></code> for generating random samples
   for simulations.</p>
     
@@ -700,7 +703,7 @@ the supporting points are calculated.</p></td>
                <span class='kw'>modnames</span> <span class='kw'>=</span> <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"modnames"</span>]],
                <span class='kw'>dsids</span> <span class='kw'>=</span> <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"dsids"</span>]])
 
-<span class='co'>## Generate an mscurve object that contains ROC and Precision-Recall curves</span>
+<span class='co'>## Generate an mmcurve object that contains ROC and Precision-Recall curves</span>
 <span class='no'>mmcurves</span> <span class='kw'>&lt;-</span> <span class='fu'>evalmod</span>(<span class='no'>mdat</span>)
 <span class='no'>mmcurves</span></div><div class='output co'>#&gt; 
 #&gt;     === AUCs ===
@@ -1043,6 +1046,341 @@ the supporting points are calculated.</p></td>
 #&gt; </div><div class='input'>
 
 <span class='co'>##################################################</span>
+<span class='co'>### N-fold cross validation datasets</span>
+<span class='co'>###</span>
+
+<span class='co'>## Load test data</span>
+<span class='fu'>data</span>(<span class='no'>M2N50F5</span>)
+
+<span class='co'>## Speficy nessesary columns to create mdat</span>
+<span class='no'>cvdat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mmdata.html'>mmdata</a></span>(<span class='kw'>nfold_df</span> <span class='kw'>=</span> <span class='no'>M2N50F5</span>, <span class='kw'>score_cols</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>),
+                <span class='kw'>lab_col</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>fold_col</span> <span class='kw'>=</span> <span class='fl'>4</span>,
+                <span class='kw'>modnames</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"m1"</span>, <span class='st'>"m2"</span>), <span class='kw'>dsids</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>5</span>)
+
+<span class='co'>## Generate an mmcurve object that contains ROC and Precision-Recall curves</span>
+<span class='no'>cvcurves</span> <span class='kw'>&lt;-</span> <span class='fu'>evalmod</span>(<span class='no'>cvdat</span>)
+<span class='no'>cvcurves</span></div><div class='output co'>#&gt; 
+#&gt;     === AUCs ===
+#&gt; 
+#&gt;      Model name Dataset ID Curve type       AUC
+#&gt;    1         m1          1        ROC 1.0000000
+#&gt;    2         m1          1        PRC 1.0000000
+#&gt;    3         m1          2        ROC 0.4166667
+#&gt;    4         m1          2        PRC 0.5164199
+#&gt;    5         m1          3        ROC 0.2000000
+#&gt;    6         m1          3        PRC 0.4891743
+#&gt;    7         m1          4        ROC 0.7916667
+#&gt;    8         m1          4        PRC 0.7728152
+#&gt;    9         m1          5        ROC 0.4400000
+#&gt;   10         m1          5        PRC 0.4266312
+#&gt;   11         m2          1        ROC 0.4000000
+#&gt;   12         m2          1        PRC 0.4247188
+#&gt;   13         m2          2        ROC 0.7083333
+#&gt;   14         m2          2        PRC 0.6568625
+#&gt;   15         m2          3        ROC 0.8400000
+#&gt;   16         m2          3        PRC 0.9057736
+#&gt;   17         m2          4        ROC 0.7916667
+#&gt;   18         m2          4        PRC 0.8527712
+#&gt;   19         m2          5        ROC 0.4000000
+#&gt;   20         m2          5        PRC 0.4247188
+#&gt; 
+#&gt; 
+#&gt;     === Input data ===
+#&gt; 
+#&gt;      Model name Dataset ID # of negatives # of positives
+#&gt;    1         m1          1              5              5
+#&gt;    2         m1          2              4              6
+#&gt;    3         m1          3              5              5
+#&gt;    4         m1          4              6              4
+#&gt;    5         m1          5              5              5
+#&gt;    6         m2          1              5              5
+#&gt;    7         m2          2              4              6
+#&gt;    8         m2          3              5              5
+#&gt;    9         m2          4              6              4
+#&gt;   10         m2          5              5              5
+#&gt; </div><div class='input'>
+<span class='co'>## Generate an mmpoints object that contains basic evaluation measures</span>
+<span class='no'>cvpoints</span> <span class='kw'>&lt;-</span> <span class='fu'>evalmod</span>(<span class='no'>cvdat</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"basic"</span>)
+<span class='no'>cvpoints</span></div><div class='output co'>#&gt; 
+#&gt;     === Basic performance evaluation measures ===
+#&gt; 
+#&gt;      ## Performance measures (Meas.)
+#&gt;       rank:   normalized rank
+#&gt;       score:  score
+#&gt;       label:  label
+#&gt;       err:    error rate
+#&gt;       acc:    accuracy
+#&gt;       sp:     specificity
+#&gt;       sn:     sensitivity
+#&gt;       prec:   precision
+#&gt;       mcc:    Matthews correlation coefficient
+#&gt;       fscore: F-score
+#&gt; 
+#&gt; 
+#&gt;      Model ID  Meas.       Min.     1st Qu.       Median         Mean
+#&gt;    1    m1  1   rank  0.0000000  0.25000000  0.500000000  0.500000000
+#&gt;    2    m1  1  score -1.5761733 -0.92376396 -0.002327284  0.113500523
+#&gt;    3    m1  1  label -1.0000000 -1.00000000  0.000000000  0.000000000
+#&gt;    4    m1  1    err  0.0000000  0.15000000  0.300000000  0.272727273
+#&gt;    5    m1  1    acc  0.5000000  0.60000000  0.700000000  0.727272727
+#&gt;    6    m1  1     sp  0.0000000  0.50000000  1.000000000  0.727272727
+#&gt;    7    m1  1     sn  0.0000000  0.50000000  1.000000000  0.727272727
+#&gt;    8    m1  1   prec  0.5000000  0.66964286  1.000000000  0.838924964
+#&gt;    9    m1  1    mcc  0.3333333  0.50000000  0.654653671  0.623218574
+#&gt;   10    m1  1 fscore  0.0000000  0.61904762  0.750000000  0.676023471
+#&gt;   11    m1  2   rank  0.0000000  0.25000000  0.500000000  0.500000000
+#&gt;   12    m1  2  score -1.8425134 -1.08765052 -0.450813882 -0.375652956
+#&gt;   13    m1  2  label -1.0000000 -1.00000000  1.000000000  0.200000000
+#&gt;   14    m1  2    err  0.4000000  0.45000000  0.500000000  0.536363636
+#&gt;   15    m1  2    acc  0.3000000  0.40000000  0.500000000  0.463636364
+#&gt;   16    m1  2     sp  0.0000000  0.25000000  0.500000000  0.454545455
+#&gt;   17    m1  2     sn  0.0000000  0.16666667  0.500000000  0.469696970
+#&gt;   18    m1  2   prec  0.0000000  0.41666667  0.555555556  0.450180375
+#&gt;   19    m1  2    mcc -0.4082483 -0.27216553 -0.102062073 -0.125094358
+#&gt;   20    m1  2 fscore  0.0000000  0.23611111  0.545454545  0.439152766
+#&gt;   21    m1  3   rank  0.0000000  0.25000000  0.500000000  0.500000000
+#&gt;   22    m1  3  score -1.1558752 -0.16251342  0.389025335  0.414373732
+#&gt;   23    m1  3  label -1.0000000 -1.00000000  0.000000000  0.000000000
+#&gt;   24    m1  3    err  0.4000000  0.50000000  0.600000000  0.636363636
+#&gt;   25    m1  3    acc  0.1000000  0.25000000  0.400000000  0.363636364
+#&gt;   26    m1  3     sp  0.0000000  0.00000000  0.200000000  0.363636364
+#&gt;   27    m1  3     sn  0.0000000  0.20000000  0.200000000  0.363636364
+#&gt;   28    m1  3   prec  0.1666667  0.26785714  0.375000000  0.459559885
+#&gt;   29    m1  3    mcc -0.8164966 -0.60000000 -0.408248290 -0.355290715
+#&gt;   30    m1  3 fscore  0.0000000  0.21111111  0.285714286  0.318732278
+#&gt;   31    m1  4   rank  0.0000000  0.25000000  0.500000000  0.500000000
+#&gt;   32    m1  4  score -1.5462252 -1.19762686 -0.400691531 -0.141998509
+#&gt;   33    m1  4  label -1.0000000 -1.00000000 -1.000000000 -0.200000000
+#&gt;   34    m1  4    err  0.2000000  0.30000000  0.400000000  0.372727273
+#&gt;   35    m1  4    acc  0.4000000  0.60000000  0.600000000  0.627272727
+#&gt;   36    m1  4     sp  0.0000000  0.41666667  0.666666667  0.606060606
+#&gt;   37    m1  4     sn  0.0000000  0.50000000  0.750000000  0.659090909
+#&gt;   38    m1  4   prec  0.4000000  0.50000000  0.571428571  0.652958153
+#&gt;   39    m1  4    mcc  0.1666667  0.27216553  0.408248290  0.379646701
+#&gt;   40    m1  4 fscore  0.0000000  0.53571429  0.600000000  0.544137681
+#&gt;   41    m1  5   rank  0.0000000  0.25000000  0.500000000  0.500000000
+#&gt;   42    m1  5  score -1.5944199 -0.50932491 -0.113562820  0.006988569
+#&gt;   43    m1  5  label -1.0000000 -1.00000000  0.000000000  0.000000000
+#&gt;   44    m1  5    err  0.4000000  0.50000000  0.500000000  0.527272727
+#&gt;   45    m1  5    acc  0.3000000  0.40000000  0.500000000  0.472727273
+#&gt;   46    m1  5     sp  0.0000000  0.30000000  0.400000000  0.472727273
+#&gt;   47    m1  5     sn  0.0000000  0.10000000  0.400000000  0.472727273
+#&gt;   48    m1  5   prec  0.0000000  0.16666667  0.500000000  0.350937951
+#&gt;   49    m1  5    mcc -0.5000000 -0.21821789  0.000000000 -0.077777778
+#&gt;   50    m1  5 fscore  0.0000000  0.12500000  0.444444444  0.391172968
+#&gt;   51    m2  1   rank  0.0000000  0.25000000  0.500000000  0.500000000
+#&gt;   52    m2  1  score -1.5666375 -0.93714170 -0.338617003 -0.081054576
+#&gt;   53    m2  1  label -1.0000000 -1.00000000  0.000000000  0.000000000
+#&gt;   54    m2  1    err  0.5000000  0.50000000  0.500000000  0.545454545
+#&gt;   55    m2  1    acc  0.4000000  0.40000000  0.500000000  0.454545455
+#&gt;   56    m2  1     sp  0.0000000  0.20000000  0.400000000  0.454545455
+#&gt;   57    m2  1     sn  0.0000000  0.20000000  0.400000000  0.454545455
+#&gt;   58    m2  1   prec  0.0000000  0.36666667  0.444444444  0.373304473
+#&gt;   59    m2  1    mcc -0.3333333 -0.21821789 -0.200000000 -0.144789161
+#&gt;   60    m2  1 fscore  0.0000000  0.26785714  0.444444444  0.389008466
+#&gt;   61    m2  2   rank  0.0000000  0.25000000  0.500000000  0.500000000
+#&gt;   62    m2  2  score -0.9422955 -0.51338997  0.168580899 -0.003990330
+#&gt;   63    m2  2  label -1.0000000 -1.00000000  1.000000000  0.200000000
+#&gt;   64    m2  2    err  0.2000000  0.30000000  0.400000000  0.409090909
+#&gt;   65    m2  2    acc  0.3000000  0.45000000  0.600000000  0.590909091
+#&gt;   66    m2  2     sp  0.0000000  0.50000000  0.750000000  0.613636364
+#&gt;   67    m2  2     sn  0.0000000  0.25000000  0.666666667  0.575757576
+#&gt;   68    m2  2   prec  0.0000000  0.55000000  0.666666667  0.570995671
+#&gt;   69    m2  2    mcc -0.4082483  0.08908708  0.356348323  0.244147488
+#&gt;   70    m2  2 fscore  0.0000000  0.34722222  0.727272727  0.548311285
+#&gt;   71    m2  3   rank  0.0000000  0.25000000  0.500000000  0.500000000
+#&gt;   72    m2  3  score -1.0962763 -0.40057827 -0.167608702  0.082174350
+#&gt;   73    m2  3  label -1.0000000 -1.00000000  0.000000000  0.000000000
+#&gt;   74    m2  3    err  0.1000000  0.25000000  0.400000000  0.345454545
+#&gt;   75    m2  3    acc  0.5000000  0.55000000  0.600000000  0.654545455
+#&gt;   76    m2  3     sp  0.0000000  0.30000000  0.800000000  0.654545455
+#&gt;   77    m2  3     sn  0.0000000  0.50000000  0.800000000  0.654545455
+#&gt;   78    m2  3   prec  0.5000000  0.56349206  0.800000000  0.781240981
+#&gt;   79    m2  3    mcc  0.0000000  0.33333333  0.408248290  0.429364789
+#&gt;   80    m2  3 fscore  0.0000000  0.59340659  0.666666667  0.612175199
+#&gt;   81    m2  4   rank  0.0000000  0.25000000  0.500000000  0.500000000
+#&gt;   82    m2  4  score -1.1654721 -0.35410360 -0.099106516  0.103674375
+#&gt;   83    m2  4  label -1.0000000 -1.00000000 -1.000000000 -0.200000000
+#&gt;   84    m2  4    err  0.1000000  0.25000000  0.400000000  0.372727273
+#&gt;   85    m2  4    acc  0.4000000  0.50000000  0.600000000  0.627272727
+#&gt;   86    m2  4     sp  0.0000000  0.25000000  0.666666667  0.606060606
+#&gt;   87    m2  4     sn  0.0000000  0.62500000  0.750000000  0.659090909
+#&gt;   88    m2  4   prec  0.3750000  0.43650794  0.600000000  0.681637807
+#&gt;   89    m2  4    mcc -0.1020621  0.25000000  0.408248290  0.369241846
+#&gt;   90    m2  4 fscore  0.0000000  0.52272727  0.600000000  0.561158538
+#&gt;   91    m2  5   rank  0.0000000  0.25000000  0.500000000  0.500000000
+#&gt;   92    m2  5  score -1.7908147 -1.14209817  0.032207934 -0.329061088
+#&gt;   93    m2  5  label -1.0000000 -1.00000000  0.000000000  0.000000000
+#&gt;   94    m2  5    err  0.5000000  0.50000000  0.500000000  0.545454545
+#&gt;   95    m2  5    acc  0.4000000  0.40000000  0.500000000  0.454545455
+#&gt;   96    m2  5     sp  0.0000000  0.20000000  0.400000000  0.454545455
+#&gt;   97    m2  5     sn  0.0000000  0.20000000  0.400000000  0.454545455
+#&gt;   98    m2  5   prec  0.0000000  0.36666667  0.444444444  0.373304473
+#&gt;   99    m2  5    mcc -0.3333333 -0.21821789 -0.200000000 -0.144789161
+#&gt;  100    m2  5 fscore  0.0000000  0.26785714  0.444444444  0.389008466
+#&gt;          3rd Qu.      Max.
+#&gt;    1  0.75000000 1.0000000
+#&gt;    2  1.06708368 2.0606025
+#&gt;    3  1.00000000 1.0000000
+#&gt;    4  0.40000000 0.5000000
+#&gt;    5  0.85000000 1.0000000
+#&gt;    6  1.00000000 1.0000000
+#&gt;    7  1.00000000 1.0000000
+#&gt;    8  1.00000000 1.0000000
+#&gt;    9  0.81649658 1.0000000
+#&gt;   10  0.86111111 1.0000000
+#&gt;   11  0.75000000 1.0000000
+#&gt;   12 -0.08830171 2.2002973
+#&gt;   13  1.00000000 1.0000000
+#&gt;   14  0.60000000 0.7000000
+#&gt;   15  0.55000000 0.6000000
+#&gt;   16  0.62500000 1.0000000
+#&gt;   17  0.75000000 1.0000000
+#&gt;   18  0.60000000 0.6666667
+#&gt;   19  0.00000000 0.1666667
+#&gt;   20  0.66666667 0.7500000
+#&gt;   21  0.75000000 1.0000000
+#&gt;   22  1.01753386 1.6870336
+#&gt;   23  1.00000000 1.0000000
+#&gt;   24  0.75000000 0.9000000
+#&gt;   25  0.50000000 0.6000000
+#&gt;   26  0.70000000 1.0000000
+#&gt;   27  0.50000000 1.0000000
+#&gt;   28  0.50000000 1.0000000
+#&gt;   29 -0.21821789 0.3333333
+#&gt;   30  0.39743590 0.6666667
+#&gt;   31  0.75000000 1.0000000
+#&gt;   32  1.00867637 1.5387145
+#&gt;   33  1.00000000 1.0000000
+#&gt;   34  0.40000000 0.6000000
+#&gt;   35  0.70000000 0.8000000
+#&gt;   36  0.91666667 1.0000000
+#&gt;   37  1.00000000 1.0000000
+#&gt;   38  0.83333333 1.0000000
+#&gt;   39  0.40824829 0.6123724
+#&gt;   40  0.66666667 0.7272727
+#&gt;   41  0.75000000 1.0000000
+#&gt;   42  0.45270677 1.9237289
+#&gt;   43  1.00000000 1.0000000
+#&gt;   44  0.60000000 0.7000000
+#&gt;   45  0.50000000 0.6000000
+#&gt;   46  0.60000000 1.0000000
+#&gt;   47  0.80000000 1.0000000
+#&gt;   48  0.50000000 0.5714286
+#&gt;   49  0.00000000 0.3333333
+#&gt;   50  0.64102564 0.7142857
+#&gt;   51  0.75000000 1.0000000
+#&gt;   52  0.43266892 2.8510651
+#&gt;   53  1.00000000 1.0000000
+#&gt;   54  0.60000000 0.6000000
+#&gt;   55  0.50000000 0.5000000
+#&gt;   56  0.70000000 1.0000000
+#&gt;   57  0.70000000 1.0000000
+#&gt;   58  0.50000000 0.5000000
+#&gt;   59  0.00000000 0.0000000
+#&gt;   60  0.55844156 0.6666667
+#&gt;   61  0.75000000 1.0000000
+#&gt;   62  0.39797893 0.7890534
+#&gt;   63  1.00000000 1.0000000
+#&gt;   64  0.55000000 0.7000000
+#&gt;   65  0.70000000 0.8000000
+#&gt;   66  0.75000000 1.0000000
+#&gt;   67  0.91666667 1.0000000
+#&gt;   68  0.75000000 0.8333333
+#&gt;   69  0.40824829 0.6123724
+#&gt;   70  0.78461538 0.8571429
+#&gt;   71  0.75000000 1.0000000
+#&gt;   72  0.35464019 2.0647833
+#&gt;   73  1.00000000 1.0000000
+#&gt;   74  0.45000000 0.5000000
+#&gt;   75  0.75000000 0.9000000
+#&gt;   76  1.00000000 1.0000000
+#&gt;   77  0.80000000 1.0000000
+#&gt;   78  1.00000000 1.0000000
+#&gt;   79  0.60000000 0.8164966
+#&gt;   80  0.73863636 0.8888889
+#&gt;   81  0.75000000 1.0000000
+#&gt;   82  0.79072036 1.4431452
+#&gt;   83  1.00000000 1.0000000
+#&gt;   84  0.50000000 0.6000000
+#&gt;   85  0.75000000 0.9000000
+#&gt;   86  1.00000000 1.0000000
+#&gt;   87  0.75000000 1.0000000
+#&gt;   88  1.00000000 1.0000000
+#&gt;   89  0.58333333 0.8017837
+#&gt;   90  0.66666667 0.8571429
+#&gt;   91  0.75000000 1.0000000
+#&gt;   92  0.31323748 0.7002948
+#&gt;   93  1.00000000 1.0000000
+#&gt;   94  0.60000000 0.6000000
+#&gt;   95  0.50000000 0.5000000
+#&gt;   96  0.70000000 1.0000000
+#&gt;   97  0.70000000 1.0000000
+#&gt;   98  0.50000000 0.5000000
+#&gt;   99  0.00000000 0.0000000
+#&gt;  100  0.55844156 0.6666667
+#&gt; 
+#&gt; 
+#&gt;     === Input data ===
+#&gt; 
+#&gt;      Model name Dataset ID # of negatives # of positives
+#&gt;    1         m1          1              5              5
+#&gt;    2         m1          2              4              6
+#&gt;    3         m1          3              5              5
+#&gt;    4         m1          4              6              4
+#&gt;    5         m1          5              5              5
+#&gt;    6         m2          1              5              5
+#&gt;    7         m2          2              4              6
+#&gt;    8         m2          3              5              5
+#&gt;    9         m2          4              6              4
+#&gt;   10         m2          5              5              5
+#&gt; </div><div class='input'>
+<span class='co'>## Specify mmdata arguments from evalmod</span>
+<span class='no'>cvcurves2</span> <span class='kw'>&lt;-</span> <span class='fu'>evalmod</span>(<span class='kw'>nfold_df</span> <span class='kw'>=</span> <span class='no'>M2N50F5</span>, <span class='kw'>score_cols</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>),
+                     <span class='kw'>lab_col</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>fold_col</span> <span class='kw'>=</span> <span class='fl'>4</span>,
+                     <span class='kw'>modnames</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"m1"</span>, <span class='st'>"m2"</span>), <span class='kw'>dsids</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>5</span>)
+<span class='no'>cvcurves2</span></div><div class='output co'>#&gt; 
+#&gt;     === AUCs ===
+#&gt; 
+#&gt;      Model name Dataset ID Curve type       AUC
+#&gt;    1         m1          1        ROC 1.0000000
+#&gt;    2         m1          1        PRC 1.0000000
+#&gt;    3         m1          2        ROC 0.4166667
+#&gt;    4         m1          2        PRC 0.5164199
+#&gt;    5         m1          3        ROC 0.2000000
+#&gt;    6         m1          3        PRC 0.4891743
+#&gt;    7         m1          4        ROC 0.7916667
+#&gt;    8         m1          4        PRC 0.7728152
+#&gt;    9         m1          5        ROC 0.4400000
+#&gt;   10         m1          5        PRC 0.4266312
+#&gt;   11         m2          1        ROC 0.4000000
+#&gt;   12         m2          1        PRC 0.4247188
+#&gt;   13         m2          2        ROC 0.7083333
+#&gt;   14         m2          2        PRC 0.6568625
+#&gt;   15         m2          3        ROC 0.8400000
+#&gt;   16         m2          3        PRC 0.9057736
+#&gt;   17         m2          4        ROC 0.7916667
+#&gt;   18         m2          4        PRC 0.8527712
+#&gt;   19         m2          5        ROC 0.4000000
+#&gt;   20         m2          5        PRC 0.4247188
+#&gt; 
+#&gt; 
+#&gt;     === Input data ===
+#&gt; 
+#&gt;      Model name Dataset ID # of negatives # of positives
+#&gt;    1         m1          1              5              5
+#&gt;    2         m1          2              4              6
+#&gt;    3         m1          3              5              5
+#&gt;    4         m1          4              6              4
+#&gt;    5         m1          5              5              5
+#&gt;    6         m2          1              5              5
+#&gt;    7         m2          2              4              6
+#&gt;    8         m2          3              5              5
+#&gt;    9         m2          4              6              4
+#&gt;   10         m2          5              5              5
+#&gt; </div><div class='input'>
+
+<span class='co'>##################################################</span>
 <span class='co'>### AUC with the U statistic</span>
 <span class='co'>###</span>
 
@@ -1087,8 +1425,8 @@ the supporting points are calculated.</p></td>
 
 <span class='co'># Process time</span>
 <span class='fu'>system.time</span>(<span class='no'>res1</span> <span class='kw'>&lt;-</span> <span class='fu'>func_evalmod_rocprc</span>(<span class='no'>samp1</span>))</div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.064   0.010   0.074 </div><div class='input'><span class='fu'>system.time</span>(<span class='no'>res2</span> <span class='kw'>&lt;-</span> <span class='fu'>func_evalmod_aucroc</span>(<span class='no'>samp1</span>))</div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.020   0.002   0.022 </div><div class='input'>
+#&gt;   0.045   0.008   0.053 </div><div class='input'><span class='fu'>system.time</span>(<span class='no'>res2</span> <span class='kw'>&lt;-</span> <span class='fu'>func_evalmod_aucroc</span>(<span class='no'>samp1</span>))</div><div class='output co'>#&gt;    user  system elapsed 
+#&gt;   0.015   0.001   0.016 </div><div class='input'>
 <span class='co'># AUCs</span>
 <span class='no'>res1</span></div><div class='output co'>#&gt;   modnames dsids curvetypes      aucs
 #&gt; 1       m1     1        ROC 0.5002722

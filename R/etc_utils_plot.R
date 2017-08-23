@@ -220,6 +220,34 @@
 #' ## Plot normalized ranks vs. average basic evaluation measures
 #' plot(mmpoints)
 #'
+#'
+#' ##################################################
+#' ### N-fold cross validation datasets
+#' ###
+#'
+#' ## Load test data
+#' data(M2N50F5)
+#'
+#' ## Speficy nessesary columns to create mdat
+#' cvdat <- mmdata(nfold_df = M2N50F5, score_cols = c(1, 2),
+#'                 lab_col = 3, fold_col = 4,
+#'                 modnames = c("m1", "m2"), dsids = 1:5)
+#'
+#' ## Generate an mmcurve object that contains ROC and Precision-Recall curves
+#' cvcurves <- evalmod(cvdat)
+#'
+#' ## Average ROC and Precision-Recall curves
+#' plot(cvcurves)
+#'
+#' ## Show confidence bounds
+#' plot(cvcurves, show_cb = TRUE)
+#'
+#' ## Generate an mmpoints object that contains basic evaluation measures
+#' cvpoints <- evalmod(cvdat, mode = "basic")
+#'
+#' ## Normalized ranks vs. average basic evaluation measures
+#' plot(cvpoints)
+#'
 #'}
 #' @name plot
 NULL
@@ -587,10 +615,10 @@ NULL
   tlist <- .get_titiles(curvetype)
   main <- tlist[["main"]]
 
-  np <- attr(x, "data_info")[["np"]][[1]]
-  nn <- attr(x, "data_info")[["nn"]][[1]]
-
-  if (add_np_nn) {
+  pn_info <- .get_pn_info(x)
+  if (add_np_nn && pn_info$is_consistant) {
+    np <- pn_info$avg_np
+    nn <- pn_info$avg_nn
     main <- paste0(main, " - P: ", np, ", N: ", nn)
   }
 
@@ -618,7 +646,7 @@ NULL
     graphics::abline(a = 0, b = 1, col = "grey", lty = 3)
 
   } else if (curvetype == "PRC") {
-    graphics::abline(h = np / (np + nn), col = "grey", lty = 3)
+    graphics::abline(h = pn_info$prc_base, col = "grey", lty = 3)
   }
 
   .show_legend(x, show_legend)

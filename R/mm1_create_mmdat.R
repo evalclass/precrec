@@ -70,6 +70,18 @@
 #'     \item{"aucroc"}{Fast AUC(ROC) calculation with the U statistic}
 #'   }
 #'
+#' @param nfold_df A data frame that contains at least one score column,
+#'   lable and fold columns.
+#'
+#' @param score_cols A character/numeric vector that specifies score columns
+#'   of \code{nfold_df}.
+#'
+#' @param lab_col A number/string that specifies the label column
+#'   of \code{nfold_df}.
+#'
+#' @param fold_col A number/string that specifies the fold column
+#'   of \code{nfold_df}.
+#'
 #' @param ... Not used by this method.
 #'
 #' @return The \code{mmdata} function returns an \code{mdat} object
@@ -79,6 +91,8 @@
 #' @seealso \code{\link{evalmod}} for calculation evaluation measures.
 #'   \code{\link{join_scores}} and \code{\link{join_labels}} for formatting
 #'   scores and labels with multiple datasets.
+#'   \code{\link{format_nfold}} for creating n-fold cross validation dataset
+#'   from data frame.
 #'
 #' @examples
 #'
@@ -148,14 +162,53 @@
 #'                  dsids = samps[["dsids"]])
 #' mmmdat
 #'
+#'
+#' ##################################################
+#' ### N-fold cross validation datasets
+#' ###
+#'
+#' ## Load test data
+#' data(M2N50F5)
+#' head(M2N50F5)
+#'
+#' ## Speficy nessesary columns to create mdat
+#' cvdat1 <- mmdata(nfold_df = M2N50F5, score_cols = c(1, 2),
+#'                  lab_col = 3, fold_col = 4,
+#'                  modnames = c("m1", "m2"), dsids = 1:5)
+#' cvdat1
+#'
+#' ## Use column names
+#' cvdat2 <- mmdata(nfold_df = M2N50F5, score_cols = c("score1", "score2"),
+#'                  lab_col = "label", fold_col = "fold",
+#'                  modnames = c("m1", "m2"), dsids = 1:5)
+#' cvdat2
+#'
 #' @export
 mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
                    posclass = NULL, na_worst = TRUE, ties_method = "equiv",
-                   expd_first = "modnames", mode = "rocprc", ...) {
+                   expd_first = NULL, mode = "rocprc",
+                   nfold_df = NULL, score_cols = NULL, lab_col = NULL,
+                   fold_col = NULL, ...) {
 
   # === Join datasets ===
-  lscores <- join_scores(scores, chklen = FALSE)
-  llabels <- join_labels(labels, chklen = FALSE)
+  if (!is.null(nfold_df) && !is.null(score_cols) && !is.null(lab_col)
+      && !is.null(fold_col)) {
+    nfold_list <- format_nfold(nfold_df, score_cols, lab_col, fold_col)
+    lscores <- nfold_list$scores
+    llabels <- nfold_list$labels
+    if (is.null(expd_first)) {
+      expd_first <- "dsids"
+    }
+  } else {
+    if(missing(scores) || missing(labels)) {
+      stop("'scores' and/or 'lables' are missing", call. = FALSE)
+    }
+    lscores <- join_scores(scores, chklen = FALSE)
+    llabels <- join_labels(labels, chklen = FALSE)
+    if (is.null(expd_first)) {
+      expd_first <- "modnames"
+    }
+  }
 
   # === Model names and dataset IDs ===
   new_expd_first <- .pmatch_expd_first(expd_first)

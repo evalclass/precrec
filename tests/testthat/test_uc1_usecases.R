@@ -33,3 +33,22 @@ test_that("calculation of correct avg and cb when x_bins = 8", {
   expect_false(any(ys==0.0))
 
 })
+
+test_that("as.data.frame issue when n-fold datasets are used", {
+
+  crv5f = evalmod(nfold_df = M2N50F5,
+                  score_cols = c(1, 2),
+                  lab_col = 3,
+                  fold_col = 4,
+                  modnames = c("score1", "score2"),
+                  dsids = 1:5)
+
+  crv5f_df <- as.data.frame(crv5f)
+  modnames <- table(crv5f_df$modname)
+  modnames_tbl  <- table(crv5f_df$modname)
+
+  expect_true(modnames_tbl[1] > 2000)
+  expect_true(modnames_tbl[2] > 2000)
+
+})
+

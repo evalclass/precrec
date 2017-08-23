@@ -45,7 +45,7 @@ update_main <- function(call_pkgdown = FALSE) {
   }
 
   update_html(get_file_path("precrec.html"),
-              c("five functions",
+              c("six functions",
                 "eight different"),
               c("precrec_funcs", "precrec_s3"))
 

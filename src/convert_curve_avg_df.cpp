@@ -64,7 +64,7 @@ Rcpp::List convert_curve_avg_df(const Rcpp::List& obj,
         copy_xy_vec(yma, vec_ymax, start_idx);
       }
 
-      add_to_vec(vec_modname, n, modnames[j], start_idx);
+      add_to_vec(vec_modname, n, j+1, start_idx);
       add_to_vec(vec_curvetype, n, i+1, start_idx);
 
       start_idx += n;

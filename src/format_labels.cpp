@@ -1,6 +1,5 @@
 #include <Rcpp.h>
 #include <vector>
-#include <set>
 #include <string>
 
 // Make new labels - negative: 1, positive: 2
@@ -16,43 +15,45 @@ Rcpp::List make_new_labels(T labels,
   int nn = 0;
   int np = 0;
 
-  std::set<S> label_set;
-  typename std::set<S>::iterator it;
-  S lab2 = labels[0];
-
-  // Check two labels
+  // Get two labels
+  S lab_p = labels[0];
+  S lab_n;
   for (unsigned i = 0; i < labels.size(); ++i) {
-    label_set.insert(labels[i]);
+    if (lab_p != labels[i]) {
+      lab_n = labels[i];
+      break;
+    }
   }
 
   // Find positive label
   if (is_pc_na) {
-    if (label_set.size() != 2) {
-      ret_val["errmsg"] = "invalid-labels";
-      return ret_val;
-    }
-    for (it = label_set.begin(); it != label_set.end(); ++it) {
-      if (lab2 < *it) {
-        lab2 = *it;
-      }
+    if (lab_p < lab_n) {
+      S lab_tmp = lab_p;
+      lab_p = lab_n;
+      lab_n = lab_tmp;
     }
   } else {
-    it = label_set.find(posclass);
-    if (it == label_set.end()) {
+    if (lab_n == posclass) {
+      S lab_tmp = lab_p;
+      lab_p = lab_n;
+      lab_n = lab_tmp;
+    } else if (lab_p != posclass) {
       ret_val["errmsg"] = "invalid-posclass";
       return ret_val;
     }
-    lab2 = posclass;
   }
 
   // Make new labels - negative 1 & positive 2
   for (unsigned i = 0; i < labels.size(); ++i) {
-    if (labels[i] == lab2) {
+    if (labels[i] == lab_p) {
       ++np;
       new_labels[i] = 2;
-    } else {
+    } else if (labels[i] == lab_n) {
       ++nn;
       new_labels[i] = 1;
+    } else {
+      ret_val["errmsg"] = "invalid-labels";
+      return ret_val;
     }
   }
 

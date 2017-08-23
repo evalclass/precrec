@@ -14,6 +14,7 @@ reference:
     - mmdata
     - join_scores
     - join_labels
+    - format_nfold
     - create_sim_samples
   - title: Visualization
     contents:
@@ -29,12 +30,14 @@ reference:
     contents:
     - part
   - title: Datasets
+    desc: P10N10, B500, B1000, IB500, IB1000 and M2N50F5
     contents:
     - P10N10
     - B500
     - B1000
     - IB500
     - IB1000
+    - M2N50F5
 
 navbar:
   left:

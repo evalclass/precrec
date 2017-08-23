@@ -61,8 +61,7 @@
 .validate_labels <- function(labels) {
   assertthat::assert_that(is.atomic(labels),
                           (is.vector(labels) || is.factor(labels)),
-                          length(labels) > 0L,
-                          length(unique(labels)) == 2L)
+                          length(labels) > 0L)
 }
 
 #
@@ -234,6 +233,51 @@
                             x_bins %% 1 == 0,
                             x_bins >= 1L)
   }
+}
+
+# Check score column names
+.validate_score_cols <- function(score_cols, nfold_df) {
+  assertthat::assert_that(is.vector(score_cols))
+  assertthat::assert_that(is.numeric(score_cols)
+                          || is.character(score_cols))
+
+  if (is.numeric(score_cols)) {
+    assertthat::assert_that(all(score_cols <= ncol(nfold_df)),
+                            msg = "Invalid score_cols")
+  } else if(is.character(score_cols)) {
+    assertthat::assert_that(all(score_cols %in% colnames(nfold_df)),
+                            msg = "Invalid score_cols")
+  }
+
+}
+
+# Check label column name
+.validate_lab_col <- function(lab_col, nfold_df) {
+  assertthat::assert_that(assertthat::see_if(assertthat::is.number(lab_col))
+                          || assertthat::see_if(assertthat::is.string(lab_col)))
+
+  if (assertthat::see_if(assertthat::is.number(lab_col))) {
+    assertthat::assert_that(lab_col <= ncol(nfold_df),
+                            msg = "Invalid lab_col")
+  } else if(assertthat::see_if(assertthat::is.string(lab_col))) {
+    assertthat::assert_that(lab_col %in% colnames(nfold_df),
+                            msg = "Invalid lab_col")
+  }
+}
+
+# Check fold column name
+.validate_fold_col <- function(fold_col, nfold_df) {
+  assertthat::assert_that(assertthat::see_if(assertthat::is.number(fold_col))
+                          || assertthat::see_if(assertthat::is.string(fold_col)))
+
+  if (assertthat::see_if(assertthat::is.number(fold_col))) {
+    assertthat::assert_that(fold_col <= ncol(nfold_df),
+                            msg = "Invalid fold_col")
+  } else if(assertthat::see_if(assertthat::is.string(fold_col))) {
+    assertthat::assert_that(fold_col %in% colnames(nfold_df),
+                            msg = "Invalid fold_col")
+  }
+
 }
 
 # Check mode

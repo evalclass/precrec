@@ -115,7 +115,7 @@ test_that("'labels' takes a factor", {
 
 test_that("'labels' takes two unique labels", {
   expect_err_msg <- function(labels) {
-    err_msg <- "not equal to 2L"
+    err_msg <- "invalid-labels"
     eval(bquote(expect_error(.factor_labels(labels, NULL), err_msg)))
   }
 
