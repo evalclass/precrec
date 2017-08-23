@@ -1,3 +1,9 @@
+# precrec 0.9
+
+* Fix a bug with as.data.frame when multiple datasets given
+
+* Add format_nfold function to convert a dataframe with n-fold data to a list
+
 # precrec 0.8
 
 * Add 'aucroc' mode for fast AUC (ROC)
