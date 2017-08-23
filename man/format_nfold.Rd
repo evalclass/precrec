@@ -8,7 +8,7 @@ format_nfold(nfold_df, score_cols, lab_col, fold_col)
 }
 \arguments{
 \item{nfold_df}{A data frame that contains at least one score column,
-lable and fold columns.}
+label and fold columns.}
 
 \item{score_cols}{A character/numeric vector that specifies score columns
 of \code{nfold_df}.}

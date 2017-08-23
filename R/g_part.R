@@ -21,10 +21,10 @@
 #'
 #'    See the \strong{Value} section of \code{\link{evalmod}} for more details.
 #'
-#' @param xlim A numeric vector of lenght two to specifiy x range between
+#' @param xlim A numeric vector of length two to specify x range between
 #'   two points in [0, 1]
 #'
-#' @param ylim A numeric vector of lenght two to specifiy y range between
+#' @param ylim A numeric vector of length two to specify y range between
 #'   two points in [0, 1]
 #'
 #' @param curvetype A character vector with the following curve types.
@@ -40,7 +40,7 @@
 #'   input with calculated pAUCs and standardized pAUCs.
 #'
 #' @seealso \code{\link{evalmod}} for generating \code{S3} objects with
-#'   performance evaluation measures. \code{\link{pauc}} for retieving a dataset
+#'   performance evaluation measures. \code{\link{pauc}} for retrieving a dataset
 #'   of pAUCs.
 #'
 #' @examples

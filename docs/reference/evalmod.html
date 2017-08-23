@@ -200,7 +200,7 @@ It is effective only when <code>calc_avg</code> is set to <code>TRUE</code>.</p>
     <tr>
       <th>x_bins</th>
       <td><p>An integer value to specify the number of minimum bins
-on the x-axis. It is then used to define supporting poins. For instance,
+on the x-axis. It is then used to define supporting points For instance,
 the x-values of the supporting points will be <code>c(0, 0.5, 1)</code> and
 <code>c(0, 0.25, 0.5, 0.75, 1)</code> when <code>x_bins = 2</code>
 and <code>x_bins = 4</code>, respectively. All corresponding y-values of
@@ -1425,8 +1425,8 @@ for data preparation.</p></td>
 
 <span class='co'># Process time</span>
 <span class='fu'>system.time</span>(<span class='no'>res1</span> <span class='kw'>&lt;-</span> <span class='fu'>func_evalmod_rocprc</span>(<span class='no'>samp1</span>))</div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.045   0.008   0.053 </div><div class='input'><span class='fu'>system.time</span>(<span class='no'>res2</span> <span class='kw'>&lt;-</span> <span class='fu'>func_evalmod_aucroc</span>(<span class='no'>samp1</span>))</div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.015   0.001   0.016 </div><div class='input'>
+#&gt;   0.044   0.008   0.052 </div><div class='input'><span class='fu'>system.time</span>(<span class='no'>res2</span> <span class='kw'>&lt;-</span> <span class='fu'>func_evalmod_aucroc</span>(<span class='no'>samp1</span>))</div><div class='output co'>#&gt;    user  system elapsed 
+#&gt;   0.015   0.001   0.017 </div><div class='input'>
 <span class='co'># AUCs</span>
 <span class='no'>res1</span></div><div class='output co'>#&gt;   modnames dsids curvetypes      aucs
 #&gt; 1       m1     1        ROC 0.5002722
