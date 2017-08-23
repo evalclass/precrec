@@ -5,7 +5,7 @@
 #'   and \code{\link{mmdata}}.
 #'
 #' @param nfold_df A data frame that contains at least one score column,
-#'   lable and fold columns.
+#'   label and fold columns.
 #'
 #' @param score_cols A character/numeric vector that specifies score columns
 #'   of \code{nfold_df}.

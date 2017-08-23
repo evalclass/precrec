@@ -103,7 +103,7 @@ See the \strong{Value} section of \code{\link{evalmod}} for more details.}
 
 \describe{
   \item{type}{
-    A character to specifiy the line type as follows.
+    A character to specify the line type as follows.
     \describe{
       \item{"l"}{lines}
       \item{"p"}{points}

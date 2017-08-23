@@ -39,10 +39,10 @@ part(curves, xlim, ylim, curvetype)
 
    See the \strong{Value} section of \code{\link{evalmod}} for more details.}
 
-\item{xlim}{A numeric vector of lenght two to specifiy x range between
+\item{xlim}{A numeric vector of length two to specify x range between
 two points in [0, 1]}
 
-\item{ylim}{A numeric vector of lenght two to specifiy y range between
+\item{ylim}{A numeric vector of length two to specify y range between
 two points in [0, 1]}
 
 \item{curvetype}{A character vector with the following curve types.
@@ -173,6 +173,6 @@ autoplot(mmcurves.part)
 }
 \seealso{
 \code{\link{evalmod}} for generating \code{S3} objects with
-  performance evaluation measures. \code{\link{pauc}} for retieving a dataset
+  performance evaluation measures. \code{\link{pauc}} for retrieving a dataset
   of pAUCs.
 }

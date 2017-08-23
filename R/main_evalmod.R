@@ -90,7 +90,7 @@
 #'   It is effective only when \code{calc_avg} is set to \code{TRUE}.
 #'
 #' @param x_bins An integer value to specify the number of minimum bins
-#'   on the x-axis. It is then used to define supporting poins. For instance,
+#'   on the x-axis. It is then used to define supporting points For instance,
 #'   the x-values of the supporting points will be \code{c(0, 0.5, 1)} and
 #'   \code{c(0, 0.25, 0.5, 0.75, 1)} when \code{x_bins = 2}
 #'   and \code{x_bins = 4}, respectively. All corresponding y-values of
