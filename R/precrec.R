@@ -201,7 +201,7 @@ NULL
 #' \describe{
 #'   \item{score1}{50 random scores}
 #'   \item{score2}{50 random scores}
-#'   \item{label}{50 lables as 'pos' or 'neg'}
+#'   \item{label}{50 labels as 'pos' or 'neg'}
 #'   \item{fold}{50 fold IDs as 1:5}
 #' }
 #'

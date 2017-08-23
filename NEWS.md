@@ -1,4 +1,4 @@
-# precrec 0.9
+# precrec 0.9.1
 
 * Fix a bug with as.data.frame when multiple datasets given
 

@@ -23,7 +23,7 @@
 #' @return The \code{auc} function returns a data frame with AUC scores.
 #'
 #' @seealso \code{\link{evalmod}} for generating \code{S3} objects with
-#'   performance evaluation measures. \code{\link{pauc}} for retieving a dataset
+#'   performance evaluation measures. \code{\link{pauc}} for retrieving a dataset
 #'   of pAUCs.
 #'
 #' @examples

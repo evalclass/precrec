@@ -1,4 +1,4 @@
-## Version 0.9
+## Version 0.9.1
 This is a submission for updating the already published package - precrec.
 In this version I have:
 
@@ -7,7 +7,7 @@ In this version I have:
 * Added cross validation functions
 
 * Updated the version.
-    * 0.8 -> 0.9
+    * 0.8 -> 0.9.1
     
 ## Test environments
 * local CentOS 6.7, R 3.3.3
