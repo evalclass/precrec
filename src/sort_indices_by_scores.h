@@ -2,6 +2,7 @@
 #define SORT_INDICES_BY_SCORES_H_
 
 #include <Rcpp.h>
+#include <cfloat>       // DBL_MIN, DBL_MAX
 #include <vector>       // std::vector
 #include <string>       // std::string
 #include <algorithm>    // std::sort, std::stable_sort
