@@ -17,12 +17,12 @@ calc_basic_measures <- function(np, nn, tps, fps, tns, fns) {
     .Call(`_precrec_calc_basic_measures`, np, nn, tps, fps, tns, fns)
 }
 
-calc_uauc_frank <- function(np, nn, scores, olabs, na_last, ties_method, frank) {
-    .Call(`_precrec_calc_uauc_frank`, np, nn, scores, olabs, na_last, ties_method, frank)
-}
-
 calc_uauc <- function(np, nn, scores, olabs, na_worst, ties_method) {
     .Call(`_precrec_calc_uauc`, np, nn, scores, olabs, na_worst, ties_method)
+}
+
+calc_uauc_frank <- function(np, nn, scores, olabs, na_last, ties_method, frank) {
+    .Call(`_precrec_calc_uauc_frank`, np, nn, scores, olabs, na_last, ties_method, frank)
 }
 
 convert_curve_avg_df <- function(obj, uniq_modnames, modnames, curvetype_names, x_bins) {
