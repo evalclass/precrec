@@ -22,7 +22,7 @@ calc_avg_basic <- function(epoints, modnames, uniq_modnames, cb_alpha) {
                              cb_alpha, x_bins) {
 
   # === Validate input arguments ===
-  if (is.null(x_bins) || is.na(x_bins)) {
+  if (is.null(x_bins) || any(is.na(x_bins))) {
     x_bins <- 1
   }
   .validate_cb_alpha(cb_alpha)
