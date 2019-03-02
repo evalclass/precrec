@@ -87,10 +87,10 @@ update_main <- function(call_pkgdown = FALSE) {
   #             "accepts the following",
   #             "mode_rocprcr")
 
-  update_html(get_file_path("part.html"),
-              c("accepts the following",
-                "following curve"),
-              c("mode_rocprcr", "curve_type"))
+  # update_html(get_file_path("part.html"),
+  #             c("accepts the following",
+  #               "following curve"),
+  #             c("mode_rocprcr", "curve_type"))
 }
 
 update_main(call_pkgdown = TRUE)
