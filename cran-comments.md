@@ -17,11 +17,3 @@ In this version I have:
 
 ## R CMD check results
 * There were no ERRORs or WARNINGs.
-
-* One **NOTE** in the package size test on **local CentOS 6.7, R 3.3.3** and **Ubuntu 12.04.5 LTS**.
-  
-    * It happens because the the size of the package c++ library `precrec.so` was 5-8 MB.     
-
-* One **NOTE** from the "checking compiled code"" test on **AppVeyor**.
-
-    * It is good practice to register native routines and to disable symbol search.
