@@ -72,7 +72,7 @@ create_sim_samples <- function(n_repeat, np, nn, score_names = "random") {
       && any(score_names == "all")) {
     score_names <- choices
   } else if (!is.atomic(score_names) || !is.character(score_names)
-             || !(score_names %in% choices)) {
+             || !(all(score_names %in% choices))) {
     stop(gettextf("'score_names' must be one of %s",
                   paste(dQuote(choices), collapse = ", ")), call. = FALSE)
   }
