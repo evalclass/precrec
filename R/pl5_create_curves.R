@@ -9,7 +9,7 @@ create_curves <- function(pevals, scores = NULL, labels = NULL,
   pevals <- .create_src_obj(pevals, "pevals", calc_measures, scores, labels,
                                  ...)
 
-  if (is.null(x_bins) || is.na(x_bins)) {
+  if (is.null(x_bins) || any(is.na(x_bins))) {
     x_bins <- 1
   }
   .validate_x_bins(x_bins)

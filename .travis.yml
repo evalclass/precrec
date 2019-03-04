@@ -7,7 +7,7 @@ branches:
 
 os:
  - linux
- - osx
+# - osx
 
 language: r
 r:
