@@ -1,3 +1,8 @@
+# precrec 0.10
+
+* Fix RCpp header for STRICT_R_HEADERS
+* Strip symbols of .so file
+
 # precrec 0.9.1
 
 * Fix a bug with as.data.frame when multiple datasets given

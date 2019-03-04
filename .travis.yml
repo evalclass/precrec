@@ -3,11 +3,11 @@
 branches:
   only:
     - master
-#    - develop
+    - develop
 
 os:
  - linux
- - osx
+# - osx
 
 language: r
 r:

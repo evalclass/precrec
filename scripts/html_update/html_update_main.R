@@ -44,53 +44,53 @@ update_main <- function(call_pkgdown = FALSE) {
     pkgdown::build_site(run_dont_run = TRUE)
   }
 
-  update_html(get_file_path("precrec.html"),
-              c("six functions",
-                "eight different"),
-              c("precrec_funcs", "precrec_s3"))
+  # update_html(get_file_path("precrec.html"),
+  #             c("six functions",
+  #               "eight different"),
+  #             c("precrec_funcs", "precrec_s3"))
 
-  update_html(get_file_path("evalmod.html"),
-              c("one of the following",
-                "one of the following"),
-              c("mode_rocprcr", "mode_basic"))
+  # update_html(get_file_path("evalmod.html"),
+  #             c("one of the following",
+  #               "one of the following"),
+  #             c("mode_rocprcr", "mode_basic"))
 
-  update_html(get_file_path("plot.html"),
-              c("ROC and Precision-Recall ",
-                "Basic evaluation",
-                "ROC and Precision-Recall ",
-                "Basic evaluation"),
-              c("mode_rocprcr", "mode_basic", "curve_type", "curve_type_basic"))
+  # update_html(get_file_path("plot.html"),
+  #             c("ROC and Precision-Recall ",
+  #               "Basic evaluation",
+  #               "ROC and Precision-Recall ",
+  #               "Basic evaluation"),
+  #             c("mode_rocprcr", "mode_basic", "curve_type", "curve_type_basic"))
 
-  update_html(get_file_path("autoplot.html"),
-              c("ROC and Precision-Recall ",
-                "Basic evaluation",
-                "ROC and Precision-Recall ",
-                "Basic evaluation"),
-              c("mode_rocprcr", "mode_basic", "curve_type", "curve_type_basic"))
+  # update_html(get_file_path("autoplot.html"),
+  #             c("ROC and Precision-Recall ",
+  #               "Basic evaluation",
+  #               "ROC and Precision-Recall ",
+  #               "Basic evaluation"),
+  #             c("mode_rocprcr", "mode_basic", "curve_type", "curve_type_basic"))
 
-  update_html(get_file_path("fortify.html"),
-              c("ROC and Precision-Recall ",
-                "Basic evaluation"),
-              c("mode_rocprcr", "mode_basic"))
+  # update_html(get_file_path("fortify.html"),
+  #             c("ROC and Precision-Recall ",
+  #               "Basic evaluation"),
+  #             c("mode_rocprcr", "mode_basic"))
 
-  update_html(get_file_path("as.data.frame.html"),
-              c("ROC and Precision-Recall ",
-                "Basic evaluation",
-                "Fast AUC"),
-              c("mode_rocprcr", "mode_basic", "mode_aucroc"))
+  # update_html(get_file_path("as.data.frame.html"),
+  #             c("ROC and Precision-Recall ",
+  #               "Basic evaluation",
+  #               "Fast AUC"),
+  #             c("mode_rocprcr", "mode_basic", "mode_aucroc"))
 
-  update_html(get_file_path("auc.html"),
-              "accepts the following",
-              "mode_rocprcr")
+  # update_html(get_file_path("auc.html"),
+  #             "accepts the following",
+  #             "mode_rocprcr")
 
-  update_html(get_file_path("pauc.html"),
-              "accepts the following",
-              "mode_rocprcr")
+  # update_html(get_file_path("pauc.html"),
+  #             "accepts the following",
+  #             "mode_rocprcr")
 
-  update_html(get_file_path("part.html"),
-              c("accepts the following",
-                "following curve"),
-              c("mode_rocprcr", "curve_type"))
+  # update_html(get_file_path("part.html"),
+  #             c("accepts the following",
+  #               "following curve"),
+  #             c("mode_rocprcr", "curve_type"))
 }
 
 update_main(call_pkgdown = TRUE)
