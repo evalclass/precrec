@@ -3,6 +3,7 @@ This is a submission for updating the already published package - precrec.
 In this version I have:
 
 * Fixed a cpp header for STRICT_R_HEADERS 
+* Strip symbols of .so file using src/Makervars
 
 * Updated the version.
     * 0.9.1 -> 0.10
