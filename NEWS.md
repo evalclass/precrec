@@ -1,4 +1,5 @@
 # precrec 0.10.1
+
 * Remove src/Makervars to keep .so file unstripped
 
 # precrec 0.10
