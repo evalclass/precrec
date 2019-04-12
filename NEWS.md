@@ -1,3 +1,7 @@
+# precrec 0.10.1
+
+* Remove src/Makervars to keep .so file unstripped
+
 # precrec 0.10
 
 * Fix RCpp header for STRICT_R_HEADERS
