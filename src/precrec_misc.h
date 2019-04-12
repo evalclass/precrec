@@ -1,5 +1,5 @@
-#ifndef SORT_INDICES_BY_SCORES_H_
-#define SORT_INDICES_BY_SCORES_H_
+#ifndef PRECREC_MISC_H_
+#define PRECREC_MISC_H_
 
 #include <Rcpp.h>
 #include <cfloat>       // DBL_MIN, DBL_MAX
@@ -21,5 +21,5 @@ void sort_indices(std::vector<std::pair<unsigned, double > >& indices,
                   const std::string& ties_method,
                   bool desc);
 
-#endif /* SORT_INDICES_BY_SCORES_H_ */
+#endif /* PRECREC_MISC_H_ */
 
