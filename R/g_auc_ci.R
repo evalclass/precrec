@@ -47,7 +47,7 @@
 #'                dsids = samps[["dsids"]])
 #'
 #' ## Generate an smcurve object that contains ROC and Precision-Recall curves
-#' smcurves <- evalmod(mdat, raw_curves = TRUE)
+#' smcurves <- evalmod(mdat)
 #'
 #' ## Calculate CI of AUCs
 #' sm_auc_cis <- auc_ci(smcurves)
@@ -66,7 +66,7 @@
 #'                dsids = samps[["dsids"]])
 #'
 #' ## Generate an mscurve object that contains ROC and Precision-Recall curves
-#' mmcurves <- evalmod(mdat, raw_curves = TRUE)
+#' mmcurves <- evalmod(mdat)
 #'
 #' ## Calculate CI of AUCs
 #' mm_auc_ci <- auc_ci(mmcurves)
