@@ -3,7 +3,6 @@
 \docType{package}
 \name{precrec}
 \alias{precrec}
-\alias{precrec-package}
 \title{precrec: A package for computing accurate ROC and Precision-Recall curves}
 \description{
 The precrec package contains several functions and \code{S3} generics to
