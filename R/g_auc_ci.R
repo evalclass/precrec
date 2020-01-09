@@ -18,7 +18,7 @@
 #'
 #'    See the \strong{Value} section of \code{\link{evalmod}} for more details.
 #'
-#' @param alpha A numeric value for the significant level (default: 0.05)
+#' @param alpha A numeric value of the significant level (default: 0.05)
 #'
 #' @param dtype A string to specify the distibution used for CI calculation.
 #'   \tabular{ll}{
@@ -49,7 +49,7 @@
 #' ## Generate an smcurve object that contains ROC and Precision-Recall curves
 #' smcurves <- evalmod(mdat, raw_curves = TRUE)
 #'
-#' ## Calculate CIs of AUCs
+#' ## Calculate CI of AUCs
 #' sm_auc_cis <- auc_ci(smcurves)
 #'
 #' ## Shows the result
@@ -68,7 +68,7 @@
 #' ## Generate an mscurve object that contains ROC and Precision-Recall curves
 #' mmcurves <- evalmod(mdat, raw_curves = TRUE)
 #'
-#' ## Calculate CIs of AUCs
+#' ## Calculate CI of AUCs
 #' mm_auc_ci <- auc_ci(mmcurves)
 #'
 #' ## Shows the result
