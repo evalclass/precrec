@@ -29,7 +29,7 @@ sscurves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 ```
 
 ### S3 generics
-The R language specifies S3 objects and S3 generic functions as part of the most basic object-oriented system in R. The `precrec` package provides eight S3 generics for the S3 object 
+The R language specifies S3 objects and S3 generic functions as part of the most basic object-oriented system in R. The `precrec` package provides nine S3 generics for the S3 object 
 created by the `evalmod` function.
 
 S3 generic       Package   Description 
@@ -42,7 +42,8 @@ S3 generic       Package   Description
            auc   precrec   Make a data frame with AUC scores
           part   precrec   Set partial curves and calculate AUC scores
           pauc   precrec   Make a data frame with pAUC scores
-          
+        auc_ci   precrec   Calculate confidence intervals of AUC scores
+  
 #### Example of the plot function
 The `plot` function outputs ROC and Precision-Recall curves
 ```{r, fig.width=7, fig.show='hold'}
