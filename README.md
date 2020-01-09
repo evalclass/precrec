@@ -80,7 +80,7 @@ The `precrec` package provides the following six functions.
 | create\_sim\_samples | Create random samples for simulations                      |
 | format\_nfold        | Create n-fold cross validation dataset from data frame     |
 
-Moreover, the `precrec` package provides eight S3 generics for the S3 object created by the `evalmod` function. **N.B.** The R language specifies S3 objects and S3 generic functions as part of the most basic object-oriented system in R.
+Moreover, the `precrec` package provides nine S3 generics for the S3 object created by the `evalmod` function. **N.B.** The R language specifies S3 objects and S3 generic functions as part of the most basic object-oriented system in R.
 
 | S3 generic    | Package  | Description                                                    |
 |:--------------|:---------|:---------------------------------------------------------------|
@@ -92,6 +92,7 @@ Moreover, the `precrec` package provides eight S3 generics for the S3 object cre
 | auc           | precrec  | Make a data frame with AUC scores                              |
 | part          | precrec  | Calculate partial curves and partial AUC scores                |
 | pauc          | precrec  | Make a data frame with pAUC scores                             |
+| auc\_ci       | precrec  | Calculate confidence intervals of AUC scores                   |
 
 Documentation
 -------------

@@ -4,10 +4,22 @@
 \alias{mmdata}
 \title{Reformat input data for performance evaluation calculation}
 \usage{
-mmdata(scores, labels, modnames = NULL, dsids = NULL,
-  posclass = NULL, na_worst = TRUE, ties_method = "equiv",
-  expd_first = NULL, mode = "rocprc", nfold_df = NULL,
-  score_cols = NULL, lab_col = NULL, fold_col = NULL, ...)
+mmdata(
+  scores,
+  labels,
+  modnames = NULL,
+  dsids = NULL,
+  posclass = NULL,
+  na_worst = TRUE,
+  ties_method = "equiv",
+  expd_first = NULL,
+  mode = "rocprc",
+  nfold_df = NULL,
+  score_cols = NULL,
+  lab_col = NULL,
+  fold_col = NULL,
+  ...
+)
 }
 \arguments{
 \item{scores}{A numeric dataset of predicted scores. It can be a vector,

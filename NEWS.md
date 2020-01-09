@@ -1,3 +1,7 @@
+# precrec 0.11
+
+* Add auc\_ci function for CI calculation of AUC scores
+
 # precrec 0.10.1
 
 * Remove src/Makervars to keep .so file unstripped

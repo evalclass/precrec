@@ -29,7 +29,7 @@ sscurves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 ```
 
 ### S3 generics
-The R language specifies S3 objects and S3 generic functions as part of the most basic object-oriented system in R. The `precrec` package provides eight S3 generics for the S3 object 
+The R language specifies S3 objects and S3 generic functions as part of the most basic object-oriented system in R. The `precrec` package provides nine S3 generics for the S3 object 
 created by the `evalmod` function.
 
 S3 generic       Package   Description 
@@ -42,7 +42,8 @@ S3 generic       Package   Description
            auc   precrec   Make a data frame with AUC scores
           part   precrec   Set partial curves and calculate AUC scores
           pauc   precrec   Make a data frame with pAUC scores
-          
+        auc_ci   precrec   Calculate confidence intervals of AUC scores
+  
 #### Example of the plot function
 The `plot` function outputs ROC and Precision-Recall curves
 ```{r, fig.width=7, fig.show='hold'}
@@ -510,7 +511,43 @@ aucs.df <- as.data.frame(aucs)
 knitr::kable(aucs.df)
 ```
 
-## 11. Balanced and imbalanced datasets
+## 11. Confidence intervals of AUCs
+The `auc_ci` function calculates confidenc intervals of the calcualted ROCs by the `evalmod` function.
+
+### Default CI calculation with normal distribution and alpha=0.05
+The `auc_ci` function calculates CIs for both ROC and precision-recall AUCs. The specified data must contain multiple datasets, such as cross-valudation data.
+
+```{r}
+# Calculate CI of AUCs with normal distibution
+auc_ci <- auc_ci(smcurves)
+
+# Use knitr::kable to display the result in a table format
+knitr::kable(auc_ci)
+```
+
+### CI calculation with a different alpha (0.01)
+The `auc_ci` function accepts a different signifiant level.
+
+```{r}
+# Calculate CI of AUCs with alpha = 0.01
+auc_ci_a <- auc_ci(smcurves, alpha = 0.01)
+
+# Use knitr::kable to display the result in a table format
+knitr::kable(auc_ci_a)
+```
+
+### CI calculation with t-distribution
+The `auc_ci` function accepts both normal and t-distiubtions for CI calculation.
+
+```{r}
+# Calculate CI of AUCs t-distribution
+auc_ci_t <- auc_ci(smcurves, dtype = "t")
+
+# Use knitr::kable to display the result in a table format
+knitr::kable(auc_ci_t)
+```
+
+## 12. Balanced and imbalanced datasets
 It is easy to simulate various scenarios, such as balanced vs. imbalanced 
 datasets, by using the `evalmod` and `create_sim_samples` functions.
 
@@ -551,7 +588,7 @@ autoplot(simcurves1)
 autoplot(simcurves2)
 ```
 
-## 12. Citation
+## 13. Citation
 *Precrec: fast and accurate precision-recall and ROC curve calculations in R*
 
 Takaya Saito; Marc Rehmsmeier
@@ -560,7 +597,7 @@ Bioinformatics 2017; 33 (1): 145-147.
 
 doi: [10.1093/bioinformatics/btw570](https://doi.org/10.1093/bioinformatics/btw570)
 
-## 13. External links
+## 14. External links
 - [Classifier evaluation with imbalanced datasets](https://classeval.wordpress.com/) - our web site that contains several pages with useful tips for performance evaluation on binary classifiers.
 
 - [The Precision-Recall Plot Is More Informative than the ROC Plot When Evaluating Binary Classifiers on Imbalanced Datasets](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0118432) -  our paper that summarized potential pitfalls of ROC plots with imbalanced datasets and advantages of using precision-recall plots instead.

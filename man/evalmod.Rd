@@ -4,10 +4,22 @@
 \alias{evalmod}
 \title{Evaluate models and calculate performance evaluation measures}
 \usage{
-evalmod(mdat, mode = NULL, scores = NULL, labels = NULL,
-  modnames = NULL, dsids = NULL, posclass = NULL, na_worst = TRUE,
-  ties_method = "equiv", calc_avg = TRUE, cb_alpha = 0.05,
-  raw_curves = FALSE, x_bins = 1000, ...)
+evalmod(
+  mdat,
+  mode = NULL,
+  scores = NULL,
+  labels = NULL,
+  modnames = NULL,
+  dsids = NULL,
+  posclass = NULL,
+  na_worst = TRUE,
+  ties_method = "equiv",
+  calc_avg = TRUE,
+  cb_alpha = 0.05,
+  raw_curves = FALSE,
+  x_bins = 1000,
+  ...
+)
 }
 \arguments{
 \item{mdat}{An \code{S3} object created by the \code{\link{mmdata}}
