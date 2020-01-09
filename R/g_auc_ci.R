@@ -114,9 +114,9 @@ auc_ci.aucs <- function(curves, alpha=0.05, dtype="normal") {
 
   ci_df <- NULL
   for (modname in uniq_modnames) {
-    auc_mod <- subset(aucs, modnames == modname)
+    auc_mod <- aucs[aucs$modnames == modname, ]
     for (curvetype in uniq_curvetype) {
-      aucs_subset <- subset(auc_mod, curvetypes == curvetype)
+      aucs_subset <- auc_mod[auc_mod$curvetypes == curvetype, ]
 
       # Prepare for CI calculation
       aucs_mean <- mean(aucs_subset$aucs)

@@ -15,4 +15,5 @@ In this version I have:
 * Windows Server 2012 R2 x64 (on AppVeyor), 3.5.3 Patched
 
 ## R CMD check results
-* There were no ERRORs or WARNINGs.
+* One **NOTE** in the package size test on **local Ubuntu 18.04.2 LTS, R 3.6.2**.
+    * It happens because the size of unstripped `precrec.so` is over 3 MB.    
