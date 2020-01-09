@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Calculate Accurate Precision-Recall and ROC (Receiver Operator Characteristics) Curves • precrec</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Calculate Accurate Precision-Recall and ROC (Receiver Operator Characteristics) Curves">
 <meta property="og:description" content="Accurate calculations and visualization of precision-recall and ROC (Receiver Operator Characteristics)
     curves.">
@@ -19,7 +20,7 @@
 <![endif]-->
 </head>
 <body>
-    <div class="container template-article">
+    <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -31,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">precrec</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11</span>
       </span>
     </div>
 
@@ -47,7 +48,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/takayasaito/precrec">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -60,12 +61,9 @@
 <!--/.navbar -->
 
       
-      </header><div class="row">
-  <div class="col-md-9 contents">
-    
 
-    
-    
+      </header><div class="row">
+  <div class="contents col-md-9">
 <div id="precrec" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#precrec" class="anchor"></a>Precrec</h1></div>
@@ -129,10 +127,10 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <ul>
-<li><p>Install the release version of <code>precrec</code> from CRAN with <code><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages("precrec")</a></code>.</p></li>
+<li><p>Install the release version of <code>precrec</code> from CRAN with <code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages("precrec")</a></code>.</p></li>
 <li>
 <p>Alternatively, you can install a development version of <code>precrec</code> from <a href="https://github.com/takayasaito/precrec">our GitHub repository</a>. To install it:</p>
-<ol style="list-style-type: decimal">
+<ol>
 <li>Make sure you have a working development environment.
 <ul>
 <li>
@@ -143,8 +141,8 @@
 <strong>Linux</strong>: Install a compiler and various development libraries (details vary across different flavors of Linux).</li>
 </ul>
 </li>
-<li><p>Install <code>devtools</code> from CRAN with <code><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages("devtools")</a></code>.</p></li>
-<li><p>Install <code>precrec</code> from the GitHub repository with <code><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">devtools::install_github("takayasaito/precrec")</a></code>.</p></li>
+<li><p>Install <code>devtools</code> from CRAN with <code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages("devtools")</a></code>.</p></li>
+<li><p>Install <code>precrec</code> from the GitHub repository with <code><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">devtools::install_github("takayasaito/precrec")</a></code>.</p></li>
 </ol>
 </li>
 </ul>
@@ -153,7 +151,7 @@
 <h2 class="hasAnchor">
 <a href="#functions" class="anchor"></a>Functions</h2>
 <p>The <code>precrec</code> package provides the following six functions.</p>
-<table class="table table">
+<table class="table">
 <thead><tr class="header">
 <th align="left">Function</th>
 <th align="left">Description</th>
@@ -185,8 +183,8 @@
 </tr>
 </tbody>
 </table>
-<p>Moreover, the <code>precrec</code> package provides eight S3 generics for the S3 object created by the <code>evalmod</code> function. <strong>N.B.</strong> The R language specifies S3 objects and S3 generic functions as part of the most basic object-oriented system in R.</p>
-<table class="table table">
+<p>Moreover, the <code>precrec</code> package provides nine S3 generics for the S3 object created by the <code>evalmod</code> function. <strong>N.B.</strong> The R language specifies S3 objects and S3 generic functions as part of the most basic object-oriented system in R.</p>
+<table class="table">
 <thead><tr class="header">
 <th align="left">S3 generic</th>
 <th align="left">Package</th>
@@ -233,6 +231,11 @@
 <td align="left">precrec</td>
 <td align="left">Make a data frame with pAUC scores</td>
 </tr>
+<tr class="odd">
+<td align="left">auc_ci</td>
+<td align="left">precrec</td>
+<td align="left">Calculate confidence intervals of AUC scores</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -241,7 +244,7 @@
 <a href="#documentation" class="anchor"></a>Documentation</h2>
 <ul>
 <li><p><a href="http://takayasaito.github.io/precrec/articles/introduction.html">Introduction to precrec</a> - a package vignette that contains the descriptions of the functions with several useful examples. View the vignette with <code><a href="articles/introduction.html">vignette("introduction", package = "precrec")</a></code> in R. The HTML version is also available on the <a href="http://takayasaito.github.io/precrec/articles/introduction.html">GitHub Pages</a>.</p></li>
-<li><p><a href="http://takayasaito.github.io/precrec/reference">Help pages</a> - all the functions including the S3 generics except for <code>print</code> have their own help pages with plenty of examples. View the main help page with <code><a href="https://www.rdocumentation.org/packages/utils/topics/help">help(package = "precrec")</a></code> in R. The HTML version is also available on the <a href="http://takayasaito.github.io/precrec/reference">GitHub Pages</a>.</p></li>
+<li><p><a href="http://takayasaito.github.io/precrec/reference">Help pages</a> - all the functions including the S3 generics except for <code>print</code> have their own help pages with plenty of examples. View the main help page with <code><a href="https://rdrr.io/r/utils/help.html">help(package = "precrec")</a></code> in R. The HTML version is also available on the <a href="http://takayasaito.github.io/precrec/reference">GitHub Pages</a>.</p></li>
 </ul>
 </div>
 <div id="examples" class="section level2">
@@ -252,10 +255,10 @@
 <h3 class="hasAnchor">
 <a href="#roc-and-precision-recall-calculations" class="anchor"></a>ROC and Precision-Recall calculations</h3>
 <p>The <code>evalmod</code> function calculates ROC and Precision-Recall curves and returns an S3 object.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(precrec)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(precrec)
 
 <span class="co"># Load a test dataset</span>
-<span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(P10N10)
+<span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(P10N10)
 
 <span class="co"># Calculate ROC and Precision-Recall curves</span>
 sscurves &lt;-<span class="st"> </span><span class="kw"><a href="reference/evalmod.html">evalmod</a></span>(<span class="dt">scores =</span> P10N10<span class="op">$</span>scores, <span class="dt">labels =</span> P10N10<span class="op">$</span>labels)</code></pre></div>
@@ -265,13 +268,11 @@ sscurves &lt;-<span class="st"> </span><span class="kw"><a href="reference/evalm
 <a href="#visualization-of-the-curves" class="anchor"></a>Visualization of the curves</h3>
 <p>The <code>autoplot</code> function outputs ROC and Precision-Recall curves by using the <code>ggplot2</code> package.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The ggplot2 package is required </span>
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(ggplot2)
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)
 
 <span class="co"># Show ROC and Precision-Recall plots</span>
 <span class="kw"><a href="reference/autoplot.html">autoplot</a></span>(sscurves)</code></pre></div>
-<div class="figure">
-<img src="https://rawgit.com/takayasaito/precrec/master/README_files/figure-markdown_github/unnamed-chunk-2-1.png">
-</div>
+<p><img src="https://rawgit.com/takayasaito/precrec/master/README_files/figure-markdown_github/unnamed-chunk-2-1.png"></p>
 </div>
 </div>
 <div id="citation" class="section level2">
@@ -326,7 +327,7 @@ sscurves &lt;-<span class="st"> </span><span class="kw"><a href="reference/evalm
 </ul>
 </div>
 
-      <div class="dev-status">
+  <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://travis-ci.org/takayasaito/precrec"><img src="https://img.shields.io/travis/takayasaito/precrec.svg?maxAge=2592000" alt="Travis"></a></li>
@@ -336,7 +337,6 @@ sscurves &lt;-<span class="st"> </span><span class="kw"><a href="reference/evalm
 </ul>
 </div>
 </div>
-
 </div>
 
 
@@ -345,12 +345,14 @@ sscurves &lt;-<span class="st"> </span><span class="kw"><a href="reference/evalm
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
 </div>
 
   
+
 
   </body>
 </html>

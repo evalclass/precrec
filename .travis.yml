@@ -3,7 +3,7 @@
 branches:
   only:
     - master
- #   - develop
+    - develop
 
 os:
  - linux
@@ -12,7 +12,7 @@ os:
 language: r
 r:
   - release
-  - devel
+#  - devel
 cache: packages
 sudo: false
 warnings_are_errors: true

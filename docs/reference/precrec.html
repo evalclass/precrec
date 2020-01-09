@@ -8,21 +8,25 @@
 
 <title>precrec: A package for computing accurate ROC and Precision-Recall curves — precrec • precrec</title>
 
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -30,11 +34,12 @@
 
 
 
-<meta property="og:title" content="precrec: A package for computing accurate ROC and Precision-Recall curves — precrec" />
 
+<meta property="og:title" content="precrec: A package for computing accurate ROC and Precision-Recall curves — precrec" />
 <meta property="og:description" content="The precrec package contains several functions and S3 generics to
 provide a robust platform for performance evaluation of binary classifiers." />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -46,6 +51,7 @@ provide a robust platform for performance evaluation of binary classifiers." />
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
 
 
   </head>
@@ -64,7 +70,7 @@ provide a robust platform for performance evaluation of binary classifiers." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">precrec</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11</span>
       </span>
     </div>
 
@@ -77,11 +83,10 @@ provide a robust platform for performance evaluation of binary classifiers." />
   <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/takayasaito/precrec">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -92,6 +97,7 @@ provide a robust platform for performance evaluation of binary classifiers." />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -103,17 +109,17 @@ provide a robust platform for performance evaluation of binary classifiers." />
     </div>
 
     <div class="ref-description">
-    
     <p>The precrec package contains several functions and <code>S3</code> generics to
 provide a robust platform for performance evaluation of binary classifiers.</p>
-    
     </div>
 
-        
+
+
     <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
 
     
-    <p>The precrec package provides the following six functions.</p>
+
+<p>The precrec package provides the following six functions.</p>
 <p></p><table class='table'>
 <tr><td><strong>Function</strong></td><td><strong>Description</strong></td></tr>
 <tr><td><code><a href='evalmod.html'>evalmod</a></code></td><td>Main function to calculate evaluation measures</td></tr>
@@ -123,11 +129,13 @@ provide a robust platform for performance evaluation of binary classifiers.</p>
 <tr><td><code><a href='create_sim_samples.html'>create_sim_samples</a></code></td><td>Create random samples for simulations</td></tr>
 <tr><td><code><a href='format_nfold.html'>format_nfold</a></code></td><td>Create n-fold cross validation dataset from data frame</td></tr>
 </table>
-    
+
+
     <h2 class="hasAnchor" id="s-generics"><a class="anchor" href="#s-generics"></a>S3 generics</h2>
 
     
-    <p>The precrec package provides eight different <code>S3</code> generics for the
+
+<p>The precrec package provides nine different <code>S3</code> generics for the
  <code>S3</code> objects generated by the <code><a href='evalmod.html'>evalmod</a></code> function.</p>
 <p></p><table class='table'>
 <tr><td><strong>S3 generic</strong></td><td><strong>Library</strong></td><td><strong>Description</strong></td></tr>
@@ -139,65 +147,63 @@ provide a robust platform for performance evaluation of binary classifiers.</p>
 <tr><td><code><a href='auc.html'>auc</a></code></td><td>precrec</td><td>Make a data frame with AUC scores</td></tr>
 <tr><td><code><a href='part.html'>part</a></code></td><td>precrec</td><td>Calculate partial curves and partial AUC scores</td></tr>
 <tr><td><code><a href='pauc.html'>pauc</a></code></td><td>precrec</td><td>Make a data frame with pAUC scores</td></tr>
+<tr><td><code><a href='auc_ci.html'>auc_ci</a></code></td><td>precrec</td><td>Calculate confidence intervals of AUC scores</td></tr>
 </table>
-    
+
+
     <h2 class="hasAnchor" id="performance-measure-calculations"><a class="anchor" href="#performance-measure-calculations"></a>Performance measure calculations</h2>
 
     
-    <p>The <code><a href='evalmod.html'>evalmod</a></code> function calculates ROC and Precision-Recall
+
+<p>The <code><a href='evalmod.html'>evalmod</a></code> function calculates ROC and Precision-Recall
   curves and returns an <code>S3</code> object. The generated <code>S3</code> object can
   be used with several different <code>S3</code> generics, such as <code>print</code> and
   <code><a href='plot.html'>plot</a></code>. The <code><a href='evalmod.html'>evalmod</a></code> function can also
   calculate basic evaluation measures - error rate, accuracy, specificity,
   sensitivity, precision, Matthews correlation coefficient, and F-Score.</p>
-    
     <h2 class="hasAnchor" id="data-preparation"><a class="anchor" href="#data-preparation"></a>Data preparation</h2>
 
     
-    <p>The <code><a href='mmdata.html'>mmdata</a></code> function creates an input dataset for
+
+<p>The <code><a href='mmdata.html'>mmdata</a></code> function creates an input dataset for
  the <code><a href='evalmod.html'>evalmod</a></code> function. The generated dataset contains
  formatted scores and labels.</p>
 <p><code><a href='join_scores.html'>join_scores</a></code> and <code><a href='join_labels.html'>join_labels</a></code> are helper
  functions to combine multiple scores and labels.</p>
 <p>The <code><a href='create_sim_samples.html'>create_sim_samples</a></code> function creates test datasets with
  five different performance levels.</p>
-    
     <h2 class="hasAnchor" id="data-visualization"><a class="anchor" href="#data-visualization"></a>Data visualization</h2>
 
     
-    <p><code><a href='plot.html'>plot</a></code> takes an <code>S3</code> object generated by <code><a href='evalmod.html'>evalmod</a></code> as input
+
+<p><code><a href='plot.html'>plot</a></code> takes an <code>S3</code> object generated by <code><a href='evalmod.html'>evalmod</a></code> as input
 and plot corresponding curves.</p>
 <p><code><a href='autoplot.html'>autoplot</a></code> uses <code>ggplot</code> to plot curves.</p>
-    
     <h2 class="hasAnchor" id="result-retrieval"><a class="anchor" href="#result-retrieval"></a>Result retrieval</h2>
 
     
-    <p><code><a href='as.data.frame.html'>as.data.frame</a></code> takes an <code>S3</code> object generated by <code><a href='evalmod.html'>evalmod</a></code>
+
+<p><code><a href='as.data.frame.html'>as.data.frame</a></code> takes an <code>S3</code> object generated by <code><a href='evalmod.html'>evalmod</a></code>
 as input and and returns a data frame with calculated curve points.</p>
 <p><code><a href='auc.html'>auc</a></code> and <code><a href='pauc.html'>pauc</a></code> returns a data frame with AUC scores
-and partial AUC scores, respectively.</p>
-    
+and partial AUC scores, respectively. <code><a href='auc_ci.html'>auc_ci</a></code> returns confidence intervals
+of AUCs for both ROC and precision-recall curves.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      
       <li><a href="#functions">Functions</a></li>
-
       <li><a href="#s-generics">S3 generics</a></li>
-
       <li><a href="#performance-measure-calculations">Performance measure calculations</a></li>
-
       <li><a href="#data-preparation">Data preparation</a></li>
-
       <li><a href="#data-visualization">Data visualization</a></li>
-
       <li><a href="#result-retrieval">Result retrieval</a></li>
-          </ul>
+    </ul>
 
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -205,13 +211,16 @@ and partial AUC scores, respectively.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 
