@@ -20,7 +20,7 @@
 #'
 #' @param alpha A numeric value of the significant level (default: 0.05)
 #'
-#' @param dtype A string to specify the distibution used for CI calculation.
+#' @param dtype A string to specify the distribution used for CI calculation.
 #'   \tabular{ll}{
 #'     \strong{dtype} \tab \strong{distribution} \cr
 #'     normal (default) \tab Normal distribution \cr
@@ -96,7 +96,7 @@ auc_ci.aucs <- function(curves, alpha=0.05, dtype="normal") {
                           alpha >= 0 && alpha <= 1)
   assertthat::assert_that(assertthat::is.string(dtype))
 
-  # Check type of distibution
+  # Check type of distribution
   dtype_tab <- c("normal", "z", "t")
   dype_match <- pmatch(tolower(dtype), dtype_tab)
   if (!is.na(dype_match)) {

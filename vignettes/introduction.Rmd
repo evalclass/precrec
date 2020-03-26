@@ -512,10 +512,10 @@ knitr::kable(aucs.df)
 ```
 
 ## 11. Confidence intervals of AUCs
-The `auc_ci` function calculates confidenc intervals of the calcualted ROCs by the `evalmod` function.
+The `auc_ci` function calculates confidence intervals of the calculated ROCs by the `evalmod` function.
 
 ### Default CI calculation with normal distribution and alpha=0.05
-The `auc_ci` function calculates CIs for both ROC and precision-recall AUCs. The specified data must contain multiple datasets, such as cross-valudation data.
+The `auc_ci` function calculates CIs for both ROC and precision-recall AUCs. The specified data must contain multiple datasets, such as cross-validation data.
 
 ```{r}
 # Calculate CI of AUCs with normal distibution
@@ -526,7 +526,7 @@ knitr::kable(auc_ci)
 ```
 
 ### CI calculation with a different alpha (0.01)
-The `auc_ci` function accepts a different signifiant level.
+The `auc_ci` function accepts a different significance level.
 
 ```{r}
 # Calculate CI of AUCs with alpha = 0.01
@@ -537,7 +537,7 @@ knitr::kable(auc_ci_a)
 ```
 
 ### CI calculation with t-distribution
-The `auc_ci` function accepts both normal and t-distiubtions for CI calculation.
+The `auc_ci` function accepts either normal or t-distribution for CI calculation.
 
 ```{r}
 # Calculate CI of AUCs t-distribution

@@ -4,7 +4,8 @@
 \name{B1000}
 \alias{B1000}
 \title{Balanced data with 1000 positives and 1000 negatives.}
-\format{A list with 8 items.
+\format{
+A list with 8 items.
 \describe{
   \item{np}{number of positives: 1000}
   \item{nn}{number of negatives: 1000}
@@ -14,7 +15,8 @@
   \item{good_er_scores}{scores of a good early retrieval level}
   \item{excel_scores}{scores of an excellent level}
   \item{perf_scores}{scores of the perfect level}
-}}
+}
+}
 \usage{
 data(B1000)
 }
