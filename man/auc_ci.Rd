@@ -26,7 +26,7 @@ auc_ci(curves, alpha, dtype)
 
 \item{alpha}{A numeric value of the significant level (default: 0.05)}
 
-\item{dtype}{A string to specify the distibution used for CI calculation.
+\item{dtype}{A string to specify the distribution used for CI calculation.
 \tabular{ll}{
   \strong{dtype} \tab \strong{distribution} \cr
   normal (default) \tab Normal distribution \cr
