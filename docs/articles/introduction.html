@@ -43,6 +43,9 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li>
+  <a href="../news/index.html">Change log</a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -66,7 +69,7 @@
     <div class="page-header toc-ignore">
       <h1>Introduction to precrec</h1>
             
-            <h4 class="date">2020-01-09</h4>
+            <h4 class="date">2020-01-10</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/takayasaito/precrec/blob/master/vignettes/introduction.Rmd"><code>vignettes/introduction.Rmd</code></a></small>
       <div class="hidden name"><code>introduction.Rmd</code></div>
@@ -181,9 +184,9 @@ eval1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/evalm
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Full supporting points</span>
 <span class="kw"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>(<span class="kw"><a href="../reference/autoplot.html">autoplot</a></span>(eval1, <span class="dt">reduce_points =</span> <span class="ot">FALSE</span>))</code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.661   0.064   0.779 
+##   0.654   0.063   0.771 
 ##    user  system elapsed 
-##  16.565   1.132  17.802</code></pre>
+##  16.560   1.151  17.784</code></pre>
 </div>
 <div id="example-of-the-auc-function" class="section level4">
 <h4 class="hasAnchor">
@@ -468,42 +471,42 @@ knitr<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/kni
 <tbody>
 <tr class="odd">
 <td align="right">0.000</td>
-<td align="right">0</td>
+<td align="right">0.0</td>
+<td align="left">random</td>
+<td align="left">1</td>
+<td align="left">ROC</td>
+</tr>
+<tr class="even">
+<td align="right">0.000</td>
+<td align="right">0.1</td>
+<td align="left">random</td>
+<td align="left">1</td>
+<td align="left">ROC</td>
+</tr>
+<tr class="odd">
+<td align="right">0.000</td>
+<td align="right">0.2</td>
 <td align="left">random</td>
 <td align="left">1</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="even">
 <td align="right">0.001</td>
-<td align="right">0</td>
+<td align="right">0.2</td>
 <td align="left">random</td>
 <td align="left">1</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="odd">
 <td align="right">0.002</td>
-<td align="right">0</td>
+<td align="right">0.2</td>
 <td align="left">random</td>
 <td align="left">1</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="even">
 <td align="right">0.003</td>
-<td align="right">0</td>
-<td align="left">random</td>
-<td align="left">1</td>
-<td align="left">ROC</td>
-</tr>
-<tr class="odd">
-<td align="right">0.004</td>
-<td align="right">0</td>
-<td align="left">random</td>
-<td align="left">1</td>
-<td align="left">ROC</td>
-</tr>
-<tr class="even">
-<td align="right">0.005</td>
-<td align="right">0</td>
+<td align="right">0.2</td>
 <td align="left">random</td>
 <td align="left">1</td>
 <td align="left">ROC</td>
@@ -563,43 +566,43 @@ knitr<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/kni
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.0</td>
 <td align="left">m1</td>
 <td align="left">1</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="even">
-<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.1</td>
 <td align="left">m1</td>
 <td align="left">1</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="odd">
-<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.2</td>
 <td align="left">m1</td>
 <td align="left">1</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="even">
-<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.3</td>
 <td align="left">m1</td>
 <td align="left">1</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="odd">
-<td align="right">0.001</td>
-<td align="right">0.3</td>
+<td align="right">0</td>
+<td align="right">0.4</td>
 <td align="left">m1</td>
 <td align="left">1</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="even">
-<td align="right">0.002</td>
-<td align="right">0.3</td>
+<td align="right">0</td>
+<td align="right">0.5</td>
 <td align="left">m1</td>
 <td align="left">1</td>
 <td align="left">ROC</td>
@@ -662,7 +665,7 @@ knitr<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/kni
 <tbody>
 <tr class="odd">
 <td align="right">0.000</td>
-<td align="right">0.000</td>
+<td align="right">0.00</td>
 <td align="right">0.0000000</td>
 <td align="right">0.0000000</td>
 <td align="left">random</td>
@@ -670,41 +673,41 @@ knitr<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/kni
 </tr>
 <tr class="even">
 <td align="right">0.000</td>
-<td align="right">0.135</td>
-<td align="right">0.0664013</td>
-<td align="right">0.2035987</td>
+<td align="right">0.12</td>
+<td align="right">0.0586764</td>
+<td align="right">0.1813236</td>
 <td align="left">random</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="odd">
 <td align="right">0.001</td>
-<td align="right">0.135</td>
-<td align="right">0.0664013</td>
-<td align="right">0.2035987</td>
+<td align="right">0.12</td>
+<td align="right">0.0586764</td>
+<td align="right">0.1813236</td>
 <td align="left">random</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="even">
 <td align="right">0.002</td>
-<td align="right">0.135</td>
-<td align="right">0.0664013</td>
-<td align="right">0.2035987</td>
+<td align="right">0.12</td>
+<td align="right">0.0586764</td>
+<td align="right">0.1813236</td>
 <td align="left">random</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="odd">
 <td align="right">0.003</td>
-<td align="right">0.135</td>
-<td align="right">0.0664013</td>
-<td align="right">0.2035987</td>
+<td align="right">0.12</td>
+<td align="right">0.0586764</td>
+<td align="right">0.1813236</td>
 <td align="left">random</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="even">
 <td align="right">0.004</td>
-<td align="right">0.135</td>
-<td align="right">0.0664013</td>
-<td align="right">0.2035987</td>
+<td align="right">0.12</td>
+<td align="right">0.0586764</td>
+<td align="right">0.1813236</td>
 <td align="left">random</td>
 <td align="left">ROC</td>
 </tr>
@@ -946,41 +949,41 @@ knitr<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/kni
 </tr>
 <tr class="even">
 <td align="right">0.05</td>
-<td align="right">1.6959208</td>
-<td align="right">1.5386830</td>
-<td align="right">1.8531585</td>
+<td align="right">1.7731689</td>
+<td align="right">1.5635597</td>
+<td align="right">1.9827780</td>
 <td align="left">random</td>
 <td align="left">score</td>
 </tr>
 <tr class="odd">
 <td align="right">0.10</td>
-<td align="right">1.3433153</td>
-<td align="right">1.2199430</td>
-<td align="right">1.4666877</td>
+<td align="right">1.4249266</td>
+<td align="right">1.2535962</td>
+<td align="right">1.5962569</td>
 <td align="left">random</td>
 <td align="left">score</td>
 </tr>
 <tr class="even">
 <td align="right">0.15</td>
-<td align="right">1.1601694</td>
-<td align="right">1.0514961</td>
-<td align="right">1.2688428</td>
+<td align="right">1.0298562</td>
+<td align="right">0.8811445</td>
+<td align="right">1.1785679</td>
 <td align="left">random</td>
 <td align="left">score</td>
 </tr>
 <tr class="odd">
 <td align="right">0.20</td>
-<td align="right">0.9429061</td>
-<td align="right">0.8175924</td>
-<td align="right">1.0682198</td>
+<td align="right">0.8596490</td>
+<td align="right">0.7105220</td>
+<td align="right">1.0087760</td>
 <td align="left">random</td>
 <td align="left">score</td>
 </tr>
 <tr class="even">
 <td align="right">0.25</td>
-<td align="right">0.6957517</td>
-<td align="right">0.5859100</td>
-<td align="right">0.8055935</td>
+<td align="right">0.7090049</td>
+<td align="right">0.5763174</td>
+<td align="right">0.8416924</td>
 <td align="left">random</td>
 <td align="left">score</td>
 </tr>
@@ -1102,19 +1105,19 @@ knitr<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/kni
 <tr class="odd">
 <td align="left">m1</td>
 <td align="left">ROC</td>
-<td align="right">0.7980000</td>
-<td align="right">0.0511412</td>
-<td align="right">0.7468588</td>
-<td align="right">0.8491412</td>
+<td align="right">0.7900000</td>
+<td align="right">0.0415771</td>
+<td align="right">0.7484229</td>
+<td align="right">0.8315771</td>
 <td align="right">20</td>
 </tr>
 <tr class="even">
 <td align="left">m1</td>
 <td align="left">PRC</td>
-<td align="right">0.8454837</td>
-<td align="right">0.0344994</td>
-<td align="right">0.8109844</td>
-<td align="right">0.8799831</td>
+<td align="right">0.8313645</td>
+<td align="right">0.0348119</td>
+<td align="right">0.7965526</td>
+<td align="right">0.8661764</td>
 <td align="right">20</td>
 </tr>
 </tbody>
@@ -1143,19 +1146,19 @@ knitr<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/kni
 <tr class="odd">
 <td align="left">m1</td>
 <td align="left">ROC</td>
-<td align="right">0.7980000</td>
-<td align="right">0.0672110</td>
-<td align="right">0.7307890</td>
-<td align="right">0.8652110</td>
+<td align="right">0.7900000</td>
+<td align="right">0.0546416</td>
+<td align="right">0.7353584</td>
+<td align="right">0.8446416</td>
 <td align="right">20</td>
 </tr>
 <tr class="even">
 <td align="left">m1</td>
 <td align="left">PRC</td>
-<td align="right">0.8454837</td>
-<td align="right">0.0453398</td>
-<td align="right">0.8001439</td>
-<td align="right">0.8908236</td>
+<td align="right">0.8313645</td>
+<td align="right">0.0457506</td>
+<td align="right">0.7856139</td>
+<td align="right">0.8771151</td>
 <td align="right">20</td>
 </tr>
 </tbody>
@@ -1184,19 +1187,19 @@ knitr<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/kni
 <tr class="odd">
 <td align="left">m1</td>
 <td align="left">ROC</td>
-<td align="right">0.7980000</td>
-<td align="right">0.0546132</td>
-<td align="right">0.7433868</td>
-<td align="right">0.8526132</td>
+<td align="right">0.7900000</td>
+<td align="right">0.0443997</td>
+<td align="right">0.7456003</td>
+<td align="right">0.8343997</td>
 <td align="right">20</td>
 </tr>
 <tr class="even">
 <td align="left">m1</td>
 <td align="left">PRC</td>
-<td align="right">0.8454837</td>
-<td align="right">0.0368415</td>
-<td align="right">0.8086422</td>
-<td align="right">0.8823252</td>
+<td align="right">0.8313645</td>
+<td align="right">0.0371752</td>
+<td align="right">0.7941893</td>
+<td align="right">0.8685398</td>
 <td align="right">20</td>
 </tr>
 </tbody>

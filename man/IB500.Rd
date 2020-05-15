@@ -4,7 +4,8 @@
 \name{IB500}
 \alias{IB500}
 \title{Imbalanced data with 500 positives and 5000 negatives.}
-\format{A list with 8 items.
+\format{
+A list with 8 items.
 \describe{
   \item{np}{number of positives: 500}
   \item{nn}{number of negatives: 5000}
@@ -14,7 +15,8 @@
   \item{good_er_scores}{scores of a good early retrieval level}
   \item{excel_scores}{scores of an excellent level}
   \item{perf_scores}{scores of the perfect level}
-}}
+}
+}
 \usage{
 data(IB500)
 }

@@ -1,3 +1,5 @@
+url: https://takayasaito.github.io/precrec
+
 templates:
   params:
     bootswatch: cerulean
@@ -29,6 +31,9 @@ reference:
   - title: Partical AUC and partial curve
     contents:
     - part
+  - title: Confidence interval of AUC scores
+    contents:
+    - auc_ci
   - title: Datasets
     desc: P10N10, B500, B1000, IB500, IB1000 and M2N50F5
     contents:
@@ -45,3 +50,5 @@ navbar:
     href: articles/introduction.html
   - text: Reference
     href: reference/index.html
+  - text: Change log
+    href: news/index.html

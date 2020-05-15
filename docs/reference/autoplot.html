@@ -82,6 +82,9 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li>
+  <a href="../news/index.html">Change log</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -260,10 +263,10 @@
 
 <span class='co'># Reduced supporting point</span>
 <span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span>(<span class='fu'>autoplot</span>(<span class='no'>evalss</span>))</div><div class='img'><img src='autoplot-2.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.203   0.009   0.213 </div><div class='input'>
+#&gt;   0.231   0.007   0.240 </div><div class='input'>
 <span class='co'># Full supporting points</span>
 <span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span>(<span class='fu'>autoplot</span>(<span class='no'>evalss</span>, <span class='kw'>reduce_points</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>))</div><div class='img'><img src='autoplot-3.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   2.269   0.147   2.421 </div><div class='input'>
+#&gt;   2.490   0.151   2.654 </div><div class='input'>
 <span class='co'>## Get a grob object for multiple plots</span>
 <span class='no'>pp1</span> <span class='kw'>&lt;-</span> <span class='fu'>autoplot</span>(<span class='no'>sscurves</span>, <span class='kw'>ret_grob</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 <span class='fu'><a href='https://rdrr.io/r/graphics/frame.html'>plot.new</a></span>()</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/grid/grid.draw.html'>grid.draw</a></span>(<span class='no'>pp1</span>)</div><div class='img'><img src='autoplot-4.png' alt='' width='700' height='433' /></div><div class='input'>
@@ -300,10 +303,10 @@
 
 <span class='co'># Reduced supporting point</span>
 <span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span>(<span class='fu'>autoplot</span>(<span class='no'>evalms</span>))</div><div class='img'><img src='autoplot-10.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.507   0.031   0.539 </div><div class='input'>
+#&gt;   0.507   0.030   0.538 </div><div class='input'>
 <span class='co'># Full supporting points</span>
 <span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span>(<span class='fu'>autoplot</span>(<span class='no'>evalms</span>, <span class='kw'>reduce_points</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>))</div><div class='img'><img src='autoplot-11.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;  12.991   1.258  14.292 </div><div class='input'>
+#&gt;  12.913   0.993  13.922 </div><div class='input'>
 <span class='co'>## Hide the legend</span>
 <span class='fu'>autoplot</span>(<span class='no'>mscurves</span>, <span class='kw'>show_legend</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='img'><img src='autoplot-12.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Generate an mspoints object that contains basic evaluation measures</span>
@@ -340,10 +343,10 @@
 
 <span class='co'># Reduced supporting point</span>
 <span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span>(<span class='fu'>autoplot</span>(<span class='no'>evalsm</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))</div><div class='img'><img src='autoplot-18.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.194   0.004   0.198 </div><div class='input'>
+#&gt;   0.188   0.000   0.188 </div><div class='input'>
 <span class='co'># Full supporting points</span>
 <span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span>(<span class='fu'>autoplot</span>(<span class='no'>evalsm</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>reduce_points</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>))</div><div class='img'><img src='autoplot-19.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.203   0.001   0.204 </div><div class='input'>
+#&gt;   0.191   0.000   0.191 </div><div class='input'>
 <span class='co'>## Generate an smpoints object that contains basic evaluation measures</span>
 <span class='no'>smpoints</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"basic"</span>)
 
@@ -377,10 +380,10 @@
 
 <span class='co'># Reduced supporting point</span>
 <span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span>(<span class='fu'>autoplot</span>(<span class='no'>evalmm</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))</div><div class='img'><img src='autoplot-24.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.415   0.005   0.422 </div><div class='input'>
+#&gt;   0.410   0.006   0.415 </div><div class='input'>
 <span class='co'># Full supporting points</span>
 <span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span>(<span class='fu'>autoplot</span>(<span class='no'>evalmm</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>reduce_points</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>))</div><div class='img'><img src='autoplot-25.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   1.248   0.109   1.361 </div><div class='input'>
+#&gt;   1.195   0.084   1.280 </div><div class='input'>
 <span class='co'>## Generate an mmpoints object that contains basic evaluation measures</span>
 <span class='no'>mmpoints</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"basic"</span>)
 

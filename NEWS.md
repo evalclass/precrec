@@ -1,3 +1,7 @@
+# precrec 0.11.1
+
+* Update test cases to treat c(factor) as factor since c(factor) does not return interger anymore 
+
 # precrec 0.11
 
 * Add auc\_ci function for CI calculation of AUC scores
@@ -8,7 +12,7 @@
 
 # precrec 0.10
 
-* Fix RCpp header for STRICT_R_HEADERS
+* Fix Rcpp header for STRICT_R_HEADERS
 * Strip symbols of .so file
 
 # precrec 0.9.1
@@ -37,13 +41,13 @@
 
 # precrec 0.6.1
 
-* Improve github pages
+* Improve GitHub pages
 
 # precrec 0.6
 
 * Improve as.data.frame with Rcpp
 
-* Create github pages with pkgdown
+* Create GitHub pages with pkgdown
 
 # precrec 0.5.2
 
@@ -64,7 +68,7 @@
 
 # precrec 0.3
 
-* Improved the testing enviroment
+* Improved the testing environment
     * unit tests
     * codecov
     
