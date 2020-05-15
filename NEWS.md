@@ -1,3 +1,7 @@
+# precrec 0.11.1
+
+* Update test cases to treat c(factor) as factor since c(factor) does not return interger anymore 
+
 # precrec 0.11
 
 * Add auc\_ci function for CI calculation of AUC scores
