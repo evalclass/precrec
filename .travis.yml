@@ -12,7 +12,7 @@ os:
 language: r
 r:
   - release
-#  - devel
+  - devel
 cache: packages
 sudo: false
 warnings_are_errors: true
