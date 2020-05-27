@@ -1,8 +1,8 @@
 # .travis.yml for precrec
 
-branches:
-  only:
-    - master
+#branches:
+#  only:
+#    - master
 #    - develop
 
 os:
@@ -11,8 +11,8 @@ os:
 
 language: r
 r:
-  - release
-#  - devel
+#  - release
+  - devel
 cache: packages
 sudo: false
 warnings_are_errors: true

@@ -1,5 +1,7 @@
 library(precrec)
 
+skip()
+
 context("AP 1: Autoplot for pipeline functions")
 # Test autoplot(object, ...)
 

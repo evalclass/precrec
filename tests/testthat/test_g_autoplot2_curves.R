@@ -1,5 +1,7 @@
 library(precrec)
 
+skip()
+
 context("AP 2: Autoplot for curves")
 # Test autoplot(object, ...)
 

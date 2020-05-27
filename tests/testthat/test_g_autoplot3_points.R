@@ -1,5 +1,7 @@
 library(precrec)
 
+skip()
+
 context("AP 3: Autoplot for points")
 # Test autoplot(object, ...)
 
