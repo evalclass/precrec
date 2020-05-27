@@ -61,8 +61,8 @@ test_that("a factor by c() returns another factor", {
   ds_id <- 5
 
 
-  # smmod <- evalmod(mode=emod, scores=scores, labels=labels,
-  #                  modnames=mnames, dsids=ds_id)
+  smmod <- evalmod(mode=emod, scores=scores, labels=labels,
+                   modnames=mnames, dsids=ds_id)
 
   mdat <- mmdata(scores, labels,
                  modnames = mnames, dsids = ds_id, posclass = NULL,
