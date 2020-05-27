@@ -93,9 +93,16 @@ format_nfold <- function(nfold_df, score_cols, lab_col, fold_col) {
   scores <- unlist(lapply(seq_along(score_cols), f_comb_s), recursive = FALSE)
 
   # Combine labels
+  cfunc <- function(i) {
+    if (is.factor(split_df[[i]][[lab_col_idx]])) {
+      as.numeric(split_df[[i]][[lab_col_idx]])
+    } else {
+      c(split_df[[i]][[lab_col_idx]])
+    }
+  }
   lab_col_idx = length(slcols)
   f_comb_l = function(s_col) {
-    lapply(seq_along(split_df), function(i) c(split_df[[i]][[lab_col_idx]]))
+    lapply(seq_along(split_df), cfunc)
   }
   labels <- unlist(lapply(score_cols, f_comb_l), recursive = FALSE)
 
