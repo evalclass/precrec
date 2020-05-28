@@ -1,8 +1,8 @@
 Package: precrec
 Type: Package
 Title: Calculate Accurate Precision-Recall and ROC (Receiver Operator Characteristics) Curves
-Version: 0.11.1
-Date: 2020-05-15
+Version: 0.11.2
+Date: 2020-05-28
 Authors@R: c(
     person("Takaya", "Saito", email = "takaya.saito@outlook.com", role = c("aut", "cre")),
     person("Marc", "Rehmsmeier", email = "marc.rehmsmeier@ii.uib.no", role = c("aut")))

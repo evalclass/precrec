@@ -1,11 +1,11 @@
-## Version 0.11.1
+## Version 0.11.2
 This is a submission for updating the already published package - precrec.
 In this version I have:
 
-* Update test cases to treat c(factor) as factor since c(factor) does not return interger anymore 
+* Fixed format_nfold function to return lables as interger even given as factor  
 
 * Updated the version.
-    * 0.11 -> 0.11.1
+    * 0.11.1 -> 0.11.2
     
 ## Test environments
 * local macOS High Sierra, R 4.0.0
