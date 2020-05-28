@@ -10,10 +10,12 @@ In this version I have:
 ## Test environments
 * local macOS High Sierra, R 4.0.0
 * local Ubuntu 18.04.2 LTS, R 4.0.0
-* win-builder, R Under development (unstable) (2020-05-11 r78411)
+* win-builder, R Under development (unstable) (2020-05-26 r78577)
 * Ubuntu 16.04.6 LTS (on travis-ci), R 4.4.0 & R Under development (2020-05-15 r78470)
 * Windows Server 2012 R2 x64 (on AppVeyor), R 4.0.0 Patched
 
 ## R CMD check results
-* One **NOTE** in the package size test on **local Ubuntu**.
+* One **NOTE** from **local Ubuntu**.
     * It occures because the size of unstripped `precrec.so` is over 3 MB.    
+* One **NOTE** from **win-builder, R Under development (unstable)**.
+    * Non-standard file/directory found at top level: "'revdep'". I don't have 'revdep' folder at the top level. 
