@@ -125,25 +125,17 @@ test_that("format_nfold() correctly converts M2N50F5", {
   }
 
   check_labels <- function(llabel) {
-    check_lables_internal <- function(x, y) {
-      if (is.factor(x)) {
-        expect_equal(x, y)
-      } else {
-        expect_equal(x, as.integer(y))
-      }
-    }
+    expect_equal(llabel[[1]], as.integer(dat1$label))
+    expect_equal(llabel[[2]], as.integer(dat2$label))
+    expect_equal(llabel[[3]], as.integer(dat3$label))
+    expect_equal(llabel[[4]], as.integer(dat4$label))
+    expect_equal(llabel[[5]], as.integer(dat5$label))
 
-    check_lables_internal(llabel[[1]], dat1$label)
-    check_lables_internal(llabel[[2]], dat2$label)
-    check_lables_internal(llabel[[3]], dat3$label)
-    check_lables_internal(llabel[[4]], dat4$label)
-    check_lables_internal(llabel[[5]], dat5$label)
-
-    check_lables_internal(llabel[[6]], dat1$label)
-    check_lables_internal(llabel[[7]], dat2$label)
-    check_lables_internal(llabel[[8]], dat3$label)
-    check_lables_internal(llabel[[9]], dat4$label)
-    check_lables_internal(llabel[[10]], dat5$label)
+    expect_equal(llabel[[6]], as.integer(dat1$label))
+    expect_equal(llabel[[7]], as.integer(dat2$label))
+    expect_equal(llabel[[8]], as.integer(dat3$label))
+    expect_equal(llabel[[9]], as.integer(dat4$label))
+    expect_equal(llabel[[10]], as.integer(dat5$label))
   }
 
   lfold1 = format_nfold(M2N50F5, c(1, 2), 3, 4)

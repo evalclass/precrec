@@ -52,3 +52,41 @@ test_that("as.data.frame issue when n-fold datasets are used", {
 
 })
 
+test_that("a factor by c() returns another factor", {
+
+  emod <- "basic"
+  scores <- list(c(0.1007308,0.5804833,0.3817939,0.2826659,0.4325302))
+  labels <- list(c(1, 1, 1, 2, 1))
+  mnames <- "m1"
+  ds_id <- 5
+
+
+  smmod <- evalmod(mode=emod, scores=scores, labels=labels,
+                   modnames=mnames, dsids=ds_id)
+
+  mdat <- mmdata(scores, labels,
+                 modnames = mnames, dsids = ds_id, posclass = NULL,
+                 na_worst = TRUE, ties_method = "equiv",
+                 mode = emod)
+
+  cdat <- create_confmats(mdat[[1]], keep_fmdat = TRUE)
+  #pevals <- calc_measures(cdat)
+
+
+  expect_equal(cdat$tp, c(0, 0, 0, 0, 1, 1))
+  expect_equal(cdat$fp, c(0, 1, 2, 3, 3, 4))
+  expect_equal(cdat$tn, c(4, 3, 2, 1, 1, 0))
+  expect_equal(cdat$fn, c(1, 1, 1, 1, 0, 0))
+
+  expect_equal(attr(cdat, "src")[["scores"]], scores[[1]])
+  expect_equal(attr(cdat, "src")[["labels"]], labels[[1]])
+
+  #
+  # lscores <- join_scores(scores, chklen = FALSE)
+  # llabels <- join_labels(labels, chklen = FALSE)
+  #
+  #
+  # cdat <- list()
+  # cdat <- c(cdat, labels)
+
+})

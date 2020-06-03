@@ -1,3 +1,7 @@
+# precrec 0.11.2
+
+* format_nfold function returns lables as interger even given as factor  
+
 # precrec 0.11.1
 
 * Update test cases to treat c(factor) as factor since c(factor) does not return interger anymore 
