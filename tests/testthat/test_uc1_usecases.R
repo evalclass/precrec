@@ -1,6 +1,6 @@
 library(precrec)
 
-context("UC 1: Test actual cases")
+context("UC 1: Use cases")
 
 test_that("calculation of correct avg and cb when x_bins = 8", {
 

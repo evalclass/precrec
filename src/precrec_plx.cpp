@@ -318,8 +318,16 @@ Rcpp::List calc_basic_measures(int np,
     rank[i] = double(i) / double(n - 1);
     errrate[i] = (fps[i] + fns[i]) / (np + nn);
     acc[i] = 1 - errrate[i];
-    sp[i] = tns[i] / nn;
-    sn[i] = tps[i] / np;
+    if (nn == 0) {
+      sp[i] = ::NA_REAL;
+    } else {
+      sp[i] = tns[i] / nn;
+    }
+    if (np == 0) {
+      sn[i] = ::NA_REAL;
+    } else {
+      sn[i] = tps[i] / np;
+    }
     if (i > 0) {
       prec[i] = tps[i] / (tps[i] + fps[i]);
     }
