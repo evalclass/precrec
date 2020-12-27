@@ -1,6 +1,6 @@
 library(precrec)
 
-context("PT 2: Plot curves")
+context("PT 1: Plot curves")
 # Test plot(x, y, ...)
 
 pt2_create_mscurves <- function() {

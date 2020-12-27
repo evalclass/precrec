@@ -1,6 +1,6 @@
 library(precrec)
 
-context("PT 3: Plot points")
+context("PT 2: Plot points")
 # Test plot(x, y, ...)
 
 pt3_create_mspoints <- function() {
