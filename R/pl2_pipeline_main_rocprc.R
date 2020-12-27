@@ -14,8 +14,13 @@
   # Create curves
   plfunc <- function(s) {
     if (attr(mdat[[s]], "nn") == 0 || attr(mdat[[s]], "np") == 0) {
+      if (attr(mdat[[s]], "np") > 0) {
+        cl <- "positive"
+      } else {
+        cl <- "negative"
+      }
       err_msg <- paste0("Curves cannot be calculated. ",
-                        "Only a single class (positive/negative) ",
+                        "Only a single class (", cl, ") ",
                         "found in dataset (modname:", attr(mdat[[s]], "modname"),
                         ", dsid: ",attr(mdat[[s]], "dsid"), ").")
       stop(err_msg, call.=FALSE)
