@@ -19,7 +19,6 @@ Rcpp::List make_new_labels(T labels,
                            bool is_pc_na,
                            S def_posclass,
                            S def_negclass) {
-
   // Variables
   Rcpp::List ret_val;
   std::string errmsg = "";
@@ -166,7 +165,6 @@ void update_ties(std::vector<int>& ranks,
 Rcpp::List get_score_ranks(const Rcpp::NumericVector& scores,
                            const bool& na_worst,
                            const std::string& ties_method) {
-
   // Variables
   Rcpp::List ret_val;
   std::string errmsg = "";
@@ -230,7 +228,6 @@ void update_ties(std::vector<int>& ranks,
                  std::vector<int>& rank_idx,
                  std::vector<int>& tied_idx,
                  const std::string& ties_method) {
-
   typedef std::vector<int>::iterator TIntIt;
 
   int base_rank = ranks[tied_idx[0]];
