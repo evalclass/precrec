@@ -27,15 +27,15 @@ csf <- function() {
 }
 
 src_path <- dirname(csf())
-source(paste(sep="/", src_path, "html_tables.R"))
-source(paste(sep="/", src_path, "html_update_funcs.R"))
+source(paste(sep = "/", src_path, "html_tables.R"))
+source(paste(sep = "/", src_path, "html_update_funcs.R"))
 
 get_site_path <- function(subdir = "reference") {
-  normalizePath(paste(sep="/", src_path, "../../docs", subdir))
+  normalizePath(paste(sep = "/", src_path, "../../docs", subdir))
 }
 
 get_file_path <- function(file_name, subdir = "reference") {
-  normalizePath(paste(sep="/", get_site_path(subdir), file_name))
+  normalizePath(paste(sep = "/", get_site_path(subdir), file_name))
 }
 
 update_main <- function(call_pkgdown = FALSE) {

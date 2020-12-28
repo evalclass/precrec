@@ -21,7 +21,7 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
 
   # Set attributes
   attr(s3obj, "modname") <- attr(cmats, "modname")
-  if (all(is.na(attr(cmats, "src")))){
+  if (all(is.na(attr(cmats, "src")))) {
     s3obj[["basic"]][["score"]] <- rep(NA,
                                        length(s3obj[["basic"]][["rank"]]))
     s3obj[["basic"]][["label"]] <- rep(NA,

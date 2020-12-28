@@ -14,7 +14,6 @@
 //
 int calc_vec_size(const Rcpp::List& obj,
                   const Rcpp::List& curvetype_names) {
-
   int vec_size = 0;
 
   Rcpp::CharacterVector curvetypes = curvetype_names.names();
@@ -39,7 +38,6 @@ int calc_vec_size(const Rcpp::List& obj,
 void copy_xy_vec(const Rcpp::NumericVector& from_vec,
                  std::vector<double>& to_vec,
                  int start_idx) {
-
   for (unsigned i = 0; i < from_vec.size(); i++) {
     to_vec[start_idx+i] = from_vec[i];
   }
@@ -49,7 +47,6 @@ void copy_xy_vec(const Rcpp::NumericVector& from_vec,
 // Add to vector
 //
 void add_to_vec(std::vector<int>& vec, int size, int value, int start_idx) {
-
   for (unsigned i = 0; i < size; i++) {
     vec[start_idx+i] = value;
   }
@@ -61,7 +58,6 @@ void add_to_vec(std::vector<int>& vec, int size, int value, int start_idx) {
 int set_reduced_points(const Rcpp::NumericVector& from_vec,
                        std::vector<bool>& points,
                        const int x_bins) {
-
   double x_pos = 0.0;
   double step = 1.0 / x_bins;
   double eps = std::numeric_limits<double>::epsilon() * x_bins;
@@ -89,7 +85,6 @@ void copy_reduced_xy_vec(const Rcpp::NumericVector& from_vec,
                          std::vector<double>& to_vec,
                          int start_idx,
                          std::vector<bool>& points) {
-
   int idx = 0;
 
   for (unsigned i = 0; i < from_vec.size(); i++) {
@@ -98,7 +93,6 @@ void copy_reduced_xy_vec(const Rcpp::NumericVector& from_vec,
       idx++;
     }
   }
-
 }
 
 //
@@ -106,14 +100,12 @@ void copy_reduced_xy_vec(const Rcpp::NumericVector& from_vec,
 //
 
 bool comp_asc(const std::pair<unsigned, double > &a,
-              const std::pair<unsigned, double > &b)
-{
+              const std::pair<unsigned, double > &b) {
   return a.second < b.second;
 }
 
 bool comp_desc(const std::pair<unsigned, double > &a,
-               const std::pair<unsigned, double > &b)
-{
+               const std::pair<unsigned, double > &b) {
   return a.second > b.second;
 }
 
@@ -123,7 +115,6 @@ bool comp_desc(const std::pair<unsigned, double > &a,
 void make_index_pairs(std::vector<std::pair<unsigned, double > >& indices,
                       const Rcpp::NumericVector& scores,
                       const bool& na_worst) {
-
   // Determin NA values
   double na_val;
   if (na_worst) {
@@ -148,7 +139,6 @@ void make_index_pairs(std::vector<std::pair<unsigned, double > >& indices,
 void sort_indices(std::vector<std::pair<unsigned, double > >& indices,
                   const std::string& ties_method,
                   bool desc) {
-
   bool (*comp_func)(const std::pair<unsigned, double > &,
         const std::pair<unsigned, double > &);
   if (desc) {
@@ -186,7 +176,6 @@ Rcpp::List convert_curve_df(const Rcpp::List& obj,
                             const Rcpp::CharacterVector& dsid_modnames,
                             const Rcpp::List& curvetype_names,
                             const int x_bins) {
-
   // Variables
   Rcpp::List ret_val;
   Rcpp::DataFrame df;
@@ -295,7 +284,6 @@ Rcpp::List convert_curve_avg_df(const Rcpp::List& obj,
                                 const Rcpp::IntegerVector& modnames,
                                 const Rcpp::List& curvetype_names,
                                 const int x_bins) {
-
   // Variables
   Rcpp::List ret_val;
   Rcpp::DataFrame df;

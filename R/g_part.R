@@ -150,10 +150,10 @@
 #' }
 #'
 #' @export
-part <- function(curves, xlim, ylim, curvetype) UseMethod("part")
+part <- function(curves, xlim=NULL, ylim=NULL, curvetype=NULL) UseMethod("part", curves)
 
 #' @export
-part.default <- function(curves, xlim, ylim, curvetype) {
+part.default <- function(curves, xlim=NULL, ylim=NULL, curvetype=NULL) {
   stop("An object of unknown class is specified")
 }
 

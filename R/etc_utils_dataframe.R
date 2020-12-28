@@ -325,7 +325,7 @@ NULL
       curve_df <- with(curve_df, subset(curve_df, select = -dsid_modname))
     }
     colnum <- ncol(curve_df)
-    names(curve_df) <- c(names(curve_df)[1:(colnum-1)], "type")
+    names(curve_df) <- c(names(curve_df)[1:(colnum - 1)], "type")
   }
 
   curve_df
@@ -399,7 +399,7 @@ NULL
 
   arglist <- list(...)
 
-  if (is.null(arglist[["raw_curves"]])){
+  if (is.null(arglist[["raw_curves"]])) {
     if (!is.null(def_raw_curves)) {
       arglist[["raw_curves"]] <- def_raw_curves
     } else if (!is.null(evalmod_args[["raw_curves"]])) {

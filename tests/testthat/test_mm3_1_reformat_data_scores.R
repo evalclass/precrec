@@ -72,7 +72,6 @@ test_that("'na_worst' should be TRUE or FALSE", {
 test_that("'ties_method' should be one of the three options", {
   expect_err_msg <- function(err_msg, ties_method) {
     scores <- c(1, 2)
-    choices <- c("equiv", "random", "first")
     eval(bquote(expect_error(.rank_scores(scores, ties_method = ties_method),
                              err_msg)))
   }

@@ -1,7 +1,7 @@
 #
 # A generic to validate data
 #
-.validate <- function(x) UseMethod(".validate")
+.validate <- function(x) UseMethod(".validate", x)
 
 #
 # Default .validate

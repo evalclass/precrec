@@ -19,7 +19,7 @@
                         "Only a single class (", cl, ") ",
                         "found in dataset (modname: ", attr(mdat[[s]], "modname"),
                         ", dsid: ",attr(mdat[[s]], "dsid"), ").")
-      stop(err_msg, call.=FALSE)
+      stop(err_msg, call. = FALSE)
     }
     uauc <- calc_auc_with_u(mdat[[s]], na_worst = na_worst,
                             ties_method = ties_method)
