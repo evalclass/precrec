@@ -80,8 +80,8 @@ test_that("'ties_method' should be one of the three options", {
   expect_err_msg(err_msg, c("equiv", "first"))
 
   err_msg <- "ties_method must be one of"
-  expect_err_msg(err_msg, c("avg"))
-  expect_err_msg(err_msg, c("max"))
+  expect_err_msg(err_msg, "avg")
+  expect_err_msg(err_msg, "max")
 })
 
 test_that("NAs in 'scores' should be controlled by 'na_worst'", {

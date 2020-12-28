@@ -448,7 +448,7 @@ NULL
     nrow1 <- 2
     ncol1 <- 1
     mat1 <- c(1, 2)
-    mat2 <- c(1)
+    mat2 <- 1
     heights <- c(0.85, 0.15)
   } else  if (ctype_len == 2) {
     nrow1 <- 2

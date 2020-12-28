@@ -57,7 +57,7 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
   }
 
   # Validate class items and attributes
-  item_names <- c("basic")
+  item_names <- "basic"
   attr_names <- c("modname", "dsid", "nn", "np", "args", "cpp_errmsg",
                   "src", "validated")
   arg_names <- c("na_worst", "na.last", "ties.method", "ties_method",
