@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("FT 3: Fortify points")
 # Test fortify(model, ...)

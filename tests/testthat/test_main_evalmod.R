@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("MA 1: evalmod")
 # Test evalmod()

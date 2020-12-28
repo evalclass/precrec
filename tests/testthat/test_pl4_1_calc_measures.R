@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("PL 4: Calculate evaluation measures")
 # Test calc_measures(cmats, scores, labels)

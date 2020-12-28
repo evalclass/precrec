@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("MM 2: Join score datasets")
 # Test join_scores(..., byrow, chklen)

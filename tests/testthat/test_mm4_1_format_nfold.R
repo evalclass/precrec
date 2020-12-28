@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("MM 4: Format n-fold cross validation data frame")
 # Test format_nfold(nfold_df, score_cols, lab_col, fold_col)

@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("PL 2: Pipeline main for basic evaluation values")
 # Test .pl_main_basic(mdat, model_type, dataset_type, class_name_pf,

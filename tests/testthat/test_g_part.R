@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("PA 1: Calculate partial AUC")
 # Test part(x, xlim = c(0, 1), ylim = c(0, 1), curvetype, ...)

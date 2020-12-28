@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("PC 1: Retrieve pAUCs")
 # Test auc(curves)

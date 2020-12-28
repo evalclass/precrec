@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("PL 5: Create ROC and Precision-Recall curves")
 # Test create_curves(pevals, scores, labels, x_bins)

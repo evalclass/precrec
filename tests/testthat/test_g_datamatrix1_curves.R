@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("DF 1: as.data.frame curves")
 # Test as.data.frame(x, ...)

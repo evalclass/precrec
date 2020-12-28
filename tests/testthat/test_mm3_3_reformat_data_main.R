@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("MM 3: Reformat input data for evaluation")
 # Test reformat_data(scores, labels,

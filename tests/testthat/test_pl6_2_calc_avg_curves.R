@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("PL 6: Calculate average curves")
 # Test calc_avg_rocprc(epoints, modnames, uniq_modnames, cb_alpha)

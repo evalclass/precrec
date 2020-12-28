@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("FT 1: Fortify pipeline objects")
 # Test fortify(model, ...)

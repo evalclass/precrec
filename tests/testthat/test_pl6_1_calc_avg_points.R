@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("PL 6: Calculate average points")
 # Test calc_avg_basic(epoints, modnames, uniq_modnames, cb_alpha)

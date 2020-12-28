@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("PL 3: Calculate AUC (ROC) with the U statitics")
 # Test calc_auc_with_u(sdat, scores, labels, na_worst, ties_method, keep_sdat)

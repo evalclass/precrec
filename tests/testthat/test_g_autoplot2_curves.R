@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("AP 2: Autoplot for curves")
 # Test autoplot(object, ...)

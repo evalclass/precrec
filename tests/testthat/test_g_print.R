@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("PR 1: Print objects")
 # Test print(x, ...)

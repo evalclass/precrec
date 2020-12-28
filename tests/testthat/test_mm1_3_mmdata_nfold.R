@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("MM 1: Create mmdata for n-fold cross validation")
 # Test mmdata(nfold_df = NULL, score_cols = NULL, lab_col = NULL,

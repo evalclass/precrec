@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("MM 3: Reformat scores for evaluation")
 # Test .rank_scores(scores, na_worst, ties_method)

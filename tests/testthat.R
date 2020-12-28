@@ -1,4 +1,3 @@
-library(testthat)
-library(precrec)
+#' @importFrom testthat precrec
 
 test_check("precrec")

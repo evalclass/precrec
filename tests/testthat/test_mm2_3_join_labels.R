@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("MM 2: Join label datasets")
 # Test join_labels(..., byrow, chklen)

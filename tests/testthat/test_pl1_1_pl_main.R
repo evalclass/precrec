@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("PL 1: Pipeline main")
 # Test .pmatch_mode(val)

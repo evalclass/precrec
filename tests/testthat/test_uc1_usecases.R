@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("UC 1: Use cases")
 

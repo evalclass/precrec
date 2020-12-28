@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("PT 1: Plot curves")
 # Test plot(x, y, ...)

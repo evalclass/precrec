@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("MM 2: Join datasets")
 # Test .join_datasets(..., efunc_vtype, efunc_nrow, byrow, chklen)
