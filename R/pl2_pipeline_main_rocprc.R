@@ -13,6 +13,18 @@
   # === Create ROC and Precision-Recall curves ===
   # Create curves
   plfunc <- function(s) {
+    if (attr(mdat[[s]], "nn") == 0 || attr(mdat[[s]], "np") == 0) {
+      if (attr(mdat[[s]], "np") > 0) {
+        cl <- "positive"
+      } else {
+        cl <- "negative"
+      }
+      err_msg <- paste0("Curves cannot be calculated. ",
+                        "Only a single class (", cl, ") ",
+                        "found in dataset (modname: ", attr(mdat[[s]], "modname"),
+                        ", dsid: ",attr(mdat[[s]], "dsid"), ").")
+      stop(err_msg, call.=FALSE)
+    }
     cdat <- create_confmats(mdat[[s]])
     pevals <- calc_measures(cdat)
     curves <- create_curves(pevals, x_bins = x_bins)

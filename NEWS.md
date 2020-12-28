@@ -1,3 +1,7 @@
+# precrec 0.12
+
+* Improve error messeages when a dataset includes only one class  
+
 # precrec 0.11.2
 
 * format_nfold function returns lables as interger even given as factor  
