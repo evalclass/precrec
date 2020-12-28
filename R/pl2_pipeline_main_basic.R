@@ -10,9 +10,21 @@
     raw_curves <- TRUE
   }
 
-  # === Create ROC and Precision-Recall curves ===
+  # === Calculate evaluation measure ===
   # Create points
   plfunc <- function(s) {
+    if (attr(mdat[[s]], "nn") == 0 || attr(mdat[[s]], "np") == 0) {
+      if (attr(mdat[[s]], "np") > 0) {
+        cl <- "positive"
+      } else {
+        cl <- "negative"
+      }
+      err_msg <- paste0("Basic measures cannot be calculated. ",
+                        "Only a single class (", cl, ") ",
+                        "found in dataset (modname:", attr(mdat[[s]], "modname"),
+                        ", dsid: ",attr(mdat[[s]], "dsid"), ").")
+      stop(err_msg, call.=FALSE)
+    }
     cdat <- create_confmats(mdat[[s]], keep_fmdat = TRUE)
     pevals <- calc_measures(cdat)
   }
