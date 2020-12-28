@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("PL 6: Calculate average points")
 # Test calc_avg_basic(epoints, modnames, uniq_modnames, cb_alpha)
@@ -14,7 +14,7 @@ pl6_create_mdat_sm <- function() {
   l3 <- c(1, 1, 0, 1)
   labels <- join_labels(l1, l2, l3)
 
-  mdat <- mmdata(scores, labels, expd_first = "dsids")
+  mmdata(scores, labels, expd_first = "dsids")
 }
 
 pl6_create_mdat_mm <- function() {
@@ -30,8 +30,8 @@ pl6_create_mdat_mm <- function() {
   l4 <- c(1, 1, 0, 1)
   labels <- join_labels(l1, l2, l3, l4)
 
-  mdat <- mmdata(scores, labels, modnames = c("m1", "m2"), dsids = c(1, 2),
-                 expd_first = "modnames")
+  mmdata(scores, labels, modnames = c("m1", "m2"), dsids = c(1, 2),
+         expd_first = "modnames")
 }
 
 pl6_calc_avg_basic <- function(mdat, eval_type = "err", cb_alpha = 0.05) {
@@ -58,7 +58,7 @@ pl6_calc_avg_basic <- function(mdat, eval_type = "err", cb_alpha = 0.05) {
   modnames <- attr(mdat, "data_info")[["modnames"]]
   uniq_modnames <- attr(mdat, "uniq_modnames")
 
-  avgcurves <- calc_avg_basic(pevals, modnames, uniq_modnames, cb_alpha)
+  calc_avg_basic(pevals, modnames, uniq_modnames, cb_alpha)
 }
 
 test_that("calc_avg_basic() returns 'avgpoints'", {

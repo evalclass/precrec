@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("PL 3: Calculate AUC (ROC) with the U statitics")
 # Test calc_auc_with_u(sdat, scores, labels, na_worst, ties_method, keep_sdat)
@@ -121,7 +121,7 @@ test_that("ms test data", {
   aucs <- subset(aucs, curvetypes == "ROC")$aucs
 
 
-  for (i in seq_along(aucs)){
+  for (i in seq_along(aucs)) {
     s <- msdat[["scores"]][[i]]
     l <- msdat[["labels"]][[i]]
 
@@ -143,7 +143,7 @@ test_that("sm test data", {
   aucs <- auc(curves)
   aucs <- subset(aucs, curvetypes == "ROC")$aucs
 
-  for (i in seq_along(aucs)){
+  for (i in seq_along(aucs)) {
     s <- smdat[["scores"]][[i]]
     l <- smdat[["labels"]][[i]]
 
@@ -168,7 +168,7 @@ test_that("mm test data", {
   aucs <- subset(aucs, curvetypes == "ROC")$aucs
 
 
-  for (i in seq_along(aucs)){
+  for (i in seq_along(aucs)) {
     s <- mmdat[["scores"]][[i]]
     l <- mmdat[["labels"]][[i]]
 

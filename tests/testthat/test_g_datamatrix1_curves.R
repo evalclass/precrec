@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("DF 1: as.data.frame curves")
 # Test as.data.frame(x, ...)
@@ -107,7 +107,7 @@ test_that("as.data.frame mmcurves", {
 
 test_that("as.data raw_curve option sscurves", {
   get_args <- function(x, ...) {
-    arglist <- .get_dataframe_arglist(attr(x, "args"), def_raw_curves = TRUE,
+    .get_dataframe_arglist(attr(x, "args"), def_raw_curves = TRUE,
                                       ...)
   }
 
@@ -126,7 +126,7 @@ test_that("as.data raw_curve option sscurves", {
 
 test_that("as.data raw_curve option mscurves", {
   get_args <- function(x, ...) {
-    arglist <- .get_dataframe_arglist(attr(x, "args"), def_raw_curves = TRUE,
+    .get_dataframe_arglist(attr(x, "args"), def_raw_curves = TRUE,
                                       ...)
   }
 
@@ -144,7 +144,7 @@ test_that("as.data raw_curve option mscurves", {
 
 test_that("as.data raw_curve option smcurves", {
   get_args <- function(x, ...) {
-    arglist <- .get_dataframe_arglist(attr(x, "args"), def_raw_curves = NULL,
+    .get_dataframe_arglist(attr(x, "args"), def_raw_curves = NULL,
                                       ...)
   }
 
@@ -173,7 +173,7 @@ test_that("as.data raw_curve option smcurves", {
 
 test_that("as.data raw_curve option mmcurves", {
   get_args <- function(x, ...) {
-    arglist <- .get_dataframe_arglist(attr(x, "args"), def_raw_curves = NULL,
+    .get_dataframe_arglist(attr(x, "args"), def_raw_curves = NULL,
                                       ...)
   }
 

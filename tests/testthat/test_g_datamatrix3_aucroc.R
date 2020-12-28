@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("DF 3: as.data.frame aucroc")
 # Test as.data.frame(x, ...)

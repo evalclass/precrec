@@ -578,7 +578,7 @@ simcurves2 <- evalmod(simmdat2)
 ### Balanced vs. imbalanced datasets
 ROC plots are unchanged between balanced and imbalanced datasets, whereas
 Precision-Recall plots show a clear difference between them. See our 
-[article](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0118432) or [website](https://classeval.wordpress.com) for potential pitfalls by
+[article](https://doi.org/10.1371/journal.pone.0118432) or [website](https://classeval.wordpress.com) for potential pitfalls by
 using ROC plots with imbalanced datasets.
 ```{r, fig.width=7, fig.show='hold'}
 # Balanced dataset
@@ -600,5 +600,5 @@ doi: [10.1093/bioinformatics/btw570](https://doi.org/10.1093/bioinformatics/btw5
 ## 14. External links
 - [Classifier evaluation with imbalanced datasets](https://classeval.wordpress.com/) - our web site that contains several pages with useful tips for performance evaluation on binary classifiers.
 
-- [The Precision-Recall Plot Is More Informative than the ROC Plot When Evaluating Binary Classifiers on Imbalanced Datasets](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0118432) -  our paper that summarized potential pitfalls of ROC plots with imbalanced datasets and advantages of using precision-recall plots instead.
+- [The Precision-Recall Plot Is More Informative than the ROC Plot When Evaluating Binary Classifiers on Imbalanced Datasets](https://doi.org/10.1371/journal.pone.0118432) - our paper that summarized potential pitfalls of ROC plots with imbalanced datasets and advantages of using precision-recall plots instead.
 

@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("AP 2: Autoplot for curves")
 # Test autoplot(object, ...)
@@ -190,14 +190,14 @@ test_that("autoplot multiple mmcurves returns grob", {
 
 test_that("autoplot raw_curve option sscurves", {
   get_args <- function(curves, ...) {
-    args <- .get_autoplot_arglist(attr(curves, "args"),
-                                  def_curvetype = c("ROC", "PRC"),
-                                  def_type = "l",
-                                  def_show_cb = FALSE, def_raw_curves = NULL,
-                                  def_add_np_nn = TRUE,
-                                  def_show_legend = FALSE,
-                                  def_ret_grob = FALSE,
-                                  def_reduce_points = TRUE, ...)
+    .get_autoplot_arglist(attr(curves, "args"),
+                          def_curvetype = c("ROC", "PRC"),
+                          def_type = "l",
+                          def_show_cb = FALSE, def_raw_curves = NULL,
+                          def_add_np_nn = TRUE,
+                          def_show_legend = FALSE,
+                          def_ret_grob = FALSE,
+                          def_reduce_points = TRUE, ...)
   }
 
   data(P10N10)
@@ -215,14 +215,14 @@ test_that("autoplot raw_curve option sscurves", {
 
 test_that("autoplot raw_curve option mscurves", {
   get_args <- function(curves, ...) {
-    args <- .get_autoplot_arglist(attr(curves, "args"),
-                                  def_curvetype = c("ROC", "PRC"),
-                                  def_type = "l",
-                                  def_show_cb = FALSE, def_raw_curves = NULL,
-                                  def_add_np_nn = TRUE,
-                                  def_show_legend = TRUE,
-                                  def_ret_grob = FALSE,
-                                  def_reduce_points = TRUE, ...)
+    .get_autoplot_arglist(attr(curves, "args"),
+                          def_curvetype = c("ROC", "PRC"),
+                          def_type = "l",
+                          def_show_cb = FALSE, def_raw_curves = NULL,
+                          def_add_np_nn = TRUE,
+                          def_show_legend = TRUE,
+                          def_ret_grob = FALSE,
+                          def_reduce_points = TRUE, ...)
   }
 
   curves1 <- ap2_create_mscurves()
@@ -239,14 +239,14 @@ test_that("autoplot raw_curve option mscurves", {
 
 test_that("autoplot raw_curve option smcurves", {
   get_args <- function(curves, ...) {
-    args <- .get_autoplot_arglist(attr(curves, "args"),
-                                  def_curvetype = c("ROC", "PRC"),
-                                  def_type = "l",
-                                  def_show_cb = TRUE, def_raw_curves = NULL,
-                                  def_add_np_nn = TRUE,
-                                  def_show_legend = FALSE,
-                                  def_ret_grob = FALSE,
-                                  def_reduce_points = TRUE, ...)
+    .get_autoplot_arglist(attr(curves, "args"),
+                          def_curvetype = c("ROC", "PRC"),
+                          def_type = "l",
+                          def_show_cb = TRUE, def_raw_curves = NULL,
+                          def_add_np_nn = TRUE,
+                          def_show_legend = FALSE,
+                          def_ret_grob = FALSE,
+                          def_reduce_points = TRUE, ...)
   }
 
   curves1 <- ap2_create_smcurves()
@@ -273,14 +273,14 @@ test_that("autoplot raw_curve option smcurves", {
 
 test_that("autoplot raw_curve option mmcurves", {
   get_args <- function(curves, ...) {
-    args <- .get_autoplot_arglist(attr(curves, "args"),
-                                  def_curvetype = c("ROC", "PRC"),
-                                  def_type = "l",
-                                  def_show_cb = FALSE, def_raw_curves = NULL,
-                                  def_add_np_nn = TRUE,
-                                  def_show_legend = TRUE,
-                                  def_ret_grob = FALSE,
-                                  def_reduce_points = TRUE, ...)
+    .get_autoplot_arglist(attr(curves, "args"),
+                          def_curvetype = c("ROC", "PRC"),
+                          def_type = "l",
+                          def_show_cb = FALSE, def_raw_curves = NULL,
+                          def_add_np_nn = TRUE,
+                          def_show_legend = TRUE,
+                          def_ret_grob = FALSE,
+                          def_reduce_points = TRUE, ...)
   }
 
   curves1 <- ap2_create_mmcurves()

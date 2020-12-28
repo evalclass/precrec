@@ -8,25 +8,36 @@
 
 <title>Calculate partial AUCs — part • precrec</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -40,7 +51,6 @@
   evalmod and calculate partial AUCs and Standardized partial
   AUCs of ROC and Precision-Recall curves.
   Standardized pAUCs are standardized to the range between 0 and 1." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -58,7 +68,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -72,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">precrec</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12</span>
       </span>
     </div>
 
@@ -90,8 +100,8 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/takayasaito/precrec">
-    <span class="fab fa fab fa-github fa-lg"></span>
+  <a href="https://github.com/takayasaito/precrec/">
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,19 +130,19 @@
   Standardized pAUCs are standardized to the range between 0 and 1.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>part</span>(<span class='no'>curves</span>, <span class='no'>xlim</span>, <span class='no'>ylim</span>, <span class='no'>curvetype</span>)
+    <pre class="usage"><span class='fu'>part</span><span class='op'>(</span><span class='va'>curves</span>, xlim <span class='op'>=</span> <span class='cn'>NULL</span>, ylim <span class='op'>=</span> <span class='cn'>NULL</span>, curvetype <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
 
 <span class='co'># S3 method for sscurves</span>
-<span class='fu'>part</span>(<span class='no'>curves</span>, <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>), <span class='kw'>ylim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>), <span class='kw'>curvetype</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"ROC"</span>, <span class='st'>"PRC"</span>))
+<span class='fu'>part</span><span class='op'>(</span><span class='va'>curves</span>, xlim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span>, ylim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span>, curvetype <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ROC"</span>, <span class='st'>"PRC"</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'># S3 method for mscurves</span>
-<span class='fu'>part</span>(<span class='no'>curves</span>, <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>), <span class='kw'>ylim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>), <span class='kw'>curvetype</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"ROC"</span>, <span class='st'>"PRC"</span>))
+<span class='fu'>part</span><span class='op'>(</span><span class='va'>curves</span>, xlim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span>, ylim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span>, curvetype <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ROC"</span>, <span class='st'>"PRC"</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'># S3 method for smcurves</span>
-<span class='fu'>part</span>(<span class='no'>curves</span>, <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>), <span class='kw'>ylim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>), <span class='kw'>curvetype</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"ROC"</span>, <span class='st'>"PRC"</span>))
+<span class='fu'>part</span><span class='op'>(</span><span class='va'>curves</span>, xlim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span>, ylim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span>, curvetype <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ROC"</span>, <span class='st'>"PRC"</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'># S3 method for mmcurves</span>
-<span class='fu'>part</span>(<span class='no'>curves</span>, <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>), <span class='kw'>ylim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>), <span class='kw'>curvetype</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"ROC"</span>, <span class='st'>"PRC"</span>))</pre>
+<span class='fu'>part</span><span class='op'>(</span><span class='va'>curves</span>, xlim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span>, ylim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span>, curvetype <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ROC"</span>, <span class='st'>"PRC"</span><span class='op'>)</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -188,23 +198,24 @@ two points in [0, 1]</p></td>
     <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
 
 <span class='co'>## Load library</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>ggplot2</span>)
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span>
 
 <span class='co'>##################################################</span>
 <span class='co'>### Single model &amp; single test dataset</span>
 <span class='co'>###</span>
 
 <span class='co'>## Load a dataset with 10 positives and 10 negatives</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>P10N10</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>P10N10</span><span class='op'>)</span>
 
 <span class='co'>## Generate an sscurve object that contains ROC and Precision-Recall curves</span>
-<span class='no'>sscurves</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='kw'>scores</span> <span class='kw'>=</span> <span class='no'>P10N10</span>$<span class='no'>scores</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='no'>P10N10</span>$<span class='no'>labels</span>)
+<span class='va'>sscurves</span> <span class='op'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span><span class='op'>(</span>scores <span class='op'>=</span> <span class='va'>P10N10</span><span class='op'>$</span><span class='va'>scores</span>, labels <span class='op'>=</span> <span class='va'>P10N10</span><span class='op'>$</span><span class='va'>labels</span><span class='op'>)</span>
 
 <span class='co'>## Calculate partial AUCs</span>
-<span class='no'>sscurves.part</span> <span class='kw'>&lt;-</span> <span class='fu'>part</span>(<span class='no'>sscurves</span>, <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.25</span>, <span class='fl'>0.75</span>))
+<span class='va'>sscurves.part</span> <span class='op'>&lt;-</span> <span class='fu'>part</span><span class='op'>(</span><span class='va'>sscurves</span>, xlim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.25</span>, <span class='fl'>0.75</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'>## Show AUCs</span>
-<span class='no'>sscurves.part</span></div><div class='output co'>#&gt; 
+<span class='va'>sscurves.part</span>
+</div><div class='output co'>#&gt; 
 #&gt;     === AUCs ===
 #&gt; 
 #&gt;      Model name Dataset ID Curve type       AUC
@@ -225,27 +236,30 @@ two points in [0, 1]</p></td>
 #&gt;    1         m1          1             10             10
 #&gt; </div><div class='input'>
 <span class='co'>## Plot partial curve</span>
-<span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>sscurves.part</span>)</div><div class='img'><img src='part-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='va'>sscurves.part</span><span class='op'>)</span>
+</div><div class='img'><img src='part-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Plot partial curve with ggplot</span>
-<span class='fu'><a href='autoplot.html'>autoplot</a></span>(<span class='no'>sscurves.part</span>)</div><div class='img'><img src='part-2.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='va'>sscurves.part</span><span class='op'>)</span>
+</div><div class='img'><img src='part-2.png' alt='' width='700' height='433' /></div><div class='input'>
 
 <span class='co'>##################################################</span>
 <span class='co'>### Multiple models &amp; single test dataset</span>
 <span class='co'>###</span>
 
 <span class='co'>## Create sample datasets with 100 positives and 100 negatives</span>
-<span class='no'>samps</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_sim_samples.html'>create_sim_samples</a></span>(<span class='fl'>1</span>, <span class='fl'>100</span>, <span class='fl'>100</span>, <span class='st'>"all"</span>)
-<span class='no'>mdat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mmdata.html'>mmdata</a></span>(<span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"scores"</span>]], <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"labels"</span>]],
-               <span class='kw'>modnames</span> <span class='kw'>=</span> <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"modnames"</span>]])
+<span class='va'>samps</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_sim_samples.html'>create_sim_samples</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>100</span>, <span class='fl'>100</span>, <span class='st'>"all"</span><span class='op'>)</span>
+<span class='va'>mdat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mmdata.html'>mmdata</a></span><span class='op'>(</span><span class='va'>samps</span><span class='op'>[[</span><span class='st'>"scores"</span><span class='op'>]</span><span class='op'>]</span>, <span class='va'>samps</span><span class='op'>[[</span><span class='st'>"labels"</span><span class='op'>]</span><span class='op'>]</span>,
+               modnames <span class='op'>=</span> <span class='va'>samps</span><span class='op'>[[</span><span class='st'>"modnames"</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span>
 
 <span class='co'>## Generate an mscurve object that contains ROC and Precision-Recall curves</span>
-<span class='no'>mscurves</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>)
+<span class='va'>mscurves</span> <span class='op'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span><span class='op'>(</span><span class='va'>mdat</span><span class='op'>)</span>
 
 <span class='co'>## Calculate partial AUCs</span>
-<span class='no'>mscurves.part</span> <span class='kw'>&lt;-</span> <span class='fu'>part</span>(<span class='no'>mscurves</span>, <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0.75</span>), <span class='kw'>ylim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.25</span>, <span class='fl'>0.75</span>))
+<span class='va'>mscurves.part</span> <span class='op'>&lt;-</span> <span class='fu'>part</span><span class='op'>(</span><span class='va'>mscurves</span>, xlim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0.75</span><span class='op'>)</span>, ylim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.25</span>, <span class='fl'>0.75</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'>## Show AUCs</span>
-<span class='no'>mscurves.part</span></div><div class='output co'>#&gt; 
+<span class='va'>mscurves.part</span>
+</div><div class='output co'>#&gt; 
 #&gt;     === AUCs ===
 #&gt; 
 #&gt;      Model name Dataset ID Curve type       AUC
@@ -286,28 +300,31 @@ two points in [0, 1]</p></td>
 #&gt;    5       perf          1            100            100
 #&gt; </div><div class='input'>
 <span class='co'>## Plot partial curves</span>
-<span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>mscurves.part</span>)</div><div class='img'><img src='part-3.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='va'>mscurves.part</span><span class='op'>)</span>
+</div><div class='img'><img src='part-3.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Plot partial curves with ggplot</span>
-<span class='fu'><a href='autoplot.html'>autoplot</a></span>(<span class='no'>mscurves.part</span>)</div><div class='img'><img src='part-4.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='va'>mscurves.part</span><span class='op'>)</span>
+</div><div class='img'><img src='part-4.png' alt='' width='700' height='433' /></div><div class='input'>
 
 <span class='co'>##################################################</span>
 <span class='co'>### Single model &amp; multiple test datasets</span>
 <span class='co'>###</span>
 
 <span class='co'>## Create sample datasets with 100 positives and 100 negatives</span>
-<span class='no'>samps</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_sim_samples.html'>create_sim_samples</a></span>(<span class='fl'>4</span>, <span class='fl'>100</span>, <span class='fl'>100</span>, <span class='st'>"good_er"</span>)
-<span class='no'>mdat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mmdata.html'>mmdata</a></span>(<span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"scores"</span>]], <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"labels"</span>]],
-               <span class='kw'>modnames</span> <span class='kw'>=</span> <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"modnames"</span>]],
-               <span class='kw'>dsids</span> <span class='kw'>=</span> <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"dsids"</span>]])
+<span class='va'>samps</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_sim_samples.html'>create_sim_samples</a></span><span class='op'>(</span><span class='fl'>4</span>, <span class='fl'>100</span>, <span class='fl'>100</span>, <span class='st'>"good_er"</span><span class='op'>)</span>
+<span class='va'>mdat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mmdata.html'>mmdata</a></span><span class='op'>(</span><span class='va'>samps</span><span class='op'>[[</span><span class='st'>"scores"</span><span class='op'>]</span><span class='op'>]</span>, <span class='va'>samps</span><span class='op'>[[</span><span class='st'>"labels"</span><span class='op'>]</span><span class='op'>]</span>,
+               modnames <span class='op'>=</span> <span class='va'>samps</span><span class='op'>[[</span><span class='st'>"modnames"</span><span class='op'>]</span><span class='op'>]</span>,
+               dsids <span class='op'>=</span> <span class='va'>samps</span><span class='op'>[[</span><span class='st'>"dsids"</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span>
 
 <span class='co'>## Generate an smcurve object that contains ROC and Precision-Recall curves</span>
-<span class='no'>smcurves</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>)
+<span class='va'>smcurves</span> <span class='op'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span><span class='op'>(</span><span class='va'>mdat</span><span class='op'>)</span>
 
 <span class='co'>## Calculate partial AUCs</span>
-<span class='no'>smcurves.part</span> <span class='kw'>&lt;-</span> <span class='fu'>part</span>(<span class='no'>smcurves</span>, <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.25</span>, <span class='fl'>0.75</span>))
+<span class='va'>smcurves.part</span> <span class='op'>&lt;-</span> <span class='fu'>part</span><span class='op'>(</span><span class='va'>smcurves</span>, xlim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.25</span>, <span class='fl'>0.75</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'>## Show AUCs</span>
-<span class='no'>smcurves.part</span></div><div class='output co'>#&gt; 
+<span class='va'>smcurves.part</span>
+</div><div class='output co'>#&gt; 
 #&gt;     === AUCs ===
 #&gt; 
 #&gt;      Model name Dataset ID Curve type       AUC
@@ -337,28 +354,31 @@ two points in [0, 1]</p></td>
 #&gt;    4    good_er          4            100            100
 #&gt; </div><div class='input'>
 <span class='co'>## Plot partial curve</span>
-<span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>smcurves.part</span>)</div><div class='img'><img src='part-5.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='va'>smcurves.part</span><span class='op'>)</span>
+</div><div class='img'><img src='part-5.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Plot partial curve with ggplot</span>
-<span class='fu'><a href='autoplot.html'>autoplot</a></span>(<span class='no'>smcurves.part</span>)</div><div class='img'><img src='part-6.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='va'>smcurves.part</span><span class='op'>)</span>
+</div><div class='img'><img src='part-6.png' alt='' width='700' height='433' /></div><div class='input'>
 
 <span class='co'>##################################################</span>
 <span class='co'>### Multiple models &amp; multiple test datasets</span>
 <span class='co'>###</span>
 
 <span class='co'>## Create sample datasets with 100 positives and 100 negatives</span>
-<span class='no'>samps</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_sim_samples.html'>create_sim_samples</a></span>(<span class='fl'>4</span>, <span class='fl'>100</span>, <span class='fl'>100</span>, <span class='st'>"all"</span>)
-<span class='no'>mdat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mmdata.html'>mmdata</a></span>(<span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"scores"</span>]], <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"labels"</span>]],
-               <span class='kw'>modnames</span> <span class='kw'>=</span> <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"modnames"</span>]],
-               <span class='kw'>dsids</span> <span class='kw'>=</span> <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"dsids"</span>]])
+<span class='va'>samps</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_sim_samples.html'>create_sim_samples</a></span><span class='op'>(</span><span class='fl'>4</span>, <span class='fl'>100</span>, <span class='fl'>100</span>, <span class='st'>"all"</span><span class='op'>)</span>
+<span class='va'>mdat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mmdata.html'>mmdata</a></span><span class='op'>(</span><span class='va'>samps</span><span class='op'>[[</span><span class='st'>"scores"</span><span class='op'>]</span><span class='op'>]</span>, <span class='va'>samps</span><span class='op'>[[</span><span class='st'>"labels"</span><span class='op'>]</span><span class='op'>]</span>,
+               modnames <span class='op'>=</span> <span class='va'>samps</span><span class='op'>[[</span><span class='st'>"modnames"</span><span class='op'>]</span><span class='op'>]</span>,
+               dsids <span class='op'>=</span> <span class='va'>samps</span><span class='op'>[[</span><span class='st'>"dsids"</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span>
 
 <span class='co'>## Generate an mscurve object that contains ROC and Precision-Recall curves</span>
-<span class='no'>mmcurves</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='va'>mmcurves</span> <span class='op'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span><span class='op'>(</span><span class='va'>mdat</span>, raw_curves <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
 <span class='co'>## Calculate partial AUCs</span>
-<span class='no'>mmcurves.part</span> <span class='kw'>&lt;-</span> <span class='fu'>part</span>(<span class='no'>mmcurves</span>, <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0.25</span>))
+<span class='va'>mmcurves.part</span> <span class='op'>&lt;-</span> <span class='fu'>part</span><span class='op'>(</span><span class='va'>mmcurves</span>, xlim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0.25</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'>## Show AUCs</span>
-<span class='no'>mmcurves.part</span></div><div class='output co'>#&gt; 
+<span class='va'>mmcurves.part</span>
+</div><div class='output co'>#&gt; 
 #&gt;     === AUCs ===
 #&gt; 
 #&gt;      Model name Dataset ID Curve type       AUC
@@ -474,21 +494,18 @@ two points in [0, 1]</p></td>
 #&gt;   20       perf          4            100            100
 #&gt; </div><div class='input'>
 <span class='co'>## Plot partial curves</span>
-<span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>mmcurves.part</span>)</div><div class='img'><img src='part-7.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='va'>mmcurves.part</span><span class='op'>)</span>
+</div><div class='img'><img src='part-7.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Plot partial curves with ggplot</span>
-<span class='fu'><a href='autoplot.html'>autoplot</a></span>(<span class='no'>mmcurves.part</span>)</div><div class='img'><img src='part-8.png' alt='' width='700' height='433' /></div><div class='input'># }
+<span class='fu'><a href='autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='va'>mmcurves.part</span><span class='op'>)</span>
+</div><div class='img'><img src='part-8.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
 
 </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -499,7 +516,7 @@ two points in [0, 1]</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

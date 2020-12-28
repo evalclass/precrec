@@ -8,7 +8,7 @@
 \alias{part.mmcurves}
 \title{Calculate partial AUCs}
 \usage{
-part(curves, xlim, ylim, curvetype)
+part(curves, xlim = NULL, ylim = NULL, curvetype = NULL)
 
 \method{part}{sscurves}(curves, xlim = c(0, 1), ylim = c(0, 1), curvetype = c("ROC", "PRC"))
 

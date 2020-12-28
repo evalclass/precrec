@@ -102,7 +102,7 @@
 #' pauc(mmcurves.part)
 #'
 #' @export
-pauc <- function(curves) UseMethod("pauc")
+pauc <- function(curves) UseMethod("pauc", curves)
 
 #' @export
 pauc.default <- function(curves) {

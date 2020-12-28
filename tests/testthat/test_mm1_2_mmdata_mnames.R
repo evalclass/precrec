@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("MM 1: Create model names")
 # Test .pmatch_expd_first(val),

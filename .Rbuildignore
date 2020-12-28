@@ -1,6 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^data-raw$
+^pkgdown$
 ^\.travis\.yml$
 ^cran-comments\.md$
 ^README\.Rmd$

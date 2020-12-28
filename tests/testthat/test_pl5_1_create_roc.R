@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("PL 5: Create a ROC curve")
 # Test create_roc(pevals, scores, labels, x_bins)

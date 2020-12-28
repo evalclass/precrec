@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("FT 2: Fortify curves")
 # Test fortify(model, ...)

@@ -1,8 +1,9 @@
-pandoc: 1.19.2.1
-pkgdown: 1.4.1
+pandoc: 2.7.3
+pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   introduction: introduction.html
+last_built: 2020-12-28T09:21Z
 urls:
   reference: https://takayasaito.github.io/precrec/reference
   article: https://takayasaito.github.io/precrec/articles

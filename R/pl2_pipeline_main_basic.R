@@ -23,7 +23,7 @@
                         "Only a single class (", cl, ") ",
                         "found in dataset (modname: ", attr(mdat[[s]], "modname"),
                         ", dsid: ",attr(mdat[[s]], "dsid"), ").")
-      stop(err_msg, call.=FALSE)
+      stop(err_msg, call. = FALSE)
     }
     cdat <- create_confmats(mdat[[s]], keep_fmdat = TRUE)
     pevals <- calc_measures(cdat)
@@ -40,7 +40,7 @@
   grp_row_names <- c("score", "label", "err", "acc", "sp", "sn", "prec", "mcc",
                      "fscore")
   grp_points <- lapply(eval_names, grpfunc)
-  names(grp_points)<- grp_row_names
+  names(grp_points) <- grp_row_names
 
   # Summarize basic evaluation measures
   eval_summary <- .summarize_basic(lpoints, mdat)
@@ -50,7 +50,7 @@
     attr(grp_points[[et]], "avgcurves")
   }
   grp_avg <- lapply(names(grp_points), grpfunc2)
-  names(grp_avg)<- names(grp_points)
+  names(grp_avg) <- names(grp_points)
 
   # === Create an S3 object ===
   if (dataset_type == "multiple" && calc_avg && !raw_curves) {
@@ -58,7 +58,7 @@
       .summarize_points(NULL, m, "pointgrp", mdat, NULL, NULL, NULL)
     }
     grp_points <- lapply(eval_names, grpfunc3)
-    names(grp_points)<- grp_row_names
+    names(grp_points) <- grp_row_names
   }
   s3obj <- structure(grp_points, class = c(paste0(class_name_pf, "points"),
                                            "beval_info"))

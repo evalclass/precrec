@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("MM 3: Reformat input data for evaluation")
 # Test reformat_data(scores, labels,
@@ -29,8 +29,8 @@ test_that("'scores' and 'labels' must be specified", {
     eval(bquote(expect_error(reformat_data(scores, labels), err_msg)))
   }
 
-  expect_err_msg(NULL, c(0), "Invalid scores")
-  expect_err_msg(c(0), NULL, "Invalid labels")
+  expect_err_msg(NULL, 0, "Invalid scores")
+  expect_err_msg(0, NULL, "Invalid labels")
 })
 
 test_that("'scores' and 'labels' should be the same length", {
@@ -40,7 +40,7 @@ test_that("'scores' and 'labels' should be the same length", {
   }
 
   expect_err_msg(c(0.1, 0.2), c(1, 0, 0))
-  expect_err_msg(c(0.1), c(1, 0))
+  expect_err_msg(0.1, c(1, 0))
 })
 
 test_that("'modname' must be a character vector", {

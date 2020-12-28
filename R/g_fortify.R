@@ -9,8 +9,7 @@ fortify.fmdat <- function(model, ...) {
   .validate(model)
 
   # === Prepare a data frame for ggplot2 ===
-  curve_df <- data.frame(x = model[["labels"]],
-                         y = model[["ranks"]])
+  data.frame(x = model[["labels"]], y = model[["ranks"]])
 }
 
 #
@@ -25,13 +24,13 @@ fortify.cmats <- function(model, ...) {
 
   # === Prepare a data frame for ggplot2 ===
   n <- length(model[["ranks"]])
-  curve_df <- data.frame(x = rep(1:length(model[["ranks"]]), 4),
-                         y = c(model[["tp"]], model[["fn"]],
-                               model[["fp"]], model[["tn"]]),
-                         group = factor(c(rep("TPs", n), rep("FNs", n),
-                                          rep("FPs", n), rep("TNs", n)),
-                                        levels = c("TPs", "FNs",
-                                                   "FPs", "TNs")))
+  data.frame(x = rep(seq_len(length(model[["ranks"]])), 4),
+             y = c(model[["tp"]], model[["fn"]],
+                   model[["fp"]], model[["tn"]]),
+             group = factor(c(rep("TPs", n), rep("FNs", n),
+                              rep("FPs", n), rep("TNs", n)),
+                            levels = c("TPs", "FNs",
+                                       "FPs", "TNs")))
 }
 
 #
@@ -47,30 +46,30 @@ fortify.pevals <- function(model, ...) {
   # === Prepare a data frame for ggplot2 ===
   pb <- model[["basic"]]
   n <- length(pb[["error"]])
-  curve_df <- data.frame(x = rep(1:n, 10),
-                         y = c(pb[["score"]], pb[["label"]],
-                               pb[["error"]], pb[["accuracy"]],
-                               pb[["specificity"]], pb[["sensitivity"]],
-                               1 - pb[["specificity"]], pb[["precision"]],
-                               pb[["mcc"]], pb[["fscore"]]),
-                         group = factor(c(rep("score", n),
-                                          rep("label", n),
-                                          rep("error", n),
-                                          rep("accuracy", n),
-                                          rep("specificity", n),
-                                          rep("sensitivity", n),
-                                          rep("1 - specificity", n),
-                                          rep("precision", n),
-                                          rep("mcc", n),
-                                          rep("fscore", n)),
-                                        levels = c("score", "label",
-                                                   "error", "accuracy",
-                                                   "specificity",
-                                                   "sensitivity",
-                                                   "1 - specificity",
-                                                   "precision",
-                                                   "mcc",
-                                                   "fscore")))
+  data.frame(x = rep(1:n, 10),
+             y = c(pb[["score"]], pb[["label"]],
+                   pb[["error"]], pb[["accuracy"]],
+                   pb[["specificity"]], pb[["sensitivity"]],
+                   1 - pb[["specificity"]], pb[["precision"]],
+                   pb[["mcc"]], pb[["fscore"]]),
+             group = factor(c(rep("score", n),
+                              rep("label", n),
+                              rep("error", n),
+                              rep("accuracy", n),
+                              rep("specificity", n),
+                              rep("sensitivity", n),
+                              rep("1 - specificity", n),
+                              rep("precision", n),
+                              rep("mcc", n),
+                              rep("fscore", n)),
+                            levels = c("score", "label",
+                                       "error", "accuracy",
+                                       "specificity",
+                                       "sensitivity",
+                                       "1 - specificity",
+                                       "precision",
+                                       "mcc",
+                                       "fscore")))
 }
 
 #' @rdname fortify

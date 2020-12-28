@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("MM 2: Join label datasets")
 # Test join_labels(..., byrow, chklen)
@@ -24,7 +24,7 @@ test_that("'byrow' should be TRUE or FALSE", {
   expect_error(join_labels(c(0, 1), byrow = FALSE), NA)
 
   expect_err_msg <- function(err_msg, byrow) {
-    eval(bquote(expect_error(join_labels(c(0), byrow = byrow), err_msg)))
+    eval(bquote(expect_error(join_labels(0, byrow = byrow), err_msg)))
   }
 
   err_msg <- "byrow contains 1 missing values"
@@ -44,7 +44,7 @@ test_that("'chklen' should be TRUE or FALSE", {
 
   expect_err_msg <- function(err_msg, chklen) {
 
-    eval(bquote(expect_error(join_labels(c(0), chklen = chklen), err_msg)))
+    eval(bquote(expect_error(join_labels(0, chklen = chklen), err_msg)))
   }
 
   err_msg <- "chklen contains 1 missing values"
@@ -125,7 +125,6 @@ test_that("join_labels() only accepts vectors or factors", {
 
 test_that("join_labels() accepts any number of unique labels", {
   expect_err_msg <- function(vec1, vec2) {
-    err_msg <- "not equal to 2L"
     eval(bquote(expect_error(join_labels(vec1, vec2), NA)))
   }
 

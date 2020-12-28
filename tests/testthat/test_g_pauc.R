@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("PC 1: Retrieve pAUCs")
 # Test auc(curves)
@@ -15,7 +15,7 @@ pauc_create_mscurves <- function() {
   labels <- join_labels(l1, l2, l3)
 
   mdat <- mmdata(scores, labels)
-  curves <- evalmod(mdat)
+  evalmod(mdat)
 }
 
 pauc_create_smcurves <- function(raw_curves = TRUE) {
@@ -30,7 +30,7 @@ pauc_create_smcurves <- function(raw_curves = TRUE) {
   labels <- join_labels(l1, l2, l3)
 
   mdat <- mmdata(scores, labels, expd_first = "dsids")
-  curves <- evalmod(mdat, raw_curves = raw_curves)
+  evalmod(mdat, raw_curves = raw_curves)
 }
 
 pauc_create_mmcurves <- function(raw_curves = TRUE) {
@@ -48,7 +48,7 @@ pauc_create_mmcurves <- function(raw_curves = TRUE) {
 
   mdat <- mmdata(scores, labels, modnames = c("m1", "m2"), dsids = c(1, 2),
                  expd_first = "modnames")
-  curves <- evalmod(mdat, raw_curves = raw_curves)
+  evalmod(mdat, raw_curves = raw_curves)
 }
 
 test_that("paucs for sscurves", {

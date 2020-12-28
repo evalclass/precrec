@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("PL 3: Create confusion matrices")
 # Test create_confmats(fmdat, scores, labels)

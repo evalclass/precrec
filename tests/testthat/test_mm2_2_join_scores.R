@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("MM 2: Join score datasets")
 # Test join_scores(..., byrow, chklen)
@@ -20,11 +20,11 @@ test_that("'...' must be specified", {
 })
 
 test_that("'byrow' should be TRUE or FALSE", {
-  expect_error(join_scores(c(0), byrow = TRUE), NA)
-  expect_error(join_scores(c(0), byrow = FALSE), NA)
+  expect_error(join_scores(0, byrow = TRUE), NA)
+  expect_error(join_scores(0, byrow = FALSE), NA)
 
   expect_err_msg <- function(err_msg, byrow) {
-    eval(bquote(expect_error(join_scores(c(0), byrow = byrow), err_msg)))
+    eval(bquote(expect_error(join_scores(0, byrow = byrow), err_msg)))
   }
 
   err_msg <- "byrow contains 1 missing values"
@@ -39,12 +39,12 @@ test_that("'byrow' should be TRUE or FALSE", {
 })
 
 test_that("'chklen' should be TRUE or FALSE", {
-  expect_error(join_scores(c(0), chklen = TRUE), NA)
-  expect_error(join_scores(c(0), chklen = FALSE), NA)
+  expect_error(join_scores(0, chklen = TRUE), NA)
+  expect_error(join_scores(0, chklen = FALSE), NA)
 
   expect_err_msg <- function(err_msg, chklen) {
 
-    eval(bquote(expect_error(join_scores(c(0), chklen = chklen), err_msg)))
+    eval(bquote(expect_error(join_scores(0, chklen = chklen), err_msg)))
   }
 
   err_msg <- "chklen contains 1 missing values"
@@ -86,7 +86,7 @@ test_that("Checking vector lenght is ignore when 'chklen' is set", {
 })
 
 test_that("join_scores() returns a list", {
-  cdat <- join_scores(c(0))
+  cdat <- join_scores(0)
 
   expect_true(is.list(cdat))
 })
