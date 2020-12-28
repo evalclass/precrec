@@ -26,7 +26,8 @@ Imports:
     grid,
     gridExtra (>= 2.0.0),
     methods,
-    data.table (>= 1.10.4)
+    data.table (>= 1.10.4),
+    withr (>= 2.3.0)
 RoxygenNote: 7.1.1
 Encoding: UTF-8
 VignetteBuilder: knitr

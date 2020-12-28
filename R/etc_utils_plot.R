@@ -622,9 +622,7 @@ NULL
     main <- paste0(main, " - P: ", np, ", N: ", nn)
   }
 
-  old_pty <- graphics::par(pty = "s")
-  on.exit(graphics::par(old_pty), add = TRUE)
-
+  withr::local_par(list(pty = "s"))
   if (show_legend) {
     .set_layout(1, show_legend)
     on.exit(graphics::layout(1), add = TRUE)
@@ -693,11 +691,7 @@ NULL
 #
 .show_legend <- function(obj, show_legend, gnames = "modnames") {
   if (show_legend) {
-    old_mar <- graphics::par(mar = c(0, 0, 0, 0))
-    on.exit(graphics::par(old_mar), add = TRUE)
-    old_pty <- graphics::par(pty = "m")
-    on.exit(graphics::par(old_pty), add = TRUE)
-
+    withr::local_par(list(mar = c(0, 0, 0, 0), pty = "m"))
     gnames <- attr(obj, paste0("uniq_", gnames))
     graphics::plot(1, type = "n", axes = FALSE, xlab = "", ylab = "")
     graphics::legend(x = "top", lty = 1,
