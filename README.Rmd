@@ -8,7 +8,8 @@ output:
 [![Travis](https://travis-ci.org/takayasaito/precrec.svg?branch=master)](https://travis-ci.org/takayasaito/precrec)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/takayasaito/precrec?branch=master&svg=true)](https://ci.appveyor.com/project/takayasaito/precrec)
 [![codecov.io](https://codecov.io/github/takayasaito/precrec/coverage.svg?branch=master)](https://codecov.io/github/takayasaito/precrec?branch=master)
-[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/precrec)](https://cran.r-project.org/package=precrec)
+[![CodeFactor](https://www.codefactor.io/repository/github/takayasaito/precrec/badge)](https://www.codefactor.io/repository/github/takayasaito/precrec)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version-ago/precrec)](https://cran.r-project.org/package=precrec)
 [![CRAN_Logs_Badge](https://cranlogs.r-pkg.org/badges/grand-total/precrec)](https://cran.r-project.org/package=precrec)
 
 The aim of the `precrec` package is to provide an integrated platform that enables robust performance evaluations of binary classifiers. Specifically, `precrec` offers accurate calculations of ROC (Receiver Operator Characteristics) and precision-recall curves. All the main calculations of `precrec` are implemented with C++/[Rcpp](https://cran.r-project.org/package=Rcpp).

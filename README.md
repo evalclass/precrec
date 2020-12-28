@@ -5,7 +5,8 @@
 [![AppVeyor Build
 Status](https://ci.appveyor.com/api/projects/status/github/takayasaito/precrec?branch=master&svg=true)](https://ci.appveyor.com/project/takayasaito/precrec)
 [![codecov.io](https://codecov.io/github/takayasaito/precrec/coverage.svg?branch=master)](https://codecov.io/github/takayasaito/precrec?branch=master)
-[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/precrec)](https://cran.r-project.org/package=precrec)
+[![CodeFactor](https://www.codefactor.io/repository/github/takayasaito/precrec/badge)](https://www.codefactor.io/repository/github/takayasaito/precrec)
+[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version-ago/precrec)](https://cran.r-project.org/package=precrec)
 [![CRAN\_Logs\_Badge](https://cranlogs.r-pkg.org/badges/grand-total/precrec)](https://cran.r-project.org/package=precrec)
 
 The aim of the `precrec` package is to provide an integrated platform
