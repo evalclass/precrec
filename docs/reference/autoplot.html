@@ -49,6 +49,7 @@
 <meta property="og:title" content="Plot performance evaluation measures with ggplot2 — autoplot" />
 <meta property="og:description" content="The autoplot function plots performance evaluation measures
   by using ggplot2 instead of the general R plot." />
+<meta property="og:image" content="https://takayasaito.github.io/precrec/logo.png" />
 
 
 
@@ -80,7 +81,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">precrec</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12.0</span>
       </span>
     </div>
 
@@ -275,11 +276,11 @@
 <span class='co'># Reduced supporting point</span>
 <span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span><span class='op'>(</span><span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>evalss</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='img'><img src='autoplot-2.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.198   0.010   0.209 </div><div class='input'>
+#&gt;   0.260   0.011   0.273 </div><div class='input'>
 <span class='co'># Full supporting points</span>
 <span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span><span class='op'>(</span><span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>evalss</span>, reduce_points <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='img'><img src='autoplot-3.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   1.529   0.159   1.689 </div><div class='input'>
+#&gt;   1.893   0.201   2.106 </div><div class='input'>
 <span class='co'>## Get a grob object for multiple plots</span>
 <span class='va'>pp1</span> <span class='op'>&lt;-</span> <span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>sscurves</span>, ret_grob <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/frame.html'>plot.new</a></span><span class='op'>(</span><span class='op'>)</span>
@@ -324,11 +325,11 @@
 <span class='co'># Reduced supporting point</span>
 <span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span><span class='op'>(</span><span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>evalms</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='img'><img src='autoplot-10.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.519   0.052   0.573 </div><div class='input'>
+#&gt;   0.367   0.032   0.400 </div><div class='input'>
 <span class='co'># Full supporting points</span>
 <span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span><span class='op'>(</span><span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>evalms</span>, reduce_points <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='img'><img src='autoplot-11.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   7.907   1.225   9.167 </div><div class='input'>
+#&gt;   8.181   1.304   9.520 </div><div class='input'>
 <span class='co'>## Hide the legend</span>
 <span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>mscurves</span>, show_legend <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 </div><div class='img'><img src='autoplot-12.png' alt='' width='700' height='433' /></div><div class='input'>
@@ -372,11 +373,11 @@
 <span class='co'># Reduced supporting point</span>
 <span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span><span class='op'>(</span><span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>evalsm</span>, raw_curves <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='img'><img src='autoplot-18.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.183   0.001   0.186 </div><div class='input'>
+#&gt;   0.185   0.001   0.186 </div><div class='input'>
 <span class='co'># Full supporting points</span>
 <span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span><span class='op'>(</span><span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>evalsm</span>, raw_curves <span class='op'>=</span> <span class='cn'>TRUE</span>, reduce_points <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='img'><img src='autoplot-19.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.192   0.001   0.194 </div><div class='input'>
+#&gt;   0.184   0.001   0.186 </div><div class='input'>
 <span class='co'>## Generate an smpoints object that contains basic evaluation measures</span>
 <span class='va'>smpoints</span> <span class='op'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span><span class='op'>(</span><span class='va'>mdat</span>, mode <span class='op'>=</span> <span class='st'>"basic"</span><span class='op'>)</span>
 
@@ -415,11 +416,11 @@
 <span class='co'># Reduced supporting point</span>
 <span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span><span class='op'>(</span><span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>evalmm</span>, raw_curves <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='img'><img src='autoplot-24.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.316   0.007   0.325 </div><div class='input'>
+#&gt;   0.335   0.010   0.346 </div><div class='input'>
 <span class='co'># Full supporting points</span>
 <span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span><span class='op'>(</span><span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>evalmm</span>, raw_curves <span class='op'>=</span> <span class='cn'>TRUE</span>, reduce_points <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='img'><img src='autoplot-25.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.804   0.104   0.912 </div><div class='input'>
+#&gt;   0.841   0.115   0.959 </div><div class='input'>
 <span class='co'>## Generate an mmpoints object that contains basic evaluation measures</span>
 <span class='va'>mmpoints</span> <span class='op'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span><span class='op'>(</span><span class='va'>mdat</span>, mode <span class='op'>=</span> <span class='st'>"basic"</span><span class='op'>)</span>
 
