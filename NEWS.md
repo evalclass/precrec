@@ -1,6 +1,7 @@
 # precrec 0.12
 
-* Improve error messeages when a dataset includes only one class  
+* Improve error messages when a data set includes only one class  
+* Improve code quality using the results from lintr and CodeFactor.io
 
 # precrec 0.11.2
 
