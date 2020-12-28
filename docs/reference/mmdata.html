@@ -8,25 +8,36 @@
 
 <title>Reformat input data for performance evaluation calculation — mmdata • precrec</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -39,7 +50,6 @@
 <meta property="og:description" content="The mmdata function takes predicted scores and labels
   and returns an mdat object. The evalmod function
   takes an mdat object as input data to calculate evaluation measures." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -57,7 +67,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -71,7 +81,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">precrec</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12</span>
       </span>
     </div>
 
@@ -89,8 +99,8 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/takayasaito/precrec">
-    <span class="fab fa fab fa-github fa-lg"></span>
+  <a href="https://github.com/takayasaito/precrec/">
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,22 +128,22 @@
   takes an <code>mdat</code> object as input data to calculate evaluation measures.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>mmdata</span>(
-  <span class='no'>scores</span>,
-  <span class='no'>labels</span>,
-  <span class='kw'>modnames</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>dsids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>posclass</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>na_worst</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>ties_method</span> <span class='kw'>=</span> <span class='st'>"equiv"</span>,
-  <span class='kw'>expd_first</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"rocprc"</span>,
-  <span class='kw'>nfold_df</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>score_cols</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>lab_col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>fold_col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>...</span>
-)</pre>
+    <pre class="usage"><span class='fu'>mmdata</span><span class='op'>(</span>
+  <span class='va'>scores</span>,
+  <span class='va'>labels</span>,
+  modnames <span class='op'>=</span> <span class='cn'>NULL</span>,
+  dsids <span class='op'>=</span> <span class='cn'>NULL</span>,
+  posclass <span class='op'>=</span> <span class='cn'>NULL</span>,
+  na_worst <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  ties_method <span class='op'>=</span> <span class='st'>"equiv"</span>,
+  expd_first <span class='op'>=</span> <span class='cn'>NULL</span>,
+  mode <span class='op'>=</span> <span class='st'>"rocprc"</span>,
+  nfold_df <span class='op'>=</span> <span class='cn'>NULL</span>,
+  score_cols <span class='op'>=</span> <span class='cn'>NULL</span>,
+  lab_col <span class='op'>=</span> <span class='cn'>NULL</span>,
+  fold_col <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -175,7 +185,7 @@ detected when <code>posclass</code> is <code>NULL</code>.</p></td>
     <tr>
       <th>na_worst</th>
       <td><p>A Boolean value for controlling the treatment of NAs
-in <code>scores</code>.</p><dl class='dl-horizontal'>
+in <code>scores</code>.</p><dl>
   <dt>TRUE</dt><dd><p>All NAs are treated as the worst scores</p></dd>
   <dt>FALSE</dt><dd><p>All NAs are treated as the best scores</p></dd>
 
@@ -183,7 +193,7 @@ in <code>scores</code>.</p><dl class='dl-horizontal'>
     </tr>
     <tr>
       <th>ties_method</th>
-      <td><p>A string for controlling ties in <code>scores</code>.</p><dl class='dl-horizontal'>
+      <td><p>A string for controlling ties in <code>scores</code>.</p><dl>
   <dt>"equiv"</dt><dd><p>Ties are equivalently ranked</p></dd>
   <dt>"first"</dt><dd><p>Ties are ranked in an increasing order as appeared</p></dd>
   <dt>"random"</dt><dd><p>Ties are ranked in random order</p></dd>
@@ -195,7 +205,7 @@ in <code>scores</code>.</p><dl class='dl-horizontal'>
       <td><p>A string to indicate which of the two variables
   - model names or test dataset IDs
   should be expanded first when they are automatically generated.</p>
-<p></p><dl class='dl-horizontal'>
+<p></p><dl>
     <dt>"modnames"</dt><dd><p>Model names are expanded first. For example,
            The <code>mmdata</code> function generates <code>modnames</code> as
            <code><a href='https://rdrr.io/r/base/c.html'>c("m1", "m2")</a></code> and <code>dsids</code> as <code><a href='https://rdrr.io/r/base/c.html'>c(1, 1)</a></code>
@@ -212,7 +222,7 @@ in <code>scores</code>.</p><dl class='dl-horizontal'>
     <tr>
       <th>mode</th>
       <td><p>A string that specifies the types of evaluation measures
-that the <code>evalmod</code> function calculates.</p><dl class='dl-horizontal'>
+that the <code>evalmod</code> function calculates.</p><dl>
   <dt>"rocprc"</dt><dd><p>ROC and Precision-Recall curves</p></dd>
   <dt>"prcroc"</dt><dd><p>Same as above</p></dd>
   <dt>"basic"</dt><dd><p>Normalized ranks vs. accuracy, error rate, specificity,
@@ -268,17 +278,19 @@ of <code>nfold_df</code>.</p></td>
 <span class='co'>###</span>
 
 <span class='co'>## Load a dataset with 10 positives and 10 negatives</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>P10N10</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>P10N10</span><span class='op'>)</span>
 
 <span class='co'>## Generate mdat object</span>
-<span class='no'>ssmdat1</span> <span class='kw'>&lt;-</span> <span class='fu'>mmdata</span>(<span class='no'>P10N10</span>$<span class='no'>scores</span>, <span class='no'>P10N10</span>$<span class='no'>labels</span>)
-<span class='no'>ssmdat1</span></div><div class='output co'>#&gt; 
+<span class='va'>ssmdat1</span> <span class='op'>&lt;-</span> <span class='fu'>mmdata</span><span class='op'>(</span><span class='va'>P10N10</span><span class='op'>$</span><span class='va'>scores</span>, <span class='va'>P10N10</span><span class='op'>$</span><span class='va'>labels</span><span class='op'>)</span>
+<span class='va'>ssmdat1</span>
+</div><div class='output co'>#&gt; 
 #&gt;     === Input data ===
 #&gt; 
 #&gt;      Model name Dataset ID # of negatives # of positives
 #&gt;    1         m1          1             10             10
-#&gt; </div><div class='input'><span class='no'>ssmdat2</span> <span class='kw'>&lt;-</span> <span class='fu'>mmdata</span>(<span class='fl'>1</span>:<span class='fl'>8</span>, <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>), <span class='fl'>8</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))
-<span class='no'>ssmdat2</span></div><div class='output co'>#&gt; 
+#&gt; </div><div class='input'><span class='va'>ssmdat2</span> <span class='op'>&lt;-</span> <span class='fu'>mmdata</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>8</span>, <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span>, <span class='fl'>8</span>, replace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>ssmdat2</span>
+</div><div class='output co'>#&gt; 
 #&gt;     === Input data ===
 #&gt; 
 #&gt;      Model name Dataset ID # of negatives # of positives
@@ -290,12 +302,13 @@ of <code>nfold_df</code>.</p></td>
 <span class='co'>###</span>
 
 <span class='co'>## Create sample datasets with 100 positives and 100 negatives</span>
-<span class='no'>samps</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_sim_samples.html'>create_sim_samples</a></span>(<span class='fl'>1</span>, <span class='fl'>100</span>, <span class='fl'>100</span>, <span class='st'>"all"</span>)
+<span class='va'>samps</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_sim_samples.html'>create_sim_samples</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>100</span>, <span class='fl'>100</span>, <span class='st'>"all"</span><span class='op'>)</span>
 
 <span class='co'>## Multiple models &amp; single test dataset</span>
-<span class='no'>msmdat1</span> <span class='kw'>&lt;-</span> <span class='fu'>mmdata</span>(<span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"scores"</span>]], <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"labels"</span>]],
-                  <span class='kw'>modnames</span> <span class='kw'>=</span> <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"modnames"</span>]])
-<span class='no'>msmdat1</span></div><div class='output co'>#&gt; 
+<span class='va'>msmdat1</span> <span class='op'>&lt;-</span> <span class='fu'>mmdata</span><span class='op'>(</span><span class='va'>samps</span><span class='op'>[[</span><span class='st'>"scores"</span><span class='op'>]</span><span class='op'>]</span>, <span class='va'>samps</span><span class='op'>[[</span><span class='st'>"labels"</span><span class='op'>]</span><span class='op'>]</span>,
+                  modnames <span class='op'>=</span> <span class='va'>samps</span><span class='op'>[[</span><span class='st'>"modnames"</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span>
+<span class='va'>msmdat1</span>
+</div><div class='output co'>#&gt; 
 #&gt;     === Input data ===
 #&gt; 
 #&gt;      Model name Dataset ID # of negatives # of positives
@@ -306,16 +319,17 @@ of <code>nfold_df</code>.</p></td>
 #&gt;    5       perf          1            100            100
 #&gt; </div><div class='input'>
 <span class='co'>## Use join_scores and join_labels</span>
-<span class='no'>s1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span>)
-<span class='no'>s2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5</span>, <span class='fl'>6</span>, <span class='fl'>7</span>, <span class='fl'>8</span>)
-<span class='no'>scores</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='join_scores.html'>join_scores</a></span>(<span class='no'>s1</span>, <span class='no'>s2</span>)
+<span class='va'>s1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span><span class='op'>)</span>
+<span class='va'>s2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>, <span class='fl'>6</span>, <span class='fl'>7</span>, <span class='fl'>8</span><span class='op'>)</span>
+<span class='va'>scores</span> <span class='op'>&lt;-</span> <span class='fu'><a href='join_scores.html'>join_scores</a></span><span class='op'>(</span><span class='va'>s1</span>, <span class='va'>s2</span><span class='op'>)</span>
 
-<span class='no'>l1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>1</span>)
-<span class='no'>l2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>1</span>)
-<span class='no'>labels</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='join_labels.html'>join_labels</a></span>(<span class='no'>l1</span>, <span class='no'>l2</span>)
+<span class='va'>l1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span>
+<span class='va'>l2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span>
+<span class='va'>labels</span> <span class='op'>&lt;-</span> <span class='fu'><a href='join_labels.html'>join_labels</a></span><span class='op'>(</span><span class='va'>l1</span>, <span class='va'>l2</span><span class='op'>)</span>
 
-<span class='no'>msmdat2</span> <span class='kw'>&lt;-</span> <span class='fu'>mmdata</span>(<span class='no'>scores</span>, <span class='no'>labels</span>, <span class='kw'>modnames</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"ms1"</span>, <span class='st'>"ms2"</span>))
-<span class='no'>msmdat2</span></div><div class='output co'>#&gt; 
+<span class='va'>msmdat2</span> <span class='op'>&lt;-</span> <span class='fu'>mmdata</span><span class='op'>(</span><span class='va'>scores</span>, <span class='va'>labels</span>, modnames <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ms1"</span>, <span class='st'>"ms2"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>msmdat2</span>
+</div><div class='output co'>#&gt; 
 #&gt;     === Input data ===
 #&gt; 
 #&gt;      Model name Dataset ID # of negatives # of positives
@@ -328,13 +342,14 @@ of <code>nfold_df</code>.</p></td>
 <span class='co'>###</span>
 
 <span class='co'>## Create sample datasets with 100 positives and 100 negatives</span>
-<span class='no'>samps</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_sim_samples.html'>create_sim_samples</a></span>(<span class='fl'>10</span>, <span class='fl'>100</span>, <span class='fl'>100</span>, <span class='st'>"good_er"</span>)
+<span class='va'>samps</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_sim_samples.html'>create_sim_samples</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>100</span>, <span class='fl'>100</span>, <span class='st'>"good_er"</span><span class='op'>)</span>
 
 <span class='co'>## Single model &amp; multiple test datasets</span>
-<span class='no'>smmdat</span> <span class='kw'>&lt;-</span> <span class='fu'>mmdata</span>(<span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"scores"</span>]], <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"labels"</span>]],
-                 <span class='kw'>modnames</span> <span class='kw'>=</span> <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"modnames"</span>]],
-                 <span class='kw'>dsids</span> <span class='kw'>=</span> <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"dsids"</span>]])
-<span class='no'>smmdat</span></div><div class='output co'>#&gt; 
+<span class='va'>smmdat</span> <span class='op'>&lt;-</span> <span class='fu'>mmdata</span><span class='op'>(</span><span class='va'>samps</span><span class='op'>[[</span><span class='st'>"scores"</span><span class='op'>]</span><span class='op'>]</span>, <span class='va'>samps</span><span class='op'>[[</span><span class='st'>"labels"</span><span class='op'>]</span><span class='op'>]</span>,
+                 modnames <span class='op'>=</span> <span class='va'>samps</span><span class='op'>[[</span><span class='st'>"modnames"</span><span class='op'>]</span><span class='op'>]</span>,
+                 dsids <span class='op'>=</span> <span class='va'>samps</span><span class='op'>[[</span><span class='st'>"dsids"</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span>
+<span class='va'>smmdat</span>
+</div><div class='output co'>#&gt; 
 #&gt;     === Input data ===
 #&gt; 
 #&gt;      Model name Dataset ID # of negatives # of positives
@@ -355,13 +370,14 @@ of <code>nfold_df</code>.</p></td>
 <span class='co'>###</span>
 
 <span class='co'>## Create sample datasets with 100 positives and 100 negatives</span>
-<span class='no'>samps</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_sim_samples.html'>create_sim_samples</a></span>(<span class='fl'>10</span>, <span class='fl'>100</span>, <span class='fl'>100</span>, <span class='st'>"all"</span>)
+<span class='va'>samps</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_sim_samples.html'>create_sim_samples</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>100</span>, <span class='fl'>100</span>, <span class='st'>"all"</span><span class='op'>)</span>
 
 <span class='co'>## Multiple models &amp; multiple test datasets</span>
-<span class='no'>mmmdat</span> <span class='kw'>&lt;-</span> <span class='fu'>mmdata</span>(<span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"scores"</span>]], <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"labels"</span>]],
-                 <span class='kw'>modnames</span> <span class='kw'>=</span> <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"modnames"</span>]],
-                 <span class='kw'>dsids</span> <span class='kw'>=</span> <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"dsids"</span>]])
-<span class='no'>mmmdat</span></div><div class='output co'>#&gt; 
+<span class='va'>mmmdat</span> <span class='op'>&lt;-</span> <span class='fu'>mmdata</span><span class='op'>(</span><span class='va'>samps</span><span class='op'>[[</span><span class='st'>"scores"</span><span class='op'>]</span><span class='op'>]</span>, <span class='va'>samps</span><span class='op'>[[</span><span class='st'>"labels"</span><span class='op'>]</span><span class='op'>]</span>,
+                 modnames <span class='op'>=</span> <span class='va'>samps</span><span class='op'>[[</span><span class='st'>"modnames"</span><span class='op'>]</span><span class='op'>]</span>,
+                 dsids <span class='op'>=</span> <span class='va'>samps</span><span class='op'>[[</span><span class='st'>"dsids"</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span>
+<span class='va'>mmmdat</span>
+</div><div class='output co'>#&gt; 
 #&gt;     === Input data ===
 #&gt; 
 #&gt;      Model name Dataset ID # of negatives # of positives
@@ -422,8 +438,9 @@ of <code>nfold_df</code>.</p></td>
 <span class='co'>###</span>
 
 <span class='co'>## Load test data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>M2N50F5</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>M2N50F5</span>)</div><div class='output co'>#&gt;       score1     score2 label fold
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>M2N50F5</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>M2N50F5</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;       score1     score2 label fold
 #&gt; 1  2.0606025  1.0689227   pos    1
 #&gt; 2  0.3066092  0.1745491   pos    3
 #&gt; 3  1.5597733 -1.5666375   pos    1
@@ -431,10 +448,11 @@ of <code>nfold_df</code>.</p></td>
 #&gt; 5 -0.2229031  0.6070042   pos    5
 #&gt; 6 -0.7679551 -1.7908147   pos    5</div><div class='input'>
 <span class='co'>## Speficy nessesary columns to create mdat</span>
-<span class='no'>cvdat1</span> <span class='kw'>&lt;-</span> <span class='fu'>mmdata</span>(<span class='kw'>nfold_df</span> <span class='kw'>=</span> <span class='no'>M2N50F5</span>, <span class='kw'>score_cols</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>),
-                 <span class='kw'>lab_col</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>fold_col</span> <span class='kw'>=</span> <span class='fl'>4</span>,
-                 <span class='kw'>modnames</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"m1"</span>, <span class='st'>"m2"</span>), <span class='kw'>dsids</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>5</span>)
-<span class='no'>cvdat1</span></div><div class='output co'>#&gt; 
+<span class='va'>cvdat1</span> <span class='op'>&lt;-</span> <span class='fu'>mmdata</span><span class='op'>(</span>nfold_df <span class='op'>=</span> <span class='va'>M2N50F5</span>, score_cols <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span>,
+                 lab_col <span class='op'>=</span> <span class='fl'>3</span>, fold_col <span class='op'>=</span> <span class='fl'>4</span>,
+                 modnames <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"m1"</span>, <span class='st'>"m2"</span><span class='op'>)</span>, dsids <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>)</span>
+<span class='va'>cvdat1</span>
+</div><div class='output co'>#&gt; 
 #&gt;     === Input data ===
 #&gt; 
 #&gt;      Model name Dataset ID # of negatives # of positives
@@ -450,10 +468,11 @@ of <code>nfold_df</code>.</p></td>
 #&gt;   10         m2          5              5              5
 #&gt; </div><div class='input'>
 <span class='co'>## Use column names</span>
-<span class='no'>cvdat2</span> <span class='kw'>&lt;-</span> <span class='fu'>mmdata</span>(<span class='kw'>nfold_df</span> <span class='kw'>=</span> <span class='no'>M2N50F5</span>, <span class='kw'>score_cols</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"score1"</span>, <span class='st'>"score2"</span>),
-                 <span class='kw'>lab_col</span> <span class='kw'>=</span> <span class='st'>"label"</span>, <span class='kw'>fold_col</span> <span class='kw'>=</span> <span class='st'>"fold"</span>,
-                 <span class='kw'>modnames</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"m1"</span>, <span class='st'>"m2"</span>), <span class='kw'>dsids</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>5</span>)
-<span class='no'>cvdat2</span></div><div class='output co'>#&gt; 
+<span class='va'>cvdat2</span> <span class='op'>&lt;-</span> <span class='fu'>mmdata</span><span class='op'>(</span>nfold_df <span class='op'>=</span> <span class='va'>M2N50F5</span>, score_cols <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"score1"</span>, <span class='st'>"score2"</span><span class='op'>)</span>,
+                 lab_col <span class='op'>=</span> <span class='st'>"label"</span>, fold_col <span class='op'>=</span> <span class='st'>"fold"</span>,
+                 modnames <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"m1"</span>, <span class='st'>"m2"</span><span class='op'>)</span>, dsids <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>)</span>
+<span class='va'>cvdat2</span>
+</div><div class='output co'>#&gt; 
 #&gt;     === Input data ===
 #&gt; 
 #&gt;      Model name Dataset ID # of negatives # of positives
@@ -470,15 +489,10 @@ of <code>nfold_df</code>.</p></td>
 #&gt; </div><div class='input'>
 </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -489,7 +503,7 @@ of <code>nfold_df</code>.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

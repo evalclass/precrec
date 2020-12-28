@@ -8,25 +8,36 @@
 
 <title>Create n-fold cross validation dataset from data frame — format_nfold • precrec</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -39,7 +50,6 @@
 <meta property="og:description" content="The format_nfold function takes a data frame with scores, label,
   and n-fold columns and convert it to a list for evalmod
   and mmdata." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -57,7 +67,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -71,7 +81,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">precrec</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12</span>
       </span>
     </div>
 
@@ -89,8 +99,8 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/takayasaito/precrec">
-    <span class="fab fa fab fa-github fa-lg"></span>
+  <a href="https://github.com/takayasaito/precrec/">
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,7 +128,7 @@
   and <code><a href='mmdata.html'>mmdata</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>format_nfold</span>(<span class='no'>nfold_df</span>, <span class='no'>score_cols</span>, <span class='no'>lab_col</span>, <span class='no'>fold_col</span>)</pre>
+    <pre class="usage"><span class='fu'>format_nfold</span><span class='op'>(</span><span class='va'>nfold_df</span>, <span class='va'>score_cols</span>, <span class='va'>lab_col</span>, <span class='va'>fold_col</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -163,8 +173,9 @@ of <code>nfold_df</code>.</p></td>
 <span class='co'>###</span>
 
 <span class='co'>## Load test data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>M2N50F5</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>M2N50F5</span>)</div><div class='output co'>#&gt;       score1     score2 label fold
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>M2N50F5</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>M2N50F5</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;       score1     score2 label fold
 #&gt; 1  2.0606025  1.0689227   pos    1
 #&gt; 2  0.3066092  0.1745491   pos    3
 #&gt; 3  1.5597733 -1.5666375   pos    1
@@ -172,11 +183,12 @@ of <code>nfold_df</code>.</p></td>
 #&gt; 5 -0.2229031  0.6070042   pos    5
 #&gt; 6 -0.7679551 -1.7908147   pos    5</div><div class='input'>
 <span class='co'>## Convert with format_nfold</span>
-<span class='no'>nfold_list1</span> <span class='kw'>=</span> <span class='fu'>format_nfold</span>(<span class='kw'>nfold_df</span> <span class='kw'>=</span> <span class='no'>M2N50F5</span>, <span class='kw'>score_cols</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>),
-                          <span class='kw'>lab_col</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>fold_col</span> <span class='kw'>=</span> <span class='fl'>4</span>)
+<span class='va'>nfold_list1</span> <span class='op'>=</span> <span class='fu'>format_nfold</span><span class='op'>(</span>nfold_df <span class='op'>=</span> <span class='va'>M2N50F5</span>, score_cols <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span>,
+                          lab_col <span class='op'>=</span> <span class='fl'>3</span>, fold_col <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>
 
 <span class='co'>## Show the list structure</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>nfold_list1</span>)</div><div class='output co'>#&gt; List of 2
+<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>nfold_list1</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; List of 2
 #&gt;  $ scores:List of 10
 #&gt;   ..$ : num [1:10] 2.061 1.56 0.215 1.264 0.477 ...
 #&gt;   ..$ : num [1:10] -1.843 -0.386 -0.156 -1.134 -0.515 ...
@@ -189,16 +201,17 @@ of <code>nfold_df</code>.</p></td>
 #&gt;   ..$ : num [1:10] 1.443 0.876 0.826 -0.771 -1.165 ...
 #&gt;   ..$ : num [1:10] 0.607 -1.7908 0.2527 -1.3882 -0.0227 ...
 #&gt;  $ labels:List of 10
-#&gt;   ..$ : int [1:10] 2 2 2 2 2 1 1 1 1 1
-#&gt;   ..$ : int [1:10] 2 2 2 2 2 2 1 1 1 1
-#&gt;   ..$ : int [1:10] 2 2 2 2 2 1 1 1 1 1
-#&gt;   ..$ : int [1:10] 2 2 2 2 1 1 1 1 1 1
-#&gt;   ..$ : int [1:10] 2 2 2 2 2 1 1 1 1 1
-#&gt;   ..$ : int [1:10] 2 2 2 2 2 1 1 1 1 1
-#&gt;   ..$ : int [1:10] 2 2 2 2 2 2 1 1 1 1
-#&gt;   ..$ : int [1:10] 2 2 2 2 2 1 1 1 1 1
-#&gt;   ..$ : int [1:10] 2 2 2 2 1 1 1 1 1 1
-#&gt;   ..$ : int [1:10] 2 2 2 2 2 1 1 1 1 1</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>nfold_list1</span>$<span class='no'>scores</span>)</div><div class='output co'>#&gt; List of 10
+#&gt;   ..$ : num [1:10] 2 2 2 2 2 1 1 1 1 1
+#&gt;   ..$ : num [1:10] 2 2 2 2 2 2 1 1 1 1
+#&gt;   ..$ : num [1:10] 2 2 2 2 2 1 1 1 1 1
+#&gt;   ..$ : num [1:10] 2 2 2 2 1 1 1 1 1 1
+#&gt;   ..$ : num [1:10] 2 2 2 2 2 1 1 1 1 1
+#&gt;   ..$ : num [1:10] 2 2 2 2 2 1 1 1 1 1
+#&gt;   ..$ : num [1:10] 2 2 2 2 2 2 1 1 1 1
+#&gt;   ..$ : num [1:10] 2 2 2 2 2 1 1 1 1 1
+#&gt;   ..$ : num [1:10] 2 2 2 2 1 1 1 1 1 1
+#&gt;   ..$ : num [1:10] 2 2 2 2 2 1 1 1 1 1</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>nfold_list1</span><span class='op'>$</span><span class='va'>scores</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; List of 10
 #&gt;  $ : num [1:10] 2.061 1.56 0.215 1.264 0.477 ...
 #&gt;  $ : num [1:10] -1.843 -0.386 -0.156 -1.134 -0.515 ...
 #&gt;  $ : num [1:10] 0.307 -0.604 -0.319 -1.156 1.687 ...
@@ -208,28 +221,30 @@ of <code>nfold_df</code>.</p></td>
 #&gt;  $ : num [1:10] 0.3945 0.6563 -0.0559 0.3991 0.3931 ...
 #&gt;  $ : num [1:10] 0.175 1.157 -0.864 2.065 0.415 ...
 #&gt;  $ : num [1:10] 1.443 0.876 0.826 -0.771 -1.165 ...
-#&gt;  $ : num [1:10] 0.607 -1.7908 0.2527 -1.3882 -0.0227 ...</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>nfold_list1</span>$<span class='no'>labels</span>)</div><div class='output co'>#&gt; List of 10
-#&gt;  $ : int [1:10] 2 2 2 2 2 1 1 1 1 1
-#&gt;  $ : int [1:10] 2 2 2 2 2 2 1 1 1 1
-#&gt;  $ : int [1:10] 2 2 2 2 2 1 1 1 1 1
-#&gt;  $ : int [1:10] 2 2 2 2 1 1 1 1 1 1
-#&gt;  $ : int [1:10] 2 2 2 2 2 1 1 1 1 1
-#&gt;  $ : int [1:10] 2 2 2 2 2 1 1 1 1 1
-#&gt;  $ : int [1:10] 2 2 2 2 2 2 1 1 1 1
-#&gt;  $ : int [1:10] 2 2 2 2 2 1 1 1 1 1
-#&gt;  $ : int [1:10] 2 2 2 2 1 1 1 1 1 1
-#&gt;  $ : int [1:10] 2 2 2 2 2 1 1 1 1 1</div><div class='input'>
+#&gt;  $ : num [1:10] 0.607 -1.7908 0.2527 -1.3882 -0.0227 ...</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>nfold_list1</span><span class='op'>$</span><span class='va'>labels</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; List of 10
+#&gt;  $ : num [1:10] 2 2 2 2 2 1 1 1 1 1
+#&gt;  $ : num [1:10] 2 2 2 2 2 2 1 1 1 1
+#&gt;  $ : num [1:10] 2 2 2 2 2 1 1 1 1 1
+#&gt;  $ : num [1:10] 2 2 2 2 1 1 1 1 1 1
+#&gt;  $ : num [1:10] 2 2 2 2 2 1 1 1 1 1
+#&gt;  $ : num [1:10] 2 2 2 2 2 1 1 1 1 1
+#&gt;  $ : num [1:10] 2 2 2 2 2 2 1 1 1 1
+#&gt;  $ : num [1:10] 2 2 2 2 2 1 1 1 1 1
+#&gt;  $ : num [1:10] 2 2 2 2 1 1 1 1 1 1
+#&gt;  $ : num [1:10] 2 2 2 2 2 1 1 1 1 1</div><div class='input'>
 
 <span class='co'>##################################################</span>
 <span class='co'>### Speficy a single score column</span>
 <span class='co'>###</span>
 
 <span class='co'>## Convert with format_nfold</span>
-<span class='no'>nfold_list2</span> <span class='kw'>=</span> <span class='fu'>format_nfold</span>(<span class='kw'>nfold_df</span> <span class='kw'>=</span> <span class='no'>M2N50F5</span>, <span class='kw'>score_cols</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-                           <span class='kw'>lab_col</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>fold_col</span> <span class='kw'>=</span> <span class='fl'>4</span>)
+<span class='va'>nfold_list2</span> <span class='op'>=</span> <span class='fu'>format_nfold</span><span class='op'>(</span>nfold_df <span class='op'>=</span> <span class='va'>M2N50F5</span>, score_cols <span class='op'>=</span> <span class='fl'>1</span>,
+                           lab_col <span class='op'>=</span> <span class='fl'>3</span>, fold_col <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>
 
 <span class='co'>## Show the list structure</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>nfold_list2</span>)</div><div class='output co'>#&gt; List of 2
+<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>nfold_list2</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; List of 2
 #&gt;  $ scores:List of 5
 #&gt;   ..$ : num [1:10] 2.061 1.56 0.215 1.264 0.477 ...
 #&gt;   ..$ : num [1:10] -1.843 -0.386 -0.156 -1.134 -0.515 ...
@@ -237,33 +252,36 @@ of <code>nfold_df</code>.</p></td>
 #&gt;   ..$ : num [1:10] 1.539 1.231 -1.101 -0.371 0.843 ...
 #&gt;   ..$ : num [1:10] -0.223 -0.768 0.464 0.42 -0.34 ...
 #&gt;  $ labels:List of 5
-#&gt;   ..$ : int [1:10] 2 2 2 2 2 1 1 1 1 1
-#&gt;   ..$ : int [1:10] 2 2 2 2 2 2 1 1 1 1
-#&gt;   ..$ : int [1:10] 2 2 2 2 2 1 1 1 1 1
-#&gt;   ..$ : int [1:10] 2 2 2 2 1 1 1 1 1 1
-#&gt;   ..$ : int [1:10] 2 2 2 2 2 1 1 1 1 1</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>nfold_list2</span>$<span class='no'>scores</span>)</div><div class='output co'>#&gt; List of 5
+#&gt;   ..$ : num [1:10] 2 2 2 2 2 1 1 1 1 1
+#&gt;   ..$ : num [1:10] 2 2 2 2 2 2 1 1 1 1
+#&gt;   ..$ : num [1:10] 2 2 2 2 2 1 1 1 1 1
+#&gt;   ..$ : num [1:10] 2 2 2 2 1 1 1 1 1 1
+#&gt;   ..$ : num [1:10] 2 2 2 2 2 1 1 1 1 1</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>nfold_list2</span><span class='op'>$</span><span class='va'>scores</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; List of 5
 #&gt;  $ : num [1:10] 2.061 1.56 0.215 1.264 0.477 ...
 #&gt;  $ : num [1:10] -1.843 -0.386 -0.156 -1.134 -0.515 ...
 #&gt;  $ : num [1:10] 0.307 -0.604 -0.319 -1.156 1.687 ...
 #&gt;  $ : num [1:10] 1.539 1.231 -1.101 -0.371 0.843 ...
-#&gt;  $ : num [1:10] -0.223 -0.768 0.464 0.42 -0.34 ...</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>nfold_list2</span>$<span class='no'>labels</span>)</div><div class='output co'>#&gt; List of 5
-#&gt;  $ : int [1:10] 2 2 2 2 2 1 1 1 1 1
-#&gt;  $ : int [1:10] 2 2 2 2 2 2 1 1 1 1
-#&gt;  $ : int [1:10] 2 2 2 2 2 1 1 1 1 1
-#&gt;  $ : int [1:10] 2 2 2 2 1 1 1 1 1 1
-#&gt;  $ : int [1:10] 2 2 2 2 2 1 1 1 1 1</div><div class='input'>
+#&gt;  $ : num [1:10] -0.223 -0.768 0.464 0.42 -0.34 ...</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>nfold_list2</span><span class='op'>$</span><span class='va'>labels</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; List of 5
+#&gt;  $ : num [1:10] 2 2 2 2 2 1 1 1 1 1
+#&gt;  $ : num [1:10] 2 2 2 2 2 2 1 1 1 1
+#&gt;  $ : num [1:10] 2 2 2 2 2 1 1 1 1 1
+#&gt;  $ : num [1:10] 2 2 2 2 1 1 1 1 1 1
+#&gt;  $ : num [1:10] 2 2 2 2 2 1 1 1 1 1</div><div class='input'>
 
 <span class='co'>##################################################</span>
 <span class='co'>### Use column names</span>
 <span class='co'>###</span>
 
 <span class='co'>## Convert with format_nfold</span>
-<span class='no'>nfold_list3</span> <span class='kw'>=</span> <span class='fu'>format_nfold</span>(<span class='kw'>nfold_df</span> <span class='kw'>=</span> <span class='no'>M2N50F5</span>,
-                           <span class='kw'>score_cols</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"score1"</span>, <span class='st'>"score2"</span>),
-                           <span class='kw'>lab_col</span> <span class='kw'>=</span> <span class='st'>"label"</span>, <span class='kw'>fold_col</span> <span class='kw'>=</span> <span class='st'>"fold"</span>)
+<span class='va'>nfold_list3</span> <span class='op'>=</span> <span class='fu'>format_nfold</span><span class='op'>(</span>nfold_df <span class='op'>=</span> <span class='va'>M2N50F5</span>,
+                           score_cols <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"score1"</span>, <span class='st'>"score2"</span><span class='op'>)</span>,
+                           lab_col <span class='op'>=</span> <span class='st'>"label"</span>, fold_col <span class='op'>=</span> <span class='st'>"fold"</span><span class='op'>)</span>
 
 <span class='co'>## Show the list structure</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>nfold_list3</span>)</div><div class='output co'>#&gt; List of 2
+<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>nfold_list3</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; List of 2
 #&gt;  $ scores:List of 10
 #&gt;   ..$ : num [1:10] 2.061 1.56 0.215 1.264 0.477 ...
 #&gt;   ..$ : num [1:10] -1.843 -0.386 -0.156 -1.134 -0.515 ...
@@ -276,16 +294,17 @@ of <code>nfold_df</code>.</p></td>
 #&gt;   ..$ : num [1:10] 1.443 0.876 0.826 -0.771 -1.165 ...
 #&gt;   ..$ : num [1:10] 0.607 -1.7908 0.2527 -1.3882 -0.0227 ...
 #&gt;  $ labels:List of 10
-#&gt;   ..$ : int [1:10] 2 2 2 2 2 1 1 1 1 1
-#&gt;   ..$ : int [1:10] 2 2 2 2 2 2 1 1 1 1
-#&gt;   ..$ : int [1:10] 2 2 2 2 2 1 1 1 1 1
-#&gt;   ..$ : int [1:10] 2 2 2 2 1 1 1 1 1 1
-#&gt;   ..$ : int [1:10] 2 2 2 2 2 1 1 1 1 1
-#&gt;   ..$ : int [1:10] 2 2 2 2 2 1 1 1 1 1
-#&gt;   ..$ : int [1:10] 2 2 2 2 2 2 1 1 1 1
-#&gt;   ..$ : int [1:10] 2 2 2 2 2 1 1 1 1 1
-#&gt;   ..$ : int [1:10] 2 2 2 2 1 1 1 1 1 1
-#&gt;   ..$ : int [1:10] 2 2 2 2 2 1 1 1 1 1</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>nfold_list3</span>$<span class='no'>scores</span>)</div><div class='output co'>#&gt; List of 10
+#&gt;   ..$ : num [1:10] 2 2 2 2 2 1 1 1 1 1
+#&gt;   ..$ : num [1:10] 2 2 2 2 2 2 1 1 1 1
+#&gt;   ..$ : num [1:10] 2 2 2 2 2 1 1 1 1 1
+#&gt;   ..$ : num [1:10] 2 2 2 2 1 1 1 1 1 1
+#&gt;   ..$ : num [1:10] 2 2 2 2 2 1 1 1 1 1
+#&gt;   ..$ : num [1:10] 2 2 2 2 2 1 1 1 1 1
+#&gt;   ..$ : num [1:10] 2 2 2 2 2 2 1 1 1 1
+#&gt;   ..$ : num [1:10] 2 2 2 2 2 1 1 1 1 1
+#&gt;   ..$ : num [1:10] 2 2 2 2 1 1 1 1 1 1
+#&gt;   ..$ : num [1:10] 2 2 2 2 2 1 1 1 1 1</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>nfold_list3</span><span class='op'>$</span><span class='va'>scores</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; List of 10
 #&gt;  $ : num [1:10] 2.061 1.56 0.215 1.264 0.477 ...
 #&gt;  $ : num [1:10] -1.843 -0.386 -0.156 -1.134 -0.515 ...
 #&gt;  $ : num [1:10] 0.307 -0.604 -0.319 -1.156 1.687 ...
@@ -295,28 +314,24 @@ of <code>nfold_df</code>.</p></td>
 #&gt;  $ : num [1:10] 0.3945 0.6563 -0.0559 0.3991 0.3931 ...
 #&gt;  $ : num [1:10] 0.175 1.157 -0.864 2.065 0.415 ...
 #&gt;  $ : num [1:10] 1.443 0.876 0.826 -0.771 -1.165 ...
-#&gt;  $ : num [1:10] 0.607 -1.7908 0.2527 -1.3882 -0.0227 ...</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>nfold_list3</span>$<span class='no'>labels</span>)</div><div class='output co'>#&gt; List of 10
-#&gt;  $ : int [1:10] 2 2 2 2 2 1 1 1 1 1
-#&gt;  $ : int [1:10] 2 2 2 2 2 2 1 1 1 1
-#&gt;  $ : int [1:10] 2 2 2 2 2 1 1 1 1 1
-#&gt;  $ : int [1:10] 2 2 2 2 1 1 1 1 1 1
-#&gt;  $ : int [1:10] 2 2 2 2 2 1 1 1 1 1
-#&gt;  $ : int [1:10] 2 2 2 2 2 1 1 1 1 1
-#&gt;  $ : int [1:10] 2 2 2 2 2 2 1 1 1 1
-#&gt;  $ : int [1:10] 2 2 2 2 2 1 1 1 1 1
-#&gt;  $ : int [1:10] 2 2 2 2 1 1 1 1 1 1
-#&gt;  $ : int [1:10] 2 2 2 2 2 1 1 1 1 1</div><div class='input'>
+#&gt;  $ : num [1:10] 0.607 -1.7908 0.2527 -1.3882 -0.0227 ...</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>nfold_list3</span><span class='op'>$</span><span class='va'>labels</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; List of 10
+#&gt;  $ : num [1:10] 2 2 2 2 2 1 1 1 1 1
+#&gt;  $ : num [1:10] 2 2 2 2 2 2 1 1 1 1
+#&gt;  $ : num [1:10] 2 2 2 2 2 1 1 1 1 1
+#&gt;  $ : num [1:10] 2 2 2 2 1 1 1 1 1 1
+#&gt;  $ : num [1:10] 2 2 2 2 2 1 1 1 1 1
+#&gt;  $ : num [1:10] 2 2 2 2 2 1 1 1 1 1
+#&gt;  $ : num [1:10] 2 2 2 2 2 2 1 1 1 1
+#&gt;  $ : num [1:10] 2 2 2 2 2 1 1 1 1 1
+#&gt;  $ : num [1:10] 2 2 2 2 1 1 1 1 1 1
+#&gt;  $ : num [1:10] 2 2 2 2 2 1 1 1 1 1</div><div class='input'>
 </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -327,7 +342,7 @@ of <code>nfold_df</code>.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
