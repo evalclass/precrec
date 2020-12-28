@@ -501,7 +501,7 @@ NULL
 
   g <- ggplot2::ggplotGrob(plots[[1]]
                            + ggplot2::theme(legend.position = "bottom"))$grobs
-  legend <- g[[which(sapply(g, function(x) x$name) == "guide-box")]]
+  legend <- g[[which(lapply(g, function(x) x$name) == "guide-box")]]
   lheight <- sum(legend$height)
 
   fncol <- function(...) gridExtra::arrangeGrob(..., ncol = main_ncol)
