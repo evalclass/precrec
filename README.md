@@ -16,6 +16,26 @@ Operator Characteristics) and precision-recall curves. All the main
 calculations of `precrec` are implemented with
 C++/[Rcpp](https://cran.r-project.org/package=Rcpp).
 
+## Documentation
+
+  - [Package website](https://takayasaito.github.io/precrec/) – GitHub
+    pages that contain all precrec documentation.
+
+  - [Introduction to
+    precrec](https://takayasaito.github.io/precrec/articles/introduction.html)
+    – a package vignette that contains the descriptions of the functions
+    with several useful examples. View the vignette with
+    `vignette("introduction", package = "precrec")` in R. The HTML
+    version is also available on the [GitHub
+    Pages](https://takayasaito.github.io/precrec/articles/introduction.html).
+
+  - [Help pages](https://takayasaito.github.io/precrec/reference/) – all
+    the functions including the S3 generics except for `print` have
+    their own help pages with plenty of examples. View the main help
+    page with `help(package = "precrec")` in R. The HTML version is also
+    available on the [GitHub
+    Pages](https://takayasaito.github.io/precrec/reference/).
+
 ## Six key features of precrec
 
 ### 1\. Accurate curve calculations
@@ -120,23 +140,6 @@ object-oriented system in R.
 | part          | precrec  | Calculate partial curves and partial AUC scores                |
 | pauc          | precrec  | Make a data frame with pAUC scores                             |
 | auc\_ci       | precrec  | Calculate confidence intervals of AUC scores                   |
-
-## Documentation
-
-  - [Introduction to
-    precrec](https://takayasaito.github.io/precrec/articles/introduction.html)
-    - a package vignette that contains the descriptions of the functions
-    with several useful examples. View the vignette with
-    `vignette("introduction", package = "precrec")` in R. The HTML
-    version is also available on the [GitHub
-    Pages](https://takayasaito.github.io/precrec/articles/introduction.html).
-
-  - [Help pages](https://takayasaito.github.io/precrec/reference/) - all
-    the functions including the S3 generics except for `print` have
-    their own help pages with plenty of examples. View the main help
-    page with `help(package = "precrec")` in R. The HTML version is also
-    available on the [GitHub
-    Pages](https://takayasaito.github.io/precrec/reference/).
 
 ## Examples
 
