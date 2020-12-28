@@ -21,7 +21,7 @@
       }
       err_msg <- paste0("Basic measures cannot be calculated. ",
                         "Only a single class (", cl, ") ",
-                        "found in dataset (modname:", attr(mdat[[s]], "modname"),
+                        "found in dataset (modname: ", attr(mdat[[s]], "modname"),
                         ", dsid: ",attr(mdat[[s]], "dsid"), ").")
       stop(err_msg, call.=FALSE)
     }
