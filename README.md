@@ -1,11 +1,11 @@
 
-# Precrec
+# Precrec <img src="man/figures/logo.png" align="right" alt="" width="100" />
 
-[![Travis](https://travis-ci.org/takayasaito/precrec.svg?branch=master)](https://travis-ci.org/takayasaito/precrec)
+[![Travis](https://travis-ci.org/takayasaito/precrec.svg?branch=master)](https://travis-ci.org/takayasaito/precrec/)
 [![AppVeyor Build
-Status](https://ci.appveyor.com/api/projects/status/github/takayasaito/precrec?branch=master&svg=true)](https://ci.appveyor.com/project/takayasaito/precrec)
+Status](https://ci.appveyor.com/api/projects/status/github/takayasaito/precrec?branch=master&svg=true)](https://ci.appveyor.com/project/takayasaito/precrec/)
 [![codecov.io](https://codecov.io/github/takayasaito/precrec/coverage.svg?branch=master)](https://codecov.io/github/takayasaito/precrec?branch=master)
-[![CodeFactor](https://www.codefactor.io/repository/github/takayasaito/precrec/badge)](https://www.codefactor.io/repository/github/takayasaito/precrec)
+[![CodeFactor](https://www.codefactor.io/repository/github/takayasaito/precrec/badge)](https://www.codefactor.io/repository/github/takayasaito/precrec/)
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version-ago/precrec)](https://cran.r-project.org/package=precrec)
 [![CRAN\_Logs\_Badge](https://cranlogs.r-pkg.org/badges/grand-total/precrec)](https://cran.r-project.org/package=precrec)
 
@@ -76,7 +76,7 @@ evaluation tools.
 
   - Alternatively, you can install a development version of `precrec`
     from [our GitHub
-    repository](https://github.com/takayasaito/precrec). To install it:
+    repository](https://github.com/takayasaito/precrec/). To install it:
     
     1.  Make sure you have a working development environment.
         
@@ -131,12 +131,12 @@ object-oriented system in R.
     version is also available on the [GitHub
     Pages](https://takayasaito.github.io/precrec/articles/introduction.html).
 
-  - [Help pages](https://takayasaito.github.io/precrec/reference) - all
+  - [Help pages](https://takayasaito.github.io/precrec/reference/) - all
     the functions including the S3 generics except for `print` have
     their own help pages with plenty of examples. View the main help
     page with `help(package = "precrec")` in R. The HTML version is also
     available on the [GitHub
-    Pages](https://takayasaito.github.io/precrec/reference).
+    Pages](https://takayasaito.github.io/precrec/reference/).
 
 ## Examples
 
