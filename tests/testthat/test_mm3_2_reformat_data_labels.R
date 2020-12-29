@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("MM 3: Reformat labels for evaluation")
 # Test .factor_labels(labels, posclass)

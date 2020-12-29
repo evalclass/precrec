@@ -1,6 +1,6 @@
-library(precrec)
+#' @importFrom precrec
 
-context("UC 1: Test actual cases")
+context("UC 1: Use cases")
 
 test_that("calculation of correct avg and cb when x_bins = 8", {
 
@@ -27,10 +27,10 @@ test_that("calculation of correct avg and cb when x_bins = 8", {
 
   # Results
   smdf <- as.data.frame(smcurves)
-  ys <- subset(smdf, x %in% c(0.25, 0.75), select=y, drop = TRUE)
+  ys <- subset(smdf, x %in% c(0.25, 0.75), select = y, drop = TRUE)
 
   # Test
-  expect_false(any(ys==0.0))
+  expect_false(any(ys == 0.0))
 
 })
 
@@ -61,8 +61,8 @@ test_that("a factor by c() returns another factor", {
   ds_id <- 5
 
 
-  smmod <- evalmod(mode=emod, scores=scores, labels=labels,
-                   modnames=mnames, dsids=ds_id)
+  smmod <- evalmod(mode = emod, scores = scores, labels = labels,
+                   modnames = mnames, dsids = ds_id)
 
   mdat <- mmdata(scores, labels,
                  modnames = mnames, dsids = ds_id, posclass = NULL,

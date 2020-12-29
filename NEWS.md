@@ -1,3 +1,8 @@
+# precrec 0.12
+
+* Improve error messages when a data set includes only one class  
+* Improve code quality using the results from lintr and CodeFactor.io
+
 # precrec 0.11.2
 
 * format_nfold function returns lables as interger even given as factor  

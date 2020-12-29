@@ -113,7 +113,7 @@ reformat_data <- function(scores, labels,
 
   # Check '...'
   arglist <- list(...)
-  if (!is.null(names(arglist))){
+  if (!is.null(names(arglist))) {
     stop(paste0("Invalid arguments: ", paste(names(arglist), collapse = ", ")),
          call. = FALSE)
   }

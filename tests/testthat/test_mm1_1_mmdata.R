@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("MM 1: Create mmdata")
 # Test .pmatch_tiesmethod(val),
@@ -57,7 +57,7 @@ test_that("'scores' and 'labels' must be specified", {
   }
 
   scores <- NULL
-  labels <- c(0)
+  labels <- 0
 
   expect_err_msg(scores, labels)
 })

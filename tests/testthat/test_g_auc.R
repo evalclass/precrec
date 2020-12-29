@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("AC 1: Retrieve AUCs")
 # Test auc(curves)
@@ -15,7 +15,7 @@ auc_create_mscurves <- function() {
   labels <- join_labels(l1, l2, l3)
 
   mdat <- mmdata(scores, labels)
-  curves <- evalmod(mdat)
+  evalmod(mdat)
 }
 
 auc_create_smcurves <- function() {
@@ -30,7 +30,7 @@ auc_create_smcurves <- function() {
   labels <- join_labels(l1, l2, l3)
 
   mdat <- mmdata(scores, labels, expd_first = "dsids")
-  curves <- evalmod(mdat)
+  evalmod(mdat)
 }
 
 auc_create_mmcurves <- function() {
@@ -48,7 +48,7 @@ auc_create_mmcurves <- function() {
 
   mdat <- mmdata(scores, labels, modnames = c("m1", "m2"), dsids = c(1, 2),
                  expd_first = "modnames")
-  curves <- evalmod(mdat)
+  evalmod(mdat)
 }
 
 test_that("aucs for sscurves", {

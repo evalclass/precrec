@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("PR 1: Print objects")
 # Test print(x, ...)
@@ -14,7 +14,7 @@ pr_create_msdat <- function() {
   l3 <- c(1, 1, 0, 1)
   labels <- join_labels(l1, l2, l3)
 
-  mdat <- mmdata(scores, labels)
+  mmdata(scores, labels)
 }
 
 pr_create_smdat <- function() {
@@ -28,7 +28,7 @@ pr_create_smdat <- function() {
   l3 <- c(1, 1, 0, 1)
   labels <- join_labels(l1, l2, l3)
 
-  mdat <- mmdata(scores, labels, expd_first = "dsids")
+  mmdata(scores, labels, expd_first = "dsids")
 }
 
 pr_create_mmdat <- function() {
@@ -44,8 +44,8 @@ pr_create_mmdat <- function() {
   l4 <- c(1, 1, 0, 1)
   labels <- join_labels(l1, l2, l3, l4)
 
-  mdat <- mmdata(scores, labels, modnames = c("m1", "m2"), dsids = c(1, 2),
-                 expd_first = "modnames")
+  mmdata(scores, labels, modnames = c("m1", "m2"), dsids = c(1, 2),
+         expd_first = "modnames")
 }
 
 test_that("print sscurves", {

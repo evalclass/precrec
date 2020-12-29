@@ -6,9 +6,9 @@
   if (missing(obj) || is.null(obj)) {
 
     # Check if scores and labels are specified
-    if(is.null(scores) && !is.null(labels)) {
+    if (is.null(scores) && !is.null(labels)) {
       stop("Invalid scores", call. = FALSE)
-    } else if(!is.null(scores) && is.null(labels)) {
+    } else if (!is.null(scores) && is.null(labels)) {
       stop("Invalid labels", call. = FALSE)
     } else if (is.null(scores) && is.null(labels)) {
       if (is.null(obj)) {
@@ -83,7 +83,7 @@
                             is.character(modnames),
                             length(modnames) == datalen)
 
-    for (i in 1:length(modnames)) {
+    for (i in seq_len(length(modnames))) {
       .validate_modname(modnames[i])
     }
   }
@@ -108,7 +108,7 @@
                             is.numeric(dsids),
                             length(dsids) == datalen)
 
-    for (i in 1:length(dsids)) {
+    for (i in seq_len(length(dsids))) {
       .validate_dsid(dsids[i])
     }
   }
@@ -244,7 +244,7 @@
   if (is.numeric(score_cols)) {
     assertthat::assert_that(all(score_cols <= ncol(nfold_df)),
                             msg = "Invalid score_cols")
-  } else if(is.character(score_cols)) {
+  } else if (is.character(score_cols)) {
     assertthat::assert_that(all(score_cols %in% colnames(nfold_df)),
                             msg = "Invalid score_cols")
   }
@@ -259,7 +259,7 @@
   if (assertthat::see_if(assertthat::is.number(lab_col))) {
     assertthat::assert_that(lab_col <= ncol(nfold_df),
                             msg = "Invalid lab_col")
-  } else if(assertthat::see_if(assertthat::is.string(lab_col))) {
+  } else if (assertthat::see_if(assertthat::is.string(lab_col))) {
     assertthat::assert_that(lab_col %in% colnames(nfold_df),
                             msg = "Invalid lab_col")
   }
@@ -273,7 +273,7 @@
   if (assertthat::see_if(assertthat::is.number(fold_col))) {
     assertthat::assert_that(fold_col <= ncol(nfold_df),
                             msg = "Invalid fold_col")
-  } else if(assertthat::see_if(assertthat::is.string(fold_col))) {
+  } else if (assertthat::see_if(assertthat::is.string(fold_col))) {
     assertthat::assert_that(fold_col %in% colnames(nfold_df),
                             msg = "Invalid fold_col")
   }

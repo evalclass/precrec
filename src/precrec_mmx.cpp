@@ -16,8 +16,9 @@
 template<typename T, typename S>
 Rcpp::List make_new_labels(T labels,
                            S posclass,
-                           bool is_pc_na) {
-
+                           bool is_pc_na,
+                           S def_posclass,
+                           S def_negclass) {
   // Variables
   Rcpp::List ret_val;
   std::string errmsg = "";
@@ -28,22 +29,40 @@ Rcpp::List make_new_labels(T labels,
   // Get two labels
   S lab_p = labels[0];
   S lab_n;
+  bool is_single_class = true;
   for (unsigned i = 0; i < labels.size(); ++i) {
     if (lab_p != labels[i]) {
       lab_n = labels[i];
+      is_single_class = false;
       break;
     }
   }
 
   // Find positive label
   if (is_pc_na) {
-    if (lab_p < lab_n) {
+    if (is_single_class) {
+      if (lab_p == def_posclass) {
+        lab_n = def_negclass;
+      } else {
+        S lab_tmp = lab_p;
+        lab_p = def_posclass;
+        lab_n = lab_tmp;
+      }
+    } else if (lab_p < lab_n) {
       S lab_tmp = lab_p;
       lab_p = lab_n;
       lab_n = lab_tmp;
     }
   } else {
-    if (lab_n == posclass) {
+    if (is_single_class) {
+      if (lab_p == posclass) {
+        lab_n = def_negclass;
+      } else {
+        S lab_tmp = lab_p;
+        lab_p = posclass;
+        lab_n = lab_tmp;
+      }
+    } else if (lab_n == posclass) {
       S lab_tmp = lab_p;
       lab_p = lab_n;
       lab_n = lab_tmp;
@@ -87,28 +106,36 @@ Rcpp::List format_labels(SEXP labels,
   case INTSXP: {
     Rcpp::IntegerVector pos_class_i = Rcpp::as<Rcpp::IntegerVector>(posclass);
     is_pc_na = Rcpp::IntegerVector::is_na(pos_class_i[0]);
+    int def_posclass = 2;
+    int def_negclass = 1;
     return make_new_labels<Rcpp::IntegerVector, int>
-      (labels, pos_class_i[0], is_pc_na);
+      (labels, pos_class_i[0], is_pc_na, def_posclass, def_negclass);
   }
   case REALSXP: {
     Rcpp::NumericVector pos_class_d = Rcpp::as<Rcpp::NumericVector>(posclass);
     is_pc_na = Rcpp::NumericVector::is_na(pos_class_d[0]);
+    double def_posclass = 1.0;
+    double def_negclass = -1.0;
     return make_new_labels<Rcpp::NumericVector, double>
-      (labels, pos_class_d[0], is_pc_na);
+      (labels, pos_class_d[0], is_pc_na, def_posclass, def_negclass);
   }
   case LGLSXP: {
     Rcpp::LogicalVector pos_class_b = Rcpp::as<Rcpp::LogicalVector>(posclass);
     is_pc_na = Rcpp::LogicalVector::is_na(pos_class_b[0]);
+    bool def_posclass = true;
+    bool def_negclass = false;
     return make_new_labels<Rcpp::LogicalVector, bool>
-      (labels, pos_class_b[0], is_pc_na);
+      (labels, pos_class_b[0], is_pc_na, def_posclass, def_negclass);
   }
   case STRSXP: {
     Rcpp::CharacterVector pos_class_c = Rcpp::as<Rcpp::CharacterVector>(posclass);
     std::string pos_class_c2(pos_class_c[0]);
     is_pc_na = Rcpp::CharacterVector::is_na(pos_class_c[0]);
     std::vector<std::string> labels_s = Rcpp::as<std::vector<std::string> >(labels);
+    std::string def_posclass = "P";
+    std::string def_negclass = "N";
     return make_new_labels<std::vector<std::string>, std::string>
-      (labels_s, pos_class_c2, is_pc_na);
+      (labels_s, pos_class_c2, is_pc_na, def_posclass, def_negclass);
   }
   default:
     Rcpp::List ret_val;
@@ -138,7 +165,6 @@ void update_ties(std::vector<int>& ranks,
 Rcpp::List get_score_ranks(const Rcpp::NumericVector& scores,
                            const bool& na_worst,
                            const std::string& ties_method) {
-
   // Variables
   Rcpp::List ret_val;
   std::string errmsg = "";
@@ -202,7 +228,6 @@ void update_ties(std::vector<int>& ranks,
                  std::vector<int>& rank_idx,
                  std::vector<int>& tied_idx,
                  const std::string& ties_method) {
-
   typedef std::vector<int>::iterator TIntIt;
 
   int base_rank = ranks[tied_idx[0]];

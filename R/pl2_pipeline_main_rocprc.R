@@ -13,6 +13,18 @@
   # === Create ROC and Precision-Recall curves ===
   # Create curves
   plfunc <- function(s) {
+    if (attr(mdat[[s]], "nn") == 0 || attr(mdat[[s]], "np") == 0) {
+      if (attr(mdat[[s]], "np") > 0) {
+        cl <- "positive"
+      } else {
+        cl <- "negative"
+      }
+      err_msg <- paste0("Curves cannot be calculated. ",
+                        "Only a single class (", cl, ") ",
+                        "found in dataset (modname: ", attr(mdat[[s]], "modname"),
+                        ", dsid: ",attr(mdat[[s]], "dsid"), ").")
+      stop(err_msg, call. = FALSE)
+    }
     cdat <- create_confmats(mdat[[s]])
     pevals <- calc_measures(cdat)
     curves <- create_curves(pevals, x_bins = x_bins)
@@ -25,7 +37,7 @@
                       calc_avg, cb_alpha, x_bins)
   }
   grp_curves <- lapply(c("roc", "prc"), grpfunc)
-  names(grp_curves)<- c("rocs", "prcs")
+  names(grp_curves) <- c("rocs", "prcs")
 
   # Summarize AUCs
   aucs <- .gather_aucs(lcurves, mdat)
@@ -35,7 +47,7 @@
     attr(grp_curves[[lt]], "avgcurves")
   }
   grp_avg <- lapply(names(grp_curves), grpfunc2)
-  names(grp_avg)<- names(grp_curves)
+  names(grp_avg) <- names(grp_curves)
 
   # === Create an S3 object ===
   if (dataset_type == "multiple" && calc_avg && !raw_curves) {
@@ -43,7 +55,7 @@
       .summarize_curves(NULL, lt, "crvgrp", mdat, NULL, NULL, NULL, NULL)
     }
     grp_curves <- lapply(c("roc", "prc"), grpfunc3)
-    names(grp_curves)<- c("rocs", "prcs")
+    names(grp_curves) <- c("rocs", "prcs")
   }
   s3obj <- structure(grp_curves, class = c(paste0(class_name_pf, "curves"),
                                            "curve_info", "aucs"))

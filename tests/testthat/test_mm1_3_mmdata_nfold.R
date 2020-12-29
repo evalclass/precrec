@@ -1,6 +1,6 @@
-library(precrec)
+#' @importFrom precrec
 
-context("MM 3: Create mmdata for n-fold cross validation")
+context("MM 1: Create mmdata for n-fold cross validation")
 # Test mmdata(nfold_df = NULL, score_cols = NULL, lab_col = NULL,
 #             fold_col = NULL, ...)
 
@@ -45,47 +45,47 @@ test_that("mmdata() accepts arguments for 'format_nfold'", {
 test_that("mmdata() requires scores and labels if n-fold args are incomplete", {
   data(M2N50F5)
 
-  expect_error(mdat <- mmdata(nfold_df = M2N50F5,
-                              score_cols = c(1, 2),
-                              lab_col = 3,
-                              fold_col = 4,
-                              modnames = c("score1", "score2"),
-                              dsids = 1:5), NA)
+  expect_error(mmdata(nfold_df = M2N50F5,
+                      score_cols = c(1, 2),
+                      lab_col = 3,
+                      fold_col = 4,
+                      modnames = c("score1", "score2"),
+                      dsids = 1:5), NA)
 
   err_msg <- "'scores' and/or 'lables' are missing"
-  expect_error(mdat <- mmdata(score_cols = c(1, 2),
-                              lab_col = 3,
-                              fold_col = 4,
-                              modnames = c("score1", "score2"),
-                              dsids = 1:5), err_msg)
+  expect_error(mmdata(score_cols = c(1, 2),
+                      lab_col = 3,
+                      fold_col = 4,
+                      modnames = c("score1", "score2"),
+                      dsids = 1:5), err_msg)
 
-  expect_error(mdat <- mmdata(nfold_df = M2N50F5,
-                              lab_col = 3,
-                              fold_col = 4,
-                              modnames = c("score1", "score2"),
-                              dsids = 1:5), err_msg)
-  expect_error(mdat <- mmdata(nfold_df = M2N50F5,
-                              score_cols = c(1, 2),
-                              fold_col = 4,
-                              modnames = c("score1", "score2"),
-                              dsids = 1:5), err_msg)
-  expect_error(mdat <- mmdata(nfold_df = M2N50F5,
-                              score_cols = c(1, 2),
-                              lab_col = 3,
-                              modnames = c("score1", "score2"),
-                              dsids = 1:5), err_msg)
+  expect_error(mmdata(nfold_df = M2N50F5,
+                      lab_col = 3,
+                      fold_col = 4,
+                      modnames = c("score1", "score2"),
+                      dsids = 1:5), err_msg)
+  expect_error(mmdata(nfold_df = M2N50F5,
+                      score_cols = c(1, 2),
+                      fold_col = 4,
+                      modnames = c("score1", "score2"),
+                      dsids = 1:5), err_msg)
+  expect_error(mmdata(nfold_df = M2N50F5,
+                      score_cols = c(1, 2),
+                      lab_col = 3,
+                      modnames = c("score1", "score2"),
+                      dsids = 1:5), err_msg)
 
   err_msg <- "Invalid modnames and/or dsids"
-  expect_error(mdat <- mmdata(nfold_df = M2N50F5,
-                              score_cols = c(1, 2),
-                              lab_col = 3,
-                              fold_col = 4,
-                              dsids = 1:5), err_msg)
-  expect_error(mdat <- mmdata(nfold_df = M2N50F5,
-                              score_cols = c(1, 2),
-                              lab_col = 3,
-                              fold_col = 4,
-                              modnames = c("score1", "score2"), err_msg))
+  expect_error(mmdata(nfold_df = M2N50F5,
+                      score_cols = c(1, 2),
+                      lab_col = 3,
+                      fold_col = 4,
+                      dsids = 1:5), err_msg)
+  expect_error(mmdata(nfold_df = M2N50F5,
+                      score_cols = c(1, 2),
+                      lab_col = 3,
+                      fold_col = 4,
+                      modnames = c("score1", "score2"), err_msg))
 
 
 })

@@ -30,7 +30,6 @@ void solve_ties(std::vector<double>& tp, std::vector<double>& fp,
 Rcpp::List create_confusion_matrices(const Rcpp::IntegerVector& olabs,
                                      const Rcpp::NumericVector& ranks,
                                      const Rcpp::IntegerVector& rank_idx) {
-
   // Variables
   Rcpp::List ret_val;
   std::string errmsg = "";
@@ -124,7 +123,6 @@ void solve_ties(std::vector<double>& tp, std::vector<double>& fp,
     tp[curpos-ties+i] = tp[curpos-ties+i-1] + tied_tp;
     fp[curpos-ties+i] = fp[curpos-ties+i-1] + tied_fp;
   }
-
 }
 
 /*
@@ -144,7 +142,6 @@ Rcpp::List calc_uauc(unsigned np, unsigned nn,
                      const Rcpp::IntegerVector& olabs,
                      const bool& na_worst,
                      const std::string& ties_method) {
-
   // Variables
   Rcpp::List ret_val;
   std::string errmsg = "";
@@ -181,7 +178,6 @@ Rcpp::List calc_uauc(unsigned np, unsigned nn,
       neg_vec[neg_idx] = s;
       neg_idx++;
     }
-
   }
 
   // Sort neg scores
@@ -234,7 +230,6 @@ Rcpp::List calc_uauc_frank(unsigned np, unsigned nn,
                            const bool& na_last,
                            const std::string& ties_method,
                            Rcpp::Function frank) {
-
   // Variables
   Rcpp::List ret_val;
   std::string errmsg = "";
@@ -289,7 +284,6 @@ Rcpp::List calc_basic_measures(int np,
                                const Rcpp::NumericVector& fps,
                                const Rcpp::NumericVector& tns,
                                const Rcpp::NumericVector& fns) {
-
   // Variables
   Rcpp::List ret_val;
   Rcpp::DataFrame df;
@@ -318,8 +312,16 @@ Rcpp::List calc_basic_measures(int np,
     rank[i] = double(i) / double(n - 1);
     errrate[i] = (fps[i] + fns[i]) / (np + nn);
     acc[i] = 1 - errrate[i];
-    sp[i] = tns[i] / nn;
-    sn[i] = tps[i] / np;
+    if (nn == 0) {
+      sp[i] = ::NA_REAL;
+    } else {
+      sp[i] = tns[i] / nn;
+    }
+    if (np == 0) {
+      sn[i] = ::NA_REAL;
+    } else {
+      sn[i] = tps[i] / np;
+    }
     if (i > 0) {
       prec[i] = tps[i] / (tps[i] + fps[i]);
     }
@@ -383,7 +385,6 @@ Rcpp::List create_roc_curve(const Rcpp::NumericVector& tps,
                             const Rcpp::NumericVector& sp,
                             const Rcpp::NumericVector& sn,
                             double x_bins) {
-
   // Variables
   Rcpp::List ret_val;
   Rcpp::DataFrame df;
@@ -443,7 +444,6 @@ int interpolate_roc(const Rcpp::NumericVector& sp,
                     std::vector<double>& fpr,
                     std::vector<double>& tpr,
                     int n) {
-
   double cur_fpr = 1 - sp[idx];
   double prev_fpr = 1 - sp[idx-1];
   double slope = (sn[idx] - sn[idx-1]) / (cur_fpr - prev_fpr);
@@ -466,7 +466,6 @@ int interpolate_roc(const Rcpp::NumericVector& sp,
   }
 
   return n;
-
 }
 
 /*
@@ -497,7 +496,6 @@ Rcpp::List create_prc_curve(const Rcpp::NumericVector& tps,
                             const Rcpp::NumericVector& sn,
                             const Rcpp::NumericVector& pr,
                             double x_bins) {
-
   // Variables
   Rcpp::List ret_val;
   Rcpp::DataFrame df;
@@ -560,7 +558,6 @@ int interpolate_prc(const Rcpp::NumericVector& tps,
                     std::vector<double>& rec,
                     std::vector<double>& prec,
                     int n) {
-
   double tmp_rec = x_interval * int(sn[idx-1] / x_interval);
   double tmp_prec;
   double x;
@@ -608,7 +605,6 @@ int interpolate_prc(const Rcpp::NumericVector& tps,
 // [[Rcpp::export]]
 Rcpp::List calc_auc(const Rcpp::NumericVector& xs,
                     const Rcpp::NumericVector& ys) {
-
   // Variables
   Rcpp::List ret_val;
   std::string errmsg = "";
@@ -655,7 +651,6 @@ void get_yval_single(const Rcpp::NumericVector& xs,
 Rcpp::List calc_avg_curve(const Rcpp::List& curves,
                           double x_bins,
                           double ci_q) {
-
   // Variables
   Rcpp::List ret_val;
   Rcpp::DataFrame df;
@@ -739,7 +734,6 @@ void get_yval_single(const Rcpp::NumericVector& xs,
                      double x_bins,
                      int vec_size,
                      std::vector<double>& s_y_val) {
-
   std::vector<double> y_tot(vec_size, 0.0); // Total of ys
   std::vector<int> n_y(vec_size, 0);        // Number of each point
   std::set<double> x_set;
@@ -822,7 +816,6 @@ void get_yval_single(const Rcpp::NumericVector& xs,
 //
 // [[Rcpp::export]]
 Rcpp::List calc_avg_points(const Rcpp::List& points, double ci_q) {
-
   // Variables
   Rcpp::List ret_val;
   Rcpp::DataFrame df;

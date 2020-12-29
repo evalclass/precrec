@@ -21,7 +21,7 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
 
   # Set attributes
   attr(s3obj, "modname") <- attr(cmats, "modname")
-  if (all(is.na(attr(cmats, "src")))){
+  if (all(is.na(attr(cmats, "src")))) {
     s3obj[["basic"]][["score"]] <- rep(NA,
                                        length(s3obj[["basic"]][["rank"]]))
     s3obj[["basic"]][["label"]] <- rep(NA,
@@ -57,7 +57,7 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
   }
 
   # Validate class items and attributes
-  item_names <- c("basic")
+  item_names <- "basic"
   attr_names <- c("modname", "dsid", "nn", "np", "args", "cpp_errmsg",
                   "src", "validated")
   arg_names <- c("na_worst", "na.last", "ties.method", "ties_method",

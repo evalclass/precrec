@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("AP 3: Autoplot for points")
 # Test autoplot(object, ...)
@@ -227,14 +227,14 @@ test_that("autoplot for multiple mmpoints returns grob", {
 
 test_that("autoplot raw_curve option sspoints", {
   get_args <- function(curves, ...) {
-    args <- .get_autoplot_arglist(attr(curves, "args"),
-                                  def_curvetype = .get_metric_names("basic"),
-                                  def_type = "p",
-                                  def_show_cb = FALSE, def_raw_curves = NULL,
-                                  def_add_np_nn = TRUE,
-                                  def_show_legend = FALSE,
-                                  def_ret_grob = FALSE,
-                                  def_reduce_points = FALSE, ...)
+    .get_autoplot_arglist(attr(curves, "args"),
+                          def_curvetype = .get_metric_names("basic"),
+                          def_type = "p",
+                          def_show_cb = FALSE, def_raw_curves = NULL,
+                          def_add_np_nn = TRUE,
+                          def_show_legend = FALSE,
+                          def_ret_grob = FALSE,
+                          def_reduce_points = FALSE, ...)
   }
 
   data(P10N10)
@@ -253,14 +253,14 @@ test_that("autoplot raw_curve option sspoints", {
 
 test_that("autoplot raw_curve option mspoints", {
   get_args <- function(curves, ...) {
-    args <- .get_autoplot_arglist(attr(curves, "args"),
-                                  def_curvetype = .get_metric_names("basic"),
-                                  def_type = "p",
-                                  def_show_cb = FALSE, def_raw_curves = NULL,
-                                  def_add_np_nn = TRUE,
-                                  def_show_legend = TRUE,
-                                  def_ret_grob = FALSE,
-                                  def_reduce_points = FALSE, ...)
+    .get_autoplot_arglist(attr(curves, "args"),
+                          def_curvetype = .get_metric_names("basic"),
+                          def_type = "p",
+                          def_show_cb = FALSE, def_raw_curves = NULL,
+                          def_add_np_nn = TRUE,
+                          def_show_legend = TRUE,
+                          def_ret_grob = FALSE,
+                          def_reduce_points = FALSE, ...)
   }
 
   points1 <- ap3_create_mspoints()
@@ -277,14 +277,14 @@ test_that("autoplot raw_curve option mspoints", {
 
 test_that("autoplot raw_curve option smpoints", {
   get_args <- function(curves, ...) {
-    args <- .get_autoplot_arglist(attr(curves, "args"),
-                                  def_curvetype = .get_metric_names("basic"),
-                                  def_type = "p",
-                                  def_show_cb = TRUE, def_raw_curves = NULL,
-                                  def_add_np_nn = TRUE,
-                                  def_show_legend = FALSE,
-                                  def_ret_grob = FALSE,
-                                  def_reduce_points = FALSE, ...)
+    .get_autoplot_arglist(attr(curves, "args"),
+                          def_curvetype = .get_metric_names("basic"),
+                          def_type = "p",
+                          def_show_cb = TRUE, def_raw_curves = NULL,
+                          def_add_np_nn = TRUE,
+                          def_show_legend = FALSE,
+                          def_ret_grob = FALSE,
+                          def_reduce_points = FALSE, ...)
   }
 
   points1 <- ap3_create_smpoints()
@@ -311,14 +311,14 @@ test_that("autoplot raw_curve option smpoints", {
 
 test_that("autoplot raw_curve option mmpoints", {
   get_args <- function(curves, ...) {
-    args <- .get_autoplot_arglist(attr(curves, "args"),
-                                  def_curvetype = .get_metric_names("basic"),
-                                  def_type = "p",
-                                  def_show_cb = FALSE, def_raw_curves = NULL,
-                                  def_add_np_nn = TRUE,
-                                  def_show_legend = TRUE,
-                                  def_ret_grob = FALSE,
-                                  def_reduce_points = FALSE, ...)
+    .get_autoplot_arglist(attr(curves, "args"),
+                          def_curvetype = .get_metric_names("basic"),
+                          def_type = "p",
+                          def_show_cb = FALSE, def_raw_curves = NULL,
+                          def_add_np_nn = TRUE,
+                          def_show_legend = TRUE,
+                          def_ret_grob = FALSE,
+                          def_reduce_points = FALSE, ...)
   }
 
   points1 <- ap3_create_mmpoints()

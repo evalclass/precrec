@@ -200,7 +200,7 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
       expd_first <- "dsids"
     }
   } else {
-    if(missing(scores) || missing(labels)) {
+    if (missing(scores) || missing(labels)) {
       stop("'scores' and/or 'lables' are missing", call. = FALSE)
     }
     lscores <- join_scores(scores, chklen = FALSE)

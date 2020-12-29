@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("MM 3: Reformat scores for evaluation")
 # Test .rank_scores(scores, na_worst, ties_method)
@@ -72,7 +72,6 @@ test_that("'na_worst' should be TRUE or FALSE", {
 test_that("'ties_method' should be one of the three options", {
   expect_err_msg <- function(err_msg, ties_method) {
     scores <- c(1, 2)
-    choices <- c("equiv", "random", "first")
     eval(bquote(expect_error(.rank_scores(scores, ties_method = ties_method),
                              err_msg)))
   }
@@ -81,8 +80,8 @@ test_that("'ties_method' should be one of the three options", {
   expect_err_msg(err_msg, c("equiv", "first"))
 
   err_msg <- "ties_method must be one of"
-  expect_err_msg(err_msg, c("avg"))
-  expect_err_msg(err_msg, c("max"))
+  expect_err_msg(err_msg, "avg")
+  expect_err_msg(err_msg, "max")
 })
 
 test_that("NAs in 'scores' should be controlled by 'na_worst'", {

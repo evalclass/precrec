@@ -109,7 +109,7 @@
 #' mm_aucs_prc
 #'
 #' @export
-auc <- function(curves) UseMethod("auc")
+auc <- function(curves) UseMethod("auc", curves)
 
 #' @export
 auc.default <- function(curves) {

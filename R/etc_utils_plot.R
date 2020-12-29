@@ -342,15 +342,15 @@ NULL
     arglist[["curvetype"]] <- y
   }
 
-  if (is.null(arglist[["curvetype"]])){
+  if (is.null(arglist[["curvetype"]])) {
     arglist[["curvetype"]] <- def_curvetype
   }
 
-  if (is.null(arglist[["type"]])){
+  if (is.null(arglist[["type"]])) {
     arglist[["type"]] <- def_type
   }
 
-  if (is.null(arglist[["show_cb"]])){
+  if (is.null(arglist[["show_cb"]])) {
     arglist[["show_cb"]] <- def_show_cb
   }
   if (!evalmod_args[["calc_avg"]] && arglist[["show_cb"]]) {
@@ -358,7 +358,7 @@ NULL
          call. = FALSE)
   }
 
-  if (is.null(arglist[["raw_curves"]])){
+  if (is.null(arglist[["raw_curves"]])) {
     if (!is.null(def_raw_curves)) {
       arglist[["raw_curves"]] <- def_raw_curves
     } else if (!is.null(evalmod_args[["raw_curves"]])) {
@@ -372,11 +372,11 @@ NULL
          call. = FALSE)
   }
 
-  if (is.null(arglist[["add_np_nn"]])){
+  if (is.null(arglist[["add_np_nn"]])) {
     arglist[["add_np_nn"]] <- def_add_np_nn
   }
 
-  if (is.null(arglist[["show_legend"]])){
+  if (is.null(arglist[["show_legend"]])) {
     arglist[["show_legend"]] <- def_show_legend
   }
 
@@ -448,7 +448,7 @@ NULL
     nrow1 <- 2
     ncol1 <- 1
     mat1 <- c(1, 2)
-    mat2 <- c(1)
+    mat2 <- 1
     heights <- c(0.85, 0.15)
   } else  if (ctype_len == 2) {
     nrow1 <- 2
@@ -529,8 +529,8 @@ NULL
   y <- matrix(as.double(NA), nrow = max_nrow, ncol = ncol)
 
   for (i in seq_along(obj)) {
-    x[1:length(obj[[i]][["x"]]), i] <- obj[[i]][["x"]]
-    y[1:length(obj[[i]][["y"]]), i] <- obj[[i]][["y"]]
+    x[seq_len(length(obj[[i]][["x"]])), i] <- obj[[i]][["x"]]
+    y[seq_len(length(obj[[i]][["y"]])), i] <- obj[[i]][["y"]]
   }
 
   list(x = x, y = y)
@@ -543,7 +543,7 @@ NULL
   uniq_modnames <- attr(obj, "uniq_modnames")
   modnames <- attr(obj, "data_info")[["modnames"]]
 
-  uniq_col <- grDevices::rainbow(length(uniq_modnames))
+  uniq_col <- grDevices::rainbow(length(uniq_modnames), alpha = 1)
   modnams_idx <- as.numeric(factor(modnames, levels = uniq_modnames))
   unlist(lapply(seq_along(modnames), function(i) uniq_col[modnams_idx[i]]))
 }
@@ -564,10 +564,10 @@ NULL
   if (length(avgcurves) == 1) {
     lcols <- "blue"
   } else {
-    lcols <- grDevices::rainbow(length(avgcurves))
+    lcols <- grDevices::rainbow(length(avgcurves), alpha = 1)
   }
 
-  for (i in 1:length(avgcurves)) {
+  for (i in seq_len(length(avgcurves))) {
     .add_curve_with_ci(avgcurves, type, i, "grey", lcols[i], show_cb)
   }
 }
@@ -622,9 +622,7 @@ NULL
     main <- paste0(main, " - P: ", np, ", N: ", nn)
   }
 
-  old_pty <- graphics::par(pty = "s")
-  on.exit(graphics::par(old_pty), add = TRUE)
-
+  withr::local_par(list(pty = "s"))
   if (show_legend) {
     .set_layout(1, show_legend)
     on.exit(graphics::layout(1), add = TRUE)
@@ -693,16 +691,12 @@ NULL
 #
 .show_legend <- function(obj, show_legend, gnames = "modnames") {
   if (show_legend) {
-    old_mar <- graphics::par(mar = c(0, 0, 0, 0))
-    on.exit(graphics::par(old_mar), add = TRUE)
-    old_pty <- graphics::par(pty = "m")
-    on.exit(graphics::par(old_pty), add = TRUE)
-
+    withr::local_par(list(mar = c(0, 0, 0, 0), pty = "m"))
     gnames <- attr(obj, paste0("uniq_", gnames))
     graphics::plot(1, type = "n", axes = FALSE, xlab = "", ylab = "")
     graphics::legend(x = "top", lty = 1,
                      legend = gnames,
-                     col = grDevices::rainbow(length(gnames)),
+                     col = grDevices::rainbow(length(gnames), alpha = 1),
                      horiz = TRUE)
   }
 }
@@ -719,14 +713,14 @@ NULL
   min_score <- NA
 
   if (!all(is.na(avgcurves))) {
-    for (i in 1:length(avgcurves)) {
+    for (i in seq_len(length(avgcurves))) {
       max_score <- max(max_score, max(avgcurves[[i]][["y_ci_h"]], na.rm = TRUE),
                        na.rm = TRUE)
       min_score <- min(min_score, min(avgcurves[[i]][["y_ci_l"]], na.rm = TRUE),
                        na.rm = TRUE)
     }
   } else {
-    for (i in 1:length(curves)) {
+    for (i in seq_len(length(curves))) {
       max_score <- max(max_score, max(curves[[i]][["y"]], na.rm = TRUE),
                        na.rm = TRUE)
       min_score <- min(min_score, min(curves[[i]][["y"]], na.rm = TRUE),

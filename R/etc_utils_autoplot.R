@@ -332,15 +332,15 @@ NULL
 
   arglist <- list(...)
 
-  if (is.null(arglist[["curvetype"]])){
+  if (is.null(arglist[["curvetype"]])) {
     arglist[["curvetype"]] <- def_curvetype
   }
 
-  if (is.null(arglist[["type"]])){
+  if (is.null(arglist[["type"]])) {
     arglist[["type"]] <- def_type
   }
 
-  if (is.null(arglist[["show_cb"]])){
+  if (is.null(arglist[["show_cb"]])) {
     arglist[["show_cb"]] <- def_show_cb
   }
   if (!evalmod_args[["calc_avg"]] && arglist[["show_cb"]]) {
@@ -348,7 +348,7 @@ NULL
          call. = FALSE)
   }
 
-  if (is.null(arglist[["raw_curves"]])){
+  if (is.null(arglist[["raw_curves"]])) {
     if (!is.null(def_raw_curves)) {
       arglist[["raw_curves"]] <- def_raw_curves
     } else if (!is.null(evalmod_args[["raw_curves"]])) {
@@ -362,19 +362,19 @@ NULL
          call. = FALSE)
   }
 
-  if (is.null(arglist[["add_np_nn"]])){
+  if (is.null(arglist[["add_np_nn"]])) {
     arglist[["add_np_nn"]] <- def_add_np_nn
   }
 
-  if (is.null(arglist[["show_legend"]])){
+  if (is.null(arglist[["show_legend"]])) {
     arglist[["show_legend"]] <- def_show_legend
   }
 
-  if (is.null(arglist[["ret_grob"]])){
+  if (is.null(arglist[["ret_grob"]])) {
     arglist[["ret_grob"]] <- def_ret_grob
   }
 
-  if (is.null(arglist[["reduce_points"]])){
+  if (is.null(arglist[["reduce_points"]])) {
     arglist[["reduce_points"]] <- def_reduce_points
   }
 
@@ -501,10 +501,10 @@ NULL
 
   g <- ggplot2::ggplotGrob(plots[[1]]
                            + ggplot2::theme(legend.position = "bottom"))$grobs
-  legend <- g[[which(sapply(g, function(x) x$name) == "guide-box")]]
+  legend <- g[[which(lapply(g, function(x) x$name) == "guide-box")]]
   lheight <- sum(legend$height)
 
-  fncol <- function (...) gridExtra::arrangeGrob(..., ncol = main_ncol)
+  fncol <- function(...) gridExtra::arrangeGrob(..., ncol = main_ncol)
   fnolegend <- function(x) x + ggplot2::theme(legend.position = "none")
 
   gridExtra::arrangeGrob(
@@ -670,7 +670,7 @@ NULL
   np <- pn_info$avg_np
   nn <- pn_info$avg_nn
 
-  main <- paste0(pt, " - P: ", np, ", N: ", nn)
+  paste0(pt, " - P: ", np, ", N: ", nn)
 }
 
 #
@@ -689,7 +689,7 @@ NULL
 
   p <- p + ggplot2::geom_abline(intercept = 0, slope = 1, colour = "grey",
                                 linetype = 3)
-  p <-.set_coords(p, xlim, ylim, ratio)
+  p <- .set_coords(p, xlim, ylim, ratio)
   p <- .geom_basic(p, main, "1 - Specificity", "Sensitivity", show_legend)
 
   p

@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("CI 1: AUC CIs")
 # Test auc_ci(curves)
@@ -15,7 +15,7 @@ auc_ci_create_mscurves <- function() {
   labels <- join_labels(l1, l2, l3)
 
   mdat <- mmdata(scores, labels)
-  curves <- evalmod(mdat)
+  evalmod(mdat)
 }
 
 auc_ci_create_smcurves <- function() {
@@ -30,7 +30,7 @@ auc_ci_create_smcurves <- function() {
   labels <- join_labels(l1, l2, l3)
 
   mdat <- mmdata(scores, labels, expd_first = "dsids")
-  curves <- evalmod(mdat)
+  evalmod(mdat)
 }
 
 auc_ci_create_smcurves_n2 <- function() {
@@ -43,7 +43,7 @@ auc_ci_create_smcurves_n2 <- function() {
   labels <- join_labels(l1, l2)
 
   mdat <- mmdata(scores, labels, expd_first = "dsids")
-  curves <- evalmod(mdat)
+  evalmod(mdat)
 }
 
 auc_ci_create_mmcurves <- function() {
@@ -61,7 +61,7 @@ auc_ci_create_mmcurves <- function() {
 
   mdat <- mmdata(scores, labels, modnames = c("m1", "m2"), dsids = c(1, 2),
                  expd_first = "modnames")
-  curves <- evalmod(mdat)
+  evalmod(mdat)
 }
 
 auc_ci_create_mmcurves_n1 <- function() {
@@ -79,7 +79,7 @@ auc_ci_create_mmcurves_n1 <- function() {
 
   mdat <- mmdata(scores, labels, modnames = c("m1", "m1", "m1" ,"m2"),
                  dsids = c(1, 2, 3, 1))
-  curves <- evalmod(mdat)
+  evalmod(mdat)
 }
 
 test_that("auc_ci for sscurves", {
@@ -122,7 +122,6 @@ test_that("auc_ci alpha", {
   # Check function signature
   expect_error(auc_ci(curves, 0.5), NA)
   expect_error(auc_ci(curves, alpha = 0.5), NA)
-  expect_error(auc_ci(curves, a = 0.5), NA)
 
   # Check varialbe type
   err_msg <- "alpha is not a number"
@@ -152,7 +151,6 @@ test_that("auc_ci dtype", {
   expect_error(auc_ci(curves, alpha = 0.5, "normal"), NA)
   expect_error(auc_ci(curves, dtype = "normal", alpha = 0.5), NA)
   expect_error(auc_ci(curves, dtype = "normal"), NA)
-  expect_error(auc_ci(curves, d = "normal"), NA)
 
   # Check varialbe type
   err_msg <- "dtype is not a string"

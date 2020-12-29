@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("DF 2: as.data.frame points")
 # Test as.data.frame(x, ...)
@@ -108,8 +108,8 @@ test_that("as.data.frame mmpoints", {
 
 test_that("as.data.frame raw_curve option sspoints", {
   get_args <- function(x, y = NULL, ...) {
-    arglist <- .get_dataframe_arglist(attr(x, "args"),
-                                      def_raw_curves = TRUE, ...)
+    .get_dataframe_arglist(attr(x, "args"),
+                           def_raw_curves = TRUE, ...)
   }
 
   data(P10N10)
@@ -128,8 +128,8 @@ test_that("as.data.frame raw_curve option sspoints", {
 
 test_that("as.data.frame raw_curve option mspoints", {
   get_args <- function(x, y = NULL, ...) {
-    arglist <- .get_dataframe_arglist(attr(x, "args"),
-                                      def_raw_curves = TRUE, ...)
+    .get_dataframe_arglist(attr(x, "args"),
+                           def_raw_curves = TRUE, ...)
   }
 
   points1 <- df2_create_mscurves()
@@ -146,8 +146,8 @@ test_that("as.data.frame raw_curve option mspoints", {
 
 test_that("as.data.frame raw_curve option smpoints", {
   get_args <- function(x, y = NULL, ...) {
-    arglist <- .get_dataframe_arglist(attr(x, "args"),
-                                      def_raw_curves = NULL, ...)
+    .get_dataframe_arglist(attr(x, "args"),
+                           def_raw_curves = NULL, ...)
   }
 
   points1 <- df2_create_smcurves()
@@ -175,8 +175,8 @@ test_that("as.data.frame raw_curve option smpoints", {
 
 test_that("as.data.frame raw_curve option mmpoints", {
   get_args <- function(x, y = NULL, ...) {
-    arglist <- .get_dataframe_arglist(attr(x, "args"),
-                                      def_raw_curves = NULL, ...)
+    .get_dataframe_arglist(attr(x, "args"),
+                           def_raw_curves = NULL, ...)
   }
 
   points1 <- df2_create_mmcurves()

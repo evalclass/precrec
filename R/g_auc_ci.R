@@ -75,10 +75,10 @@
 #' mm_auc_ci
 #'
 #' @export
-auc_ci <- function(curves, alpha, dtype) UseMethod("auc_ci")
+auc_ci <- function(curves, alpha=NULL, dtype=NULL) UseMethod("auc_ci", curves)
 
 #' @export
-auc_ci.default <- function(curves, alpha, dtype) {
+auc_ci.default <- function(curves, alpha=NULL, dtype=NULL) {
   stop("An object of unknown class is specified")
 }
 

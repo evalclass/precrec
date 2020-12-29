@@ -78,7 +78,7 @@ calc_auc_with_u <- function(sdat, scores = NULL, labels = NULL, na_worst = TRUE,
   }
 
   # Validate class items and attributes
-  item_names <- c("auc")
+  item_names <- "auc"
   attr_names <- c("modname", "dsid", "nn", "np", "args", "cpp_errmsg",
                   "src", "validated")
   arg_names <- c("na_worst", "na.last", "ties_method", "ties.method",

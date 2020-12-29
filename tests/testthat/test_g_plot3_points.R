@@ -1,6 +1,6 @@
-library(precrec)
+#' @importFrom precrec
 
-context("PT 3: Plot points")
+context("PT 2: Plot points")
 # Test plot(x, y, ...)
 
 pt3_create_mspoints <- function() {
@@ -122,12 +122,12 @@ test_that("plot mmpoints", {
 
 test_that("plot raw_curve option sspoints", {
   get_args <- function(x, y = NULL, ...) {
-    args <- .get_plot_arglist(attr(x, "args"), y,
-                              def_curvetype = .get_metric_names("basic"),
-                              def_type = "p",
-                              def_show_cb = FALSE, def_raw_curves = TRUE,
-                              def_add_np_nn = TRUE, def_show_legend = TRUE,
-                              ...)
+    .get_plot_arglist(attr(x, "args"), y,
+                      def_curvetype = .get_metric_names("basic"),
+                      def_type = "p",
+                      def_show_cb = FALSE, def_raw_curves = TRUE,
+                      def_add_np_nn = TRUE, def_show_legend = TRUE,
+                      ...)
   }
 
   data(P10N10)
@@ -146,12 +146,12 @@ test_that("plot raw_curve option sspoints", {
 
 test_that("plot raw_curve option mspoints", {
   get_args <- function(x, y = NULL, ...) {
-    arglist <- .get_plot_arglist(attr(x, "args"), y,
-                                 def_curvetype = .get_metric_names("basic"),
-                                 def_type = "p",
-                                 def_show_cb = FALSE, def_raw_curves = TRUE,
-                                 def_add_np_nn = TRUE, def_show_legend = TRUE,
-                                 ...)
+    .get_plot_arglist(attr(x, "args"), y,
+                      def_curvetype = .get_metric_names("basic"),
+                      def_type = "p",
+                      def_show_cb = FALSE, def_raw_curves = TRUE,
+                      def_add_np_nn = TRUE, def_show_legend = TRUE,
+                      ...)
   }
 
   points1 <- pt3_create_mspoints()
@@ -168,12 +168,12 @@ test_that("plot raw_curve option mspoints", {
 
 test_that("plot raw_curve option smpoints", {
   get_args <- function(x, y = NULL, ...) {
-    args <- .get_plot_arglist(attr(x, "args"), y,
-                              def_curvetype = .get_metric_names("basic"),
-                              def_type = "p",
-                              def_show_cb = TRUE, def_raw_curves = NULL,
-                              def_add_np_nn = TRUE, def_show_legend = FALSE,
-                              ...)
+    .get_plot_arglist(attr(x, "args"), y,
+                      def_curvetype = .get_metric_names("basic"),
+                      def_type = "p",
+                      def_show_cb = TRUE, def_raw_curves = NULL,
+                      def_add_np_nn = TRUE, def_show_legend = FALSE,
+                      ...)
   }
 
   points1 <- pt3_create_smpoints()
@@ -200,12 +200,12 @@ test_that("plot raw_curve option smpoints", {
 
 test_that("plot raw_curve option mmpoints", {
   get_args <- function(x, y = NULL, ...) {
-    args <- .get_plot_arglist(attr(x, "args"), y,
-                              def_curvetype = .get_metric_names("basic"),
-                              def_type = "p",
-                              def_show_cb = FALSE, def_raw_curves = NULL,
-                              def_add_np_nn = TRUE, def_show_legend = TRUE,
-                              ...)
+    .get_plot_arglist(attr(x, "args"), y,
+                      def_curvetype = .get_metric_names("basic"),
+                      def_type = "p",
+                      def_show_cb = FALSE, def_raw_curves = NULL,
+                      def_add_np_nn = TRUE, def_show_legend = TRUE,
+                      ...)
   }
 
   points1 <- pt3_create_mmpoints()

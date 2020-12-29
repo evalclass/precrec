@@ -1,4 +1,4 @@
-library(precrec)
+#' @importFrom precrec
 
 context("PL 2: Pipeline main for ROC and Precision-Recall")
 # Test .pl_main_rocprc(mdat, model_type, dataset_type, class_name_pf,
@@ -15,7 +15,7 @@ pl2_create_mdat_ms <- function() {
   l3 <- c(1, 1, 0, 1)
   labels <- join_labels(l1, l2, l3)
 
-  mdat <- mmdata(scores, labels)
+  mmdata(scores, labels)
 }
 
 pl2_create_mdat_sm <- function() {
@@ -29,7 +29,7 @@ pl2_create_mdat_sm <- function() {
   l3 <- c(1, 1, 0, 1)
   labels <- join_labels(l1, l2, l3)
 
-  mdat <- mmdata(scores, labels, expd_first = "dsids")
+  mmdata(scores, labels, expd_first = "dsids")
 }
 
 pl2_create_mdat_mm <- function() {
@@ -45,8 +45,8 @@ pl2_create_mdat_mm <- function() {
   l4 <- c(1, 1, 0, 1)
   labels <- join_labels(l1, l2, l3, l4)
 
-  mdat <- mmdata(scores, labels, modnames = c("m1", "m2"), dsids = c(1, 2),
-                 expd_first = "modnames")
+  mmdata(scores, labels, modnames = c("m1", "m2"), dsids = c(1, 2),
+         expd_first = "modnames")
 }
 
 test_that(".pl_main_rocprc() accepts 'x_bins'", {
@@ -200,7 +200,7 @@ test_that("curve object contains 'crvgrp', 'roc_curve', 'prc_curve'", {
       expect_true(is(pl[[ct]], "crvgrp"))
     }
 
-    for (i in 1:length(list_len)) {
+    for (i in seq_len(length(list_len))) {
       expect_true(is(pl[["rocs"]][[i]], "roc_curve"))
       expect_true(is(pl[["prcs"]][[i]], "prc_curve"))
     }

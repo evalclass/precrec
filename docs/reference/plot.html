@@ -8,25 +8,36 @@
 
 <title>Plot performance evaluation measures — plot • precrec</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -37,7 +48,7 @@
 
 <meta property="og:title" content="Plot performance evaluation measures — plot" />
 <meta property="og:description" content="The plot function creates a plot of performance evaluation measures." />
-<meta name="twitter:card" content="summary" />
+<meta property="og:image" content="https://takayasaito.github.io/precrec/logo.png" />
 
 
 
@@ -55,7 +66,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -69,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">precrec</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12.0</span>
       </span>
     </div>
 
@@ -87,8 +98,8 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/takayasaito/precrec">
-    <span class="fab fa fab fa-github fa-lg"></span>
+  <a href="https://github.com/takayasaito/precrec/">
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -115,28 +126,28 @@
     </div>
 
     <pre class="usage"><span class='co'># S3 method for sscurves</span>
-<span class='fu'>plot</span>(<span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>x</span>, y <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for mscurves</span>
-<span class='fu'>plot</span>(<span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>x</span>, y <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for smcurves</span>
-<span class='fu'>plot</span>(<span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>x</span>, y <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for mmcurves</span>
-<span class='fu'>plot</span>(<span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>x</span>, y <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for sspoints</span>
-<span class='fu'>plot</span>(<span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>x</span>, y <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for mspoints</span>
-<span class='fu'>plot</span>(<span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>x</span>, y <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for smpoints</span>
-<span class='fu'>plot</span>(<span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>x</span>, y <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for mmpoints</span>
-<span class='fu'>plot</span>(<span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>x</span>, y <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -175,7 +186,7 @@
     <tr>
       <th>...</th>
       <td><p>All the following arguments can be specified.</p>
-<dl class='dl-horizontal'>
+<dl>
   <dt>curvetype</dt><dd><p><ol>
 <li><p>ROC and Precision-Recall curves (mode = "rocprc")</p><table class='table'>
 <tr><td><strong>curvetype</strong></td><td><strong>description</strong></td></tr>
@@ -198,7 +209,7 @@
        <code><a href='https://rdrr.io/r/base/c.html'>c("precision", "sensitivity")</a></code>.</p></li>
 </ol></p></dd>
   <dt>type</dt><dd><p>A character to specify the line type as follows.
-    <dl class='dl-horizontal'>
+    <dl>
       <dt>"l"</dt><dd><p>lines</p></dd>
       <dt>"p"</dt><dd><p>points</p></dd>
       <dt>"b"</dt><dd><p>both lines and points</p></dd></dl></p></dd>
@@ -232,136 +243,151 @@
 <span class='co'>###</span>
 
 <span class='co'>## Load a dataset with 10 positives and 10 negatives</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>P10N10</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>P10N10</span><span class='op'>)</span>
 
 <span class='co'>## Generate an sscurve object that contains ROC and Precision-Recall curves</span>
-<span class='no'>sscurves</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='kw'>scores</span> <span class='kw'>=</span> <span class='no'>P10N10</span>$<span class='no'>scores</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='no'>P10N10</span>$<span class='no'>labels</span>)
+<span class='va'>sscurves</span> <span class='op'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span><span class='op'>(</span>scores <span class='op'>=</span> <span class='va'>P10N10</span><span class='op'>$</span><span class='va'>scores</span>, labels <span class='op'>=</span> <span class='va'>P10N10</span><span class='op'>$</span><span class='va'>labels</span><span class='op'>)</span>
 
 <span class='co'>## Plot both ROC and Precision-Recall curves</span>
-<span class='fu'>plot</span>(<span class='no'>sscurves</span>)</div><div class='img'><img src='plot-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>sscurves</span><span class='op'>)</span>
+</div><div class='img'><img src='plot-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Plot a ROC curve</span>
-<span class='fu'>plot</span>(<span class='no'>sscurves</span>, <span class='kw'>curvetype</span> <span class='kw'>=</span> <span class='st'>"ROC"</span>)</div><div class='img'><img src='plot-2.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>sscurves</span>, curvetype <span class='op'>=</span> <span class='st'>"ROC"</span><span class='op'>)</span>
+</div><div class='img'><img src='plot-2.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Plot a Precision-Recall curve</span>
-<span class='fu'>plot</span>(<span class='no'>sscurves</span>, <span class='kw'>curvetype</span> <span class='kw'>=</span> <span class='st'>"PRC"</span>)</div><div class='img'><img src='plot-3.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>sscurves</span>, curvetype <span class='op'>=</span> <span class='st'>"PRC"</span><span class='op'>)</span>
+</div><div class='img'><img src='plot-3.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Generate an sspoints object that contains basic evaluation measures</span>
-<span class='no'>sspoints</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"basic"</span>, <span class='kw'>scores</span> <span class='kw'>=</span> <span class='no'>P10N10</span>$<span class='no'>scores</span>,
-                    <span class='kw'>labels</span> <span class='kw'>=</span> <span class='no'>P10N10</span>$<span class='no'>labels</span>)
+<span class='va'>sspoints</span> <span class='op'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span><span class='op'>(</span>mode <span class='op'>=</span> <span class='st'>"basic"</span>, scores <span class='op'>=</span> <span class='va'>P10N10</span><span class='op'>$</span><span class='va'>scores</span>,
+                    labels <span class='op'>=</span> <span class='va'>P10N10</span><span class='op'>$</span><span class='va'>labels</span><span class='op'>)</span>
 
 <span class='co'>## Plot normalized ranks vs. basic evaluation measures</span>
-<span class='fu'>plot</span>(<span class='no'>sspoints</span>)</div><div class='img'><img src='plot-4.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>sspoints</span><span class='op'>)</span>
+</div><div class='img'><img src='plot-4.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Plot normalized ranks vs. precision</span>
-<span class='fu'>plot</span>(<span class='no'>sspoints</span>, <span class='kw'>curvetype</span> <span class='kw'>=</span> <span class='st'>"precision"</span>)</div><div class='img'><img src='plot-5.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>sspoints</span>, curvetype <span class='op'>=</span> <span class='st'>"precision"</span><span class='op'>)</span>
+</div><div class='img'><img src='plot-5.png' alt='' width='700' height='433' /></div><div class='input'>
 
 <span class='co'>##################################################</span>
 <span class='co'>### Multiple models &amp; single test dataset</span>
 <span class='co'>###</span>
 
 <span class='co'>## Create sample datasets with 100 positives and 100 negatives</span>
-<span class='no'>samps</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_sim_samples.html'>create_sim_samples</a></span>(<span class='fl'>1</span>, <span class='fl'>100</span>, <span class='fl'>100</span>, <span class='st'>"all"</span>)
-<span class='no'>mdat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mmdata.html'>mmdata</a></span>(<span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"scores"</span>]], <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"labels"</span>]],
-               <span class='kw'>modnames</span> <span class='kw'>=</span> <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"modnames"</span>]])
+<span class='va'>samps</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_sim_samples.html'>create_sim_samples</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>100</span>, <span class='fl'>100</span>, <span class='st'>"all"</span><span class='op'>)</span>
+<span class='va'>mdat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mmdata.html'>mmdata</a></span><span class='op'>(</span><span class='va'>samps</span><span class='op'>[[</span><span class='st'>"scores"</span><span class='op'>]</span><span class='op'>]</span>, <span class='va'>samps</span><span class='op'>[[</span><span class='st'>"labels"</span><span class='op'>]</span><span class='op'>]</span>,
+               modnames <span class='op'>=</span> <span class='va'>samps</span><span class='op'>[[</span><span class='st'>"modnames"</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span>
 
 <span class='co'>## Generate an mscurve object that contains ROC and Precision-Recall curves</span>
-<span class='no'>mscurves</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>)
+<span class='va'>mscurves</span> <span class='op'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span><span class='op'>(</span><span class='va'>mdat</span><span class='op'>)</span>
 
 <span class='co'>## Plot both ROC and Precision-Recall curves</span>
-<span class='fu'>plot</span>(<span class='no'>mscurves</span>)</div><div class='img'><img src='plot-6.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>mscurves</span><span class='op'>)</span>
+</div><div class='img'><img src='plot-6.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Hide the legend</span>
-<span class='fu'>plot</span>(<span class='no'>mscurves</span>, <span class='kw'>show_legend</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='img'><img src='plot-7.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>mscurves</span>, show_legend <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+</div><div class='img'><img src='plot-7.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Generate an mspoints object that contains basic evaluation measures</span>
-<span class='no'>mspoints</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"basic"</span>)
+<span class='va'>mspoints</span> <span class='op'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span><span class='op'>(</span><span class='va'>mdat</span>, mode <span class='op'>=</span> <span class='st'>"basic"</span><span class='op'>)</span>
 
 <span class='co'>## Plot normalized ranks vs. basic evaluation measures</span>
-<span class='fu'>plot</span>(<span class='no'>mspoints</span>)</div><div class='img'><img src='plot-8.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>mspoints</span><span class='op'>)</span>
+</div><div class='img'><img src='plot-8.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Hide the legend</span>
-<span class='fu'>plot</span>(<span class='no'>mspoints</span>, <span class='kw'>show_legend</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='img'><img src='plot-9.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>mspoints</span>, show_legend <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+</div><div class='img'><img src='plot-9.png' alt='' width='700' height='433' /></div><div class='input'>
 
 <span class='co'>##################################################</span>
 <span class='co'>### Single model &amp; multiple test datasets</span>
 <span class='co'>###</span>
 
 <span class='co'>## Create sample datasets with 100 positives and 100 negatives</span>
-<span class='no'>samps</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_sim_samples.html'>create_sim_samples</a></span>(<span class='fl'>10</span>, <span class='fl'>100</span>, <span class='fl'>100</span>, <span class='st'>"good_er"</span>)
-<span class='no'>mdat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mmdata.html'>mmdata</a></span>(<span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"scores"</span>]], <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"labels"</span>]],
-               <span class='kw'>modnames</span> <span class='kw'>=</span> <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"modnames"</span>]],
-               <span class='kw'>dsids</span> <span class='kw'>=</span> <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"dsids"</span>]])
+<span class='va'>samps</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_sim_samples.html'>create_sim_samples</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>100</span>, <span class='fl'>100</span>, <span class='st'>"good_er"</span><span class='op'>)</span>
+<span class='va'>mdat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mmdata.html'>mmdata</a></span><span class='op'>(</span><span class='va'>samps</span><span class='op'>[[</span><span class='st'>"scores"</span><span class='op'>]</span><span class='op'>]</span>, <span class='va'>samps</span><span class='op'>[[</span><span class='st'>"labels"</span><span class='op'>]</span><span class='op'>]</span>,
+               modnames <span class='op'>=</span> <span class='va'>samps</span><span class='op'>[[</span><span class='st'>"modnames"</span><span class='op'>]</span><span class='op'>]</span>,
+               dsids <span class='op'>=</span> <span class='va'>samps</span><span class='op'>[[</span><span class='st'>"dsids"</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span>
 
 <span class='co'>## Generate an smcurve object that contains ROC and Precision-Recall curves</span>
-<span class='no'>smcurves</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='va'>smcurves</span> <span class='op'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span><span class='op'>(</span><span class='va'>mdat</span>, raw_curves <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
 <span class='co'>## Plot average ROC and Precision-Recall curves</span>
-<span class='fu'>plot</span>(<span class='no'>smcurves</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='img'><img src='plot-10.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>smcurves</span>, raw_curves <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+</div><div class='img'><img src='plot-10.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Hide confidence bounds</span>
-<span class='fu'>plot</span>(<span class='no'>smcurves</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>show_cb</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='img'><img src='plot-11.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>smcurves</span>, raw_curves <span class='op'>=</span> <span class='cn'>FALSE</span>, show_cb <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+</div><div class='img'><img src='plot-11.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Plot raw ROC and Precision-Recall curves</span>
-<span class='fu'>plot</span>(<span class='no'>smcurves</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>show_cb</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='img'><img src='plot-12.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>smcurves</span>, raw_curves <span class='op'>=</span> <span class='cn'>TRUE</span>, show_cb <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+</div><div class='img'><img src='plot-12.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Generate an smpoints object that contains basic evaluation measures</span>
-<span class='no'>smpoints</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"basic"</span>)
+<span class='va'>smpoints</span> <span class='op'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span><span class='op'>(</span><span class='va'>mdat</span>, mode <span class='op'>=</span> <span class='st'>"basic"</span><span class='op'>)</span>
 
 <span class='co'>## Plot normalized ranks vs. average basic evaluation measures</span>
-<span class='fu'>plot</span>(<span class='no'>smpoints</span>)</div><div class='img'><img src='plot-13.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>smpoints</span><span class='op'>)</span>
+</div><div class='img'><img src='plot-13.png' alt='' width='700' height='433' /></div><div class='input'>
 
 <span class='co'>##################################################</span>
 <span class='co'>### Multiple models &amp; multiple test datasets</span>
 <span class='co'>###</span>
 
 <span class='co'>## Create sample datasets with 100 positives and 100 negatives</span>
-<span class='no'>samps</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_sim_samples.html'>create_sim_samples</a></span>(<span class='fl'>10</span>, <span class='fl'>100</span>, <span class='fl'>100</span>, <span class='st'>"all"</span>)
-<span class='no'>mdat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mmdata.html'>mmdata</a></span>(<span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"scores"</span>]], <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"labels"</span>]],
-               <span class='kw'>modnames</span> <span class='kw'>=</span> <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"modnames"</span>]],
-               <span class='kw'>dsids</span> <span class='kw'>=</span> <span class='no'>samps</span><span class='kw'>[[</span><span class='st'>"dsids"</span>]])
+<span class='va'>samps</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_sim_samples.html'>create_sim_samples</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>100</span>, <span class='fl'>100</span>, <span class='st'>"all"</span><span class='op'>)</span>
+<span class='va'>mdat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mmdata.html'>mmdata</a></span><span class='op'>(</span><span class='va'>samps</span><span class='op'>[[</span><span class='st'>"scores"</span><span class='op'>]</span><span class='op'>]</span>, <span class='va'>samps</span><span class='op'>[[</span><span class='st'>"labels"</span><span class='op'>]</span><span class='op'>]</span>,
+               modnames <span class='op'>=</span> <span class='va'>samps</span><span class='op'>[[</span><span class='st'>"modnames"</span><span class='op'>]</span><span class='op'>]</span>,
+               dsids <span class='op'>=</span> <span class='va'>samps</span><span class='op'>[[</span><span class='st'>"dsids"</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span>
 
 <span class='co'>## Generate an mscurve object that contains ROC and Precision-Recall curves</span>
-<span class='no'>mmcurves</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='va'>mmcurves</span> <span class='op'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span><span class='op'>(</span><span class='va'>mdat</span>, raw_curves <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
 <span class='co'>## Plot average ROC and Precision-Recall curves</span>
-<span class='fu'>plot</span>(<span class='no'>mmcurves</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='img'><img src='plot-14.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>mmcurves</span>, raw_curves <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+</div><div class='img'><img src='plot-14.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Show confidence bounds</span>
-<span class='fu'>plot</span>(<span class='no'>mmcurves</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>show_cb</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='plot-15.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>mmcurves</span>, raw_curves <span class='op'>=</span> <span class='cn'>FALSE</span>, show_cb <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='img'><img src='plot-15.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Plot raw ROC and Precision-Recall curves</span>
-<span class='fu'>plot</span>(<span class='no'>mmcurves</span>, <span class='kw'>raw_curves</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='plot-16.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>mmcurves</span>, raw_curves <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='img'><img src='plot-16.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Generate an mmpoints object that contains basic evaluation measures</span>
-<span class='no'>mmpoints</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>mdat</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"basic"</span>)
+<span class='va'>mmpoints</span> <span class='op'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span><span class='op'>(</span><span class='va'>mdat</span>, mode <span class='op'>=</span> <span class='st'>"basic"</span><span class='op'>)</span>
 
 <span class='co'>## Plot normalized ranks vs. average basic evaluation measures</span>
-<span class='fu'>plot</span>(<span class='no'>mmpoints</span>)</div><div class='img'><img src='plot-17.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>mmpoints</span><span class='op'>)</span>
+</div><div class='img'><img src='plot-17.png' alt='' width='700' height='433' /></div><div class='input'>
 
 <span class='co'>##################################################</span>
 <span class='co'>### N-fold cross validation datasets</span>
 <span class='co'>###</span>
 
 <span class='co'>## Load test data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>M2N50F5</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>M2N50F5</span><span class='op'>)</span>
 
 <span class='co'>## Speficy nessesary columns to create mdat</span>
-<span class='no'>cvdat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mmdata.html'>mmdata</a></span>(<span class='kw'>nfold_df</span> <span class='kw'>=</span> <span class='no'>M2N50F5</span>, <span class='kw'>score_cols</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>),
-                <span class='kw'>lab_col</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>fold_col</span> <span class='kw'>=</span> <span class='fl'>4</span>,
-                <span class='kw'>modnames</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"m1"</span>, <span class='st'>"m2"</span>), <span class='kw'>dsids</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>5</span>)
+<span class='va'>cvdat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mmdata.html'>mmdata</a></span><span class='op'>(</span>nfold_df <span class='op'>=</span> <span class='va'>M2N50F5</span>, score_cols <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span>,
+                lab_col <span class='op'>=</span> <span class='fl'>3</span>, fold_col <span class='op'>=</span> <span class='fl'>4</span>,
+                modnames <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"m1"</span>, <span class='st'>"m2"</span><span class='op'>)</span>, dsids <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>)</span>
 
 <span class='co'>## Generate an mmcurve object that contains ROC and Precision-Recall curves</span>
-<span class='no'>cvcurves</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>cvdat</span>)
+<span class='va'>cvcurves</span> <span class='op'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span><span class='op'>(</span><span class='va'>cvdat</span><span class='op'>)</span>
 
 <span class='co'>## Average ROC and Precision-Recall curves</span>
-<span class='fu'>plot</span>(<span class='no'>cvcurves</span>)</div><div class='img'><img src='plot-18.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>cvcurves</span><span class='op'>)</span>
+</div><div class='img'><img src='plot-18.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Show confidence bounds</span>
-<span class='fu'>plot</span>(<span class='no'>cvcurves</span>, <span class='kw'>show_cb</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='plot-19.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>cvcurves</span>, show_cb <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='img'><img src='plot-19.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Generate an mmpoints object that contains basic evaluation measures</span>
-<span class='no'>cvpoints</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span>(<span class='no'>cvdat</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"basic"</span>)
+<span class='va'>cvpoints</span> <span class='op'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span><span class='op'>(</span><span class='va'>cvdat</span>, mode <span class='op'>=</span> <span class='st'>"basic"</span><span class='op'>)</span>
 
 <span class='co'>## Normalized ranks vs. average basic evaluation measures</span>
-<span class='fu'>plot</span>(<span class='no'>cvpoints</span>)</div><div class='img'><img src='plot-20.png' alt='' width='700' height='433' /></div><div class='input'>
-# }
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>cvpoints</span><span class='op'>)</span>
+</div><div class='img'><img src='plot-20.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='co'># }</span>
 </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -372,7 +398,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

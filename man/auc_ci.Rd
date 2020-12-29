@@ -5,7 +5,7 @@
 \alias{auc_ci.aucs}
 \title{Calculate CIs of ROC and precision-recall AUCs}
 \usage{
-auc_ci(curves, alpha, dtype)
+auc_ci(curves, alpha = NULL, dtype = NULL)
 
 \method{auc_ci}{aucs}(curves, alpha = 0.05, dtype = "normal")
 }

@@ -155,7 +155,7 @@ join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
   # Set a default error function for checking values
   if (is.null(efunc_vtype)) {
     efunc_vtype <- function(efunc_vtype) {
-      if (any(is.null(efunc_vtype))){
+      if (any(is.null(efunc_vtype))) {
         stop("All vectors must contain values", call. = FALSE)
       }
     }
@@ -178,7 +178,7 @@ join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
   arglist <- list(...)
   cdat <- list()
   for (ds in arglist) {
-    if(is.atomic(ds) && (is.vector(ds) || is.factor(ds))) {
+    if (is.atomic(ds) && (is.vector(ds) || is.factor(ds))) {
       cdat <- c(cdat, list(ds))
     } else if (is.matrix(ds) || is.data.frame(ds)) {
       if (byrow) {
@@ -202,7 +202,7 @@ join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
       if (any(unlist(lapply(ds, is.list)))) {
         f_unlist <- function(ds2) {
           new_list <- list()
-          for (i in 1:length(ds2)) {
+          for (i in seq_len(length(ds2))) {
             if (is.list(ds2[[i]])) {
               new_list <- c(new_list, f_unlist(ds2[[i]]))
             } else {
@@ -222,7 +222,7 @@ join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
 
   # Validate cdat with efunc_vtype and efunc_nrow
   m <- length(cdat[[1]])
-  for (i in 1:length(cdat)) {
+  for (i in seq_len(length(cdat))) {
     efunc_vtype(cdat[[i]])
     efunc_nrow(m, length(cdat[[i]]))
   }
