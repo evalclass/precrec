@@ -21,5 +21,12 @@ void sort_indices(std::vector<std::pair<unsigned, double > >& indices,
                   const std::string& ties_method,
                   bool desc);
 
+//
+// Shuffle int vector
+//
+void shuffle_intvec(std::vector<int>::iterator first,
+                    std::vector<int>::iterator last,
+                    int (*gen)(const int));
+
 #endif /* PRECREC_MISC_H_ */
 

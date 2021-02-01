@@ -376,5 +376,15 @@ Rcpp::List convert_curve_avg_df(const Rcpp::List& obj,
   return ret_val;
 }
 
-
-
+//
+// Shuffle int vector
+//
+void shuffle_intvec(std::vector<int>::iterator first,
+                    std::vector<int>::iterator last,
+                    int (*gen)(const int)) {
+  std::iterator_traits<std::vector<int>::iterator >::difference_type i, n;
+  n = (last - first);
+  for (i = n - 1; i > 0; --i) {
+    std::swap(first[i], first[gen(i + 1)]);
+  }
+}
