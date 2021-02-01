@@ -1,13 +1,11 @@
-## Version 0.12.0
+## Version 0.12.1
 This is a submission for updating the already published package - precrec.
 In this version I have:
 
-* Improved error messages when a data set includes only one class  
-
-* Improve code quality using the results from lintr and CodeFactor.io
+* Replace std::random_shuffle with a new function
 
 * Updated the version.
-    * 0.11.2 -> 0.12.0
+    * 0.12.0 -> 0.12.1
     
 ## Test environments
 * local macOS High Sierra, R 4.0.3
