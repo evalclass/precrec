@@ -238,7 +238,7 @@ void update_ties(std::vector<int>& ranks,
       ranks[*it] = base_rank;
     }
   } else if (ties_method == "random") {
-    std::random_shuffle(tied_idx.begin(), tied_idx.end(), randWrapper);
+    shuffle_intvec(tied_idx.begin(), tied_idx.end(), randWrapper);
     for (unsigned i = 0; i < tied_idx.size(); ++i) {
       ranks[rank_idx[tied_idx[i]]] = base_rank + i;
       rank_idx[tied_idx[i]] = base_rank_idx + i;

@@ -1,3 +1,7 @@
+# precrec 0.12.1
+
+* Replace std::random_shuffle with a new function 
+
 # precrec 0.12
 
 * Improve error messages when a data set includes only one class  
