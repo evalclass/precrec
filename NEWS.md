@@ -1,3 +1,8 @@
+# precrec 0.12.2
+
+* Skip ggplot2 unit tests
+* Change default branch to main
+
 # precrec 0.12.1
 
 * Replace std::random_shuffle with a new function 
