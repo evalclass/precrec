@@ -3,6 +3,8 @@
 context("AP 3: Autoplot for points")
 # Test autoplot(object, ...)
 
+test_extra_ap3 <- FALSE
+
 ap3_check_libs <- function() {
   if (requireNamespace("ggplot2", quietly = TRUE)
       && requireNamespace("grid", quietly = TRUE)
@@ -61,46 +63,46 @@ ap3_create_mmpoints <- function(raw_curves = FALSE) {
   evalmod(mdat, mode = "basic", raw_curves = raw_curves)
 }
 
-ap3_test_basic_measures <- function(curves, raw_curves = FALSE, ...){
-  pp <- ggplot2::autoplot(curves, raw_curves = raw_curves, ...)
-  expect_error(pp, NA)
+ap3_test_basic_measures <- function(curves, check_def_matrix = FALSE,
+                                    raw_curves = FALSE, ...){
 
-  pp <- ggplot2::autoplot(curves, c("sensitivity", "specificity", "error",
-                                    "accuracy", "precision", "mcc", "score",
-                                    "label"),
-                          raw_curves = raw_curves, ...)
-  expect_error(pp, NA)
-
-  pp <- ggplot2::autoplot(curves, c("sensitivity", "specificity", "error",
-                                    "accuracy", "precision", "mcc", "score"),
-                          raw_curves = raw_curves, ...)
-  expect_error(pp, NA)
-
-  pp <- ggplot2::autoplot(curves, c("sensitivity", "specificity", "error",
-                                    "accuracy", "precision", "mcc"),
-                          raw_curves = raw_curves, ...)
-  expect_error(pp, NA)
-
-  pp <- ggplot2::autoplot(curves, c("sensitivity", "specificity", "error",
-                                    "accuracy", "precision"),
-                          raw_curves = raw_curves, ...)
-  expect_error(pp, NA)
-
-  pp <- ggplot2::autoplot(curves, c("sensitivity", "specificity", "error",
-                                    "precision"),
-                          raw_curves = raw_curves, ...)
-  expect_error(pp, NA)
-
-  pp <- ggplot2::autoplot(curves, c("sensitivity", "specificity", "precision"),
-                          raw_curves = raw_curves, ...)
-  expect_error(pp, NA)
-
-  pp <- ggplot2::autoplot(curves, c("sensitivity", "precision"),
-                          raw_curves = raw_curves, ...)
-  expect_error(pp, NA)
+  if (check_def_matrix) {
+    expect_error(ggplot2::autoplot(curves, raw_curves = raw_curves, ...), NA)
+  }
 
   pp <- ggplot2::autoplot(curves, "precision", raw_curves = raw_curves, ...)
   expect_error(pp, NA)
+
+  if (!test_extra_ap3) return(TRUE)
+
+  check_autoploat <- function(curves, metrix, raw_curves, ...) {
+    expect_error(ggplot2::autoplot(curves, metrix, raw_curves = raw_curves,
+                                   ...), NA)
+  }
+
+  metrix8 <- c("sensitivity", "specificity",  "error", "accuracy", "precision",
+               "mcc", "score", "label")
+  check_autoploat(curves, metrix8, raw_curves, ...)
+
+  metrix7 <- c("sensitivity", "specificity",  "error", "accuracy", "precision",
+               "mcc", "score")
+  check_autoploat(curves, metrix7, raw_curves, ...)
+
+  metrix6 <- c("sensitivity", "specificity",  "error", "accuracy", "precision",
+               "mcc")
+  check_autoploat(curves, metrix6, raw_curves, ...)
+
+  metrix5 <- c("sensitivity", "specificity",  "error", "accuracy", "precision")
+  check_autoploat(curves, metrix5, raw_curves, ...)
+
+  metrix4 <- c("sensitivity", "specificity",  "error", "precision")
+  check_autoploat(curves, metrix4, raw_curves, ...)
+
+  metrix3 <- c("sensitivity", "specificity", "precision")
+  check_autoploat(curves, metrix3, raw_curves, ...)
+
+  metrix2 <- c("sensitivity", "precision")
+  check_autoploat(curves, metrix2, raw_curves, ...)
 }
 
 test_that("autoplot sspoints", {
@@ -113,7 +115,7 @@ test_that("autoplot sspoints", {
   data(P10N10)
   points <- evalmod(mode = "basic", scores = P10N10$scores,
                     labels = P10N10$labels)
-  ap3_test_basic_measures(points)
+  ap3_test_basic_measures(points, check_def_matrix = TRUE)
   ap3_test_basic_measures(points, type = "l")
   ap3_test_basic_measures(points, type = "b")
 })
@@ -142,7 +144,7 @@ test_that("autoplot mspoints", {
 
   points <- ap3_create_mspoints()
 
-  ap3_test_basic_measures(points)
+  ap3_test_basic_measures(points, check_def_matrix = TRUE)
   ap3_test_basic_measures(points, type = "l")
   ap3_test_basic_measures(points, type = "b")
   ap3_test_basic_measures(points, show_legend = TRUE)
@@ -170,7 +172,7 @@ test_that("autoplot smpoints", {
 
   points <- ap3_create_smpoints()
 
-  ap3_test_basic_measures(points)
+  ap3_test_basic_measures(points, check_def_matrix = TRUE)
   ap3_test_basic_measures(points, type = "l")
   ap3_test_basic_measures(points, type = "b")
   ap3_test_basic_measures(points, show_cb = FALSE)
@@ -201,7 +203,7 @@ test_that("autoplot mmpoints", {
 
   points <- ap3_create_mmpoints()
 
-  ap3_test_basic_measures(points)
+  ap3_test_basic_measures(points, check_def_matrix = TRUE)
   ap3_test_basic_measures(points, type = "l")
   ap3_test_basic_measures(points, type = "b")
   ap3_test_basic_measures(points, show_cb = TRUE)
