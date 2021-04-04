@@ -3,6 +3,8 @@
 context("AP 2: Autoplot for curves")
 # Test autoplot(object, ...)
 
+test_extra_ap2 <- FALSE
+
 ap2_check_libs <- function() {
   if (requireNamespace("ggplot2", quietly = TRUE)
       && requireNamespace("grid", quietly = TRUE)
@@ -62,11 +64,11 @@ ap2_create_mmcurves <- function(raw_curves = FALSE) {
 }
 
 ap2_test_roc_prc <- function(curves, ...){
-  pp <- ggplot2::autoplot(curves, ...)
-  expect_error(pp, NA)
+  expect_error(ggplot2::autoplot(curves, ...), NA)
 
-  pp <- ggplot2::autoplot(curves, c("ROC", "PRC"), ...)
-  expect_error(pp, NA)
+  if (!test_extra_ap2) return(TRUE)
+
+  expect_error(ggplot2::autoplot(curves, c("ROC", "PRC"), ...), NA)
 
   pp <- ggplot2::autoplot(curves, "ROC", ...)
   expect_error(pp, NA)
