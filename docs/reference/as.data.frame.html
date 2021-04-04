@@ -118,7 +118,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Convert a curves and points object to a data frame</h1>
-    <small class="dont-index">Source: <a href='https://github.com/takayasaito/precrec/blob/master/R/etc_utils_dataframe.R'><code>R/etc_utils_dataframe.R</code></a>, <a href='https://github.com/takayasaito/precrec/blob/master/R/g_dataframe.R'><code>R/g_dataframe.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/takayasaito/precrec/blob/main/R/etc_utils_dataframe.R'><code>R/etc_utils_dataframe.R</code></a>, <a href='https://github.com/takayasaito/precrec/blob/main/R/g_dataframe.R'><code>R/g_dataframe.R</code></a></small>
     <div class="hidden name"><code>as.data.frame.Rd</code></div>
     </div>
 
@@ -220,7 +220,7 @@ of the <code><a href='evalmod.html'>evalmod</a></code> function.</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='co'># \dontrun{</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'>##################################################</span>
 <span class='co'>### Single model &amp; single test dataset</span>
 <span class='co'>###</span>
@@ -236,13 +236,7 @@ of the <code><a href='evalmod.html'>evalmod</a></code> function.</p></td>
 
 <span class='co'>## Show data frame</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>sscurves.df</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;       x   y modname dsid type
-#&gt; 1 0.000 0.0      m1    1  ROC
-#&gt; 2 0.000 0.1      m1    1  ROC
-#&gt; 3 0.000 0.2      m1    1  ROC
-#&gt; 4 0.001 0.2      m1    1  ROC
-#&gt; 5 0.002 0.2      m1    1  ROC
-#&gt; 6 0.003 0.2      m1    1  ROC</div><div class='input'>
+
 <span class='co'>## Generate an sspoints object that contains basic evaluation measures</span>
 <span class='va'>sspoints</span> <span class='op'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span><span class='op'>(</span>mode <span class='op'>=</span> <span class='st'>"basic"</span>, scores <span class='op'>=</span> <span class='va'>P10N10</span><span class='op'>$</span><span class='va'>scores</span>,
                     labels <span class='op'>=</span> <span class='va'>P10N10</span><span class='op'>$</span><span class='va'>labels</span><span class='op'>)</span>
@@ -251,13 +245,7 @@ of the <code><a href='evalmod.html'>evalmod</a></code> function.</p></td>
 
 <span class='co'>## Show data frame</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>sspoints.df</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;      x  y modname dsid  type
-#&gt; 1 0.00 NA      m1    1 score
-#&gt; 2 0.05 20      m1    1 score
-#&gt; 3 0.10 19      m1    1 score
-#&gt; 4 0.15 18      m1    1 score
-#&gt; 5 0.20 17      m1    1 score
-#&gt; 6 0.25 16      m1    1 score</div><div class='input'>
+
 
 <span class='co'>##################################################</span>
 <span class='co'>### Multiple models &amp; single test dataset</span>
@@ -276,13 +264,7 @@ of the <code><a href='evalmod.html'>evalmod</a></code> function.</p></td>
 
 <span class='co'>## Show data frame</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>mscurves.df</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;       x    y modname dsid type
-#&gt; 1 0.000 0.00  random    1  ROC
-#&gt; 2 0.000 0.01  random    1  ROC
-#&gt; 3 0.000 0.02  random    1  ROC
-#&gt; 4 0.001 0.02  random    1  ROC
-#&gt; 5 0.002 0.02  random    1  ROC
-#&gt; 6 0.003 0.02  random    1  ROC</div><div class='input'>
+
 <span class='co'>## Generate an mspoints object that contains basic evaluation measures</span>
 <span class='va'>mspoints</span> <span class='op'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span><span class='op'>(</span><span class='va'>mdat</span>, mode <span class='op'>=</span> <span class='st'>"basic"</span><span class='op'>)</span>
 
@@ -291,13 +273,7 @@ of the <code><a href='evalmod.html'>evalmod</a></code> function.</p></td>
 
 <span class='co'>## Show data frame</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>mspoints.df</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;       x        y modname dsid  type
-#&gt; 1 0.000       NA  random    1 score
-#&gt; 2 0.005 2.755418  random    1 score
-#&gt; 3 0.010 2.682557  random    1 score
-#&gt; 4 0.015 2.564408  random    1 score
-#&gt; 5 0.020 2.211769  random    1 score
-#&gt; 6 0.025 2.126850  random    1 score</div><div class='input'>
+
 
 <span class='co'>##################################################</span>
 <span class='co'>### Single model &amp; multiple test datasets</span>
@@ -317,13 +293,7 @@ of the <code><a href='evalmod.html'>evalmod</a></code> function.</p></td>
 
 <span class='co'>## Show data frame</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>smcurves.df</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   x    y modname dsid type
-#&gt; 1 0 0.00 good_er    1  ROC
-#&gt; 2 0 0.01 good_er    1  ROC
-#&gt; 3 0 0.02 good_er    1  ROC
-#&gt; 4 0 0.03 good_er    1  ROC
-#&gt; 5 0 0.04 good_er    1  ROC
-#&gt; 6 0 0.05 good_er    1  ROC</div><div class='input'>
+
 <span class='co'>## Generate an smpoints object that contains basic evaluation measures</span>
 <span class='va'>smpoints</span> <span class='op'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span><span class='op'>(</span><span class='va'>mdat</span>, mode <span class='op'>=</span> <span class='st'>"basic"</span><span class='op'>)</span>
 
@@ -332,13 +302,7 @@ of the <code><a href='evalmod.html'>evalmod</a></code> function.</p></td>
 
 <span class='co'>## Show data frame</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>smpoints.df</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;       x         y      ymin      ymax modname  type
-#&gt; 1 0.000        NA        NA        NA good_er score
-#&gt; 2 0.005 0.9817259 0.9729559 0.9904959 good_er score
-#&gt; 3 0.010 0.9724147 0.9626556 0.9821739 good_er score
-#&gt; 4 0.015 0.9622373 0.9497315 0.9747430 good_er score
-#&gt; 5 0.020 0.9462811 0.9362615 0.9563008 good_er score
-#&gt; 6 0.025 0.9377157 0.9256513 0.9497802 good_er score</div><div class='input'>
+
 
 <span class='co'>##################################################</span>
 <span class='co'>### Multiple models &amp; multiple test datasets</span>
@@ -358,13 +322,7 @@ of the <code><a href='evalmod.html'>evalmod</a></code> function.</p></td>
 
 <span class='co'>## Show data frame</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>mmcurves.df</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;       x y modname dsid type
-#&gt; 1 0.000 0  random    1  ROC
-#&gt; 2 0.001 0  random    1  ROC
-#&gt; 3 0.002 0  random    1  ROC
-#&gt; 4 0.003 0  random    1  ROC
-#&gt; 5 0.004 0  random    1  ROC
-#&gt; 6 0.005 0  random    1  ROC</div><div class='input'>
+
 <span class='co'>## Generate an mmpoints object that contains basic evaluation measures</span>
 <span class='va'>mmpoints</span> <span class='op'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span><span class='op'>(</span><span class='va'>mdat</span>, mode <span class='op'>=</span> <span class='st'>"basic"</span><span class='op'>)</span>
 
@@ -373,13 +331,7 @@ of the <code><a href='evalmod.html'>evalmod</a></code> function.</p></td>
 
 <span class='co'>## Show data frame</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>mmpoints.df</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;       x        y     ymin     ymax modname  type
-#&gt; 1 0.000       NA       NA       NA  random score
-#&gt; 2 0.005 2.739291 2.508815 2.969767  random score
-#&gt; 3 0.010 2.345126 2.261530 2.428722  random score
-#&gt; 4 0.015 2.180498 2.060028 2.300968  random score
-#&gt; 5 0.020 2.038010 1.933964 2.142056  random score
-#&gt; 6 0.025 1.962737 1.864846 2.060628  random score</div><div class='input'>
+
 
 <span class='co'>##################################################</span>
 <span class='co'>### N-fold cross validation datasets</span>
@@ -401,13 +353,7 @@ of the <code><a href='evalmod.html'>evalmod</a></code> function.</p></td>
 
 <span class='co'>## Show data frame</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>cvcurves.df</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;       x    y        ymin      ymax modname type
-#&gt; 1 0.000 0.00  0.00000000 0.0000000      m1  ROC
-#&gt; 2 0.000 0.34 -0.02980526 0.7098053      m1  ROC
-#&gt; 3 0.001 0.34 -0.02980526 0.7098053      m1  ROC
-#&gt; 4 0.002 0.34 -0.02980526 0.7098053      m1  ROC
-#&gt; 5 0.003 0.34 -0.02980526 0.7098053      m1  ROC
-#&gt; 6 0.004 0.34 -0.02980526 0.7098053      m1  ROC</div><div class='input'>
+
 <span class='co'>## Generate an mmpoints object that contains basic evaluation measures</span>
 <span class='va'>cvpoints</span> <span class='op'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span><span class='op'>(</span><span class='va'>cvdat</span>, mode <span class='op'>=</span> <span class='st'>"basic"</span><span class='op'>)</span>
 
@@ -416,13 +362,7 @@ of the <code><a href='evalmod.html'>evalmod</a></code> function.</p></td>
 
 <span class='co'>## Show data frame</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>cvpoints.df</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;     x           y       ymin     ymax modname  type
-#&gt; 1 0.0          NA         NA       NA      m1 score
-#&gt; 2 0.1  1.88207537  1.6457350 2.118416      m1 score
-#&gt; 3 0.2  1.20510611  0.8322451 1.577967      m1 score
-#&gt; 4 0.3  0.77534711  0.2820198 1.268674      m1 score
-#&gt; 5 0.4  0.44011784  0.1146357 0.765600      m1 score
-#&gt; 6 0.5 -0.02838804 -0.3363391 0.279563      m1 score</div><div class='input'>
+
 
 <span class='co'>##################################################</span>
 <span class='co'>### AUC with the U statistic</span>
@@ -435,8 +375,7 @@ of the <code><a href='evalmod.html'>evalmod</a></code> function.</p></td>
 
 <span class='co'># as.data.frame 'aucroc'</span>
 <span class='fu'>as.data.frame</span><span class='op'>(</span><span class='va'>uauc1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   modnames dsids aucs ustats
-#&gt; 1       m1     1 0.72     72</div><div class='input'>
+
 <span class='co'>## mode = "aucroc"</span>
 <span class='va'>samps</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_sim_samples.html'>create_sim_samples</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>100</span>, <span class='fl'>100</span>, <span class='st'>"all"</span><span class='op'>)</span>
 <span class='va'>mdat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mmdata.html'>mmdata</a></span><span class='op'>(</span><span class='va'>samps</span><span class='op'>[[</span><span class='st'>"scores"</span><span class='op'>]</span><span class='op'>]</span>, <span class='va'>samps</span><span class='op'>[[</span><span class='st'>"labels"</span><span class='op'>]</span><span class='op'>]</span>,
@@ -446,13 +385,7 @@ of the <code><a href='evalmod.html'>evalmod</a></code> function.</p></td>
 
 <span class='co'># as.data.frame 'aucroc'</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='fu'>as.data.frame</span><span class='op'>(</span><span class='va'>uauc2</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   modnames dsids   aucs ustats
-#&gt; 1   random     1 0.5507   5507
-#&gt; 2  poor_er     1 0.8031   8031
-#&gt; 3  good_er     1 0.7532   7532
-#&gt; 4    excel     1 0.9899   9899
-#&gt; 5     perf     1 1.0000  10000
-#&gt; 6   random     2 0.5106   5106</div><div class='input'><span class='co'># }</span>
+<span class='op'>}</span>
 
 </div></pre>
   </div>
