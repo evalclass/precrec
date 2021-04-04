@@ -1,10 +1,10 @@
 
 # Precrec <img src="man/figures/logo.png" align="right" alt="" width="100" />
 
-[![Travis](https://travis-ci.org/takayasaito/precrec.svg?branch=master)](https://travis-ci.org/takayasaito/precrec/)
+[![Travis](https://travis-ci.org/takayasaito/precrec.svg?branch=main)](https://travis-ci.org/takayasaito/precrec/)
 [![AppVeyor Build
-Status](https://ci.appveyor.com/api/projects/status/github/takayasaito/precrec?branch=master&svg=true)](https://ci.appveyor.com/project/takayasaito/precrec/)
-[![codecov.io](https://codecov.io/github/takayasaito/precrec/coverage.svg?branch=master)](https://codecov.io/github/takayasaito/precrec?branch=master)
+Status](https://ci.appveyor.com/api/projects/status/github/takayasaito/precrec?branch=main&svg=true)](https://ci.appveyor.com/project/takayasaito/precrec/)
+[![codecov.io](https://codecov.io/github/takayasaito/precrec/coverage.svg?branch=main)](https://codecov.io/github/takayasaito/precrec?branch=main)
 [![CodeFactor](https://www.codefactor.io/repository/github/takayasaito/precrec/badge)](https://www.codefactor.io/repository/github/takayasaito/precrec/)
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version-ago/precrec)](https://cran.r-project.org/package=precrec)
 [![CRAN\_Logs\_Badge](https://cranlogs.r-pkg.org/badges/grand-total/precrec)](https://cran.r-project.org/package=precrec)
@@ -173,7 +173,7 @@ library(ggplot2)
 autoplot(sscurves)
 ```
 
-![](https://rawgit.com/takayasaito/precrec/master/README_files/figure-markdown_github/unnamed-chunk-2-1.png)
+![](https://rawgit.com/takayasaito/precrec/main/README_files/figure-markdown_github/unnamed-chunk-2-1.png)
 
 ## Citation
 

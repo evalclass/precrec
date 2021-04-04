@@ -1,5 +1,8 @@
 url: https://takayasaito.github.io/precrec
 
+repo:
+  branch: main
+
 templates:
   params:
     bootswatch: cerulean
