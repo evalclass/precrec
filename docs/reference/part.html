@@ -120,7 +120,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Calculate partial AUCs</h1>
-    <small class="dont-index">Source: <a href='https://github.com/takayasaito/precrec/blob/master/R/g_part.R'><code>R/g_part.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/takayasaito/precrec/blob/main/R/g_part.R'><code>R/g_part.R</code></a></small>
     <div class="hidden name"><code>part.Rd</code></div>
     </div>
 
@@ -196,7 +196,7 @@ two points in [0, 1]</p></td>
   of pAUCs.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 
 <span class='co'>## Load library</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span>
@@ -216,32 +216,13 @@ two points in [0, 1]</p></td>
 
 <span class='co'>## Show AUCs</span>
 <span class='va'>sscurves.part</span>
-</div><div class='output co'>#&gt; 
-#&gt;     === AUCs ===
-#&gt; 
-#&gt;      Model name Dataset ID Curve type       AUC
-#&gt;    1         m1          1        ROC 0.7200000
-#&gt;    2         m1          1        PRC 0.7397716
-#&gt; 
-#&gt; 
-#&gt;     === partial AUCs ===
-#&gt; 
-#&gt;      Model name Dataset ID Curve type      pAUC Standardized
-#&gt;    1         m1          1        ROC 0.3771875    0.7543750
-#&gt;    2         m1          1        PRC 0.3616708    0.7233417
-#&gt; 
-#&gt; 
-#&gt;     === Input data ===
-#&gt; 
-#&gt;      Model name Dataset ID # of negatives # of positives
-#&gt;    1         m1          1             10             10
-#&gt; </div><div class='input'>
+
 <span class='co'>## Plot partial curve</span>
 <span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='va'>sscurves.part</span><span class='op'>)</span>
-</div><div class='img'><img src='part-1.png' alt='' width='700' height='433' /></div><div class='input'>
+
 <span class='co'>## Plot partial curve with ggplot</span>
 <span class='fu'><a href='autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='va'>sscurves.part</span><span class='op'>)</span>
-</div><div class='img'><img src='part-2.png' alt='' width='700' height='433' /></div><div class='input'>
+
 
 <span class='co'>##################################################</span>
 <span class='co'>### Multiple models &amp; single test dataset</span>
@@ -260,52 +241,13 @@ two points in [0, 1]</p></td>
 
 <span class='co'>## Show AUCs</span>
 <span class='va'>mscurves.part</span>
-</div><div class='output co'>#&gt; 
-#&gt;     === AUCs ===
-#&gt; 
-#&gt;      Model name Dataset ID Curve type       AUC
-#&gt;    1     random          1        ROC 0.5069000
-#&gt;    2     random          1        PRC 0.5384987
-#&gt;    3    poor_er          1        ROC 0.8114000
-#&gt;    4    poor_er          1        PRC 0.7808159
-#&gt;    5    good_er          1        ROC 0.7531000
-#&gt;    6    good_er          1        PRC 0.7952740
-#&gt;    7      excel          1        ROC 0.9720000
-#&gt;    8      excel          1        PRC 0.9709210
-#&gt;    9       perf          1        ROC 1.0000000
-#&gt;   10       perf          1        PRC 1.0000000
-#&gt; 
-#&gt; 
-#&gt;     === partial AUCs ===
-#&gt; 
-#&gt;      Model name Dataset ID Curve type      pAUC Standardized
-#&gt;    1     random          1        ROC 0.1301000    0.3469333
-#&gt;    2     random          1        PRC 0.2185493    0.5827982
-#&gt;    3    poor_er          1        ROC 0.3070000    0.8186667
-#&gt;    4    poor_er          1        PRC 0.3733519    0.9956050
-#&gt;    5    good_er          1        ROC 0.2946000    0.7856000
-#&gt;    6    good_er          1        PRC 0.3601777    0.9604739
-#&gt;    7      excel          1        ROC 0.3708000    0.9888000
-#&gt;    8      excel          1        PRC 0.3750000    1.0000000
-#&gt;    9       perf          1        ROC 0.3750000    1.0000000
-#&gt;   10       perf          1        PRC 0.3750000    1.0000000
-#&gt; 
-#&gt; 
-#&gt;     === Input data ===
-#&gt; 
-#&gt;      Model name Dataset ID # of negatives # of positives
-#&gt;    1     random          1            100            100
-#&gt;    2    poor_er          1            100            100
-#&gt;    3    good_er          1            100            100
-#&gt;    4      excel          1            100            100
-#&gt;    5       perf          1            100            100
-#&gt; </div><div class='input'>
+
 <span class='co'>## Plot partial curves</span>
 <span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='va'>mscurves.part</span><span class='op'>)</span>
-</div><div class='img'><img src='part-3.png' alt='' width='700' height='433' /></div><div class='input'>
+
 <span class='co'>## Plot partial curves with ggplot</span>
 <span class='fu'><a href='autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='va'>mscurves.part</span><span class='op'>)</span>
-</div><div class='img'><img src='part-4.png' alt='' width='700' height='433' /></div><div class='input'>
+
 
 <span class='co'>##################################################</span>
 <span class='co'>### Single model &amp; multiple test datasets</span>
@@ -325,41 +267,13 @@ two points in [0, 1]</p></td>
 
 <span class='co'>## Show AUCs</span>
 <span class='va'>smcurves.part</span>
-</div><div class='output co'>#&gt; 
-#&gt;     === AUCs ===
-#&gt; 
-#&gt;      Model name Dataset ID Curve type       AUC
-#&gt;    1    good_er          1        ROC 0.8347000
-#&gt;    2    good_er          1        PRC 0.8678453
-#&gt;    3    good_er          2        ROC 0.8019000
-#&gt;    4    good_er          2        PRC 0.8431919
-#&gt;    5    good_er          3        ROC 0.8481000
-#&gt;    6    good_er          3        PRC 0.8797784
-#&gt;    7    good_er          4        ROC 0.8586000
-#&gt;    8    good_er          4        PRC 0.8820418
-#&gt; 
-#&gt; 
-#&gt;     === partial AUCs (average curves only) ===
-#&gt; 
-#&gt;      Model name Curve type      pAUC Standardized
-#&gt;    1    good_er        ROC 0.4326713    0.8653425
-#&gt;    2    good_er        PRC 0.4592858    0.9185717
-#&gt; 
-#&gt; 
-#&gt;     === Input data ===
-#&gt; 
-#&gt;      Model name Dataset ID # of negatives # of positives
-#&gt;    1    good_er          1            100            100
-#&gt;    2    good_er          2            100            100
-#&gt;    3    good_er          3            100            100
-#&gt;    4    good_er          4            100            100
-#&gt; </div><div class='input'>
+
 <span class='co'>## Plot partial curve</span>
 <span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='va'>smcurves.part</span><span class='op'>)</span>
-</div><div class='img'><img src='part-5.png' alt='' width='700' height='433' /></div><div class='input'>
+
 <span class='co'>## Plot partial curve with ggplot</span>
 <span class='fu'><a href='autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='va'>smcurves.part</span><span class='op'>)</span>
-</div><div class='img'><img src='part-6.png' alt='' width='700' height='433' /></div><div class='input'>
+
 
 <span class='co'>##################################################</span>
 <span class='co'>### Multiple models &amp; multiple test datasets</span>
@@ -379,127 +293,13 @@ two points in [0, 1]</p></td>
 
 <span class='co'>## Show AUCs</span>
 <span class='va'>mmcurves.part</span>
-</div><div class='output co'>#&gt; 
-#&gt;     === AUCs ===
-#&gt; 
-#&gt;      Model name Dataset ID Curve type       AUC
-#&gt;    1     random          1        ROC 0.5440000
-#&gt;    2     random          1        PRC 0.5796108
-#&gt;    3    poor_er          1        ROC 0.8192000
-#&gt;    4    poor_er          1        PRC 0.7566730
-#&gt;    5    good_er          1        ROC 0.7670000
-#&gt;    6    good_er          1        PRC 0.8194596
-#&gt;    7      excel          1        ROC 0.9830000
-#&gt;    8      excel          1        PRC 0.9849639
-#&gt;    9       perf          1        ROC 1.0000000
-#&gt;   10       perf          1        PRC 1.0000000
-#&gt;   11     random          2        ROC 0.4929000
-#&gt;   12     random          2        PRC 0.4956446
-#&gt;   13    poor_er          2        ROC 0.8483000
-#&gt;   14    poor_er          2        PRC 0.8165340
-#&gt;   15    good_er          2        ROC 0.8224000
-#&gt;   16    good_er          2        PRC 0.8554154
-#&gt;   17      excel          2        ROC 0.9883000
-#&gt;   18      excel          2        PRC 0.9890723
-#&gt;   19       perf          2        ROC 1.0000000
-#&gt;   20       perf          2        PRC 1.0000000
-#&gt;   21     random          3        ROC 0.4795000
-#&gt;   22     random          3        PRC 0.4827813
-#&gt;   23    poor_er          3        ROC 0.7723000
-#&gt;   24    poor_er          3        PRC 0.6955223
-#&gt;   25    good_er          3        ROC 0.7877000
-#&gt;   26    good_er          3        PRC 0.8319985
-#&gt;   27      excel          3        ROC 0.9697000
-#&gt;   28      excel          3        PRC 0.9704090
-#&gt;   29       perf          3        ROC 1.0000000
-#&gt;   30       perf          3        PRC 1.0000000
-#&gt;   31     random          4        ROC 0.4552000
-#&gt;   32     random          4        PRC 0.4904880
-#&gt;   33    poor_er          4        ROC 0.7877000
-#&gt;   34    poor_er          4        PRC 0.7158956
-#&gt;   35    good_er          4        ROC 0.8166000
-#&gt;   36    good_er          4        PRC 0.8478499
-#&gt;   37      excel          4        ROC 0.9837000
-#&gt;   38      excel          4        PRC 0.9864787
-#&gt;   39       perf          4        ROC 1.0000000
-#&gt;   40       perf          4        PRC 1.0000000
-#&gt; 
-#&gt; 
-#&gt;     === partial AUCs ===
-#&gt; 
-#&gt;      Model name Dataset ID Curve type      pAUC Standardized
-#&gt;    1     random          1        ROC 0.0512000    0.2048000
-#&gt;    2     random          1        PRC 0.1859678    0.7438711
-#&gt;    3    poor_er          1        ROC 0.1108000    0.4432000
-#&gt;    4    poor_er          1        PRC 0.1898327    0.7593310
-#&gt;    5    good_er          1        ROC 0.1328000    0.5312000
-#&gt;    6    good_er          1        PRC 0.2500000    1.0000000
-#&gt;    7      excel          1        ROC 0.2363000    0.9452000
-#&gt;    8      excel          1        PRC 0.2500000    1.0000000
-#&gt;    9       perf          1        ROC 0.2500000    1.0000000
-#&gt;   10       perf          1        PRC 0.2500000    1.0000000
-#&gt;   11     random          2        ROC 0.0305000    0.1220000
-#&gt;   12     random          2        PRC 0.1218805    0.4875222
-#&gt;   13    poor_er          2        ROC 0.1305000    0.5220000
-#&gt;   14    poor_er          2        PRC 0.2225176    0.8900705
-#&gt;   15    good_er          2        ROC 0.1486000    0.5944000
-#&gt;   16    good_er          2        PRC 0.2500000    1.0000000
-#&gt;   17      excel          2        ROC 0.2388000    0.9552000
-#&gt;   18      excel          2        PRC 0.2500000    1.0000000
-#&gt;   19       perf          2        ROC 0.2500000    1.0000000
-#&gt;   20       perf          2        PRC 0.2500000    1.0000000
-#&gt;   21     random          3        ROC 0.0303000    0.1212000
-#&gt;   22     random          3        PRC 0.1150595    0.4602380
-#&gt;   23    poor_er          3        ROC 0.0857000    0.3428000
-#&gt;   24    poor_er          3        PRC 0.1682442    0.6729769
-#&gt;   25    good_er          3        ROC 0.1361000    0.5444000
-#&gt;   26    good_er          3        PRC 0.2500000    1.0000000
-#&gt;   27      excel          3        ROC 0.2203000    0.8812000
-#&gt;   28      excel          3        PRC 0.2500000    1.0000000
-#&gt;   29       perf          3        ROC 0.2500000    1.0000000
-#&gt;   30       perf          3        PRC 0.2500000    1.0000000
-#&gt;   31     random          4        ROC 0.0295000    0.1180000
-#&gt;   32     random          4        PRC 0.1330801    0.5323203
-#&gt;   33    poor_er          4        ROC 0.0930000    0.3720000
-#&gt;   34    poor_er          4        PRC 0.1729591    0.6918366
-#&gt;   35    good_er          4        ROC 0.1526000    0.6104000
-#&gt;   36    good_er          4        PRC 0.2500000    1.0000000
-#&gt;   37      excel          4        ROC 0.2375000    0.9500000
-#&gt;   38      excel          4        PRC 0.2500000    1.0000000
-#&gt;   39       perf          4        ROC 0.2500000    1.0000000
-#&gt;   40       perf          4        PRC 0.2500000    1.0000000
-#&gt; 
-#&gt; 
-#&gt;     === Input data ===
-#&gt; 
-#&gt;      Model name Dataset ID # of negatives # of positives
-#&gt;    1     random          1            100            100
-#&gt;    2    poor_er          1            100            100
-#&gt;    3    good_er          1            100            100
-#&gt;    4      excel          1            100            100
-#&gt;    5       perf          1            100            100
-#&gt;    6     random          2            100            100
-#&gt;    7    poor_er          2            100            100
-#&gt;    8    good_er          2            100            100
-#&gt;    9      excel          2            100            100
-#&gt;   10       perf          2            100            100
-#&gt;   11     random          3            100            100
-#&gt;   12    poor_er          3            100            100
-#&gt;   13    good_er          3            100            100
-#&gt;   14      excel          3            100            100
-#&gt;   15       perf          3            100            100
-#&gt;   16     random          4            100            100
-#&gt;   17    poor_er          4            100            100
-#&gt;   18    good_er          4            100            100
-#&gt;   19      excel          4            100            100
-#&gt;   20       perf          4            100            100
-#&gt; </div><div class='input'>
+
 <span class='co'>## Plot partial curves</span>
 <span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='va'>mmcurves.part</span><span class='op'>)</span>
-</div><div class='img'><img src='part-7.png' alt='' width='700' height='433' /></div><div class='input'>
+
 <span class='co'>## Plot partial curves with ggplot</span>
 <span class='fu'><a href='autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='va'>mmcurves.part</span><span class='op'>)</span>
-</div><div class='img'><img src='part-8.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
+<span class='op'>}</span>
 
 </div></pre>
   </div>

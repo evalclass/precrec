@@ -119,7 +119,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Calculate CIs of ROC and precision-recall AUCs</h1>
-    <small class="dont-index">Source: <a href='https://github.com/takayasaito/precrec/blob/master/R/g_auc_ci.R'><code>R/g_auc_ci.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/takayasaito/precrec/blob/main/R/g_auc_ci.R'><code>R/g_auc_ci.R</code></a></small>
     <div class="hidden name"><code>auc_ci.Rd</code></div>
     </div>
 
@@ -195,9 +195,9 @@
 
 <span class='co'>## Shows the result</span>
 <span class='va'>sm_auc_cis</span>
-</div><div class='output co'>#&gt;   modnames curvetypes      mean      error lower_bound upper_bound n
-#&gt; 1  good_er        ROC 0.8032500 0.03138050   0.7718695   0.8346305 4
-#&gt; 2  good_er        PRC 0.8336947 0.03031903   0.8033757   0.8640138 4</div><div class='input'>
+</div><div class='output co'>#&gt;   modnames curvetypes     mean      error lower_bound upper_bound n
+#&gt; 1  good_er        ROC 0.789975 0.02019134   0.7697837   0.8101663 4
+#&gt; 2  good_er        PRC 0.834768 0.02176032   0.8130076   0.8565283 4</div><div class='input'>
 <span class='co'>##################################################</span>
 <span class='co'>### Multiple models &amp; multiple test datasets</span>
 <span class='co'>###</span>
@@ -216,17 +216,17 @@
 
 <span class='co'>## Shows the result</span>
 <span class='va'>mm_auc_ci</span>
-</div><div class='output co'>#&gt;    modnames curvetypes      mean      error lower_bound upper_bound n
-#&gt; 1    random        ROC 0.4636250 0.02802810   0.4355969   0.4916531 4
-#&gt; 2    random        PRC 0.4836572 0.02555646   0.4581007   0.5092137 4
-#&gt; 3   poor_er        ROC 0.7943250 0.04363583   0.7506892   0.8379608 4
-#&gt; 4   poor_er        PRC 0.7484883 0.05112118   0.6973671   0.7996095 4
-#&gt; 5   good_er        ROC 0.8134000 0.01687562   0.7965244   0.8302756 4
-#&gt; 6   good_er        PRC 0.8469727 0.01544813   0.8315246   0.8624208 4
-#&gt; 7     excel        ROC 0.9795500 0.01153232   0.9680177   0.9910823 4
-#&gt; 8     excel        PRC 0.9787671 0.01327986   0.9654872   0.9920469 4
-#&gt; 9      perf        ROC 1.0000000 0.00000000   1.0000000   1.0000000 4
-#&gt; 10     perf        PRC 1.0000000 0.00000000   1.0000000   1.0000000 4</div><div class='input'>
+</div><div class='output co'>#&gt;    modnames curvetypes      mean       error lower_bound upper_bound n
+#&gt; 1    random        ROC 0.4785750 0.025405848   0.4531692   0.5039808 4
+#&gt; 2    random        PRC 0.4927332 0.022360158   0.4703731   0.5150934 4
+#&gt; 3   poor_er        ROC 0.7893750 0.043471334   0.7459037   0.8328463 4
+#&gt; 4   poor_er        PRC 0.7458060 0.037821227   0.7079848   0.7836272 4
+#&gt; 5   good_er        ROC 0.7734750 0.041057727   0.7324173   0.8145327 4
+#&gt; 6   good_er        PRC 0.8099094 0.033761476   0.7761479   0.8436708 4
+#&gt; 7     excel        ROC 0.9810500 0.006008337   0.9750417   0.9870583 4
+#&gt; 8     excel        PRC 0.9813123 0.004354320   0.9769579   0.9856666 4
+#&gt; 9      perf        ROC 1.0000000 0.000000000   1.0000000   1.0000000 4
+#&gt; 10     perf        PRC 1.0000000 0.000000000   1.0000000   1.0000000 4</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
