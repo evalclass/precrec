@@ -173,7 +173,7 @@ library(ggplot2)
 autoplot(sscurves)
 ```
 
-![](https://rawgit.com/takayasaito/precrec/main/README_files/figure-markdown_github/unnamed-chunk-2-1.png)
+![](https://rawgit.com/takayasaito/precrec/main/README_files/figure-gfm/unnamed-chunk-2-1.png)
 
 ## Citation
 
