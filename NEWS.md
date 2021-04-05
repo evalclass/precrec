@@ -1,3 +1,7 @@
+# precrec 0.12.4
+
+* Transfer the GitHub repository to evalclass/precrec
+
 # precrec 0.12.2
 
 * Skip ggplot2 unit tests
