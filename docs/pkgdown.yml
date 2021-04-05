@@ -3,8 +3,8 @@ pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   introduction: introduction.html
-last_built: 2021-04-04T22:43Z
+last_built: 2021-04-05T19:32Z
 urls:
-  reference: https://takayasaito.github.io/precrec/reference
-  article: https://takayasaito.github.io/precrec/articles
+  reference: https://evalclass.github.io/precrec/reference
+  article: https://evalclass.github.io/precrec/articles
 
