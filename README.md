@@ -1,11 +1,11 @@
 
 # Precrec <img src="man/figures/logo.png" align="right" alt="" width="100" />
 
-[![Travis](https://travis-ci.org/takayasaito/precrec.svg?branch=main)](https://travis-ci.org/takayasaito/precrec/)
+[![Travis](https://travis-ci.org/evalclass/precrec.svg?branch=main)](https://travis-ci.org/evalclass/precrec/)
 [![AppVeyor Build
-Status](https://ci.appveyor.com/api/projects/status/github/takayasaito/precrec?branch=main&svg=true)](https://ci.appveyor.com/project/takayasaito/precrec/)
-[![codecov.io](https://codecov.io/github/takayasaito/precrec/coverage.svg?branch=main)](https://codecov.io/github/takayasaito/precrec?branch=main)
-[![CodeFactor](https://www.codefactor.io/repository/github/takayasaito/precrec/badge)](https://www.codefactor.io/repository/github/takayasaito/precrec/)
+Status](https://ci.appveyor.com/api/projects/status/github/evalclass/precrec?branch=main&svg=true)](https://ci.appveyor.com/project/takayasaito/precrec/)
+[![codecov.io](https://codecov.io/github/evalclass/precrec/coverage.svg?branch=main)](https://codecov.io/github/evalclass/precrec?branch=main)
+[![CodeFactor](https://www.codefactor.io/repository/github/evalclass/precrec/badge)](https://www.codefactor.io/repository/github/evalclass/precrec/)
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version-ago/precrec)](https://cran.r-project.org/package=precrec)
 [![CRAN\_Logs\_Badge](https://cranlogs.r-pkg.org/badges/grand-total/precrec)](https://cran.r-project.org/package=precrec)
 
@@ -18,23 +18,23 @@ C++/[Rcpp](https://cran.r-project.org/package=Rcpp).
 
 ## Documentation
 
-  - [Package website](https://takayasaito.github.io/precrec/) – GitHub
+  - [Package website](https://evalclass.github.io/precrec/) – GitHub
     pages that contain all precrec documentation.
 
   - [Introduction to
-    precrec](https://takayasaito.github.io/precrec/articles/introduction.html)
+    precrec](https://evalclass.github.io/precrec/articles/introduction.html)
     – a package vignette that contains the descriptions of the functions
     with several useful examples. View the vignette with
     `vignette("introduction", package = "precrec")` in R. The HTML
     version is also available on the [GitHub
-    Pages](https://takayasaito.github.io/precrec/articles/introduction.html).
+    Pages](https://evalclass.github.io/precrec/articles/introduction.html).
 
-  - [Help pages](https://takayasaito.github.io/precrec/reference/) – all
+  - [Help pages](https://evalclass.github.io/precrec/reference/) – all
     the functions including the S3 generics except for `print` have
     their own help pages with plenty of examples. View the main help
     page with `help(package = "precrec")` in R. The HTML version is also
     available on the [GitHub
-    Pages](https://takayasaito.github.io/precrec/reference/).
+    Pages](https://evalclass.github.io/precrec/reference/).
 
 ## Six key features of precrec
 
@@ -95,8 +95,8 @@ evaluation tools.
     `install.packages("precrec")`.
 
   - Alternatively, you can install a development version of `precrec`
-    from [our GitHub
-    repository](https://github.com/takayasaito/precrec/). To install it:
+    from [our GitHub repository](https://github.com/evalclass/precrec/).
+    To install it:
     
     1.  Make sure you have a working development environment.
         
@@ -109,7 +109,7 @@ evaluation tools.
         `install.packages("devtools")`.
     
     3.  Install `precrec` from the GitHub repository with
-        `devtools::install_github("takayasaito/precrec")`.
+        `devtools::install_github("evalclass/precrec")`.
 
 ## Functions
 
@@ -173,7 +173,7 @@ library(ggplot2)
 autoplot(sscurves)
 ```
 
-![](https://rawgit.com/takayasaito/precrec/main/README_files/figure-gfm/unnamed-chunk-2-1.png)
+![](https://raw.githubusercontent.com/evalclass/precrec/main/README_files/figure-gfm/unnamed-chunk-2-1.png)
 
 ## Citation
 
@@ -199,8 +199,3 @@ doi:
     Datasets](https://doi.org/10.1371/journal.pone.0118432) - our paper
     that summarized potential pitfalls of ROC plots with imbalanced
     datasets and advantages of using precision-recall plots instead.
-
-  - [Advanced R](https://adv-r.hadley.nz) and [R
-    packages](https://r-pkgs.org) - web sites of two Hadley Wickham’s
-    books that we used as references to decide the basic structure and
-    the coding style of `precrec`.
