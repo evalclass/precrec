@@ -14,5 +14,5 @@ citEntry(entry = "Article",
   paste("Takaya Saito and Marc Rehmsmeier (2017).",
         "Precrec: fast and accurate precision-recall and ROC curve calculations in R.",
         "Bioinformatics (2017) 33 (1): 145-147.",
-        "doi: 10.1093/bioinformatics/btw570")
+        "https://doi.org/10.1093/bioinformatics/btw570")
 )
