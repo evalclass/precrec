@@ -1,13 +1,15 @@
-## Version 0.12.4
+## Version 0.12.5
 This is a submission for updating the already published package - precrec.
 In this version I have:
 
 * Transferred the GitHub repository to an organization GitHub account,
 
+* Updated citation,
+
 * Added a flag to skip ggplot unit tests to reduce the total unit test time, and
 
 * Updated the version.
-    * 0.12.1 -> 0.12.4
+    * 0.12.1 -> 0.12.5
     
 ## Test environments
 * local Ubuntu 20.04 High Sierra, R 4.0.5
