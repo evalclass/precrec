@@ -1,7 +1,9 @@
+#define STRICT_R_HEADERS
 #include <Rcpp.h>
 #include <vector>
 #include <string>
 #include <ctime>
+#include <cfloat>       // DBL_MIN, DBL_MAX
 
 /*
 ##############################################

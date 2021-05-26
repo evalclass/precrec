@@ -1,3 +1,4 @@
+#define STRICT_R_HEADERS
 #include <Rcpp.h>
 #include <vector>       // std::vector
 #include <string>       // std::string
