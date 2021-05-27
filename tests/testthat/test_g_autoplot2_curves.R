@@ -3,6 +3,8 @@
 context("AP 2: Autoplot for curves")
 # Test autoplot(object, ...)
 
+skip_on_cran()
+
 test_extra_ap2 <- FALSE
 
 ap2_check_libs <- function() {

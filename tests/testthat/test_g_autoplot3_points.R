@@ -3,6 +3,8 @@
 context("AP 3: Autoplot for points")
 # Test autoplot(object, ...)
 
+skip_on_cran()
+
 test_extra_ap3 <- FALSE
 
 ap3_check_libs <- function() {

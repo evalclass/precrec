@@ -3,6 +3,8 @@
 context("AP 1: Autoplot for pipeline functions")
 # Test autoplot(object, ...)
 
+skip_on_cran()
+
 ap1_check_libs <- function() {
   if (requireNamespace("ggplot2", quietly = TRUE)) {
     TRUE
