@@ -81,7 +81,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">precrec</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12.7</span>
       </span>
     </div>
 
@@ -250,7 +250,7 @@
   with the general R plot.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+    <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
 
 <span class='co'>## Load libraries</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span>
@@ -268,38 +268,40 @@
 
 <span class='co'>## Plot both ROC and Precision-Recall curves</span>
 <span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>sscurves</span><span class='op'>)</span>
-
+</div><div class='img'><img src='autoplot-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Reduced/Full supporting points</span>
 <span class='va'>sampss</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_sim_samples.html'>create_sim_samples</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>50000</span>, <span class='fl'>50000</span><span class='op'>)</span>
 <span class='va'>evalss</span> <span class='op'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span><span class='op'>(</span>scores <span class='op'>=</span> <span class='va'>sampss</span><span class='op'>$</span><span class='va'>scores</span>, labels <span class='op'>=</span> <span class='va'>sampss</span><span class='op'>$</span><span class='va'>labels</span><span class='op'>)</span>
 
 <span class='co'># Reduced supporting point</span>
 <span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span><span class='op'>(</span><span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>evalss</span><span class='op'>)</span><span class='op'>)</span>
-
+</div><div class='img'><img src='autoplot-2.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt;    user  system elapsed 
+#&gt;   0.194   0.010   0.210 </div><div class='input'>
 <span class='co'># Full supporting points</span>
 <span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span><span class='op'>(</span><span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>evalss</span>, reduce_points <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span><span class='op'>)</span>
-
+</div><div class='img'><img src='autoplot-3.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt;    user  system elapsed 
+#&gt;   1.660   0.136   1.804 </div><div class='input'>
 <span class='co'>## Get a grob object for multiple plots</span>
 <span class='va'>pp1</span> <span class='op'>&lt;-</span> <span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>sscurves</span>, ret_grob <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/frame.html'>plot.new</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/grid/grid.draw.html'>grid.draw</a></span><span class='op'>(</span><span class='va'>pp1</span><span class='op'>)</span>
-
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/grid/grid.draw.html'>grid.draw</a></span><span class='op'>(</span><span class='va'>pp1</span><span class='op'>)</span>
+</div><div class='img'><img src='autoplot-4.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## A ROC curve</span>
 <span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>sscurves</span>, curvetype <span class='op'>=</span> <span class='st'>"ROC"</span><span class='op'>)</span>
-
+</div><div class='img'><img src='autoplot-5.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## A Precision-Recall curve</span>
 <span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>sscurves</span>, curvetype <span class='op'>=</span> <span class='st'>"PRC"</span><span class='op'>)</span>
-
+</div><div class='img'><img src='autoplot-6.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Generate an sspoints object that contains basic evaluation measures</span>
 <span class='va'>sspoints</span> <span class='op'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span><span class='op'>(</span>mode <span class='op'>=</span> <span class='st'>"basic"</span>, scores <span class='op'>=</span> <span class='va'>P10N10</span><span class='op'>$</span><span class='va'>scores</span>,
                     labels <span class='op'>=</span> <span class='va'>P10N10</span><span class='op'>$</span><span class='va'>labels</span><span class='op'>)</span>
 
 <span class='co'>## Normalized ranks vs. basic evaluation measures</span>
 <span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>sspoints</span><span class='op'>)</span>
-
+</div><div class='img'><img src='autoplot-7.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Normalized ranks vs. precision</span>
 <span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>sspoints</span>, curvetype <span class='op'>=</span> <span class='st'>"precision"</span><span class='op'>)</span>
-
+</div><div class='img'><img src='autoplot-8.png' alt='' width='700' height='433' /></div><div class='input'>
 
 <span class='co'>##################################################</span>
 <span class='co'>### Multiple models &amp; single test dataset</span>
@@ -315,29 +317,31 @@
 
 <span class='co'>## ROC and Precision-Recall curves</span>
 <span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>mscurves</span><span class='op'>)</span>
-
+</div><div class='img'><img src='autoplot-9.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Reduced/Full supporting points</span>
 <span class='va'>sampms</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_sim_samples.html'>create_sim_samples</a></span><span class='op'>(</span><span class='fl'>5</span>, <span class='fl'>50000</span>, <span class='fl'>50000</span><span class='op'>)</span>
 <span class='va'>evalms</span> <span class='op'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span><span class='op'>(</span>scores <span class='op'>=</span> <span class='va'>sampms</span><span class='op'>$</span><span class='va'>scores</span>, labels <span class='op'>=</span> <span class='va'>sampms</span><span class='op'>$</span><span class='va'>labels</span><span class='op'>)</span>
 
 <span class='co'># Reduced supporting point</span>
 <span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span><span class='op'>(</span><span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>evalms</span><span class='op'>)</span><span class='op'>)</span>
-
+</div><div class='img'><img src='autoplot-10.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt;    user  system elapsed 
+#&gt;   0.378   0.036   0.415 </div><div class='input'>
 <span class='co'># Full supporting points</span>
 <span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span><span class='op'>(</span><span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>evalms</span>, reduce_points <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span><span class='op'>)</span>
-
+</div><div class='img'><img src='autoplot-11.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt;    user  system elapsed 
+#&gt;   7.248   0.898   8.155 </div><div class='input'>
 <span class='co'>## Hide the legend</span>
 <span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>mscurves</span>, show_legend <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
+</div><div class='img'><img src='autoplot-12.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Generate an mspoints object that contains basic evaluation measures</span>
 <span class='va'>mspoints</span> <span class='op'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span><span class='op'>(</span><span class='va'>mdat</span>, mode <span class='op'>=</span> <span class='st'>"basic"</span><span class='op'>)</span>
 
 <span class='co'>## Normalized ranks vs. basic evaluation measures</span>
 <span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>mspoints</span><span class='op'>)</span>
-
+</div><div class='img'><img src='autoplot-13.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Hide the legend</span>
 <span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>mspoints</span>, show_legend <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
+</div><div class='img'><img src='autoplot-14.png' alt='' width='700' height='433' /></div><div class='input'>
 
 <span class='co'>##################################################</span>
 <span class='co'>### Single model &amp; multiple test datasets</span>
@@ -354,13 +358,13 @@
 
 <span class='co'>## Average ROC and Precision-Recall curves</span>
 <span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>smcurves</span>, raw_curves <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
+</div><div class='img'><img src='autoplot-15.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Hide confidence bounds</span>
 <span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>smcurves</span>, raw_curves <span class='op'>=</span> <span class='cn'>FALSE</span>, show_cb <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
+</div><div class='img'><img src='autoplot-16.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Raw ROC and Precision-Recall curves</span>
 <span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>smcurves</span>, raw_curves <span class='op'>=</span> <span class='cn'>TRUE</span>, show_cb <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
+</div><div class='img'><img src='autoplot-17.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Reduced/Full supporting points</span>
 <span class='va'>sampsm</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_sim_samples.html'>create_sim_samples</a></span><span class='op'>(</span><span class='fl'>4</span>, <span class='fl'>5000</span>, <span class='fl'>5000</span><span class='op'>)</span>
 <span class='va'>mdatsm</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mmdata.html'>mmdata</a></span><span class='op'>(</span><span class='va'>sampsm</span><span class='op'>$</span><span class='va'>scores</span>, <span class='va'>sampsm</span><span class='op'>$</span><span class='va'>labels</span>, expd_first <span class='op'>=</span> <span class='st'>"dsids"</span><span class='op'>)</span>
@@ -368,16 +372,18 @@
 
 <span class='co'># Reduced supporting point</span>
 <span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span><span class='op'>(</span><span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>evalsm</span>, raw_curves <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
-
+</div><div class='img'><img src='autoplot-18.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt;    user  system elapsed 
+#&gt;   0.205   0.003   0.209 </div><div class='input'>
 <span class='co'># Full supporting points</span>
 <span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span><span class='op'>(</span><span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>evalsm</span>, raw_curves <span class='op'>=</span> <span class='cn'>TRUE</span>, reduce_points <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span><span class='op'>)</span>
-
+</div><div class='img'><img src='autoplot-19.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt;    user  system elapsed 
+#&gt;   0.180   0.001   0.181 </div><div class='input'>
 <span class='co'>## Generate an smpoints object that contains basic evaluation measures</span>
 <span class='va'>smpoints</span> <span class='op'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span><span class='op'>(</span><span class='va'>mdat</span>, mode <span class='op'>=</span> <span class='st'>"basic"</span><span class='op'>)</span>
 
 <span class='co'>## Normalized ranks vs. average basic evaluation measures</span>
 <span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>smpoints</span><span class='op'>)</span>
-
+</div><div class='img'><img src='autoplot-20.png' alt='' width='700' height='433' /></div><div class='input'>
 
 <span class='co'>##################################################</span>
 <span class='co'>### Multiple models &amp; multiple test datasets</span>
@@ -394,13 +400,13 @@
 
 <span class='co'>## Average ROC and Precision-Recall curves</span>
 <span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>mmcurves</span>, raw_curves <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
+</div><div class='img'><img src='autoplot-21.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Show confidence bounds</span>
 <span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>mmcurves</span>, raw_curves <span class='op'>=</span> <span class='cn'>FALSE</span>, show_cb <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-
+</div><div class='img'><img src='autoplot-22.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Raw ROC and Precision-Recall curves</span>
 <span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>mmcurves</span>, raw_curves <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-
+</div><div class='img'><img src='autoplot-23.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Reduced/Full supporting points</span>
 <span class='va'>sampmm</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_sim_samples.html'>create_sim_samples</a></span><span class='op'>(</span><span class='fl'>4</span>, <span class='fl'>5000</span>, <span class='fl'>5000</span><span class='op'>)</span>
 <span class='va'>mdatmm</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mmdata.html'>mmdata</a></span><span class='op'>(</span><span class='va'>sampmm</span><span class='op'>$</span><span class='va'>scores</span>, <span class='va'>sampmm</span><span class='op'>$</span><span class='va'>labels</span>, modnames <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"m1"</span>, <span class='st'>"m2"</span><span class='op'>)</span>,
@@ -409,16 +415,18 @@
 
 <span class='co'># Reduced supporting point</span>
 <span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span><span class='op'>(</span><span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>evalmm</span>, raw_curves <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
-
+</div><div class='img'><img src='autoplot-24.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt;    user  system elapsed 
+#&gt;   0.313   0.010   0.323 </div><div class='input'>
 <span class='co'># Full supporting points</span>
 <span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span><span class='op'>(</span><span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>evalmm</span>, raw_curves <span class='op'>=</span> <span class='cn'>TRUE</span>, reduce_points <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span><span class='op'>)</span>
-
+</div><div class='img'><img src='autoplot-25.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt;    user  system elapsed 
+#&gt;   0.743   0.081   0.825 </div><div class='input'>
 <span class='co'>## Generate an mmpoints object that contains basic evaluation measures</span>
 <span class='va'>mmpoints</span> <span class='op'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span><span class='op'>(</span><span class='va'>mdat</span>, mode <span class='op'>=</span> <span class='st'>"basic"</span><span class='op'>)</span>
 
 <span class='co'>## Normalized ranks vs. average basic evaluation measures</span>
 <span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>mmpoints</span><span class='op'>)</span>
-
+</div><div class='img'><img src='autoplot-26.png' alt='' width='700' height='433' /></div><div class='input'>
 
 <span class='co'>##################################################</span>
 <span class='co'>### N-fold cross validation datasets</span>
@@ -437,17 +445,17 @@
 
 <span class='co'>## Average ROC and Precision-Recall curves</span>
 <span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>cvcurves</span><span class='op'>)</span>
-
+</div><div class='img'><img src='autoplot-27.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Show confidence bounds</span>
 <span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>cvcurves</span>, show_cb <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-
+</div><div class='img'><img src='autoplot-28.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Generate an mmpoints object that contains basic evaluation measures</span>
 <span class='va'>cvpoints</span> <span class='op'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span><span class='op'>(</span><span class='va'>cvdat</span>, mode <span class='op'>=</span> <span class='st'>"basic"</span><span class='op'>)</span>
 
 <span class='co'>## Normalized ranks vs. average basic evaluation measures</span>
 <span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>cvpoints</span><span class='op'>)</span>
-
-<span class='op'>}</span>
+</div><div class='img'><img src='autoplot-29.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='co'># }</span>
 
 </div></pre>
   </div>
