@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">precrec</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12.7</span>
       </span>
     </div>
 
@@ -237,7 +237,7 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='co'># \dontrun{</span>
 <span class='co'>##################################################</span>
 <span class='co'>### Single model &amp; single test dataset</span>
 <span class='co'>###</span>
@@ -250,23 +250,23 @@
 
 <span class='co'>## Plot both ROC and Precision-Recall curves</span>
 <span class='fu'>plot</span><span class='op'>(</span><span class='va'>sscurves</span><span class='op'>)</span>
-
+</div><div class='img'><img src='plot-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Plot a ROC curve</span>
 <span class='fu'>plot</span><span class='op'>(</span><span class='va'>sscurves</span>, curvetype <span class='op'>=</span> <span class='st'>"ROC"</span><span class='op'>)</span>
-
+</div><div class='img'><img src='plot-2.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Plot a Precision-Recall curve</span>
 <span class='fu'>plot</span><span class='op'>(</span><span class='va'>sscurves</span>, curvetype <span class='op'>=</span> <span class='st'>"PRC"</span><span class='op'>)</span>
-
+</div><div class='img'><img src='plot-3.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Generate an sspoints object that contains basic evaluation measures</span>
 <span class='va'>sspoints</span> <span class='op'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span><span class='op'>(</span>mode <span class='op'>=</span> <span class='st'>"basic"</span>, scores <span class='op'>=</span> <span class='va'>P10N10</span><span class='op'>$</span><span class='va'>scores</span>,
                     labels <span class='op'>=</span> <span class='va'>P10N10</span><span class='op'>$</span><span class='va'>labels</span><span class='op'>)</span>
 
 <span class='co'>## Plot normalized ranks vs. basic evaluation measures</span>
 <span class='fu'>plot</span><span class='op'>(</span><span class='va'>sspoints</span><span class='op'>)</span>
-
+</div><div class='img'><img src='plot-4.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Plot normalized ranks vs. precision</span>
 <span class='fu'>plot</span><span class='op'>(</span><span class='va'>sspoints</span>, curvetype <span class='op'>=</span> <span class='st'>"precision"</span><span class='op'>)</span>
-
+</div><div class='img'><img src='plot-5.png' alt='' width='700' height='433' /></div><div class='input'>
 
 <span class='co'>##################################################</span>
 <span class='co'>### Multiple models &amp; single test dataset</span>
@@ -282,19 +282,19 @@
 
 <span class='co'>## Plot both ROC and Precision-Recall curves</span>
 <span class='fu'>plot</span><span class='op'>(</span><span class='va'>mscurves</span><span class='op'>)</span>
-
+</div><div class='img'><img src='plot-6.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Hide the legend</span>
 <span class='fu'>plot</span><span class='op'>(</span><span class='va'>mscurves</span>, show_legend <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
+</div><div class='img'><img src='plot-7.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Generate an mspoints object that contains basic evaluation measures</span>
 <span class='va'>mspoints</span> <span class='op'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span><span class='op'>(</span><span class='va'>mdat</span>, mode <span class='op'>=</span> <span class='st'>"basic"</span><span class='op'>)</span>
 
 <span class='co'>## Plot normalized ranks vs. basic evaluation measures</span>
 <span class='fu'>plot</span><span class='op'>(</span><span class='va'>mspoints</span><span class='op'>)</span>
-
+</div><div class='img'><img src='plot-8.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Hide the legend</span>
 <span class='fu'>plot</span><span class='op'>(</span><span class='va'>mspoints</span>, show_legend <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
+</div><div class='img'><img src='plot-9.png' alt='' width='700' height='433' /></div><div class='input'>
 
 <span class='co'>##################################################</span>
 <span class='co'>### Single model &amp; multiple test datasets</span>
@@ -311,19 +311,19 @@
 
 <span class='co'>## Plot average ROC and Precision-Recall curves</span>
 <span class='fu'>plot</span><span class='op'>(</span><span class='va'>smcurves</span>, raw_curves <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
+</div><div class='img'><img src='plot-10.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Hide confidence bounds</span>
 <span class='fu'>plot</span><span class='op'>(</span><span class='va'>smcurves</span>, raw_curves <span class='op'>=</span> <span class='cn'>FALSE</span>, show_cb <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
+</div><div class='img'><img src='plot-11.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Plot raw ROC and Precision-Recall curves</span>
 <span class='fu'>plot</span><span class='op'>(</span><span class='va'>smcurves</span>, raw_curves <span class='op'>=</span> <span class='cn'>TRUE</span>, show_cb <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
+</div><div class='img'><img src='plot-12.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Generate an smpoints object that contains basic evaluation measures</span>
 <span class='va'>smpoints</span> <span class='op'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span><span class='op'>(</span><span class='va'>mdat</span>, mode <span class='op'>=</span> <span class='st'>"basic"</span><span class='op'>)</span>
 
 <span class='co'>## Plot normalized ranks vs. average basic evaluation measures</span>
 <span class='fu'>plot</span><span class='op'>(</span><span class='va'>smpoints</span><span class='op'>)</span>
-
+</div><div class='img'><img src='plot-13.png' alt='' width='700' height='433' /></div><div class='input'>
 
 <span class='co'>##################################################</span>
 <span class='co'>### Multiple models &amp; multiple test datasets</span>
@@ -340,19 +340,19 @@
 
 <span class='co'>## Plot average ROC and Precision-Recall curves</span>
 <span class='fu'>plot</span><span class='op'>(</span><span class='va'>mmcurves</span>, raw_curves <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
+</div><div class='img'><img src='plot-14.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Show confidence bounds</span>
 <span class='fu'>plot</span><span class='op'>(</span><span class='va'>mmcurves</span>, raw_curves <span class='op'>=</span> <span class='cn'>FALSE</span>, show_cb <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-
+</div><div class='img'><img src='plot-15.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Plot raw ROC and Precision-Recall curves</span>
 <span class='fu'>plot</span><span class='op'>(</span><span class='va'>mmcurves</span>, raw_curves <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-
+</div><div class='img'><img src='plot-16.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Generate an mmpoints object that contains basic evaluation measures</span>
 <span class='va'>mmpoints</span> <span class='op'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span><span class='op'>(</span><span class='va'>mdat</span>, mode <span class='op'>=</span> <span class='st'>"basic"</span><span class='op'>)</span>
 
 <span class='co'>## Plot normalized ranks vs. average basic evaluation measures</span>
 <span class='fu'>plot</span><span class='op'>(</span><span class='va'>mmpoints</span><span class='op'>)</span>
-
+</div><div class='img'><img src='plot-17.png' alt='' width='700' height='433' /></div><div class='input'>
 
 <span class='co'>##################################################</span>
 <span class='co'>### N-fold cross validation datasets</span>
@@ -371,17 +371,17 @@
 
 <span class='co'>## Average ROC and Precision-Recall curves</span>
 <span class='fu'>plot</span><span class='op'>(</span><span class='va'>cvcurves</span><span class='op'>)</span>
-
+</div><div class='img'><img src='plot-18.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Show confidence bounds</span>
 <span class='fu'>plot</span><span class='op'>(</span><span class='va'>cvcurves</span>, show_cb <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-
+</div><div class='img'><img src='plot-19.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Generate an mmpoints object that contains basic evaluation measures</span>
 <span class='va'>cvpoints</span> <span class='op'>&lt;-</span> <span class='fu'><a href='evalmod.html'>evalmod</a></span><span class='op'>(</span><span class='va'>cvdat</span>, mode <span class='op'>=</span> <span class='st'>"basic"</span><span class='op'>)</span>
 
 <span class='co'>## Normalized ranks vs. average basic evaluation measures</span>
 <span class='fu'>plot</span><span class='op'>(</span><span class='va'>cvpoints</span><span class='op'>)</span>
-
-<span class='op'>}</span>
+</div><div class='img'><img src='plot-20.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
