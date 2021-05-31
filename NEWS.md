@@ -1,3 +1,8 @@
+# precrec 0.12.7
+
+* Use STRICT_R_HEADER in Rcpp source files
+* Skip several unit tests on CRAN submission
+
 # precrec 0.12.5
 
 * Update citation
