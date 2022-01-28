@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // convert_curve_df
 Rcpp::List convert_curve_df(const Rcpp::List& obj, const Rcpp::CharacterVector& uniq_modnames, const Rcpp::CharacterVector& uniq_dsids, const Rcpp::IntegerVector& modnames, const Rcpp::IntegerVector& dsids, const Rcpp::CharacterVector& dsid_modnames, const Rcpp::List& curvetype_names, const int x_bins);
 RcppExport SEXP _precrec_convert_curve_df(SEXP objSEXP, SEXP uniq_modnamesSEXP, SEXP uniq_dsidsSEXP, SEXP modnamesSEXP, SEXP dsidsSEXP, SEXP dsid_modnamesSEXP, SEXP curvetype_namesSEXP, SEXP x_binsSEXP) {
