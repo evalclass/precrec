@@ -281,15 +281,8 @@ NULL
   }
 
   # Make dsis-modname pairs
-  i <- 1
-  dsid_modnames <- vector(mode = "character",
-                          length = length(uniq_modnames) * length(uniq_dsids))
-  for (modname in uniq_modnames) {
-    for (dsid in uniq_dsids) {
-      dsid_modnames[i] <- paste(modname, dsid, sep = ":")
-      i <- i + 1
-    }
-  }
+  dsid_modnames <- paste(rep(uniq_modnames, length(uniq_dsids)),
+                         rep(uniq_dsids, each=length(uniq_modnames)), sep=":")
 
   # Create curve_df
   if (raw_curves) {
