@@ -71,6 +71,17 @@ test_that("as.data.frame sscurves", {
   df1_comp_dfs(curve_df, curve_df2)
 })
 
+
+test_that("as.data.frame sscurves - dsid_modname", {
+
+  data(P10N10)
+  curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
+
+  curve_df <- as.data.frame(curves, raw_curves = TRUE, check_ggplot = TRUE)
+  expect_equal(as.character(curve_df$dsid_modname),
+               paste(curve_df$modname, curve_df$dsid, sep=":"))
+})
+
 test_that("as.data.frame mscurves", {
 
   curves <- df1_create_mscurves()
@@ -81,6 +92,15 @@ test_that("as.data.frame mscurves", {
   curve_df2 <- suppressWarnings(as.data.frame(curves, use_rcpp = FALSE))
   df1_comp_dfs(curve_df, curve_df2)
 
+})
+
+test_that("as.data.frame mscurves - dsid_modname", {
+
+  curves <- df1_create_mscurves()
+
+  curve_df <- as.data.frame(curves, raw_curves = TRUE, check_ggplot = TRUE)
+  expect_equal(as.character(curve_df$dsid_modname),
+               paste(curve_df$modname, curve_df$dsid, sep=":"))
 })
 
 test_that("as.data.frame smcurves", {
@@ -94,6 +114,15 @@ test_that("as.data.frame smcurves", {
   df1_comp_dfs(curve_df, curve_df2)
 })
 
+test_that("as.data.frame smcurves - dsid_modname", {
+
+  curves <- df1_create_smcurves(raw_curves = TRUE)
+
+  curve_df <- as.data.frame(curves, raw_curves = TRUE, check_ggplot = TRUE)
+  expect_equal(as.character(curve_df$dsid_modname),
+               paste(curve_df$modname, curve_df$dsid, sep=":"))
+})
+
 test_that("as.data.frame mmcurves", {
 
   curves <- df1_create_mmcurves(raw_curves = TRUE)
@@ -103,6 +132,15 @@ test_that("as.data.frame mmcurves", {
 
   curve_df2 <- suppressWarnings(as.data.frame(curves, use_rcpp = FALSE))
   df1_comp_dfs(curve_df, curve_df2)
+})
+
+test_that("as.data.frame mmcurves - dsid_modname", {
+
+  curves <- df1_create_mmcurves(raw_curves = TRUE)
+
+  curve_df <- as.data.frame(curves, raw_curves = TRUE, check_ggplot = TRUE)
+  expect_equal(as.character(curve_df$dsid_modname),
+               paste(curve_df$modname, curve_df$dsid, sep=":"))
 })
 
 test_that("as.data raw_curve option sscurves", {

@@ -72,6 +72,20 @@ test_that("fortify sspoints", {
   expect_true(is.list(curve_df))
 })
 
+test_that("fortify sspoints - dsid_modname", {
+  if (!ft3_check_libs()) {
+    skip("Libraries cannot be loaded")
+  }
+
+  data(P10N10)
+  curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
+                    mode = "basic")
+
+  curve_df <- ggplot2::fortify(curves)
+  expect_equal(as.character(curve_df$dsid_modname),
+               paste(curve_df$modname, curve_df$dsid, sep=":"))
+})
+
 test_that("fortify mspoints", {
   if (!ft3_check_libs()) {
     skip("Libraries cannot be loaded")
@@ -81,6 +95,18 @@ test_that("fortify mspoints", {
 
   curve_df <- ggplot2::fortify(curves)
   expect_true(is.list(curve_df))
+})
+
+test_that("fortify mspoints - dsid_modname", {
+  if (!ft3_check_libs()) {
+    skip("Libraries cannot be loaded")
+  }
+
+  curves <- ft3_create_mscurves()
+
+  curve_df <- ggplot2::fortify(curves)
+  expect_equal(as.character(curve_df$dsid_modname),
+               paste(curve_df$modname, curve_df$dsid, sep=":"))
 })
 
 test_that("fortify smpoints", {
@@ -94,6 +120,18 @@ test_that("fortify smpoints", {
   expect_true(is.list(curve_df))
 })
 
+test_that("fortify smpoints - dsid_modname", {
+  if (!ft3_check_libs()) {
+    skip("Libraries cannot be loaded")
+  }
+
+  curves <- ft3_create_smcurves(raw_curves = TRUE)
+
+  curve_df <- ggplot2::fortify(curves)
+  expect_equal(as.character(curve_df$dsid_modname),
+               paste(curve_df$modname, curve_df$dsid, sep=":"))
+})
+
 test_that("fortify mmpoints", {
   if (!ft3_check_libs()) {
     skip("Libraries cannot be loaded")
@@ -103,6 +141,18 @@ test_that("fortify mmpoints", {
 
   curve_df <- ggplot2::fortify(curves)
   expect_true(is.list(curve_df))
+})
+
+test_that("fortify mmpoints - dsid_modname", {
+  if (!ft3_check_libs()) {
+    skip("Libraries cannot be loaded")
+  }
+
+  curves <- ft3_create_mmcurves(raw_curves = TRUE)
+
+  curve_df <- ggplot2::fortify(curves)
+  expect_equal(as.character(curve_df$dsid_modname),
+               paste(curve_df$modname, curve_df$dsid, sep=":"))
 })
 
 test_that("fortify raw_curve option smpoints", {
