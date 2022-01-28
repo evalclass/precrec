@@ -1,3 +1,7 @@
+# precrec 0.12.8
+
+* Fix incorrect dsid_modnames when data.frame is created by fortify()
+
 # precrec 0.12.7
 
 * Use STRICT_R_HEADER in Rcpp source files

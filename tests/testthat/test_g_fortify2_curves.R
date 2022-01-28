@@ -94,6 +94,20 @@ test_that("sscurves - reduce points", {
   expect_lte(nrow(curve_df2b), 1000)
 })
 
+test_that("fortify sscurves - dsid_modname", {
+  if (!ft2_check_libs()) {
+    skip("Libraries cannot be loaded")
+  }
+
+  data(P10N10)
+  curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
+
+  curve_df <- ggplot2::fortify(curves)
+  expect_equal(as.character(curve_df$dsid_modname),
+               paste(curve_df$modname, curve_df$dsid, sep=":"))
+
+})
+
 test_that("fortify mscurves", {
   if (!ft2_check_libs()) {
     skip("Libraries cannot be loaded")
@@ -125,6 +139,18 @@ test_that("mscurves - reduce points", {
 
   curve_df2b <- ggplot2::fortify(curves2, reduce_points = TRUE)
   expect_lte(nrow(curve_df2b), 4000)
+})
+
+test_that("fortify mscurves - dsid_modname", {
+  if (!ft2_check_libs()) {
+    skip("Libraries cannot be loaded")
+  }
+
+  curves <- ft2_create_mscurves()
+
+  curve_df <- ggplot2::fortify(curves)
+  expect_equal(as.character(curve_df$dsid_modname),
+               paste(curve_df$modname, curve_df$dsid, sep=":"))
 })
 
 test_that("fortify smcurves", {
@@ -163,6 +189,18 @@ test_that("smcurves - reduce points", {
   expect_lte(nrow(curve_df2b), 4000)
 })
 
+test_that("fortify smcurves - dsid_modname", {
+  if (!ft2_check_libs()) {
+    skip("Libraries cannot be loaded")
+  }
+
+  curves <- ft2_create_smcurves(raw_curves = TRUE)
+
+  curve_df <- ggplot2::fortify(curves)
+  expect_equal(as.character(curve_df$dsid_modname),
+               paste(curve_df$modname, curve_df$dsid, sep=":"))
+})
+
 test_that("fortify mmcurves", {
   if (!ft2_check_libs()) {
     skip("Libraries cannot be loaded")
@@ -198,6 +236,18 @@ test_that("mmcurves - reduce points", {
   curve_df2b <- ggplot2::fortify(curves2, raw_curves = TRUE,
                                  reduce_points = TRUE)
   expect_lte(nrow(curve_df2b), 4000)
+})
+
+test_that("fortify mmcurves - dsid_modname", {
+  if (!ft2_check_libs()) {
+    skip("Libraries cannot be loaded")
+  }
+
+  curves <- ft2_create_mmcurves(raw_curves = TRUE)
+
+  curve_df <- ggplot2::fortify(curves)
+  expect_equal(as.character(curve_df$dsid_modname),
+               paste(curve_df$modname, curve_df$dsid, sep=":"))
 })
 
 test_that("fortify raw_curve option smcurves", {
