@@ -1,7 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://evalclass.github.io/precrec/404.html</loc>
+  </url>
+  <url>
+    <loc>https://evalclass.github.io/precrec/LICENSE-text.html</loc>
+  </url>
+  <url>
+    <loc>https://evalclass.github.io/precrec/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://evalclass.github.io/precrec/articles/introduction.html</loc>
+  </url>
+  <url>
+    <loc>https://evalclass.github.io/precrec/authors.html</loc>
+  </url>
+  <url>
     <loc>https://evalclass.github.io/precrec/index.html</loc>
+  </url>
+  <url>
+    <loc>https://evalclass.github.io/precrec/news/index.html</loc>
   </url>
   <url>
     <loc>https://evalclass.github.io/precrec/reference/B1000.html</loc>
@@ -46,6 +64,9 @@
     <loc>https://evalclass.github.io/precrec/reference/fortify.html</loc>
   </url>
   <url>
+    <loc>https://evalclass.github.io/precrec/reference/index.html</loc>
+  </url>
+  <url>
     <loc>https://evalclass.github.io/precrec/reference/join_labels.html</loc>
   </url>
   <url>
@@ -65,8 +86,5 @@
   </url>
   <url>
     <loc>https://evalclass.github.io/precrec/reference/precrec.html</loc>
-  </url>
-  <url>
-    <loc>https://evalclass.github.io/precrec/articles/introduction.html</loc>
   </url>
 </urlset>
