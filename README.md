@@ -1,7 +1,7 @@
 
 # Precrec <img src="man/figures/logo.png" align="right" alt="" width="100" />
 
-[![Travis](https://travis-ci.org/evalclass/precrec.svg?branch=main)](https://travis-ci.org/evalclass/precrec/)
+[![R-CMD-check](https://github.com/evalclass/precrec/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/evalclass/precrec/actions/workflows/R-CMD-check.yaml)
 [![AppVeyor Build
 Status](https://ci.appveyor.com/api/projects/status/github/evalclass/precrec?branch=main&svg=true)](https://ci.appveyor.com/project/takayasaito/precrec/)
 [![codecov.io](https://codecov.io/github/evalclass/precrec/coverage.svg?branch=main)](https://codecov.io/github/evalclass/precrec?branch=main)
@@ -152,12 +152,7 @@ returns an S3 object.
 
 ``` r
 library(precrec)
-```
 
-    ## Warning in register(): Can't find generic `scale_type` in package ggplot2 to
-    ## register S3 method.
-
-``` r
 # Load a test dataset
 data(P10N10)
 
