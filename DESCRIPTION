@@ -1,8 +1,8 @@
 Package: precrec
 Type: Package
 Title: Calculate Accurate Precision-Recall and ROC (Receiver Operator Characteristics) Curves
-Version: 0.12.7
-Date: 2021-05-31
+Version: 0.12.8
+Date: 2022-01-28
 Authors@R: c(
     person("Takaya", "Saito", email = "takaya.saito@outlook.com", role = c("aut", "cre"), 
            comment = c(ORCID = "0000-0002-0154-8452")),
@@ -10,8 +10,8 @@ Authors@R: c(
            comment = c(ORCID = "0000-0002-5021-7721")))
 Description: Accurate calculations and visualization of precision-recall and ROC (Receiver Operator Characteristics)
     curves. Saito and Rehmsmeier (2015) <doi:10.1371/journal.pone.0118432>.
-URL: https://evalclass.github.io/precrec/, https://github.com/evalclass/precrec/
-BugReports: https://github.com/evalclass/precrec/issues/
+URL: https://github.com/evalclass/precrec
+BugReports: https://github.com/evalclass/precrec/issues
 Depends: R (>= 3.2.1)
 License: GPL-3
 Language: en-US
@@ -30,6 +30,6 @@ Imports:
     methods,
     data.table (>= 1.10.4),
     withr (>= 2.3.0)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Encoding: UTF-8
 VignetteBuilder: knitr
