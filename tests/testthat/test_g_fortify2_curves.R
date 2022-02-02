@@ -104,7 +104,7 @@ test_that("fortify sscurves - dsid_modname", {
 
   curve_df <- ggplot2::fortify(curves)
   expect_equal(as.character(curve_df$dsid_modname),
-               paste(curve_df$modname, curve_df$dsid, sep=":"))
+               paste(curve_df$modname, curve_df$dsid, sep = ":"))
 
 })
 
@@ -150,7 +150,7 @@ test_that("fortify mscurves - dsid_modname", {
 
   curve_df <- ggplot2::fortify(curves)
   expect_equal(as.character(curve_df$dsid_modname),
-               paste(curve_df$modname, curve_df$dsid, sep=":"))
+               paste(curve_df$modname, curve_df$dsid, sep = ":"))
 })
 
 test_that("fortify smcurves", {
@@ -198,7 +198,7 @@ test_that("fortify smcurves - dsid_modname", {
 
   curve_df <- ggplot2::fortify(curves)
   expect_equal(as.character(curve_df$dsid_modname),
-               paste(curve_df$modname, curve_df$dsid, sep=":"))
+               paste(curve_df$modname, curve_df$dsid, sep = ":"))
 })
 
 test_that("fortify mmcurves", {
@@ -247,10 +247,10 @@ test_that("fortify mmcurves - dsid_modname", {
 
   curve_df <- ggplot2::fortify(curves)
   expect_equal(as.character(curve_df$dsid_modname),
-               paste(curve_df$modname, curve_df$dsid, sep=":"))
+               paste(curve_df$modname, curve_df$dsid, sep = ":"))
 
   samp1 <- create_sim_samples(5, 10, 10, c("random", "poor_er", "good_er"))
-  samp1$modnames <- rep(c("random", "poor_er", "good_er"), each=5)
+  samp1$modnames <- rep(c("random", "poor_er", "good_er"), each = 5)
   samp1$dsids <- rep(1:5, 3)
 
   mmcurves <- evalmod(scores = samp1$scores, labels = samp1$labels,

@@ -83,7 +83,7 @@ test_that("fortify sspoints - dsid_modname", {
 
   point_df <- ggplot2::fortify(sspoints)
   expect_equal(as.character(point_df$dsid_modname),
-               paste(point_df$modname, point_df$dsid, sep=":"))
+               paste(point_df$modname, point_df$dsid, sep = ":"))
 })
 
 test_that("fortify mspoints", {
@@ -106,7 +106,7 @@ test_that("fortify mspoints - dsid_modname", {
 
   point_df <- ggplot2::fortify(mspoints)
   expect_equal(as.character(point_df$dsid_modname),
-               paste(point_df$modname, point_df$dsid, sep=":"))
+               paste(point_df$modname, point_df$dsid, sep = ":"))
 })
 
 test_that("fortify smpoints", {
@@ -129,7 +129,7 @@ test_that("fortify smpoints - dsid_modname", {
 
   point_df <- ggplot2::fortify(smpoints)
   expect_equal(as.character(point_df$dsid_modname),
-               paste(point_df$modname, point_df$dsid, sep=":"))
+               paste(point_df$modname, point_df$dsid, sep = ":"))
 })
 
 test_that("fortify mmpoints", {
@@ -152,10 +152,10 @@ test_that("fortify mmpoints - dsid_modname", {
 
   point_df <- ggplot2::fortify(mmpoints)
   expect_equal(as.character(point_df$dsid_modname),
-               paste(point_df$modname, point_df$dsid, sep=":"))
+               paste(point_df$modname, point_df$dsid, sep = ":"))
 
   samp1 <- create_sim_samples(5, 10, 10, c("random", "poor_er", "good_er"))
-  samp1$modnames <- rep(c("random", "poor_er", "good_er"), each=5)
+  samp1$modnames <- rep(c("random", "poor_er", "good_er"), each = 5)
   samp1$dsids <- rep(1:5, 3)
 
   mmpoints <- evalmod(scores = samp1$scores, labels = samp1$labels,
