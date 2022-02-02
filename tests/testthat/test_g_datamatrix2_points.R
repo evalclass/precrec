@@ -3,7 +3,7 @@
 context("DF 2: as.data.frame points")
 # Test as.data.frame(x, ...)
 
-df2_create_mscurves <- function() {
+df2_create_mspoints <- function() {
   s1 <- c(1, 2, 3, 4)
   s2 <- c(5, 6, 7, 8)
   s3 <- c(2, 4, 6, 8)
@@ -18,7 +18,7 @@ df2_create_mscurves <- function() {
   evalmod(mdat, mode = "basic")
 }
 
-df2_create_smcurves <- function(raw_curves = FALSE) {
+df2_create_smpoints <- function(raw_curves = FALSE) {
   s1 <- c(1, 2, 3, 4)
   s2 <- c(5, 6, 7, 8)
   s3 <- c(2, 4, 6, 8)
@@ -33,7 +33,7 @@ df2_create_smcurves <- function(raw_curves = FALSE) {
   evalmod(mdat, mode = "basic", raw_curves = raw_curves)
 }
 
-df2_create_mmcurves <- function(raw_curves = FALSE) {
+df2_create_mmpoints <- function(raw_curves = FALSE) {
   s1 <- c(1, 2, 3, 4)
   s2 <- c(5, 6, 7, 8)
   s3 <- c(2, 4, 6, 8)
@@ -63,50 +63,50 @@ df2_comp_dfs <- function(df1, df2) {
 test_that("as.data.frame sspoints", {
 
   data(P10N10)
-  curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
-                    mode = "basic")
+  sspoints <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
+                      mode = "basic")
 
-  curve_df <- as.data.frame(curves)
-  expect_true(is.data.frame(curve_df))
+  point_df <- as.data.frame(sspoints)
+  expect_true(is.data.frame(point_df))
 
-  curve_df2 <- suppressWarnings(as.data.frame(curves, use_rcpp = FALSE))
-  df2_comp_dfs(curve_df, curve_df2)
+  point_df2 <- suppressWarnings(as.data.frame(sspoints, use_rcpp = FALSE))
+  df2_comp_dfs(point_df, point_df2)
 })
 
 test_that("as.data.frame mspoints", {
 
-  curves <- df2_create_mscurves()
+  mspoints <- df2_create_mspoints()
 
-  curve_df <- as.data.frame(curves)
-  expect_true(is.data.frame(curve_df))
+  point_df <- as.data.frame(mspoints)
+  expect_true(is.data.frame(point_df))
 
-  curve_df2 <- suppressWarnings(as.data.frame(curves, use_rcpp = FALSE))
-  df2_comp_dfs(curve_df, curve_df2)
+  point_df2 <- suppressWarnings(as.data.frame(mspoints, use_rcpp = FALSE))
+  df2_comp_dfs(point_df, point_df2)
 })
 
 test_that("as.data.frame smpoints", {
 
-  curves <- df2_create_smcurves(raw_curves = TRUE)
+  smpoints <- df2_create_smpoints(raw_curves = TRUE)
 
-  curve_df <- as.data.frame(curves)
-  expect_true(is.data.frame(curve_df))
+  point_df <- as.data.frame(smpoints)
+  expect_true(is.data.frame(point_df))
 
-  curve_df2 <- suppressWarnings(as.data.frame(curves, use_rcpp = FALSE))
-  df2_comp_dfs(curve_df, curve_df2)
+  point_df2 <- suppressWarnings(as.data.frame(smpoints, use_rcpp = FALSE))
+  df2_comp_dfs(point_df, point_df2)
 })
 
 test_that("as.data.frame mmpoints", {
 
-  curves <- df2_create_mmcurves(raw_curves = TRUE)
+  mmpoints <- df2_create_mmpoints(raw_curves = TRUE)
 
-  curve_df <- as.data.frame(curves)
-  expect_true(is.data.frame(curve_df))
+  point_df <- as.data.frame(mmpoints)
+  expect_true(is.data.frame(point_df))
 
-  curve_df2 <- suppressWarnings(as.data.frame(curves, use_rcpp = FALSE))
-  df2_comp_dfs(curve_df, curve_df2)
+  point_df2 <- suppressWarnings(as.data.frame(mmpoints, use_rcpp = FALSE))
+  df2_comp_dfs(point_df, point_df2)
 })
 
-test_that("as.data.frame raw_curve option sspoints", {
+test_that("as.data.frame raw_point option sspoints", {
   get_args <- function(x, y = NULL, ...) {
     .get_dataframe_arglist(attr(x, "args"),
                            def_raw_curves = TRUE, ...)
@@ -126,13 +126,13 @@ test_that("as.data.frame raw_curve option sspoints", {
   expect_true(args1c[["raw_curves"]])
 })
 
-test_that("as.data.frame raw_curve option mspoints", {
+test_that("as.data.frame raw_point option mspoints", {
   get_args <- function(x, y = NULL, ...) {
     .get_dataframe_arglist(attr(x, "args"),
                            def_raw_curves = TRUE, ...)
   }
 
-  points1 <- df2_create_mscurves()
+  points1 <- df2_create_mspoints()
 
   args1a <- get_args(points1, raw_curves = TRUE)
   expect_true(args1a[["raw_curves"]])
@@ -144,13 +144,13 @@ test_that("as.data.frame raw_curve option mspoints", {
   expect_true(args1c[["raw_curves"]])
 })
 
-test_that("as.data.frame raw_curve option smpoints", {
+test_that("as.data.frame raw_point option smpoints", {
   get_args <- function(x, y = NULL, ...) {
     .get_dataframe_arglist(attr(x, "args"),
                            def_raw_curves = NULL, ...)
   }
 
-  points1 <- df2_create_smcurves()
+  points1 <- df2_create_smpoints()
 
   args1a <- get_args(points1, raw_curves = TRUE)
   expect_true(args1a[["raw_curves"]])
@@ -161,7 +161,7 @@ test_that("as.data.frame raw_curve option smpoints", {
   args1c <- get_args(points1)
   expect_false(args1c[["raw_curves"]])
 
-  points2 <- df2_create_smcurves(raw_curves = TRUE)
+  points2 <- df2_create_smpoints(raw_curves = TRUE)
 
   args2a <- get_args(points2, raw_curves = TRUE)
   expect_true(args2a[["raw_curves"]])
@@ -173,13 +173,13 @@ test_that("as.data.frame raw_curve option smpoints", {
   expect_true(args2c[["raw_curves"]])
 })
 
-test_that("as.data.frame raw_curve option mmpoints", {
+test_that("as.data.frame raw_point option mmpoints", {
   get_args <- function(x, y = NULL, ...) {
     .get_dataframe_arglist(attr(x, "args"),
                            def_raw_curves = NULL, ...)
   }
 
-  points1 <- df2_create_mmcurves()
+  points1 <- df2_create_mmpoints()
 
   args1a <- get_args(points1, raw_curves = TRUE)
   expect_true(args1a[["raw_curves"]])
@@ -190,7 +190,7 @@ test_that("as.data.frame raw_curve option mmpoints", {
   args1c <- get_args(points1)
   expect_false(args1c[["raw_curves"]])
 
-  points2 <- df2_create_mmcurves(raw_curves = TRUE)
+  points2 <- df2_create_mmpoints(raw_curves = TRUE)
 
   args2a <- get_args(points2, raw_curves = TRUE)
   expect_true(args2a[["raw_curves"]])
