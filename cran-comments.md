@@ -14,9 +14,9 @@ This is a submission for updating the already published package - precrec. In th
 
 -   local macOS Big Sur, R 4.1.2
 
--   win-builder, R Under development (unstable) (2022-01-27 r81578 ucrt)
+-   win-builder, R Under development (unstable) (2022-03-09 r81867 ucrt)
 
--   Windows Server 2012 R2 x64 (on AppVeyor), R 4.1.0 Patched (2022-01-24 r81578)
+-   Windows Server 2012 R2 x64 (on AppVeyor), R 4.1.2 Patched (2022-02-25 r81819)
 
 -   GitHub Actions
 
