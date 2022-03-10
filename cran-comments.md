@@ -1,14 +1,12 @@
-## Version 0.12.8
+## Version 0.12.9
 
 This is a submission for updating the already published package - precrec. In this version I have:
 
--   Fixed incorrect labels in data.frame when fortify() is used with mmcurves
-
--   Stopped using Travis and started using GitHub Actions for CI, and
+-   Fix another case of incorrect assignment of dsid_modnames, and
 
 -   Updated the version.
 
-    -   0.12.7 -> 0.12.8
+    -   0.12.8 -> 0.12.9
 
 ## Test environments
 
