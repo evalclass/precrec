@@ -51,17 +51,17 @@ pt3_create_mmpoints <- function(raw_curves = FALSE) {
   evalmod(mdat, mode = "basic", raw_curves = raw_curves)
 }
 
-ap3_test_basic_measures <- function(points, ...){
+ap3_test_basic_measures <- function(xpoints, ...){
 
-  expect_error(plot(points, ...), NA)
-  expect_error(plot(points, c("sensitivity", "specificity", "error",
+  expect_error(plot(xpoints, ...), NA)
+  expect_error(plot(xpoints, c("sensitivity", "specificity", "error",
                               "accuracy", "precision"), ...), NA)
-  expect_error(plot(points, c("sensitivity", "specificity", "error",
+  expect_error(plot(xpoints, c("sensitivity", "specificity", "error",
                               "precision"), ...), NA)
-  expect_error(plot(points, c("sensitivity", "specificity", "precision"), ...),
+  expect_error(plot(xpoints, c("sensitivity", "specificity", "precision"), ...),
                NA)
-  expect_error(plot(points, c("sensitivity", "precision"), ...), NA)
-  expect_error(plot(points, "precision", ...), NA)
+  expect_error(plot(xpoints, c("sensitivity", "precision"), ...), NA)
+  expect_error(plot(xpoints, "precision", ...), NA)
 }
 
 test_that("plot sspoints", {
@@ -69,55 +69,55 @@ test_that("plot sspoints", {
   on.exit(dev.off())
 
   data(P10N10)
-  points <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
-                    mode = "basic")
+  sspoints <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
+                      mode = "basic")
 
-  ap3_test_basic_measures(points)
-  ap3_test_basic_measures(points, type = "l")
-  ap3_test_basic_measures(points, type = "b")
+  ap3_test_basic_measures(sspoints)
+  ap3_test_basic_measures(sspoints, type = "l")
+  ap3_test_basic_measures(sspoints, type = "b")
 })
 
 test_that("plot mspoints", {
   pdf(NULL)
   on.exit(dev.off())
 
-  points <- pt3_create_mspoints()
+  mspoints <- pt3_create_mspoints()
 
-  ap3_test_basic_measures(points)
-  ap3_test_basic_measures(points, type = "l")
-  ap3_test_basic_measures(points, type = "b")
-  ap3_test_basic_measures(points, show_legend = TRUE)
+  ap3_test_basic_measures(mspoints)
+  ap3_test_basic_measures(mspoints, type = "l")
+  ap3_test_basic_measures(mspoints, type = "b")
+  ap3_test_basic_measures(mspoints, show_legend = TRUE)
 })
 
 test_that("plot smpoints", {
   pdf(NULL)
   on.exit(dev.off())
 
-  points <- pt3_create_smpoints()
+  smpoints <- pt3_create_smpoints()
 
-  ap3_test_basic_measures(points)
-  ap3_test_basic_measures(points, type = "l")
-  ap3_test_basic_measures(points, type = "b")
-  ap3_test_basic_measures(points, show_cb = FALSE)
+  ap3_test_basic_measures(smpoints)
+  ap3_test_basic_measures(smpoints, type = "l")
+  ap3_test_basic_measures(smpoints, type = "b")
+  ap3_test_basic_measures(smpoints, show_cb = FALSE)
 
-  points2 <- pt3_create_smpoints(raw_curves = TRUE)
-  ap3_test_basic_measures(points2, raw_curves = TRUE)
+  smpoints2 <- pt3_create_smpoints(raw_curves = TRUE)
+  ap3_test_basic_measures(smpoints2, raw_curves = TRUE)
 })
 
 test_that("plot mmpoints", {
   pdf(NULL)
   on.exit(dev.off())
 
-  points <- pt3_create_mmpoints()
+  mmpoints <- pt3_create_mmpoints()
 
-  ap3_test_basic_measures(points)
-  ap3_test_basic_measures(points, type = "l")
-  ap3_test_basic_measures(points, type = "b")
-  ap3_test_basic_measures(points, show_cb = TRUE)
-  ap3_test_basic_measures(points, show_legend = FALSE)
+  ap3_test_basic_measures(mmpoints)
+  ap3_test_basic_measures(mmpoints, type = "l")
+  ap3_test_basic_measures(mmpoints, type = "b")
+  ap3_test_basic_measures(mmpoints, show_cb = TRUE)
+  ap3_test_basic_measures(mmpoints, show_legend = FALSE)
 
-  points2 <- pt3_create_mmpoints(raw_curves = TRUE)
-  ap3_test_basic_measures(points2, raw_curves = TRUE)
+  mmpoints2 <- pt3_create_mmpoints(raw_curves = TRUE)
+  ap3_test_basic_measures(mmpoints2, raw_curves = TRUE)
 })
 
 test_that("plot raw_curve option sspoints", {

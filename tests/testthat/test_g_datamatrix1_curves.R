@@ -79,7 +79,7 @@ test_that("as.data.frame sscurves - dsid_modname", {
 
   curve_df <- as.data.frame(curves, raw_curves = TRUE, check_ggplot = TRUE)
   expect_equal(as.character(curve_df$dsid_modname),
-               paste(curve_df$modname, curve_df$dsid, sep=":"))
+               paste(curve_df$modname, curve_df$dsid, sep = ":"))
 })
 
 test_that("as.data.frame mscurves", {
@@ -100,7 +100,7 @@ test_that("as.data.frame mscurves - dsid_modname", {
 
   curve_df <- as.data.frame(curves, raw_curves = TRUE, check_ggplot = TRUE)
   expect_equal(as.character(curve_df$dsid_modname),
-               paste(curve_df$modname, curve_df$dsid, sep=":"))
+               paste(curve_df$modname, curve_df$dsid, sep = ":"))
 })
 
 test_that("as.data.frame smcurves", {
@@ -120,7 +120,7 @@ test_that("as.data.frame smcurves - dsid_modname", {
 
   curve_df <- as.data.frame(curves, raw_curves = TRUE, check_ggplot = TRUE)
   expect_equal(as.character(curve_df$dsid_modname),
-               paste(curve_df$modname, curve_df$dsid, sep=":"))
+               paste(curve_df$modname, curve_df$dsid, sep = ":"))
 })
 
 test_that("as.data.frame mmcurves", {
@@ -140,7 +140,7 @@ test_that("as.data.frame mmcurves - dsid_modname", {
 
   curve_df <- as.data.frame(curves, raw_curves = TRUE, check_ggplot = TRUE)
   expect_equal(as.character(curve_df$dsid_modname),
-               paste(curve_df$modname, curve_df$dsid, sep=":"))
+               paste(curve_df$modname, curve_df$dsid, sep = ":"))
 })
 
 test_that("as.data raw_curve option sscurves", {

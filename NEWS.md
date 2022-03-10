@@ -1,3 +1,7 @@
+# precrec 0.12.9
+
+* Fix another case of incorrect assignment of dsid_modnames
+
 # precrec 0.12.8
 
 * Fix incorrect dsid_modnames when data.frame is created by fortify()

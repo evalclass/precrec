@@ -2,8 +2,8 @@
 
 branches:
   only:
-    - main
-    - develop
+    - __main
+    - __develop
 
 os:
  - linux
