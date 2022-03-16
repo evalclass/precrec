@@ -78,7 +78,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Introduction to precrec</h1>
             
-            <h4 data-toc-skip class="date">2022-03-10</h4>
+            <h4 data-toc-skip class="date">2022-03-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/evalclass/precrec/blob/main/vignettes/introduction.Rmd" class="external-link"><code>vignettes/introduction.Rmd</code></a></small>
       <div class="hidden name"><code>introduction.Rmd</code></div>
@@ -198,9 +198,9 @@
 <code class="sourceCode R"><span class="co"># Full supporting points</span>
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">eval1</span>, reduce_points <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">##    user  system elapsed </span>
-<span class="co">##   0.479   0.012   0.490 </span>
+<span class="co">##   0.477   0.000   0.477 </span>
 <span class="co">##    user  system elapsed </span>
-<span class="co">##   8.421   0.156   8.578</span></code></pre>
+<span class="co">##   7.652   0.216   7.869</span></code></pre>
 </div>
 <div class="section level4">
 <h4 id="example-of-the-auc-function">Example of the auc function<a class="anchor" aria-label="anchor" href="#example-of-the-auc-function"></a>
@@ -496,42 +496,42 @@
 <tbody>
 <tr class="odd">
 <td align="right">0.000</td>
-<td align="right">0.0</td>
+<td align="right">0</td>
 <td align="left">random</td>
 <td align="left">1</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="even">
-<td align="right">0.000</td>
-<td align="right">0.1</td>
-<td align="left">random</td>
-<td align="left">1</td>
-<td align="left">ROC</td>
-</tr>
-<tr class="odd">
 <td align="right">0.001</td>
-<td align="right">0.1</td>
-<td align="left">random</td>
-<td align="left">1</td>
-<td align="left">ROC</td>
-</tr>
-<tr class="even">
-<td align="right">0.002</td>
-<td align="right">0.1</td>
+<td align="right">0</td>
 <td align="left">random</td>
 <td align="left">1</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="odd">
-<td align="right">0.003</td>
-<td align="right">0.1</td>
+<td align="right">0.002</td>
+<td align="right">0</td>
 <td align="left">random</td>
 <td align="left">1</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="even">
+<td align="right">0.003</td>
+<td align="right">0</td>
+<td align="left">random</td>
+<td align="left">1</td>
+<td align="left">ROC</td>
+</tr>
+<tr class="odd">
 <td align="right">0.004</td>
-<td align="right">0.1</td>
+<td align="right">0</td>
+<td align="left">random</td>
+<td align="left">1</td>
+<td align="left">ROC</td>
+</tr>
+<tr class="even">
+<td align="right">0.005</td>
+<td align="right">0</td>
 <td align="left">random</td>
 <td align="left">1</td>
 <td align="left">ROC</td>
@@ -595,43 +595,43 @@
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="right">0</td>
+<td align="right">0.000</td>
 <td align="right">0.0</td>
 <td align="left">m1</td>
 <td align="left">1</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="even">
-<td align="right">0</td>
+<td align="right">0.000</td>
 <td align="right">0.1</td>
 <td align="left">m1</td>
 <td align="left">1</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="odd">
-<td align="right">0</td>
+<td align="right">0.000</td>
 <td align="right">0.2</td>
 <td align="left">m1</td>
 <td align="left">1</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="even">
-<td align="right">0</td>
+<td align="right">0.000</td>
 <td align="right">0.3</td>
 <td align="left">m1</td>
 <td align="left">1</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="odd">
-<td align="right">0</td>
-<td align="right">0.4</td>
+<td align="right">0.001</td>
+<td align="right">0.3</td>
 <td align="left">m1</td>
 <td align="left">1</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="even">
-<td align="right">0</td>
-<td align="right">0.5</td>
+<td align="right">0.002</td>
+<td align="right">0.3</td>
 <td align="left">m1</td>
 <td align="left">1</td>
 <td align="left">ROC</td>
@@ -698,7 +698,7 @@
 <tbody>
 <tr class="odd">
 <td align="right">0.000</td>
-<td align="right">0.0</td>
+<td align="right">0.00</td>
 <td align="right">0.0000000</td>
 <td align="right">0.0000000</td>
 <td align="left">random</td>
@@ -706,41 +706,41 @@
 </tr>
 <tr class="even">
 <td align="right">0.000</td>
-<td align="right">0.1</td>
-<td align="right">0.0431237</td>
-<td align="right">0.1568763</td>
+<td align="right">0.06</td>
+<td align="right">0.0164051</td>
+<td align="right">0.1035949</td>
 <td align="left">random</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="odd">
 <td align="right">0.001</td>
-<td align="right">0.1</td>
-<td align="right">0.0431237</td>
-<td align="right">0.1568763</td>
+<td align="right">0.06</td>
+<td align="right">0.0164051</td>
+<td align="right">0.1035949</td>
 <td align="left">random</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="even">
 <td align="right">0.002</td>
-<td align="right">0.1</td>
-<td align="right">0.0431237</td>
-<td align="right">0.1568763</td>
+<td align="right">0.06</td>
+<td align="right">0.0164051</td>
+<td align="right">0.1035949</td>
 <td align="left">random</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="odd">
 <td align="right">0.003</td>
-<td align="right">0.1</td>
-<td align="right">0.0431237</td>
-<td align="right">0.1568763</td>
+<td align="right">0.06</td>
+<td align="right">0.0164051</td>
+<td align="right">0.1035949</td>
 <td align="left">random</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="even">
 <td align="right">0.004</td>
-<td align="right">0.1</td>
-<td align="right">0.0431237</td>
-<td align="right">0.1568763</td>
+<td align="right">0.06</td>
+<td align="right">0.0164051</td>
+<td align="right">0.1035949</td>
 <td align="left">random</td>
 <td align="left">ROC</td>
 </tr>
@@ -993,41 +993,41 @@
 </tr>
 <tr class="even">
 <td align="right">0.05</td>
-<td align="right">1.915809</td>
-<td align="right">1.5942144</td>
-<td align="right">2.2374036</td>
+<td align="right">1.9073908</td>
+<td align="right">1.5846295</td>
+<td align="right">2.2301520</td>
 <td align="left">random</td>
 <td align="left">score</td>
 </tr>
 <tr class="odd">
 <td align="right">0.10</td>
-<td align="right">1.519770</td>
-<td align="right">1.3257096</td>
-<td align="right">1.7138311</td>
+<td align="right">1.3472127</td>
+<td align="right">1.1264177</td>
+<td align="right">1.5680077</td>
 <td align="left">random</td>
 <td align="left">score</td>
 </tr>
 <tr class="even">
 <td align="right">0.15</td>
-<td align="right">1.238093</td>
-<td align="right">1.0516026</td>
-<td align="right">1.4245842</td>
+<td align="right">1.0902187</td>
+<td align="right">0.9183991</td>
+<td align="right">1.2620382</td>
 <td align="left">random</td>
 <td align="left">score</td>
 </tr>
 <tr class="odd">
 <td align="right">0.20</td>
-<td align="right">1.010918</td>
-<td align="right">0.8396965</td>
-<td align="right">1.1821391</td>
+<td align="right">0.8483219</td>
+<td align="right">0.7023783</td>
+<td align="right">0.9942656</td>
 <td align="left">random</td>
 <td align="left">score</td>
 </tr>
 <tr class="even">
 <td align="right">0.25</td>
-<td align="right">0.826299</td>
-<td align="right">0.6842965</td>
-<td align="right">0.9683014</td>
+<td align="right">0.6969499</td>
+<td align="right">0.5554664</td>
+<td align="right">0.8384333</td>
 <td align="left">random</td>
 <td align="left">score</td>
 </tr>
@@ -1153,19 +1153,19 @@
 <tr class="odd">
 <td align="left">m1</td>
 <td align="left">ROC</td>
-<td align="right">0.809000</td>
-<td align="right">0.0497647</td>
-<td align="right">0.7592353</td>
-<td align="right">0.8587647</td>
+<td align="right">0.8170000</td>
+<td align="right">0.0426596</td>
+<td align="right">0.7743404</td>
+<td align="right">0.8596596</td>
 <td align="right">20</td>
 </tr>
 <tr class="even">
 <td align="left">m1</td>
 <td align="left">PRC</td>
-<td align="right">0.842459</td>
-<td align="right">0.0409285</td>
-<td align="right">0.8015305</td>
-<td align="right">0.8833875</td>
+<td align="right">0.8549733</td>
+<td align="right">0.0318372</td>
+<td align="right">0.8231361</td>
+<td align="right">0.8868104</td>
 <td align="right">20</td>
 </tr>
 </tbody>
@@ -1195,19 +1195,19 @@
 <tr class="odd">
 <td align="left">m1</td>
 <td align="left">ROC</td>
-<td align="right">0.809000</td>
-<td align="right">0.0654019</td>
-<td align="right">0.7435981</td>
-<td align="right">0.8744019</td>
+<td align="right">0.8170000</td>
+<td align="right">0.0560642</td>
+<td align="right">0.7609358</td>
+<td align="right">0.8730642</td>
 <td align="right">20</td>
 </tr>
 <tr class="even">
 <td align="left">m1</td>
 <td align="left">PRC</td>
-<td align="right">0.842459</td>
-<td align="right">0.0537891</td>
-<td align="right">0.7886699</td>
-<td align="right">0.8962482</td>
+<td align="right">0.8549733</td>
+<td align="right">0.0418411</td>
+<td align="right">0.8131321</td>
+<td align="right">0.8968144</td>
 <td align="right">20</td>
 </tr>
 </tbody>
@@ -1237,19 +1237,19 @@
 <tr class="odd">
 <td align="left">m1</td>
 <td align="left">ROC</td>
-<td align="right">0.809000</td>
-<td align="right">0.0531432</td>
-<td align="right">0.7558568</td>
-<td align="right">0.8621432</td>
+<td align="right">0.8170000</td>
+<td align="right">0.0455557</td>
+<td align="right">0.7714443</td>
+<td align="right">0.8625557</td>
 <td align="right">20</td>
 </tr>
 <tr class="even">
 <td align="left">m1</td>
 <td align="left">PRC</td>
-<td align="right">0.842459</td>
-<td align="right">0.0437071</td>
-<td align="right">0.7987519</td>
-<td align="right">0.8861661</td>
+<td align="right">0.8549733</td>
+<td align="right">0.0339986</td>
+<td align="right">0.8209747</td>
+<td align="right">0.8889718</td>
 <td align="right">20</td>
 </tr>
 </tbody>
