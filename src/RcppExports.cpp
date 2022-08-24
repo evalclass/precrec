@@ -11,7 +11,7 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // convert_curve_df
-Rcpp::List convert_curve_df(const Rcpp::List& obj, const Rcpp::CharacterVector& uniq_modnames, const Rcpp::CharacterVector& uniq_dsids, const Rcpp::IntegerVector& modnames, const Rcpp::IntegerVector& dsids, const Rcpp::CharacterVector& dsid_modnames, const Rcpp::List& curvetype_names, const int x_bins);
+Rcpp::List convert_curve_df(const Rcpp::List& obj, const Rcpp::CharacterVector& uniq_modnames, const Rcpp::CharacterVector& uniq_dsids, const Rcpp::IntegerVector& modnames, const Rcpp::IntegerVector& dsids, const Rcpp::CharacterVector& dsid_modnames, const Rcpp::List& curvetype_names, const unsigned x_bins);
 RcppExport SEXP _precrec_convert_curve_df(SEXP objSEXP, SEXP uniq_modnamesSEXP, SEXP uniq_dsidsSEXP, SEXP modnamesSEXP, SEXP dsidsSEXP, SEXP dsid_modnamesSEXP, SEXP curvetype_namesSEXP, SEXP x_binsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -23,7 +23,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type dsids(dsidsSEXP);
     Rcpp::traits::input_parameter< const Rcpp::CharacterVector& >::type dsid_modnames(dsid_modnamesSEXP);
     Rcpp::traits::input_parameter< const Rcpp::List& >::type curvetype_names(curvetype_namesSEXP);
-    Rcpp::traits::input_parameter< const int >::type x_bins(x_binsSEXP);
+    Rcpp::traits::input_parameter< const unsigned >::type x_bins(x_binsSEXP);
     rcpp_result_gen = Rcpp::wrap(convert_curve_df(obj, uniq_modnames, uniq_dsids, modnames, dsids, dsid_modnames, curvetype_names, x_bins));
     return rcpp_result_gen;
 END_RCPP

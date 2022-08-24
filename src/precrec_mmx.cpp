@@ -24,8 +24,8 @@ Rcpp::List make_new_labels(T labels,
   Rcpp::List ret_val;
   std::string errmsg = "";
   std::vector<double> new_labels(labels.size());
-  int nn = 0;
-  int np = 0;
+  unsigned nn = 0;
+  unsigned np = 0;
 
   // Get two labels
   S lab_p = labels[0];

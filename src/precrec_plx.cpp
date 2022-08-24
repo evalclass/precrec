@@ -17,12 +17,12 @@
 void calc_tp_fp(const Rcpp::IntegerVector& olabs,
                 const Rcpp::NumericVector& ranks,
                 const Rcpp::IntegerVector& rank_idx,
-                int n, int& np, int& nn,
+                const unsigned n, unsigned& np, unsigned& nn,
                 std::vector<double>& tp, std::vector<double>& fp,
                 std::vector<double>& sorted_ranks);
 
 void solve_ties(std::vector<double>& tp, std::vector<double>& fp,
-                int curpos, int ties);
+                unsigned curpos, unsigned ties);
 
 //
 // Calculate confusion matrices for ranks
@@ -34,20 +34,22 @@ Rcpp::List create_confusion_matrices(const Rcpp::IntegerVector& olabs,
   // Variables
   Rcpp::List ret_val;
   std::string errmsg = "";
-  int n = olabs.size();                   // Input data size
-  int np;                                 // # of positive
-  int nn;                                 // # of negatives
-  std::vector<double> tp(n+1);            // TPs
-  std::vector<double> fp(n+1);            // FPs
-  std::vector<double> tn(n+1);            // TNs
-  std::vector<double> fn(n+1);            // FNs
-  std::vector<double> sorted_ranks(n+1);  // Ranks
+  const unsigned n = olabs.size();    // Input data size
+  const unsigned nvec = n + 1;        // Vector size
+
+  unsigned np;                                 // # of positive
+  unsigned nn;                                 // # of negatives
+  std::vector<double> tp(nvec);           // TPs
+  std::vector<double> fp(nvec);           // FPs
+  std::vector<double> tn(nvec);           // TNs
+  std::vector<double> fn(nvec);           // FNs
+  std::vector<double> sorted_ranks(nvec); // Ranks
 
   // Calculate TPs and FPs
   calc_tp_fp(olabs, ranks, rank_idx, n, np, nn, tp, fp, sorted_ranks);
 
   // Calculate TNs and FNs
-  for (int i = 0; i < n+1; ++i) {
+  for (int i = 0; i < nvec; ++i) {
     tn[i] = nn - fp[i];
     fn[i] = np - tp[i];
   }
@@ -69,10 +71,10 @@ Rcpp::List create_confusion_matrices(const Rcpp::IntegerVector& olabs,
 void calc_tp_fp(const Rcpp::IntegerVector& olabs,
                 const Rcpp::NumericVector& ranks,
                 const Rcpp::IntegerVector& rank_idx,
-                int n, int& np, int& nn,
+                unsigned n, unsigned& np, unsigned& nn,
                 std::vector<double>& tp, std::vector<double>& fp,
                 std::vector<double>& sorted_ranks) {
-  int ties = 0;
+  unsigned ties = 0;
   double prev_rank = 0;
 
   // Initialize
@@ -83,8 +85,8 @@ void calc_tp_fp(const Rcpp::IntegerVector& olabs,
   sorted_ranks[0] = ranks[rank_idx[0] - 1] - 1;
 
   // Iterate all ranks
-  for (int i = 0; i < n; ++i) {
-    int idx = rank_idx[i] - 1;
+  for (unsigned i = 0; i < n; ++i) {
+    unsigned idx = rank_idx[i] - 1;
 
     // olabs is an ordered factor - positive: 2, negative: 1
     if (olabs[idx] == 2) {
@@ -114,7 +116,7 @@ void calc_tp_fp(const Rcpp::IntegerVector& olabs,
 
 // Solve tied scores
 void solve_ties(std::vector<double>& tp, std::vector<double>& fp,
-                int curpos, int ties) {
+                unsigned curpos, unsigned ties) {
   double tied_tp;
   double tied_fp;
 
