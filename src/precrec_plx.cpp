@@ -799,7 +799,7 @@ void get_yval_single(const Rcpp::NumericVector& xs,
   }
   n_y[vec_size - 2]  = 1;
 
-  //Treat missing values
+  // Treat missing values
   for (int i = 0; i < vec_size; ++i) {
     if (n_y[i] == 0) {
       if (n_y[i-1] != 0 && n_y[i+1] != 0) {
