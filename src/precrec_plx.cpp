@@ -18,10 +18,10 @@ void calc_tp_fp(const Rcpp::IntegerVector& olabs,
                 const Rcpp::NumericVector& ranks,
                 const Rcpp::IntegerVector& rank_idx,
                 const unsigned n, unsigned& np, unsigned& nn,
-                std::vector<double>& tp, std::vector<double>& fp,
-                std::vector<double>& sorted_ranks);
+                std::vector<float>& tp, std::vector<float>& fp,
+                std::vector<float>& sorted_ranks);
 
-void solve_ties(std::vector<double>& tp, std::vector<double>& fp,
+void solve_ties(std::vector<float>& tp, std::vector<float>& fp,
                 unsigned curpos, unsigned ties);
 
 //
@@ -39,11 +39,11 @@ Rcpp::List create_confusion_matrices(const Rcpp::IntegerVector& olabs,
 
   unsigned np;                                 // # of positive
   unsigned nn;                                 // # of negatives
-  std::vector<double> tp(nvec);           // TPs
-  std::vector<double> fp(nvec);           // FPs
-  std::vector<double> tn(nvec);           // TNs
-  std::vector<double> fn(nvec);           // FNs
-  std::vector<double> sorted_ranks(nvec); // Ranks
+  std::vector<float> tp(nvec);           // TPs
+  std::vector<float> fp(nvec);           // FPs
+  std::vector<float> tn(nvec);           // TNs
+  std::vector<float> fn(nvec);           // FNs
+  std::vector<float> sorted_ranks(nvec); // Ranks
 
   // Calculate TPs and FPs
   calc_tp_fp(olabs, ranks, rank_idx, n, np, nn, tp, fp, sorted_ranks);
@@ -71,11 +71,11 @@ Rcpp::List create_confusion_matrices(const Rcpp::IntegerVector& olabs,
 void calc_tp_fp(const Rcpp::IntegerVector& olabs,
                 const Rcpp::NumericVector& ranks,
                 const Rcpp::IntegerVector& rank_idx,
-                unsigned n, unsigned& np, unsigned& nn,
-                std::vector<double>& tp, std::vector<double>& fp,
-                std::vector<double>& sorted_ranks) {
+                const unsigned n, unsigned& np, unsigned& nn,
+                std::vector<float>& tp, std::vector<float>& fp,
+                std::vector<float>& sorted_ranks) {
   unsigned ties = 0;
-  double prev_rank = 0;
+  float prev_rank = 0;
 
   // Initialize
   np = 0;
@@ -115,10 +115,10 @@ void calc_tp_fp(const Rcpp::IntegerVector& olabs,
 }
 
 // Solve tied scores
-void solve_ties(std::vector<double>& tp, std::vector<double>& fp,
+void solve_ties(std::vector<float>& tp, std::vector<float>& fp,
                 unsigned curpos, unsigned ties) {
-  double tied_tp;
-  double tied_fp;
+  float tied_tp;
+  float tied_fp;
 
   tied_tp = (tp[curpos] - tp[curpos-ties-1]) / (ties + 1);
   tied_fp = (fp[curpos] - fp[curpos-ties-1]) / (ties + 1);
@@ -148,13 +148,13 @@ Rcpp::List calc_uauc(unsigned np, unsigned nn,
   // Variables
   Rcpp::List ret_val;
   std::string errmsg = "";
-  double auc = 0;
-  double ustat = 0;
-  double np_dbl = (double)np;
-  double nn_dbl = (double)nn;
+  float auc = 0;
+  float ustat = 0;
+  float np_dbl = (float)np;
+  float nn_dbl = (float)nn;
 
   // Determin NA values
-  double na_val;
+  float na_val;
   if (na_worst) {
     na_val = DBL_MIN;
   } else {
@@ -162,11 +162,11 @@ Rcpp::List calc_uauc(unsigned np, unsigned nn,
   }
 
   // Create pos and neg vectors
-  std::vector<double> pos_vec(np);
-  std::vector<double> neg_vec(nn);
+  std::vector<float> pos_vec(np);
+  std::vector<float> neg_vec(nn);
   unsigned pos_idx = 0;
   unsigned neg_idx = 0;
-  double s;
+  float s;
   for (unsigned i = 0; i < olabs.size(); ++i) {
     if (Rcpp::NumericVector::is_na(scores[i])) {
       s = na_val;
@@ -194,7 +194,7 @@ Rcpp::List calc_uauc(unsigned np, unsigned nn,
     if (neg_idx < neg_vec.size() && pos_vec[pos_idx] >= neg_vec[neg_idx]) {
       neg_idx++;
     } else {
-      ustat += (double)neg_idx;
+      ustat += (float)neg_idx;
       pos_idx++;
     }
   }
@@ -236,11 +236,11 @@ Rcpp::List calc_uauc_frank(unsigned np, unsigned nn,
   // Variables
   Rcpp::List ret_val;
   std::string errmsg = "";
-  double auc = 0;
-  double ranksum = 0;
-  double ustat = 0;
-  double np_dbl = (double)np;
-  double nn_dbl = (double)nn;
+  float auc = 0;
+  float ranksum = 0;
+  float ustat = 0;
+  float np_dbl = (float)np;
+  float nn_dbl = (float)nn;
 
   // Rank scores
   Rcpp::NumericVector ranks = frank(scores);
@@ -292,15 +292,15 @@ Rcpp::List calc_basic_measures(int np,
   Rcpp::DataFrame df;
   std::string errmsg = "";
   int n = tps.size();               // Input data size
-  std::vector<double> rank(n);      // Normalized rank
-  std::vector<double> errrate(n);   // Error-rate
-  std::vector<double> acc(n);       // Accuracy
-  std::vector<double> sp(n);        // Specificity
-  std::vector<double> sn(n);        // Sensitivity
-  std::vector<double> prec(n);      // Precision
-  std::vector<double> mcc(n);       // Matthews correlation coefficient
-  double tpfp, tpfn, tnfp, tnfn;    // For mcc calculation
-  std::vector<double> fscore(n);    // F1Score
+  std::vector<float> rank(n);      // Normalized rank
+  std::vector<float> errrate(n);   // Error-rate
+  std::vector<float> acc(n);       // Accuracy
+  std::vector<float> sp(n);        // Specificity
+  std::vector<float> sn(n);        // Sensitivity
+  std::vector<float> prec(n);      // Precision
+  std::vector<float> mcc(n);       // Matthews correlation coefficient
+  float tpfp, tpfn, tnfp, tnfn;    // For mcc calculation
+  std::vector<float> fscore(n);    // F1Score
 
   // Vector size must be >1
   if (n < 2) {
@@ -312,7 +312,7 @@ Rcpp::List calc_basic_measures(int np,
   // Calculate evaluation measures for ranks
   // n should be >1
   for (int i = 0; i < n; ++i) {
-    rank[i] = double(i) / double(n - 1);
+    rank[i] = float(i) / float(n - 1);
     errrate[i] = (fps[i] + fns[i]) / (np + nn);
     acc[i] = 1 - errrate[i];
     if (nn == 0) {
@@ -373,11 +373,11 @@ Rcpp::List calc_basic_measures(int np,
 // Prototype
 int interpolate_roc(const Rcpp::NumericVector& sp,
                     const Rcpp::NumericVector& sn,
-                    int idx,
-                    double x_interval,
-                    std::vector<double>& fpr,
-                    std::vector<double>& tpr,
-                    int n);
+                    unsigned idx,
+                    float x_interval,
+                    std::vector<float>& fpr,
+                    std::vector<float>& tpr,
+                    unsigned n);
 
 //
 // Calculate ROC curve
@@ -392,13 +392,13 @@ Rcpp::List create_roc_curve(const Rcpp::NumericVector& tps,
   Rcpp::List ret_val;
   Rcpp::DataFrame df;
   std::string errmsg = "";
-  double x_interval = 1.0 / x_bins;
-  int max_n = sp.size() + (1.0 / x_interval);
-  std::vector<double> fpr(max_n);           // False positive rate
-  std::vector<double> tpr(max_n);           // True positive rate
+  float x_interval = 1.0 / x_bins;
+  unsigned max_n = sp.size() + (1.0 / x_interval);
+  std::vector<float> fpr(max_n);           // False positive rate
+  std::vector<float> tpr(max_n);           // True positive rate
   std::vector<bool> roc_orig(max_n, false); // true: original point
 
-  int n = 0;
+  unsigned n = 0;
 
   // Interval must be >0
   if (x_interval <= 0) {
@@ -408,7 +408,7 @@ Rcpp::List create_roc_curve(const Rcpp::NumericVector& tps,
   }
 
   // Calculate ROC points
-  for (int i = 0; i < sp.size(); ++i) {
+  for (unsigned i = 0; i < sp.size(); ++i) {
     if ((i != 0) && (sp[i] == sp[i-1])  && (sn[i] == sn[i-1])) {
       continue;
     }
@@ -442,17 +442,17 @@ Rcpp::List create_roc_curve(const Rcpp::NumericVector& tps,
 // Linearly interpolate two ROC points
 int interpolate_roc(const Rcpp::NumericVector& sp,
                     const Rcpp::NumericVector& sn,
-                    int idx,
-                    double x_interval,
-                    std::vector<double>& fpr,
-                    std::vector<double>& tpr,
-                    int n) {
-  double cur_fpr = 1 - sp[idx];
-  double prev_fpr = 1 - sp[idx-1];
-  double slope = (sn[idx] - sn[idx-1]) / (cur_fpr - prev_fpr);
-  double y_interval = slope * x_interval;
-  double tmp_fpr = x_interval * int(prev_fpr / x_interval);
-  double tmp_tpr = sn[idx-1] + (tmp_fpr - prev_fpr) * slope;
+                    unsigned idx,
+                    float x_interval,
+                    std::vector<float>& fpr,
+                    std::vector<float>& tpr,
+                    unsigned n) {
+  float cur_fpr = 1 - sp[idx];
+  float prev_fpr = 1 - sp[idx-1];
+  float slope = (sn[idx] - sn[idx-1]) / (cur_fpr - prev_fpr);
+  float y_interval = slope * x_interval;
+  float tmp_fpr = x_interval * int(prev_fpr / x_interval);
+  float tmp_tpr = sn[idx-1] + (tmp_fpr - prev_fpr) * slope;
 
   while (tmp_fpr < 1) {
     tmp_fpr += x_interval;
@@ -484,11 +484,11 @@ int interpolate_prc(const Rcpp::NumericVector& tps,
                     const Rcpp::NumericVector& fps,
                     const Rcpp::NumericVector& sn,
                     const Rcpp::NumericVector& pr,
-                    int idx,
-                    double x_interval,
-                    std::vector<double>& rec,
-                    std::vector<double>& prec,
-                    int n);
+                    unsigned idx,
+                    float x_interval,
+                    std::vector<float>& rec,
+                    std::vector<float>& prec,
+                    unsigned n);
 
 //
 // Calculate precision-recall curve
@@ -503,10 +503,10 @@ Rcpp::List create_prc_curve(const Rcpp::NumericVector& tps,
   Rcpp::List ret_val;
   Rcpp::DataFrame df;
   std::string errmsg = "";
-  double x_interval = 1.0 / x_bins;
+  float x_interval = 1.0 / x_bins;
   int max_n = sn.size() + (1.0 / x_interval);
-  std::vector<double> rec(max_n);           // Recall
-  std::vector<double> prec(max_n);          // Precision
+  std::vector<float> rec(max_n);           // Recall
+  std::vector<float> prec(max_n);          // Precision
   std::vector<bool> prc_orig(max_n, false); // true: original point
 
   int n = 0;
@@ -556,14 +556,14 @@ int interpolate_prc(const Rcpp::NumericVector& tps,
                     const Rcpp::NumericVector& fps,
                     const Rcpp::NumericVector& sn,
                     const Rcpp::NumericVector& pr,
-                    int idx,
-                    double x_interval,
-                    std::vector<double>& rec,
-                    std::vector<double>& prec,
-                    int n) {
-  double tmp_rec = x_interval * int(sn[idx-1] / x_interval);
-  double tmp_prec;
-  double x;
+                    unsigned idx,
+                    float x_interval,
+                    std::vector<float>& rec,
+                    std::vector<float>& prec,
+                    unsigned n) {
+  float tmp_rec = x_interval * int(sn[idx-1] / x_interval);
+  float tmp_prec;
+  float x;
 
   while (tmp_rec < 1) {
     tmp_rec += x_interval;
@@ -611,11 +611,11 @@ Rcpp::List calc_auc(const Rcpp::NumericVector& xs,
   // Variables
   Rcpp::List ret_val;
   std::string errmsg = "";
-  double auc = 0;
+  float auc = 0;
 
   // Calculate AUC
   for (int i = 1; i < xs.size(); ++i) {
-    if (xs[i] > xs[i-1]) {
+    if (xs[i] >= xs[i-1]) {
       auc += 0.5 * (ys[i] + ys[i-1]) * (xs[i] - xs[i-1]);
     } else if (xs[i] < xs[i-1]) {
       errmsg = "invalid-x-vals";
@@ -642,36 +642,36 @@ Rcpp::List calc_auc(const Rcpp::NumericVector& xs,
 // Prototype
 void get_yval_single(const Rcpp::NumericVector& xs,
                      const Rcpp::NumericVector& ys,
-                     double x_interval,
-                     double x_bins,
-                     int vec_size,
-                     std::vector<double>& s_y_val);
+                     float x_interval,
+                     float x_bins,
+                     const unsigned vec_size,
+                     std::vector<float>& s_y_val);
 
 //
 // Calculate average curves
 //
 // [[Rcpp::export]]
 Rcpp::List calc_avg_curve(const Rcpp::List& curves,
-                          double x_bins,
-                          double ci_q) {
+                          float x_bins,
+                          float ci_q) {
   // Variables
   Rcpp::List ret_val;
   Rcpp::DataFrame df;
   std::string errmsg = "";
-  double x_interval = 1.0 / x_bins;
+  float x_interval = 1.0 / x_bins;
 
 
-  int vec_size = 3 + (1.0 / x_interval);
+  const unsigned  vec_size = 3 + (1.0 / x_interval);
 
-  std::vector<double> x_val(vec_size);         // x values
-  std::vector<double> avg_y(vec_size);         // Average
-  std::vector<double> se_y(vec_size);          // SE
-  std::vector<double> ci_h_y(vec_size);        // CI upper bound
-  std::vector<double> ci_l_y(vec_size);        // CI lower bound
+  std::vector<float> x_val(vec_size);         // x values
+  std::vector<float> avg_y(vec_size);         // Average
+  std::vector<float> se_y(vec_size);          // SE
+  std::vector<float> ci_h_y(vec_size);        // CI upper bound
+  std::vector<float> ci_l_y(vec_size);        // CI lower bound
 
-  std::vector<double> tot_y(vec_size, 0.0);    // Total of ys
-  std::vector<double> stot_y(vec_size, 0.0);   // Total of squared ys
-  std::vector<double> s_y_val(vec_size, 0.0);  // x values of a single curve
+  std::vector<float> tot_y(vec_size, 0.0);    // Total of ys
+  std::vector<float> stot_y(vec_size, 0.0);   // Total of squared ys
+  std::vector<float> s_y_val(vec_size, 0.0);  // x values of a single curve
   int n = curves.size();
 
   // Calculate total
@@ -689,8 +689,8 @@ Rcpp::List calc_avg_curve(const Rcpp::List& curves,
   }
 
   // Calculate average & CI
-  double exp2;
-  double sd;
+  float exp2;
+  float sd;
   for (int i = 0; i < vec_size; ++i) {
     // x
     if (i == 0) {
@@ -702,15 +702,15 @@ Rcpp::List calc_avg_curve(const Rcpp::List& curves,
     }
 
     // y
-    avg_y[i] = tot_y[i] / double(n);
+    avg_y[i] = tot_y[i] / float(n);
 
     // se
-    exp2 = (stot_y[i] / double(n)) - (avg_y[i] * avg_y[i]);
+    exp2 = (stot_y[i] / float(n)) - (avg_y[i] * avg_y[i]);
     if (exp2 < 0){
       exp2 = 0;
     }
-    sd =  ::sqrt(double(n) / double(n - 1)) * ::sqrt(exp2);
-    se_y[i] = sd / ::sqrt(double(n));
+    sd =  ::sqrt(float(n) / float(n - 1)) * ::sqrt(exp2);
+    se_y[i] = sd / ::sqrt(float(n));
 
     // ci upper bound
     ci_h_y[i] = avg_y[i] + ci_q * se_y[i];
@@ -733,15 +733,15 @@ Rcpp::List calc_avg_curve(const Rcpp::List& curves,
 
 void get_yval_single(const Rcpp::NumericVector& xs,
                      const Rcpp::NumericVector& ys,
-                     double x_interval,
-                     double x_bins,
-                     int vec_size,
-                     std::vector<double>& s_y_val) {
-  std::vector<double> y_tot(vec_size, 0.0); // Total of ys
+                     float x_interval,
+                     float x_bins,
+                     const unsigned vec_size,
+                     std::vector<float>& s_y_val) {
+  std::vector<float> y_tot(vec_size, 0.0); // Total of ys
   std::vector<int> n_y(vec_size, 0);        // Number of each point
-  std::set<double> x_set;
+  std::set<float> x_set;
   int idx;
-  double rounded_xval;
+  float rounded_xval;
 
   // x = 0
   s_y_val[0] = ys[0];
@@ -818,24 +818,24 @@ void get_yval_single(const Rcpp::NumericVector& xs,
 // Calculate average points
 //
 // [[Rcpp::export]]
-Rcpp::List calc_avg_points(const Rcpp::List& points, double ci_q) {
+Rcpp::List calc_avg_points(const Rcpp::List& points, float ci_q) {
   // Variables
   Rcpp::List ret_val;
   Rcpp::DataFrame df;
   std::string errmsg = "";
 
-  std::set<double> all_x_vals;       // all x values
-  std::map<double, int> x_vals_idx;  // map x values to indices
+  std::set<float> all_x_vals;       // all x values
+  std::map<float, int> x_vals_idx;  // map x values to indices
 
-  std::vector<double> x_val;         // x values
-  std::vector<double> avg_y;         // Average
-  std::vector<double> se_y;          // SE
-  std::vector<double> ci_h_y;        // CI upper bound
-  std::vector<double> ci_l_y;        // CI lower bound
+  std::vector<float> x_val;         // x values
+  std::vector<float> avg_y;         // Average
+  std::vector<float> se_y;          // SE
+  std::vector<float> ci_h_y;        // CI upper bound
+  std::vector<float> ci_l_y;        // CI lower bound
 
-  std::vector<double> tot_y;         // Total of ys
+  std::vector<float> tot_y;         // Total of ys
   std::vector<int> count_y;          // Count of ys
-  std::vector<double> stot_y;        // Total of squared ys
+  std::vector<float> stot_y;        // Total of squared ys
 
   // Create all unique x values
   for (int i = 0; i < points.size(); ++i) {
@@ -859,11 +859,11 @@ Rcpp::List calc_avg_points(const Rcpp::List& points, double ci_q) {
   stot_y.resize(vec_size, 0.0);
 
   // Make maps x vals to indices
-  std::set<double>::iterator set_it;
+  std::set<float>::iterator set_it;
   int idx = 0;
   for (set_it = all_x_vals.begin(); set_it != all_x_vals.end(); ++set_it) {
     x_val[idx] = *set_it;
-    x_vals_idx.insert(std::pair<double, int>(*set_it, idx));
+    x_vals_idx.insert(std::pair<float, int>(*set_it, idx));
     ++idx;
   }
 
@@ -884,11 +884,11 @@ Rcpp::List calc_avg_points(const Rcpp::List& points, double ci_q) {
   }
 
   // Calculate average & CI
-  double exp2;
-  double sd;
-  double n;
+  float exp2;
+  float sd;
+  float n;
   for (int i = 0; i < vec_size; ++i) {
-    n = double(count_y[i]);
+    n = float(count_y[i]);
 
     // y
     avg_y[i] = tot_y[i] / n;

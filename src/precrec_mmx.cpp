@@ -23,7 +23,7 @@ Rcpp::List make_new_labels(T labels,
   // Variables
   Rcpp::List ret_val;
   std::string errmsg = "";
-  std::vector<double> new_labels(labels.size());
+  std::vector<float> new_labels(labels.size());
   unsigned nn = 0;
   unsigned np = 0;
 
@@ -173,7 +173,7 @@ Rcpp::List get_score_ranks(const Rcpp::NumericVector& scores,
   std::vector<int> rank_idx(scores.size());
 
   // Sort scores
-  std::vector<std::pair<unsigned, double > > sorted_idx(scores.size());
+  std::vector<std::pair<unsigned, float > > sorted_idx(scores.size());
   make_index_pairs(sorted_idx, scores, na_worst);
   sort_indices(sorted_idx, ties_method, true);
 
@@ -186,7 +186,7 @@ Rcpp::List get_score_ranks(const Rcpp::NumericVector& scores,
   // Update ties
   if (ties_method == "equiv" || ties_method == "random") {
     std::vector<int> tied_idx;
-    double prev_val = sorted_idx[0].second;
+    float prev_val = sorted_idx[0].second;
     bool tied = false;
     for (unsigned i = 1; i < sorted_idx.size(); ++i) {
       if (tied) {

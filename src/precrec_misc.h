@@ -10,14 +10,14 @@
 //
 // Make pairs for sorting
 //
-void make_index_pairs(std::vector<std::pair<unsigned, double > >& indices,
+void make_index_pairs(std::vector<std::pair<unsigned, float > >& indices,
                       const Rcpp::NumericVector& scores,
                       const bool& na_worst);
 
 //
 // Sort indices by scores
 //
-void sort_indices(std::vector<std::pair<unsigned, double > >& indices,
+void sort_indices(std::vector<std::pair<unsigned, float > >& indices,
                   const std::string& ties_method,
                   bool desc);
 
