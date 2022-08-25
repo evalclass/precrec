@@ -173,26 +173,26 @@ BEGIN_RCPP
 END_RCPP
 }
 // calc_avg_curve
-Rcpp::List calc_avg_curve(const Rcpp::List& curves, float x_bins, float ci_q);
+Rcpp::List calc_avg_curve(const Rcpp::List& curves, double x_bins, double ci_q);
 RcppExport SEXP _precrec_calc_avg_curve(SEXP curvesSEXP, SEXP x_binsSEXP, SEXP ci_qSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::List& >::type curves(curvesSEXP);
-    Rcpp::traits::input_parameter< float >::type x_bins(x_binsSEXP);
-    Rcpp::traits::input_parameter< float >::type ci_q(ci_qSEXP);
+    Rcpp::traits::input_parameter< double >::type x_bins(x_binsSEXP);
+    Rcpp::traits::input_parameter< double >::type ci_q(ci_qSEXP);
     rcpp_result_gen = Rcpp::wrap(calc_avg_curve(curves, x_bins, ci_q));
     return rcpp_result_gen;
 END_RCPP
 }
 // calc_avg_points
-Rcpp::List calc_avg_points(const Rcpp::List& points, float ci_q);
+Rcpp::List calc_avg_points(const Rcpp::List& points, double ci_q);
 RcppExport SEXP _precrec_calc_avg_points(SEXP pointsSEXP, SEXP ci_qSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::List& >::type points(pointsSEXP);
-    Rcpp::traits::input_parameter< float >::type ci_q(ci_qSEXP);
+    Rcpp::traits::input_parameter< double >::type ci_q(ci_qSEXP);
     rcpp_result_gen = Rcpp::wrap(calc_avg_points(points, ci_q));
     return rcpp_result_gen;
 END_RCPP

@@ -38,7 +38,7 @@ unsigned calc_vec_size(const Rcpp::List& obj,
 // Copy vector
 //
 void copy_xy_vec(const Rcpp::NumericVector& from_vec,
-                 std::vector<float>& to_vec,
+                 std::vector<double>& to_vec,
                  unsigned start_idx) {
   for (unsigned i = 0; i < from_vec.size(); i++) {
     to_vec[start_idx+i] = from_vec[i];
@@ -60,14 +60,14 @@ void add_to_vec(std::vector<int>& vec, int size, int value, int start_idx) {
 unsigned set_reduced_points(const Rcpp::NumericVector& from_vec,
                             std::vector<bool>& points,
                             const int x_bins) {
-  float x_pos = 0.0;
-  float step = 1.0 / x_bins;
-  float eps = std::numeric_limits<float>::epsilon() * x_bins;
+  double x_pos = 0.0;
+  double step = 1.0 / x_bins;
+  double eps = std::numeric_limits<double>::epsilon() * x_bins;
   unsigned n = 0;
 
   for (unsigned i = 0; i < from_vec.size(); i++) {
     unsigned count = (unsigned)(from_vec[i] / step);
-    x_pos = (float)count * step;
+    x_pos = (double)count * step;
     if (fabs(x_pos - from_vec[i]) <= eps) {
       points[i] = true;
       n++;
@@ -84,7 +84,7 @@ unsigned set_reduced_points(const Rcpp::NumericVector& from_vec,
 // Copy reduced points
 //
 void copy_reduced_xy_vec(const Rcpp::NumericVector& from_vec,
-                         std::vector<float>& to_vec,
+                         std::vector<double>& to_vec,
                          unsigned start_idx,
                          std::vector<bool>& points) {
   unsigned idx = 0;
@@ -101,24 +101,24 @@ void copy_reduced_xy_vec(const Rcpp::NumericVector& from_vec,
 // Comp functions
 //
 
-bool comp_asc(const std::pair<unsigned, float > &a,
-              const std::pair<unsigned, float > &b) {
+bool comp_asc(const std::pair<unsigned, double > &a,
+              const std::pair<unsigned, double > &b) {
   return a.second < b.second;
 }
 
-bool comp_desc(const std::pair<unsigned, float > &a,
-               const std::pair<unsigned, float > &b) {
+bool comp_desc(const std::pair<unsigned, double > &a,
+               const std::pair<unsigned, double > &b) {
   return a.second > b.second;
 }
 
 //
 // Make pairs
 //
-void make_index_pairs(std::vector<std::pair<unsigned, float > >& indices,
+void make_index_pairs(std::vector<std::pair<unsigned, double > >& indices,
                       const Rcpp::NumericVector& scores,
                       const bool& na_worst) {
   // Determin NA values
-  float na_val;
+  double na_val;
   if (na_worst) {
     na_val = DBL_MIN;
   } else {
@@ -138,11 +138,11 @@ void make_index_pairs(std::vector<std::pair<unsigned, float > >& indices,
 //
 // Sort indices by scores
 //
-void sort_indices(std::vector<std::pair<unsigned, float > >& indices,
+void sort_indices(std::vector<std::pair<unsigned, double > >& indices,
                   const std::string& ties_method,
                   bool desc) {
-  bool (*comp_func)(const std::pair<unsigned, float > &,
-        const std::pair<unsigned, float > &);
+  bool (*comp_func)(const std::pair<unsigned, double > &,
+        const std::pair<unsigned, double > &);
   if (desc) {
     comp_func = &comp_desc;
   } else {
@@ -190,8 +190,8 @@ Rcpp::List convert_curve_df(const Rcpp::List& obj,
   }
   const unsigned vec_size = calc_vec_size(obj, curvetype_names);
 
-  std::vector<float> vec_xs(vec_size);
-  std::vector<float> vec_ys(vec_size);
+  std::vector<double> vec_xs(vec_size);
+  std::vector<double> vec_ys(vec_size);
   std::vector<int> vec_modname(vec_size);
   std::vector<int> vec_dsid(vec_size);
   std::vector<int> vec_dsid_modname(vec_size);
@@ -298,10 +298,10 @@ Rcpp::List convert_curve_avg_df(const Rcpp::List& obj,
   }
   const unsigned vec_size = calc_vec_size(obj, curvetype_names);
 
-  std::vector<float> vec_xs(vec_size);
-  std::vector<float> vec_ys(vec_size);
-  std::vector<float> vec_ymin(vec_size);
-  std::vector<float> vec_ymax(vec_size);
+  std::vector<double> vec_xs(vec_size);
+  std::vector<double> vec_ys(vec_size);
+  std::vector<double> vec_ymin(vec_size);
+  std::vector<double> vec_ymax(vec_size);
   std::vector<int> vec_modname(vec_size);
   std::vector<int> vec_curvetype(vec_size);
   std::vector<bool> vec_points(vec_size);
