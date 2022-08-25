@@ -2,7 +2,8 @@
 
 context("PL 2: Pipeline main for ROC and Precision-Recall")
 # Test .pl_main_rocprc(mdat, model_type, dataset_type, class_name_pf,
-#                      cald_avg, cb_alpha, raw_curves, x_bins)
+#                      cald_avg, cb_alpha, raw_curves, x_bins,
+#                      interpolate)
 
 pl2_create_mdat_ms <- function() {
   s1 <- c(1, 2, 3, 4)
@@ -57,7 +58,7 @@ test_that(".pl_main_rocprc() accepts 'x_bins'", {
   pl <- .pl_main_rocprc(mdat, "single", "single", "ss", x_bins = 10)
 
   expect_equal(attr(pl[["rocs"]][[1]], "args")[["x_bins"]], 10)
-  expect_equal(attr(pl[["rocs"]][[1]], "args")[["x_bins"]], 10)
+  expect_equal(attr(pl[["prcs"]][[1]], "args")[["x_bins"]], 10)
 
   expect_err_msg <- function(err_msg, mdat, x_bins) {
     eval(bquote(expect_error(.pl_main_rocprc(mdat, x_bins = x_bins), err_msg)))
@@ -70,10 +71,27 @@ test_that(".pl_main_rocprc() accepts 'x_bins'", {
   expect_err_msg(err_msg, mdat, 1.5)
   expect_err_msg(err_msg, mdat, 0.001)
 
-  err_msg <- "x_bins not greater than or equal to 1L"
-  expect_err_msg(err_msg, mdat, 0)
+  err_msg <- "x_bins not greater than or equal"
+  expect_err_msg(err_msg, mdat, -1)
+})
 
+test_that(".pl_main_rocprc() accepts 'interpolate'", {
 
+  s1 <- c(1, 2, 3, 4)
+  l1 <- c(1, 0, 1, 0)
+  mdat <- mmdata(s1, l1)
+
+  pl1 <- .pl_main_rocprc(mdat, "single", "single", "ss", interpolate = TRUE)
+  expect_equal(attr(pl1[["rocs"]][[1]], "args")[["x_bins"]], 1000)
+  expect_equal(attr(pl1[["prcs"]][[1]], "args")[["x_bins"]], 1000)
+  expect_false(all(pl1[["rocs"]][[1]][["orig_points"]]))
+  expect_false(all(pl1[["prcs"]][[1]][["orig_points"]]))
+
+  pl2 <- .pl_main_rocprc(mdat, "single", "single", "ss", interpolate = FALSE)
+  expect_equal(attr(pl2[["rocs"]][[1]], "args")[["x_bins"]], 0)
+  expect_equal(attr(pl2[["prcs"]][[1]], "args")[["x_bins"]], 0)
+  expect_true(all(pl2[["rocs"]][[1]][["orig_points"]]))
+  expect_true(all(pl2[["prcs"]][[1]][["orig_points"]]))
 })
 
 test_that(".pl_main_rocprc() returns 'sscurves'", {

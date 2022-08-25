@@ -135,7 +135,20 @@ test_that("create_curves() reterns a correct ROC curve", {
                                                    FALSE, FALSE, TRUE, TRUE))
 })
 
-test_that("create_curves() reterns correct a Precision-Recall curve", {
+test_that("create_curves() reterns a correct ROC curve when x_bins = 0", {
+  curves <- create_curves(scores = c(0.6, 0.5, 0.4, 0.3, 0.2, 0.1),
+                          labels = c(0, 1, 0, 1, 0, 1), x_bins = 0)
+
+  expect_equal(attr(curves[["roc"]], "np"), 3)
+  expect_equal(attr(curves[["roc"]], "nn"), 3)
+
+  expect_equal(curves[["roc"]][["x"]], c(0, 1/3, 1/3, 2/3, 2/3, 1, 1))
+  expect_equal(curves[["roc"]][["y"]], c(0, 0, 1/3, 1/3, 2/3, 2/3, 1))
+  expect_true(all(curves[["roc"]][["orig_points"]]))
+})
+
+
+test_that("create_curves() reterns correct a precision-recall curve", {
   curves <- create_curves(scores = c(0.6, 0.5, 0.4, 0.3, 0.2, 0.1),
                           labels = c(0, 1, 0, 1, 0, 1), x_bins = 10)
 
@@ -155,11 +168,30 @@ test_that("create_curves() reterns correct a Precision-Recall curve", {
                                             TRUE, FALSE, FALSE, FALSE, TRUE))
 })
 
+test_that("create_curves() reterns correct a pr curve when x_bins = 0", {
+  curves <- create_curves(scores = c(0.6, 0.5, 0.4, 0.3, 0.2, 0.1),
+                          labels = c(0, 1, 0, 1, 0, 1), x_bins = 0)
+
+  expect_equal(attr(curves[["prc"]], "np"), 3)
+  expect_equal(attr(curves[["prc"]], "np"), 3)
+
+  expect_equal(curves[["prc"]][["x"]], c(0, 1/3, 1/3, 2/3, 2/3, 1))
+  expect_equal(curves[["prc"]][["y"]], c(0, 0.5, 1/3, 0.5, 0.4, 0.5))
+  expect_true(all(curves[["prc"]][["orig_points"]]))
+})
+
 test_that("create_curves() reterns a correct ROC AUC", {
   curves <- create_curves(scores = c(0.6, 0.5, 0.4, 0.3, 0.2, 0.1),
                           labels = c(0, 1, 0, 1, 0, 1), x_bins = 100)
 
-  expect_equal(attr(curves[["roc"]], "auc"), 1/3, tolerance = 1e-3)
+  expect_equal(attr(curves[["roc"]], "auc"), 1/3)
+})
+
+test_that("create_curves() reterns a correct ROC AUC when x_bins = 0", {
+  curves <- create_curves(scores = c(0.6, 0.5, 0.4, 0.3, 0.2, 0.1),
+                          labels = c(0, 1, 0, 1, 0, 1), x_bins = 0)
+
+  expect_equal(attr(curves[["roc"]], "auc"), 1/3)
 })
 
 test_that("create_curves() reterns correct a PRC AUC with 1st point (0, 0)", {
@@ -175,3 +207,18 @@ test_that("create_curves() reterns correct a PRC AUC with 1st point (0, 1)", {
 
   expect_equal(attr(curves[["prc"]], "auc"), 0.904, tolerance = 1e-3)
 })
+
+test_that("create_curves() reterns correct a PRC AUC with (0, 0) and x_bins = 0", {
+  curves <- create_curves(scores = c(0.6, 0.5, 0.4, 0.3, 0.2, 0.1),
+                          labels = c(0, 1, 0, 1, 0, 1), x_bins = 0)
+
+  expect_equal(attr(curves[["prc"]], "auc"), 0.372, tolerance = 1e-3)
+})
+
+test_that("create_curves() reterns correct a PRC AUC with (0, 1) and x_bins = 0", {
+  curves <- create_curves(scores = c(0.6, 0.5, 0.4, 0.3, 0.2, 0.1),
+                          labels = c(1, 1, 0, 1, 0, 0), x_bins = 0)
+
+  expect_equal(attr(curves[["prc"]], "auc"), 0.902, tolerance = 1e-3)
+})
+

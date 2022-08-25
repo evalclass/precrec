@@ -12,7 +12,7 @@ create_curves <- function(pevals, scores = NULL, labels = NULL,
   if (is.null(x_bins) || any(is.na(x_bins))) {
     x_bins <- 1
   }
-  .validate_x_bins(x_bins)
+  .validate_x_bins(x_bins, allow_zero=TRUE)
   .validate(pevals)
 
   # === Create ROC and Precision-Recall curves ===
@@ -78,7 +78,7 @@ create_prc <- function(pevals, scores = NULL, labels = NULL, x_bins = 1000,
   # Create pevals from scores and labels if pevals is missing
   pevals <- .create_src_obj(pevals, "pevals", calc_measures, scores, labels,
                             ...)
-  .validate_x_bins(x_bins)
+  .validate_x_bins(x_bins, allow_zero=TRUE)
   .validate(pevals)
 
   # === Create a curve ===
