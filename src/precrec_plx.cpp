@@ -49,7 +49,7 @@ Rcpp::List create_confusion_matrices(const Rcpp::IntegerVector& olabs,
   calc_tp_fp(olabs, ranks, rank_idx, n, np, nn, tp, fp, sorted_ranks);
 
   // Calculate TNs and FNs
-  for (int i = 0; i < nvec; ++i) {
+  for (unsigned i = 0; i < nvec; ++i) {
     tn[i] = nn - fp[i];
     fn[i] = np - tp[i];
   }
@@ -86,7 +86,7 @@ void calc_tp_fp(const Rcpp::IntegerVector& olabs,
 
   // Iterate all ranks
   for (unsigned i = 0; i < n; ++i) {
-    unsigned idx = rank_idx[i] - 1;
+    const unsigned idx = rank_idx[i] - 1;
 
     // olabs is an ordered factor - positive: 2, negative: 1
     if (olabs[idx] == 2) {
@@ -117,12 +117,10 @@ void calc_tp_fp(const Rcpp::IntegerVector& olabs,
 // Solve tied scores
 void solve_ties(std::vector<double>& tp, std::vector<double>& fp,
                 unsigned curpos, unsigned ties) {
-  double tied_tp;
-  double tied_fp;
 
-  tied_tp = (tp[curpos] - tp[curpos-ties-1]) / (ties + 1);
-  tied_fp = (fp[curpos] - fp[curpos-ties-1]) / (ties + 1);
-  for (int i = 0; i < ties; ++i) {
+  const double tied_tp = (tp[curpos] - tp[curpos-ties-1]) / (ties + 1);
+  const double tied_fp = (fp[curpos] - fp[curpos-ties-1]) / (ties + 1);
+  for (unsigned i = 0; i < ties; ++i) {
     tp[curpos-ties+i] = tp[curpos-ties+i-1] + tied_tp;
     fp[curpos-ties+i] = fp[curpos-ties+i-1] + tied_fp;
   }
@@ -150,8 +148,8 @@ Rcpp::List calc_uauc(unsigned np, unsigned nn,
   std::string errmsg = "";
   double auc = 0;
   double ustat = 0;
-  double np_dbl = (double)np;
-  double nn_dbl = (double)nn;
+  const double np_dbl = static_cast<const double>(np);
+  const double nn_dbl = static_cast<const double>(nn);
 
   // Determin NA values
   double na_val;
@@ -194,7 +192,7 @@ Rcpp::List calc_uauc(unsigned np, unsigned nn,
     if (neg_idx < neg_vec.size() && pos_vec[pos_idx] >= neg_vec[neg_idx]) {
       neg_idx++;
     } else {
-      ustat += (double)neg_idx;
+      ustat += static_cast<double>(neg_idx);
       pos_idx++;
     }
   }
@@ -239,8 +237,8 @@ Rcpp::List calc_uauc_frank(unsigned np, unsigned nn,
   double auc = 0;
   double ranksum = 0;
   double ustat = 0;
-  double np_dbl = (double)np;
-  double nn_dbl = (double)nn;
+  const double np_dbl = static_cast<const double>(np);
+  const double nn_dbl =  static_cast<const double>(nn);
 
   // Rank scores
   Rcpp::NumericVector ranks = frank(scores);
@@ -311,8 +309,8 @@ Rcpp::List calc_basic_measures(int np,
 
   // Calculate evaluation measures for ranks
   // n should be >1
-  for (int i = 0; i < n; ++i) {
-    rank[i] = double(i) / double(n - 1);
+  for (unsigned i = 0; i < n; ++i) {
+    rank[i] = i / static_cast<double>(n - 1);
     errrate[i] = (fps[i] + fns[i]) / (np + nn);
     acc[i] = 1 - errrate[i];
     if (nn == 0) {
@@ -373,8 +371,8 @@ Rcpp::List calc_basic_measures(int np,
 // Prototype
 int interpolate_roc(const Rcpp::NumericVector& sp,
                     const Rcpp::NumericVector& sn,
-                    unsigned idx,
-                    double x_interval,
+                    const unsigned idx,
+                    const double x_interval,
                     std::vector<double>& fpr,
                     std::vector<double>& tpr,
                     unsigned n);
@@ -393,7 +391,7 @@ Rcpp::List create_roc_curve(const Rcpp::NumericVector& tps,
   Rcpp::DataFrame df;
   std::string errmsg = "";
   double x_interval;
-  int max_n;
+  unsigned max_n;
   if (x_bins > 0) {
     x_interval = 1.0 / x_bins;
     max_n = sp.size() + (1.0 / x_interval);
@@ -449,8 +447,8 @@ Rcpp::List create_roc_curve(const Rcpp::NumericVector& tps,
 // Linearly interpolate two ROC points
 int interpolate_roc(const Rcpp::NumericVector& sp,
                     const Rcpp::NumericVector& sn,
-                    unsigned idx,
-                    double x_interval,
+                    const unsigned idx,
+                    const double x_interval,
                     std::vector<double>& fpr,
                     std::vector<double>& tpr,
                     unsigned n) {
@@ -491,8 +489,8 @@ int interpolate_prc(const Rcpp::NumericVector& tps,
                     const Rcpp::NumericVector& fps,
                     const Rcpp::NumericVector& sn,
                     const Rcpp::NumericVector& pr,
-                    unsigned idx,
-                    double x_interval,
+                    const unsigned idx,
+                    const double x_interval,
                     std::vector<double>& rec,
                     std::vector<double>& prec,
                     unsigned n);
@@ -511,7 +509,7 @@ Rcpp::List create_prc_curve(const Rcpp::NumericVector& tps,
   Rcpp::DataFrame df;
   std::string errmsg = "";
   double x_interval;
-  int max_n;
+  unsigned max_n;
   if (x_bins > 0) {
     x_interval = 1.0 / x_bins;
     max_n = sn.size() + (1.0 / x_interval);
@@ -533,7 +531,7 @@ Rcpp::List create_prc_curve(const Rcpp::NumericVector& tps,
   }
 
   // Calculate Precision-Recall points
-  for (int i = 0; i < sn.size(); ++i) {
+  for (unsigned i = 0; i < sn.size(); ++i) {
     if ((i != 0) && (sn[i] == sn[i-1])  && (pr[i] == pr[i-1])) {
       continue;
     }
@@ -570,8 +568,8 @@ int interpolate_prc(const Rcpp::NumericVector& tps,
                     const Rcpp::NumericVector& fps,
                     const Rcpp::NumericVector& sn,
                     const Rcpp::NumericVector& pr,
-                    unsigned idx,
-                    double x_interval,
+                    const unsigned idx,
+                    const double x_interval,
                     std::vector<double>& rec,
                     std::vector<double>& prec,
                     unsigned n) {
@@ -628,7 +626,7 @@ Rcpp::List calc_auc(const Rcpp::NumericVector& xs,
   double auc = 0;
 
   // Calculate AUC
-  for (int i = 1; i < xs.size(); ++i) {
+  for (unsigned i = 1; i < xs.size(); ++i) {
     if (xs[i] >= xs[i-1]) {
       auc += 0.5 * (ys[i] + ys[i-1]) * (xs[i] - xs[i-1]);
     } else if (xs[i] < xs[i-1]) {
