@@ -303,10 +303,10 @@ test_that("pl_main() accepts 'interpolate'", {
   # check x_bins instead of interpolate (TRUE -> x_bins:1000, FALSE -> x_bins:0)
   f_check_x_interpolate <- function(mdat) {
     for (ct in c("rocs", "prcs")) {
-      pl1 <- pl_main(mdat, raw_curves = TRUE, x_bins=10, interpolate = TRUE)
+      pl1 <- pl_main(mdat, raw_curves = TRUE, x_bins = 10, interpolate = TRUE)
       expect_equal(attr(pl1[[ct]][[1]], "args")[["x_bins"]], 10)
 
-      pl2 <- pl_main(mdat, raw_curves = TRUE, x_bins=10, interpolate = FALSE)
+      pl2 <- pl_main(mdat, raw_curves = TRUE, x_bins = 10, interpolate = FALSE)
       expect_equal(attr(pl2[[ct]][[1]], "args")[["x_bins"]], 0)
 
       pl3 <- pl_main(mdat, raw_curves = TRUE)

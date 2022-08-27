@@ -337,7 +337,7 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
 
   # Call pipeline controller
   pl_main(mdat, mode = new_mode, calc_avg = calc_avg, cb_alpha = cb_alpha,
-          raw_curves = raw_curves, x_bins = x_bins, interpolate=interpolate,
+          raw_curves = raw_curves, x_bins = x_bins, interpolate = interpolate,
           na_worst = new_na_worst,ties_method = new_ties_method,
           validate = FALSE)
 

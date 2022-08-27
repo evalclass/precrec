@@ -19,7 +19,9 @@ LazyData: TRUE
 Suggests:
     testthat (>= 0.11.0),
     knitr (>= 1.11),
-    rmarkdown (>= 0.8.1)
+    rmarkdown (>= 0.8.1),
+    vdiffr (>= 1.0.0),
+    patchwork (>= 1.1.2)
 LinkingTo: Rcpp
 Imports:
     Rcpp (>= 0.12.2),
@@ -29,7 +31,7 @@ Imports:
     gridExtra (>= 2.0.0),
     methods,
     data.table (>= 1.10.4),
-    withr (>= 2.3.0)
+    withr (>= 2.3.0),
 RoxygenNote: 7.2.1
 Encoding: UTF-8
 VignetteBuilder: knitr
