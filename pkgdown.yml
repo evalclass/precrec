@@ -3,7 +3,7 @@ pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
   introduction: introduction.html
-last_built: 2022-08-27T18:32Z
+last_built: 2022-08-27T20:45Z
 urls:
   reference: https://evalclass.github.io/precrec/reference
   article: https://evalclass.github.io/precrec/articles
