@@ -14,19 +14,19 @@
 //
 // Calculate vector size
 //
-int calc_vec_size(const Rcpp::List& obj,
-                  const Rcpp::List& curvetype_names) {
-  int vec_size = 0;
+unsigned calc_vec_size(const Rcpp::List& obj,
+                       const Rcpp::List& curvetype_names) {
+  unsigned vec_size = 0;
 
   Rcpp::CharacterVector curvetypes = curvetype_names.names();
   for (unsigned i = 0; i < curvetypes.size(); i++) {
     std::string lblctype = Rcpp::as<std::string>(curvetypes[i]);
     std::string idxctype = Rcpp::as<std::string>(curvetype_names[lblctype]);
-    Rcpp::List curves = Rcpp::as<Rcpp::List>(obj[idxctype]);
+    const Rcpp::List& curves = static_cast<const Rcpp::List&>(obj[idxctype]);
 
     for (unsigned j = 0; j < curves.size(); j++) {
-      Rcpp::List xys = Rcpp::as<Rcpp::List>(curves[j]);
-      Rcpp::NumericVector xs = Rcpp::as<Rcpp::NumericVector>(xys["x"]);
+      const Rcpp::List& xys = static_cast<const Rcpp::List&>(curves[j]);
+      const Rcpp::NumericVector& xs = static_cast<const Rcpp::NumericVector&>(xys["x"]);
       vec_size += xs.size();
     }
   }
@@ -39,7 +39,7 @@ int calc_vec_size(const Rcpp::List& obj,
 //
 void copy_xy_vec(const Rcpp::NumericVector& from_vec,
                  std::vector<double>& to_vec,
-                 int start_idx) {
+                 const unsigned start_idx) {
   for (unsigned i = 0; i < from_vec.size(); i++) {
     to_vec[start_idx+i] = from_vec[i];
   }
@@ -48,7 +48,10 @@ void copy_xy_vec(const Rcpp::NumericVector& from_vec,
 //
 // Add to vector
 //
-void add_to_vec(std::vector<int>& vec, int size, int value, int start_idx) {
+void add_to_vec(std::vector<int>& vec,
+                const unsigned size,
+                int value,
+                const unsigned start_idx) {
   for (unsigned i = 0; i < size; i++) {
     vec[start_idx+i] = value;
   }
@@ -57,16 +60,16 @@ void add_to_vec(std::vector<int>& vec, int size, int value, int start_idx) {
 //
 // Set reduced points
 //
-int set_reduced_points(const Rcpp::NumericVector& from_vec,
-                       std::vector<bool>& points,
-                       const int x_bins) {
+unsigned set_reduced_points(const Rcpp::NumericVector& from_vec,
+                            std::vector<bool>& points,
+                            const int x_bins) {
   double x_pos = 0.0;
-  double step = 1.0 / x_bins;
-  double eps = std::numeric_limits<double>::epsilon() * x_bins;
-  int n = 0;
+  const double step = 1.0 / x_bins;
+  const double eps = std::numeric_limits<double>::epsilon() * x_bins;
+  unsigned n = 0;
 
   for (unsigned i = 0; i < from_vec.size(); i++) {
-    int count = (int)(from_vec[i] / step);
+    unsigned count = (unsigned)(from_vec[i] / step);
     x_pos = (double)count * step;
     if (fabs(x_pos - from_vec[i]) <= eps) {
       points[i] = true;
@@ -85,9 +88,9 @@ int set_reduced_points(const Rcpp::NumericVector& from_vec,
 //
 void copy_reduced_xy_vec(const Rcpp::NumericVector& from_vec,
                          std::vector<double>& to_vec,
-                         int start_idx,
-                         std::vector<bool>& points) {
-  int idx = 0;
+                         const unsigned start_idx,
+                         const std::vector<bool>& points) {
+  unsigned idx = 0;
 
   for (unsigned i = 0; i < from_vec.size(); i++) {
     if (points[i]) {
@@ -116,8 +119,8 @@ bool comp_desc(const std::pair<unsigned, double > &a,
 //
 void make_index_pairs(std::vector<std::pair<unsigned, double > >& indices,
                       const Rcpp::NumericVector& scores,
-                      const bool& na_worst) {
-  // Determin NA values
+                      const bool na_worst) {
+  // Determine NA values
   double na_val;
   if (na_worst) {
     na_val = DBL_MIN;
@@ -140,7 +143,7 @@ void make_index_pairs(std::vector<std::pair<unsigned, double > >& indices,
 //
 void sort_indices(std::vector<std::pair<unsigned, double > >& indices,
                   const std::string& ties_method,
-                  bool desc) {
+                  const bool desc) {
   bool (*comp_func)(const std::pair<unsigned, double > &,
         const std::pair<unsigned, double > &);
   if (desc) {
@@ -188,7 +191,7 @@ Rcpp::List convert_curve_df(const Rcpp::List& obj,
   if (x_bins > 1){
     reduce_points = true;
   }
-  int vec_size = calc_vec_size(obj, curvetype_names);
+  const unsigned vec_size = calc_vec_size(obj, curvetype_names);
 
   std::vector<double> vec_xs(vec_size);
   std::vector<double> vec_ys(vec_size);
@@ -199,17 +202,17 @@ Rcpp::List convert_curve_df(const Rcpp::List& obj,
   std::vector<bool> vec_points(vec_size);
 
   Rcpp::CharacterVector curvetypes = curvetype_names.names();
-  int start_idx = 0;
+  unsigned start_idx = 0;
   for (unsigned i = 0; i < curvetypes.size(); i++) {
     lblctype = Rcpp::as<std::string>(curvetypes[i]);
     idxctype = Rcpp::as<std::string>(curvetype_names[lblctype]);
-    Rcpp::List curves = Rcpp::as<Rcpp::List>(obj[idxctype]);
+    const Rcpp::List& curves = static_cast<const Rcpp::List&>(obj[idxctype]);
 
     for (unsigned j = 0; j < curves.size(); j++) {
-      int n = 0;
-      Rcpp::List xys = Rcpp::as<Rcpp::List>(curves[j]);
-      Rcpp::NumericVector x = Rcpp::as<Rcpp::NumericVector>(xys["x"]);
-      Rcpp::NumericVector y = Rcpp::as<Rcpp::NumericVector>(xys["y"]);
+      unsigned n = 0;
+      const Rcpp::List& xys = static_cast<const Rcpp::List&>(curves[j]);
+      const Rcpp::NumericVector& x = static_cast<const Rcpp::NumericVector&>(xys["x"]);
+      const Rcpp::NumericVector& y = static_cast<const Rcpp::NumericVector&>(xys["y"]);
 
       if (reduce_points){
         vec_points.resize(x.size(), false);
@@ -225,8 +228,8 @@ Rcpp::List convert_curve_df(const Rcpp::List& obj,
 
       add_to_vec(vec_modname, n, modnames[j], start_idx);
       add_to_vec(vec_dsid, n, dsids[j], start_idx);
-      add_to_vec(vec_dsid_modname, n, j+1, start_idx);
-      add_to_vec(vec_curvetype, n, i+1, start_idx);
+      add_to_vec(vec_dsid_modname, n, static_cast<int>(j+1), start_idx);
+      add_to_vec(vec_curvetype, n, static_cast<int>(i+1), start_idx);
 
       start_idx += n;
     }
@@ -259,11 +262,11 @@ Rcpp::List convert_curve_df(const Rcpp::List& obj,
 
   // Return a list
   ret_val["df"] = Rcpp::DataFrame::create(Rcpp::_["x"]= xs,
-                                        Rcpp::_["y"]= ys,
-                                        Rcpp::_["modname"] = modname,
-                                        Rcpp::_["dsid"] = dsid,
-                                        Rcpp::_["dsid_modname"] = dsid_modname,
-                                        Rcpp::_["curvetype"] = curvetype);
+                                          Rcpp::_["y"]= ys,
+                                          Rcpp::_["modname"] = modname,
+                                          Rcpp::_["dsid"] = dsid,
+                                          Rcpp::_["dsid_modname"] = dsid_modname,
+                                          Rcpp::_["curvetype"] = curvetype);
   ret_val["errmsg"] = errmsg;
 
   return ret_val;
@@ -296,7 +299,7 @@ Rcpp::List convert_curve_avg_df(const Rcpp::List& obj,
   if (x_bins > 1){
     reduce_points = true;
   }
-  int vec_size = calc_vec_size(obj, curvetype_names);
+  const unsigned vec_size = calc_vec_size(obj, curvetype_names);
 
   std::vector<double> vec_xs(vec_size);
   std::vector<double> vec_ys(vec_size);
@@ -307,19 +310,19 @@ Rcpp::List convert_curve_avg_df(const Rcpp::List& obj,
   std::vector<bool> vec_points(vec_size);
 
   Rcpp::CharacterVector curvetypes = curvetype_names.names();
-  int start_idx = 0;
+  unsigned start_idx = 0;
   for (unsigned i = 0; i < curvetypes.size(); i++) {
     lblctype = Rcpp::as<std::string>(curvetypes[i]);
     idxctype = Rcpp::as<std::string>(curvetype_names[lblctype]);
-    Rcpp::List curves = Rcpp::as<Rcpp::List>(obj[idxctype]);
+    const Rcpp::List& curves = static_cast<const Rcpp::List&>(obj[idxctype]);
 
     for (unsigned j = 0; j < curves.size(); j++) {
-      int n = 0;
-      Rcpp::List xys = Rcpp::as<Rcpp::List>(curves[j]);
-      Rcpp::NumericVector x = Rcpp::as<Rcpp::NumericVector>(xys["x"]);
-      Rcpp::NumericVector y = Rcpp::as<Rcpp::NumericVector>(xys["y_avg"]);
-      Rcpp::NumericVector ymi = Rcpp::as<Rcpp::NumericVector>(xys["y_ci_l"]);
-      Rcpp::NumericVector yma = Rcpp::as<Rcpp::NumericVector>(xys["y_ci_h"]);
+      unsigned n = 0;
+      const Rcpp::List& xys = static_cast<const Rcpp::List&>(curves[j]);
+      const Rcpp::NumericVector& x = static_cast<const Rcpp::NumericVector&>(xys["x"]);
+      const Rcpp::NumericVector& y = static_cast<const Rcpp::NumericVector&>(xys["y_avg"]);
+      const Rcpp::NumericVector& ymi = static_cast<const Rcpp::NumericVector&>(xys["y_ci_l"]);
+      const Rcpp::NumericVector& yma = static_cast<const Rcpp::NumericVector&>(xys["y_ci_h"]);
 
       if (reduce_points){
         vec_points.resize(x.size(), false);
@@ -338,8 +341,8 @@ Rcpp::List convert_curve_avg_df(const Rcpp::List& obj,
         copy_xy_vec(yma, vec_ymax, start_idx);
       }
 
-      add_to_vec(vec_modname, n, j+1, start_idx);
-      add_to_vec(vec_curvetype, n, i+1, start_idx);
+      add_to_vec(vec_modname, n, static_cast<int>(j+1), start_idx);
+      add_to_vec(vec_curvetype, n, static_cast<int>(i+1), start_idx);
 
       start_idx += n;
     }

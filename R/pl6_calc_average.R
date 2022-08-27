@@ -26,7 +26,7 @@ calc_avg_basic <- function(epoints, modnames, uniq_modnames, cb_alpha) {
     x_bins <- 1
   }
   .validate_cb_alpha(cb_alpha)
-  .validate_x_bins(x_bins)
+  .validate_x_bins(x_bins, allow_zero = TRUE)
 
   # === Summarize curves by by models ===
   # Z value of confidence bounds

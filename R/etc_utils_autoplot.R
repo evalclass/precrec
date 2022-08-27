@@ -328,7 +328,7 @@ NULL
                                   def_curvetype, def_type, def_show_cb,
                                   def_raw_curves, def_add_np_nn,
                                   def_show_legend, def_ret_grob,
-                                  def_reduce_points, ...) {
+                                  def_reduce_points, def_multiplot_lib, ...) {
 
   arglist <- list(...)
 
@@ -378,6 +378,10 @@ NULL
     arglist[["reduce_points"]] <- def_reduce_points
   }
 
+  if (is.null(arglist[["multiplot_lib"]])) {
+    arglist[["multiplot_lib"]] <- def_multiplot_lib
+  }
+
   arglist
 }
 
@@ -409,8 +413,7 @@ NULL
 #
 .load_ggplot2 <- function() {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
-    stop(paste("This function should not be called directly,",
-               "and ggplot2 is needed to work.",
+    stop(paste("ggplot2 is required to perform this function.",
                "Please install it."),
          call. = FALSE)
   }
@@ -421,7 +424,7 @@ NULL
 #
 .load_grid <- function() {
   if (!requireNamespace("grid", quietly = TRUE)) {
-    stop("grid needed for this function to work. Please install it.",
+    stop("grid is required to perform this function. Please install it.",
          call. = FALSE)
   }
 }
@@ -431,8 +434,21 @@ NULL
 #
 .load_gridExtra <- function() {
   if (!requireNamespace("gridExtra", quietly = TRUE)) {
-    stop("gridExtra needed for this function to work. Please install it.",
+    stop("gridExtra is required to perform this function. Please install it.",
          call. = FALSE)
+  }
+}
+
+#
+# Load patchwork
+#
+.load_patchwork <- function() {
+  if (requireNamespace("patchwork", quietly = TRUE)) {
+    return(TRUE)
+  } else {
+    warning("patchwork is not installed. grid and gridExtra will be used instead.",
+            call. = FALSE)
+    return(FALSE)
   }
 }
 
@@ -446,6 +462,7 @@ NULL
   show_legend <- arglist[["show_legend"]]
   ret_grob <- arglist[["ret_grob"]]
   reduce_points <- arglist[["reduce_points"]]
+  multiplot_lib <- arglist[["multiplot_lib"]]
 
   show_cb <- arglist[["show_cb"]]
   if (!attr(object, "args")$calc_avg) {
@@ -459,6 +476,7 @@ NULL
 
   # === Check package availability  ===
   .load_ggplot2()
+  avail_pathwork <- .load_ggplot2()
   .validate(object)
   .check_curvetype(curvetype, object)
   .check_type(type)
@@ -467,6 +485,7 @@ NULL
   .check_show_legend(show_legend)
   .check_add_np_nn(add_np_nn)
   .check_ret_grob(ret_grob)
+  .check_multiplot_lib(multiplot_lib)
 
   # === Create a ggplot object for ROC&PRC, ROC, or PRC ===
   curve_df <- ggplot2::fortify(object, raw_curves = raw_curves,
@@ -483,7 +502,8 @@ NULL
 
   if (length(lcurves) > 1) {
     do.call(.combine_plots, c(lcurves, show_legend = show_legend,
-                              ret_grob = ret_grob, nplots = length(lcurves)))
+                              ret_grob = ret_grob, multiplot_lib = multiplot_lib,
+                              nplots = length(lcurves)))
   } else {
     lcurves[[1]]
   }
@@ -515,12 +535,9 @@ NULL
 }
 
 #
-# Combine ROC and Precision-Recall plots
+# Combine ROC and Precision-Recall plots by grid and gridExtra
 #
-.combine_plots <- function(..., show_legend, ret_grob, nplots) {
-  .load_grid()
-  .load_gridExtra()
-
+.combine_plots_grid <- function(..., show_legend, ret_grob, nplots) {
   if (nplots == 2 || nplots == 4) {
     ncol <- 2
   } else {
@@ -538,6 +555,47 @@ NULL
   } else {
     graphics::plot.new()
     grid::grid.draw(grobframe)
+  }
+}
+
+#
+# Combine ROC and Precision-Recall plots by patchwork
+#
+.combine_plots_patchwork <- function(..., show_legend) {
+  plotlist <- list(...)
+
+  if (length(plotlist) == 2 || length(plotlist) == 4) {
+    ncol <- 2
+  } else {
+    ncol <- 3
+  }
+
+  p <- patchwork::wrap_plots(plotlist, ncol = ncol)
+  if (show_legend) {
+    p <- p + patchwork::plot_layout(guides = "collect")
+    if (length(plotlist) > 2) {
+      p <- p + ggplot2::theme(legend.position = 'bottom')
+    }
+  }
+
+  p
+}
+
+#
+# Combine ROC and Precision-Recall plots
+#
+.combine_plots <- function(..., show_legend, ret_grob, multiplot_lib, nplots) {
+  if (multiplot_lib == "patchwork") {
+    if (.load_patchwork()) {
+      return(.combine_plots_patchwork(..., show_legend = show_legend))
+    } else {
+      multiplot_lib <- "grid"
+    }
+  }
+  if (multiplot_lib == "grid") {
+    .load_grid()
+    .load_gridExtra()
+    .combine_plots_grid(..., show_legend = show_legend, ret_grob = ret_grob, nplots = nplots)
   }
 }
 

@@ -3,7 +3,8 @@
 context("PL 1: Pipeline main")
 # Test .pmatch_mode(val)
 #      .make_prefix(model_type, data_type)
-#      pl_main(mdat, mode, calc_avg, cb_alpha, raw_curves, x_bins)
+#      pl_main(mdat, mode, calc_avg, cb_alpha, raw_curves, x_bins,
+#              interpolate)
 #
 
 test_that(".pmatch_mode() returns 'rocprc', 'basic' or 'aucroc'", {
@@ -293,5 +294,50 @@ test_that("pl_main() accepts 'x_bins'", {
 
   mdat4 <- pl1_create_mdat_mm()
   f_check_x_bins(mdat4)
+
+})
+
+
+test_that("pl_main() accepts 'interpolate'", {
+
+  # check x_bins instead of interpolate (TRUE -> x_bins:1000, FALSE -> x_bins:0)
+  f_check_x_interpolate <- function(mdat) {
+    for (ct in c("rocs", "prcs")) {
+      pl1 <- pl_main(mdat, raw_curves = TRUE, x_bins = 10, interpolate = TRUE)
+      expect_equal(attr(pl1[[ct]][[1]], "args")[["x_bins"]], 10)
+
+      pl2 <- pl_main(mdat, raw_curves = TRUE, x_bins = 10, interpolate = FALSE)
+      expect_equal(attr(pl2[[ct]][[1]], "args")[["x_bins"]], 0)
+
+      pl3 <- pl_main(mdat, raw_curves = TRUE)
+      expect_equal(attr(pl3[[ct]][[1]], "args")[["x_bins"]], 1000)
+    }
+  }
+
+  s1 <- c(1, 2, 3, 4)
+  l1 <- c(1, 0, 1, 0)
+  mdat1 <- mmdata(s1, l1)
+  f_check_x_interpolate(mdat1)
+
+  mdat2 <- pl1_create_mdat_ms()
+  f_check_x_interpolate(mdat2)
+
+  mdat3 <- pl1_create_mdat_sm()
+  f_check_x_interpolate(mdat3)
+
+  mdat4 <- pl1_create_mdat_mm()
+  f_check_x_interpolate(mdat4)
+
+  expect_err_msg <- function(err_msg, mdat, interpolate) {
+    eval(bquote(expect_error(pl_main(mdat, interpolate = interpolate), err_msg)))
+  }
+
+  err_msg <- "interpolate is not a flag"
+  expect_err_msg(err_msg, mdat1, 0)
+  expect_err_msg(err_msg, mdat1, 1)
+  expect_err_msg(err_msg, mdat1, "T")
+  expect_err_msg(err_msg, mdat1, "F")
+  expect_err_msg(err_msg, mdat1, c(10, 20))
+  expect_err_msg(err_msg, mdat1, c(TRUE, FALSE))
 
 })

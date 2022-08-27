@@ -24,8 +24,8 @@ Rcpp::List make_new_labels(T labels,
   Rcpp::List ret_val;
   std::string errmsg = "";
   std::vector<double> new_labels(labels.size());
-  int nn = 0;
-  int np = 0;
+  unsigned nn = 0;
+  unsigned np = 0;
 
   // Get two labels
   S lab_p = labels[0];
@@ -105,38 +105,37 @@ Rcpp::List format_labels(SEXP labels,
 
   switch (TYPEOF(labels)) {
   case INTSXP: {
-    Rcpp::IntegerVector pos_class_i = Rcpp::as<Rcpp::IntegerVector>(posclass);
+    const Rcpp::IntegerVector& pos_class_i = static_cast<const Rcpp::IntegerVector&>(posclass);
     is_pc_na = Rcpp::IntegerVector::is_na(pos_class_i[0]);
     int def_posclass = 2;
     int def_negclass = 1;
-    return make_new_labels<Rcpp::IntegerVector, int>
+    return make_new_labels<const Rcpp::IntegerVector&, int>
       (labels, pos_class_i[0], is_pc_na, def_posclass, def_negclass);
   }
   case REALSXP: {
-    Rcpp::NumericVector pos_class_d = Rcpp::as<Rcpp::NumericVector>(posclass);
+    const Rcpp::NumericVector& pos_class_d = static_cast<const Rcpp::NumericVector&>(posclass);
     is_pc_na = Rcpp::NumericVector::is_na(pos_class_d[0]);
     double def_posclass = 1.0;
     double def_negclass = -1.0;
-    return make_new_labels<Rcpp::NumericVector, double>
+    return make_new_labels<const Rcpp::NumericVector&, double>
       (labels, pos_class_d[0], is_pc_na, def_posclass, def_negclass);
   }
   case LGLSXP: {
-    Rcpp::LogicalVector pos_class_b = Rcpp::as<Rcpp::LogicalVector>(posclass);
+    const Rcpp::LogicalVector& pos_class_b = static_cast<const Rcpp::LogicalVector&>(posclass);
     is_pc_na = Rcpp::LogicalVector::is_na(pos_class_b[0]);
     bool def_posclass = true;
     bool def_negclass = false;
-    return make_new_labels<Rcpp::LogicalVector, bool>
+    return make_new_labels<const Rcpp::LogicalVector&, bool>
       (labels, pos_class_b[0], is_pc_na, def_posclass, def_negclass);
   }
   case STRSXP: {
     Rcpp::CharacterVector pos_class_c = Rcpp::as<Rcpp::CharacterVector>(posclass);
-    std::string pos_class_c2(pos_class_c[0]);
     is_pc_na = Rcpp::CharacterVector::is_na(pos_class_c[0]);
     std::vector<std::string> labels_s = Rcpp::as<std::vector<std::string> >(labels);
     std::string def_posclass = "P";
     std::string def_negclass = "N";
-    return make_new_labels<std::vector<std::string>, std::string>
-      (labels_s, pos_class_c2, is_pc_na, def_posclass, def_negclass);
+    return make_new_labels<const std::vector<std::string>&, std::string>
+      (labels_s, static_cast<std::string>(pos_class_c[0]), is_pc_na, def_posclass, def_negclass);
   }
   default:
     Rcpp::List ret_val;
@@ -178,7 +177,7 @@ Rcpp::List get_score_ranks(const Rcpp::NumericVector& scores,
   sort_indices(sorted_idx, ties_method, true);
 
   // Set ranks
-  for (unsigned i = 0; i < sorted_idx.size(); ++i) {
+  for (int i = 0; i < sorted_idx.size(); ++i) {
     ranks[sorted_idx[i].first] = i + 1;
     rank_idx[i] = sorted_idx[i].first + 1;
   }

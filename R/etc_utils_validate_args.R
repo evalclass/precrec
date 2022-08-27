@@ -227,11 +227,26 @@
 #
 # Validate x_bins
 #
-.validate_x_bins <- function(x_bins) {
+.validate_x_bins <- function(x_bins, allow_zero=FALSE) {
+  if (allow_zero) {
+    min_x_bin <- 0
+  } else {
+    min_x_bin <- 1
+  }
+
   if (!is.null(x_bins) && all(!is.na(x_bins))) {
     assertthat::assert_that(assertthat::is.number(x_bins),
                             x_bins %% 1 == 0,
-                            x_bins >= 1L)
+                            x_bins >= min_x_bin)
+  }
+}
+
+#
+# Validate interpolate
+#
+.validate_interpolate <- function(interpolate) {
+  if (!is.null(interpolate) && all(!is.na(interpolate))) {
+    assertthat::assert_that(assertthat::is.flag(interpolate))
   }
 }
 
@@ -400,6 +415,15 @@
   assertthat::assert_that(is.atomic(ret_grob),
                           assertthat::is.flag(ret_grob),
                           assertthat::noNA(ret_grob))
+}
+
+#
+# Check multiplot_lib
+#
+.check_multiplot_lib <- function(multiplot_lib) {
+  assertthat::assert_that(is.atomic(multiplot_lib),
+                          is.character(multiplot_lib),
+                          multiplot_lib %in% c("patchwork", "grid"))
 }
 
 #

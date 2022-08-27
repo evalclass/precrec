@@ -3,11 +3,17 @@
 #
 .pl_main_rocprc <- function(mdat, model_type, dataset_type, class_name_pf,
                             calc_avg = TRUE, cb_alpha = 0.05,
-                            raw_curves = FALSE, x_bins = 1000) {
+                            raw_curves = FALSE, x_bins = 1000,
+                            interpolate = TRUE) {
 
   if (!missing(dataset_type) && dataset_type == "single") {
     calc_avg <- FALSE
     raw_curves <- TRUE
+  }
+
+  if (!interpolate) {
+    calc_avg <- FALSE
+    x_bins <- 0
   }
 
   # === Create ROC and Precision-Recall curves ===
@@ -74,7 +80,8 @@
                               calc_avg = calc_avg,
                               cb_alpha = cb_alpha,
                               raw_curves = raw_curves,
-                              x_bins = x_bins)
+                              x_bins = x_bins,
+                              interpolate = interpolate)
   attr(s3obj, "validated") <- FALSE
 
   # Call .validate.class_name()
@@ -163,7 +170,7 @@
   attr_names <- c("aucs", "grp_avg", "data_info", "uniq_modnames",
                   "uniq_dsids", "model_type", "dataset_type", "args",
                   "validated")
-  arg_names <- c("mode", "calc_avg", "cb_alpha", "raw_curves", "x_bins")
+  arg_names <- c("mode", "calc_avg", "cb_alpha", "raw_curves", "x_bins", "interpolate")
   .validate_basic(curves, class_name, ".pl_main_rocprc", item_names, attr_names,
                   arg_names)
 

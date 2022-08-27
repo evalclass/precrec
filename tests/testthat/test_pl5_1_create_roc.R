@@ -191,6 +191,17 @@ test_that("ss test data", {
 
 })
 
+test_that("ss test data with x_bins=0, 1", {
+  for (x in c(0, 1)) {
+    roc_curve <- create_roc(scores = c(1, 2, 3, 4),
+                            labels = c(1, 0, 1, 0), x_bins = x)
+
+    expect_equal(roc_curve[["x"]], c(0, 0.5, 0.5, 1, 1))
+    expect_equal(roc_curve[["y"]], c(0, 0, 0.5, 0.5, 1))
+    expect_true(all(roc_curve[["orig_points"]]))
+  }
+})
+
 test_that("ms test data", {
   msdat <- pl5_create_ms_dat()
 
@@ -217,6 +228,30 @@ test_that("ms test data", {
 
 })
 
+test_that("ms test data with x_bins=0, 1", {
+  msdat <- pl5_create_ms_dat()
+
+  for (x in c(0, 1)) {
+    roc_curve1 <- create_roc(scores = msdat[["scores"]][[1]],
+                             labels = msdat[["labels"]][[1]], x_bins = x)
+    expect_equal(roc_curve1[["x"]], c(0, 0, 0, 1, 1))
+    expect_equal(roc_curve1[["y"]], c(0, 1/3, 2/3, 2/3, 1))
+    expect_true(all(roc_curve1[["orig_points"]]))
+
+    roc_curve2 <- create_roc(scores = msdat[["scores"]][[2]],
+                             labels = msdat[["labels"]][[2]], x_bins = x)
+    expect_equal(roc_curve2[["x"]], c(0, 0, 0, 0, 1))
+    expect_equal(roc_curve2[["y"]], c(0, 1/3, 2/3, 1, 1))
+    expect_true(any(roc_curve2[["orig_points"]]))
+
+    roc_curve3 <- create_roc(scores = msdat[["scores"]][[3]],
+                             labels = msdat[["labels"]][[3]], x_bins = x)
+    expect_equal(roc_curve3[["x"]], c(0, 0, 1, 1, 1))
+    expect_equal(roc_curve3[["y"]], c(0, 1/3, 1/3, 2/3, 1))
+    expect_true(all(roc_curve3[["orig_points"]]))
+  }
+})
+
 test_that("sm test data", {
   smdat <- pl5_create_sm_dat()
 
@@ -240,7 +275,30 @@ test_that("sm test data", {
   expect_equal(roc_curve3[["y"]], c(0, 1/3, 1/3, 1/3, 1/3, 1/3, 2/3, 1))
   expect_equal(roc_curve3[["orig_points"]], c(TRUE, TRUE, FALSE, FALSE, FALSE,
                                               TRUE, TRUE, TRUE))
+})
 
+test_that("sm test data with x_bins=0, 1", {
+  smdat <- pl5_create_sm_dat()
+
+  for (x in c(0, 1)) {
+    roc_curve1 <- create_roc(scores = smdat[["scores"]][[1]],
+                             labels = smdat[["labels"]][[1]], x_bins = x)
+    expect_equal(roc_curve1[["x"]], c(0, 0, 0, 1, 1))
+    expect_equal(roc_curve1[["y"]], c(0, 1/3, 2/3, 2/3, 1))
+    expect_true(all(roc_curve1[["orig_points"]]))
+
+    roc_curve2 <- create_roc(scores = smdat[["scores"]][[2]],
+                             labels = smdat[["labels"]][[2]], x_bins = x)
+    expect_equal(roc_curve2[["x"]], c(0, 0, 0, 0, 1))
+    expect_equal(roc_curve2[["y"]], c(0, 1/3, 2/3, 1, 1))
+    expect_true(all(roc_curve2[["orig_points"]]))
+
+    roc_curve3 <- create_roc(scores = smdat[["scores"]][[3]],
+                             labels = smdat[["labels"]][[3]], x_bins = x)
+    expect_equal(roc_curve3[["x"]], c(0, 0, 1, 1, 1))
+    expect_equal(roc_curve3[["y"]], c(0, 1/3, 1/3, 2/3, 1))
+    expect_true(all(roc_curve3[["orig_points"]]))
+  }
 })
 
 test_that("mm test data", {
@@ -273,5 +331,35 @@ test_that("mm test data", {
   expect_equal(roc_curve4[["y"]], c(0, 1/3, 1/3, 1/3, 1/3, 1/3, 2/3, 1))
   expect_equal(roc_curve4[["orig_points"]], c(TRUE, TRUE, FALSE, FALSE, FALSE,
                                               TRUE, TRUE, TRUE))
+})
+
+test_that("mm test data with x_bins=0, 1", {
+  mmdat <- pl5_create_mm_dat()
+
+  for (x in c(0, 1)) {
+    roc_curve1 <- create_roc(scores = mmdat[["scores"]][[1]],
+                             labels = mmdat[["labels"]][[1]], x_bins = x)
+    expect_equal(roc_curve1[["x"]], c(0, 0, 0, 1, 1))
+    expect_equal(roc_curve1[["y"]], c(0, 1/3, 2/3, 2/3, 1))
+    expect_true(all(roc_curve1[["orig_points"]]))
+
+    roc_curve2 <- create_roc(scores = mmdat[["scores"]][[2]],
+                             labels = mmdat[["labels"]][[2]], x_bins = x)
+    expect_equal(roc_curve2[["x"]], c(0, 0, 0, 0, 1))
+    expect_equal(roc_curve2[["y"]], c(0, 1/3, 2/3, 1, 1))
+    expect_true(all(roc_curve2[["orig_points"]]))
+
+    roc_curve3 <- create_roc(scores = mmdat[["scores"]][[3]],
+                             labels = mmdat[["labels"]][[3]], x_bins = x)
+    expect_equal(roc_curve3[["x"]], c(0, 0, 1, 1, 1))
+    expect_equal(roc_curve3[["y"]], c(0, 1/3, 1/3, 2/3, 1))
+    expect_true(all(roc_curve3[["orig_points"]]))
+
+    roc_curve4 <- create_roc(scores = mmdat[["scores"]][[4]],
+                             labels = mmdat[["labels"]][[4]], x_bins = x)
+    expect_equal(roc_curve4[["x"]], c(0, 0, 1, 1, 1))
+    expect_equal(roc_curve4[["y"]], c(0, 1/3, 1/3, 2/3, 1))
+    expect_true(all(roc_curve4[["orig_points"]]))
+  }
 
 })

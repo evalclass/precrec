@@ -15,7 +15,7 @@ install:
 branches:
   only:
     - main
-    - develop
+    - _develop
 
 skip_tags: true
 

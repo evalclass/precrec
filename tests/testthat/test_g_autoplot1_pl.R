@@ -6,7 +6,8 @@ context("AP 1: Autoplot for pipeline functions")
 skip_on_cran()
 
 ap1_check_libs <- function() {
-  if (requireNamespace("ggplot2", quietly = TRUE)) {
+  if (requireNamespace("ggplot2", quietly = TRUE)
+      && requireNamespace("vdiffr", quietly = TRUE)) {
     TRUE
   } else {
     FALSE
@@ -17,31 +18,27 @@ test_that("autoplot fmdat", {
   if (!ap1_check_libs()) {
     skip("Libraries cannot be loaded")
   }
-  pdf(NULL)
-  on.exit(dev.off())
+
+  orig.seed <- globalenv()[[".Random.seed"]]
+  on.exit(assign(".Random.seed", orig.seed, envir = .GlobalEnv))
+  set.seed(1234)
 
   data(B500)
   fmdat <- reformat_data(B500$good_er_scores, B500$labels)
-
-  pp <- ggplot2::autoplot(fmdat)
-  expect_true(all(class(pp) == c("gg", "ggplot")))
-  expect_error(pp, NA)
+  p <- ggplot2::autoplot(fmdat)
+  vdiffr::expect_doppelganger("autoplot_fmdat", p)
 })
 
-test_that("autoplot cmat", {
+test_that("autoplot cmats", {
   if (!ap1_check_libs()) {
     skip("Libraries cannot be loaded")
   }
-  pdf(NULL)
-  on.exit(dev.off())
 
   data(B500)
-  cmat <- create_confmats(scores = B500$good_er_scores,
+  cmats <- create_confmats(scores = B500$good_er_scores,
                           labels = B500$labels)
-
-  pp <- ggplot2::autoplot(cmat)
-  expect_true(all(class(pp) == c("gg", "ggplot")))
-  expect_error(pp, NA)
+  p <- ggplot2::autoplot(cmats)
+  vdiffr::expect_doppelganger("autoplot_cmats", p)
 })
 
 
@@ -49,14 +46,10 @@ test_that("autoplot pevals", {
   if (!ap1_check_libs()) {
     skip("Libraries cannot be loaded")
   }
-  pdf(NULL)
-  on.exit(dev.off())
 
   data(B500)
   pevals <- calc_measures(scores = B500$good_er_scores,
                           labels = B500$labels)
-
-  pp <- ggplot2::autoplot(pevals)
-  expect_true(all(class(pp) == c("gg", "ggplot")))
-  expect_error(pp, NA)
+  suppressWarnings(vdiffr::expect_doppelganger("autoplot_pevals",
+                                               ggplot2::autoplot(pevals)))
 })

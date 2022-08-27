@@ -94,7 +94,14 @@
 #'   the x-values of the supporting points will be \code{c(0, 0.5, 1)} and
 #'   \code{c(0, 0.25, 0.5, 0.75, 1)} when \code{x_bins = 2}
 #'   and \code{x_bins = 4}, respectively. All corresponding y-values of
-#'   the supporting points are calculated.
+#'   the supporting points are calculated. \code{x_bins} is effective only
+#'   when \code{mode} is set to \code{rocprc} or \code{prcroc}.
+#'
+#' @param interpolate A Boolean value to specify whether or not interpolation of
+#'   ROC and precision-recall curves are performed. \code{x_bins} and \code{calc_avg} are
+#'    ignored and  when \code{x_bins} is set to \code{FALSE}.
+#'    \code{interpolate} is effective only when \code{mode} is set
+#'    to \code{rocprc} or \code{prcroc}.
 #'
 #' @param ... These additional arguments are passed to \code{\link{mmdata}}
 #'   for data preparation.
@@ -306,7 +313,7 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
                     modnames = NULL, dsids = NULL,
                     posclass = NULL, na_worst = TRUE, ties_method = "equiv",
                     calc_avg = TRUE, cb_alpha = 0.05, raw_curves = FALSE,
-                    x_bins = 1000, ...) {
+                    x_bins = 1000, interpolate=TRUE, ...) {
 
   # Validation
   new_mode <- .get_new_mode(mode, mdat, "rocprc")
@@ -317,7 +324,7 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
   }
   .validate_evalmod_args(new_mode, modnames, dsids, posclass, new_na_worst,
                          new_ties_method, calc_avg, cb_alpha, raw_curves,
-                         x_bins)
+                         x_bins, interpolate)
 
   # Create mdat if not provided
   if (missing(mdat)) {
@@ -330,8 +337,9 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
 
   # Call pipeline controller
   pl_main(mdat, mode = new_mode, calc_avg = calc_avg, cb_alpha = cb_alpha,
-          raw_curves = raw_curves, x_bins = x_bins, na_worst = new_na_worst,
-          ties_method = new_ties_method, validate = FALSE)
+          raw_curves = raw_curves, x_bins = x_bins, interpolate = interpolate,
+          na_worst = new_na_worst,ties_method = new_ties_method,
+          validate = FALSE)
 
 }
 
@@ -370,7 +378,7 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
 .validate_evalmod_args <- function(mode, modnames, dsids,
                                    posclass, na_worst, ties_method,
                                    calc_avg, cb_alpha, raw_curves,
-                                   x_bins) {
+                                   x_bins, interpolate) {
 
   # Check mode
   .validate_mode(mode)
@@ -403,5 +411,8 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
 
   # Check x_bins
   .validate_x_bins(x_bins)
+
+  # Check interpolate
+  .validate_interpolate(interpolate)
 
 }

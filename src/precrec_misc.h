@@ -12,14 +12,14 @@
 //
 void make_index_pairs(std::vector<std::pair<unsigned, double > >& indices,
                       const Rcpp::NumericVector& scores,
-                      const bool& na_worst);
+                      const bool na_worst);
 
 //
 // Sort indices by scores
 //
 void sort_indices(std::vector<std::pair<unsigned, double > >& indices,
                   const std::string& ties_method,
-                  bool desc);
+                  const bool desc);
 
 //
 // Shuffle int vector
