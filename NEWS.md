@@ -1,3 +1,9 @@
+# precrec 0.13.0
+
+* Use patchwork to combine multiple plots instead of using grid and gridExtra
+
+* Test ggplot results with vdiffr 
+
 # precrec 0.12.9
 
 * Fix another case of incorrect assignment of dsid_modnames
