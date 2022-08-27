@@ -418,6 +418,15 @@
 }
 
 #
+# Check multiplot_lib
+#
+.check_multiplot_lib <- function(multiplot_lib) {
+  assertthat::assert_that(is.atomic(multiplot_lib),
+                          is.character(multiplot_lib),
+                          multiplot_lib %in% c("patchwork", "grid"))
+}
+
+#
 # Check xlim and ylim
 #
 .check_limits <- function(xlim, ylim) {

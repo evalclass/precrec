@@ -20,7 +20,7 @@ test_that("autoplot fmdat", {
   }
 
   orig.seed <- globalenv()[[".Random.seed"]]
-  on.exit(globalenv()[[".Random.seed"]] <- orig.seed)
+  on.exit(assign(".Random.seed", orig.seed, envir = .GlobalEnv))
   set.seed(1234)
 
   data(B500)

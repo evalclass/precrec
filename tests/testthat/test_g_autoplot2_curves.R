@@ -7,16 +7,25 @@ skip_on_cran()
 
 test_extra_ap2 <- TRUE
 
-ap2_check_libs <- function() {
+ap2_check_libs1 <- function() {
   if (requireNamespace("ggplot2", quietly = TRUE)
-      && requireNamespace("grid", quietly = TRUE)
-      && requireNamespace("gridExtra", quietly = TRUE)
       && requireNamespace("vdiffr", quietly = TRUE)) {
     TRUE
   } else {
     FALSE
   }
 }
+
+ap2_check_libs2 <- function() {
+  if (requireNamespace("ggplot2", quietly = TRUE)
+      && requireNamespace("grid", quietly = TRUE)
+      && requireNamespace("gridExtra", quietly = TRUE)) {
+    TRUE
+  } else {
+    FALSE
+  }
+}
+
 
 ap2_create_mscurves <- function() {
   s1 <- c(1, 2, 3, 4)
@@ -68,12 +77,13 @@ ap2_create_mmcurves <- function(raw_curves = FALSE) {
 
 ap2_test_roc_prc <- function(curves, ptitle, ...){
 
-  vdiffr::expect_doppelganger(ptitle, ggplot2::autoplot(curves, ret_grob = TRUE, ...))
+  p <- ggplot2::autoplot(curves, ...)
+  vdiffr::expect_doppelganger(ptitle, p)
 
   if (!test_extra_ap2) return(TRUE)
 
-  vdiffr::expect_doppelganger(paste0(ptitle, "_roc_prc"),
-                              ggplot2::autoplot(curves, c("ROC", "PRC"), ret_grob = TRUE, ...))
+  pp_roc_prc <- ggplot2::autoplot(curves, c("ROC", "PRC"), ...)
+  vdiffr::expect_doppelganger(paste0(ptitle, "_roc_prc"), pp_roc_prc)
 
   pp_roc <- ggplot2::autoplot(curves, "ROC", ...)
   vdiffr::expect_doppelganger(paste0(ptitle, "_roc"), pp_roc)
@@ -82,14 +92,8 @@ ap2_test_roc_prc <- function(curves, ptitle, ...){
   vdiffr::expect_doppelganger(paste0(ptitle, "_prc"), pp_prc)
 }
 
-test_roc_prc <- function(curves, ptitle, ...){
-
-  ggplot2::autoplot(curves, ...)
-
-}
-
 test_that("autoplot sscurves", {
-  if (!ap2_check_libs()) {
+  if (!ap2_check_libs1()) {
     skip("Libraries cannot be loaded")
   }
 
@@ -99,19 +103,19 @@ test_that("autoplot sscurves", {
 })
 
 test_that("autoplot for multiple sscurves returns grob", {
-  if (!ap2_check_libs()) {
+  if (!ap2_check_libs2()) {
     skip("Libraries cannot be loaded")
   }
 
   data(P10N10)
   curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 
-  pp <- ggplot2::autoplot(curves, ret_grob = TRUE)
+  pp <- ggplot2::autoplot(curves, multiplot_lib="grid", ret_grob = TRUE)
   expect_true(is(pp, "grob"))
 })
 
 test_that("autoplot mscurves", {
-  if (!ap2_check_libs()) {
+  if (!ap2_check_libs1()) {
     skip("Libraries cannot be loaded")
   }
 
@@ -122,18 +126,18 @@ test_that("autoplot mscurves", {
 })
 
 test_that("autoplot for multiple mscurves returns grob", {
-  if (!ap2_check_libs()) {
+  if (!ap2_check_libs2()) {
     skip("Libraries cannot be loaded")
   }
 
   curves <- ap2_create_mscurves()
 
-  pp <- ggplot2::autoplot(curves, show_legend = FALSE, ret_grob = TRUE)
+  pp <- ggplot2::autoplot(curves, multiplot_lib="grid", show_legend = FALSE, ret_grob = TRUE)
   expect_true(is(pp, "grob"))
 })
 
 test_that("autoplot single smcurve", {
-  if (!ap2_check_libs()) {
+  if (!ap2_check_libs1()) {
     skip("Libraries cannot be loaded")
   }
 
@@ -147,18 +151,18 @@ test_that("autoplot single smcurve", {
 })
 
 test_that("autoplot for multiple smcurves retruns grob", {
-  if (!ap2_check_libs()) {
+  if (!ap2_check_libs2()) {
     skip("Libraries cannot be loaded")
   }
 
   curves <- ap2_create_smcurves()
 
-  pp <- ggplot2::autoplot(curves, show_legend = FALSE, ret_grob = TRUE)
+  pp <- ggplot2::autoplot(curves, multiplot_lib="grid", show_legend = FALSE, ret_grob = TRUE)
   expect_true(is(pp, "grob"))
 })
 
 test_that("autoplot mmcurves", {
-  if (!ap2_check_libs()) {
+  if (!ap2_check_libs1()) {
     skip("Libraries cannot be loaded")
   }
 
@@ -174,13 +178,13 @@ test_that("autoplot mmcurves", {
 })
 
 test_that("autoplot multiple mmcurves returns grob", {
-  if (!ap2_check_libs()) {
+  if (!ap2_check_libs2()) {
     skip("Libraries cannot be loaded")
   }
 
   curves <- ap2_create_mmcurves()
 
-  pp <- ggplot2::autoplot(curves, show_legend = FALSE, ret_grob = TRUE)
+  pp <- ggplot2::autoplot(curves, multiplot_lib="grid", show_legend = FALSE, ret_grob = TRUE)
   expect_true(is(pp, "grob"))
 })
 
@@ -193,7 +197,8 @@ test_that("autoplot raw_curve option sscurves", {
                           def_add_np_nn = TRUE,
                           def_show_legend = FALSE,
                           def_ret_grob = FALSE,
-                          def_reduce_points = TRUE, ...)
+                          def_reduce_points = TRUE,
+                          def_multiplot_lib = "patchwork", ...)
   }
 
   data(P10N10)
@@ -218,7 +223,8 @@ test_that("autoplot raw_curve option mscurves", {
                           def_add_np_nn = TRUE,
                           def_show_legend = TRUE,
                           def_ret_grob = FALSE,
-                          def_reduce_points = TRUE, ...)
+                          def_reduce_points = TRUE,
+                          def_multiplot_lib = "patchwork", ...)
   }
 
   curves1 <- ap2_create_mscurves()
@@ -242,7 +248,8 @@ test_that("autoplot raw_curve option smcurves", {
                           def_add_np_nn = TRUE,
                           def_show_legend = FALSE,
                           def_ret_grob = FALSE,
-                          def_reduce_points = TRUE, ...)
+                          def_reduce_points = TRUE,
+                          def_multiplot_lib = "patchwork", ...)
   }
 
   curves1 <- ap2_create_smcurves()
@@ -276,7 +283,8 @@ test_that("autoplot raw_curve option mmcurves", {
                           def_add_np_nn = TRUE,
                           def_show_legend = TRUE,
                           def_ret_grob = FALSE,
-                          def_reduce_points = TRUE, ...)
+                          def_reduce_points = TRUE,
+                          def_multiplot_lib = "patchwork", ...)
   }
 
   curves1 <- ap2_create_mmcurves()

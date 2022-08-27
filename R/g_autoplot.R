@@ -53,7 +53,8 @@ autoplot.sscurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
                                    def_add_np_nn = TRUE,
                                    def_show_legend = FALSE,
                                    def_ret_grob = FALSE,
-                                   def_reduce_points = TRUE, ...)
+                                   def_reduce_points = TRUE,
+                                   def_multiplot_lib = "patchwork", ...)
   arglist[["raw_curves"]] <- TRUE
   arglist[["show_cb"]] <- FALSE
   arglist[["curvetype"]] <- .pmatch_curvetype_rocprc(arglist[["curvetype"]])
@@ -72,7 +73,8 @@ autoplot.mscurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
                                    def_add_np_nn = TRUE,
                                    def_show_legend = TRUE,
                                    def_ret_grob = FALSE,
-                                   def_reduce_points = TRUE, ...)
+                                   def_reduce_points = TRUE,
+                                   def_multiplot_lib = "patchwork", ...)
   arglist[["raw_curves"]] <- TRUE
   arglist[["show_cb"]] <- FALSE
   arglist[["curvetype"]] <- .pmatch_curvetype_rocprc(arglist[["curvetype"]])
@@ -90,7 +92,8 @@ autoplot.smcurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
                                    def_add_np_nn = TRUE,
                                    def_show_legend = FALSE,
                                    def_ret_grob = FALSE,
-                                   def_reduce_points = TRUE, ...)
+                                   def_reduce_points = TRUE,
+                                   def_multiplot_lib = "patchwork", ...)
 
   arglist[["curvetype"]] <- .pmatch_curvetype_rocprc(arglist[["curvetype"]])
 
@@ -107,7 +110,8 @@ autoplot.mmcurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
                                    def_add_np_nn = TRUE,
                                    def_show_legend = TRUE,
                                    def_ret_grob = FALSE,
-                                   def_reduce_points = TRUE, ...)
+                                   def_reduce_points = TRUE,
+                                   def_multiplot_lib = "patchwork", ...)
 
   arglist[["curvetype"]] <- .pmatch_curvetype_rocprc(arglist[["curvetype"]])
 
@@ -125,7 +129,8 @@ autoplot.sspoints <- function(object, curvetype = .get_metric_names("basic"),
                                    def_add_np_nn = TRUE,
                                    def_show_legend = FALSE,
                                    def_ret_grob = FALSE,
-                                   def_reduce_points = FALSE, ...)
+                                   def_reduce_points = FALSE,
+                                   def_multiplot_lib = "patchwork", ...)
   arglist[["raw_curves"]] <- TRUE
   arglist[["show_cb"]] <- FALSE
   arglist[["curvetype"]] <- .pmatch_curvetype_basic(arglist[["curvetype"]])
@@ -145,7 +150,8 @@ autoplot.mspoints <- function(object, curvetype = .get_metric_names("basic"),
                                    def_add_np_nn = TRUE,
                                    def_show_legend = TRUE,
                                    def_ret_grob = FALSE,
-                                   def_reduce_points = FALSE, ...)
+                                   def_reduce_points = FALSE,
+                                   def_multiplot_lib = "patchwork", ...)
   arglist[["raw_curves"]] <- TRUE
   arglist[["show_cb"]] <- FALSE
   arglist[["curvetype"]] <- .pmatch_curvetype_basic(arglist[["curvetype"]])
@@ -164,7 +170,8 @@ autoplot.smpoints <- function(object, curvetype = .get_metric_names("basic"),
                                    def_add_np_nn = TRUE,
                                    def_show_legend = FALSE,
                                    def_ret_grob = FALSE,
-                                   def_reduce_points = FALSE, ...)
+                                   def_reduce_points = FALSE,
+                                   def_multiplot_lib = "patchwork", ...)
 
   arglist[["curvetype"]] <- .pmatch_curvetype_basic(arglist[["curvetype"]])
 
@@ -182,7 +189,8 @@ autoplot.mmpoints <- function(object, curvetype = .get_metric_names("basic"),
                                    def_add_np_nn = TRUE,
                                    def_show_legend = TRUE,
                                    def_ret_grob = FALSE,
-                                   def_reduce_points = FALSE, ...)
+                                   def_reduce_points = FALSE,
+                                   def_multiplot_lib = "patchwork", ...)
 
   arglist[["curvetype"]] <- .pmatch_curvetype_basic(arglist[["curvetype"]])
 
