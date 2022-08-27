@@ -16,3 +16,4 @@
 ^CRAN-RELEASE$
 ^\.github$
 ^CRAN-SUBMISSION$
+^.idea$
