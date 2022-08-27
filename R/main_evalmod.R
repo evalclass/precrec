@@ -313,7 +313,7 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
                     modnames = NULL, dsids = NULL,
                     posclass = NULL, na_worst = TRUE, ties_method = "equiv",
                     calc_avg = TRUE, cb_alpha = 0.05, raw_curves = FALSE,
-                    x_bins = 1000, interpolate=TRUE, ...) {
+                    x_bins = 1000, interpolate = TRUE, ...) {
 
   # Validation
   new_mode <- .get_new_mode(mode, mdat, "rocprc")

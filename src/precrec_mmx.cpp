@@ -177,7 +177,7 @@ Rcpp::List get_score_ranks(const Rcpp::NumericVector& scores,
   sort_indices(sorted_idx, ties_method, true);
 
   // Set ranks
-  for (int i = 0; i < sorted_idx.size(); ++i) {
+  for (int i = 0; i < static_cast<int>(sorted_idx.size()); ++i) {
     ranks[sorted_idx[i].first] = i + 1;
     rank_idx[i] = sorted_idx[i].first + 1;
   }

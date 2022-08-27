@@ -4,8 +4,9 @@ context("AP 3: Autoplot for points")
 # Test autoplot(object, ...)
 
 skip_on_cran()
+skip_on_ci()
 
-test_extra_ap3 <- TRUE
+test_extra_ap3 <- FALSE
 
 ap3_check_libs1 <- function() {
   if (requireNamespace("ggplot2", quietly = TRUE)

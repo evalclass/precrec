@@ -18,6 +18,7 @@ evalmod(
   cb_alpha = 0.05,
   raw_curves = FALSE,
   x_bins = 1000,
+  interpolate = TRUE,
   ...
 )
 }
@@ -111,7 +112,14 @@ on the x-axis. It is then used to define supporting points For instance,
 the x-values of the supporting points will be \code{c(0, 0.5, 1)} and
 \code{c(0, 0.25, 0.5, 0.75, 1)} when \code{x_bins = 2}
 and \code{x_bins = 4}, respectively. All corresponding y-values of
-the supporting points are calculated.}
+the supporting points are calculated. \code{x_bins} is effective only
+when \code{mode} is set to \code{rocprc} or \code{prcroc}.}
+
+\item{interpolate}{A Boolean value to specify whether or not interpolation of
+ROC and precision-recall curves are performed. \code{x_bins} and \code{calc_avg} are
+ ignored and  when \code{x_bins} is set to \code{FALSE}.
+ \code{interpolate} is effective only when \code{mode} is set
+ to \code{rocprc} or \code{prcroc}.}
 
 \item{...}{These additional arguments are passed to \code{\link{mmdata}}
 for data preparation.}
