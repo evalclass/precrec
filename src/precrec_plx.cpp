@@ -289,7 +289,7 @@ Rcpp::List calc_basic_measures(int np,
   Rcpp::List ret_val;
   Rcpp::DataFrame df;
   std::string errmsg = "";
-  int n = tps.size();               // Input data size
+  const unsigned n = tps.size();               // Input data size
   std::vector<double> rank(n);      // Normalized rank
   std::vector<double> errrate(n);   // Error-rate
   std::vector<double> acc(n);       // Accuracy
@@ -671,28 +671,25 @@ Rcpp::List calc_avg_curve(const Rcpp::List& curves,
   Rcpp::DataFrame df;
   std::string errmsg = "";
   double x_interval = 1.0 / x_bins;
-
-
   const unsigned  vec_size = 3 + (1.0 / x_interval);
+  const unsigned n = curves.size();
 
   std::vector<double> x_val(vec_size);         // x values
   std::vector<double> avg_y(vec_size);         // Average
   std::vector<double> se_y(vec_size);          // SE
   std::vector<double> ci_h_y(vec_size);        // CI upper bound
   std::vector<double> ci_l_y(vec_size);        // CI lower bound
-
   std::vector<double> tot_y(vec_size, 0.0);    // Total of ys
   std::vector<double> stot_y(vec_size, 0.0);   // Total of squared ys
   std::vector<double> s_y_val(vec_size, 0.0);  // x values of a single curve
-  int n = curves.size();
 
   // Calculate total
-  for (int i = 0; i < n; ++i) {
+  for (unsigned i = 0; i < n; ++i) {
     Rcpp::List c = Rcpp::as<Rcpp::List>(curves[i]);
 
     get_yval_single(c["x"], c["y"], x_interval, x_bins, vec_size, s_y_val);
 
-    for (int j = 0; j < vec_size; ++j) {
+    for (unsigned j = 0; j < vec_size; ++j) {
       tot_y[j] += s_y_val[j];
       stot_y[j] += (s_y_val[j] * s_y_val[j]);
     }
@@ -703,7 +700,7 @@ Rcpp::List calc_avg_curve(const Rcpp::List& curves,
   // Calculate average & CI
   double exp2;
   double sd;
-  for (int i = 0; i < vec_size; ++i) {
+  for (unsigned i = 0; i < vec_size; ++i) {
     // x
     if (i == 0) {
       x_val[i] = 0;
@@ -752,7 +749,7 @@ void get_yval_single(const Rcpp::NumericVector& xs,
   std::vector<double> y_tot(vec_size, 0.0); // Total of ys
   std::vector<int> n_y(vec_size, 0);        // Number of each point
   std::set<double> x_set;
-  int idx;
+  unsigned idx;
   double rounded_xval;
 
   // x = 0
@@ -770,7 +767,7 @@ void get_yval_single(const Rcpp::NumericVector& xs,
   n_y[1]  = 1;
 
   // 0 < x < 1
-  for (int j = 1; j < xs.size() - 1; ++j) {
+  for (unsigned j = 1; j < static_cast<unsigned>(xs.size() - 1); ++j) {
     if (xs[j] == 0.0 || xs[j] == 1.0) {
       continue;
     }
