@@ -68,12 +68,12 @@ ap2_create_mmcurves <- function(raw_curves = FALSE) {
 
 ap2_test_roc_prc <- function(curves, ptitle, ...){
 
-  vdiffr::expect_doppelganger(ptitle, ggplot2::autoplot(curves, ret_grob=TRUE, ...))
+  vdiffr::expect_doppelganger(ptitle, ggplot2::autoplot(curves, ret_grob = TRUE, ...))
 
   if (!test_extra_ap2) return(TRUE)
 
   vdiffr::expect_doppelganger(paste0(ptitle, "_roc_prc"),
-                              ggplot2::autoplot(curves, c("ROC", "PRC"), ret_grob=TRUE, ...))
+                              ggplot2::autoplot(curves, c("ROC", "PRC"), ret_grob = TRUE, ...))
 
   pp_roc <- ggplot2::autoplot(curves, "ROC", ...)
   vdiffr::expect_doppelganger(paste0(ptitle, "_roc"), pp_roc)

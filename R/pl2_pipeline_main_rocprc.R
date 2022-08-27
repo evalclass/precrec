@@ -81,7 +81,7 @@
                               cb_alpha = cb_alpha,
                               raw_curves = raw_curves,
                               x_bins = x_bins,
-                              interpolate=interpolate)
+                              interpolate = interpolate)
   attr(s3obj, "validated") <- FALSE
 
   # Call .validate.class_name()

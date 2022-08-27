@@ -58,8 +58,8 @@
   if (mode == "rocprc" || mode == "prcroc") {
     mnames <- c("ROC", "PRC")
   } else if (mode == "basic") {
-    mnames <-  c("score", "label", "error", "accuracy", "specificity",
-                 "sensitivity", "precision", "mcc", "fscore")
+    mnames <- c("score", "label", "error", "accuracy", "specificity",
+                "sensitivity", "precision", "mcc", "fscore")
   }
 
   mnames

@@ -71,7 +71,7 @@ ap3_test_basic_measures <- function(curves, ptitle, check_def_matrix = FALSE,
 
   if (check_def_matrix) {
     vdiffr::expect_doppelganger(ptitle, ggplot2::autoplot(curves,
-                                                          ret_grob=TRUE,
+                                                          ret_grob = TRUE,
                                                           raw_curves = raw_curves, ...))
   }
 
@@ -84,7 +84,7 @@ ap3_test_basic_measures <- function(curves, ptitle, check_def_matrix = FALSE,
   check_autoploat <- function(curves, metrics, ptitile2, raw_curves, ...) {
     vdiffr::expect_doppelganger(paste0(ptitle, "_", ptitile2),
                                 ggplot2::autoplot(curves, metrics,
-                                                  ret_grob=TRUE,
+                                                  ret_grob = TRUE,
                                                   raw_curves = raw_curves, ...))
   }
 
