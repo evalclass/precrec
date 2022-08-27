@@ -19,7 +19,7 @@
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Introduction to precrec">
 <meta property="og:description" content="precrec">
-<meta property="og:image" content="https://evalclass.github.io/precrec/logo.png">
+<meta property="og:image" content="https://evalclass.github.io/precrec/logo.svg">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">precrec</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.12.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.13.0</span>
       </span>
     </div>
 
@@ -78,7 +78,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Introduction to precrec</h1>
             
-            <h4 data-toc-skip class="date">2022-03-16</h4>
+            <h4 data-toc-skip class="date">2022-08-27</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/evalclass/precrec/blob/main/vignettes/introduction.Rmd" class="external-link"><code>vignettes/introduction.Rmd</code></a></small>
       <div class="hidden name"><code>introduction.Rmd</code></div>
@@ -93,13 +93,13 @@
 </h2>
 <p>The <code>evalmod</code> function calculates ROC and Precision-Recall curves and returns an S3 object.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/evalclass/precrec" class="external-link">precrec</a></span><span class="op">)</span>
-
-<span class="co"># Load a test dataset</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">P10N10</span><span class="op">)</span>
-
-<span class="co"># Calculate ROC and Precision-Recall curves</span>
-<span class="va">sscurves</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/evalclass/precrec" class="external-link">precrec</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Load a test dataset</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">P10N10</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Calculate ROC and Precision-Recall curves</span></span>
+<span><span class="va">sscurves</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="s3-generics">S3 generics<a class="anchor" aria-label="anchor" href="#s3-generics"></a>
 </h3>
@@ -163,11 +163,11 @@
 </h4>
 <p>The <code>plot</code> function outputs ROC and Precision-Recall curves</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Show ROC and Precision-Recall plots</span>
-<span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">sscurves</span><span class="op">)</span>
-
-<span class="co"># Show a Precision-Recall plot</span>
-<span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">sscurves</span>, <span class="st">"PRC"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Show ROC and Precision-Recall plots</span></span>
+<span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">sscurves</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Show a Precision-Recall plot</span></span>
+<span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">sscurves</span>, <span class="st">"PRC"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="introduction_files/figure-html/unnamed-chunk-2-1.png" width="672"><img src="introduction_files/figure-html/unnamed-chunk-2-2.png" width="672"></p>
 </div>
 <div class="section level4">
@@ -175,43 +175,43 @@
 </h4>
 <p>The <code>autoplot</code> function outputs ROC and Precision-Recall curves by using the <code>ggplot2</code> package.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># The ggplot2 package is required </span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
-
-<span class="co"># Show ROC and Precision-Recall plots</span>
-<span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">sscurves</span><span class="op">)</span>
-
-<span class="co"># Show a Precision-Recall plot</span>
-<span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">sscurves</span>, <span class="st">"PRC"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># The ggplot2 package is required </span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Show ROC and Precision-Recall plots</span></span>
+<span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">sscurves</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Show a Precision-Recall plot</span></span>
+<span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">sscurves</span>, <span class="st">"PRC"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="introduction_files/figure-html/unnamed-chunk-3-1.png" width="672"><img src="introduction_files/figure-html/unnamed-chunk-3-2.png" width="672"></p>
 <p>Reduced supporting points make the plotting speed faster for large data sets.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># 5 data sets with 50000 positives and 50000 negatives</span>
-<span class="va">samp1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_sim_samples.html">create_sim_samples</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">50000</span>, <span class="fl">50000</span><span class="op">)</span>
-
-<span class="co"># Calculate curves</span>
-<span class="va">eval1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">samp1</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">samp1</span><span class="op">$</span><span class="va">labels</span><span class="op">)</span>
-
-<span class="co"># Reduced supporting points</span>
-<span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">eval1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Full supporting points</span>
-<span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">eval1</span>, reduce_points <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">##    user  system elapsed </span>
-<span class="co">##   0.477   0.000   0.477 </span>
-<span class="co">##    user  system elapsed </span>
-<span class="co">##   7.652   0.216   7.869</span></code></pre>
+<code class="sourceCode R"><span><span class="co"># 5 data sets with 50000 positives and 50000 negatives</span></span>
+<span><span class="va">samp1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_sim_samples.html">create_sim_samples</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">50000</span>, <span class="fl">50000</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Calculate curves</span></span>
+<span><span class="va">eval1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">samp1</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">samp1</span><span class="op">$</span><span class="va">labels</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Reduced supporting points</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">eval1</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Full supporting points</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">eval1</span>, reduce_points <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##    user  system elapsed </span></span>
+<span><span class="co">##   0.042   0.000   0.042 </span></span>
+<span><span class="co">##    user  system elapsed </span></span>
+<span><span class="co">##   0.261   0.020   0.281</span></span></code></pre>
 </div>
 <div class="section level4">
 <h4 id="example-of-the-auc-function">Example of the auc function<a class="anchor" aria-label="anchor" href="#example-of-the-auc-function"></a>
 </h4>
 <p>The <code>auc</code> function outputs a data frame with the AUC (Area Under the Curve) scores.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Get a data frame with AUC scores</span>
-<span class="va">aucs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/auc.html">auc</a></span><span class="op">(</span><span class="va">sscurves</span><span class="op">)</span>
-
-<span class="co"># Use knitr::kable to display the result in a table format</span>
-<span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">aucs</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Get a data frame with AUC scores</span></span>
+<span><span class="va">aucs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/auc.html">auc</a></span><span class="op">(</span><span class="va">sscurves</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Use knitr::kable to display the result in a table format</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">aucs</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">modnames</th>
@@ -234,10 +234,10 @@
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Get AUCs of Precision-Recall</span>
-<span class="va">aucs_prc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">aucs</span>, <span class="va">curvetypes</span> <span class="op">==</span> <span class="st">"PRC"</span><span class="op">)</span>
-<span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">aucs_prc</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Get AUCs of Precision-Recall</span></span>
+<span><span class="va">aucs_prc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">aucs</span>, <span class="va">curvetypes</span> <span class="op">==</span> <span class="st">"PRC"</span><span class="op">)</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">aucs_prc</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left"></th>
@@ -259,12 +259,12 @@
 <h4 id="example-of-the-as-data-frame-function">Example of the as.data.frame function<a class="anchor" aria-label="anchor" href="#example-of-the-as-data-frame-function"></a>
 </h4>
 <p>The <code>as.data.frame</code> function converts a precrec object to a data frame.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Convert sscurves to a data frame</span>
-<span class="va">sscurves.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">sscurves</span><span class="op">)</span>
-
-<span class="co"># Use knitr::kable to display the result in a table format</span>
-<span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sscurves.df</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Convert sscurves to a data frame</span></span>
+<span><span class="va">sscurves.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">sscurves</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Use knitr::kable to display the result in a table format</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sscurves.df</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">x</th>
@@ -353,43 +353,43 @@
 <h3 id="example-of-the-join_scores-function">Example of the join_scores function<a class="anchor" aria-label="anchor" href="#example-of-the-join_scores-function"></a>
 </h3>
 <p>The <code>join_scores</code> function combines multiple score datasets.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">s1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span><span class="op">)</span>
-<span class="va">s2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">6</span>, <span class="fl">7</span>, <span class="fl">8</span><span class="op">)</span>
-<span class="va">s3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">8</span>, <span class="fl">4</span>, <span class="fl">2</span><span class="op">)</span>
-
-<span class="co"># Join two score vectors</span>
-<span class="va">scores1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/join_scores.html">join_scores</a></span><span class="op">(</span><span class="va">s1</span>, <span class="va">s2</span><span class="op">)</span>
-
-<span class="co"># Join two vectors and a matrix</span>
-<span class="va">scores2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/join_scores.html">join_scores</a></span><span class="op">(</span><span class="va">s1</span>, <span class="va">s2</span>, <span class="va">s3</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">s1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="va">s2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">6</span>, <span class="fl">7</span>, <span class="fl">8</span><span class="op">)</span></span>
+<span><span class="va">s3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">8</span>, <span class="fl">4</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Join two score vectors</span></span>
+<span><span class="va">scores1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/join_scores.html">join_scores</a></span><span class="op">(</span><span class="va">s1</span>, <span class="va">s2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Join two vectors and a matrix</span></span>
+<span><span class="va">scores2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/join_scores.html">join_scores</a></span><span class="op">(</span><span class="va">s1</span>, <span class="va">s2</span>, <span class="va">s3</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="example-of-the-join_labels-function">Example of the join_labels function<a class="anchor" aria-label="anchor" href="#example-of-the-join_labels-function"></a>
 </h3>
 <p>The <code>join_labels</code> function combines multiple score datasets.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">l1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>
-<span class="va">l2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>
-<span class="va">l3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>
-
-<span class="co"># Join two label vectors</span>
-<span class="va">labels1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/join_labels.html">join_labels</a></span><span class="op">(</span><span class="va">l1</span>, <span class="va">l2</span><span class="op">)</span>
-<span class="va">labels2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/join_labels.html">join_labels</a></span><span class="op">(</span><span class="va">l1</span>, <span class="va">l3</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">l1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">l2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">l3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Join two label vectors</span></span>
+<span><span class="va">labels1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/join_labels.html">join_labels</a></span><span class="op">(</span><span class="va">l1</span>, <span class="va">l2</span><span class="op">)</span></span>
+<span><span class="va">labels2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/join_labels.html">join_labels</a></span><span class="op">(</span><span class="va">l1</span>, <span class="va">l3</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="example-of-the-mmdata-function">Example of the mmdata function<a class="anchor" aria-label="anchor" href="#example-of-the-mmdata-function"></a>
 </h3>
 <p>The <code>mmdata</code> function makes an input dataset for the <code>evalmod</code> function.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Create an input dataset with two score vectors and one label vector</span>
-<span class="va">msmdat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mmdata.html">mmdata</a></span><span class="op">(</span><span class="va">scores1</span>, <span class="va">labels1</span><span class="op">)</span>
-
-<span class="co"># Specify dataset IDs</span>
-<span class="va">smmdat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mmdata.html">mmdata</a></span><span class="op">(</span><span class="va">scores1</span>, <span class="va">labels2</span>, dsids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>
-
-<span class="co"># Specify model names and dataset IDs</span>
-<span class="va">mmmdat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mmdata.html">mmdata</a></span><span class="op">(</span><span class="va">scores1</span>, <span class="va">labels2</span>, modnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mod1"</span>, <span class="st">"mod2"</span><span class="op">)</span>, dsids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Create an input dataset with two score vectors and one label vector</span></span>
+<span><span class="va">msmdat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mmdata.html">mmdata</a></span><span class="op">(</span><span class="va">scores1</span>, <span class="va">labels1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Specify dataset IDs</span></span>
+<span><span class="va">smmdat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mmdata.html">mmdata</a></span><span class="op">(</span><span class="va">scores1</span>, <span class="va">labels2</span>, dsids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Specify model names and dataset IDs</span></span>
+<span><span class="va">mmmdat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mmdata.html">mmdata</a></span><span class="op">(</span><span class="va">scores1</span>, <span class="va">labels2</span>, modnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mod1"</span>, <span class="st">"mod2"</span><span class="op">)</span>, dsids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="example-of-the-create_sim_samples-function">Example of the create_sim_samples function<a class="anchor" aria-label="anchor" href="#example-of-the-create_sim_samples-function"></a>
@@ -427,18 +427,18 @@
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># A dataset with 10 positives and 10 negatives for the random performance level</span>
-<span class="va">samps1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_sim_samples.html">create_sim_samples</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span>, <span class="fl">10</span>, <span class="st">"random"</span><span class="op">)</span>
-
-<span class="co">#  A dataset for five different performance levels</span>
-<span class="va">samps2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_sim_samples.html">create_sim_samples</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span>, <span class="fl">10</span>, <span class="st">"all"</span><span class="op">)</span>
-
-<span class="co"># A dataset with 20 samples for the good early retrieval performance level</span>
-<span class="va">samps3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_sim_samples.html">create_sim_samples</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">10</span>, <span class="fl">10</span>, <span class="st">"good_er"</span><span class="op">)</span>
-
-<span class="co"># A dataset with 20 samples for five different performance levels</span>
-<span class="va">samps4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_sim_samples.html">create_sim_samples</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">10</span>, <span class="fl">10</span>, <span class="st">"all"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># A dataset with 10 positives and 10 negatives for the random performance level</span></span>
+<span><span class="va">samps1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_sim_samples.html">create_sim_samples</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span>, <span class="fl">10</span>, <span class="st">"random"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#  A dataset for five different performance levels</span></span>
+<span><span class="va">samps2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_sim_samples.html">create_sim_samples</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span>, <span class="fl">10</span>, <span class="st">"all"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># A dataset with 20 samples for the good early retrieval performance level</span></span>
+<span><span class="va">samps3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_sim_samples.html">create_sim_samples</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">10</span>, <span class="fl">10</span>, <span class="st">"good_er"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># A dataset with 20 samples for five different performance levels</span></span>
+<span><span class="va">samps4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_sim_samples.html">create_sim_samples</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">10</span>, <span class="fl">10</span>, <span class="st">"all"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -449,42 +449,42 @@
 <h3 id="data-preparation-1">Data preparation<a class="anchor" aria-label="anchor" href="#data-preparation-1"></a>
 </h3>
 <p>There are several ways to create a dataset with the <code>mmdata</code> function for multiple models.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Use a list with multiple score vectors and a list with a single label vector</span>
-<span class="va">msmdat1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mmdata.html">mmdata</a></span><span class="op">(</span><span class="va">scores1</span>, <span class="va">labels1</span><span class="op">)</span>
-
-<span class="co"># Explicitly specify model names</span>
-<span class="va">msmdat2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mmdata.html">mmdata</a></span><span class="op">(</span><span class="va">scores1</span>, <span class="va">labels1</span>, modnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mod1"</span>, <span class="st">"mod2"</span><span class="op">)</span><span class="op">)</span>
-
-<span class="co"># Use a sample dataset created by the create_sim_samples function</span>
-<span class="va">msmdat3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mmdata.html">mmdata</a></span><span class="op">(</span><span class="va">samps2</span><span class="op">[[</span><span class="st">"scores"</span><span class="op">]</span><span class="op">]</span>, <span class="va">samps2</span><span class="op">[[</span><span class="st">"labels"</span><span class="op">]</span><span class="op">]</span>, modnames <span class="op">=</span> <span class="va">samps2</span><span class="op">[[</span><span class="st">"modnames"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Use a list with multiple score vectors and a list with a single label vector</span></span>
+<span><span class="va">msmdat1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mmdata.html">mmdata</a></span><span class="op">(</span><span class="va">scores1</span>, <span class="va">labels1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Explicitly specify model names</span></span>
+<span><span class="va">msmdat2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mmdata.html">mmdata</a></span><span class="op">(</span><span class="va">scores1</span>, <span class="va">labels1</span>, modnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mod1"</span>, <span class="st">"mod2"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Use a sample dataset created by the create_sim_samples function</span></span>
+<span><span class="va">msmdat3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mmdata.html">mmdata</a></span><span class="op">(</span><span class="va">samps2</span><span class="op">[[</span><span class="st">"scores"</span><span class="op">]</span><span class="op">]</span>, <span class="va">samps2</span><span class="op">[[</span><span class="st">"labels"</span><span class="op">]</span><span class="op">]</span>, modnames <span class="op">=</span> <span class="va">samps2</span><span class="op">[[</span><span class="st">"modnames"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="roc-and-precision-recall-calculations">ROC and Precision-Recall calculations<a class="anchor" aria-label="anchor" href="#roc-and-precision-recall-calculations"></a>
 </h3>
 <p>The <code>evalmod</code> function automatically detects multiple models.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Calculate ROC and Precision-Recall curves for multiple models</span>
-<span class="va">mscurves</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span><span class="va">msmdat3</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Calculate ROC and Precision-Recall curves for multiple models</span></span>
+<span><span class="va">mscurves</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span><span class="va">msmdat3</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="s3-generics-1">S3 generics<a class="anchor" aria-label="anchor" href="#s3-generics-1"></a>
 </h3>
 <p>All the S3 generics are effective for the S3 object generated by this approach.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Show ROC and Precision-Recall curves with the ggplot2 package</span>
-<span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">mscurves</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Show ROC and Precision-Recall curves with the ggplot2 package</span></span>
+<span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">mscurves</span><span class="op">)</span></span></code></pre></div>
 <p><img src="introduction_files/figure-html/unnamed-chunk-13-1.png" width="672"></p>
 <div class="section level4">
 <h4 id="example-of-the-as-data-frame-function-1">Example of the as.data.frame function<a class="anchor" aria-label="anchor" href="#example-of-the-as-data-frame-function-1"></a>
 </h4>
 <p>The <code>as.data.frame</code> function also works with this object.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Convert mscurves to a data frame</span>
-<span class="va">mscurves.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">mscurves</span><span class="op">)</span>
-
-<span class="co"># Use knitr::kable to display the result in a table format</span>
-<span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mscurves.df</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Convert mscurves to a data frame</span></span>
+<span><span class="va">mscurves.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">mscurves</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Use knitr::kable to display the result in a table format</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mscurves.df</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">x</th>
@@ -549,42 +549,42 @@
 <h3 id="data-preparation-2">Data preparation<a class="anchor" aria-label="anchor" href="#data-preparation-2"></a>
 </h3>
 <p>There are several ways to create a dataset with the <code>mmdata</code> function for multiple test datasets.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Specify test dataset IDs names</span>
-<span class="va">smmdat1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mmdata.html">mmdata</a></span><span class="op">(</span><span class="va">scores1</span>, <span class="va">labels2</span>, dsids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
-
-<span class="co"># Use a sample dataset created by the create_sim_samples function</span>
-<span class="va">smmdat2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mmdata.html">mmdata</a></span><span class="op">(</span><span class="va">samps3</span><span class="op">[[</span><span class="st">"scores"</span><span class="op">]</span><span class="op">]</span>, <span class="va">samps3</span><span class="op">[[</span><span class="st">"labels"</span><span class="op">]</span><span class="op">]</span>, dsids <span class="op">=</span> <span class="va">samps3</span><span class="op">[[</span><span class="st">"dsids"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Specify test dataset IDs names</span></span>
+<span><span class="va">smmdat1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mmdata.html">mmdata</a></span><span class="op">(</span><span class="va">scores1</span>, <span class="va">labels2</span>, dsids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Use a sample dataset created by the create_sim_samples function</span></span>
+<span><span class="va">smmdat2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mmdata.html">mmdata</a></span><span class="op">(</span><span class="va">samps3</span><span class="op">[[</span><span class="st">"scores"</span><span class="op">]</span><span class="op">]</span>, <span class="va">samps3</span><span class="op">[[</span><span class="st">"labels"</span><span class="op">]</span><span class="op">]</span>, dsids <span class="op">=</span> <span class="va">samps3</span><span class="op">[[</span><span class="st">"dsids"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="roc-and-precision-recall-calculations-1">ROC and Precision-Recall calculations<a class="anchor" aria-label="anchor" href="#roc-and-precision-recall-calculations-1"></a>
 </h3>
 <p>The <code>evalmod</code> function automatically detects multiple test datasets.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Calculate curves for multiple test datasets and keep all the curves</span>
-<span class="va">smcurves</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span><span class="va">smmdat2</span>, raw_curves <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Calculate curves for multiple test datasets and keep all the curves</span></span>
+<span><span class="va">smcurves</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span><span class="va">smmdat2</span>, raw_curves <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="s3-generics-2">S3 generics<a class="anchor" aria-label="anchor" href="#s3-generics-2"></a>
 </h3>
 <p>All the S3 generics are effective for the S3 object generated by this approach.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Show an average Precision-Recall curve with the 95% confidence bounds</span>
-<span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">smcurves</span>, <span class="st">"PRC"</span>, show_cb <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="co"># Show raw Precision-Recall curves</span>
-<span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">smcurves</span>, <span class="st">"PRC"</span>, show_cb <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Show an average Precision-Recall curve with the 95% confidence bounds</span></span>
+<span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">smcurves</span>, <span class="st">"PRC"</span>, show_cb <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Show raw Precision-Recall curves</span></span>
+<span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">smcurves</span>, <span class="st">"PRC"</span>, show_cb <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="introduction_files/figure-html/unnamed-chunk-17-1.png" width="672"><img src="introduction_files/figure-html/unnamed-chunk-17-2.png" width="672"></p>
 <div class="section level4">
 <h4 id="example-of-the-as-data-frame-function-2">Example of the as.data.frame function<a class="anchor" aria-label="anchor" href="#example-of-the-as-data-frame-function-2"></a>
 </h4>
 <p>The <code>as.data.frame</code> function also works with this object.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Convert smcurves to a data frame</span>
-<span class="va">smcurves.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">smcurves</span><span class="op">)</span>
-
-<span class="co"># Use knitr::kable to display the result in a table format</span>
-<span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">smcurves.df</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Convert smcurves to a data frame</span></span>
+<span><span class="va">smcurves.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">smcurves</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Use knitr::kable to display the result in a table format</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">smcurves.df</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">x</th>
@@ -609,29 +609,29 @@
 <td align="left">ROC</td>
 </tr>
 <tr class="odd">
-<td align="right">0.000</td>
-<td align="right">0.2</td>
-<td align="left">m1</td>
-<td align="left">1</td>
-<td align="left">ROC</td>
-</tr>
-<tr class="even">
-<td align="right">0.000</td>
-<td align="right">0.3</td>
-<td align="left">m1</td>
-<td align="left">1</td>
-<td align="left">ROC</td>
-</tr>
-<tr class="odd">
 <td align="right">0.001</td>
-<td align="right">0.3</td>
+<td align="right">0.1</td>
 <td align="left">m1</td>
 <td align="left">1</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="even">
 <td align="right">0.002</td>
-<td align="right">0.3</td>
+<td align="right">0.1</td>
+<td align="left">m1</td>
+<td align="left">1</td>
+<td align="left">ROC</td>
+</tr>
+<tr class="odd">
+<td align="right">0.003</td>
+<td align="right">0.1</td>
+<td align="left">m1</td>
+<td align="left">1</td>
+<td align="left">ROC</td>
+</tr>
+<tr class="even">
+<td align="right">0.004</td>
+<td align="right">0.1</td>
 <td align="left">m1</td>
 <td align="left">1</td>
 <td align="left">ROC</td>
@@ -649,43 +649,43 @@
 <h3 id="data-preparation-3">Data preparation<a class="anchor" aria-label="anchor" href="#data-preparation-3"></a>
 </h3>
 <p>There are several ways to create a dataset with the <code>mmdata</code> function for multiple models and multiple datasets.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Specify model names and test dataset IDs names</span>
-<span class="va">mmmdat1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mmdata.html">mmdata</a></span><span class="op">(</span><span class="va">scores1</span>, <span class="va">labels2</span>, modnames<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mod1"</span>, <span class="st">"mod2"</span><span class="op">)</span>, dsids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>
-
-<span class="co"># Use a sample dataset created by the create_sim_samples function</span>
-<span class="va">mmmdat2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mmdata.html">mmdata</a></span><span class="op">(</span><span class="va">samps4</span><span class="op">[[</span><span class="st">"scores"</span><span class="op">]</span><span class="op">]</span>, <span class="va">samps4</span><span class="op">[[</span><span class="st">"labels"</span><span class="op">]</span><span class="op">]</span>, 
-                  modnames <span class="op">=</span> <span class="va">samps4</span><span class="op">[[</span><span class="st">"modnames"</span><span class="op">]</span><span class="op">]</span>, dsids <span class="op">=</span> <span class="va">samps4</span><span class="op">[[</span><span class="st">"dsids"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Specify model names and test dataset IDs names</span></span>
+<span><span class="va">mmmdat1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mmdata.html">mmdata</a></span><span class="op">(</span><span class="va">scores1</span>, <span class="va">labels2</span>, modnames<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mod1"</span>, <span class="st">"mod2"</span><span class="op">)</span>, dsids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Use a sample dataset created by the create_sim_samples function</span></span>
+<span><span class="va">mmmdat2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mmdata.html">mmdata</a></span><span class="op">(</span><span class="va">samps4</span><span class="op">[[</span><span class="st">"scores"</span><span class="op">]</span><span class="op">]</span>, <span class="va">samps4</span><span class="op">[[</span><span class="st">"labels"</span><span class="op">]</span><span class="op">]</span>, </span>
+<span>                  modnames <span class="op">=</span> <span class="va">samps4</span><span class="op">[[</span><span class="st">"modnames"</span><span class="op">]</span><span class="op">]</span>, dsids <span class="op">=</span> <span class="va">samps4</span><span class="op">[[</span><span class="st">"dsids"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="roc-and-precision-recall-calculations-2">ROC and Precision-Recall calculations<a class="anchor" aria-label="anchor" href="#roc-and-precision-recall-calculations-2"></a>
 </h3>
 <p>The <code>evalmod</code> function automatically detects multiple models and multiple test datasets.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Calculate curves for multiple models and multiple test datasets</span>
-<span class="va">mmcurves</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span><span class="va">mmmdat2</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Calculate curves for multiple models and multiple test datasets</span></span>
+<span><span class="va">mmcurves</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span><span class="va">mmmdat2</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="s3-generics-3">S3 generics<a class="anchor" aria-label="anchor" href="#s3-generics-3"></a>
 </h3>
 <p>All the S3 generics are effective for the S3 object generated by this approach.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Show average Precision-Recall curves</span>
-<span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">mmcurves</span>, <span class="st">"PRC"</span><span class="op">)</span>
-
-<span class="co"># Show average Precision-Recall curves with the 95% confidence bounds</span>
-<span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">mmcurves</span>, <span class="st">"PRC"</span>, show_cb <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Show average Precision-Recall curves</span></span>
+<span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">mmcurves</span>, <span class="st">"PRC"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Show average Precision-Recall curves with the 95% confidence bounds</span></span>
+<span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">mmcurves</span>, <span class="st">"PRC"</span>, show_cb <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="introduction_files/figure-html/unnamed-chunk-21-1.png" width="672"><img src="introduction_files/figure-html/unnamed-chunk-21-2.png" width="672"></p>
 <div class="section level4">
 <h4 id="example-of-the-as-data-frame-function-3">Example of the as.data.frame function<a class="anchor" aria-label="anchor" href="#example-of-the-as-data-frame-function-3"></a>
 </h4>
 <p>The <code>as.data.frame</code> function also works with this object.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Convert smcurves to a data frame</span>
-<span class="va">mmcurves.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">mmcurves</span><span class="op">)</span>
-
-<span class="co"># Use knitr::kable to display the result in a table format</span>
-<span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mmcurves.df</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Convert smcurves to a data frame</span></span>
+<span><span class="va">mmcurves.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">mmcurves</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Use knitr::kable to display the result in a table format</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mmcurves.df</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">x</th>
@@ -698,7 +698,7 @@
 <tbody>
 <tr class="odd">
 <td align="right">0.000</td>
-<td align="right">0.00</td>
+<td align="right">0.000</td>
 <td align="right">0.0000000</td>
 <td align="right">0.0000000</td>
 <td align="left">random</td>
@@ -706,41 +706,41 @@
 </tr>
 <tr class="even">
 <td align="right">0.000</td>
-<td align="right">0.06</td>
-<td align="right">0.0164051</td>
-<td align="right">0.1035949</td>
+<td align="right">0.095</td>
+<td align="right">0.0355599</td>
+<td align="right">0.1544401</td>
 <td align="left">random</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="odd">
 <td align="right">0.001</td>
-<td align="right">0.06</td>
-<td align="right">0.0164051</td>
-<td align="right">0.1035949</td>
+<td align="right">0.095</td>
+<td align="right">0.0355599</td>
+<td align="right">0.1544401</td>
 <td align="left">random</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="even">
 <td align="right">0.002</td>
-<td align="right">0.06</td>
-<td align="right">0.0164051</td>
-<td align="right">0.1035949</td>
+<td align="right">0.095</td>
+<td align="right">0.0355599</td>
+<td align="right">0.1544401</td>
 <td align="left">random</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="odd">
 <td align="right">0.003</td>
-<td align="right">0.06</td>
-<td align="right">0.0164051</td>
-<td align="right">0.1035949</td>
+<td align="right">0.095</td>
+<td align="right">0.0355599</td>
+<td align="right">0.1544401</td>
 <td align="left">random</td>
 <td align="left">ROC</td>
 </tr>
 <tr class="even">
 <td align="right">0.004</td>
-<td align="right">0.06</td>
-<td align="right">0.0164051</td>
-<td align="right">0.1035949</td>
+<td align="right">0.095</td>
+<td align="right">0.0355599</td>
+<td align="right">0.1544401</td>
 <td align="left">random</td>
 <td align="left">ROC</td>
 </tr>
@@ -757,40 +757,40 @@
 <h3 id="example-of-confidence-bands-when-x_bins-is-2">Example of confidence bands when x_bins is 2<a class="anchor" aria-label="anchor" href="#example-of-confidence-bands-when-x_bins-is-2"></a>
 </h3>
 <p>The dataset <code>smmdat2</code> contains 20 samples for a single model/classifier.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Show all curves</span>
-<span class="va">smcurves_all</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span><span class="va">smmdat2</span>, raw_curves <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">smcurves_all</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Show all curves</span></span>
+<span><span class="va">smcurves_all</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span><span class="va">smmdat2</span>, raw_curves <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">smcurves_all</span><span class="op">)</span></span></code></pre></div>
 <p><img src="introduction_files/figure-html/unnamed-chunk-23-1.png" width="672"></p>
 <p>Additional supporting points are calculated for <code>x = (0, 0.5, 1.0)</code> when <code>x_bins</code> is set to 2.</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># x_bins: 2</span>
-<span class="va">smcurves_xb2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span><span class="va">smmdat2</span>, x_bins <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
-<span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">smcurves_xb2</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># x_bins: 2</span></span>
+<span><span class="va">smcurves_xb2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span><span class="va">smmdat2</span>, x_bins <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">smcurves_xb2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="introduction_files/figure-html/unnamed-chunk-24-1.png" width="672"></p>
 </div>
 <div class="section level3">
 <h3 id="example-of-confidence-bands-when-x_bins-is-10">Example of confidence bands when x_bins is 10<a class="anchor" aria-label="anchor" href="#example-of-confidence-bands-when-x_bins-is-10"></a>
 </h3>
 <p>Additional supporting points are calculated for <code>x = (0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0)</code> when <code>x_bins</code> is set to 10.</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># x_bins: 10</span>
-<span class="va">smcurves_xb10</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span><span class="va">smmdat2</span>, x_bins <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
-<span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">smcurves_xb10</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># x_bins: 10</span></span>
+<span><span class="va">smcurves_xb10</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span><span class="va">smmdat2</span>, x_bins <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">smcurves_xb10</span><span class="op">)</span></span></code></pre></div>
 <p><img src="introduction_files/figure-html/unnamed-chunk-25-1.png" width="672"></p>
 </div>
 <div class="section level3">
 <h3 id="example-of-the-alpha-value">Example of the alpha value<a class="anchor" aria-label="anchor" href="#example-of-the-alpha-value"></a>
 </h3>
 <p>The <code>evalmod</code> function accepts the <code>cb_alpha</code> option to specify the alpha value of the point-wise confidence bounds calculation. For instance, 95% confidence bands are calculated when <code>cb_alpha</code> is 0.05.</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># cb_alpha: 0.1 for 90% confidence band</span>
-<span class="va">smcurves_cb1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span><span class="va">smmdat2</span>, x_bins <span class="op">=</span> <span class="fl">10</span>, cb_alpha <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span>
-<span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">smcurves_cb1</span><span class="op">)</span>
-
-<span class="co"># cb_alpha: 0.01 for 99% confidence band</span>
-<span class="va">smcurves_cb2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span><span class="va">smmdat2</span>, x_bins <span class="op">=</span> <span class="fl">10</span>, cb_alpha <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span>
-<span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">smcurves_cb2</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># cb_alpha: 0.1 for 90% confidence band</span></span>
+<span><span class="va">smcurves_cb1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span><span class="va">smmdat2</span>, x_bins <span class="op">=</span> <span class="fl">10</span>, cb_alpha <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">smcurves_cb1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># cb_alpha: 0.01 for 99% confidence band</span></span>
+<span><span class="va">smcurves_cb2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span><span class="va">smmdat2</span>, x_bins <span class="op">=</span> <span class="fl">10</span>, cb_alpha <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">smcurves_cb2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="introduction_files/figure-html/unnamed-chunk-26-1.png" width="672"><img src="introduction_files/figure-html/unnamed-chunk-26-2.png" width="672"></p>
 </div>
 </div>
@@ -801,12 +801,12 @@
 <div class="section level4">
 <h4 id="example-of-a-data-frame-with-5-fold-data">Example of a data frame with 5-fold data<a class="anchor" aria-label="anchor" href="#example-of-a-data-frame-with-5-fold-data"></a>
 </h4>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Load data</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">M2N50F5</span><span class="op">)</span>
-
-<span class="co"># Use knitr::kable to display the result in a table format</span>
-<span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">M2N50F5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Load data</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">M2N50F5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Use knitr::kable to display the result in a table format</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">M2N50F5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">score1</th>
@@ -857,19 +857,19 @@
 <div class="section level4">
 <h4 id="example-of-the-format_nfold-function-with-5-fold-datasets">Example of the format_nfold function with 5-fold datasets<a class="anchor" aria-label="anchor" href="#example-of-the-format_nfold-function-with-5-fold-datasets"></a>
 </h4>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Convert data frame to list</span>
-<span class="va">nfold_list1</span> <span class="op">=</span> <span class="fu"><a href="../reference/format_nfold.html">format_nfold</a></span><span class="op">(</span>nfold_df <span class="op">=</span> <span class="va">M2N50F5</span>,  score_cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, 
-                           lab_col <span class="op">=</span> <span class="fl">3</span>, fold_col <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
-
-<span class="co"># Use column names</span>
-<span class="va">nfold_list2</span> <span class="op">=</span> <span class="fu"><a href="../reference/format_nfold.html">format_nfold</a></span><span class="op">(</span>nfold_df <span class="op">=</span> <span class="va">M2N50F5</span>, score_cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"score1"</span>, <span class="st">"score2"</span><span class="op">)</span>,
-                           lab_col <span class="op">=</span> <span class="st">"label"</span>, fold_col <span class="op">=</span> <span class="st">"fold"</span><span class="op">)</span>
-
-<span class="co"># Use the result for evalmod</span>
-<span class="va">cvcurves</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">nfold_list2</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">nfold_list2</span><span class="op">$</span><span class="va">labels</span>,
-                    modnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"m1"</span>, <span class="st">"m2"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>, dsids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">cvcurves</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Convert data frame to list</span></span>
+<span><span class="va">nfold_list1</span> <span class="op">=</span> <span class="fu"><a href="../reference/format_nfold.html">format_nfold</a></span><span class="op">(</span>nfold_df <span class="op">=</span> <span class="va">M2N50F5</span>,  score_cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, </span>
+<span>                           lab_col <span class="op">=</span> <span class="fl">3</span>, fold_col <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Use column names</span></span>
+<span><span class="va">nfold_list2</span> <span class="op">=</span> <span class="fu"><a href="../reference/format_nfold.html">format_nfold</a></span><span class="op">(</span>nfold_df <span class="op">=</span> <span class="va">M2N50F5</span>, score_cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"score1"</span>, <span class="st">"score2"</span><span class="op">)</span>,</span>
+<span>                           lab_col <span class="op">=</span> <span class="st">"label"</span>, fold_col <span class="op">=</span> <span class="st">"fold"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Use the result for evalmod</span></span>
+<span><span class="va">cvcurves</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">nfold_list2</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">nfold_list2</span><span class="op">$</span><span class="va">labels</span>,</span>
+<span>                    modnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"m1"</span>, <span class="st">"m2"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>, dsids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">cvcurves</span><span class="op">)</span></span></code></pre></div>
 <p><img src="introduction_files/figure-html/unnamed-chunk-28-1.png" width="672"></p>
 </div>
 <div class="section level3">
@@ -879,15 +879,15 @@
 <div class="section level4">
 <h4 id="example-of-evalmod-and-mmdata-with-5-fold-data">Example of evalmod and mmdata with 5-fold data<a class="anchor" aria-label="anchor" href="#example-of-evalmod-and-mmdata-with-5-fold-data"></a>
 </h4>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># mmdata</span>
-<span class="va">cvcurves2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mmdata.html">mmdata</a></span><span class="op">(</span>nfold_df <span class="op">=</span> <span class="va">M2N50F5</span>, score_cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, lab_col <span class="op">=</span> <span class="fl">3</span>, fold_col <span class="op">=</span> <span class="fl">4</span>, 
-                    modnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"m1"</span>, <span class="st">"m2"</span><span class="op">)</span>, dsids <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>
-
-<span class="co"># evalmod</span>
-<span class="va">cvcurves3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span>nfold_df <span class="op">=</span> <span class="va">M2N50F5</span>, score_cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, lab_col <span class="op">=</span> <span class="fl">3</span>, fold_col <span class="op">=</span> <span class="fl">4</span>, 
-                     modnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"m1"</span>, <span class="st">"m2"</span><span class="op">)</span>, dsids <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>
-<span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">cvcurves3</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># mmdata</span></span>
+<span><span class="va">cvcurves2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mmdata.html">mmdata</a></span><span class="op">(</span>nfold_df <span class="op">=</span> <span class="va">M2N50F5</span>, score_cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, lab_col <span class="op">=</span> <span class="fl">3</span>, fold_col <span class="op">=</span> <span class="fl">4</span>, </span>
+<span>                    modnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"m1"</span>, <span class="st">"m2"</span><span class="op">)</span>, dsids <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># evalmod</span></span>
+<span><span class="va">cvcurves3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span>nfold_df <span class="op">=</span> <span class="va">M2N50F5</span>, score_cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, lab_col <span class="op">=</span> <span class="fl">3</span>, fold_col <span class="op">=</span> <span class="fl">4</span>, </span>
+<span>                     modnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"m1"</span>, <span class="st">"m2"</span><span class="op">)</span>, dsids <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">cvcurves3</span><span class="op">)</span></span></code></pre></div>
 <p><img src="introduction_files/figure-html/unnamed-chunk-29-1.png" width="672"></p>
 </div>
 </div>
@@ -936,43 +936,43 @@
 <h3 id="basic-measure-calculations">Basic measure calculations<a class="anchor" aria-label="anchor" href="#basic-measure-calculations"></a>
 </h3>
 <p>The <code>mode = "basic"</code> option makes the <code>evalmod</code> function calculate the basic evaluation measures instead of performing ROC and Precision-Recall calculations.</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Calculate basic evaluation measures</span>
-<span class="va">mmpoins</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span><span class="va">mmmdat2</span>, mode <span class="op">=</span> <span class="st">"basic"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Calculate basic evaluation measures</span></span>
+<span><span class="va">mmpoins</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span><span class="va">mmmdat2</span>, mode <span class="op">=</span> <span class="st">"basic"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="s3-generics-4">S3 generics<a class="anchor" aria-label="anchor" href="#s3-generics-4"></a>
 </h3>
 <p>All the S3 generics except for <code>auc</code>, <code>part</code> and <code>pauc</code> are effective for the S3 object generated by this approach.</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Show normalized ranks vs. error rate and accuracy</span>
-<span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">mmpoins</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"error"</span>, <span class="st">"accuracy"</span><span class="op">)</span><span class="op">)</span>
-
-<span class="co"># Show normalized ranks vs. specificity, sensitivity, and precision</span>
-<span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">mmpoins</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"specificity"</span>, <span class="st">"sensitivity"</span>, <span class="st">"precision"</span><span class="op">)</span><span class="op">)</span>
-
-<span class="co"># Show normalized ranks vs. Matthews correlation coefficient and F-score</span>
-<span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">mmpoins</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mcc"</span>, <span class="st">"fscore"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Show normalized ranks vs. error rate and accuracy</span></span>
+<span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">mmpoins</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"error"</span>, <span class="st">"accuracy"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Show normalized ranks vs. specificity, sensitivity, and precision</span></span>
+<span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">mmpoins</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"specificity"</span>, <span class="st">"sensitivity"</span>, <span class="st">"precision"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Show normalized ranks vs. Matthews correlation coefficient and F-score</span></span>
+<span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">mmpoins</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mcc"</span>, <span class="st">"fscore"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="introduction_files/figure-html/unnamed-chunk-31-1.png" width="672"><img src="introduction_files/figure-html/unnamed-chunk-31-2.png" width="672"><img src="introduction_files/figure-html/unnamed-chunk-31-3.png" width="672"></p>
 <div class="section level4">
 <h4 id="normalized-ranks-and-predicted-scores">Normalized ranks and predicted scores<a class="anchor" aria-label="anchor" href="#normalized-ranks-and-predicted-scores"></a>
 </h4>
 <p>In addition to the basic measures, the <code>autoplot</code> function can plot normalized ranks vs. scores and labels.</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Show normalized ranks vs. scores and labels</span>
-<span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">mmpoins</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"score"</span>, <span class="st">"label"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Show normalized ranks vs. scores and labels</span></span>
+<span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">mmpoins</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"score"</span>, <span class="st">"label"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="introduction_files/figure-html/unnamed-chunk-32-1.png" width="672"></p>
 </div>
 <div class="section level4">
 <h4 id="example-of-the-as-data-frame-function-4">Example of the as.data.frame function<a class="anchor" aria-label="anchor" href="#example-of-the-as-data-frame-function-4"></a>
 </h4>
 <p>The <code>as.data.frame</code> function also works for the precrec objects of the basic measures.</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Convert mmpoins to a data frame</span>
-<span class="va">mmpoins.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">mmpoins</span><span class="op">)</span>
-
-<span class="co"># Use knitr::kable to display the result in a table format</span>
-<span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mmpoins.df</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Convert mmpoins to a data frame</span></span>
+<span><span class="va">mmpoins.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">mmpoins</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Use knitr::kable to display the result in a table format</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mmpoins.df</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">x</th>
@@ -993,41 +993,41 @@
 </tr>
 <tr class="even">
 <td align="right">0.05</td>
-<td align="right">1.9073908</td>
-<td align="right">1.5846295</td>
-<td align="right">2.2301520</td>
+<td align="right">1.9040809</td>
+<td align="right">1.6579143</td>
+<td align="right">2.1502476</td>
 <td align="left">random</td>
 <td align="left">score</td>
 </tr>
 <tr class="odd">
 <td align="right">0.10</td>
-<td align="right">1.3472127</td>
-<td align="right">1.1264177</td>
-<td align="right">1.5680077</td>
+<td align="right">1.5601682</td>
+<td align="right">1.3834296</td>
+<td align="right">1.7369068</td>
 <td align="left">random</td>
 <td align="left">score</td>
 </tr>
 <tr class="even">
 <td align="right">0.15</td>
-<td align="right">1.0902187</td>
-<td align="right">0.9183991</td>
-<td align="right">1.2620382</td>
+<td align="right">1.2138364</td>
+<td align="right">1.0788638</td>
+<td align="right">1.3488089</td>
 <td align="left">random</td>
 <td align="left">score</td>
 </tr>
 <tr class="odd">
 <td align="right">0.20</td>
-<td align="right">0.8483219</td>
-<td align="right">0.7023783</td>
-<td align="right">0.9942656</td>
+<td align="right">0.9683117</td>
+<td align="right">0.8140558</td>
+<td align="right">1.1225675</td>
 <td align="left">random</td>
 <td align="left">score</td>
 </tr>
 <tr class="even">
 <td align="right">0.25</td>
-<td align="right">0.6969499</td>
-<td align="right">0.5554664</td>
-<td align="right">0.8384333</td>
+<td align="right">0.8022531</td>
+<td align="right">0.6658384</td>
+<td align="right">0.9386678</td>
 <td align="left">random</td>
 <td align="left">score</td>
 </tr>
@@ -1044,18 +1044,18 @@
 <h3 id="partial-auc-calculations">partial AUC calculations<a class="anchor" aria-label="anchor" href="#partial-auc-calculations"></a>
 </h3>
 <p>It requires an S3 object produced by the <code>evalmod</code> function and uses <code>xlim</code> and <code>ylim</code> to specify the partial area of your choice. The <code>pauc</code> function outputs a data frame with the pAUC scores.</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Calculate ROC and Precision-Recall curves</span>
-<span class="va">curves</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span><span class="op">)</span>
-
-<span class="co"># Calculate partial AUCs</span>
-<span class="va">curves.part</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/part.html">part</a></span><span class="op">(</span><span class="va">curves</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.0</span>, <span class="fl">0.25</span><span class="op">)</span><span class="op">)</span>
-
-<span class="co"># Retrieve a dataframe of pAUCs</span>
-<span class="va">paucs.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pauc.html">pauc</a></span><span class="op">(</span><span class="va">curves.part</span><span class="op">)</span>
-
-<span class="co"># Use knitr::kable to display the result in a table format</span>
-<span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">paucs.df</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Calculate ROC and Precision-Recall curves</span></span>
+<span><span class="va">curves</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Calculate partial AUCs</span></span>
+<span><span class="va">curves.part</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/part.html">part</a></span><span class="op">(</span><span class="va">curves</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.0</span>, <span class="fl">0.25</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Retrieve a dataframe of pAUCs</span></span>
+<span><span class="va">paucs.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pauc.html">pauc</a></span><span class="op">(</span><span class="va">curves.part</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Use knitr::kable to display the result in a table format</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">paucs.df</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">modnames</th>
@@ -1086,9 +1086,9 @@
 <h3 id="s3-generics-5">S3 generics<a class="anchor" aria-label="anchor" href="#s3-generics-5"></a>
 </h3>
 <p>All the S3 generics are effective for the S3 object generated by this approach.</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Show ROC and Precision-Recall curves</span>
-<span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">curves.part</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Show ROC and Precision-Recall curves</span></span>
+<span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">curves.part</span><span class="op">)</span></span></code></pre></div>
 <p><img src="introduction_files/figure-html/unnamed-chunk-35-1.png" width="672"></p>
 </div>
 </div>
@@ -1100,15 +1100,15 @@
 <h3 id="auc-calculation-with-the-u-statistic">AUC calculation with the U statistic<a class="anchor" aria-label="anchor" href="#auc-calculation-with-the-u-statistic"></a>
 </h3>
 <p>The <code>evalmod</code> function calculates AUCs with the U statistic when mode = ‘aucroc’.</p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Calculate AUC (ROC)</span>
-<span class="va">aucs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span>, mode <span class="op">=</span> <span class="st">'aucroc'</span><span class="op">)</span>
-
-<span class="co"># Convert to data.frame</span>
-<span class="va">aucs.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">aucs</span><span class="op">)</span>
-
-<span class="co"># Use knitr::kable to display the result in a table format</span>
-<span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">aucs.df</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Calculate AUC (ROC)</span></span>
+<span><span class="va">aucs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span>, mode <span class="op">=</span> <span class="st">'aucroc'</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Convert to data.frame</span></span>
+<span><span class="va">aucs.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">aucs</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Use knitr::kable to display the result in a table format</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">aucs.df</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">modnames</th>
@@ -1133,12 +1133,12 @@
 <h3 id="default-ci-calculation-with-normal-distribution-and-alpha0-05">Default CI calculation with normal distribution and alpha=0.05<a class="anchor" aria-label="anchor" href="#default-ci-calculation-with-normal-distribution-and-alpha0-05"></a>
 </h3>
 <p>The <code>auc_ci</code> function calculates CIs for both ROC and precision-recall AUCs. The specified data must contain multiple datasets, such as cross-validation data.</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Calculate CI of AUCs with normal distibution</span>
-<span class="va">auc_ci</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/auc_ci.html">auc_ci</a></span><span class="op">(</span><span class="va">smcurves</span><span class="op">)</span>
-
-<span class="co"># Use knitr::kable to display the result in a table format</span>
-<span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">auc_ci</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Calculate CI of AUCs with normal distibution</span></span>
+<span><span class="va">auc_ci</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/auc_ci.html">auc_ci</a></span><span class="op">(</span><span class="va">smcurves</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Use knitr::kable to display the result in a table format</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">auc_ci</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">modnames</th>
@@ -1153,19 +1153,19 @@
 <tr class="odd">
 <td align="left">m1</td>
 <td align="left">ROC</td>
-<td align="right">0.8170000</td>
-<td align="right">0.0426596</td>
-<td align="right">0.7743404</td>
-<td align="right">0.8596596</td>
+<td align="right">0.7880000</td>
+<td align="right">0.0557380</td>
+<td align="right">0.7322620</td>
+<td align="right">0.8437380</td>
 <td align="right">20</td>
 </tr>
 <tr class="even">
 <td align="left">m1</td>
 <td align="left">PRC</td>
-<td align="right">0.8549733</td>
-<td align="right">0.0318372</td>
-<td align="right">0.8231361</td>
-<td align="right">0.8868104</td>
+<td align="right">0.8162803</td>
+<td align="right">0.0529188</td>
+<td align="right">0.7633614</td>
+<td align="right">0.8691991</td>
 <td align="right">20</td>
 </tr>
 </tbody>
@@ -1175,12 +1175,12 @@
 <h3 id="ci-calculation-with-a-different-alpha-0-01">CI calculation with a different alpha (0.01)<a class="anchor" aria-label="anchor" href="#ci-calculation-with-a-different-alpha-0-01"></a>
 </h3>
 <p>The <code>auc_ci</code> function accepts a different significance level.</p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Calculate CI of AUCs with alpha = 0.01</span>
-<span class="va">auc_ci_a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/auc_ci.html">auc_ci</a></span><span class="op">(</span><span class="va">smcurves</span>, alpha <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span>
-
-<span class="co"># Use knitr::kable to display the result in a table format</span>
-<span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">auc_ci_a</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Calculate CI of AUCs with alpha = 0.01</span></span>
+<span><span class="va">auc_ci_a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/auc_ci.html">auc_ci</a></span><span class="op">(</span><span class="va">smcurves</span>, alpha <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Use knitr::kable to display the result in a table format</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">auc_ci_a</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">modnames</th>
@@ -1195,19 +1195,19 @@
 <tr class="odd">
 <td align="left">m1</td>
 <td align="left">ROC</td>
-<td align="right">0.8170000</td>
-<td align="right">0.0560642</td>
-<td align="right">0.7609358</td>
-<td align="right">0.8730642</td>
+<td align="right">0.7880000</td>
+<td align="right">0.0732522</td>
+<td align="right">0.7147478</td>
+<td align="right">0.8612522</td>
 <td align="right">20</td>
 </tr>
 <tr class="even">
 <td align="left">m1</td>
 <td align="left">PRC</td>
-<td align="right">0.8549733</td>
-<td align="right">0.0418411</td>
-<td align="right">0.8131321</td>
-<td align="right">0.8968144</td>
+<td align="right">0.8162803</td>
+<td align="right">0.0695471</td>
+<td align="right">0.7467331</td>
+<td align="right">0.8858274</td>
 <td align="right">20</td>
 </tr>
 </tbody>
@@ -1217,12 +1217,12 @@
 <h3 id="ci-calculation-with-t-distribution">CI calculation with t-distribution<a class="anchor" aria-label="anchor" href="#ci-calculation-with-t-distribution"></a>
 </h3>
 <p>The <code>auc_ci</code> function accepts either normal or t-distribution for CI calculation.</p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Calculate CI of AUCs t-distribution</span>
-<span class="va">auc_ci_t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/auc_ci.html">auc_ci</a></span><span class="op">(</span><span class="va">smcurves</span>, dtype <span class="op">=</span> <span class="st">"t"</span><span class="op">)</span>
-
-<span class="co"># Use knitr::kable to display the result in a table format</span>
-<span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">auc_ci_t</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Calculate CI of AUCs t-distribution</span></span>
+<span><span class="va">auc_ci_t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/auc_ci.html">auc_ci</a></span><span class="op">(</span><span class="va">smcurves</span>, dtype <span class="op">=</span> <span class="st">"t"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Use knitr::kable to display the result in a table format</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">auc_ci_t</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">modnames</th>
@@ -1237,19 +1237,19 @@
 <tr class="odd">
 <td align="left">m1</td>
 <td align="left">ROC</td>
-<td align="right">0.8170000</td>
-<td align="right">0.0455557</td>
-<td align="right">0.7714443</td>
-<td align="right">0.8625557</td>
+<td align="right">0.7880000</td>
+<td align="right">0.0595220</td>
+<td align="right">0.7284780</td>
+<td align="right">0.8475220</td>
 <td align="right">20</td>
 </tr>
 <tr class="even">
 <td align="left">m1</td>
 <td align="left">PRC</td>
-<td align="right">0.8549733</td>
-<td align="right">0.0339986</td>
-<td align="right">0.8209747</td>
-<td align="right">0.8889718</td>
+<td align="right">0.8162803</td>
+<td align="right">0.0565114</td>
+<td align="right">0.7597688</td>
+<td align="right">0.8727917</td>
 <td align="right">20</td>
 </tr>
 </tbody>
@@ -1263,38 +1263,38 @@
 <div class="section level3">
 <h3 id="data-preparation-4">Data preparation<a class="anchor" aria-label="anchor" href="#data-preparation-4"></a>
 </h3>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Balanced dataset</span>
-<span class="va">samps5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_sim_samples.html">create_sim_samples</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">100</span>, <span class="fl">100</span>, <span class="st">"all"</span><span class="op">)</span>
-<span class="va">simmdat1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mmdata.html">mmdata</a></span><span class="op">(</span><span class="va">samps5</span><span class="op">[[</span><span class="st">"scores"</span><span class="op">]</span><span class="op">]</span>, <span class="va">samps5</span><span class="op">[[</span><span class="st">"labels"</span><span class="op">]</span><span class="op">]</span>, 
-                   modnames <span class="op">=</span> <span class="va">samps5</span><span class="op">[[</span><span class="st">"modnames"</span><span class="op">]</span><span class="op">]</span>, dsids <span class="op">=</span> <span class="va">samps5</span><span class="op">[[</span><span class="st">"dsids"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
-
-<span class="co"># Imbalanced dataset</span>
-<span class="va">samps6</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_sim_samples.html">create_sim_samples</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">25</span>, <span class="fl">100</span>, <span class="st">"all"</span><span class="op">)</span>
-<span class="va">simmdat2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mmdata.html">mmdata</a></span><span class="op">(</span><span class="va">samps6</span><span class="op">[[</span><span class="st">"scores"</span><span class="op">]</span><span class="op">]</span>, <span class="va">samps6</span><span class="op">[[</span><span class="st">"labels"</span><span class="op">]</span><span class="op">]</span>, 
-                   modnames <span class="op">=</span> <span class="va">samps6</span><span class="op">[[</span><span class="st">"modnames"</span><span class="op">]</span><span class="op">]</span>, dsids <span class="op">=</span> <span class="va">samps6</span><span class="op">[[</span><span class="st">"dsids"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Balanced dataset</span></span>
+<span><span class="va">samps5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_sim_samples.html">create_sim_samples</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">100</span>, <span class="fl">100</span>, <span class="st">"all"</span><span class="op">)</span></span>
+<span><span class="va">simmdat1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mmdata.html">mmdata</a></span><span class="op">(</span><span class="va">samps5</span><span class="op">[[</span><span class="st">"scores"</span><span class="op">]</span><span class="op">]</span>, <span class="va">samps5</span><span class="op">[[</span><span class="st">"labels"</span><span class="op">]</span><span class="op">]</span>, </span>
+<span>                   modnames <span class="op">=</span> <span class="va">samps5</span><span class="op">[[</span><span class="st">"modnames"</span><span class="op">]</span><span class="op">]</span>, dsids <span class="op">=</span> <span class="va">samps5</span><span class="op">[[</span><span class="st">"dsids"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Imbalanced dataset</span></span>
+<span><span class="va">samps6</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_sim_samples.html">create_sim_samples</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">25</span>, <span class="fl">100</span>, <span class="st">"all"</span><span class="op">)</span></span>
+<span><span class="va">simmdat2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mmdata.html">mmdata</a></span><span class="op">(</span><span class="va">samps6</span><span class="op">[[</span><span class="st">"scores"</span><span class="op">]</span><span class="op">]</span>, <span class="va">samps6</span><span class="op">[[</span><span class="st">"labels"</span><span class="op">]</span><span class="op">]</span>, </span>
+<span>                   modnames <span class="op">=</span> <span class="va">samps6</span><span class="op">[[</span><span class="st">"modnames"</span><span class="op">]</span><span class="op">]</span>, dsids <span class="op">=</span> <span class="va">samps6</span><span class="op">[[</span><span class="st">"dsids"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="roc-and-precision-recall-calculations-3">ROC and Precision-Recall calculations<a class="anchor" aria-label="anchor" href="#roc-and-precision-recall-calculations-3"></a>
 </h3>
 <p>The <code>evalmod</code> function automatically detects multiple models and multiple test datasets.</p>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Balanced dataset</span>
-<span class="va">simcurves1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span><span class="va">simmdat1</span><span class="op">)</span>
-
-<span class="co"># Imbalanced dataset</span>
-<span class="va">simcurves2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span><span class="va">simmdat2</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Balanced dataset</span></span>
+<span><span class="va">simcurves1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span><span class="va">simmdat1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Imbalanced dataset</span></span>
+<span><span class="va">simcurves2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span><span class="va">simmdat2</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="balanced-vs--imbalanced-datasets">Balanced vs. imbalanced datasets<a class="anchor" aria-label="anchor" href="#balanced-vs--imbalanced-datasets"></a>
 </h3>
 <p>ROC plots are unchanged between balanced and imbalanced datasets, whereas Precision-Recall plots show a clear difference between them. See our <a href="https://doi.org/10.1371/journal.pone.0118432" class="external-link">article</a> or <a href="https://classeval.wordpress.com" class="external-link">website</a> for potential pitfalls by using ROC plots with imbalanced datasets.</p>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Balanced dataset</span>
-<span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">simcurves1</span><span class="op">)</span>
-
-<span class="co"># Imbalanced dataset</span>
-<span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">simcurves2</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Balanced dataset</span></span>
+<span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">simcurves1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Imbalanced dataset</span></span>
+<span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">simcurves2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="introduction_files/figure-html/unnamed-chunk-42-1.png" width="672"><img src="introduction_files/figure-html/unnamed-chunk-42-2.png" width="672"></p>
 </div>
 </div>
@@ -1333,7 +1333,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
