@@ -5,7 +5,7 @@ context("AP 2: Autoplot for curves")
 
 skip_on_cran()
 
-test_extra_ap2 <- FALSE
+test_extra_ap2 <- TRUE
 
 ap2_check_libs <- function() {
   if (requireNamespace("ggplot2", quietly = TRUE)
@@ -70,7 +70,7 @@ ap2_test_roc_prc <- function(curves, ptitle, ...){
 
   vdiffr::expect_doppelganger(ptitle, ggplot2::autoplot(curves, ret_grob=TRUE, ...))
 
-  #if (!test_extra_ap2) return(TRUE)
+  if (!test_extra_ap2) return(TRUE)
 
   vdiffr::expect_doppelganger(paste0(ptitle, "_roc_prc"),
                               ggplot2::autoplot(curves, c("ROC", "PRC"), ret_grob=TRUE, ...))
