@@ -46,8 +46,10 @@ pt2_create_mmcurves <- function(raw_curves = FALSE) {
   l4 <- c(1, 1, 0, 1)
   labels <- join_labels(l1, l2, l3, l4)
 
-  mdat <- mmdata(scores, labels, modnames = c("m1", "m2"), dsids = c(1, 2),
-                 expd_first = "modnames")
+  mdat <- mmdata(scores, labels,
+    modnames = c("m1", "m2"), dsids = c(1, 2),
+    expd_first = "modnames"
+  )
   evalmod(mdat, raw_curves = raw_curves)
 }
 
@@ -146,10 +148,11 @@ test_that("plot() accepts show_legend", {
 test_that("plot raw_curve option sscurves", {
   get_args <- function(x, y = NULL, ...) {
     .get_plot_arglist(attr(x, "args"), y,
-                      def_curvetype = c("ROC", "PRC"),
-                      def_type = "l", def_show_cb = FALSE,
-                      def_raw_curves = TRUE, def_add_np_nn = TRUE,
-                      def_show_legend = FALSE, ...)
+      def_curvetype = c("ROC", "PRC"),
+      def_type = "l", def_show_cb = FALSE,
+      def_raw_curves = TRUE, def_add_np_nn = TRUE,
+      def_show_legend = FALSE, ...
+    )
   }
 
   data(P10N10)
@@ -168,10 +171,11 @@ test_that("plot raw_curve option sscurves", {
 test_that("plot raw_curve option mscurves", {
   get_args <- function(x, y = NULL, ...) {
     .get_plot_arglist(attr(x, "args"), y,
-                      def_curvetype = c("ROC", "PRC"),
-                      def_type = "l", def_show_cb = FALSE,
-                      def_raw_curves = TRUE, def_add_np_nn = TRUE,
-                      def_show_legend = TRUE, ...)
+      def_curvetype = c("ROC", "PRC"),
+      def_type = "l", def_show_cb = FALSE,
+      def_raw_curves = TRUE, def_add_np_nn = TRUE,
+      def_show_legend = TRUE, ...
+    )
   }
 
   curves1 <- pt2_create_mscurves()
@@ -189,10 +193,11 @@ test_that("plot raw_curve option mscurves", {
 test_that("plot raw_curve option smcurves", {
   get_args <- function(x, y = NULL, ...) {
     .get_plot_arglist(attr(x, "args"), y,
-                      def_curvetype = c("ROC", "PRC"),
-                      def_type = "l", def_show_cb = TRUE,
-                      def_raw_curves = NULL, def_add_np_nn = TRUE,
-                      def_show_legend = FALSE, ...)
+      def_curvetype = c("ROC", "PRC"),
+      def_type = "l", def_show_cb = TRUE,
+      def_raw_curves = NULL, def_add_np_nn = TRUE,
+      def_show_legend = FALSE, ...
+    )
   }
 
   curves1 <- pt2_create_smcurves()
@@ -220,10 +225,11 @@ test_that("plot raw_curve option smcurves", {
 test_that("plot raw_curve option mmcurves", {
   get_args <- function(x, y = NULL, ...) {
     .get_plot_arglist(attr(x, "args"), y,
-                      def_curvetype = c("ROC", "PRC"),
-                      def_type = "l", def_show_cb = FALSE,
-                      def_raw_curves = NULL, def_add_np_nn = TRUE,
-                      def_show_legend = TRUE, ...)
+      def_curvetype = c("ROC", "PRC"),
+      def_type = "l", def_show_cb = FALSE,
+      def_raw_curves = NULL, def_add_np_nn = TRUE,
+      def_show_legend = TRUE, ...
+    )
   }
 
   curves1 <- pt2_create_mmcurves()

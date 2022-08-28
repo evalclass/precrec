@@ -142,5 +142,4 @@ test_that("join_labels() accepts any number of unique labels", {
   vec1 <- factor(c(1, 2, 1))
   vec2 <- factor(c(1, 2, 3))
   expect_err_msg(vec1, vec2)
-
 })

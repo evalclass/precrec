@@ -25,7 +25,6 @@ test_that("format_nfold() converts a data frame to a list", {
 
   expect_true(is.list(lfold2$labels))
   expect_equal(length(lfold2$labels), 10)
-
 })
 
 test_that("'nfold_df' should be a data frame", {
@@ -60,7 +59,6 @@ test_that("'score_cols' should be valid column names", {
 
   expect_err_msg(err_msg, c("score1", "score2", "score3"))
   expect_err_msg(err_msg, c(1, 2, 5))
-
 })
 
 test_that("'lab_col' should be a valid column name", {
@@ -80,7 +78,6 @@ test_that("'lab_col' should be a valid column name", {
   err_msg <- "Invalid lab_col"
   expect_err_msg(err_msg, "c")
   expect_err_msg(err_msg, 5)
-
 })
 
 test_that("'fold_col' should be a valid column name", {
@@ -149,5 +146,4 @@ test_that("format_nfold() correctly converts M2N50F5", {
   labels2 <- lfold2$labels
   check_scores(scores2)
   check_labels(labels2)
-
 })

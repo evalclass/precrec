@@ -35,8 +35,10 @@ test_that("'scores' and 'labels' must be specified", {
 })
 
 test_that("test .validate_scores_and_labels", {
-  expect_error(.validate_scores_and_labels("x", NULL, NULL, NULL),
-               "Unrecognized class")
+  expect_error(
+    .validate_scores_and_labels("x", NULL, NULL, NULL),
+    "Unrecognized class"
+  )
 })
 
 test_that("'scores' and 'labels' should be the same length", {
@@ -85,7 +87,6 @@ test_that("reformat_data() accepts 'na_worst'", {
 
   expect_equal_ranks(scores, labels, TRUE, c(3, 1, 2))
   expect_equal_ranks(scores, labels, FALSE, c(1, 2, 3))
-
 })
 
 test_that("reformat_data() accepts 'ties_method'", {
@@ -98,7 +99,6 @@ test_that("reformat_data() accepts 'ties_method'", {
 
   expect_equal_ranks("equiv", c(5, 2, 2, 2, 1))
   expect_equal_ranks("first", c(5, 2, 3, 4, 1))
-
 })
 
 test_that("'fmdat' contains a list with 4 items", {

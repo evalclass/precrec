@@ -2,10 +2,11 @@
 # Check if an internal Rcpp function returns en error
 #
 .check_cpp_func_error <- function(obj, func_name) {
-
   if (obj[["errmsg"]] != "") {
-    stop(paste0("Internal cpp function (", func_name, "()) failed: ",
-                obj[["errmsg"]]), call. = FALSE)
+    stop(paste0(
+      "Internal cpp function (", func_name, "()) failed: ",
+      obj[["errmsg"]]
+    ), call. = FALSE)
   }
 }
 
@@ -39,7 +40,7 @@
 # Use scores and labels to create obj
 #
 .create_src_obj <- function(obj, obj_name, func, scores, labels,
-                                         ...) {
+                            ...) {
   if (missing(obj)) {
     if (!is.null(scores) && !is.null(labels)) {
       obj <- func(scores = scores, labels = labels, ...)
@@ -58,8 +59,10 @@
   if (mode == "rocprc" || mode == "prcroc") {
     mnames <- c("ROC", "PRC")
   } else if (mode == "basic") {
-    mnames <- c("score", "label", "error", "accuracy", "specificity",
-                "sensitivity", "precision", "mcc", "fscore")
+    mnames <- c(
+      "score", "label", "error", "accuracy", "specificity",
+      "sensitivity", "precision", "mcc", "fscore"
+    )
   }
 
   mnames
@@ -93,8 +96,8 @@
     np <- nps[i]
     nn <- nns[i]
 
-    if ((!is.na(prev_np) && np != prev_np)
-        ||  (!is.na(prev_nn) && nn != prev_nn)) {
+    if ((!is.na(prev_np) && np != prev_np) ||
+      (!is.na(prev_nn) && nn != prev_nn)) {
       is_consistant <- FALSE
     }
 
@@ -110,7 +113,8 @@
 
   prc_base <- avg_np / (avg_np + avg_nn)
 
-  list(avg_np = avg_np, avg_nn = avg_nn, is_consistant = is_consistant,
-       prc_base = prc_base)
-
+  list(
+    avg_np = avg_np, avg_nn = avg_nn, is_consistant = is_consistant,
+    prc_base = prc_base
+  )
 }

@@ -67,7 +67,6 @@ test_that("'labels' takes an integer vector", {
 
   labs <- .factor_labels(l2, -1L)
   expect_equal(labs[["labels"]], c(1, 2, 1, 2))
-
 })
 
 test_that("'labels' takes a logical vector", {
@@ -80,7 +79,6 @@ test_that("'labels' takes a logical vector", {
 
   labs <- .factor_labels(l1, FALSE)
   expect_equal(labs[["labels"]], c(1, 2, 2, 1))
-
 })
 
 test_that("'labels' takes a character vector", {
@@ -93,7 +91,6 @@ test_that("'labels' takes a character vector", {
 
   labs <- .factor_labels(l1, "Neg")
   expect_equal(labs[["labels"]], c(1, 2, 1, 2))
-
 })
 
 test_that("'labels' takes a factor", {
@@ -110,7 +107,6 @@ test_that("'labels' takes a factor", {
 
   labs <- .factor_labels(l2, "N")
   expect_equal(labs[["labels"]], c(1, 2, 1, 1))
-
 })
 
 test_that("'labels' takes two unique labels", {
@@ -140,5 +136,4 @@ test_that(".factor_labels() accepts 'posclass'", {
   err_msg <- "posclass must be the same data type as labels"
   expect_err_msg(l1, "0", err_msg)
   expect_err_msg(l1, "1", err_msg)
-
 })

@@ -45,8 +45,10 @@ pl2_create_mdat_mm <- function(mode = "aucroc") {
   l4 <- c(1, 1, 0, 1)
   labels <- join_labels(l1, l2, l3, l4)
 
-  mmdata(scores, labels, modnames = c("m1", "m2"), dsids = c(1, 2),
-         expd_first = "modnames", mode = mode)
+  mmdata(scores, labels,
+    modnames = c("m1", "m2"), dsids = c(1, 2),
+    expd_first = "modnames", mode = mode
+  )
 }
 
 test_that(".pl_main_aucroc() returns 'aucroc'", {

@@ -106,5 +106,4 @@ test_that("join_scores() only accepts numeric data", {
 
   expect_err_msg(vec1, vec3)
   expect_err_msg(vec1, vec4)
-
 })

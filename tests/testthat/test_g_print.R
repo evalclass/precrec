@@ -44,8 +44,10 @@ pr_create_mmdat <- function() {
   l4 <- c(1, 1, 0, 1)
   labels <- join_labels(l1, l2, l3, l4)
 
-  mmdata(scores, labels, modnames = c("m1", "m2"), dsids = c(1, 2),
-         expd_first = "modnames")
+  mmdata(scores, labels,
+    modnames = c("m1", "m2"), dsids = c(1, 2),
+    expd_first = "modnames"
+  )
 }
 
 test_that("print sscurves", {
@@ -114,8 +116,10 @@ test_that("print mmcurves", {
 
 test_that("print sspoints", {
   data(P10N10)
-  points <- evalmod(mode = "basic", scores = P10N10$scores,
-                    labels = P10N10$labels)
+  points <- evalmod(
+    mode = "basic", scores = P10N10$scores,
+    labels = P10N10$labels
+  )
 
   expect_output(print(points), "=== Basic performance evaluation measures ===")
   expect_output(print(points), "=== Input data ===")

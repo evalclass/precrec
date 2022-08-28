@@ -15,20 +15,26 @@
       } else {
         cl <- "negative"
       }
-      err_msg <- paste0("AUCs with the U statistic cannot be calculated. ",
-                        "Only a single class (", cl, ") ",
-                        "found in dataset (modname: ",
-                        attr(mdat[[s]], "modname"),
-                        ", dsid: ", attr(mdat[[s]], "dsid"), ").")
+      err_msg <- paste0(
+        "AUCs with the U statistic cannot be calculated. ",
+        "Only a single class (", cl, ") ",
+        "found in dataset (modname: ",
+        attr(mdat[[s]], "modname"),
+        ", dsid: ", attr(mdat[[s]], "dsid"), ")."
+      )
       stop(err_msg, call. = FALSE)
     }
-    calc_auc_with_u(mdat[[s]], na_worst = na_worst,
-                    ties_method = ties_method)
+    calc_auc_with_u(mdat[[s]],
+      na_worst = na_worst,
+      ties_method = ties_method
+    )
   }
   aucrocs <- lapply(seq_along(mdat), plfunc)
-  auc_df <- .summarize_uauc_results(aucrocs, attr(mdat, "uniq_modnames"),
-                                    attr(mdat, "uniq_dsids"), calc_avg,
-                                    cb_alpha, raw_curves)
+  auc_df <- .summarize_uauc_results(
+    aucrocs, attr(mdat, "uniq_modnames"),
+    attr(mdat, "uniq_dsids"), calc_avg,
+    cb_alpha, raw_curves
+  )
 
   # === Create an S3 object ===
   s3obj <- structure(auc_df, class = "aucroc")
@@ -39,12 +45,14 @@
   attr(s3obj, "uniq_dsids") <- attr(mdat, "uniq_dsids")
   attr(s3obj, "model_type") <- model_type
   attr(s3obj, "dataset_type") <- dataset_type
-  attr(s3obj, "args") <- list(mode = "aucroc",
-                              calc_avg = calc_avg,
-                              cb_alpha = cb_alpha,
-                              raw_curves = raw_curves,
-                              na_worst = na_worst,
-                              ties_method = ties_method)
+  attr(s3obj, "args") <- list(
+    mode = "aucroc",
+    calc_avg = calc_avg,
+    cb_alpha = cb_alpha,
+    raw_curves = raw_curves,
+    na_worst = na_worst,
+    ties_method = ties_method
+  )
   attr(s3obj, "validated") <- FALSE
 
   # Call .validate.class_name()
@@ -62,12 +70,18 @@
 
   # Validate class items and attributes
   item_names <- NULL
-  attr_names <- c("data_info", "uniq_modnames", "uniq_dsids",
-                  "model_type", "dataset_type", "args", "validated")
-  arg_names <- c("mode", "calc_avg", "cb_alpha", "raw_curves", "na_worst",
-                 "ties_method")
-  .validate_basic(aucroc, "aucroc", ".pl_main_aucroc", item_names,
-                  attr_names, arg_names)
+  attr_names <- c(
+    "data_info", "uniq_modnames", "uniq_dsids",
+    "model_type", "dataset_type", "args", "validated"
+  )
+  arg_names <- c(
+    "mode", "calc_avg", "cb_alpha", "raw_curves", "na_worst",
+    "ties_method"
+  )
+  .validate_basic(
+    aucroc, "aucroc", ".pl_main_aucroc", item_names,
+    attr_names, arg_names
+  )
 
   attr(aucroc, "validated") <- TRUE
   aucroc
@@ -94,10 +108,12 @@
       vustat[i] <- aucs[[i]]$ustat
     }
 
-    auc_df <- data.frame(modnames = vmodname,
-                         dsids = vdsid,
-                         aucs = vaucs,
-                         ustats = vustat)
+    auc_df <- data.frame(
+      modnames = vmodname,
+      dsids = vdsid,
+      aucs = vaucs,
+      ustats = vustat
+    )
   }
 
   list(uaucs = auc_df)

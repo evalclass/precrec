@@ -59,8 +59,10 @@ auc_ci_create_mmcurves <- function() {
   l4 <- c(1, 1, 0, 1)
   labels <- join_labels(l1, l2, l3, l4)
 
-  mdat <- mmdata(scores, labels, modnames = c("m1", "m2"), dsids = c(1, 2),
-                 expd_first = "modnames")
+  mdat <- mmdata(scores, labels,
+    modnames = c("m1", "m2"), dsids = c(1, 2),
+    expd_first = "modnames"
+  )
   evalmod(mdat)
 }
 
@@ -77,8 +79,10 @@ auc_ci_create_mmcurves_n1 <- function() {
   l4 <- c(1, 1, 0, 1)
   labels <- join_labels(l1, l2, l3, l4)
 
-  mdat <- mmdata(scores, labels, modnames = c("m1", "m1", "m1", "m2"),
-                 dsids = c(1, 2, 3, 1))
+  mdat <- mmdata(scores, labels,
+    modnames = c("m1", "m1", "m1", "m2"),
+    dsids = c(1, 2, 3, 1)
+  )
   evalmod(mdat)
 }
 
@@ -140,7 +144,6 @@ test_that("auc_ci alpha", {
   expect_error(auc_ci(curves, 1.1), err_msg)
   expect_error(auc_ci(curves, alpha = 1.1), err_msg)
   expect_silent(auc_ci(curves, alpha = 1))
-
 })
 
 test_that("auc_ci dtype", {
@@ -168,7 +171,6 @@ test_that("auc_ci dtype", {
   expect_silent(auc_ci(curves, dtype = "z"))
   expect_error(auc_ci(curves, dtype = "d"), err_msg)
   expect_error(auc_ci(curves, dtype = "ormal"), err_msg)
-
 })
 
 test_that("auc_ci normal distribution for ROC", {

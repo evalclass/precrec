@@ -18,10 +18,14 @@ test_that("single class - positive", {
   smmdat2 <- mmdata(smsamps2$scores, smsamps2$labels)
 
   # Test
-  expect_error(evalmod(ssmdat1),
-               "Curves cannot be calculated. Only a single class")
-  expect_error(evalmod(smmdat1),
-               "Curves cannot be calculated. Only a single class")
+  expect_error(
+    evalmod(ssmdat1),
+    "Curves cannot be calculated. Only a single class"
+  )
+  expect_error(
+    evalmod(smmdat1),
+    "Curves cannot be calculated. Only a single class"
+  )
 
   expect_silent(evalmod(ssmdat2))
   expect_silent(evalmod(smmdat2))
@@ -43,10 +47,14 @@ test_that("single class - negative", {
   smmdat2 <- mmdata(smsamps2$scores, smsamps2$labels)
 
   # Test
-  expect_error(evalmod(ssmdat1),
-               "Curves cannot be calculated. Only a single class")
-  expect_error(evalmod(smmdat1),
-               "Curves cannot be calculated. Only a single class")
+  expect_error(
+    evalmod(ssmdat1),
+    "Curves cannot be calculated. Only a single class"
+  )
+  expect_error(
+    evalmod(smmdat1),
+    "Curves cannot be calculated. Only a single class"
+  )
 
   expect_silent(evalmod(ssmdat2))
   expect_silent(evalmod(smmdat2))
@@ -68,10 +76,14 @@ test_that("single class - positive (mode='basic')", {
   smmdat2 <- mmdata(smsamps2$scores, smsamps2$labels)
 
   # Test
-  expect_error(evalmod(ssmdat1, mode = "basic"),
-               "Basic measures cannot be calculated. Only a single class")
-  expect_error(evalmod(smmdat1, mode = "basic"),
-               "Basic measures cannot be calculated. Only a single class")
+  expect_error(
+    evalmod(ssmdat1, mode = "basic"),
+    "Basic measures cannot be calculated. Only a single class"
+  )
+  expect_error(
+    evalmod(smmdat1, mode = "basic"),
+    "Basic measures cannot be calculated. Only a single class"
+  )
 
   expect_silent(evalmod(ssmdat2, mode = "basic"))
   expect_silent(evalmod(smmdat2, mode = "basic"))
@@ -93,10 +105,14 @@ test_that("single class - negative (mode='basic')", {
   smmdat2 <- mmdata(smsamps2$scores, smsamps2$labels)
 
   # Test
-  expect_error(evalmod(ssmdat1, mode = "basic"),
-               "Basic measures cannot be calculated. Only a single class")
-  expect_error(evalmod(smmdat1, mode = "basic"),
-               "Basic measures cannot be calculated. Only a single class")
+  expect_error(
+    evalmod(ssmdat1, mode = "basic"),
+    "Basic measures cannot be calculated. Only a single class"
+  )
+  expect_error(
+    evalmod(smmdat1, mode = "basic"),
+    "Basic measures cannot be calculated. Only a single class"
+  )
 
   expect_silent(evalmod(ssmdat2, mode = "basic"))
   expect_silent(evalmod(smmdat2, mode = "basic"))
@@ -118,10 +134,14 @@ test_that("single class - positive (mode='aucroc')", {
   smmdat2 <- mmdata(smsamps2$scores, smsamps2$labels)
 
   # Test
-  expect_error(evalmod(ssmdat1, mode = "aucroc"),
-       "AUCs with the U statistic cannot be calculated. Only a single class")
-  expect_error(evalmod(smmdat1, mode = "aucroc"),
-        "AUCs with the U statistic cannot be calculated. Only a single class")
+  expect_error(
+    evalmod(ssmdat1, mode = "aucroc"),
+    "AUCs with the U statistic cannot be calculated. Only a single class"
+  )
+  expect_error(
+    evalmod(smmdat1, mode = "aucroc"),
+    "AUCs with the U statistic cannot be calculated. Only a single class"
+  )
 
   expect_silent(evalmod(ssmdat2, mode = "aucroc"))
   expect_silent(evalmod(smmdat2, mode = "aucroc"))
@@ -143,10 +163,14 @@ test_that("single class - negative (mode='aucroc')", {
   smmdat2 <- mmdata(smsamps2$scores, smsamps2$labels)
 
   # Test
-  expect_error(evalmod(ssmdat1, mode = "aucroc"),
-        "AUCs with the U statistic cannot be calculated. Only a single class")
-  expect_error(evalmod(smmdat1, mode = "aucroc"),
-        "AUCs with the U statistic cannot be calculated. Only a single class")
+  expect_error(
+    evalmod(ssmdat1, mode = "aucroc"),
+    "AUCs with the U statistic cannot be calculated. Only a single class"
+  )
+  expect_error(
+    evalmod(smmdat1, mode = "aucroc"),
+    "AUCs with the U statistic cannot be calculated. Only a single class"
+  )
 
   expect_silent(evalmod(ssmdat2, mode = "aucroc"))
   expect_silent(evalmod(smmdat2, mode = "aucroc"))

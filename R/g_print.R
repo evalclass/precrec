@@ -11,10 +11,14 @@ print.mdat <- function(x, ...) {
   cat("    === Input data ===\n\n")
 
   data_info <- attr(x, "data_info")
-  rownames(data_info) <- format(rownames(data_info), width = 4,
-                                justify = "right")
-  colnames(data_info) <- c("Model name", "Dataset ID", "# of negatives",
-                           "# of positives")
+  rownames(data_info) <- format(rownames(data_info),
+    width = 4,
+    justify = "right"
+  )
+  colnames(data_info) <- c(
+    "Model name", "Dataset ID", "# of negatives",
+    "# of positives"
+  )
 
   print.data.frame(data_info, print.gap = 1)
 
@@ -51,8 +55,10 @@ print.curve_info <- function(x, ...) {
       colnames(paucs) <- c("Model name", "Curve type", "pAUC", "Standardized")
     } else {
       cat("    === partial AUCs ===\n")
-      colnames(paucs) <- c("Model name", "Dataset ID", "Curve type", "pAUC",
-                           "Standardized")
+      colnames(paucs) <- c(
+        "Model name", "Dataset ID", "Curve type", "pAUC",
+        "Standardized"
+      )
     }
 
     cat("\n")
@@ -88,12 +94,18 @@ print.beval_info <- function(x, ...) {
   cat("\n\n")
 
   eval_summary <- attr(x, "eval_summary")
-  rownames(eval_summary) <- format(rownames(eval_summary), width = 4,
-                                   justify = "right")
-  colnames(eval_summary) <- c("Model", "ID", "Meas.", "Min.",
-                              "1st Qu.", "Median", "Mean", "3rd Qu.", "Max.")
-  evaltypes <- c("rank", "score", "label", "err", "acc", "sp", "sn", "prec",
-                 "mcc", "fscore")
+  rownames(eval_summary) <- format(rownames(eval_summary),
+    width = 4,
+    justify = "right"
+  )
+  colnames(eval_summary) <- c(
+    "Model", "ID", "Meas.", "Min.",
+    "1st Qu.", "Median", "Mean", "3rd Qu.", "Max."
+  )
+  evaltypes <- c(
+    "rank", "score", "label", "err", "acc", "sp", "sn", "prec",
+    "mcc", "fscore"
+  )
   eval_summary[, "Meas."] <- evaltypes
 
   print.data.frame(eval_summary, print.gap = 1)
@@ -115,10 +127,14 @@ print.aucroc <- function(x, ...) {
   cat("    === Input data ===\n\n")
 
   data_info <- attr(x, "data_info")
-  rownames(data_info) <- format(rownames(data_info), width = 4,
-                                justify = "right")
-  colnames(data_info) <- c("Model name", "Dataset ID", "# of negatives",
-                           "# of positives")
+  rownames(data_info) <- format(rownames(data_info),
+    width = 4,
+    justify = "right"
+  )
+  colnames(data_info) <- c(
+    "Model name", "Dataset ID", "# of negatives",
+    "# of positives"
+  )
 
   print.data.frame(data_info, print.gap = 1)
   cat("\n\n")

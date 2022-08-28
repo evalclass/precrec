@@ -8,8 +8,8 @@ skip_on_cran()
 test_extra_ap2 <- FALSE
 
 ap2_check_libs1 <- function() {
-  if (requireNamespace("ggplot2", quietly = TRUE)
-      && requireNamespace("vdiffr", quietly = TRUE)) {
+  if (requireNamespace("ggplot2", quietly = TRUE) &&
+    requireNamespace("vdiffr", quietly = TRUE)) {
     TRUE
   } else {
     FALSE
@@ -17,9 +17,9 @@ ap2_check_libs1 <- function() {
 }
 
 ap2_check_libs2 <- function() {
-  if (requireNamespace("ggplot2", quietly = TRUE)
-      && requireNamespace("grid", quietly = TRUE)
-      && requireNamespace("gridExtra", quietly = TRUE)) {
+  if (requireNamespace("ggplot2", quietly = TRUE) &&
+    requireNamespace("grid", quietly = TRUE) &&
+    requireNamespace("gridExtra", quietly = TRUE)) {
     TRUE
   } else {
     FALSE
@@ -70,17 +70,20 @@ ap2_create_mmcurves <- function(raw_curves = FALSE) {
   l4 <- c(1, 1, 0, 1)
   labels <- join_labels(l1, l2, l3, l4)
 
-  mdat <- mmdata(scores, labels, modnames = c("m1", "m2"), dsids = c(1, 2),
-                 expd_first = "modnames")
+  mdat <- mmdata(scores, labels,
+    modnames = c("m1", "m2"), dsids = c(1, 2),
+    expd_first = "modnames"
+  )
   evalmod(mdat, raw_curves = raw_curves)
 }
 
 ap2_test_roc_prc <- function(curves, ptitle, ...) {
-
   p <- ggplot2::autoplot(curves, ...)
   check_ggplot_fig(ptitle, p)
 
-  if (!test_extra_ap2) return(TRUE)
+  if (!test_extra_ap2) {
+    return(TRUE)
+  }
 
   pp_roc_prc <- ggplot2::autoplot(curves, c("ROC", "PRC"), ...)
   check_ggplot_fig(paste0(ptitle, "_roc_prc"), pp_roc_prc)
@@ -132,8 +135,10 @@ test_that("autoplot for multiple mscurves returns grob", {
 
   curves <- ap2_create_mscurves()
 
-  pp <- ggplot2::autoplot(curves, multiplot_lib = "grid",
-                          show_legend = FALSE, ret_grob = TRUE)
+  pp <- ggplot2::autoplot(curves,
+    multiplot_lib = "grid",
+    show_legend = FALSE, ret_grob = TRUE
+  )
   expect_true(is(pp, "grob"))
 })
 
@@ -149,7 +154,8 @@ test_that("autoplot single smcurve", {
 
   curves2 <- ap2_create_smcurves(raw_curves = TRUE)
   ap2_test_roc_prc(curves2, "autoplot_single_smcurve_raw_curves",
-                   raw_curves = TRUE)
+    raw_curves = TRUE
+  )
 })
 
 test_that("autoplot for multiple smcurves retruns grob", {
@@ -159,8 +165,10 @@ test_that("autoplot for multiple smcurves retruns grob", {
 
   curves <- ap2_create_smcurves()
 
-  pp <- ggplot2::autoplot(curves, multiplot_lib = "grid",
-                          show_legend = FALSE, ret_grob = TRUE)
+  pp <- ggplot2::autoplot(curves,
+    multiplot_lib = "grid",
+    show_legend = FALSE, ret_grob = TRUE
+  )
   expect_true(is(pp, "grob"))
 })
 
@@ -177,7 +185,6 @@ test_that("autoplot mmcurves", {
 
   curves2 <- ap2_create_smcurves(raw_curves = TRUE)
   ap2_test_roc_prc(curves2, "autoplot_mmcurves_raw_curves", raw_curves = TRUE)
-
 })
 
 test_that("autoplot multiple mmcurves returns grob", {
@@ -187,22 +194,25 @@ test_that("autoplot multiple mmcurves returns grob", {
 
   curves <- ap2_create_mmcurves()
 
-  pp <- ggplot2::autoplot(curves, multiplot_lib = "grid",
-                          show_legend = FALSE, ret_grob = TRUE)
+  pp <- ggplot2::autoplot(curves,
+    multiplot_lib = "grid",
+    show_legend = FALSE, ret_grob = TRUE
+  )
   expect_true(is(pp, "grob"))
 })
 
 test_that("autoplot raw_curve option sscurves", {
   get_args <- function(curves, ...) {
     .get_autoplot_arglist(attr(curves, "args"),
-                          def_curvetype = c("ROC", "PRC"),
-                          def_type = "l",
-                          def_show_cb = FALSE, def_raw_curves = NULL,
-                          def_add_np_nn = TRUE,
-                          def_show_legend = FALSE,
-                          def_ret_grob = FALSE,
-                          def_reduce_points = TRUE,
-                          def_multiplot_lib = "patchwork", ...)
+      def_curvetype = c("ROC", "PRC"),
+      def_type = "l",
+      def_show_cb = FALSE, def_raw_curves = NULL,
+      def_add_np_nn = TRUE,
+      def_show_legend = FALSE,
+      def_ret_grob = FALSE,
+      def_reduce_points = TRUE,
+      def_multiplot_lib = "patchwork", ...
+    )
   }
 
   data(P10N10)
@@ -221,14 +231,15 @@ test_that("autoplot raw_curve option sscurves", {
 test_that("autoplot raw_curve option mscurves", {
   get_args <- function(curves, ...) {
     .get_autoplot_arglist(attr(curves, "args"),
-                          def_curvetype = c("ROC", "PRC"),
-                          def_type = "l",
-                          def_show_cb = FALSE, def_raw_curves = NULL,
-                          def_add_np_nn = TRUE,
-                          def_show_legend = TRUE,
-                          def_ret_grob = FALSE,
-                          def_reduce_points = TRUE,
-                          def_multiplot_lib = "patchwork", ...)
+      def_curvetype = c("ROC", "PRC"),
+      def_type = "l",
+      def_show_cb = FALSE, def_raw_curves = NULL,
+      def_add_np_nn = TRUE,
+      def_show_legend = TRUE,
+      def_ret_grob = FALSE,
+      def_reduce_points = TRUE,
+      def_multiplot_lib = "patchwork", ...
+    )
   }
 
   curves1 <- ap2_create_mscurves()
@@ -246,14 +257,15 @@ test_that("autoplot raw_curve option mscurves", {
 test_that("autoplot raw_curve option smcurves", {
   get_args <- function(curves, ...) {
     .get_autoplot_arglist(attr(curves, "args"),
-                          def_curvetype = c("ROC", "PRC"),
-                          def_type = "l",
-                          def_show_cb = TRUE, def_raw_curves = NULL,
-                          def_add_np_nn = TRUE,
-                          def_show_legend = FALSE,
-                          def_ret_grob = FALSE,
-                          def_reduce_points = TRUE,
-                          def_multiplot_lib = "patchwork", ...)
+      def_curvetype = c("ROC", "PRC"),
+      def_type = "l",
+      def_show_cb = TRUE, def_raw_curves = NULL,
+      def_add_np_nn = TRUE,
+      def_show_legend = FALSE,
+      def_ret_grob = FALSE,
+      def_reduce_points = TRUE,
+      def_multiplot_lib = "patchwork", ...
+    )
   }
 
   curves1 <- ap2_create_smcurves()
@@ -281,14 +293,15 @@ test_that("autoplot raw_curve option smcurves", {
 test_that("autoplot raw_curve option mmcurves", {
   get_args <- function(curves, ...) {
     .get_autoplot_arglist(attr(curves, "args"),
-                          def_curvetype = c("ROC", "PRC"),
-                          def_type = "l",
-                          def_show_cb = FALSE, def_raw_curves = NULL,
-                          def_add_np_nn = TRUE,
-                          def_show_legend = TRUE,
-                          def_ret_grob = FALSE,
-                          def_reduce_points = TRUE,
-                          def_multiplot_lib = "patchwork", ...)
+      def_curvetype = c("ROC", "PRC"),
+      def_type = "l",
+      def_show_cb = FALSE, def_raw_curves = NULL,
+      def_add_np_nn = TRUE,
+      def_show_legend = TRUE,
+      def_ret_grob = FALSE,
+      def_reduce_points = TRUE,
+      def_multiplot_lib = "patchwork", ...
+    )
   }
 
   curves1 <- ap2_create_mmcurves()

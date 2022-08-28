@@ -16,7 +16,8 @@ test_that("m1 scores", {
 
   expect_equal(cv1[["prcs"]][[1]][["x"]], c(0, 0.25, 0.5, 0.75, 1, 1))
   expect_equal(cv1[["prcs"]][[1]][["y"]], c(1, 1, 1, 0.75, 0.6666666667, 0.5),
-               tolerance = 1e-2)
+    tolerance = 1e-2
+  )
 })
 
 test_that("m2 scores", {
@@ -30,9 +31,12 @@ test_that("m2 scores", {
   expect_equal(cv2[["rocs"]][[1]][["y"]], c(0, 0, 0, 0, 0, 0.5, 1))
 
   expect_equal(cv2[["prcs"]][[1]][["x"]], c(0, 0.25, 0.5, 0.75, 1))
-  expect_equal(cv2[["prcs"]][[1]][["y"]], c(0, 0.2, 0.3333333333, 0.4285714286,
-                                           0.5),
-               tolerance = 1e-2)
+  expect_equal(cv2[["prcs"]][[1]][["y"]], c(
+    0, 0.2, 0.3333333333, 0.4285714286,
+    0.5
+  ),
+  tolerance = 1e-2
+  )
 })
 
 test_that("m3 scores", {
@@ -46,9 +50,12 @@ test_that("m3 scores", {
   expect_equal(cv3[["rocs"]][[1]][["y"]], c(0, 0.25, 0.5, 0.5, 0.5, 1))
 
   expect_equal(cv3[["prcs"]][[1]][["x"]], c(0, 0.25, 0.5, 0.5, 0.75, 1))
-  expect_equal(cv3[["prcs"]][[1]][["y"]], c(0.5, 0.5, 0.5, 0.3333333333,
-                                           0.4285714286, 0.5),
-               tolerance = 1e-2)
+  expect_equal(cv3[["prcs"]][[1]][["y"]], c(
+    0.5, 0.5, 0.5, 0.3333333333,
+    0.4285714286, 0.5
+  ),
+  tolerance = 1e-2
+  )
 })
 
 test_that("'mode' must be consistent between 'mmdata' and 'evalmode'", {
@@ -116,5 +123,4 @@ test_that("'mode' must be consistent between 'mmdata' and 'evalmode'", {
   expect_silent(evalmod(md3, mode = "aucroc"))
   em3_4 <- evalmod(md3, mode = "aucroc")
   expect_equal(attr(em3_4, "args")[["mode"]], "aucroc")
-
 })

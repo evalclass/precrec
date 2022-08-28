@@ -44,8 +44,10 @@ pa_create_mmdat <- function() {
   l4 <- c(1, 1, 0, 1)
   labels <- join_labels(l1, l2, l3, l4)
 
-  mmdata(scores, labels, modnames = c("m1", "m2"), dsids = c(1, 2),
-         expd_first = "modnames")
+  mmdata(scores, labels,
+    modnames = c("m1", "m2"), dsids = c(1, 2),
+    expd_first = "modnames"
+  )
 }
 
 test_that("curvetype", {
@@ -90,18 +92,28 @@ test_that("ylim", {
 
 pa_test_curves_basic <- function(curves) {
   testthat::expect_silent(part(curves, xlim = c(0.25, 0.75)))
-  testthat::expect_silent(part(curves, xlim = c(0.25, 0.75),
-                               curvetype = "ROC"))
-  testthat::expect_silent(part(curves, xlim = c(0.25, 0.75),
-                               curvetype = "PRC"))
-  testthat::expect_silent(part(curves, xlim = c(0.25, 0.75),
-                               ylim = c(0.25, 0.75)))
-  testthat::expect_silent(part(curves, xlim = c(0.25, 0.75),
-                               ylim = c(0.25, 0.75),
-                               curvetype = "ROC"))
-  testthat::expect_silent(part(curves, xlim = c(0.25, 0.75),
-                               ylim = c(0.25, 0.75),
-                               curvetype = "PRC"))
+  testthat::expect_silent(part(curves,
+    xlim = c(0.25, 0.75),
+    curvetype = "ROC"
+  ))
+  testthat::expect_silent(part(curves,
+    xlim = c(0.25, 0.75),
+    curvetype = "PRC"
+  ))
+  testthat::expect_silent(part(curves,
+    xlim = c(0.25, 0.75),
+    ylim = c(0.25, 0.75)
+  ))
+  testthat::expect_silent(part(curves,
+    xlim = c(0.25, 0.75),
+    ylim = c(0.25, 0.75),
+    curvetype = "ROC"
+  ))
+  testthat::expect_silent(part(curves,
+    xlim = c(0.25, 0.75),
+    ylim = c(0.25, 0.75),
+    curvetype = "PRC"
+  ))
 }
 
 pa_test_attr <- function(curves, pauc_len, avg_only = FALSE) {
@@ -113,10 +125,14 @@ pa_test_attr <- function(curves, pauc_len, avg_only = FALSE) {
   testthat::expect_equal(attr(cpart[["rocs"]], "xlim"), c(0.25, 0.75))
   testthat::expect_equal(attr(cpart[["rocs"]], "ylim"), c(0.2, 0.7))
   if (avg_only) {
-    testthat::expect_equal(attr(attr(cpart, "grp_avg")[["rocs"]][[1]], "xlim"),
-                 c(0.25, 0.75))
-    testthat::expect_equal(attr(attr(cpart, "grp_avg")[["rocs"]][[1]], "ylim"),
-                 c(0.2, 0.7))
+    testthat::expect_equal(
+      attr(attr(cpart, "grp_avg")[["rocs"]][[1]], "xlim"),
+      c(0.25, 0.75)
+    )
+    testthat::expect_equal(
+      attr(attr(cpart, "grp_avg")[["rocs"]][[1]], "ylim"),
+      c(0.2, 0.7)
+    )
   } else {
     testthat::expect_equal(attr(cpart[["rocs"]][[1]], "xlim"), c(0.25, 0.75))
     testthat::expect_equal(attr(cpart[["rocs"]][[1]], "ylim"), c(0.2, 0.7))
@@ -125,10 +141,14 @@ pa_test_attr <- function(curves, pauc_len, avg_only = FALSE) {
   testthat::expect_equal(attr(cpart[["prcs"]], "xlim"), c(0.25, 0.75))
   testthat::expect_equal(attr(cpart[["prcs"]], "ylim"), c(0.2, 0.7))
   if (avg_only) {
-    testthat::expect_equal(attr(attr(cpart, "grp_avg")[["prcs"]][[1]], "xlim"),
-                 c(0.25, 0.75))
-    testthat::expect_equal(attr(attr(cpart, "grp_avg")[["prcs"]][[1]], "ylim"),
-                 c(0.2, 0.7))
+    testthat::expect_equal(
+      attr(attr(cpart, "grp_avg")[["prcs"]][[1]], "xlim"),
+      c(0.25, 0.75)
+    )
+    testthat::expect_equal(
+      attr(attr(cpart, "grp_avg")[["prcs"]][[1]], "ylim"),
+      c(0.2, 0.7)
+    )
   } else {
     testthat::expect_equal(attr(cpart[["prcs"]][[1]], "xlim"), c(0.25, 0.75))
     testthat::expect_equal(attr(cpart[["prcs"]][[1]], "ylim"), c(0.2, 0.7))
@@ -180,9 +200,11 @@ test_that("partial auc mmcurves", {
 
 pa_test_paucs <- function(curves_part, idx, pauc, spauc) {
   testthat::expect_equal(attr(curves_part, "paucs")[["paucs"]][idx], pauc,
-               tolerance = 1e-3)
+    tolerance = 1e-3
+  )
   testthat::expect_equal(attr(curves_part, "paucs")[["spaucs"]][idx], spauc,
-               tolerance = 1e-3)
+    tolerance = 1e-3
+  )
 }
 
 pa_test_paucs_roc <- function(curves, idx) {
