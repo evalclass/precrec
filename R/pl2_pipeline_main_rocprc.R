@@ -5,7 +5,6 @@
                             calc_avg = TRUE, cb_alpha = 0.05,
                             raw_curves = FALSE, x_bins = 1000,
                             interpolate = TRUE) {
-
   if (!missing(dataset_type) && dataset_type == "single") {
     calc_avg <- FALSE
     raw_curves <- TRUE
@@ -25,22 +24,27 @@
       } else {
         cl <- "negative"
       }
-      err_msg <- paste0("Curves cannot be calculated. ",
-                        "Only a single class (", cl, ") ",
-                        "found in dataset (modname: ", attr(mdat[[s]], "modname"),
-                        ", dsid: ",attr(mdat[[s]], "dsid"), ").")
+      err_msg <- paste0(
+        "Curves cannot be calculated. ",
+        "Only a single class (", cl, ") ",
+        "found in dataset (modname: ",
+        attr(mdat[[s]], "modname"),
+        ", dsid: ", attr(mdat[[s]], "dsid"), ")."
+      )
       stop(err_msg, call. = FALSE)
     }
     cdat <- create_confmats(mdat[[s]])
     pevals <- calc_measures(cdat)
-    curves <- create_curves(pevals, x_bins = x_bins)
+    create_curves(pevals, x_bins = x_bins)
   }
   lcurves <- lapply(seq_along(mdat), plfunc)
 
   # Summarize curves by line type
   grpfunc <- function(lt) {
-    .summarize_curves(lcurves, lt, "crvgrp", mdat, dataset_type,
-                      calc_avg, cb_alpha, x_bins)
+    .summarize_curves(
+      lcurves, lt, "crvgrp", mdat, dataset_type,
+      calc_avg, cb_alpha, x_bins
+    )
   }
   grp_curves <- lapply(c("roc", "prc"), grpfunc)
   names(grp_curves) <- c("rocs", "prcs")
@@ -63,8 +67,10 @@
     grp_curves <- lapply(c("roc", "prc"), grpfunc3)
     names(grp_curves) <- c("rocs", "prcs")
   }
-  s3obj <- structure(grp_curves, class = c(paste0(class_name_pf, "curves"),
-                                           "curve_info", "aucs"))
+  s3obj <- structure(grp_curves, class = c(
+    paste0(class_name_pf, "curves"),
+    "curve_info", "aucs"
+  ))
 
   # Set attributes
   attr(s3obj, "aucs") <- aucs
@@ -76,12 +82,14 @@
   attr(s3obj, "model_type") <- model_type
   attr(s3obj, "dataset_type") <- dataset_type
   attr(s3obj, "partial") <- FALSE
-  attr(s3obj, "args") <- list(mode = "rocprc",
-                              calc_avg = calc_avg,
-                              cb_alpha = cb_alpha,
-                              raw_curves = raw_curves,
-                              x_bins = x_bins,
-                              interpolate = interpolate)
+  attr(s3obj, "args") <- list(
+    mode = "rocprc",
+    calc_avg = calc_avg,
+    cb_alpha = cb_alpha,
+    raw_curves = raw_curves,
+    x_bins = x_bins,
+    interpolate = interpolate
+  )
   attr(s3obj, "validated") <- FALSE
 
   # Call .validate.class_name()
@@ -93,7 +101,6 @@
 #
 .summarize_curves <- function(lcurves, curve_type, class_name, mdat,
                               dataset_type, calc_avg, cb_alpha, x_bins) {
-
   if (!is.null(lcurves)) {
     # Summarize ROC or PRC curves
     mc <- lapply(seq_along(lcurves), function(s) lcurves[[s]][[curve_type]])
@@ -102,8 +109,10 @@
     if (dataset_type == "multiple" && calc_avg) {
       modnames <- attr(mdat, "data_info")[["modnames"]]
       uniq_modnames <- attr(mdat, "uniq_modnames")
-      avgcurves <- calc_avg_rocprc(mc, modnames, uniq_modnames, cb_alpha,
-                                   x_bins)
+      avgcurves <- calc_avg_rocprc(
+        mc, modnames, uniq_modnames, cb_alpha,
+        x_bins
+      )
     } else {
       avgcurves <- NA
     }
@@ -140,16 +149,20 @@
   ct_len <- 2
   modnames <- attr(mdat, "data_info")[["modnames"]]
   dsids <- attr(mdat, "data_info")[["dsids"]]
-  aucs <- data.frame(modnames = rep(modnames, each = ct_len),
-                     dsids = rep(dsids, each = ct_len),
-                     curvetypes = rep(c("ROC", "PRC"), length(modnames)),
-                     aucs = rep(NA, length(modnames) * ct_len),
-                     stringsAsFactors = FALSE)
+  aucs <- data.frame(
+    modnames = rep(modnames, each = ct_len),
+    dsids = rep(dsids, each = ct_len),
+    curvetypes = rep(c("ROC", "PRC"), length(modnames)),
+    aucs = rep(NA, length(modnames) * ct_len),
+    stringsAsFactors = FALSE
+  )
 
   for (i in seq_along(lcurves)) {
     idx <- ct_len * i - 1
-    aucs[["aucs"]][idx:(idx + 1)] <- c(attr(lcurves[[i]][["roc"]], "auc"),
-                                       attr(lcurves[[i]][["prc"]], "auc"))
+    aucs[["aucs"]][idx:(idx + 1)] <- c(
+      attr(lcurves[[i]][["roc"]], "auc"),
+      attr(lcurves[[i]][["prc"]], "auc")
+    )
   }
 
   aucs
@@ -167,12 +180,19 @@
 
   # Validate class items and attributes
   item_names <- c("rocs", "prcs")
-  attr_names <- c("aucs", "grp_avg", "data_info", "uniq_modnames",
-                  "uniq_dsids", "model_type", "dataset_type", "args",
-                  "validated")
-  arg_names <- c("mode", "calc_avg", "cb_alpha", "raw_curves", "x_bins", "interpolate")
-  .validate_basic(curves, class_name, ".pl_main_rocprc", item_names, attr_names,
-                  arg_names)
+  attr_names <- c(
+    "aucs", "grp_avg", "data_info", "uniq_modnames",
+    "uniq_dsids", "model_type", "dataset_type", "args",
+    "validated"
+  )
+  arg_names <- c(
+    "mode", "calc_avg", "cb_alpha", "raw_curves",
+    "x_bins", "interpolate"
+  )
+  .validate_basic(
+    curves, class_name, ".pl_main_rocprc", item_names, attr_names,
+    arg_names
+  )
 
   attr(curves, "validated") <- TRUE
   curves
@@ -217,13 +237,16 @@
 
   # Validate class items and attributes
   item_names <- NULL
-  attr_names <- c("data_info", "curve_type", "uniq_modnames", "uniq_dsids",
-                  "avgcurves", "validated")
+  attr_names <- c(
+    "data_info", "curve_type", "uniq_modnames", "uniq_dsids",
+    "avgcurves", "validated"
+  )
   arg_names <- NULL
-  .validate_basic(crvgrp, "crvgrp", ".summarize_curves", item_names,
-                  attr_names, arg_names)
+  .validate_basic(
+    crvgrp, "crvgrp", ".summarize_curves", item_names,
+    attr_names, arg_names
+  )
 
   attr(crvgrp, "validated") <- TRUE
   crvgrp
 }
-

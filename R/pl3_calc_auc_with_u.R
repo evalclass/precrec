@@ -8,7 +8,8 @@ calc_auc_with_u <- function(sdat, scores = NULL, labels = NULL, na_worst = TRUE,
   # === Validate input arguments ===
   # Create sdat from scores and labels if sdat is missing
   sdat <- .create_src_obj(sdat, "sdat", reformat_data, scores, labels,
-                          mode = "aucroc", ...)
+    mode = "aucroc", ...
+  )
   .validate(sdat)
 
   # === Calculate AUCs (ROC) ===
@@ -18,30 +19,34 @@ calc_auc_with_u <- function(sdat, scores = NULL, labels = NULL, na_worst = TRUE,
     dt_loaded <- .load_data_table()
     if (dt_loaded) {
       if (na_worst) {
-        na.last <- FALSE
+        na_last <- FALSE
       } else {
-        na.last <- TRUE
+        na_last <- TRUE
       }
       if (ties_method == "random") {
-        ties.method <- "random"
+        ties_method <- "random"
       } else {
-        ties.method <- "average"
+        ties_method <- "average"
       }
 
       frank_func <- function(x) {
-        data.table::frank(x, na.last = na.last, ties.method = ties.method)
+        data.table::frank(x, na.last = na_last, ties.method = ties_method)
       }
 
-      uauc <- calc_uauc_frank(attr(sdat, "np"), attr(sdat, "nn"),
-                              sdat[["scores"]], sdat[["labels"]],
-                              na.last, ties.method, frank_func)
+      uauc <- calc_uauc_frank(
+        attr(sdat, "np"), attr(sdat, "nn"),
+        sdat[["scores"]], sdat[["labels"]],
+        na_last, ties_method, frank_func
+      )
       .check_cpp_func_error(uauc, "calc_uauc_fsort")
     }
   }
 
   if (ustat_method == "sort" || (ustat_method == "frank" && !dt_loaded)) {
-    uauc <- calc_uauc(attr(sdat, "np"), attr(sdat, "nn"), sdat[["scores"]],
-                      sdat[["labels"]], na_worst, ties_method)
+    uauc <- calc_uauc(
+      attr(sdat, "np"), attr(sdat, "nn"), sdat[["scores"]],
+      sdat[["labels"]], na_worst, ties_method
+    )
     .check_cpp_func_error(uauc, "calc_uauc")
   }
 
@@ -79,17 +84,25 @@ calc_auc_with_u <- function(sdat, scores = NULL, labels = NULL, na_worst = TRUE,
 
   # Validate class items and attributes
   item_names <- "auc"
-  attr_names <- c("modname", "dsid", "nn", "np", "args", "cpp_errmsg",
-                  "src", "validated")
-  arg_names <- c("na_worst", "na.last", "ties_method", "ties.method",
-                 "modname", "dsid", "keep_fmdat")
-  .validate_basic(uauc, "uauc", "calc_auc_with_u", item_names, attr_names,
-                  arg_names)
+  attr_names <- c(
+    "modname", "dsid", "nn", "np", "args", "cpp_errmsg",
+    "src", "validated"
+  )
+  arg_names <- c(
+    "na_worst", "na.last", "ties_method", "ties.method",
+    "modname", "dsid", "keep_fmdat"
+  )
+  .validate_basic(
+    uauc, "uauc", "calc_auc_with_u", item_names, attr_names,
+    arg_names
+  )
 
   # AUC
   auc <- uauc[["auc"]]
-  assertthat::assert_that(assertthat::is.number(auc),
-                          auc >= 0, auc <= 1)
+  assertthat::assert_that(
+    assertthat::is.number(auc),
+    auc >= 0, auc <= 1
+  )
 
   attr(uauc, "validated") <- TRUE
   uauc

@@ -6,15 +6,17 @@ context("MM 1: Create mmdata for n-fold cross validation")
 
 test_that("mmdata() accepts arguments for 'format_nfold'", {
   data(M2N50F5)
-  dat1 = M2N50F5[M2N50F5$fold == 1, ]
-  dat2 = M2N50F5[M2N50F5$fold == 2, ]
-  dat3 = M2N50F5[M2N50F5$fold == 3, ]
-  dat4 = M2N50F5[M2N50F5$fold == 4, ]
-  dat5 = M2N50F5[M2N50F5$fold == 5, ]
+  dat1 <- M2N50F5[M2N50F5$fold == 1, ]
+  dat2 <- M2N50F5[M2N50F5$fold == 2, ]
+  dat3 <- M2N50F5[M2N50F5$fold == 3, ]
+  dat4 <- M2N50F5[M2N50F5$fold == 4, ]
+  dat5 <- M2N50F5[M2N50F5$fold == 5, ]
 
-  mdat <- mmdata(nfold_df = M2N50F5, score_cols = c(1, 2), lab_col = 3,
-                 fold_col = 4, modnames = c("score1", "score2"),
-                 dsids = 1:5)
+  mdat <- mmdata(
+    nfold_df = M2N50F5, score_cols = c(1, 2), lab_col = 3,
+    fold_col = 4, modnames = c("score1", "score2"),
+    dsids = 1:5
+  )
 
   expect_equal(mdat[[1]]$scores, dat1$score1)
   expect_equal(mdat[[2]]$scores, dat2$score1)
@@ -39,54 +41,64 @@ test_that("mmdata() accepts arguments for 'format_nfold'", {
   expect_equal(mdat[[8]]$labels, as.numeric(dat3$label))
   expect_equal(mdat[[9]]$labels, as.numeric(dat4$label))
   expect_equal(mdat[[10]]$labels, as.numeric(dat5$label))
-
 })
 
 test_that("mmdata() requires scores and labels if n-fold args are incomplete", {
   data(M2N50F5)
 
-  expect_error(mmdata(nfold_df = M2N50F5,
-                      score_cols = c(1, 2),
-                      lab_col = 3,
-                      fold_col = 4,
-                      modnames = c("score1", "score2"),
-                      dsids = 1:5), NA)
+  expect_error(mmdata(
+    nfold_df = M2N50F5,
+    score_cols = c(1, 2),
+    lab_col = 3,
+    fold_col = 4,
+    modnames = c("score1", "score2"),
+    dsids = 1:5
+  ), NA)
 
   err_msg <- "'scores' and/or 'lables' are missing"
-  expect_error(mmdata(score_cols = c(1, 2),
-                      lab_col = 3,
-                      fold_col = 4,
-                      modnames = c("score1", "score2"),
-                      dsids = 1:5), err_msg)
+  expect_error(mmdata(
+    score_cols = c(1, 2),
+    lab_col = 3,
+    fold_col = 4,
+    modnames = c("score1", "score2"),
+    dsids = 1:5
+  ), err_msg)
 
-  expect_error(mmdata(nfold_df = M2N50F5,
-                      lab_col = 3,
-                      fold_col = 4,
-                      modnames = c("score1", "score2"),
-                      dsids = 1:5), err_msg)
-  expect_error(mmdata(nfold_df = M2N50F5,
-                      score_cols = c(1, 2),
-                      fold_col = 4,
-                      modnames = c("score1", "score2"),
-                      dsids = 1:5), err_msg)
-  expect_error(mmdata(nfold_df = M2N50F5,
-                      score_cols = c(1, 2),
-                      lab_col = 3,
-                      modnames = c("score1", "score2"),
-                      dsids = 1:5), err_msg)
+  expect_error(mmdata(
+    nfold_df = M2N50F5,
+    lab_col = 3,
+    fold_col = 4,
+    modnames = c("score1", "score2"),
+    dsids = 1:5
+  ), err_msg)
+  expect_error(mmdata(
+    nfold_df = M2N50F5,
+    score_cols = c(1, 2),
+    fold_col = 4,
+    modnames = c("score1", "score2"),
+    dsids = 1:5
+  ), err_msg)
+  expect_error(mmdata(
+    nfold_df = M2N50F5,
+    score_cols = c(1, 2),
+    lab_col = 3,
+    modnames = c("score1", "score2"),
+    dsids = 1:5
+  ), err_msg)
 
   err_msg <- "Invalid modnames and/or dsids"
-  expect_error(mmdata(nfold_df = M2N50F5,
-                      score_cols = c(1, 2),
-                      lab_col = 3,
-                      fold_col = 4,
-                      dsids = 1:5), err_msg)
-  expect_error(mmdata(nfold_df = M2N50F5,
-                      score_cols = c(1, 2),
-                      lab_col = 3,
-                      fold_col = 4,
-                      modnames = c("score1", "score2"), err_msg))
-
-
+  expect_error(mmdata(
+    nfold_df = M2N50F5,
+    score_cols = c(1, 2),
+    lab_col = 3,
+    fold_col = 4,
+    dsids = 1:5
+  ), err_msg)
+  expect_error(mmdata(
+    nfold_df = M2N50F5,
+    score_cols = c(1, 2),
+    lab_col = 3,
+    fold_col = 4,
+    modnames = c("score1", "score2"), err_msg
+  ))
 })
-

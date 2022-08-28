@@ -29,8 +29,10 @@ test_that("fortify cmat", {
   }
 
   data(B500)
-  cmat <- create_confmats(scores = B500$good_er_scores,
-                          labels = B500$labels)
+  cmat <- create_confmats(
+    scores = B500$good_er_scores,
+    labels = B500$labels
+  )
 
   curve_df <- ggplot2::fortify(cmat)
   expect_true(is.list(curve_df))
@@ -43,8 +45,10 @@ test_that("fortify pevals", {
   }
 
   data(B500)
-  pevals <- calc_measures(scores = B500$good_er_scores,
-                          labels = B500$labels)
+  pevals <- calc_measures(
+    scores = B500$good_er_scores,
+    labels = B500$labels
+  )
 
   curve_df <- ggplot2::fortify(pevals)
   expect_true(is.list(curve_df))

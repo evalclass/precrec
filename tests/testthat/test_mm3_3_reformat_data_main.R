@@ -26,17 +26,25 @@ test_that("reformat_data() accepts 'mode'", {
 
 test_that("'scores' and 'labels' must be specified", {
   expect_err_msg <- function(scores, labels, err_msg) {
-    eval(bquote(expect_error(reformat_data(scores, labels), err_msg)))
+    expect_error(reformat_data(scores, labels), err_msg)
   }
 
   expect_err_msg(NULL, 0, "Invalid scores")
   expect_err_msg(0, NULL, "Invalid labels")
+  expect_err_msg(NULL, NULL, "Invalid scores & labels")
+})
+
+test_that("test .validate_scores_and_labels", {
+  expect_error(
+    .validate_scores_and_labels("x", NULL, NULL, NULL),
+    "Unrecognized class"
+  )
 })
 
 test_that("'scores' and 'labels' should be the same length", {
   expect_err_msg <- function(scores, labels) {
     err_msg <- "scores and labels must be the same lengths"
-    eval(bquote(expect_error(reformat_data(scores, labels), err_msg)))
+    expect_error(reformat_data(scores, labels), err_msg)
   }
 
   expect_err_msg(c(0.1, 0.2), c(1, 0, 0))
@@ -45,9 +53,7 @@ test_that("'scores' and 'labels' should be the same length", {
 
 test_that("'modname' must be a character vector", {
   expect_err_msg <- function(err_msg, modname) {
-    eval(bquote(expect_error(reformat_data(c(0, 1), c(0, 1),
-                                           modname = modname),
-                             err_msg)))
+    expect_error(reformat_data(c(0, 1), c(0, 1), modname = modname), err_msg)
   }
 
   err_msg <- "modname is not a string"
@@ -73,7 +79,7 @@ test_that("labels, ranks, and rank_idx must be the same length", {
 test_that("reformat_data() accepts 'na_worst'", {
   expect_equal_ranks <- function(scores, labels, na_worst, ranks) {
     fmdat <- reformat_data(scores, labels, na_worst = na_worst)
-    eval(bquote(expect_equal(fmdat[["ranks"]], ranks)))
+    expect_equal(fmdat[["ranks"]], ranks)
   }
 
   scores <- c(NA, 0.2, 0.1)
@@ -81,7 +87,6 @@ test_that("reformat_data() accepts 'na_worst'", {
 
   expect_equal_ranks(scores, labels, TRUE, c(3, 1, 2))
   expect_equal_ranks(scores, labels, FALSE, c(1, 2, 3))
-
 })
 
 test_that("reformat_data() accepts 'ties_method'", {
@@ -89,12 +94,11 @@ test_that("reformat_data() accepts 'ties_method'", {
     scores <- c(0.1, 0.2, 0.2, 0.2, 0.3)
     labels <- c(1, 0, 1, 0, 1)
     fmdat <- reformat_data(scores, labels, ties_method = ties_method)
-    eval(bquote(expect_equal(fmdat[["ranks"]], ranks)))
+    expect_equal(fmdat[["ranks"]], ranks)
   }
 
   expect_equal_ranks("equiv", c(5, 2, 2, 2, 1))
   expect_equal_ranks("first", c(5, 2, 3, 4, 1))
-
 })
 
 test_that("'fmdat' contains a list with 4 items", {
@@ -103,4 +107,3 @@ test_that("'fmdat' contains a list with 4 items", {
   expect_true(is.list(fmdat))
   expect_equal(length(fmdat), 4)
 })
-

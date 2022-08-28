@@ -59,8 +59,10 @@ auc_ci_create_mmcurves <- function() {
   l4 <- c(1, 1, 0, 1)
   labels <- join_labels(l1, l2, l3, l4)
 
-  mdat <- mmdata(scores, labels, modnames = c("m1", "m2"), dsids = c(1, 2),
-                 expd_first = "modnames")
+  mdat <- mmdata(scores, labels,
+    modnames = c("m1", "m2"), dsids = c(1, 2),
+    expd_first = "modnames"
+  )
   evalmod(mdat)
 }
 
@@ -77,8 +79,10 @@ auc_ci_create_mmcurves_n1 <- function() {
   l4 <- c(1, 1, 0, 1)
   labels <- join_labels(l1, l2, l3, l4)
 
-  mdat <- mmdata(scores, labels, modnames = c("m1", "m1", "m1" ,"m2"),
-                 dsids = c(1, 2, 3, 1))
+  mdat <- mmdata(scores, labels,
+    modnames = c("m1", "m1", "m1", "m2"),
+    dsids = c(1, 2, 3, 1)
+  )
   evalmod(mdat)
 }
 
@@ -120,8 +124,8 @@ test_that("auc_ci alpha", {
   curves <- auc_ci_create_smcurves()
 
   # Check function signature
-  expect_error(auc_ci(curves, 0.5), NA)
-  expect_error(auc_ci(curves, alpha = 0.5), NA)
+  expect_silent(auc_ci(curves, 0.5))
+  expect_silent(auc_ci(curves, alpha = 0.5))
 
   # Check varialbe type
   err_msg <- "alpha is not a number"
@@ -133,24 +137,23 @@ test_that("auc_ci alpha", {
   err_msg <- "alpha not greater than or equal to 0"
   expect_error(auc_ci(curves, -0.1), err_msg)
   expect_error(auc_ci(curves, alpha = -0.1), err_msg)
-  expect_error(auc_ci(curves, alpha = 0), NA)
+  expect_silent(auc_ci(curves, alpha = 0))
 
   # Check upper limit
   err_msg <- "alpha not less than or equal to 1"
   expect_error(auc_ci(curves, 1.1), err_msg)
   expect_error(auc_ci(curves, alpha = 1.1), err_msg)
-  expect_error(auc_ci(curves, alpha = 1), NA)
-
+  expect_silent(auc_ci(curves, alpha = 1))
 })
 
 test_that("auc_ci dtype", {
   curves <- auc_ci_create_smcurves()
 
   # Check function signature
-  expect_error(auc_ci(curves, 0.5, "normal"), NA)
-  expect_error(auc_ci(curves, alpha = 0.5, "normal"), NA)
-  expect_error(auc_ci(curves, dtype = "normal", alpha = 0.5), NA)
-  expect_error(auc_ci(curves, dtype = "normal"), NA)
+  expect_silent(auc_ci(curves, 0.5, "normal"))
+  expect_silent(auc_ci(curves, alpha = 0.5, "normal"))
+  expect_silent(auc_ci(curves, dtype = "normal", alpha = 0.5))
+  expect_silent(auc_ci(curves, dtype = "normal"))
 
   # Check varialbe type
   err_msg <- "dtype is not a string"
@@ -160,15 +163,14 @@ test_that("auc_ci dtype", {
 
   # Check valid input
   err_msg <- "'dtype' must be one of "
-  expect_error(auc_ci(curves, dtype = "normal"), NA)
-  expect_error(auc_ci(curves, dtype = "n"), NA)
-  expect_error(auc_ci(curves, dtype = "Normal"), NA)
-  expect_error(auc_ci(curves, dtype = "t"), NA)
-  expect_error(auc_ci(curves, dtype = "T"), NA)
-  expect_error(auc_ci(curves, dtype = "z"), NA)
+  expect_silent(auc_ci(curves, dtype = "normal"))
+  expect_silent(auc_ci(curves, dtype = "n"))
+  expect_silent(auc_ci(curves, dtype = "Normal"))
+  expect_silent(auc_ci(curves, dtype = "t"))
+  expect_silent(auc_ci(curves, dtype = "T"))
+  expect_silent(auc_ci(curves, dtype = "z"))
   expect_error(auc_ci(curves, dtype = "d"), err_msg)
   expect_error(auc_ci(curves, dtype = "ormal"), err_msg)
-
 })
 
 test_that("auc_ci normal distribution for ROC", {
@@ -190,7 +192,7 @@ test_that("auc_ci normal distribution for ROC", {
   expect_equal(roc_ci$mean, roc_mean)
 
   # Calculate CI
-  alpha = 0.05
+  alpha <- 0.05
   norm_z <- qnorm(1 - (alpha / 2))
 
   roc_error <- norm_z * roc_sd / sqrt(roc_n)
@@ -222,7 +224,7 @@ test_that("auc_ci normal distribution (z) for ROC", {
   expect_equal(roc_ci$mean, roc_mean)
 
   # Calculate CI
-  alpha = 0.05
+  alpha <- 0.05
   norm_z <- qnorm(1 - (alpha / 2))
 
   roc_error <- norm_z * roc_sd / sqrt(roc_n)
@@ -254,7 +256,7 @@ test_that("auc_ci normal distribution for PRC", {
   expect_equal(prc_ci$mean, prc_mean)
 
   # Calculate CI
-  alpha = 0.05
+  alpha <- 0.05
   norm_z <- qnorm(1 - (alpha / 2))
 
   prc_error <- norm_z * prc_sd / sqrt(prc_n)
@@ -286,7 +288,7 @@ test_that("auc_ci t-distribution for ROC", {
   expect_equal(roc_ci$mean, roc_mean)
 
   # Calculate CI
-  alpha = 0.05
+  alpha <- 0.05
   q_t <- qt(1 - (alpha / 2), df = roc_n - 1)
 
   roc_error <- q_t * roc_sd / sqrt(roc_n)
@@ -318,7 +320,7 @@ test_that("auc_ci t-distribution for PRC", {
   expect_equal(prc_ci$mean, prc_mean)
 
   # Calculate CI
-  alpha = 0.05
+  alpha <- 0.05
   q_t <- qt(1 - (alpha / 2), df = prc_n - 1)
 
   prc_error <- q_t * prc_sd / sqrt(prc_n)
@@ -350,7 +352,7 @@ test_that("auc_ci n = 2 ROC", {
   expect_equal(roc_ci$mean, roc_mean)
 
   # Calculate CI
-  alpha = 0.05
+  alpha <- 0.05
   norm_z <- qnorm(1 - (alpha / 2))
 
   roc_error <- norm_z * roc_sd / sqrt(roc_n)
@@ -382,7 +384,7 @@ test_that("auc_ci n = 2 PRC", {
   expect_equal(prc_ci$mean, prc_mean)
 
   # Calculate CI
-  alpha = 0.05
+  alpha <- 0.05
   norm_z <- qnorm(1 - (alpha / 2))
 
   prc_error <- norm_z * prc_sd / sqrt(prc_n)
@@ -412,4 +414,3 @@ test_that("auc_ci n = 1", {
   expect_equal(ci_n1_prc$lower_bound, ci_n1_prc$mean)
   expect_equal(ci_n1_prc$upper_bound, ci_n1_prc$mean)
 })
-

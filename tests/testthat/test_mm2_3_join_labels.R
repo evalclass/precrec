@@ -20,11 +20,11 @@ test_that("'...' must be specified", {
 })
 
 test_that("'byrow' should be TRUE or FALSE", {
-  expect_error(join_labels(c(0, 1), byrow = TRUE), NA)
-  expect_error(join_labels(c(0, 1), byrow = FALSE), NA)
+  expect_silent(join_labels(c(0, 1), byrow = TRUE))
+  expect_silent(join_labels(c(0, 1), byrow = FALSE))
 
   expect_err_msg <- function(err_msg, byrow) {
-    eval(bquote(expect_error(join_labels(0, byrow = byrow), err_msg)))
+    expect_error(join_labels(0, byrow = byrow), err_msg)
   }
 
   err_msg <- "byrow contains 1 missing values"
@@ -39,12 +39,11 @@ test_that("'byrow' should be TRUE or FALSE", {
 })
 
 test_that("'chklen' should be TRUE or FALSE", {
-  expect_error(join_labels(c(0, 1), chklen = TRUE), NA)
-  expect_error(join_labels(c(0, 1), chklen = FALSE), NA)
+  expect_silent(join_labels(c(0, 1), chklen = TRUE))
+  expect_silent(join_labels(c(0, 1), chklen = FALSE))
 
   expect_err_msg <- function(err_msg, chklen) {
-
-    eval(bquote(expect_error(join_labels(0, chklen = chklen), err_msg)))
+    expect_error(join_labels(0, chklen = chklen), err_msg)
   }
 
   err_msg <- "chklen contains 1 missing values"
@@ -116,7 +115,7 @@ test_that("join_labels() only accepts vectors or factors", {
 
   expect_err_msg <- function(vec1, vec2) {
     err_msg <- "Cannot join this type of data"
-    eval(bquote(expect_error(join_labels(vec1, vec2), err_msg)))
+    expect_error(join_labels(vec1, vec2), err_msg)
   }
 
   vec5 <- c(NULL, NULL)
@@ -125,7 +124,7 @@ test_that("join_labels() only accepts vectors or factors", {
 
 test_that("join_labels() accepts any number of unique labels", {
   expect_err_msg <- function(vec1, vec2) {
-    eval(bquote(expect_error(join_labels(vec1, vec2), NA)))
+    expect_silent(join_labels(vec1, vec2))
   }
 
   vec1 <- c(1, 0)
@@ -143,6 +142,4 @@ test_that("join_labels() accepts any number of unique labels", {
   vec1 <- factor(c(1, 2, 1))
   vec2 <- factor(c(1, 2, 3))
   expect_err_msg(vec1, vec2)
-
 })
-

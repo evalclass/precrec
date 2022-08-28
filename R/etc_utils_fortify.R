@@ -91,8 +91,10 @@
 #' p_prc
 #'
 #' ## Generate an sspoints object that contains basic evaluation measures
-#' sspoints <- evalmod(mode = "basic", scores = P10N10$scores,
-#'                     labels = P10N10$labels)
+#' sspoints <- evalmod(
+#'   mode = "basic", scores = P10N10$scores,
+#'   labels = P10N10$labels
+#' )
 #' ## Fortify sspoints
 #' ssdf <- fortify(sspoints)
 #'
@@ -109,7 +111,8 @@
 #' ## Create sample datasets with 10 positives and 10 negatives
 #' samps <- create_sim_samples(1, 10, 10, "all")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-#'                modnames = samps[["modnames"]])
+#'   modnames = samps[["modnames"]]
+#' )
 #'
 #' ## Generate an mscurve object that contains ROC and Precision-Recall curves
 #' mscurves <- evalmod(mdat)
@@ -155,8 +158,9 @@
 #' ## Create sample datasets with 10 positives and 10 negatives
 #' samps <- create_sim_samples(5, 10, 10, "good_er")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-#'                modnames = samps[["modnames"]],
-#'                dsids = samps[["dsids"]])
+#'   modnames = samps[["modnames"]],
+#'   dsids = samps[["dsids"]]
+#' )
 #'
 #' ## Generate an smcurve object that contains ROC and Precision-Recall curves
 #' smcurves <- evalmod(mdat, raw_curves = TRUE)
@@ -192,8 +196,9 @@
 #' df_prec <- subset(smdf, curvetype == "precision")
 #' p_prec <- ggplot(df_prec, aes(x = x, y = y, ymin = ymin, ymax = ymax))
 #' p_prec <- p_prec + geom_ribbon(aes(min = ymin, ymax = ymax),
-#'                                stat = "identity", alpha = 0.25,
-#'                                fill = "grey25")
+#'   stat = "identity", alpha = 0.25,
+#'   fill = "grey25"
+#' )
 #' p_prec <- p_prec + geom_point(aes(x = x, y = y))
 #' p_prec
 #'
@@ -205,8 +210,9 @@
 #' ## Create sample datasets with 10 positives and 10 negatives
 #' samps <- create_sim_samples(5, 10, 10, "all")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-#'                modnames = samps[["modnames"]],
-#'                dsids = samps[["dsids"]])
+#'   modnames = samps[["modnames"]],
+#'   dsids = samps[["dsids"]]
+#' )
 #'
 #' ## Generate an mscurve object that contains ROC and Precision-Recall curves
 #' mmcurves <- evalmod(mdat, raw_curves = TRUE)
@@ -242,8 +248,9 @@
 #' df_prec <- subset(mmdf, curvetype == "precision")
 #' p_prec <- ggplot(df_prec, aes(x = x, y = y, ymin = ymin, ymax = ymax))
 #' p_prec <- p_prec + geom_ribbon(aes(min = ymin, ymax = ymax, group = modname),
-#'                                stat = "identity", alpha = 0.25,
-#'                                fill = "grey25")
+#'   stat = "identity", alpha = 0.25,
+#'   fill = "grey25"
+#' )
 #' p_prec <- p_prec + geom_point(aes(x = x, y = y, color = modname))
 #' p_prec
 #' }
@@ -256,7 +263,6 @@ NULL
 # Process ... for curve objects
 #
 .get_fortify_arglist <- function(evalmod_args, def_raw_curves, ...) {
-
   arglist <- list(...)
 
   if (!is.null(def_raw_curves)) {

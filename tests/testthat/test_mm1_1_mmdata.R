@@ -18,6 +18,10 @@ test_that(".pmatch_tiesmethod() returns 'equiv', 'random', 'first'", {
   expect_equal(.pmatch_tiesmethod("A"), "A")
   expect_equal(.pmatch_tiesmethod(1), 1)
   expect_equal(.pmatch_tiesmethod(NULL), NULL)
+
+  expect_equal(.pmatch_tiesmethod("x", ties.method = "equiv"), "equiv")
+  expect_equal(.pmatch_tiesmethod("x", ties.method = "random"), "random")
+  expect_equal(.pmatch_tiesmethod("x", ties.method = "first"), "first")
 })
 
 test_that(".pmatch_expd_first() returns 'dsids' or 'modnames'", {
@@ -32,7 +36,7 @@ test_that(".pmatch_expd_first() returns 'dsids' or 'modnames'", {
   expect_equal(.pmatch_expd_first(NULL), NULL)
 })
 
-test_that("mmdata() returns an 'mdat' object", {
+mm1_create_simple_mdat <- function() {
   s1 <- c(1, 2, 3, 4)
   s2 <- c(5, 6, 7, 8)
   s3 <- c(2, 4, 6, 8)
@@ -43,17 +47,57 @@ test_that("mmdata() returns an 'mdat' object", {
   l3 <- c(0, 1, 0, 1)
   labels <- join_labels(l1, l2, l3)
 
-  mdat <- mmdata(scores, labels)
+  mmdata(scores, labels)
+}
+
+test_that("mmdata() returns an 'mdat' object", {
+  mdat <- mm1_create_simple_mdat()
 
   expect_true(is(mdat, "mdat"))
   expect_equal(length(mdat), 3)
+})
 
+test_that("check validaiton of mdat class", {
+  mdat <- mm1_create_simple_mdat()
+  item_names <- NULL
+  attr_names <- c(
+    "data_info", "uniq_modnames", "uniq_dsids", "args",
+    "validated"
+  )
+  arg_names <- c("posclass", "na_worst", "ties_method", "expd_first", "mode")
+
+  # Validated
+  expect_silent(.validate_basic(
+    mdat, "mdat", "mmdata", item_names, attr_names,
+    arg_names
+  ))
+
+  # Validation failed
+  expect_error(.validate_basic(
+    mdat, "x", "mmdata", item_names, attr_names,
+    arg_names
+  ), "Expected x")
+
+  expect_error(.validate_basic(
+    mdat, "mdat", "mmdata", "x", attr_names,
+    arg_names
+  ), "Invalid list items")
+
+  expect_error(.validate_basic(
+    mdat, "mdat", "mmdata", item_names, "x",
+    arg_names
+  ), "Invalid attributes")
+
+  expect_error(.validate_basic(
+    mdat, "mdat", "mmdata", item_names, attr_names,
+    "x"
+  ), "Invalid args")
 })
 
 test_that("'scores' and 'labels' must be specified", {
   expect_err_msg <- function(scores, labels) {
     err_msg <- "Cannot join this type of data"
-    eval(bquote(expect_error(mmdata(scores, labels), err_msg)))
+    expect_error(mmdata(scores, labels), err_msg)
   }
 
   scores <- NULL
@@ -65,7 +109,7 @@ test_that("'scores' and 'labels' must be specified", {
 test_that("'scores' and 'labels' should be the same lengths", {
   expect_err_msg <- function(scores, labels) {
     err_msg <- paste0("scores and labels must be the same lengths")
-    eval(bquote(expect_error(mmdata(scores, labels), err_msg)))
+    expect_error(mmdata(scores, labels), err_msg)
   }
 
   s1 <- c(1, 2, 3, 4)
@@ -109,8 +153,7 @@ test_that("mmdata() accepts 'modnames'", {
   expect_equal(attr(mdat[[1]], "args")[["modname"]], "model1")
 
   expect_err_msg <- function(err_msg, s1, l1, modnames) {
-    eval(bquote(expect_error(mmdata(s1, l1, modnames = modnames),
-                             err_msg)))
+    expect_error(mmdata(s1, l1, modnames = modnames), err_msg)
   }
 
   err_msg <- "Invalid"
@@ -118,7 +161,6 @@ test_that("mmdata() accepts 'modnames'", {
 
   err_msg <- "modnames is not a character vector"
   expect_err_msg(err_msg, s1, l1, NA)
-
 })
 
 test_that("mmdata() accepts 'dsids'", {
@@ -129,7 +171,7 @@ test_that("mmdata() accepts 'dsids'", {
   expect_equal(attr(mdat[[1]], "args")[["dsid"]], 10)
 
   expect_err_msg <- function(err_msg, s1, l1, dsids) {
-    eval(bquote(expect_error(mmdata(s1, l1, dsids = dsids), err_msg)))
+    expect_error(mmdata(s1, l1, dsids = dsids), err_msg)
   }
 
   err_msg <- "Invalid"
@@ -137,7 +179,6 @@ test_that("mmdata() accepts 'dsids'", {
 
   err_msg <- "dsids is not a numeric or integer vector"
   expect_err_msg(err_msg, s1, l1, NA)
-
 })
 
 test_that("mmdata() accepts 'posclass'", {
@@ -151,14 +192,13 @@ test_that("mmdata() accepts 'posclass'", {
   expect_equal(attr(mdat[[1]], "args")[["posclass"]], 1)
 
   expect_err_msg <- function(s1, l1, posclass, err_msg) {
-    eval(bquote(expect_error(mmdata(s1, l1, posclass = posclass), err_msg)))
+    expect_error(mmdata(s1, l1, posclass = posclass), err_msg)
   }
   expect_err_msg(s1, l1, -1, "invalid-posclass")
 
   err_msg <- "posclass must be the same data type as labels"
   expect_err_msg(s1, l1, "0", err_msg)
   expect_err_msg(s1, l1, "1", err_msg)
-
 })
 
 test_that("mmdata() accepts 'na_worst'", {
@@ -173,11 +213,10 @@ test_that("mmdata() accepts 'na_worst'", {
 
   expect_err_msg <- function(s1, l1, na_worst) {
     err_msg <- "na_worst contains 1 missing values"
-    eval(bquote(expect_error(mmdata(s1, l1, na_worst = na_worst), err_msg)))
+    expect_error(mmdata(s1, l1, na_worst = na_worst), err_msg)
   }
   expect_err_msg(s1, l1, as.logical(NA))
   expect_err_msg(s1, l1, NA)
-
 })
 
 test_that("mmdata() accepts 'ties_method'", {
@@ -195,12 +234,10 @@ test_that("mmdata() accepts 'ties_method'", {
 
   expect_err_msg <- function(s1, l1, ties_method) {
     err_msg <- "ties_method must be one of "
-    eval(bquote(expect_error(mmdata(s1, l1, ties_method = ties_method),
-                             err_msg)))
+    expect_error(mmdata(s1, l1, ties_method = ties_method), err_msg)
   }
   expect_err_msg(s1, l1, "min")
   expect_err_msg(s1, l1, "max")
-
 })
 
 test_that("mmdata() accepts 'expd_first", {
@@ -272,7 +309,7 @@ test_that("mmdata() accepts only one 'labels' dataset", {
 test_that("All items in 'scores' and 'labels' must be the same lengths", {
   expect_err_msg <- function(scores, labels) {
     err_msg <- "scores and labels must be the same lengths"
-    eval(bquote(expect_error(mmdata(scores, labels), err_msg)))
+    expect_error(mmdata(scores, labels), err_msg)
   }
 
   s1 <- c(1, 2, 3, 4)

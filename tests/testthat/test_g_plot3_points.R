@@ -46,22 +46,29 @@ pt3_create_mmpoints <- function(raw_curves = FALSE) {
   l4 <- c(1, 1, 0, 1)
   labels <- join_labels(l1, l2, l3, l4)
 
-  mdat <- mmdata(scores, labels, modnames = c("m1", "m2"), dsids = c(1, 2),
-                 expd_first = "modnames")
+  mdat <- mmdata(scores, labels,
+    modnames = c("m1", "m2"), dsids = c(1, 2),
+    expd_first = "modnames"
+  )
   evalmod(mdat, mode = "basic", raw_curves = raw_curves)
 }
 
-ap3_test_basic_measures <- function(xpoints, ...){
-
-  expect_error(plot(xpoints, ...), NA)
-  expect_error(plot(xpoints, c("sensitivity", "specificity", "error",
-                              "accuracy", "precision"), ...), NA)
-  expect_error(plot(xpoints, c("sensitivity", "specificity", "error",
-                              "precision"), ...), NA)
-  expect_error(plot(xpoints, c("sensitivity", "specificity", "precision"), ...),
-               NA)
-  expect_error(plot(xpoints, c("sensitivity", "precision"), ...), NA)
-  expect_error(plot(xpoints, "precision", ...), NA)
+ap3_test_basic_measures <- function(xpoints, ...) {
+  testthat::expect_silent(plot(xpoints, ...))
+  testthat::expect_silent(plot(xpoints, c(
+    "sensitivity", "specificity", "error",
+    "accuracy", "precision"
+  ), ...))
+  testthat::expect_silent(plot(xpoints, c(
+    "sensitivity", "specificity", "error",
+    "precision"
+  ), ...))
+  testthat::expect_silent(plot(xpoints, c(
+    "sensitivity", "specificity",
+    "precision"
+  ), ...))
+  testthat::expect_silent(plot(xpoints, c("sensitivity", "precision"), ...))
+  testthat::expect_silent(plot(xpoints, "precision", ...))
 }
 
 test_that("plot sspoints", {
@@ -69,8 +76,10 @@ test_that("plot sspoints", {
   on.exit(dev.off())
 
   data(P10N10)
-  sspoints <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
-                      mode = "basic")
+  sspoints <- evalmod(
+    scores = P10N10$scores, labels = P10N10$labels,
+    mode = "basic"
+  )
 
   ap3_test_basic_measures(sspoints)
   ap3_test_basic_measures(sspoints, type = "l")
@@ -123,16 +132,19 @@ test_that("plot mmpoints", {
 test_that("plot raw_curve option sspoints", {
   get_args <- function(x, y = NULL, ...) {
     .get_plot_arglist(attr(x, "args"), y,
-                      def_curvetype = .get_metric_names("basic"),
-                      def_type = "p",
-                      def_show_cb = FALSE, def_raw_curves = TRUE,
-                      def_add_np_nn = TRUE, def_show_legend = TRUE,
-                      ...)
+      def_curvetype = .get_metric_names("basic"),
+      def_type = "p",
+      def_show_cb = FALSE, def_raw_curves = TRUE,
+      def_add_np_nn = TRUE, def_show_legend = TRUE,
+      ...
+    )
   }
 
   data(P10N10)
-  points1 <- evalmod(mode = "basic", scores = P10N10$scores,
-                     labels = P10N10$labels)
+  points1 <- evalmod(
+    mode = "basic", scores = P10N10$scores,
+    labels = P10N10$labels
+  )
 
   args1a <- get_args(points1, raw_curves = TRUE)
   expect_true(args1a[["raw_curves"]])
@@ -147,11 +159,12 @@ test_that("plot raw_curve option sspoints", {
 test_that("plot raw_curve option mspoints", {
   get_args <- function(x, y = NULL, ...) {
     .get_plot_arglist(attr(x, "args"), y,
-                      def_curvetype = .get_metric_names("basic"),
-                      def_type = "p",
-                      def_show_cb = FALSE, def_raw_curves = TRUE,
-                      def_add_np_nn = TRUE, def_show_legend = TRUE,
-                      ...)
+      def_curvetype = .get_metric_names("basic"),
+      def_type = "p",
+      def_show_cb = FALSE, def_raw_curves = TRUE,
+      def_add_np_nn = TRUE, def_show_legend = TRUE,
+      ...
+    )
   }
 
   points1 <- pt3_create_mspoints()
@@ -169,11 +182,12 @@ test_that("plot raw_curve option mspoints", {
 test_that("plot raw_curve option smpoints", {
   get_args <- function(x, y = NULL, ...) {
     .get_plot_arglist(attr(x, "args"), y,
-                      def_curvetype = .get_metric_names("basic"),
-                      def_type = "p",
-                      def_show_cb = TRUE, def_raw_curves = NULL,
-                      def_add_np_nn = TRUE, def_show_legend = FALSE,
-                      ...)
+      def_curvetype = .get_metric_names("basic"),
+      def_type = "p",
+      def_show_cb = TRUE, def_raw_curves = NULL,
+      def_add_np_nn = TRUE, def_show_legend = FALSE,
+      ...
+    )
   }
 
   points1 <- pt3_create_smpoints()
@@ -201,11 +215,12 @@ test_that("plot raw_curve option smpoints", {
 test_that("plot raw_curve option mmpoints", {
   get_args <- function(x, y = NULL, ...) {
     .get_plot_arglist(attr(x, "args"), y,
-                      def_curvetype = .get_metric_names("basic"),
-                      def_type = "p",
-                      def_show_cb = FALSE, def_raw_curves = NULL,
-                      def_add_np_nn = TRUE, def_show_legend = TRUE,
-                      ...)
+      def_curvetype = .get_metric_names("basic"),
+      def_type = "p",
+      def_show_cb = FALSE, def_raw_curves = NULL,
+      def_add_np_nn = TRUE, def_show_legend = TRUE,
+      ...
+    )
   }
 
   points1 <- pt3_create_mmpoints()

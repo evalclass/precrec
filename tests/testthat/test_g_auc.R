@@ -46,10 +46,16 @@ auc_create_mmcurves <- function() {
   l4 <- c(1, 1, 0, 1)
   labels <- join_labels(l1, l2, l3, l4)
 
-  mdat <- mmdata(scores, labels, modnames = c("m1", "m2"), dsids = c(1, 2),
-                 expd_first = "modnames")
+  mdat <- mmdata(scores, labels,
+    modnames = c("m1", "m2"), dsids = c(1, 2),
+    expd_first = "modnames"
+  )
   evalmod(mdat)
 }
+
+test_that("aucs for invalid object", {
+  expect_error(auc(""), "unknown class")
+})
 
 test_that("aucs for sscurves", {
   data(P10N10)

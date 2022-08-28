@@ -97,11 +97,12 @@
 #'   the supporting points are calculated. \code{x_bins} is effective only
 #'   when \code{mode} is set to \code{rocprc} or \code{prcroc}.
 #'
-#' @param interpolate A Boolean value to specify whether or not interpolation of
-#'   ROC and precision-recall curves are performed. \code{x_bins} and \code{calc_avg} are
-#'    ignored and  when \code{x_bins} is set to \code{FALSE}.
-#'    \code{interpolate} is effective only when \code{mode} is set
-#'    to \code{rocprc} or \code{prcroc}.
+#' @param interpolate A Boolean value to specify whether or not
+#'   interpolation of ROC and precision-recall curves are
+#'   performed. \code{x_bins} and \code{calc_avg} are
+#'   ignored and  when \code{x_bins} is set to \code{FALSE}.
+#'   \code{interpolate} is effective only when \code{mode} is set
+#'   to \code{rocprc} or \code{prcroc}.
 #'
 #' @param ... These additional arguments are passed to \code{\link{mmdata}}
 #'   for data preparation.
@@ -151,7 +152,8 @@
 #'   }
 #'
 #'   \item The \code{evalmod} function returns the \code{aucroc} S3 object
-#'   when \code{mode} is "aucroc", which can be used with 'print' and 'as.data.frame'.
+#'   when \code{mode} is "aucroc", which can be used with 'print'
+#'   and 'as.data.frame'.
 #'
 #' }
 #'
@@ -179,8 +181,10 @@
 #' sscurves
 #'
 #' ## Generate an sspoints object that contains basic evaluation measures
-#' sspoints <- evalmod(mode = "basic", scores = P10N10$scores,
-#'                     labels = P10N10$labels)
+#' sspoints <- evalmod(
+#'   mode = "basic", scores = P10N10$scores,
+#'   labels = P10N10$labels
+#' )
 #' sspoints
 #'
 #'
@@ -191,7 +195,8 @@
 #' ## Create sample datasets with 100 positives and 100 negatives
 #' samps <- create_sim_samples(1, 100, 100, "all")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-#'                modnames = samps[["modnames"]])
+#'   modnames = samps[["modnames"]]
+#' )
 #'
 #' ## Generate an mscurve object that contains ROC and Precision-Recall curves
 #' mscurves <- evalmod(mdat)
@@ -209,8 +214,9 @@
 #' ## Create sample datasets with 100 positives and 100 negatives
 #' samps <- create_sim_samples(4, 100, 100, "good_er")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-#'                modnames = samps[["modnames"]],
-#'                dsids = samps[["dsids"]])
+#'   modnames = samps[["modnames"]],
+#'   dsids = samps[["dsids"]]
+#' )
 #'
 #' ## Generate an smcurve object that contains ROC and Precision-Recall curves
 #' smcurves <- evalmod(mdat)
@@ -228,8 +234,9 @@
 #' ## Create sample datasets with 100 positives and 100 negatives
 #' samps <- create_sim_samples(4, 100, 100, "all")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-#'                modnames = samps[["modnames"]],
-#'                dsids = samps[["dsids"]])
+#'   modnames = samps[["modnames"]],
+#'   dsids = samps[["dsids"]]
+#' )
 #'
 #' ## Generate an mmcurve object that contains ROC and Precision-Recall curves
 #' mmcurves <- evalmod(mdat)
@@ -248,9 +255,11 @@
 #' data(M2N50F5)
 #'
 #' ## Speficy nessesary columns to create mdat
-#' cvdat <- mmdata(nfold_df = M2N50F5, score_cols = c(1, 2),
-#'                 lab_col = 3, fold_col = 4,
-#'                 modnames = c("m1", "m2"), dsids = 1:5)
+#' cvdat <- mmdata(
+#'   nfold_df = M2N50F5, score_cols = c(1, 2),
+#'   lab_col = 3, fold_col = 4,
+#'   modnames = c("m1", "m2"), dsids = 1:5
+#' )
 #'
 #' ## Generate an mmcurve object that contains ROC and Precision-Recall curves
 #' cvcurves <- evalmod(cvdat)
@@ -261,9 +270,11 @@
 #' cvpoints
 #'
 #' ## Specify mmdata arguments from evalmod
-#' cvcurves2 <- evalmod(nfold_df = M2N50F5, score_cols = c(1, 2),
-#'                      lab_col = 3, fold_col = 4,
-#'                      modnames = c("m1", "m2"), dsids = 1:5)
+#' cvcurves2 <- evalmod(
+#'   nfold_df = M2N50F5, score_cols = c(1, 2),
+#'   lab_col = 3, fold_col = 4,
+#'   modnames = c("m1", "m2"), dsids = 1:5
+#' )
 #' cvcurves2
 #'
 #'
@@ -275,8 +286,10 @@
 #' data(P10N10)
 #'
 #' # 'aucroc' S3 object
-#' uauc1 <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
-#'                  mode="aucroc")
+#' uauc1 <- evalmod(
+#'   scores = P10N10$scores, labels = P10N10$labels,
+#'   mode = "aucroc"
+#' )
 #'
 #' # print 'aucroc'
 #' uauc1
@@ -290,13 +303,13 @@
 #'
 #' # a function to test mode = "rocprc"
 #' func_evalmod_rocprc <- function(samp) {
-#'    curves <- evalmod(scores = samp$scores, labels = samp$labels)
-#'    aucs <- auc(curves)
+#'   curves <- evalmod(scores = samp$scores, labels = samp$labels)
+#'   aucs <- auc(curves)
 #' }
 #'
 #' # a function to test mode = "aucroc"
 #' func_evalmod_aucroc <- function(samp) {
-#'   uaucs <- evalmod(scores = samp$scores, labels = samp$labels, mode="aucroc")
+#'   uaucs <- evalmod(scores = samp$scores, labels = samp$labels, mode = "aucroc")
 #'   as.data.frame(uaucs)
 #' }
 #'
@@ -322,25 +335,29 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
   if (x_bins == 0) {
     x_bins <- 1
   }
-  .validate_evalmod_args(new_mode, modnames, dsids, posclass, new_na_worst,
-                         new_ties_method, calc_avg, cb_alpha, raw_curves,
-                         x_bins, interpolate)
+  .validate_evalmod_args(
+    new_mode, modnames, dsids, posclass, new_na_worst,
+    new_ties_method, calc_avg, cb_alpha, raw_curves,
+    x_bins, interpolate
+  )
 
   # Create mdat if not provided
   if (missing(mdat)) {
     mdat <- mmdata(scores, labels,
-                   modnames = modnames, dsids = dsids, posclass = posclass,
-                   na_worst = new_na_worst, ties_method = new_ties_method,
-                   mode = new_mode, ...)
+      modnames = modnames, dsids = dsids, posclass = posclass,
+      na_worst = new_na_worst, ties_method = new_ties_method,
+      mode = new_mode, ...
+    )
   }
   .validate(mdat)
 
   # Call pipeline controller
-  pl_main(mdat, mode = new_mode, calc_avg = calc_avg, cb_alpha = cb_alpha,
-          raw_curves = raw_curves, x_bins = x_bins, interpolate = interpolate,
-          na_worst = new_na_worst,ties_method = new_ties_method,
-          validate = FALSE)
-
+  pl_main(mdat,
+    mode = new_mode, calc_avg = calc_avg, cb_alpha = cb_alpha,
+    raw_curves = raw_curves, x_bins = x_bins, interpolate = interpolate,
+    na_worst = new_na_worst, ties_method = new_ties_method,
+    validate = FALSE
+  )
 }
 
 #
@@ -356,10 +373,13 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
   new_mode <- NA
   if (!is.null(mode)) {
     new_mode <- .pmatch_mode(mode)
-    if (new_mode != "aucroc" && !is.na(mdat_mode) &&  mdat_mode == "aucroc") {
-      stop(paste0("Invalid 'mode': evalmod <- '", new_mode,
-                  "'', mmdata <- '", mdat_mode, "'"),
-           call. = FALSE)
+    if (new_mode != "aucroc" && !is.na(mdat_mode) && mdat_mode == "aucroc") {
+      stop(paste0(
+        "Invalid 'mode': evalmod <- '", new_mode,
+        "'', mmdata <- '", mdat_mode, "'"
+      ),
+      call. = FALSE
+      )
     }
   } else if (!is.na(mdat_mode)) {
     new_mode <- mdat_mode
@@ -414,5 +434,4 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
 
   # Check interpolate
   .validate_interpolate(interpolate)
-
 }

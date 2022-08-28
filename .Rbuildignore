@@ -17,3 +17,4 @@
 ^\.github$
 ^CRAN-SUBMISSION$
 ^.idea$
+^.vscode$

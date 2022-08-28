@@ -45,8 +45,10 @@ pl2_create_mdat_mm <- function() {
   l4 <- c(1, 1, 0, 1)
   labels <- join_labels(l1, l2, l3, l4)
 
-  mmdata(scores, labels, modnames = c("m1", "m2"), dsids = c(1, 2),
-         expd_first = "modnames")
+  mmdata(scores, labels,
+    modnames = c("m1", "m2"), dsids = c(1, 2),
+    expd_first = "modnames"
+  )
 }
 
 test_that(".pl_main_basic() returns 'sspoints'", {
@@ -81,17 +83,19 @@ test_that(".pl_main_basic() returns 'mmpoints'", {
 })
 
 test_that(".pl_main_basic() accepts 'calc_avg'", {
-
   f_check_calc_avg <- function(mdat, mt, dt, pf, val1 = "logical",
                                val2 = "logical") {
-
     for (et in c("err", "acc", "sp", "sn", "prec")) {
-      pl1 <- .pl_main_basic(mdat, mt, dt, pf, calc_avg = TRUE,
-                            raw_curves = TRUE)
+      pl1 <- .pl_main_basic(mdat, mt, dt, pf,
+        calc_avg = TRUE,
+        raw_curves = TRUE
+      )
       expect_equal(typeof(attr(pl1[[et]], "avgcurves")), val1)
 
-      pl2 <- .pl_main_basic(mdat, mt, dt, pf, calc_avg = FALSE,
-                            raw_curves = TRUE)
+      pl2 <- .pl_main_basic(mdat, mt, dt, pf,
+        calc_avg = FALSE,
+        raw_curves = TRUE
+      )
       expect_equal(typeof(attr(pl2[[et]], "avgcurves")), val2)
     }
   }
@@ -112,18 +116,23 @@ test_that(".pl_main_basic() accepts 'calc_avg'", {
 })
 
 test_that(".pl_main_basic() accepts 'cb_alpha'", {
-
   f_check_cb_alpha <- function(mdat, mt, dt, pf) {
     for (et in c("err", "acc", "sp", "sn", "prec")) {
-      pl1 <- .pl_main_basic(mdat, mt, dt, pf, cb_alpha = 0.05,
-                            raw_curves = TRUE)
+      pl1 <- .pl_main_basic(mdat, mt, dt, pf,
+        cb_alpha = 0.05,
+        raw_curves = TRUE
+      )
       expect_equal(attr(attr(pl1[[et]], "avgcurves"), "cb_zval"), 1.96,
-                   tolerance = 1e-2)
+        tolerance = 1e-2
+      )
 
-      pl2 <- .pl_main_basic(mdat, mt, dt, pf, cb_alpha = 0.01,
-                            raw_curves = TRUE)
+      pl2 <- .pl_main_basic(mdat, mt, dt, pf,
+        cb_alpha = 0.01,
+        raw_curves = TRUE
+      )
       expect_equal(attr(attr(pl2[[et]], "avgcurves"), "cb_zval"), 2.575,
-                   tolerance = 1e-3)
+        tolerance = 1e-3
+      )
     }
   }
 
@@ -135,10 +144,8 @@ test_that(".pl_main_basic() accepts 'cb_alpha'", {
 })
 
 test_that(".pl_main_basic() accepts 'raw_curves'", {
-
   f_check_raw_curves <- function(mdat, mt, dt, pf, val1 = "list",
-                                  val2 = "list") {
-
+                                 val2 = "list") {
     for (et in c("err", "acc", "sp", "sn", "prec")) {
       pl1 <- .pl_main_basic(mdat, mt, dt, pf, raw_curves = FALSE)
       expect_equal(typeof(pl1[[et]]), val1)
@@ -164,7 +171,6 @@ test_that(".pl_main_basic() accepts 'raw_curves'", {
 })
 
 test_that("point object contains basic measure objects", {
-
   f_check_object <- function(mdat, mt, dt, pf, list_len) {
     pl <- .pl_main_basic(mdat, mt, dt, pf, raw_curves = TRUE)
 
@@ -187,13 +193,14 @@ test_that("point object contains basic measure objects", {
 
   mdat4 <- pl2_create_mdat_mm()
   f_check_object(mdat4, "multiple", "multiple", "mm", 4)
-
 })
 
 
 test_that("scores and labels are stored as basic measures", {
-  sspoints <- evalmod(mode = "basic", scores = c(0.1, 0.2, 0, 0.3),
-                      labels = c(1, 0, 0, 1))
+  sspoints <- evalmod(
+    mode = "basic", scores = c(0.1, 0.2, 0, 0.3),
+    labels = c(1, 0, 0, 1)
+  )
   expect_equal(sspoints[["score"]][[1]][["x"]], c(0, 0.25, 0.5, 0.75, 1))
   expect_equal(sspoints[["score"]][[1]][["y"]], c(NA, 0.3, 0.2, 0.1, 0))
   expect_equal(sspoints[["label"]][[1]][["x"]], c(0, 0.25, 0.5, 0.75, 1))
@@ -225,34 +232,53 @@ test_that("scores and labels are stored as basic measures", {
   expect_equal(mspoints[["label"]][[3]][["x"]], c(0, 0.25, 0.5, 0.75, 1))
   expect_equal(mspoints[["label"]][[3]][["y"]], c(NA, 1, -1, 1, 1))
 
-  smpoints <- evalmod(mode = "basic", scores = scores, labels = labels,
-                      dsids = c(1, 2, 3))
+  smpoints <- evalmod(
+    mode = "basic", scores = scores, labels = labels,
+    dsids = c(1, 2, 3)
+  )
 
   avgscores <- attr(smpoints, "grp_avg")[["score"]]
   expect_equal(avgscores[[1]][["x"]], c(0, 0.25, 0.5, 0.75, 1))
-  expect_equal(avgscores[[1]][["y_avg"]], c(NA, 6.666667, 5.333333, 4,
-                                            2.666667),
-               tolerance = 1e-3)
-  expect_equal(avgscores[[1]][["y_se"]], c(NA, 1.333333, 1.201850, 1.154701,
-                                           1.201850),
-               tolerance = 1e-3)
-  expect_equal(avgscores[[1]][["y_ci_h"]], c(NA, 9.279952, 7.688917, 6.263171,
-                                             5.022250),
-               tolerance = 1e-3)
-  expect_equal(avgscores[[1]][["y_ci_l"]], c(NA, 4.0533814, 2.9777498,
-                                             1.7368285 ,0.3110831),
-               tolerance = 1e-3)
+  expect_equal(avgscores[[1]][["y_avg"]], c(
+    NA, 6.666667, 5.333333, 4,
+    2.666667
+  ),
+  tolerance = 1e-3
+  )
+  expect_equal(avgscores[[1]][["y_se"]], c(
+    NA, 1.333333, 1.201850, 1.154701,
+    1.201850
+  ),
+  tolerance = 1e-3
+  )
+  expect_equal(avgscores[[1]][["y_ci_h"]], c(
+    NA, 9.279952, 7.688917, 6.263171,
+    5.022250
+  ),
+  tolerance = 1e-3
+  )
+  expect_equal(avgscores[[1]][["y_ci_l"]], c(
+    NA, 4.0533814, 2.9777498,
+    1.7368285, 0.3110831
+  ),
+  tolerance = 1e-3
+  )
 
   avglabels <- attr(smpoints, "grp_avg")[["label"]]
   expect_equal(avglabels[[1]][["x"]], c(0, 0.25, 0.5, 0.75, 1))
-  expect_equal(avglabels[[1]][["y_avg"]], c(NA, 1, 1/3, 1/3, 1/3),
-               tolerance = 1e-3)
-  expect_equal(avglabels[[1]][["y_se"]], c(NA, 0, 2/3, 2/3, 2/3),
-               tolerance = 1e-3)
+  expect_equal(avglabels[[1]][["y_avg"]], c(NA, 1, 1 / 3, 1 / 3, 1 / 3),
+    tolerance = 1e-3
+  )
+  expect_equal(avglabels[[1]][["y_se"]], c(NA, 0, 2 / 3, 2 / 3, 2 / 3),
+    tolerance = 1e-3
+  )
   expect_equal(avglabels[[1]][["y_ci_h"]], c(NA, 1, 1.64, 1.64, 1.64),
-               tolerance = 1e-3)
-  expect_equal(avglabels[[1]][["y_ci_l"]], c(NA, 1, -0.9733093, -0.9733093,
-                                             -0.9733093),
-               tolerance = 1e-3)
-
+    tolerance = 1e-3
+  )
+  expect_equal(avglabels[[1]][["y_ci_l"]], c(
+    NA, 1, -0.9733093, -0.9733093,
+    -0.9733093
+  ),
+  tolerance = 1e-3
+  )
 })
