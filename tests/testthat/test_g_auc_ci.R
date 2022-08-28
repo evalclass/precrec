@@ -120,8 +120,8 @@ test_that("auc_ci alpha", {
   curves <- auc_ci_create_smcurves()
 
   # Check function signature
-  expect_error(auc_ci(curves, 0.5), NA)
-  expect_error(auc_ci(curves, alpha = 0.5), NA)
+  expect_silent(auc_ci(curves, 0.5))
+  expect_silent(auc_ci(curves, alpha = 0.5))
 
   # Check varialbe type
   err_msg <- "alpha is not a number"
@@ -133,13 +133,13 @@ test_that("auc_ci alpha", {
   err_msg <- "alpha not greater than or equal to 0"
   expect_error(auc_ci(curves, -0.1), err_msg)
   expect_error(auc_ci(curves, alpha = -0.1), err_msg)
-  expect_error(auc_ci(curves, alpha = 0), NA)
+  expect_silent(auc_ci(curves, alpha = 0))
 
   # Check upper limit
   err_msg <- "alpha not less than or equal to 1"
   expect_error(auc_ci(curves, 1.1), err_msg)
   expect_error(auc_ci(curves, alpha = 1.1), err_msg)
-  expect_error(auc_ci(curves, alpha = 1), NA)
+  expect_silent(auc_ci(curves, alpha = 1))
 
 })
 
@@ -147,10 +147,10 @@ test_that("auc_ci dtype", {
   curves <- auc_ci_create_smcurves()
 
   # Check function signature
-  expect_error(auc_ci(curves, 0.5, "normal"), NA)
-  expect_error(auc_ci(curves, alpha = 0.5, "normal"), NA)
-  expect_error(auc_ci(curves, dtype = "normal", alpha = 0.5), NA)
-  expect_error(auc_ci(curves, dtype = "normal"), NA)
+  expect_silent(auc_ci(curves, 0.5, "normal"))
+  expect_silent(auc_ci(curves, alpha = 0.5, "normal"))
+  expect_silent(auc_ci(curves, dtype = "normal", alpha = 0.5))
+  expect_silent(auc_ci(curves, dtype = "normal"))
 
   # Check varialbe type
   err_msg <- "dtype is not a string"
@@ -160,12 +160,12 @@ test_that("auc_ci dtype", {
 
   # Check valid input
   err_msg <- "'dtype' must be one of "
-  expect_error(auc_ci(curves, dtype = "normal"), NA)
-  expect_error(auc_ci(curves, dtype = "n"), NA)
-  expect_error(auc_ci(curves, dtype = "Normal"), NA)
-  expect_error(auc_ci(curves, dtype = "t"), NA)
-  expect_error(auc_ci(curves, dtype = "T"), NA)
-  expect_error(auc_ci(curves, dtype = "z"), NA)
+  expect_silent(auc_ci(curves, dtype = "normal"))
+  expect_silent(auc_ci(curves, dtype = "n"))
+  expect_silent(auc_ci(curves, dtype = "Normal"))
+  expect_silent(auc_ci(curves, dtype = "t"))
+  expect_silent(auc_ci(curves, dtype = "T"))
+  expect_silent(auc_ci(curves, dtype = "z"))
   expect_error(auc_ci(curves, dtype = "d"), err_msg)
   expect_error(auc_ci(curves, dtype = "ormal"), err_msg)
 

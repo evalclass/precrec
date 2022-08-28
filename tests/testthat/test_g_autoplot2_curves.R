@@ -4,7 +4,6 @@ context("AP 2: Autoplot for curves")
 # Test autoplot(object, ...)
 
 skip_on_cran()
-skip_on_ci()
 
 test_extra_ap2 <- FALSE
 
@@ -79,18 +78,18 @@ ap2_create_mmcurves <- function(raw_curves = FALSE) {
 ap2_test_roc_prc <- function(curves, ptitle, ...) {
 
   p <- ggplot2::autoplot(curves, ...)
-  vdiffr::expect_doppelganger(ptitle, p)
+  check_ggplot_fig(ptitle, p)
 
   if (!test_extra_ap2) return(TRUE)
 
   pp_roc_prc <- ggplot2::autoplot(curves, c("ROC", "PRC"), ...)
-  vdiffr::expect_doppelganger(paste0(ptitle, "_roc_prc"), pp_roc_prc)
+  check_ggplot_fig(paste0(ptitle, "_roc_prc"), pp_roc_prc)
 
   pp_roc <- ggplot2::autoplot(curves, "ROC", ...)
-  vdiffr::expect_doppelganger(paste0(ptitle, "_roc"), pp_roc)
+  check_ggplot_fig(paste0(ptitle, "_roc"), pp_roc)
 
   pp_prc <- ggplot2::autoplot(curves, "PRC", ...)
-  vdiffr::expect_doppelganger(paste0(ptitle, "_prc"), pp_prc)
+  check_ggplot_fig(paste0(ptitle, "_prc"), pp_prc)
 }
 
 test_that("autoplot sscurves", {

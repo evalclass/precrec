@@ -296,46 +296,25 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   arglist <- list(...)
   if (!is.null(arglist[["ties.method"]])) {
     val <- arglist[["ties.method"]]
-    set_ties_dot_method <- TRUE
   }
 
   if (assertthat::is.string(val)) {
-    if (!set_ties_dot_method) {
-      choices <- c("equiv", "random", "first")
-      if (val %in% choices) {
-        return(val)
-      }
-
-      if (!is.na(pmatch(val, "equiv"))) {
-        return("equiv")
-      }
-
-      if (!is.na(pmatch(val, "random"))) {
-        return("random")
-      }
-
-      if (!is.na(pmatch(val, "first"))) {
-        return("first")
-      }
-    } else {
-      choices <- c("average", "random", "last")
-      if (val %in% choices) {
-        return(val)
-      }
-
-      if (!is.na(pmatch(val, "average"))) {
-        return("equiv")
-      }
-
-      if (!is.na(pmatch(val, "random"))) {
-        return("random")
-      }
-
-      if (!is.na(pmatch(val, "last"))) {
-        return("first")
-      }
+    choices <- c("equiv", "random", "first")
+    if (val %in% choices) {
+      return(val)
     }
 
+    if (!is.na(pmatch(val, "equiv"))) {
+      return("equiv")
+    }
+
+    if (!is.na(pmatch(val, "random"))) {
+      return("random")
+    }
+
+    if (!is.na(pmatch(val, "first"))) {
+      return("first")
+    }
   }
 
   val

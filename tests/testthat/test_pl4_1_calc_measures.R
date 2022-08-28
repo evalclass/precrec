@@ -20,7 +20,7 @@ test_that("calc_measures() reterns an 'pevals' object", {
 test_that("'cmats' must be a 'cmats' object", {
   expect_err_msg <- function(cmats) {
     err_msg <- "Unrecognized class for .validate()"
-    eval(bquote(expect_error(calc_measures(cmats), err_msg)))
+    expect_error(calc_measures(cmats), err_msg)
   }
 
   expect_err_msg(list())
@@ -63,12 +63,12 @@ test_that("calc_measures() accepts na_worst argument", {
 
     fmdat <- .get_obj(pevals, "fmdat")
 
-    eval(bquote(expect_equal(.get_obj_arg(pevals, NULL, "na_worst"), na_worst)))
-    eval(bquote(expect_equal(.get_obj_arg(fmdat, NULL, "na_worst"), na_worst)))
-    eval(bquote(expect_equal(fmdat[["ranks"]], ranks)))
+    expect_equal(.get_obj_arg(pevals, NULL, "na_worst"), na_worst)
+    expect_equal(.get_obj_arg(fmdat, NULL, "na_worst"), na_worst)
+    expect_equal(fmdat[["ranks"]], ranks)
 
     sranks <- .rank_scores(scores, na_worst = na_worst)
-    eval(bquote(expect_equal(sranks[["ranks"]], ranks)))
+    expect_equal(sranks[["ranks"]], ranks)
   }
 
   na1_scores <- c(NA, 0.2, 0.1)
@@ -95,11 +95,9 @@ test_that("calc_measures() accepts ties_method argument", {
 
     fmdat <- .get_obj(pevals, "fmdat")
 
-    eval(bquote(expect_equal(.get_obj_arg(pevals, NULL, "ties_method"),
-                             ties_method)))
-    eval(bquote(expect_equal(.get_obj_arg(fmdat, NULL, "ties_method"),
-                             ties_method)))
-    eval(bquote(expect_equal(fmdat[["ranks"]], ranks)))
+    expect_equal(.get_obj_arg(pevals, NULL, "ties_method"), ties_method)
+    expect_equal(.get_obj_arg(fmdat, NULL, "ties_method"), ties_method)
+    expect_equal(fmdat[["ranks"]], ranks)
   }
 
   expect_equal_ranks("equiv", c(5, 2, 2, 2, 1))

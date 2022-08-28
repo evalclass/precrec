@@ -19,7 +19,7 @@ test_that("calc_auc_with_u() reterns a 'uauc' object", {
 test_that("'sdat' must be a 'sdat' object", {
   expect_err_msg <- function(sdat) {
     err_msg <- "Unrecognized class for .validate()"
-    eval(bquote(expect_error(calc_auc_with_u(sdat), err_msg)))
+    expect_error(calc_auc_with_u(sdat), err_msg)
   }
 
   expect_err_msg(list())

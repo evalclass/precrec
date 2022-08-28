@@ -162,6 +162,11 @@ test_that("fortify smcurves", {
 
   curve_df <- ggplot2::fortify(curves)
   expect_true(is.list(curve_df))
+
+  attr(curves, "args")[["raw_curves"]] <- NULL
+  curve_df2 <- ggplot2::fortify(curves)
+  expect_true(is.list(curve_df2))
+
 })
 
 test_that("smcurves - reduce points", {
@@ -210,6 +215,10 @@ test_that("fortify mmcurves", {
 
   curve_df <- ggplot2::fortify(curves)
   expect_true(is.list(curve_df))
+
+  attr(curves, "args")[["raw_curves"]] <- NULL
+  curve_df2 <- ggplot2::fortify(curves)
+  expect_true(is.list(curve_df2))
 })
 
 test_that("mmcurves - reduce points", {

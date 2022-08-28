@@ -42,7 +42,7 @@
   # Check args
   ditems <- setdiff(names(attr(obj, "args")), arg_names)
   if (!is.null(arg_names) && length(ditems) > 0) {
-    stop(paste0("Invalid args attribute in ", class_name, ": ",
+    stop(paste0("Invalid args in ", class_name, ": ",
                 paste(ditems, collapse = ", ")),
          call. = FALSE)
   }

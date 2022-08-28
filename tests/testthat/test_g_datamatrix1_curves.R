@@ -92,6 +92,8 @@ test_that("as.data.frame mscurves", {
   curve_df2 <- suppressWarnings(as.data.frame(curves, use_rcpp = FALSE))
   df1_comp_dfs(curve_df, curve_df2)
 
+  curve_df3 <- suppressWarnings(as.data.frame(curves, use_rcpp = TRUE))
+  df1_comp_dfs(curve_df, curve_df3)
 })
 
 test_that("as.data.frame mscurves - dsid_modname", {
@@ -111,6 +113,18 @@ test_that("as.data.frame smcurves", {
   expect_true(is.data.frame(curve_df))
 
   curve_df2 <- suppressWarnings(as.data.frame(curves, use_rcpp = FALSE))
+  df1_comp_dfs(curve_df, curve_df2)
+})
+
+test_that("as.data.frame smcurves without rawcurves", {
+
+  curves <- df1_create_smcurves(raw_curves = FALSE)
+
+  curve_df <- as.data.frame(curves)
+  expect_true(is.data.frame(curve_df))
+
+  curve_df2 <- suppressWarnings(as.data.frame(curves, raw_curves = FALSE,
+                                              use_rcpp = FALSE))
   df1_comp_dfs(curve_df, curve_df2)
 })
 
@@ -134,6 +148,18 @@ test_that("as.data.frame mmcurves", {
   df1_comp_dfs(curve_df, curve_df2)
 })
 
+test_that("as.data.frame mmcurves without rawcurves", {
+
+  curves <- df1_create_mmcurves(raw_curves = FALSE)
+
+  curve_df <- as.data.frame(curves)
+  expect_true(is.data.frame(curve_df))
+
+  curve_df2 <- suppressWarnings(as.data.frame(raw_curves = FALSE,
+                                              curves, use_rcpp = FALSE))
+  df1_comp_dfs(curve_df, curve_df2)
+})
+
 test_that("as.data.frame mmcurves - dsid_modname", {
 
   curves <- df1_create_mmcurves(raw_curves = TRUE)
@@ -141,6 +167,13 @@ test_that("as.data.frame mmcurves - dsid_modname", {
   curve_df <- as.data.frame(curves, raw_curves = TRUE, check_ggplot = TRUE)
   expect_equal(as.character(curve_df$dsid_modname),
                paste(curve_df$modname, curve_df$dsid, sep = ":"))
+})
+
+test_that("as.data mode", {
+  data(P10N10)
+  curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
+  attr(curves, "args")[["mode"]] <- "x"
+  expect_error(as.data.frame(curves), "Invalid mode")
 })
 
 test_that("as.data raw_curve option sscurves", {

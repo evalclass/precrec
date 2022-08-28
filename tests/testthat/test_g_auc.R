@@ -51,6 +51,10 @@ auc_create_mmcurves <- function() {
   evalmod(mdat)
 }
 
+test_that("aucs for invalid object", {
+  expect_error(auc(""), "unknown class")
+})
+
 test_that("aucs for sscurves", {
   data(P10N10)
   curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)

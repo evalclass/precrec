@@ -51,6 +51,10 @@ pauc_create_mmcurves <- function(raw_curves = TRUE) {
   evalmod(mdat, raw_curves = raw_curves)
 }
 
+test_that("pauc for invalid object", {
+  expect_error(pauc(""), "unknown class")
+})
+
 test_that("paucs for sscurves", {
   data(P10N10)
   curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)

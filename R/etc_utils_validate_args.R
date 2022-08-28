@@ -11,11 +11,7 @@
     } else if (!is.null(scores) && is.null(labels)) {
       stop("Invalid labels", call. = FALSE)
     } else if (is.null(scores) && is.null(labels)) {
-      if (is.null(obj)) {
-        stop("Invalid scores & labels", call. = FALSE)
-      } else {
-        stop(paste0(obj_name, " must be specified"), call. = FALSE)
-      }
+      stop("Invalid scores & labels", call. = FALSE)
     }
 
     # Check scores
@@ -159,28 +155,6 @@
     assertthat::assert_that(assertthat::is.string(expd_first),
                             (expd_first == "modnames"
                              || expd_first == "dsids"))
-  }
-}
-
-#
-# Validate model type
-#
-.validate_model_type <- function(model_type) {
-  if (!is.null(model_type)) {
-    assertthat::assert_that(assertthat::is.string(model_type),
-                            (model_type == "single"
-                             || model_type == "multiple"))
-  }
-}
-
-#
-# Validate data type
-#
-.validate_data_type <- function(data_type) {
-  if (!is.null(data_type)) {
-    assertthat::assert_that(assertthat::is.string(data_type),
-                            (data_type == "single"
-                             || data_type == "multiple"))
   }
 }
 

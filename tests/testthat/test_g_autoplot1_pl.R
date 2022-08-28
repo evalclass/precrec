@@ -26,7 +26,7 @@ test_that("autoplot fmdat", {
   data(B500)
   fmdat <- reformat_data(B500$good_er_scores, B500$labels)
   p <- ggplot2::autoplot(fmdat)
-  vdiffr::expect_doppelganger("autoplot_fmdat", p)
+  check_ggplot_fig("autoplot_fmdat", p)
 })
 
 test_that("autoplot cmats", {
@@ -38,7 +38,7 @@ test_that("autoplot cmats", {
   cmats <- create_confmats(scores = B500$good_er_scores,
                           labels = B500$labels)
   p <- ggplot2::autoplot(cmats)
-  vdiffr::expect_doppelganger("autoplot_cmats", p)
+  check_ggplot_fig("autoplot_cmats", p)
 })
 
 

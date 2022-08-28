@@ -52,10 +52,10 @@ pt2_create_mmcurves <- function(raw_curves = FALSE) {
 }
 
 ap2_test_roc_prc <- function(curves, ...) {
-  testthat::expect_error(plot(curves, ...), NA)
-  testthat::expect_error(plot(curves, c("ROC", "PRC"), ...), NA)
-  testthat::expect_error(plot(curves, "ROC", ...), NA)
-  testthat::expect_error(plot(curves, "PRC", ...), NA)
+  testthat::expect_silent(plot(curves, ...))
+  testthat::expect_silent(plot(curves, c("ROC", "PRC"), ...))
+  testthat::expect_silent(plot(curves, "ROC", ...))
+  testthat::expect_silent(plot(curves, "PRC", ...))
 }
 
 test_that("plot sscurves", {
@@ -110,9 +110,9 @@ test_that("plot() accepts type", {
   on.exit(dev.off())
 
   curves <- pt2_create_mmcurves()
-  expect_error(plot(curves, type = "l"), NA)
-  expect_error(plot(curves, type = "p"), NA)
-  expect_error(plot(curves, type = "b"), NA)
+  expect_silent(plot(curves, type = "l"))
+  expect_silent(plot(curves, type = "p"))
+  expect_silent(plot(curves, type = "b"))
 })
 
 test_that("plot() accepts show_cb", {
@@ -120,8 +120,8 @@ test_that("plot() accepts show_cb", {
   on.exit(dev.off())
 
   curves <- pt2_create_mmcurves()
-  expect_error(plot(curves, show_cb = TRUE), NA)
-  expect_error(plot(curves, show_cb = FALSE), NA)
+  expect_silent(plot(curves, show_cb = TRUE))
+  expect_silent(plot(curves, show_cb = FALSE))
 })
 
 test_that("plot() accepts raw_curves", {
@@ -129,8 +129,8 @@ test_that("plot() accepts raw_curves", {
   on.exit(dev.off())
 
   curves <- pt2_create_mmcurves(raw_curves = TRUE)
-  expect_error(plot(curves, raw_curves = TRUE), NA)
-  expect_error(plot(curves, raw_curves = FALSE), NA)
+  expect_silent(plot(curves, raw_curves = TRUE))
+  expect_silent(plot(curves, raw_curves = FALSE))
 })
 
 test_that("plot() accepts show_legend", {
@@ -138,9 +138,10 @@ test_that("plot() accepts show_legend", {
   on.exit(dev.off())
 
   curves <- pt2_create_mmcurves()
-  expect_error(plot(curves, show_legend = TRUE), NA)
-  expect_error(plot(curves, show_legend = FALSE), NA)
+  expect_silent(plot(curves, show_legend = TRUE))
+  expect_silent(plot(curves, show_legend = FALSE))
 })
+
 
 test_that("plot raw_curve option sscurves", {
   get_args <- function(x, y = NULL, ...) {

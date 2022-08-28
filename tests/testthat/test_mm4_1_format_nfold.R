@@ -30,7 +30,7 @@ test_that("format_nfold() converts a data frame to a list", {
 
 test_that("'nfold_df' should be a data frame", {
   expect_err_msg <- function(err_msg, dat) {
-    eval(bquote(expect_error(format_nfold(dat, 1, 2, 3), err_msg)))
+    expect_error(format_nfold(dat, 1, 2, 3), err_msg)
   }
 
   err_msg <- "nfold_df must be a data frame"
@@ -44,7 +44,7 @@ test_that("'nfold_df' should be a data frame", {
 test_that("'score_cols' should be valid column names", {
   data(M2N50F5)
   expect_err_msg <- function(err_msg, score_cols) {
-    eval(bquote(expect_error(format_nfold(M2N50F5, score_cols, 3, 4), err_msg)))
+    expect_error(format_nfold(M2N50F5, score_cols, 3, 4), err_msg)
   }
 
   err_msg <- "score_cols is not a numeric or integer vector"
@@ -66,7 +66,7 @@ test_that("'score_cols' should be valid column names", {
 test_that("'lab_col' should be a valid column name", {
   data(M2N50F5)
   expect_err_msg <- function(err_msg, lab_col) {
-    eval(bquote(expect_error(format_nfold(M2N50F5, 1, lab_col, 4), err_msg)))
+    expect_error(format_nfold(M2N50F5, 1, lab_col, 4), err_msg)
   }
 
   err_msg <- "lab_col is not a number"
@@ -86,7 +86,7 @@ test_that("'lab_col' should be a valid column name", {
 test_that("'fold_col' should be a valid column name", {
   data(M2N50F5)
   expect_err_msg <- function(err_msg, fold_col) {
-    eval(bquote(expect_error(format_nfold(M2N50F5, 1, 3, fold_col), err_msg)))
+    expect_error(format_nfold(M2N50F5, 1, 3, fold_col), err_msg)
   }
 
   err_msg <- "fold_col is not a number"

@@ -51,21 +51,21 @@ pa_create_mmdat <- function() {
 test_that("curvetype", {
   data(P10N10)
   curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
-  expect_error(part(curves), NA)
-  expect_error(part(curves, curvetype = c("ROC", "PRC")), NA)
-  expect_error(part(curves, curvetype = "ROC"), NA)
-  expect_error(part(curves, curvetype = "PRC"), NA)
+  expect_silent(part(curves))
+  expect_silent(part(curves, curvetype = c("ROC", "PRC")))
+  expect_silent(part(curves, curvetype = "ROC"))
+  expect_silent(part(curves, curvetype = "PRC"))
   expect_error(part(curves, curvetype = "PROC"), "Invalid curvetype")
 })
 
 test_that("xlim", {
   data(P10N10)
   curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
-  expect_error(part(curves), NA)
-  expect_error(part(curves, xlim = c(0, 1)), NA)
-  expect_error(part(curves, xlim = c(0.25, 1)), NA)
-  expect_error(part(curves, xlim = c(0, 0.75)), NA)
-  expect_error(part(curves, xlim = c(0.25, 0.75)), NA)
+  expect_silent(part(curves))
+  expect_silent(part(curves, xlim = c(0, 1)))
+  expect_silent(part(curves, xlim = c(0.25, 1)))
+  expect_silent(part(curves, xlim = c(0, 0.75)))
+  expect_silent(part(curves, xlim = c(0.25, 0.75)))
   expect_error(part(curves, xlim = 0.25), "not equal to 2L")
   expect_error(part(curves, xlim = c("0.25", "0.75")), "numeric or integer")
   expect_error(part(curves, xlim = c(0.75, 0.25)), "not less than")
@@ -76,11 +76,11 @@ test_that("xlim", {
 test_that("ylim", {
   data(P10N10)
   curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
-  expect_error(part(curves), NA)
-  expect_error(part(curves, ylim = c(0, 1)), NA)
-  expect_error(part(curves, ylim = c(0.25, 1)), NA)
-  expect_error(part(curves, ylim = c(0, 0.75)), NA)
-  expect_error(part(curves, ylim = c(0.25, 0.75)), NA)
+  expect_silent(part(curves))
+  expect_silent(part(curves, ylim = c(0, 1)))
+  expect_silent(part(curves, ylim = c(0.25, 1)))
+  expect_silent(part(curves, ylim = c(0, 0.75)))
+  expect_silent(part(curves, ylim = c(0.25, 0.75)))
   expect_error(part(curves, ylim = 0.25), "not equal to 2L")
   expect_error(part(curves, ylim = c("0.25", "0.75")), "numeric or integer")
   expect_error(part(curves, ylim = c(0.75, 0.25)), "not less than")
@@ -89,19 +89,19 @@ test_that("ylim", {
 })
 
 pa_test_curves_basic <- function(curves) {
-  testthat::expect_error(part(curves, xlim = c(0.25, 0.75)), NA)
-  testthat::expect_error(part(curves, xlim = c(0.25, 0.75),
-                              curvetype = "ROC"), NA)
-  testthat::expect_error(part(curves, xlim = c(0.25, 0.75),
-                              curvetype = "PRC"), NA)
-  testthat::expect_error(part(curves, xlim = c(0.25, 0.75),
-                              ylim = c(0.25, 0.75)), NA)
-  testthat::expect_error(part(curves, xlim = c(0.25, 0.75),
-                              ylim = c(0.25, 0.75),
-                              curvetype = "ROC"), NA)
-  testthat::expect_error(part(curves, xlim = c(0.25, 0.75),
-                              ylim = c(0.25, 0.75),
-                              curvetype = "PRC"), NA)
+  testthat::expect_silent(part(curves, xlim = c(0.25, 0.75)))
+  testthat::expect_silent(part(curves, xlim = c(0.25, 0.75),
+                               curvetype = "ROC"))
+  testthat::expect_silent(part(curves, xlim = c(0.25, 0.75),
+                               curvetype = "PRC"))
+  testthat::expect_silent(part(curves, xlim = c(0.25, 0.75),
+                               ylim = c(0.25, 0.75)))
+  testthat::expect_silent(part(curves, xlim = c(0.25, 0.75),
+                               ylim = c(0.25, 0.75),
+                               curvetype = "ROC"))
+  testthat::expect_silent(part(curves, xlim = c(0.25, 0.75),
+                               ylim = c(0.25, 0.75),
+                               curvetype = "PRC"))
 }
 
 pa_test_attr <- function(curves, pauc_len, avg_only = FALSE) {

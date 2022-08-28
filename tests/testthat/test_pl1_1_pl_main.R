@@ -224,6 +224,10 @@ test_that("pl_main() accepts 'cb_alpha'", {
   mdat2 <- pl1_create_mdat_mm()
   f_check_cb_alpha1(mdat2)
   f_check_cb_alpha2(mdat2)
+
+  # Directly check cb_alpha validation
+  expect_warning(.validate_cb_alpha (cb_alpha = 0.01, calc_avg = FALSE),
+                 "cb_alpha is ignored")
 })
 
 test_that("pl_main() accepts 'raw_curves'", {
@@ -265,6 +269,10 @@ test_that("pl_main() accepts 'raw_curves'", {
   mdat4 <- pl1_create_mdat_mm()
   f_check_raw_curves1(mdat4, "logical")
   f_check_raw_curves2(mdat4, "logical")
+
+  # Directly check cb_alpha validation
+  expect_warning(.validate_raw_curves(raw_curves = TRUE, calc_avg = FALSE),
+                 "raw_curves is ignored")
 })
 
 test_that("pl_main() accepts 'x_bins'", {
@@ -329,8 +337,7 @@ test_that("pl_main() accepts 'interpolate'", {
   f_check_x_interpolate(mdat4)
 
   expect_err_msg <- function(err_msg, mdat, interpolate) {
-    eval(bquote(expect_error(pl_main(mdat, interpolate = interpolate),
-                             err_msg)))
+    expect_error(pl_main(mdat, interpolate = interpolate), err_msg)
   }
 
   err_msg <- "interpolate is not a flag"

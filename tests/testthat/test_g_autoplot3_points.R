@@ -4,7 +4,6 @@ context("AP 3: Autoplot for points")
 # Test autoplot(object, ...)
 
 skip_on_cran()
-skip_on_ci()
 
 test_extra_ap3 <- FALSE
 
@@ -81,19 +80,19 @@ ap3_test_basic_measures <- function(curves, ptitle, check_def_matrix = FALSE,
   if (check_def_matrix) {
     p <- ggplot2::autoplot(curves, ret_grob = TRUE,
                            raw_curves = raw_curves, ...)
-    vdiffr::expect_doppelganger(ptitle, p)
+    check_ggplot_fig(ptitle, p)
   }
 
   p_precision <- ggplot2::autoplot(curves, "precision",
                                    raw_curves = raw_curves, ...)
-  vdiffr::expect_doppelganger(paste0(ptitle, "_precision"), p_precision)
+  check_ggplot_fig(paste0(ptitle, "_precision"), p_precision)
 
   if (!test_extra_ap3) return(TRUE)
 
   check_autoploat <- function(curves, metrics, ptitile2, raw_curves, ...) {
     p_poinsts <- ggplot2::autoplot(curves, metrics, ret_grob = TRUE,
                                    raw_curves = raw_curves, ...)
-    vdiffr::expect_doppelganger(paste0(ptitle, "_", ptitile2), p_poinsts)
+    check_ggplot_fig(paste0(ptitle, "_", ptitile2), p_poinsts)
   }
 
   metrics8 <- c("sensitivity", "specificity",  "error", "accuracy", "precision",

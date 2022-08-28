@@ -61,7 +61,7 @@ test_that(".pl_main_rocprc() accepts 'x_bins'", {
   expect_equal(attr(pl[["prcs"]][[1]], "args")[["x_bins"]], 10)
 
   expect_err_msg <- function(err_msg, mdat, x_bins) {
-    eval(bquote(expect_error(.pl_main_rocprc(mdat, x_bins = x_bins), err_msg)))
+    expect_error(.pl_main_rocprc(mdat, x_bins = x_bins), err_msg)
   }
 
   err_msg <- "x_bins is not a number"
