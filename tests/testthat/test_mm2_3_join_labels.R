@@ -145,4 +145,3 @@ test_that("join_labels() accepts any number of unique labels", {
   expect_err_msg(vec1, vec2)
 
 })
-

@@ -76,20 +76,23 @@ ap3_create_mmpoints <- function(raw_curves = FALSE) {
 }
 
 ap3_test_basic_measures <- function(curves, ptitle, check_def_matrix = FALSE,
-                                    raw_curves = FALSE, ...){
+                                    raw_curves = FALSE, ...) {
 
   if (check_def_matrix) {
-    p <- ggplot2::autoplot(curves, ret_grob = TRUE, raw_curves = raw_curves, ...)
+    p <- ggplot2::autoplot(curves, ret_grob = TRUE,
+                           raw_curves = raw_curves, ...)
     vdiffr::expect_doppelganger(ptitle, p)
   }
 
-  p_precision <- ggplot2::autoplot(curves, "precision", raw_curves = raw_curves, ...)
+  p_precision <- ggplot2::autoplot(curves, "precision",
+                                   raw_curves = raw_curves, ...)
   vdiffr::expect_doppelganger(paste0(ptitle, "_precision"), p_precision)
 
   if (!test_extra_ap3) return(TRUE)
 
   check_autoploat <- function(curves, metrics, ptitile2, raw_curves, ...) {
-    p_poinsts <- ggplot2::autoplot(curves, metrics, ret_grob = TRUE, raw_curves = raw_curves, ...)
+    p_poinsts <- ggplot2::autoplot(curves, metrics, ret_grob = TRUE,
+                                   raw_curves = raw_curves, ...)
     vdiffr::expect_doppelganger(paste0(ptitle, "_", ptitile2), p_poinsts)
   }
 
@@ -140,7 +143,7 @@ test_that("autoplot for multiple sspoints returns grob", {
   points <- evalmod(mode = "basic", scores = P10N10$scores,
                     labels = P10N10$labels)
 
-  pp <- ggplot2::autoplot(points, multiplot_lib="grid", ret_grob = TRUE)
+  pp <- ggplot2::autoplot(points, multiplot_lib = "grid", ret_grob = TRUE)
   expect_true(is(pp, "grob"))
 })
 
@@ -164,7 +167,8 @@ test_that("autoplot for multiple mspoints returns grob", {
 
   points <- ap3_create_mspoints()
 
-  pp <- ggplot2::autoplot(points, multiplot_lib="grid", show_legend = FALSE, ret_grob = TRUE)
+  pp <- ggplot2::autoplot(points, multiplot_lib = "grid",
+                          show_legend = FALSE, ret_grob = TRUE)
   expect_true(is(pp, "grob"))
 })
 
@@ -191,7 +195,8 @@ test_that("autoplot for multiple smpoints returns grob", {
 
   points <- ap3_create_smpoints()
 
-  pp <- ggplot2::autoplot(points, multiplot_lib="grid", show_legend = TRUE, ret_grob = TRUE)
+  pp <- ggplot2::autoplot(points, multiplot_lib = "grid",
+                          show_legend = TRUE, ret_grob = TRUE)
   expect_true(is(pp, "grob"))
 })
 
@@ -220,7 +225,8 @@ test_that("autoplot for multiple mmpoints returns grob", {
 
   points <- ap3_create_mmpoints()
 
-  pp <- ggplot2::autoplot(points, multiplot_lib="grid", show_legend = FALSE, ret_grob = TRUE)
+  pp <- ggplot2::autoplot(points, multiplot_lib = "grid",
+                          show_legend = FALSE, ret_grob = TRUE)
   expect_true(is(pp, "grob"))
 })
 

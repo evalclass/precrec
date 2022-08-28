@@ -2,7 +2,7 @@
 # Control the main pipeline iterations
 #
 pl_main <- function(mdat, mode = "rocprc", calc_avg = TRUE, cb_alpha = 0.05,
-                    raw_curves = FALSE, x_bins = 1000, interpolate=TRUE,
+                    raw_curves = FALSE, x_bins = 1000, interpolate = TRUE,
                     na_worst = TRUE, ties_method = "equiv", validate = TRUE) {
 
   # === Validation ===
@@ -109,6 +109,8 @@ pl_main <- function(mdat, mode = "rocprc", calc_avg = TRUE, cb_alpha = 0.05,
   } else {
     single_or_multiple <- "multiple"
   }
+
+  single_or_multiple
 }
 
 #

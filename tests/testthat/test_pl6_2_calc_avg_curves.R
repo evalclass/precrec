@@ -39,7 +39,7 @@ pl6_calc_avg_rocprc <- function(mdat, curvetype = "roc", cb_alpha = 0.05,
   plfunc <- function(s) {
     cdat <- create_confmats(mdat[[s]])
     pevals <- calc_measures(cdat)
-    curves <- create_curves(pevals, x_bins = x_bins)
+    create_curves(pevals, x_bins = x_bins)
   }
   lcurves <- lapply(seq_along(mdat), plfunc)
 

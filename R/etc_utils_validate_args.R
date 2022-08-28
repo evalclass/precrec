@@ -143,7 +143,7 @@
   if (!is.null(ties_method)) {
     assertthat::assert_that(assertthat::is.string(ties_method))
 
-    choices = c("equiv", "random", "first")
+    choices <- c("equiv", "random", "first")
     if (!(ties_method %in% choices)) {
       stop(gettextf("ties_method must be one of %s",
                     paste(dQuote(choices), collapse = ", ")), call. = FALSE)
@@ -227,7 +227,7 @@
 #
 # Validate x_bins
 #
-.validate_x_bins <- function(x_bins, allow_zero=FALSE) {
+.validate_x_bins <- function(x_bins, allow_zero = FALSE) {
   if (allow_zero) {
     min_x_bin <- 0
   } else {
@@ -283,7 +283,7 @@
 # Check fold column name
 .validate_fold_col <- function(fold_col, nfold_df) {
   assertthat::assert_that(assertthat::see_if(assertthat::is.number(fold_col))
-                          || assertthat::see_if(assertthat::is.string(fold_col)))
+                      || assertthat::see_if(assertthat::is.string(fold_col)))
 
   if (assertthat::see_if(assertthat::is.number(fold_col))) {
     assertthat::assert_that(fold_col <= ncol(nfold_df),
@@ -361,7 +361,7 @@
 
   if (!is.null(obj) && (attr(obj, "dataset_type") == "multiple")) {
     obj_calc_avg <- attr(obj, "args")[["calc_avg"]]
-    if (show_cb && !obj_calc_avg ) {
+    if (show_cb && !obj_calc_avg) {
       stop(paste0("calc_avg of the evalmod function",
                   " must be set as TRUE before using show_cb",
                   " of this function"),

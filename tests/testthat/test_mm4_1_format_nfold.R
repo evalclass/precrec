@@ -6,7 +6,7 @@ context("MM 4: Format n-fold cross validation data frame")
 test_that("format_nfold() converts a data frame to a list", {
   data(M2N50F5)
 
-  lfold1 = format_nfold(M2N50F5, 1, 3, 4)
+  lfold1 <- format_nfold(M2N50F5, 1, 3, 4)
   expect_true(is.list(lfold1))
   expect_equal(length(lfold1), 2)
 
@@ -16,7 +16,7 @@ test_that("format_nfold() converts a data frame to a list", {
   expect_true(is.list(lfold1$labels))
   expect_equal(length(lfold1$labels), 5)
 
-  lfold2 = format_nfold(M2N50F5, c(1, 2), 3, 4)
+  lfold2 <- format_nfold(M2N50F5, c(1, 2), 3, 4)
   expect_true(is.list(lfold2))
   expect_equal(length(lfold2), 2)
 
@@ -104,11 +104,11 @@ test_that("'fold_col' should be a valid column name", {
 
 test_that("format_nfold() correctly converts M2N50F5", {
   data(M2N50F5)
-  dat1 = M2N50F5[M2N50F5$fold == 1, ]
-  dat2 = M2N50F5[M2N50F5$fold == 2, ]
-  dat3 = M2N50F5[M2N50F5$fold == 3, ]
-  dat4 = M2N50F5[M2N50F5$fold == 4, ]
-  dat5 = M2N50F5[M2N50F5$fold == 5, ]
+  dat1 <- M2N50F5[M2N50F5$fold == 1, ]
+  dat2 <- M2N50F5[M2N50F5$fold == 2, ]
+  dat3 <- M2N50F5[M2N50F5$fold == 3, ]
+  dat4 <- M2N50F5[M2N50F5$fold == 4, ]
+  dat5 <- M2N50F5[M2N50F5$fold == 5, ]
 
   check_scores <- function(lscore) {
     expect_equal(lscore[[1]], dat1$score1)
@@ -138,18 +138,16 @@ test_that("format_nfold() correctly converts M2N50F5", {
     expect_equal(llabel[[10]], as.integer(dat5$label))
   }
 
-  lfold1 = format_nfold(M2N50F5, c(1, 2), 3, 4)
-  scores1 = lfold1$scores
-  labels1 = lfold1$labels
+  lfold1 <- format_nfold(M2N50F5, c(1, 2), 3, 4)
+  scores1 <- lfold1$scores
+  labels1 <- lfold1$labels
   check_scores(scores1)
   check_labels(labels1)
 
-  lfold2 = format_nfold(M2N50F5, c("score1", "score2"), "label", "fold")
-  scores2 = lfold2$scores
-  labels2 = lfold2$labels
+  lfold2 <- format_nfold(M2N50F5, c("score1", "score2"), "label", "fold")
+  scores2 <- lfold2$scores
+  labels2 <- lfold2$labels
   check_scores(scores2)
   check_labels(labels2)
 
 })
-
-

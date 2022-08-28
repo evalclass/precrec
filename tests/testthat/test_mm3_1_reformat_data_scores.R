@@ -122,4 +122,3 @@ test_that("Ties should be controlled by 'ties_method'", {
 
   expect_true(any(r0[["ranks"]] == r1, r0[["ranks"]] == r2))
 })
-

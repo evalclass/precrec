@@ -17,20 +17,21 @@
       }
       err_msg <- paste0("AUCs with the U statistic cannot be calculated. ",
                         "Only a single class (", cl, ") ",
-                        "found in dataset (modname: ", attr(mdat[[s]], "modname"),
-                        ", dsid: ",attr(mdat[[s]], "dsid"), ").")
+                        "found in dataset (modname: ",
+                        attr(mdat[[s]], "modname"),
+                        ", dsid: ", attr(mdat[[s]], "dsid"), ").")
       stop(err_msg, call. = FALSE)
     }
-    uauc <- calc_auc_with_u(mdat[[s]], na_worst = na_worst,
-                            ties_method = ties_method)
+    calc_auc_with_u(mdat[[s]], na_worst = na_worst,
+                    ties_method = ties_method)
   }
   aucrocs <- lapply(seq_along(mdat), plfunc)
-  auc.df <- .summarize_uauc_results(aucrocs, attr(mdat, "uniq_modnames"),
+  auc_df <- .summarize_uauc_results(aucrocs, attr(mdat, "uniq_modnames"),
                                     attr(mdat, "uniq_dsids"), calc_avg,
                                     cb_alpha, raw_curves)
 
   # === Create an S3 object ===
-  s3obj <- structure(auc.df, class = "aucroc")
+  s3obj <- structure(auc_df, class = "aucroc")
 
   # Set attributes
   attr(s3obj, "data_info") <- attr(mdat, "data_info")
@@ -101,4 +102,3 @@
 
   list(uaucs = auc_df)
 }
-

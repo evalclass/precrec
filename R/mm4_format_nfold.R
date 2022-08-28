@@ -113,7 +113,8 @@ format_nfold <- function(nfold_df, score_cols, lab_col, fold_col) {
 #
 # Validate arguments of format_nfold()
 #
-.validate_format_nfold_args <- function(nfold_df, score_cols, lab_col, fold_col) {
+.validate_format_nfold_args <- function(nfold_df, score_cols,
+                                        lab_col, fold_col) {
 
   if (!is.data.frame(nfold_df)) {
     stop("nfold_df must be a data frame.", call. = FALSE)
@@ -129,4 +130,3 @@ format_nfold <- function(nfold_df, score_cols, lab_col, fold_col) {
   .validate_fold_col(fold_col, nfold_df)
 
 }
-

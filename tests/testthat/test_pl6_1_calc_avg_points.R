@@ -45,7 +45,7 @@ pl6_calc_avg_basic <- function(mdat, eval_type = "err", cb_alpha = 0.05) {
 
   plfunc <- function(s) {
     cdat <- create_confmats(mdat[[s]])
-    pevals <- calc_measures(cdat)
+    calc_measures(cdat)
   }
   lpoints <- lapply(seq_along(mdat), plfunc)
 
@@ -136,19 +136,21 @@ test_that("sm test data", {
 
   avg_prec <- pl6_calc_avg_basic(mdat, "mcc")
   expect_equal(avg_prec[[1]][["x"]], c(0, 0.25, 0.5, 0.75, 1))
-  expect_equal(avg_prec[[1]][["y_avg"]], c(NA, 1/3, 0.1924501, 0.1111111, NA),
+  expect_equal(avg_prec[[1]][["y_avg"]], c(NA, 1 / 3, 0.1924501, 0.1111111, NA),
                tolerance = 1e-3)
   expect_equal(avg_prec[[1]][["y_se"]], c(NA, 0, 0.3849002, 0.4444444, NA),
                tolerance = 1e-3)
-  expect_equal(avg_prec[[1]][["y_ci_h"]], c(NA, 1/3, 0.9468406, 0.9822062, NA),
+  expect_equal(avg_prec[[1]][["y_ci_h"]], c(NA, 1 / 3, 0.9468406,
+                                            0.9822062, NA),
                tolerance = 1e-3)
-  expect_equal(avg_prec[[1]][["y_ci_l"]], c(NA, 1/3, -0.5619404, -0.7599839,
+  expect_equal(avg_prec[[1]][["y_ci_l"]], c(NA, 1 / 3, -0.5619404, -0.7599839,
                                             NA),
                tolerance = 1e-3)
 
   avg_fscore <- pl6_calc_avg_basic(mdat, "fscore")
   expect_equal(avg_fscore[[1]][["x"]], c(0, 0.25, 0.5, 0.75, 1))
-  expect_equal(avg_fscore[[1]][["y_avg"]], c(0, 0.5, 2/3, 0.7777778, 0.8571429),
+  expect_equal(avg_fscore[[1]][["y_avg"]], c(0, 0.5, 2 / 3, 0.7777778,
+                                             0.8571429),
                tolerance = 1e-3)
   expect_equal(avg_fscore[[1]][["y_se"]], c(0, 0, 0.1333333, 0.1111111, 0),
                tolerance = 1e-3)
@@ -224,24 +226,24 @@ test_that("mm test data", {
                tolerance = 1e-3)
 
   expect_equal(avg_mcc[[1]][["x"]], c(0, 0.25, 0.5, 0.75, 1))
-  expect_equal(avg_mcc[[1]][["y_avg"]], c(NA, 1/3, 0, -1/3, NA),
+  expect_equal(avg_mcc[[1]][["y_avg"]], c(NA, 1 / 3, 0, -1 / 3, NA),
                tolerance = 1e-3)
   expect_equal(avg_mcc[[1]][["y_se"]], c(NA, 0, 0.5773503, 0, NA),
                tolerance = 1e-3)
-  expect_equal(avg_mcc[[1]][["y_ci_h"]], c(NA, 1/3, 1.1316, -1/3, NA),
+  expect_equal(avg_mcc[[1]][["y_ci_h"]], c(NA, 1 / 3, 1.1316, -1 / 3, NA),
                tolerance = 1e-3)
-  expect_equal(avg_mcc[[1]][["y_ci_l"]], c(NA, 1/3, -1.1316, -1/3, NA),
+  expect_equal(avg_mcc[[1]][["y_ci_l"]], c(NA, 1 / 3, -1.1316, -1 / 3, NA),
                tolerance = 1e-3)
 
   expect_equal(avg_fscore[[1]][["x"]], c(0, 0.25, 0.5, 0.75, 1))
-  expect_equal(avg_fscore[[1]][["y_avg"]], c(0, 0.5, 0.6, 2/3, 0.8571429),
+  expect_equal(avg_fscore[[1]][["y_avg"]], c(0, 0.5, 0.6, 2 / 3, 0.8571429),
                tolerance = 1e-3)
   expect_equal(avg_fscore[[1]][["y_se"]], c(0, 0, 0.2, 0, 0),
                tolerance = 1e-3)
-  expect_equal(avg_fscore[[1]][["y_ci_h"]], c(0, 0.5, 0.9919928, 2/3,
+  expect_equal(avg_fscore[[1]][["y_ci_h"]], c(0, 0.5, 0.9919928, 2 / 3,
                                               0.8571429),
                tolerance = 1e-3)
-  expect_equal(avg_fscore[[1]][["y_ci_l"]], c(0, 0.5, 0.2080072, 2/3,
+  expect_equal(avg_fscore[[1]][["y_ci_l"]], c(0, 0.5, 0.2080072, 2 / 3,
                                               0.8571429),
                tolerance = 1e-3)
 
@@ -296,13 +298,13 @@ test_that("mm test data", {
                tolerance = 1e-3)
 
   expect_equal(avg_mcc[[2]][["x"]], c(0, 0.25, 0.5, 0.75, 1))
-  expect_equal(avg_mcc[[2]][["y_avg"]], c(NA, 1/3, 0, 1/3, NA),
+  expect_equal(avg_mcc[[2]][["y_avg"]], c(NA, 1 / 3, 0, 1 / 3, NA),
                tolerance = 1e-3)
-  expect_equal(avg_mcc[[2]][["y_se"]], c(NA, 0, 0.5773503, 2/3, NA),
+  expect_equal(avg_mcc[[2]][["y_se"]], c(NA, 0, 0.5773503, 2 / 3, NA),
                tolerance = 1e-3)
-  expect_equal(avg_mcc[[2]][["y_ci_h"]], c(NA, 1/3, 1.1316, 1.64, NA),
+  expect_equal(avg_mcc[[2]][["y_ci_h"]], c(NA, 1 / 3, 1.1316, 1.64, NA),
                tolerance = 1e-3)
-  expect_equal(avg_mcc[[2]][["y_ci_l"]], c(NA, 1/3, -1.1316, -0.9733093, NA),
+  expect_equal(avg_mcc[[2]][["y_ci_l"]], c(NA, 1 / 3, -1.1316, -0.9733093, NA),
                tolerance = 1e-3)
 
   expect_equal(avg_fscore[[2]][["x"]], c(0, 0.25, 0.5, 0.75, 1))

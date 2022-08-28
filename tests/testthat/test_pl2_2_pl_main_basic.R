@@ -240,14 +240,14 @@ test_that("scores and labels are stored as basic measures", {
                                              5.022250),
                tolerance = 1e-3)
   expect_equal(avgscores[[1]][["y_ci_l"]], c(NA, 4.0533814, 2.9777498,
-                                             1.7368285 ,0.3110831),
+                                             1.7368285, 0.3110831),
                tolerance = 1e-3)
 
   avglabels <- attr(smpoints, "grp_avg")[["label"]]
   expect_equal(avglabels[[1]][["x"]], c(0, 0.25, 0.5, 0.75, 1))
-  expect_equal(avglabels[[1]][["y_avg"]], c(NA, 1, 1/3, 1/3, 1/3),
+  expect_equal(avglabels[[1]][["y_avg"]], c(NA, 1, 1 / 3, 1 / 3, 1 / 3),
                tolerance = 1e-3)
-  expect_equal(avglabels[[1]][["y_se"]], c(NA, 0, 2/3, 2/3, 2/3),
+  expect_equal(avglabels[[1]][["y_se"]], c(NA, 0, 2 / 3, 2 / 3, 2 / 3),
                tolerance = 1e-3)
   expect_equal(avglabels[[1]][["y_ci_h"]], c(NA, 1, 1.64, 1.64, 1.64),
                tolerance = 1e-3)

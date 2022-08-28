@@ -52,10 +52,10 @@ df1_create_mmcurves <- function(raw_curves = FALSE) {
 }
 
 df1_comp_dfs <- function(df1, df2) {
-  expect_equal(names(df1), names(df2))
+  testthat::expect_equal(names(df1), names(df2))
 
   for (vname in names(df1)) {
-    expect_equal(df1[[vname]], df2[[vname]])
+    testthat::expect_equal(df1[[vname]], df2[[vname]])
   }
 }
 

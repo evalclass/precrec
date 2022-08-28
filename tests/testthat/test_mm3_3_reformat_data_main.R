@@ -103,4 +103,3 @@ test_that("'fmdat' contains a list with 4 items", {
   expect_true(is.list(fmdat))
   expect_equal(length(fmdat), 4)
 })
-

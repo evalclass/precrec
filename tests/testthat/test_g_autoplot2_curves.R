@@ -76,7 +76,7 @@ ap2_create_mmcurves <- function(raw_curves = FALSE) {
   evalmod(mdat, raw_curves = raw_curves)
 }
 
-ap2_test_roc_prc <- function(curves, ptitle, ...){
+ap2_test_roc_prc <- function(curves, ptitle, ...) {
 
   p <- ggplot2::autoplot(curves, ...)
   vdiffr::expect_doppelganger(ptitle, p)
@@ -111,7 +111,7 @@ test_that("autoplot for multiple sscurves returns grob", {
   data(P10N10)
   curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 
-  pp <- ggplot2::autoplot(curves, multiplot_lib="grid", ret_grob = TRUE)
+  pp <- ggplot2::autoplot(curves, multiplot_lib = "grid", ret_grob = TRUE)
   expect_true(is(pp, "grob"))
 })
 
@@ -133,7 +133,8 @@ test_that("autoplot for multiple mscurves returns grob", {
 
   curves <- ap2_create_mscurves()
 
-  pp <- ggplot2::autoplot(curves, multiplot_lib="grid", show_legend = FALSE, ret_grob = TRUE)
+  pp <- ggplot2::autoplot(curves, multiplot_lib = "grid",
+                          show_legend = FALSE, ret_grob = TRUE)
   expect_true(is(pp, "grob"))
 })
 
@@ -148,7 +149,8 @@ test_that("autoplot single smcurve", {
   ap2_test_roc_prc(curves, "autoplot_single_smcurve_cb", show_cb = FALSE)
 
   curves2 <- ap2_create_smcurves(raw_curves = TRUE)
-  ap2_test_roc_prc(curves2, "autoplot_single_smcurve_raw_curves", raw_curves = TRUE)
+  ap2_test_roc_prc(curves2, "autoplot_single_smcurve_raw_curves",
+                   raw_curves = TRUE)
 })
 
 test_that("autoplot for multiple smcurves retruns grob", {
@@ -158,7 +160,8 @@ test_that("autoplot for multiple smcurves retruns grob", {
 
   curves <- ap2_create_smcurves()
 
-  pp <- ggplot2::autoplot(curves, multiplot_lib="grid", show_legend = FALSE, ret_grob = TRUE)
+  pp <- ggplot2::autoplot(curves, multiplot_lib = "grid",
+                          show_legend = FALSE, ret_grob = TRUE)
   expect_true(is(pp, "grob"))
 })
 
@@ -185,7 +188,8 @@ test_that("autoplot multiple mmcurves returns grob", {
 
   curves <- ap2_create_mmcurves()
 
-  pp <- ggplot2::autoplot(curves, multiplot_lib="grid", show_legend = FALSE, ret_grob = TRUE)
+  pp <- ggplot2::autoplot(curves, multiplot_lib = "grid",
+                          show_legend = FALSE, ret_grob = TRUE)
   expect_true(is(pp, "grob"))
 })
 
@@ -309,4 +313,3 @@ test_that("autoplot raw_curve option mmcurves", {
   args2c <- get_args(curves2)
   expect_true(args2c[["raw_curves"]])
 })
-

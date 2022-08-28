@@ -51,11 +51,11 @@ pt2_create_mmcurves <- function(raw_curves = FALSE) {
   evalmod(mdat, raw_curves = raw_curves)
 }
 
-ap2_test_roc_prc <- function(curves, ...){
-  expect_error(plot(curves, ...), NA)
-  expect_error(plot(curves, c("ROC", "PRC"), ...), NA)
-  expect_error(plot(curves, "ROC", ...), NA)
-  expect_error(plot(curves, "PRC", ...), NA)
+ap2_test_roc_prc <- function(curves, ...) {
+  testthat::expect_error(plot(curves, ...), NA)
+  testthat::expect_error(plot(curves, c("ROC", "PRC"), ...), NA)
+  testthat::expect_error(plot(curves, "ROC", ...), NA)
+  testthat::expect_error(plot(curves, "PRC", ...), NA)
 }
 
 test_that("plot sscurves", {

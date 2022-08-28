@@ -396,12 +396,12 @@ NULL
 
   show_cb <- arglist[["show_cb"]]
   if (!attr(x, "args")$calc_avg) {
-    show_cb = FALSE
+    show_cb <- FALSE
   }
 
   raw_curves <- arglist[["raw_curves"]]
   if (show_cb) {
-    raw_curves = FALSE
+    raw_curves <- FALSE
   }
 
   # === Validate input arguments ===
@@ -654,7 +654,7 @@ NULL
 # Get title and subtitles
 #
 .get_titiles <- function(curvetype) {
-  tlist = list()
+  tlist <- list()
 
   if (curvetype == "ROC") {
     tlist[["main"]] <- "ROC"
@@ -675,7 +675,8 @@ NULL
     } else if (curvetype == "label") {
       main <- "Label (1:pos, -1:neg)"
     } else {
-      main <- paste0(toupper(substring(curvetype, 1, 1)), substring(curvetype, 2))
+      main <- paste0(toupper(substring(curvetype, 1, 1)),
+                     substring(curvetype, 2))
     }
     tlist[["main"]] <- main
     tlist[["xlab"]] <- "normalized rank"
@@ -744,6 +745,8 @@ NULL
   } else {
     xlim <- c(0, 1)
   }
+
+  xlim
 }
 
 #
@@ -759,4 +762,6 @@ NULL
   } else {
     ylim <- c(0, 1)
   }
+
+  ylim
 }

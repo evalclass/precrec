@@ -6,11 +6,11 @@ context("MM 1: Create mmdata for n-fold cross validation")
 
 test_that("mmdata() accepts arguments for 'format_nfold'", {
   data(M2N50F5)
-  dat1 = M2N50F5[M2N50F5$fold == 1, ]
-  dat2 = M2N50F5[M2N50F5$fold == 2, ]
-  dat3 = M2N50F5[M2N50F5$fold == 3, ]
-  dat4 = M2N50F5[M2N50F5$fold == 4, ]
-  dat5 = M2N50F5[M2N50F5$fold == 5, ]
+  dat1 <- M2N50F5[M2N50F5$fold == 1, ]
+  dat2 <- M2N50F5[M2N50F5$fold == 2, ]
+  dat3 <- M2N50F5[M2N50F5$fold == 3, ]
+  dat4 <- M2N50F5[M2N50F5$fold == 4, ]
+  dat5 <- M2N50F5[M2N50F5$fold == 5, ]
 
   mdat <- mmdata(nfold_df = M2N50F5, score_cols = c(1, 2), lab_col = 3,
                  fold_col = 4, modnames = c("score1", "score2"),
@@ -89,4 +89,3 @@ test_that("mmdata() requires scores and labels if n-fold args are incomplete", {
 
 
 })
-

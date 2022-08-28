@@ -40,8 +40,8 @@
 #'   input with calculated pAUCs and standardized pAUCs.
 #'
 #' @seealso \code{\link{evalmod}} for generating \code{S3} objects with
-#'   performance evaluation measures. \code{\link{pauc}} for retrieving a dataset
-#'   of pAUCs.
+#'   performance evaluation measures. \code{\link{pauc}} for retrieving
+#'   a dataset of pAUCs.
 #'
 #' @examples
 #' \dontrun{
@@ -150,10 +150,10 @@
 #' }
 #'
 #' @export
-part <- function(curves, xlim=NULL, ylim=NULL, curvetype=NULL) UseMethod("part", curves)
+part <- function(curves, xlim = NULL, ylim = NULL, curvetype = NULL) UseMethod("part", curves)
 
 #' @export
-part.default <- function(curves, xlim=NULL, ylim=NULL, curvetype=NULL) {
+part.default <- function(curves, xlim = NULL, ylim = NULL, curvetype = NULL) {
   stop("An object of unknown class is specified")
 }
 
@@ -279,11 +279,11 @@ part.mmcurves <- function(curves, xlim = c(0, 1), ylim = c(0, 1),
 
     # Max 1
     if (pauc > 1) {
-      pauc = 1
+      pauc <- 1
     }
 
     if (spauc > 1) {
-      spauc = 1
+      spauc <- 1
     }
 
     attr(curves[[i]], "pauc") <- pauc

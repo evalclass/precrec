@@ -75,10 +75,10 @@
 #' mm_auc_ci
 #'
 #' @export
-auc_ci <- function(curves, alpha=NULL, dtype=NULL) UseMethod("auc_ci", curves)
+auc_ci <- function(curves, alpha = NULL, dtype = NULL) UseMethod("auc_ci", curves)
 
 #' @export
-auc_ci.default <- function(curves, alpha=NULL, dtype=NULL) {
+auc_ci.default <- function(curves, alpha = NULL, dtype = NULL) {
   stop("An object of unknown class is specified")
 }
 
@@ -87,7 +87,7 @@ auc_ci.default <- function(curves, alpha=NULL, dtype=NULL) {
 #
 #' @rdname auc_ci
 #' @export
-auc_ci.aucs <- function(curves, alpha=0.05, dtype="normal") {
+auc_ci.aucs <- function(curves, alpha = 0.05, dtype = "normal") {
   # Validation
   .validate(curves)
   assertthat::assert_that(attr(curves, "dataset_type") == "multiple",
@@ -102,7 +102,8 @@ auc_ci.aucs <- function(curves, alpha=0.05, dtype="normal") {
   if (!is.na(dype_match)) {
     dtype <- dtype_tab[dype_match]
   }
-  err_msg = paste0("'dtype' must be one of ", paste(dtype_tab, collapse = ", "))
+  err_msg <- paste0("'dtype' must be one of ",
+                    paste(dtype_tab, collapse = ", "))
   assertthat::assert_that(dtype %in% dtype_tab, msg = err_msg)
 
   # Get AUC scores

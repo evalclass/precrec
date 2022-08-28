@@ -118,10 +118,10 @@ test_that("create_prc() reterns a correct Precision-Recall curve", {
   expect_equal(attr(prc_curve, "np"), 3)
   expect_equal(attr(prc_curve, "nn"), 3)
 
-  expect_equal(prc_curve[["x"]], c(0, 0.1, 0.2, 0.3, 1/3, 1/3, 0.4,
-                                   0.5, 0.6, 2/3, 2/3, 0.7, 0.8, 0.9, 1))
+  expect_equal(prc_curve[["x"]], c(0, 0.1, 0.2, 0.3, 1 / 3, 1 / 3, 0.4,
+                                   0.5, 0.6, 2 / 3, 2 / 3, 0.7, 0.8, 0.9, 1))
   expect_equal(prc_curve[["y"]], c(0, 0.230769, 0.375, 0.473684, 0.5,
-                                   1/3, 0.375, 0.428571, 0.473684,
+                                   1 / 3, 0.375, 0.428571, 0.473684,
                                    0.5, 0.4, 0.411765, 0.444444,
                                    0.473684, 0.5),
                tolerance = 1e-4)
@@ -193,7 +193,7 @@ test_that("ss test data", {
                           labels = c(1, 0, 1, 0), x_bins = 4)
 
   expect_equal(prc_curve[["x"]], c(0, 0.25, 0.5, 0.5, 0.75, 1))
-  expect_equal(prc_curve[["y"]], c(0, 0.3333, 0.5, 1/3, 0.4285, 0.5),
+  expect_equal(prc_curve[["y"]], c(0, 0.3333, 0.5, 1 / 3, 0.4285, 0.5),
                tolerance = 1e-3)
   expect_equal(prc_curve[["orig_points"]], c(TRUE, FALSE, TRUE,
                                              TRUE, FALSE, TRUE))
@@ -206,7 +206,7 @@ test_that("ss test data with x_bins=0, 1", {
                             labels = c(1, 0, 1, 0), x_bins = x)
 
     expect_equal(prc_curve[["x"]], c(0, 0.5, 0.5, 1))
-    expect_equal(prc_curve[["y"]], c(0, 0.5, 1/3, 0.5))
+    expect_equal(prc_curve[["y"]], c(0, 0.5, 1 / 3, 0.5))
     expect_true(all(prc_curve[["orig_points"]]))
   }
 })
@@ -216,15 +216,15 @@ test_that("ms test data", {
 
   prc_curve1 <- create_prc(scores = msdat[["scores"]][[1]],
                            labels = msdat[["labels"]][[1]], x_bins = 4)
-  expect_equal(prc_curve1[["x"]], c(0, 0.25, 1/3, 0.5, 2/3, 2/3, 0.75, 1))
-  expect_equal(prc_curve1[["y"]], c(1, 1, 1, 1, 1, 2/3, 0.6923, 0.75),
+  expect_equal(prc_curve1[["x"]], c(0, 0.25, 1 / 3, 0.5, 2 / 3, 2 / 3, 0.75, 1))
+  expect_equal(prc_curve1[["y"]], c(1, 1, 1, 1, 1, 2 / 3, 0.6923, 0.75),
                tolerance = 1e-3)
   expect_equal(prc_curve1[["orig_points"]], c(TRUE, FALSE, TRUE, FALSE,
                                               TRUE, TRUE, FALSE, TRUE))
 
   prc_curve2 <- create_prc(scores = msdat[["scores"]][[2]],
                            labels = msdat[["labels"]][[2]], x_bins = 4)
-  expect_equal(prc_curve2[["x"]], c(0, 0.25, 1/3, 0.5, 2/3, 0.75, 1, 1))
+  expect_equal(prc_curve2[["x"]], c(0, 0.25, 1 / 3, 0.5, 2 / 3, 0.75, 1, 1))
   expect_equal(prc_curve2[["y"]], c(1, 1, 1, 1, 1, 1, 1, 0.75),
                tolerance = 1e-3)
   expect_equal(prc_curve2[["orig_points"]], c(TRUE, FALSE, TRUE, FALSE,
@@ -232,8 +232,8 @@ test_that("ms test data", {
 
   prc_curve3 <- create_prc(scores = msdat[["scores"]][[3]],
                            labels = msdat[["labels"]][[3]], x_bins = 4)
-  expect_equal(prc_curve3[["x"]], c(0, 0.25, 1/3, 1/3, 0.5, 2/3, 0.75, 1))
-  expect_equal(prc_curve3[["y"]], c(1, 1, 1, 0.5, 0.6, 2/3, 0.6923, 0.75),
+  expect_equal(prc_curve3[["x"]], c(0, 0.25, 1 / 3, 1 / 3, 0.5, 2 / 3, 0.75, 1))
+  expect_equal(prc_curve3[["y"]], c(1, 1, 1, 0.5, 0.6, 2 / 3, 0.6923, 0.75),
                tolerance = 1e-3)
   expect_equal(prc_curve3[["orig_points"]], c(TRUE, FALSE, TRUE, TRUE,
                                               FALSE, TRUE, FALSE, TRUE))
@@ -245,20 +245,20 @@ test_that("ms test data with x_bins=0, 1", {
   for (x in c(0, 1)) {
     prc_curve1 <- create_prc(scores = msdat[["scores"]][[1]],
                              labels = msdat[["labels"]][[1]], x_bins = 0)
-    expect_equal(prc_curve1[["x"]], c(0, 1/3, 2/3, 2/3, 1))
-    expect_equal(prc_curve1[["y"]], c(1, 1, 1, 2/3, 0.75))
+    expect_equal(prc_curve1[["x"]], c(0, 1 / 3, 2 / 3, 2 / 3, 1))
+    expect_equal(prc_curve1[["y"]], c(1, 1, 1, 2 / 3, 0.75))
     expect_true(all(prc_curve1[["orig_points"]]))
 
     prc_curve2 <- create_prc(scores = msdat[["scores"]][[2]],
                              labels = msdat[["labels"]][[2]], x_bins = 0)
-    expect_equal(prc_curve2[["x"]], c(0, 1/3, 2/3, 1, 1))
+    expect_equal(prc_curve2[["x"]], c(0, 1 / 3, 2 / 3, 1, 1))
     expect_equal(prc_curve2[["y"]], c(1, 1, 1, 1, 0.75))
     expect_true(all(prc_curve2[["orig_points"]]))
 
     prc_curve3 <- create_prc(scores = msdat[["scores"]][[3]],
                              labels = msdat[["labels"]][[3]], x_bins = 0)
-    expect_equal(prc_curve3[["x"]], c(0, 1/3, 1/3, 2/3, 1))
-    expect_equal(prc_curve3[["y"]], c(1, 1, 0.5, 2/3, 0.75))
+    expect_equal(prc_curve3[["x"]], c(0, 1 / 3, 1 / 3, 2 / 3, 1))
+    expect_equal(prc_curve3[["y"]], c(1, 1, 0.5, 2 / 3, 0.75))
     expect_true(all(prc_curve3[["orig_points"]]))
   }
 })
@@ -268,15 +268,15 @@ test_that("sm test data", {
 
   prc_curve1 <- create_prc(scores = smdat[["scores"]][[1]],
                            labels = smdat[["labels"]][[1]], x_bins = 4)
-  expect_equal(prc_curve1[["x"]], c(0, 0.25, 1/3, 0.5, 2/3, 2/3, 0.75, 1))
-  expect_equal(prc_curve1[["y"]], c(1, 1, 1, 1, 1, 2/3, 0.6923, 0.75),
+  expect_equal(prc_curve1[["x"]], c(0, 0.25, 1 / 3, 0.5, 2 / 3, 2 / 3, 0.75, 1))
+  expect_equal(prc_curve1[["y"]], c(1, 1, 1, 1, 1, 2 / 3, 0.6923, 0.75),
                tolerance = 1e-3)
   expect_equal(prc_curve1[["orig_points"]], c(TRUE, FALSE, TRUE, FALSE,
                                               TRUE, TRUE, FALSE, TRUE))
 
   prc_curve2 <- create_prc(scores = smdat[["scores"]][[2]],
                            labels = smdat[["labels"]][[2]], x_bins = 4)
-  expect_equal(prc_curve2[["x"]], c(0, 0.25, 1/3, 0.5, 2/3, 0.75, 1, 1))
+  expect_equal(prc_curve2[["x"]], c(0, 0.25, 1 / 3, 0.5, 2 / 3, 0.75, 1, 1))
   expect_equal(prc_curve2[["y"]], c(1, 1, 1, 1, 1, 1, 1, 0.75),
                tolerance = 1e-3)
   expect_equal(prc_curve2[["orig_points"]], c(TRUE, FALSE, TRUE, FALSE,
@@ -284,8 +284,8 @@ test_that("sm test data", {
 
   prc_curve3 <- create_prc(scores = smdat[["scores"]][[3]],
                            labels = smdat[["labels"]][[3]], x_bins = 4)
-  expect_equal(prc_curve3[["x"]], c(0, 0.25, 1/3, 1/3, 0.5, 2/3, 0.75, 1))
-  expect_equal(prc_curve3[["y"]], c(1, 1, 1, 0.5, 0.6, 2/3, 0.6923, 0.75),
+  expect_equal(prc_curve3[["x"]], c(0, 0.25, 1 / 3, 1 / 3, 0.5, 2 / 3, 0.75, 1))
+  expect_equal(prc_curve3[["y"]], c(1, 1, 1, 0.5, 0.6, 2 / 3, 0.6923, 0.75),
                tolerance = 1e-3)
   expect_equal(prc_curve3[["orig_points"]], c(TRUE, FALSE, TRUE, TRUE,
                                               FALSE, TRUE, FALSE, TRUE))
@@ -298,20 +298,20 @@ test_that("sm test data with x_bins=0, 1", {
   for (x in c(0, 1)) {
     prc_curve1 <- create_prc(scores = smdat[["scores"]][[1]],
                              labels = smdat[["labels"]][[1]], x_bins = x)
-    expect_equal(prc_curve1[["x"]], c(0, 1/3, 2/3, 2/3, 1))
-    expect_equal(prc_curve1[["y"]], c(1, 1, 1, 2/3, 0.75))
+    expect_equal(prc_curve1[["x"]], c(0, 1 / 3, 2 / 3, 2 / 3, 1))
+    expect_equal(prc_curve1[["y"]], c(1, 1, 1, 2 / 3, 0.75))
     expect_true(all(prc_curve1[["orig_points"]]))
 
     prc_curve2 <- create_prc(scores = smdat[["scores"]][[2]],
                              labels = smdat[["labels"]][[2]], x_bins = x)
-    expect_equal(prc_curve2[["x"]], c(0, 1/3, 2/3, 1, 1))
+    expect_equal(prc_curve2[["x"]], c(0, 1 / 3, 2 / 3, 1, 1))
     expect_equal(prc_curve2[["y"]], c(1, 1, 1, 1, 0.75))
     expect_true(all(prc_curve2[["orig_points"]]))
 
     prc_curve3 <- create_prc(scores = smdat[["scores"]][[3]],
                              labels = smdat[["labels"]][[3]], x_bins = x)
-    expect_equal(prc_curve3[["x"]], c(0, 1/3, 1/3, 2/3, 1))
-    expect_equal(prc_curve3[["y"]], c(1, 1, 0.5, 2/3, 0.75))
+    expect_equal(prc_curve3[["x"]], c(0, 1 / 3, 1 / 3, 2 / 3, 1))
+    expect_equal(prc_curve3[["y"]], c(1, 1, 0.5, 2 / 3, 0.75))
     expect_true(all(prc_curve3[["orig_points"]]))
 
   }
@@ -322,15 +322,15 @@ test_that("mm test data", {
 
   prc_curve1 <- create_prc(scores = mmdat[["scores"]][[1]],
                            labels = mmdat[["labels"]][[1]], x_bins = 4)
-  expect_equal(prc_curve1[["x"]], c(0, 0.25, 1/3, 0.5, 2/3, 2/3, 0.75, 1))
-  expect_equal(prc_curve1[["y"]], c(1, 1, 1, 1, 1, 2/3, 0.6923, 0.75),
+  expect_equal(prc_curve1[["x"]], c(0, 0.25, 1 / 3, 0.5, 2 / 3, 2 / 3, 0.75, 1))
+  expect_equal(prc_curve1[["y"]], c(1, 1, 1, 1, 1, 2 / 3, 0.6923, 0.75),
                tolerance = 1e-3)
   expect_equal(prc_curve1[["orig_points"]], c(TRUE, FALSE, TRUE, FALSE,
                                               TRUE, TRUE, FALSE, TRUE))
 
   prc_curve2 <- create_prc(scores = mmdat[["scores"]][[2]],
                            labels = mmdat[["labels"]][[2]], x_bins = 4)
-  expect_equal(prc_curve2[["x"]], c(0, 0.25, 1/3, 0.5, 2/3, 0.75, 1, 1))
+  expect_equal(prc_curve2[["x"]], c(0, 0.25, 1 / 3, 0.5, 2 / 3, 0.75, 1, 1))
   expect_equal(prc_curve2[["y"]], c(1, 1, 1, 1, 1, 1, 1, 0.75),
                tolerance = 1e-3)
   expect_equal(prc_curve2[["orig_points"]], c(TRUE, FALSE, TRUE, FALSE,
@@ -338,16 +338,16 @@ test_that("mm test data", {
 
   prc_curve3 <- create_prc(scores = mmdat[["scores"]][[3]],
                            labels = mmdat[["labels"]][[3]], x_bins = 4)
-  expect_equal(prc_curve3[["x"]], c(0, 0.25, 1/3, 1/3, 0.5, 2/3, 0.75, 1))
-  expect_equal(prc_curve3[["y"]], c(1, 1, 1, 0.5, 0.6, 2/3, 0.6923, 0.75),
+  expect_equal(prc_curve3[["x"]], c(0, 0.25, 1 / 3, 1 / 3, 0.5, 2 / 3, 0.75, 1))
+  expect_equal(prc_curve3[["y"]], c(1, 1, 1, 0.5, 0.6, 2 / 3, 0.6923, 0.75),
                tolerance = 1e-3)
   expect_equal(prc_curve3[["orig_points"]], c(TRUE, FALSE, TRUE, TRUE,
                                               FALSE, TRUE, FALSE, TRUE))
 
   prc_curve4 <- create_prc(scores = mmdat[["scores"]][[4]],
                            labels = mmdat[["labels"]][[4]], x_bins = 4)
-  expect_equal(prc_curve4[["x"]], c(0, 0.25, 1/3, 1/3, 0.5, 2/3, 0.75, 1))
-  expect_equal(prc_curve4[["y"]], c(1, 1, 1, 0.5, 0.6, 2/3, 0.6923, 0.75),
+  expect_equal(prc_curve4[["x"]], c(0, 0.25, 1 / 3, 1 / 3, 0.5, 2 / 3, 0.75, 1))
+  expect_equal(prc_curve4[["y"]], c(1, 1, 1, 0.5, 0.6, 2 / 3, 0.6923, 0.75),
                tolerance = 1e-3)
   expect_equal(prc_curve4[["orig_points"]], c(TRUE, FALSE, TRUE, TRUE,
                                               FALSE, TRUE, FALSE, TRUE))
@@ -360,28 +360,26 @@ test_that("mm test data with x_bins=0, 1", {
   for (x in c(0, 1)) {
     prc_curve1 <- create_prc(scores = mmdat[["scores"]][[1]],
                              labels = mmdat[["labels"]][[1]], x_bins = x)
-    expect_equal(prc_curve1[["x"]], c(0, 1/3, 2/3, 2/3, 1))
-    expect_equal(prc_curve1[["y"]], c(1, 1, 1, 2/3, 0.75))
+    expect_equal(prc_curve1[["x"]], c(0, 1 / 3, 2 / 3, 2 / 3, 1))
+    expect_equal(prc_curve1[["y"]], c(1, 1, 1, 2 / 3, 0.75))
     expect_true(all(prc_curve1[["orig_points"]]))
 
     prc_curve2 <- create_prc(scores = mmdat[["scores"]][[2]],
                              labels = mmdat[["labels"]][[2]], x_bins = x)
-    expect_equal(prc_curve2[["x"]], c(0, 1/3, 2/3, 1, 1))
+    expect_equal(prc_curve2[["x"]], c(0, 1 / 3, 2 / 3, 1, 1))
     expect_equal(prc_curve2[["y"]], c(1, 1, 1, 1, 0.75))
     expect_true(all(prc_curve2[["orig_points"]]))
 
     prc_curve3 <- create_prc(scores = mmdat[["scores"]][[3]],
                              labels = mmdat[["labels"]][[3]], x_bins = x)
-    expect_equal(prc_curve3[["x"]], c(0, 1/3, 1/3, 2/3, 1))
-    expect_equal(prc_curve3[["y"]], c(1, 1, 0.5, 2/3, 0.75))
+    expect_equal(prc_curve3[["x"]], c(0, 1 / 3, 1 / 3, 2 / 3, 1))
+    expect_equal(prc_curve3[["y"]], c(1, 1, 0.5, 2 / 3, 0.75))
     expect_true(all(prc_curve3[["orig_points"]]))
 
     prc_curve4 <- create_prc(scores = mmdat[["scores"]][[4]],
                              labels = mmdat[["labels"]][[4]], x_bins = x)
-    expect_equal(prc_curve4[["x"]], c(0, 1/3, 1/3, 2/3, 1))
-    expect_equal(prc_curve4[["y"]], c(1, 1, 0.5, 2/3, 0.75))
+    expect_equal(prc_curve4[["x"]], c(0, 1 / 3, 1 / 3, 2 / 3, 1))
+    expect_equal(prc_curve4[["y"]], c(1, 1, 0.5, 2 / 3, 0.75))
     expect_true(all(prc_curve4[["orig_points"]]))
   }
 })
-
-

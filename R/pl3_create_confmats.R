@@ -95,4 +95,3 @@ create_confmats <- function(fmdat, scores = NULL, labels = NULL,
   attr(cmats, "validated") <- TRUE
   cmats
 }
-

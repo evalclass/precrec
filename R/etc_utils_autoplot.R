@@ -432,7 +432,7 @@ NULL
 #
 # Load gridExtra
 #
-.load_gridExtra <- function() {
+.load_gridextra <- function() {
   if (!requireNamespace("gridExtra", quietly = TRUE)) {
     stop("gridExtra is required to perform this function. Please install it.",
          call. = FALSE)
@@ -446,7 +446,8 @@ NULL
   if (requireNamespace("patchwork", quietly = TRUE)) {
     return(TRUE)
   } else {
-    warning("patchwork is not installed. grid and gridExtra will be used instead.",
+    warning(paste0("patchwork is not installed. ",
+                   "grid and gridExtra will be used instead."),
             call. = FALSE)
     return(FALSE)
   }
@@ -466,17 +467,16 @@ NULL
 
   show_cb <- arglist[["show_cb"]]
   if (!attr(object, "args")$calc_avg) {
-    show_cb = FALSE
+    show_cb <- FALSE
   }
 
   raw_curves <- arglist[["raw_curves"]]
   if (show_cb) {
-    raw_curves = FALSE
+    raw_curves <- FALSE
   }
 
   # === Check package availability  ===
   .load_ggplot2()
-  avail_pathwork <- .load_ggplot2()
   .validate(object)
   .check_curvetype(curvetype, object)
   .check_type(type)
@@ -502,7 +502,8 @@ NULL
 
   if (length(lcurves) > 1) {
     do.call(.combine_plots, c(lcurves, show_legend = show_legend,
-                              ret_grob = ret_grob, multiplot_lib = multiplot_lib,
+                              ret_grob = ret_grob,
+                              multiplot_lib = multiplot_lib,
                               nplots = length(lcurves)))
   } else {
     lcurves[[1]]
@@ -574,7 +575,7 @@ NULL
   if (show_legend) {
     p <- p + patchwork::plot_layout(guides = "collect")
     if (length(plotlist) > 2) {
-      p <- p + ggplot2::theme(legend.position = 'bottom')
+      p <- p + ggplot2::theme(legend.position = "bottom")
     }
   }
 
@@ -594,8 +595,9 @@ NULL
   }
   if (multiplot_lib == "grid") {
     .load_grid()
-    .load_gridExtra()
-    .combine_plots_grid(..., show_legend = show_legend, ret_grob = ret_grob, nplots = nplots)
+    .load_gridextra()
+    .combine_plots_grid(..., show_legend = show_legend,
+                        ret_grob = ret_grob, nplots = nplots)
   }
 }
 
@@ -615,31 +617,31 @@ NULL
   # === Create a ggplot object ===
   if (show_cb) {
     p <- ggplot2::ggplot(curve_df,
-                         ggplot2::aes_string(x = 'x', y = 'y',
-                                             ymin = 'ymin', ymax = 'ymax'))
+                         ggplot2::aes_string(x = "x", y = "y",
+                                             ymin = "ymin", ymax = "ymax"))
     if (type == "l") {
-      p <- p + ggplot2::geom_smooth(ggplot2::aes_string(color = 'modname'),
+      p <- p + ggplot2::geom_smooth(ggplot2::aes_string(color = "modname"),
                                     stat = "identity", na.rm = TRUE,
                                     size = 0.5)
     } else if (type == "b" || type == "p") {
-      p <- p + ggplot2::geom_ribbon(ggplot2::aes_string(ymin = 'ymin',
-                                                        ymax = 'ymax',
-                                                        group = 'modname'),
+      p <- p + ggplot2::geom_ribbon(ggplot2::aes_string(ymin = "ymin",
+                                                        ymax = "ymax",
+                                                        group = "modname"),
                                     stat = "identity", alpha = 0.25,
                                     fill = "grey25", na.rm = TRUE)
       if (type == "b") {
-        p <- p + ggplot2::geom_line(ggplot2::aes_string(color = 'modname'),
+        p <- p + ggplot2::geom_line(ggplot2::aes_string(color = "modname"),
                                     alpha = 0.25, na.rm = TRUE)
       }
-      p <- p + ggplot2::geom_point(ggplot2::aes_string(x = 'x', y = 'y',
-                                                       color = 'modname'),
+      p <- p + ggplot2::geom_point(ggplot2::aes_string(x = "x", y = "y",
+                                                       color = "modname"),
                                    na.rm = TRUE)
     }
   } else if (raw_curves) {
     p <- ggplot2::ggplot(curve_df,
-                         ggplot2::aes_string(x = 'x', y = 'y',
-                                             group = 'dsid_modname',
-                                             color = 'modname'))
+                         ggplot2::aes_string(x = "x", y = "y",
+                                             group = "dsid_modname",
+                                             color = "modname"))
 
     if (type == "l") {
       p <- p + ggplot2::geom_line(na.rm = TRUE)
@@ -651,8 +653,8 @@ NULL
     }
 
   } else {
-    p <- ggplot2::ggplot(curve_df, ggplot2::aes_string(x = 'x', y = 'y',
-                                                       color = 'modname'))
+    p <- ggplot2::ggplot(curve_df, ggplot2::aes_string(x = "x", y = "y",
+                                                       color = "modname"))
     if (type == "l") {
       p <- p + ggplot2::geom_line(na.rm = TRUE)
     } else if (type == "b" || type == "p") {
@@ -692,7 +694,7 @@ NULL
   }
   if (curvetype == "ROC" || curvetype == "PRC") {
     if (all(xlim == ylim)) {
-      ratio = 1
+      ratio <- 1
     } else {
       ratio = NULL
     }
@@ -801,7 +803,7 @@ NULL
   } else if (s == "label") {
     main <- "Label (1:pos, -1:neg)"
   } else {
-    main <- paste0(toupper(substring(s, 1, 1)), substring(s,2))
+    main <- paste0(toupper(substring(s, 1, 1)), substring(s, 2))
   }
   p <- .set_coords(p, xlim, ylim, ratio)
   p <- .geom_basic(p, main, "normalized rank", s, show_legend)

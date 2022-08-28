@@ -329,7 +329,8 @@ test_that("pl_main() accepts 'interpolate'", {
   f_check_x_interpolate(mdat4)
 
   expect_err_msg <- function(err_msg, mdat, interpolate) {
-    eval(bquote(expect_error(pl_main(mdat, interpolate = interpolate), err_msg)))
+    eval(bquote(expect_error(pl_main(mdat, interpolate = interpolate),
+                             err_msg)))
   }
 
   err_msg <- "interpolate is not a flag"

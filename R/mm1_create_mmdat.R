@@ -295,7 +295,7 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   set_ties_dot_method <- FALSE
   arglist <- list(...)
   if (!is.null(arglist[["ties.method"]])) {
-    val = arglist[["ties.method"]]
+    val <- arglist[["ties.method"]]
     set_ties_dot_method <- TRUE
   }
 
@@ -348,7 +348,7 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   set_na_last <- FALSE
   arglist <- list(...)
   if (!is.null(arglist[["na.last"]])) {
-    val = arglist[["na.last"]]
+    val <- arglist[["na.last"]]
     set_na_last <- TRUE
   }
 

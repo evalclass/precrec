@@ -51,17 +51,18 @@ pt3_create_mmpoints <- function(raw_curves = FALSE) {
   evalmod(mdat, mode = "basic", raw_curves = raw_curves)
 }
 
-ap3_test_basic_measures <- function(xpoints, ...){
+ap3_test_basic_measures <- function(xpoints, ...) {
 
-  expect_error(plot(xpoints, ...), NA)
-  expect_error(plot(xpoints, c("sensitivity", "specificity", "error",
+  testthat::expect_error(plot(xpoints, ...), NA)
+  testthat::expect_error(plot(xpoints, c("sensitivity", "specificity", "error",
                               "accuracy", "precision"), ...), NA)
-  expect_error(plot(xpoints, c("sensitivity", "specificity", "error",
+  testthat::expect_error(plot(xpoints, c("sensitivity", "specificity", "error",
                               "precision"), ...), NA)
-  expect_error(plot(xpoints, c("sensitivity", "specificity", "precision"), ...),
+  testthat::expect_error(plot(xpoints, c("sensitivity", "specificity",
+                                         "precision"), ...),
                NA)
-  expect_error(plot(xpoints, c("sensitivity", "precision"), ...), NA)
-  expect_error(plot(xpoints, "precision", ...), NA)
+  testthat::expect_error(plot(xpoints, c("sensitivity", "precision"), ...), NA)
+  testthat::expect_error(plot(xpoints, "precision", ...), NA)
 }
 
 test_that("plot sspoints", {

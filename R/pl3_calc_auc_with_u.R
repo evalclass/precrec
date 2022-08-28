@@ -18,23 +18,23 @@ calc_auc_with_u <- function(sdat, scores = NULL, labels = NULL, na_worst = TRUE,
     dt_loaded <- .load_data_table()
     if (dt_loaded) {
       if (na_worst) {
-        na.last <- FALSE
+        na_last <- FALSE
       } else {
-        na.last <- TRUE
+        na_last <- TRUE
       }
       if (ties_method == "random") {
-        ties.method <- "random"
+        ties_method <- "random"
       } else {
-        ties.method <- "average"
+        ties_method <- "average"
       }
 
       frank_func <- function(x) {
-        data.table::frank(x, na.last = na.last, ties.method = ties.method)
+        data.table::frank(x, na.last = na_last, ties.method = ties_method)
       }
 
       uauc <- calc_uauc_frank(attr(sdat, "np"), attr(sdat, "nn"),
                               sdat[["scores"]], sdat[["labels"]],
-                              na.last, ties.method, frank_func)
+                              na_last, ties_method, frank_func)
       .check_cpp_func_error(uauc, "calc_uauc_fsort")
     }
   }

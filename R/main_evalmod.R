@@ -97,11 +97,12 @@
 #'   the supporting points are calculated. \code{x_bins} is effective only
 #'   when \code{mode} is set to \code{rocprc} or \code{prcroc}.
 #'
-#' @param interpolate A Boolean value to specify whether or not interpolation of
-#'   ROC and precision-recall curves are performed. \code{x_bins} and \code{calc_avg} are
-#'    ignored and  when \code{x_bins} is set to \code{FALSE}.
-#'    \code{interpolate} is effective only when \code{mode} is set
-#'    to \code{rocprc} or \code{prcroc}.
+#' @param interpolate A Boolean value to specify whether or not
+#'   interpolation of ROC and precision-recall curves are
+#'   performed. \code{x_bins} and \code{calc_avg} are
+#'   ignored and  when \code{x_bins} is set to \code{FALSE}.
+#'   \code{interpolate} is effective only when \code{mode} is set
+#'   to \code{rocprc} or \code{prcroc}.
 #'
 #' @param ... These additional arguments are passed to \code{\link{mmdata}}
 #'   for data preparation.
@@ -151,7 +152,8 @@
 #'   }
 #'
 #'   \item The \code{evalmod} function returns the \code{aucroc} S3 object
-#'   when \code{mode} is "aucroc", which can be used with 'print' and 'as.data.frame'.
+#'   when \code{mode} is "aucroc", which can be used with 'print'
+#'   and 'as.data.frame'.
 #'
 #' }
 #'
@@ -338,7 +340,7 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
   # Call pipeline controller
   pl_main(mdat, mode = new_mode, calc_avg = calc_avg, cb_alpha = cb_alpha,
           raw_curves = raw_curves, x_bins = x_bins, interpolate = interpolate,
-          na_worst = new_na_worst,ties_method = new_ties_method,
+          na_worst = new_na_worst, ties_method = new_ties_method,
           validate = FALSE)
 
 }

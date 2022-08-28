@@ -256,7 +256,8 @@ test_that("fortify mmcurves - dsid_modname", {
   mmcurves <- evalmod(scores = samp1$scores, labels = samp1$labels,
                       modnames = samp1$modnames, dsids = samp1$dsids,
                       raw_curves = TRUE)
-  mmcurves_df <- subset(fortify(mmcurves, raw_curves = TRUE), curvetype == "PRC")
+  mmcurves_df <- subset(fortify(mmcurves, raw_curves = TRUE),
+                         curvetype == "PRC")
 
   expect_equal(unique(paste0(mmcurves_df$modname, ":", mmcurves_df$dsid)),
                as.character(unique(mmcurves_df$dsid_modname)))
@@ -312,4 +313,3 @@ test_that("fortify raw_curve option mmcurves", {
   expect_true(args2c[["raw_curves"]])
 
 })
-

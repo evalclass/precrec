@@ -21,12 +21,13 @@
       }
       err_msg <- paste0("Basic measures cannot be calculated. ",
                         "Only a single class (", cl, ") ",
-                        "found in dataset (modname: ", attr(mdat[[s]], "modname"),
-                        ", dsid: ",attr(mdat[[s]], "dsid"), ").")
+                        "found in dataset (modname: ",
+                        attr(mdat[[s]], "modname"),
+                        ", dsid: ", attr(mdat[[s]], "dsid"), ").")
       stop(err_msg, call. = FALSE)
     }
     cdat <- create_confmats(mdat[[s]], keep_fmdat = TRUE)
-    pevals <- calc_measures(cdat)
+    calc_measures(cdat)
   }
   lpoints <- lapply(seq_along(mdat), plfunc)
 

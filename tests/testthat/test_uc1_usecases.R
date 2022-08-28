@@ -36,12 +36,12 @@ test_that("calculation of correct avg and cb when x_bins = 8", {
 
 test_that("as.data.frame issue when n-fold datasets are used", {
 
-  crv5f = evalmod(nfold_df = M2N50F5,
-                  score_cols = c(1, 2),
-                  lab_col = 3,
-                  fold_col = 4,
-                  modnames = c("score1", "score2"),
-                  dsids = 1:5)
+  crv5f <- evalmod(nfold_df = M2N50F5,
+                   score_cols = c(1, 2),
+                   lab_col = 3,
+                   fold_col = 4,
+                   modnames = c("score1", "score2"),
+                   dsids = 1:5)
 
   crv5f_df <- as.data.frame(crv5f)
   modnames <- table(crv5f_df$modname)
@@ -55,7 +55,7 @@ test_that("as.data.frame issue when n-fold datasets are used", {
 test_that("a factor by c() returns another factor", {
 
   emod <- "basic"
-  scores <- list(c(0.1007308,0.5804833,0.3817939,0.2826659,0.4325302))
+  scores <- list(c(0.1007308, 0.5804833, 0.3817939, 0.2826659, 0.4325302))
   labels <- list(c(1, 1, 1, 2, 1))
   mnames <- "m1"
   ds_id <- 5
@@ -70,8 +70,6 @@ test_that("a factor by c() returns another factor", {
                  mode = emod)
 
   cdat <- create_confmats(mdat[[1]], keep_fmdat = TRUE)
-  #pevals <- calc_measures(cdat)
-
 
   expect_equal(cdat$tp, c(0, 0, 0, 0, 1, 1))
   expect_equal(cdat$fp, c(0, 1, 2, 3, 3, 4))
@@ -80,13 +78,5 @@ test_that("a factor by c() returns another factor", {
 
   expect_equal(attr(cdat, "src")[["scores"]], scores[[1]])
   expect_equal(attr(cdat, "src")[["labels"]], labels[[1]])
-
-  #
-  # lscores <- join_scores(scores, chklen = FALSE)
-  # llabels <- join_labels(labels, chklen = FALSE)
-  #
-  #
-  # cdat <- list()
-  # cdat <- c(cdat, labels)
 
 })

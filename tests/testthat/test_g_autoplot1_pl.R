@@ -19,8 +19,8 @@ test_that("autoplot fmdat", {
     skip("Libraries cannot be loaded")
   }
 
-  orig.seed <- globalenv()[[".Random.seed"]]
-  on.exit(assign(".Random.seed", orig.seed, envir = .GlobalEnv))
+  orig_seed <- globalenv()[[".Random.seed"]]
+  on.exit(assign(".Random.seed", orig_seed, envir = .GlobalEnv))
   set.seed(1234)
 
   data(B500)

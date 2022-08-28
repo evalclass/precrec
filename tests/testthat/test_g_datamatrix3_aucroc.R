@@ -88,4 +88,3 @@ test_that("as.data.frame aucroc mm", {
   expect_equal(nrow(aucs_df), 4)
   expect_equal(ncol(aucs_df), 4)
 })
-

@@ -27,13 +27,14 @@
       }
       err_msg <- paste0("Curves cannot be calculated. ",
                         "Only a single class (", cl, ") ",
-                        "found in dataset (modname: ", attr(mdat[[s]], "modname"),
-                        ", dsid: ",attr(mdat[[s]], "dsid"), ").")
+                        "found in dataset (modname: ",
+                        attr(mdat[[s]], "modname"),
+                        ", dsid: ", attr(mdat[[s]], "dsid"), ").")
       stop(err_msg, call. = FALSE)
     }
     cdat <- create_confmats(mdat[[s]])
     pevals <- calc_measures(cdat)
-    curves <- create_curves(pevals, x_bins = x_bins)
+    create_curves(pevals, x_bins = x_bins)
   }
   lcurves <- lapply(seq_along(mdat), plfunc)
 
@@ -170,7 +171,8 @@
   attr_names <- c("aucs", "grp_avg", "data_info", "uniq_modnames",
                   "uniq_dsids", "model_type", "dataset_type", "args",
                   "validated")
-  arg_names <- c("mode", "calc_avg", "cb_alpha", "raw_curves", "x_bins", "interpolate")
+  arg_names <- c("mode", "calc_avg", "cb_alpha", "raw_curves",
+                 "x_bins", "interpolate")
   .validate_basic(curves, class_name, ".pl_main_rocprc", item_names, attr_names,
                   arg_names)
 
@@ -226,4 +228,3 @@
   attr(crvgrp, "validated") <- TRUE
   crvgrp
 }
-

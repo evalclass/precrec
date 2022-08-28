@@ -158,7 +158,8 @@ test_that("fortify mmpoints - dsid_modname", {
   samp1$modnames <- rep(c("random", "poor_er", "good_er"), each = 5)
   samp1$dsids <- rep(1:5, 3)
 
-  mmpoints <- evalmod(mode = "basic", scores = samp1$scores, labels = samp1$labels,
+  mmpoints <- evalmod(mode = "basic", scores = samp1$scores,
+                      labels = samp1$labels,
                       modnames = samp1$modnames, dsids = samp1$dsids,
                       raw_curves = TRUE)
   mmpoints_df <- fortify(mmpoints, raw_curves = TRUE)

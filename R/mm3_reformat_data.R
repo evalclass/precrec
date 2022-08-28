@@ -97,7 +97,6 @@ reformat_data <- function(scores, labels,
   }
 
   # === Create ranks ===
-  #   ranks <- rank(scores, na_worst, ties_method)
   sranks <- get_score_ranks(scores, na_worst, ties_method)
   .check_cpp_func_error(sranks, "get_score_ranks")
 
@@ -213,4 +212,3 @@ reformat_data <- function(scores, labels,
   attr(sdat, "validated") <- TRUE
   sdat
 }
-

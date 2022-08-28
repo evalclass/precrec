@@ -77,7 +77,7 @@ auc_ci_create_mmcurves_n1 <- function() {
   l4 <- c(1, 1, 0, 1)
   labels <- join_labels(l1, l2, l3, l4)
 
-  mdat <- mmdata(scores, labels, modnames = c("m1", "m1", "m1" ,"m2"),
+  mdat <- mmdata(scores, labels, modnames = c("m1", "m1", "m1", "m2"),
                  dsids = c(1, 2, 3, 1))
   evalmod(mdat)
 }
@@ -190,7 +190,7 @@ test_that("auc_ci normal distribution for ROC", {
   expect_equal(roc_ci$mean, roc_mean)
 
   # Calculate CI
-  alpha = 0.05
+  alpha <- 0.05
   norm_z <- qnorm(1 - (alpha / 2))
 
   roc_error <- norm_z * roc_sd / sqrt(roc_n)
@@ -222,7 +222,7 @@ test_that("auc_ci normal distribution (z) for ROC", {
   expect_equal(roc_ci$mean, roc_mean)
 
   # Calculate CI
-  alpha = 0.05
+  alpha <- 0.05
   norm_z <- qnorm(1 - (alpha / 2))
 
   roc_error <- norm_z * roc_sd / sqrt(roc_n)
@@ -254,7 +254,7 @@ test_that("auc_ci normal distribution for PRC", {
   expect_equal(prc_ci$mean, prc_mean)
 
   # Calculate CI
-  alpha = 0.05
+  alpha <- 0.05
   norm_z <- qnorm(1 - (alpha / 2))
 
   prc_error <- norm_z * prc_sd / sqrt(prc_n)
@@ -286,7 +286,7 @@ test_that("auc_ci t-distribution for ROC", {
   expect_equal(roc_ci$mean, roc_mean)
 
   # Calculate CI
-  alpha = 0.05
+  alpha <- 0.05
   q_t <- qt(1 - (alpha / 2), df = roc_n - 1)
 
   roc_error <- q_t * roc_sd / sqrt(roc_n)
@@ -318,7 +318,7 @@ test_that("auc_ci t-distribution for PRC", {
   expect_equal(prc_ci$mean, prc_mean)
 
   # Calculate CI
-  alpha = 0.05
+  alpha <- 0.05
   q_t <- qt(1 - (alpha / 2), df = prc_n - 1)
 
   prc_error <- q_t * prc_sd / sqrt(prc_n)
@@ -350,7 +350,7 @@ test_that("auc_ci n = 2 ROC", {
   expect_equal(roc_ci$mean, roc_mean)
 
   # Calculate CI
-  alpha = 0.05
+  alpha <- 0.05
   norm_z <- qnorm(1 - (alpha / 2))
 
   roc_error <- norm_z * roc_sd / sqrt(roc_n)
@@ -382,7 +382,7 @@ test_that("auc_ci n = 2 PRC", {
   expect_equal(prc_ci$mean, prc_mean)
 
   # Calculate CI
-  alpha = 0.05
+  alpha <- 0.05
   norm_z <- qnorm(1 - (alpha / 2))
 
   prc_error <- norm_z * prc_sd / sqrt(prc_n)
@@ -412,4 +412,3 @@ test_that("auc_ci n = 1", {
   expect_equal(ci_n1_prc$lower_bound, ci_n1_prc$mean)
   expect_equal(ci_n1_prc$upper_bound, ci_n1_prc$mean)
 })
-
