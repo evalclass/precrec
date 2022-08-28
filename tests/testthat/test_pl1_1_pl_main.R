@@ -226,7 +226,7 @@ test_that("pl_main() accepts 'cb_alpha'", {
   f_check_cb_alpha2(mdat2)
 
   # Directly check cb_alpha validation
-  expect_warning(.validate_cb_alpha (cb_alpha = 0.01, calc_avg = FALSE),
+  expect_warning(.validate_cb_alpha(cb_alpha = 0.01, calc_avg = FALSE),
                  "cb_alpha is ignored")
 })
 

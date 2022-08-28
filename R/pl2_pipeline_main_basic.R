@@ -136,7 +136,7 @@
   modnames <- attr(mdat, "data_info")[["modnames"]]
   dsids <- attr(mdat, "data_info")[["dsids"]]
   evaltypes <- c("rank", "score", "label", "error", "accuracy",
-                 "specificity","sensitivity", "precision", "mcc", "fscore")
+                 "specificity", "sensitivity", "precision", "mcc", "fscore")
   elen <- length(evaltypes)
 
   sbasic <- data.frame(modnames = rep(modnames, each = elen),

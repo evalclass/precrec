@@ -150,7 +150,9 @@
 #' }
 #'
 #' @export
-part <- function(curves, xlim = NULL, ylim = NULL, curvetype = NULL) UseMethod("part", curves)
+part <- function(curves, xlim = NULL, ylim = NULL, curvetype = NULL) {
+  UseMethod("part", curves)
+}
 
 #' @export
 part.default <- function(curves, xlim = NULL, ylim = NULL, curvetype = NULL) {

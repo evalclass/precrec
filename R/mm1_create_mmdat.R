@@ -292,7 +292,6 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
 #
 .pmatch_tiesmethod <- function(val, ...) {
 
-  set_ties_dot_method <- FALSE
   arglist <- list(...)
   if (!is.null(arglist[["ties.method"]])) {
     val <- arglist[["ties.method"]]

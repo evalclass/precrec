@@ -696,7 +696,7 @@ NULL
     if (all(xlim == ylim)) {
       ratio <- 1
     } else {
-      ratio = NULL
+      ratio <- NULL
     }
   }
   p <- func_g(p, object, show_legend = show_legend, add_np_nn = add_np_nn,

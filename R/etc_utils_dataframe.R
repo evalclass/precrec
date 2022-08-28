@@ -316,7 +316,7 @@ NULL
 
   if (!check_ggplot) {
     if ("dsid_modname" %in% names(curve_df)) {
-      curve_df <- with(curve_df, subset(curve_df, select = -dsid_modname))
+      curve_df[["dsid_modname"]] <- NULL
     }
     colnum <- ncol(curve_df)
     names(curve_df) <- c(names(curve_df)[1:(colnum - 1)], "type")

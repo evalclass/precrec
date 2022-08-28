@@ -19,9 +19,9 @@ test_that(".pmatch_tiesmethod() returns 'equiv', 'random', 'first'", {
   expect_equal(.pmatch_tiesmethod(1), 1)
   expect_equal(.pmatch_tiesmethod(NULL), NULL)
 
-  expect_equal(.pmatch_tiesmethod("x", ties.method="equiv"), "equiv")
-  expect_equal(.pmatch_tiesmethod("x", ties.method="random"), "random")
-  expect_equal(.pmatch_tiesmethod("x", ties.method="first"), "first")
+  expect_equal(.pmatch_tiesmethod("x", ties.method = "equiv"), "equiv")
+  expect_equal(.pmatch_tiesmethod("x", ties.method = "random"), "random")
+  expect_equal(.pmatch_tiesmethod("x", ties.method = "first"), "first")
 })
 
 test_that(".pmatch_expd_first() returns 'dsids' or 'modnames'", {
