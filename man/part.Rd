@@ -96,7 +96,8 @@ autoplot(sscurves.part)
 ## Create sample datasets with 100 positives and 100 negatives
 samps <- create_sim_samples(1, 100, 100, "all")
 mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-               modnames = samps[["modnames"]])
+  modnames = samps[["modnames"]]
+)
 
 ## Generate an mscurve object that contains ROC and Precision-Recall curves
 mscurves <- evalmod(mdat)
@@ -121,8 +122,9 @@ autoplot(mscurves.part)
 ## Create sample datasets with 100 positives and 100 negatives
 samps <- create_sim_samples(4, 100, 100, "good_er")
 mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-               modnames = samps[["modnames"]],
-               dsids = samps[["dsids"]])
+  modnames = samps[["modnames"]],
+  dsids = samps[["dsids"]]
+)
 
 ## Generate an smcurve object that contains ROC and Precision-Recall curves
 smcurves <- evalmod(mdat)
@@ -147,8 +149,9 @@ autoplot(smcurves.part)
 ## Create sample datasets with 100 positives and 100 negatives
 samps <- create_sim_samples(4, 100, 100, "all")
 mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-               modnames = samps[["modnames"]],
-               dsids = samps[["dsids"]])
+  modnames = samps[["modnames"]],
+  dsids = samps[["dsids"]]
+)
 
 ## Generate an mscurve object that contains ROC and Precision-Recall curves
 mmcurves <- evalmod(mdat, raw_curves = TRUE)
@@ -169,6 +172,6 @@ autoplot(mmcurves.part)
 }
 \seealso{
 \code{\link{evalmod}} for generating \code{S3} objects with
-  performance evaluation measures. \code{\link{pauc}} for retrieving a dataset
-  of pAUCs.
+  performance evaluation measures. \code{\link{pauc}} for retrieving
+  a dataset of pAUCs.
 }

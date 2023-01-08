@@ -137,7 +137,8 @@ samps <- create_sim_samples(1, 100, 100, "all")
 
 ## Multiple models & single test dataset
 msmdat1 <- mmdata(samps[["scores"]], samps[["labels"]],
-                  modnames = samps[["modnames"]])
+  modnames = samps[["modnames"]]
+)
 msmdat1
 
 ## Use join_scores and join_labels
@@ -162,8 +163,9 @@ samps <- create_sim_samples(10, 100, 100, "good_er")
 
 ## Single model & multiple test datasets
 smmdat <- mmdata(samps[["scores"]], samps[["labels"]],
-                 modnames = samps[["modnames"]],
-                 dsids = samps[["dsids"]])
+  modnames = samps[["modnames"]],
+  dsids = samps[["dsids"]]
+)
 smmdat
 
 
@@ -176,8 +178,9 @@ samps <- create_sim_samples(10, 100, 100, "all")
 
 ## Multiple models & multiple test datasets
 mmmdat <- mmdata(samps[["scores"]], samps[["labels"]],
-                 modnames = samps[["modnames"]],
-                 dsids = samps[["dsids"]])
+  modnames = samps[["modnames"]],
+  dsids = samps[["dsids"]]
+)
 mmmdat
 
 
@@ -190,15 +193,19 @@ data(M2N50F5)
 head(M2N50F5)
 
 ## Speficy nessesary columns to create mdat
-cvdat1 <- mmdata(nfold_df = M2N50F5, score_cols = c(1, 2),
-                 lab_col = 3, fold_col = 4,
-                 modnames = c("m1", "m2"), dsids = 1:5)
+cvdat1 <- mmdata(
+  nfold_df = M2N50F5, score_cols = c(1, 2),
+  lab_col = 3, fold_col = 4,
+  modnames = c("m1", "m2"), dsids = 1:5
+)
 cvdat1
 
 ## Use column names
-cvdat2 <- mmdata(nfold_df = M2N50F5, score_cols = c("score1", "score2"),
-                 lab_col = "label", fold_col = "fold",
-                 modnames = c("m1", "m2"), dsids = 1:5)
+cvdat2 <- mmdata(
+  nfold_df = M2N50F5, score_cols = c("score1", "score2"),
+  lab_col = "label", fold_col = "fold",
+  modnames = c("m1", "m2"), dsids = 1:5
+)
 cvdat2
 
 }

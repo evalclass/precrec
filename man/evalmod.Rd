@@ -115,11 +115,12 @@ and \code{x_bins = 4}, respectively. All corresponding y-values of
 the supporting points are calculated. \code{x_bins} is effective only
 when \code{mode} is set to \code{rocprc} or \code{prcroc}.}
 
-\item{interpolate}{A Boolean value to specify whether or not interpolation of
-ROC and precision-recall curves are performed. \code{x_bins} and \code{calc_avg} are
- ignored and  when \code{x_bins} is set to \code{FALSE}.
- \code{interpolate} is effective only when \code{mode} is set
- to \code{rocprc} or \code{prcroc}.}
+\item{interpolate}{A Boolean value to specify whether or not
+interpolation of ROC and precision-recall curves are
+performed. \code{x_bins} and \code{calc_avg} are
+ignored and  when \code{x_bins} is set to \code{FALSE}.
+\code{interpolate} is effective only when \code{mode} is set
+to \code{rocprc} or \code{prcroc}.}
 
 \item{...}{These additional arguments are passed to \code{\link{mmdata}}
 for data preparation.}
@@ -170,7 +171,8 @@ Different \code{S3} objects have different default behaviors of \code{S3}
   }
 
   \item The \code{evalmod} function returns the \code{aucroc} S3 object
-  when \code{mode} is "aucroc", which can be used with 'print' and 'as.data.frame'.
+  when \code{mode} is "aucroc", which can be used with 'print'
+  and 'as.data.frame'.
 
 }
 }
@@ -194,8 +196,10 @@ sscurves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 sscurves
 
 ## Generate an sspoints object that contains basic evaluation measures
-sspoints <- evalmod(mode = "basic", scores = P10N10$scores,
-                    labels = P10N10$labels)
+sspoints <- evalmod(
+  mode = "basic", scores = P10N10$scores,
+  labels = P10N10$labels
+)
 sspoints
 
 
@@ -206,7 +210,8 @@ sspoints
 ## Create sample datasets with 100 positives and 100 negatives
 samps <- create_sim_samples(1, 100, 100, "all")
 mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-               modnames = samps[["modnames"]])
+  modnames = samps[["modnames"]]
+)
 
 ## Generate an mscurve object that contains ROC and Precision-Recall curves
 mscurves <- evalmod(mdat)
@@ -224,8 +229,9 @@ mspoints
 ## Create sample datasets with 100 positives and 100 negatives
 samps <- create_sim_samples(4, 100, 100, "good_er")
 mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-               modnames = samps[["modnames"]],
-               dsids = samps[["dsids"]])
+  modnames = samps[["modnames"]],
+  dsids = samps[["dsids"]]
+)
 
 ## Generate an smcurve object that contains ROC and Precision-Recall curves
 smcurves <- evalmod(mdat)
@@ -243,8 +249,9 @@ smpoints
 ## Create sample datasets with 100 positives and 100 negatives
 samps <- create_sim_samples(4, 100, 100, "all")
 mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-               modnames = samps[["modnames"]],
-               dsids = samps[["dsids"]])
+  modnames = samps[["modnames"]],
+  dsids = samps[["dsids"]]
+)
 
 ## Generate an mmcurve object that contains ROC and Precision-Recall curves
 mmcurves <- evalmod(mdat)
@@ -263,9 +270,11 @@ mmpoints
 data(M2N50F5)
 
 ## Speficy nessesary columns to create mdat
-cvdat <- mmdata(nfold_df = M2N50F5, score_cols = c(1, 2),
-                lab_col = 3, fold_col = 4,
-                modnames = c("m1", "m2"), dsids = 1:5)
+cvdat <- mmdata(
+  nfold_df = M2N50F5, score_cols = c(1, 2),
+  lab_col = 3, fold_col = 4,
+  modnames = c("m1", "m2"), dsids = 1:5
+)
 
 ## Generate an mmcurve object that contains ROC and Precision-Recall curves
 cvcurves <- evalmod(cvdat)
@@ -276,9 +285,11 @@ cvpoints <- evalmod(cvdat, mode = "basic")
 cvpoints
 
 ## Specify mmdata arguments from evalmod
-cvcurves2 <- evalmod(nfold_df = M2N50F5, score_cols = c(1, 2),
-                     lab_col = 3, fold_col = 4,
-                     modnames = c("m1", "m2"), dsids = 1:5)
+cvcurves2 <- evalmod(
+  nfold_df = M2N50F5, score_cols = c(1, 2),
+  lab_col = 3, fold_col = 4,
+  modnames = c("m1", "m2"), dsids = 1:5
+)
 cvcurves2
 
 
@@ -290,8 +301,10 @@ cvcurves2
 data(P10N10)
 
 # 'aucroc' S3 object
-uauc1 <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
-                 mode="aucroc")
+uauc1 <- evalmod(
+  scores = P10N10$scores, labels = P10N10$labels,
+  mode = "aucroc"
+)
 
 # print 'aucroc'
 uauc1
@@ -305,13 +318,13 @@ samp1 <- create_sim_samples(1, 50000, 50000)
 
 # a function to test mode = "rocprc"
 func_evalmod_rocprc <- function(samp) {
-   curves <- evalmod(scores = samp$scores, labels = samp$labels)
-   aucs <- auc(curves)
+  curves <- evalmod(scores = samp$scores, labels = samp$labels)
+  aucs <- auc(curves)
 }
 
 # a function to test mode = "aucroc"
 func_evalmod_aucroc <- function(samp) {
-  uaucs <- evalmod(scores = samp$scores, labels = samp$labels, mode="aucroc")
+  uaucs <- evalmod(scores = samp$scores, labels = samp$labels, mode = "aucroc")
   as.data.frame(uaucs)
 }
 
