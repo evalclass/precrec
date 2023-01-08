@@ -46,25 +46,28 @@ df2_create_mmpoints <- function(raw_curves = FALSE) {
   l4 <- c(1, 1, 0, 1)
   labels <- join_labels(l1, l2, l3, l4)
 
-  mdat <- mmdata(scores, labels, modnames = c("m1", "m2"), dsids = c(1, 2),
-                 expd_first = "modnames")
+  mdat <- mmdata(scores, labels,
+    modnames = c("m1", "m2"), dsids = c(1, 2),
+    expd_first = "modnames"
+  )
   evalmod(mdat, mode = "basic", raw_curves = raw_curves)
 }
 
 df2_comp_dfs <- function(df1, df2) {
-  expect_equal(names(df1), names(df2))
+  testthat::expect_equal(names(df1), names(df2))
 
   for (vname in names(df1)) {
-    expect_equal(df1[[vname]], df2[[vname]])
+    testthat::expect_equal(df1[[vname]], df2[[vname]])
   }
 }
 
 
 test_that("as.data.frame sspoints", {
-
   data(P10N10)
-  sspoints <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
-                      mode = "basic")
+  sspoints <- evalmod(
+    scores = P10N10$scores, labels = P10N10$labels,
+    mode = "basic"
+  )
 
   point_df <- as.data.frame(sspoints)
   expect_true(is.data.frame(point_df))
@@ -74,7 +77,6 @@ test_that("as.data.frame sspoints", {
 })
 
 test_that("as.data.frame mspoints", {
-
   mspoints <- df2_create_mspoints()
 
   point_df <- as.data.frame(mspoints)
@@ -85,7 +87,6 @@ test_that("as.data.frame mspoints", {
 })
 
 test_that("as.data.frame smpoints", {
-
   smpoints <- df2_create_smpoints(raw_curves = TRUE)
 
   point_df <- as.data.frame(smpoints)
@@ -96,7 +97,6 @@ test_that("as.data.frame smpoints", {
 })
 
 test_that("as.data.frame mmpoints", {
-
   mmpoints <- df2_create_mmpoints(raw_curves = TRUE)
 
   point_df <- as.data.frame(mmpoints)
@@ -109,12 +109,15 @@ test_that("as.data.frame mmpoints", {
 test_that("as.data.frame raw_point option sspoints", {
   get_args <- function(x, y = NULL, ...) {
     .get_dataframe_arglist(attr(x, "args"),
-                           def_raw_curves = TRUE, ...)
+      def_raw_curves = TRUE, ...
+    )
   }
 
   data(P10N10)
-  points1 <- evalmod(mode = "basic", scores = P10N10$scores,
-                     labels = P10N10$labels)
+  points1 <- evalmod(
+    mode = "basic", scores = P10N10$scores,
+    labels = P10N10$labels
+  )
 
   args1a <- get_args(points1, raw_curves = TRUE)
   expect_true(args1a[["raw_curves"]])
@@ -129,7 +132,8 @@ test_that("as.data.frame raw_point option sspoints", {
 test_that("as.data.frame raw_point option mspoints", {
   get_args <- function(x, y = NULL, ...) {
     .get_dataframe_arglist(attr(x, "args"),
-                           def_raw_curves = TRUE, ...)
+      def_raw_curves = TRUE, ...
+    )
   }
 
   points1 <- df2_create_mspoints()
@@ -147,7 +151,8 @@ test_that("as.data.frame raw_point option mspoints", {
 test_that("as.data.frame raw_point option smpoints", {
   get_args <- function(x, y = NULL, ...) {
     .get_dataframe_arglist(attr(x, "args"),
-                           def_raw_curves = NULL, ...)
+      def_raw_curves = NULL, ...
+    )
   }
 
   points1 <- df2_create_smpoints()
@@ -176,7 +181,8 @@ test_that("as.data.frame raw_point option smpoints", {
 test_that("as.data.frame raw_point option mmpoints", {
   get_args <- function(x, y = NULL, ...) {
     .get_dataframe_arglist(attr(x, "args"),
-                           def_raw_curves = NULL, ...)
+      def_raw_curves = NULL, ...
+    )
   }
 
   points1 <- df2_create_mmpoints()

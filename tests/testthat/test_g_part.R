@@ -44,28 +44,30 @@ pa_create_mmdat <- function() {
   l4 <- c(1, 1, 0, 1)
   labels <- join_labels(l1, l2, l3, l4)
 
-  mmdata(scores, labels, modnames = c("m1", "m2"), dsids = c(1, 2),
-         expd_first = "modnames")
+  mmdata(scores, labels,
+    modnames = c("m1", "m2"), dsids = c(1, 2),
+    expd_first = "modnames"
+  )
 }
 
 test_that("curvetype", {
   data(P10N10)
   curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
-  expect_error(part(curves), NA)
-  expect_error(part(curves, curvetype = c("ROC", "PRC")), NA)
-  expect_error(part(curves, curvetype = "ROC"), NA)
-  expect_error(part(curves, curvetype = "PRC"), NA)
+  expect_silent(part(curves))
+  expect_silent(part(curves, curvetype = c("ROC", "PRC")))
+  expect_silent(part(curves, curvetype = "ROC"))
+  expect_silent(part(curves, curvetype = "PRC"))
   expect_error(part(curves, curvetype = "PROC"), "Invalid curvetype")
 })
 
 test_that("xlim", {
   data(P10N10)
   curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
-  expect_error(part(curves), NA)
-  expect_error(part(curves, xlim = c(0, 1)), NA)
-  expect_error(part(curves, xlim = c(0.25, 1)), NA)
-  expect_error(part(curves, xlim = c(0, 0.75)), NA)
-  expect_error(part(curves, xlim = c(0.25, 0.75)), NA)
+  expect_silent(part(curves))
+  expect_silent(part(curves, xlim = c(0, 1)))
+  expect_silent(part(curves, xlim = c(0.25, 1)))
+  expect_silent(part(curves, xlim = c(0, 0.75)))
+  expect_silent(part(curves, xlim = c(0.25, 0.75)))
   expect_error(part(curves, xlim = 0.25), "not equal to 2L")
   expect_error(part(curves, xlim = c("0.25", "0.75")), "numeric or integer")
   expect_error(part(curves, xlim = c(0.75, 0.25)), "not less than")
@@ -76,11 +78,11 @@ test_that("xlim", {
 test_that("ylim", {
   data(P10N10)
   curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
-  expect_error(part(curves), NA)
-  expect_error(part(curves, ylim = c(0, 1)), NA)
-  expect_error(part(curves, ylim = c(0.25, 1)), NA)
-  expect_error(part(curves, ylim = c(0, 0.75)), NA)
-  expect_error(part(curves, ylim = c(0.25, 0.75)), NA)
+  expect_silent(part(curves))
+  expect_silent(part(curves, ylim = c(0, 1)))
+  expect_silent(part(curves, ylim = c(0.25, 1)))
+  expect_silent(part(curves, ylim = c(0, 0.75)))
+  expect_silent(part(curves, ylim = c(0.25, 0.75)))
   expect_error(part(curves, ylim = 0.25), "not equal to 2L")
   expect_error(part(curves, ylim = c("0.25", "0.75")), "numeric or integer")
   expect_error(part(curves, ylim = c(0.75, 0.25)), "not less than")
@@ -89,48 +91,71 @@ test_that("ylim", {
 })
 
 pa_test_curves_basic <- function(curves) {
-  expect_error(part(curves, xlim = c(0.25, 0.75)), NA)
-  expect_error(part(curves, xlim = c(0.25, 0.75), curvetype = "ROC"), NA)
-  expect_error(part(curves, xlim = c(0.25, 0.75), curvetype = "PRC"), NA)
-  expect_error(part(curves, xlim = c(0.25, 0.75), ylim = c(0.25, 0.75)), NA)
-  expect_error(part(curves, xlim = c(0.25, 0.75), ylim = c(0.25, 0.75),
-                    curvetype = "ROC"), NA)
-  expect_error(part(curves, xlim = c(0.25, 0.75), ylim = c(0.25, 0.75),
-                    curvetype = "PRC"), NA)
+  testthat::expect_silent(part(curves, xlim = c(0.25, 0.75)))
+  testthat::expect_silent(part(curves,
+    xlim = c(0.25, 0.75),
+    curvetype = "ROC"
+  ))
+  testthat::expect_silent(part(curves,
+    xlim = c(0.25, 0.75),
+    curvetype = "PRC"
+  ))
+  testthat::expect_silent(part(curves,
+    xlim = c(0.25, 0.75),
+    ylim = c(0.25, 0.75)
+  ))
+  testthat::expect_silent(part(curves,
+    xlim = c(0.25, 0.75),
+    ylim = c(0.25, 0.75),
+    curvetype = "ROC"
+  ))
+  testthat::expect_silent(part(curves,
+    xlim = c(0.25, 0.75),
+    ylim = c(0.25, 0.75),
+    curvetype = "PRC"
+  ))
 }
 
 pa_test_attr <- function(curves, pauc_len, avg_only = FALSE) {
   cpart <- part(curves, xlim = c(0.25, 0.75), ylim = c(0.2, 0.7))
 
-  expect_false(attr(curves, "partial"))
-  expect_true(attr(cpart, "partial"))
+  testthat::expect_false(attr(curves, "partial"))
+  testthat::expect_true(attr(cpart, "partial"))
 
-  expect_equal(attr(cpart[["rocs"]], "xlim"), c(0.25, 0.75))
-  expect_equal(attr(cpart[["rocs"]], "ylim"), c(0.2, 0.7))
+  testthat::expect_equal(attr(cpart[["rocs"]], "xlim"), c(0.25, 0.75))
+  testthat::expect_equal(attr(cpart[["rocs"]], "ylim"), c(0.2, 0.7))
   if (avg_only) {
-    expect_equal(attr(attr(cpart, "grp_avg")[["rocs"]][[1]], "xlim"),
-                 c(0.25, 0.75))
-    expect_equal(attr(attr(cpart, "grp_avg")[["rocs"]][[1]], "ylim"),
-                 c(0.2, 0.7))
+    testthat::expect_equal(
+      attr(attr(cpart, "grp_avg")[["rocs"]][[1]], "xlim"),
+      c(0.25, 0.75)
+    )
+    testthat::expect_equal(
+      attr(attr(cpart, "grp_avg")[["rocs"]][[1]], "ylim"),
+      c(0.2, 0.7)
+    )
   } else {
-    expect_equal(attr(cpart[["rocs"]][[1]], "xlim"), c(0.25, 0.75))
-    expect_equal(attr(cpart[["rocs"]][[1]], "ylim"), c(0.2, 0.7))
+    testthat::expect_equal(attr(cpart[["rocs"]][[1]], "xlim"), c(0.25, 0.75))
+    testthat::expect_equal(attr(cpart[["rocs"]][[1]], "ylim"), c(0.2, 0.7))
   }
 
-  expect_equal(attr(cpart[["prcs"]], "xlim"), c(0.25, 0.75))
-  expect_equal(attr(cpart[["prcs"]], "ylim"), c(0.2, 0.7))
+  testthat::expect_equal(attr(cpart[["prcs"]], "xlim"), c(0.25, 0.75))
+  testthat::expect_equal(attr(cpart[["prcs"]], "ylim"), c(0.2, 0.7))
   if (avg_only) {
-    expect_equal(attr(attr(cpart, "grp_avg")[["prcs"]][[1]], "xlim"),
-                 c(0.25, 0.75))
-    expect_equal(attr(attr(cpart, "grp_avg")[["prcs"]][[1]], "ylim"),
-                 c(0.2, 0.7))
+    testthat::expect_equal(
+      attr(attr(cpart, "grp_avg")[["prcs"]][[1]], "xlim"),
+      c(0.25, 0.75)
+    )
+    testthat::expect_equal(
+      attr(attr(cpart, "grp_avg")[["prcs"]][[1]], "ylim"),
+      c(0.2, 0.7)
+    )
   } else {
-    expect_equal(attr(cpart[["prcs"]][[1]], "xlim"), c(0.25, 0.75))
-    expect_equal(attr(cpart[["prcs"]][[1]], "ylim"), c(0.2, 0.7))
+    testthat::expect_equal(attr(cpart[["prcs"]][[1]], "xlim"), c(0.25, 0.75))
+    testthat::expect_equal(attr(cpart[["prcs"]][[1]], "ylim"), c(0.2, 0.7))
   }
 
-  expect_equal(length(attr(cpart, "paucs")[["paucs"]]), pauc_len)
-  expect_equal(length(attr(cpart, "paucs")[["spaucs"]]), pauc_len)
+  testthat::expect_equal(length(attr(cpart, "paucs")[["paucs"]]), pauc_len)
+  testthat::expect_equal(length(attr(cpart, "paucs")[["spaucs"]]), pauc_len)
 }
 
 test_that("partial auc sscurves", {
@@ -173,34 +198,36 @@ test_that("partial auc mmcurves", {
   pa_test_attr(curves2, 8)
 })
 
-pa_test_paucs <- function(curves.part, idx, pauc, spauc) {
-  expect_equal(attr(curves.part, "paucs")[["paucs"]][idx], pauc,
-               tolerance = 1e-3)
-  expect_equal(attr(curves.part, "paucs")[["spaucs"]][idx], spauc,
-               tolerance = 1e-3)
+pa_test_paucs <- function(curves_part, idx, pauc, spauc) {
+  testthat::expect_equal(attr(curves_part, "paucs")[["paucs"]][idx], pauc,
+    tolerance = 1e-3
+  )
+  testthat::expect_equal(attr(curves_part, "paucs")[["spaucs"]][idx], spauc,
+    tolerance = 1e-3
+  )
 }
 
 pa_test_paucs_roc <- function(curves, idx) {
-  curves.part1 <- part(curves, xlim = c(0, 0.1), ylim = c(0, 1))
-  pa_test_paucs(curves.part1, idx, 0.02, 0.2)
+  curves_part1 <- part(curves, xlim = c(0, 0.1), ylim = c(0, 1))
+  pa_test_paucs(curves_part1, idx, 0.02, 0.2)
 
-  curves.part2 <- part(curves, xlim = c(0.1, 0.5), ylim = c(0, 0.5))
-  pa_test_paucs(curves.part2, idx, 0.2, 1)
+  curves_part2 <- part(curves, xlim = c(0.1, 0.5), ylim = c(0, 0.5))
+  pa_test_paucs(curves_part2, idx, 0.2, 1)
 
-  curves.part3 <- part(curves, xlim = c(0.1, 0.5), ylim = c(0.5, 0.7))
-  pa_test_paucs(curves.part3, idx, 0.04, 0.5)
+  curves_part3 <- part(curves, xlim = c(0.1, 0.5), ylim = c(0.5, 0.7))
+  pa_test_paucs(curves_part3, idx, 0.04, 0.5)
 
-  curves.part4 <- part(curves, xlim = c(0.1, 0.5), ylim = c(0.7, 1))
-  pa_test_paucs(curves.part4, idx, 0, 0)
+  curves_part4 <- part(curves, xlim = c(0.1, 0.5), ylim = c(0.7, 1))
+  pa_test_paucs(curves_part4, idx, 0, 0)
 
-  curves.part5 <- part(curves, xlim = c(0, 0.5))
-  pa_test_paucs(curves.part5, idx, 0.26, 0.52)
+  curves_part5 <- part(curves, xlim = c(0, 0.5))
+  pa_test_paucs(curves_part5, idx, 0.26, 0.52)
 
-  curves.part6 <- part(curves, xlim = c(0.5, 0.75), ylim = c(0.25, 0.5))
-  pa_test_paucs(curves.part6, idx, 0.0625, 1)
+  curves_part6 <- part(curves, xlim = c(0.5, 0.75), ylim = c(0.25, 0.5))
+  pa_test_paucs(curves_part6, idx, 0.0625, 1)
 
-  curves.part7 <- part(curves, xlim = c(0.1, 0.2), ylim = c(0.6, 0.8))
-  pa_test_paucs(curves.part7, idx, 0, 0)
+  curves_part7 <- part(curves, xlim = c(0.1, 0.2), ylim = c(0.6, 0.8))
+  pa_test_paucs(curves_part7, idx, 0, 0)
 }
 
 test_that("partial auc ROC", {
@@ -216,26 +243,26 @@ test_that("partial auc ROC x_bins 1", {
 })
 
 pa_test_paucs_prc <- function(curves, idx) {
-  curves.part1 <- part(curves, xlim = c(0, 0.2), ylim = c(0.5, 1))
-  pa_test_paucs(curves.part1, idx, 0.1, 1)
+  curves_part1 <- part(curves, xlim = c(0, 0.2), ylim = c(0.5, 1))
+  pa_test_paucs(curves_part1, idx, 0.1, 1)
 
-  curves.part2 <- part(curves, xlim = c(0.2, 0.3), ylim = c(0.6666667, 0.75))
-  pa_test_paucs(curves.part2, idx, 0.004166665, 0.5)
+  curves_part2 <- part(curves, xlim = c(0.2, 0.3), ylim = c(0.6666667, 0.75))
+  pa_test_paucs(curves_part2, idx, 0.004166665, 0.5)
 
-  curves.part3 <- part(curves, xlim = c(0.3, 0.4), ylim = c(0.75, 0.8))
-  pa_test_paucs(curves.part3, idx, 0.0025, 0.5)
+  curves_part3 <- part(curves, xlim = c(0.3, 0.4), ylim = c(0.75, 0.8))
+  pa_test_paucs(curves_part3, idx, 0.0025, 0.5)
 
-  curves.part4 <- part(curves, xlim = c(0.4, 0.5), ylim = c(0.8, 0.8333333))
-  pa_test_paucs(curves.part4, idx, 0.001666665, 0.5)
+  curves_part4 <- part(curves, xlim = c(0.4, 0.5), ylim = c(0.8, 0.8333333))
+  pa_test_paucs(curves_part4, idx, 0.001666665, 0.5)
 
-  curves.part5 <- part(curves, xlim = c(0, 0.5))
-  pa_test_paucs(curves.part5, idx, 0.43, 0.86)
+  curves_part5 <- part(curves, xlim = c(0, 0.5))
+  pa_test_paucs(curves_part5, idx, 0.43, 0.86)
 
-  curves.part6 <- part(curves, xlim = c(0.25, 0.5), ylim = c(0.25, 0.5))
-  pa_test_paucs(curves.part6, idx, 0.0625, 1)
+  curves_part6 <- part(curves, xlim = c(0.25, 0.5), ylim = c(0.25, 0.5))
+  pa_test_paucs(curves_part6, idx, 0.0625, 1)
 
-  curves.part7 <- part(curves, xlim = c(0.6, 0.8), ylim = c(0.7, 0.9))
-  pa_test_paucs(curves.part7, idx, 0, 0)
+  curves_part7 <- part(curves, xlim = c(0.6, 0.8), ylim = c(0.7, 0.9))
+  pa_test_paucs(curves_part7, idx, 0, 0)
 }
 
 test_that("partial auc PRC x_bins 1", {

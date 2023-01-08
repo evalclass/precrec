@@ -46,15 +46,19 @@ df3_create_mmaucs <- function() {
   l4 <- c(1, 1, 0, 1)
   labels <- join_labels(l1, l2, l3, l4)
 
-  mdat <- mmdata(scores, labels, modnames = c("m1", "m2"), dsids = c(1, 2),
-                 expd_first = "modnames")
+  mdat <- mmdata(scores, labels,
+    modnames = c("m1", "m2"), dsids = c(1, 2),
+    expd_first = "modnames"
+  )
   evalmod(mdat, mode = "aucroc")
 }
 
 test_that("as.data.frame aucroc ss", {
   data(P10N10)
-  aucs <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
-                  mode = "aucroc")
+  aucs <- evalmod(
+    scores = P10N10$scores, labels = P10N10$labels,
+    mode = "aucroc"
+  )
 
   aucs_df <- as.data.frame(aucs)
   expect_true(is.data.frame(aucs_df))
@@ -88,4 +92,3 @@ test_that("as.data.frame aucroc mm", {
   expect_equal(nrow(aucs_df), 4)
   expect_equal(ncol(aucs_df), 4)
 })
-

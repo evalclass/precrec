@@ -103,7 +103,6 @@
 #'   with \pkg{ggplot2}.
 #'
 #' @examples
-#'
 #' \dontrun{
 #' ##################################################
 #' ### Single model & single test dataset
@@ -125,8 +124,10 @@
 #' plot(sscurves, curvetype = "PRC")
 #'
 #' ## Generate an sspoints object that contains basic evaluation measures
-#' sspoints <- evalmod(mode = "basic", scores = P10N10$scores,
-#'                     labels = P10N10$labels)
+#' sspoints <- evalmod(
+#'   mode = "basic", scores = P10N10$scores,
+#'   labels = P10N10$labels
+#' )
 #'
 #' ## Plot normalized ranks vs. basic evaluation measures
 #' plot(sspoints)
@@ -142,7 +143,8 @@
 #' ## Create sample datasets with 100 positives and 100 negatives
 #' samps <- create_sim_samples(1, 100, 100, "all")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-#'                modnames = samps[["modnames"]])
+#'   modnames = samps[["modnames"]]
+#' )
 #'
 #' ## Generate an mscurve object that contains ROC and Precision-Recall curves
 #' mscurves <- evalmod(mdat)
@@ -170,8 +172,9 @@
 #' ## Create sample datasets with 100 positives and 100 negatives
 #' samps <- create_sim_samples(10, 100, 100, "good_er")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-#'                modnames = samps[["modnames"]],
-#'                dsids = samps[["dsids"]])
+#'   modnames = samps[["modnames"]],
+#'   dsids = samps[["dsids"]]
+#' )
 #'
 #' ## Generate an smcurve object that contains ROC and Precision-Recall curves
 #' smcurves <- evalmod(mdat, raw_curves = TRUE)
@@ -199,8 +202,9 @@
 #' ## Create sample datasets with 100 positives and 100 negatives
 #' samps <- create_sim_samples(10, 100, 100, "all")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-#'                modnames = samps[["modnames"]],
-#'                dsids = samps[["dsids"]])
+#'   modnames = samps[["modnames"]],
+#'   dsids = samps[["dsids"]]
+#' )
 #'
 #' ## Generate an mscurve object that contains ROC and Precision-Recall curves
 #' mmcurves <- evalmod(mdat, raw_curves = TRUE)
@@ -229,9 +233,11 @@
 #' data(M2N50F5)
 #'
 #' ## Speficy nessesary columns to create mdat
-#' cvdat <- mmdata(nfold_df = M2N50F5, score_cols = c(1, 2),
-#'                 lab_col = 3, fold_col = 4,
-#'                 modnames = c("m1", "m2"), dsids = 1:5)
+#' cvdat <- mmdata(
+#'   nfold_df = M2N50F5, score_cols = c(1, 2),
+#'   lab_col = 3, fold_col = 4,
+#'   modnames = c("m1", "m2"), dsids = 1:5
+#' )
 #'
 #' ## Generate an mmcurve object that contains ROC and Precision-Recall curves
 #' cvcurves <- evalmod(cvdat)
@@ -247,8 +253,7 @@
 #'
 #' ## Normalized ranks vs. average basic evaluation measures
 #' plot(cvpoints)
-#'
-#'}
+#' }
 #' @name plot
 NULL
 
@@ -279,7 +284,6 @@ NULL
 # Check partial match - Basic evaluation measures
 #
 .pmatch_curvetype_basic <- function(vals) {
-
   pfunc <- function(val) {
     if (assertthat::is.string(val)) {
       sval <- tolower(val)
@@ -296,8 +300,8 @@ NULL
         return("specificity")
       }
 
-      if (!is.na(pmatch(sval, "sensitivity"))
-          || !is.na(pmatch(sval, "recall")) || sval == "tpr" || sval == "sn") {
+      if (!is.na(pmatch(sval, "sensitivity")) ||
+        !is.na(pmatch(sval, "recall")) || sval == "tpr" || sval == "sn") {
         return("sensitivity")
       }
 
@@ -305,8 +309,8 @@ NULL
         return("precision")
       }
 
-      if (!is.na(pmatch(sval, "matthews correlation coefficient"))
-          || sval == "mcc") {
+      if (!is.na(pmatch(sval, "matthews correlation coefficient")) ||
+        sval == "mcc") {
         return("mcc")
       }
 
@@ -355,7 +359,8 @@ NULL
   }
   if (!evalmod_args[["calc_avg"]] && arglist[["show_cb"]]) {
     stop("Invalid show_cb. Inconsistent with calc_avg of evalmod.",
-         call. = FALSE)
+      call. = FALSE
+    )
   }
 
   if (is.null(arglist[["raw_curves"]])) {
@@ -369,7 +374,8 @@ NULL
   }
   if (!evalmod_args[["raw_curves"]] && arglist[["raw_curves"]]) {
     stop("Invalid raw_curves. Inconsistent with the value of evalmod.",
-         call. = FALSE)
+      call. = FALSE
+    )
   }
 
   if (is.null(arglist[["add_np_nn"]])) {
@@ -381,7 +387,6 @@ NULL
   }
 
   arglist
-
 }
 
 #
@@ -396,12 +401,12 @@ NULL
 
   show_cb <- arglist[["show_cb"]]
   if (!attr(x, "args")$calc_avg) {
-    show_cb = FALSE
+    show_cb <- FALSE
   }
 
   raw_curves <- arglist[["raw_curves"]]
   if (show_cb) {
-    raw_curves = FALSE
+    raw_curves <- FALSE
   }
 
   # === Validate input arguments ===
@@ -422,9 +427,11 @@ NULL
   }
 
   for (ct in curvetype) {
-    .plot_single(x, ct, type = type, show_cb = show_cb,
-                 raw_curves = raw_curves, add_np_nn = add_np_nn,
-                 show_legend = show_legend2)
+    .plot_single(x, ct,
+      type = type, show_cb = show_cb,
+      raw_curves = raw_curves, add_np_nn = add_np_nn,
+      show_legend = show_legend2
+    )
   }
   if (length(curvetype) > 4 && length(curvetype) %% 3 == 2) {
     graphics::plot(1, type = "n", axes = FALSE, xlab = "", ylab = "")
@@ -443,14 +450,13 @@ NULL
 # Set layout
 #
 .set_layout <- function(ctype_len, show_legend) {
-
   if (ctype_len == 1) {
     nrow1 <- 2
     ncol1 <- 1
     mat1 <- c(1, 2)
     mat2 <- 1
     heights <- c(0.85, 0.15)
-  } else  if (ctype_len == 2) {
+  } else if (ctype_len == 2) {
     nrow1 <- 2
     ncol1 <- 2
     mat1 <- c(1, 2, 3, 3)
@@ -495,7 +501,6 @@ NULL
 # matplot wrapper
 #
 .matplot_wrapper <- function(obj, type, curvetype, main, xlab, ylab) {
-
   # === Validate input arguments ===
   .validate(obj[[curvetype]])
 
@@ -512,9 +517,11 @@ NULL
   xlim <- .get_xlim(obj, curvetype)
   ylim <- .get_ylim(obj, curvetype)
   mats <- .make_matplot_mats(obj[[curvetype]])
-  graphics::matplot(mats[["x"]], mats[["y"]], type = type, lty = 1, pch = 19,
-                    col = line_col, main = main, xlab = xlab, ylab = ylab,
-                    ylim = ylim, xlim = xlim)
+  graphics::matplot(mats[["x"]], mats[["y"]],
+    type = type, lty = 1, pch = 19,
+    col = line_col, main = main, xlab = xlab, ylab = ylab,
+    ylim = ylim, xlim = xlim
+  )
 }
 
 #
@@ -558,8 +565,10 @@ NULL
 
   xlim <- .get_xlim(obj, curvetype)
   ylim <- .get_ylim(obj, curvetype)
-  graphics::plot(1, type = "n", main = main, xlab = xlab, ylab = ylab,
-                 ylim = ylim, xlim = xlim)
+  graphics::plot(1,
+    type = "n", main = main, xlab = xlab, ylab = ylab,
+    ylim = ylim, xlim = xlim
+  )
 
   if (length(avgcurves) == 1) {
     lcols <- "blue"
@@ -594,15 +603,21 @@ NULL
     }
 
     g <- grDevices::col2rgb(pcol)
-    graphics::polygon(c(x, rev(x)), c(ymin, rev(ymax)), border = FALSE,
-                      col = grDevices::rgb(g[1], g[2], g[3], 180,
-                                           maxColorValue = 255))
+    graphics::polygon(c(x, rev(x)), c(ymin, rev(ymax)),
+      border = FALSE,
+      col = grDevices::rgb(g[1], g[2], g[3], 180,
+        maxColorValue = 255
+      )
+    )
   }
 
   b <- grDevices::col2rgb(lcol)
-  graphics::lines(x, y, type = type, lty = 1, pch = 19,
-                  col = grDevices::rgb(b[1], b[2], b[3], 200,
-                                       maxColorValue = 255))
+  graphics::lines(x, y,
+    type = type, lty = 1, pch = 19,
+    col = grDevices::rgb(b[1], b[2], b[3], 200,
+      maxColorValue = 255
+    )
+  )
 }
 
 #
@@ -611,7 +626,6 @@ NULL
 .plot_single <- function(x, curvetype, type = type, show_cb = FALSE,
                          raw_curves = FALSE, add_np_nn = TRUE,
                          show_legend = TRUE) {
-
   tlist <- .get_titiles(curvetype)
   main <- tlist[["main"]]
 
@@ -630,19 +644,24 @@ NULL
 
   # === Create a plot ===
   if (show_cb) {
-    .plot_avg(x, type, tlist[["ctype"]], main, tlist[["xlab"]],
-              tlist[["ylab"]], show_cb)
+    .plot_avg(
+      x, type, tlist[["ctype"]], main, tlist[["xlab"]],
+      tlist[["ylab"]], show_cb
+    )
   } else if (raw_curves) {
-    .matplot_wrapper(x, type, tlist[["ctype"]], main, tlist[["xlab"]],
-                     tlist[["ylab"]])
+    .matplot_wrapper(
+      x, type, tlist[["ctype"]], main, tlist[["xlab"]],
+      tlist[["ylab"]]
+    )
   } else {
-    .plot_avg(x, type, tlist[["ctype"]], main, tlist[["xlab"]],
-              tlist[["ylab"]], show_cb)
+    .plot_avg(
+      x, type, tlist[["ctype"]], main, tlist[["xlab"]],
+      tlist[["ylab"]], show_cb
+    )
   }
 
   if (curvetype == "ROC") {
     graphics::abline(a = 0, b = 1, col = "grey", lty = 3)
-
   } else if (curvetype == "PRC") {
     graphics::abline(h = pn_info$prc_base, col = "grey", lty = 3)
   }
@@ -654,7 +673,7 @@ NULL
 # Get title and subtitles
 #
 .get_titiles <- function(curvetype) {
-  tlist = list()
+  tlist <- list()
 
   if (curvetype == "ROC") {
     tlist[["main"]] <- "ROC"
@@ -667,15 +686,20 @@ NULL
     tlist[["ylab"]] <- "Precision"
     tlist[["ctype"]] <- "prcs"
   } else {
-    mnames <- list(score = "score", label = "label", error = "err",
-                   accuracy = "acc", specificity = "sp", sensitivity = "sn",
-                   precision = "prec", mcc = "mcc", fscore = "fscore")
+    mnames <- list(
+      score = "score", label = "label", error = "err",
+      accuracy = "acc", specificity = "sp", sensitivity = "sn",
+      precision = "prec", mcc = "mcc", fscore = "fscore"
+    )
     if (curvetype == "mcc") {
       main <- "MCC"
     } else if (curvetype == "label") {
       main <- "Label (1:pos, -1:neg)"
     } else {
-      main <- paste0(toupper(substring(curvetype, 1, 1)), substring(curvetype, 2))
+      main <- paste0(
+        toupper(substring(curvetype, 1, 1)),
+        substring(curvetype, 2)
+      )
     }
     tlist[["main"]] <- main
     tlist[["xlab"]] <- "normalized rank"
@@ -694,10 +718,12 @@ NULL
     withr::local_par(list(mar = c(0, 0, 0, 0), pty = "m"))
     gnames <- attr(obj, paste0("uniq_", gnames))
     graphics::plot(1, type = "n", axes = FALSE, xlab = "", ylab = "")
-    graphics::legend(x = "top", lty = 1,
-                     legend = gnames,
-                     col = grDevices::rainbow(length(gnames), alpha = 1),
-                     horiz = TRUE)
+    graphics::legend(
+      x = "top", lty = 1,
+      legend = gnames,
+      col = grDevices::rainbow(length(gnames), alpha = 1),
+      horiz = TRUE
+    )
   }
 }
 
@@ -715,16 +741,20 @@ NULL
   if (!all(is.na(avgcurves))) {
     for (i in seq_len(length(avgcurves))) {
       max_score <- max(max_score, max(avgcurves[[i]][["y_ci_h"]], na.rm = TRUE),
-                       na.rm = TRUE)
+        na.rm = TRUE
+      )
       min_score <- min(min_score, min(avgcurves[[i]][["y_ci_l"]], na.rm = TRUE),
-                       na.rm = TRUE)
+        na.rm = TRUE
+      )
     }
   } else {
     for (i in seq_len(length(curves))) {
       max_score <- max(max_score, max(curves[[i]][["y"]], na.rm = TRUE),
-                       na.rm = TRUE)
+        na.rm = TRUE
+      )
       min_score <- min(min_score, min(curves[[i]][["y"]], na.rm = TRUE),
-                       na.rm = TRUE)
+        na.rm = TRUE
+      )
     }
   }
 
@@ -744,6 +774,8 @@ NULL
   } else {
     xlim <- c(0, 1)
   }
+
+  xlim
 }
 
 #
@@ -759,4 +791,6 @@ NULL
   } else {
     ylim <- c(0, 1)
   }
+
+  ylim
 }

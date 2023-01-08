@@ -18,23 +18,22 @@ C++/[Rcpp](https://cran.r-project.org/package=Rcpp).
 
 ## Documentation
 
--   [Package website](https://evalclass.github.io/precrec/) – GitHub
-    pages that contain all precrec documentation.
+- [Package website](https://evalclass.github.io/precrec/) – GitHub pages
+  that contain all precrec documentation.
 
--   [Introduction to
-    precrec](https://evalclass.github.io/precrec/articles/introduction.html)
-    – a package vignette that contains the descriptions of the functions
-    with several useful examples. View the vignette with
-    `vignette("introduction", package = "precrec")` in R. The HTML
-    version is also available on the [GitHub
-    Pages](https://evalclass.github.io/precrec/articles/introduction.html).
+- [Introduction to
+  precrec](https://evalclass.github.io/precrec/articles/introduction.html)
+  – a package vignette that contains the descriptions of the functions
+  with several useful examples. View the vignette with
+  `vignette("introduction", package = "precrec")` in R. The HTML version
+  is also available on the [GitHub
+  Pages](https://evalclass.github.io/precrec/articles/introduction.html).
 
--   [Help pages](https://evalclass.github.io/precrec/reference/) – all
-    the functions including the S3 generics except for `print` have
-    their own help pages with plenty of examples. View the main help
-    page with `help(package = "precrec")` in R. The HTML version is also
-    available on the [GitHub
-    Pages](https://evalclass.github.io/precrec/reference/).
+- [Help pages](https://evalclass.github.io/precrec/reference/) – all the
+  functions including the S3 generics except for `print` have their own
+  help pages with plenty of examples. View the main help page with
+  `help(package = "precrec")` in R. The HTML version is also available
+  on the [GitHub Pages](https://evalclass.github.io/precrec/reference/).
 
 ## Six key features of precrec
 
@@ -42,9 +41,9 @@ C++/[Rcpp](https://cran.r-project.org/package=Rcpp).
 
 `precrec` provides accurate precision-recall curves.
 
--   Non-linear interpolation
--   Elongation to the y-axis to estimate the first point when necessary
--   Use of score-wise threshold values instead of fixed bins
+- Non-linear interpolation
+- Elongation to the y-axis to estimate the first point when necessary
+- Use of score-wise threshold values instead of fixed bins
 
 `precrec` also calculates AUC scores with high accuracy.
 
@@ -59,13 +58,13 @@ ROC and precision-recall curves.
 In addition to precision-recall and ROC curves, `precrec` offers basic
 evaluation measures.
 
--   Error rate
--   Accuracy
--   Specificity
--   Sensitivity, true positive rate (TPR), recall
--   Precision, positive predictive value (PPV)
--   Matthews correlation coefficient
--   F-score
+- Error rate
+- Accuracy
+- Specificity
+- Sensitivity, true positive rate (TPR), recall
+- Precision, positive predictive value (PPV)
+- Matthews correlation coefficient
+- F-score
 
 ### 4. Confidence interval band
 
@@ -84,32 +83,31 @@ ranges.
 `precrec` provides several useful functions that lack in most other
 evaluation tools.
 
--   Handling multiple models and multiple test sets
--   Handling tied scores and missing scores
--   Pre- and post-process functions of simple data preparation and curve
-    analysis
+- Handling multiple models and multiple test sets
+- Handling tied scores and missing scores
+- Pre- and post-process functions of simple data preparation and curve
+  analysis
 
 ## Installation
 
--   Install the release version of `precrec` from CRAN with
-    `install.packages("precrec")`.
+- Install the release version of `precrec` from CRAN with
+  `install.packages("precrec")`.
 
--   Alternatively, you can install a development version of `precrec`
-    from [our GitHub repository](https://github.com/evalclass/precrec/).
-    To install it:
+- Alternatively, you can install a development version of `precrec` from
+  [our GitHub repository](https://github.com/evalclass/precrec/). To
+  install it:
 
-    1.  Make sure you have a working development environment.
+  1.  Make sure you have a working development environment.
 
-        -   **Windows**: Install Rtools (available on the CRAN website).
-        -   **Mac**: Install Xcode from the Mac App Store.
-        -   **Linux**: Install a compiler and various development
-            libraries (details vary across different flavors of Linux).
+      - **Windows**: Install Rtools (available on the CRAN website).
+      - **Mac**: Install Xcode from the Mac App Store.
+      - **Linux**: Install a compiler and various development libraries
+        (details vary across different flavors of Linux).
 
-    2.  Install `devtools` from CRAN with
-        `install.packages("devtools")`.
+  2.  Install `devtools` from CRAN with `install.packages("devtools")`.
 
-    3.  Install `precrec` from the GitHub repository with
-        `devtools::install_github("evalclass/precrec")`.
+  3.  Install `precrec` from the GitHub repository with
+      `devtools::install_github("evalclass/precrec")`.
 
 ## Functions
 
@@ -166,7 +164,7 @@ The `autoplot` function outputs ROC and Precision-Recall curves by using
 the `ggplot2` package.
 
 ``` r
-# The ggplot2 package is required 
+# The ggplot2 package is required
 library(ggplot2)
 
 # Show ROC and Precision-Recall plots
@@ -189,13 +187,13 @@ doi:
 
 ## External links
 
--   [Classifier evaluation with imbalanced
-    datasets](https://classeval.wordpress.com/) - our web site that
-    contains several pages with useful tips for performance evaluation
-    on binary classifiers.
+- [Classifier evaluation with imbalanced
+  datasets](https://classeval.wordpress.com/) - our web site that
+  contains several pages with useful tips for performance evaluation on
+  binary classifiers.
 
--   [The Precision-Recall Plot Is More Informative than the ROC Plot
-    When Evaluating Binary Classifiers on Imbalanced
-    Datasets](https://doi.org/10.1371/journal.pone.0118432) - our paper
-    that summarized potential pitfalls of ROC plots with imbalanced
-    datasets and advantages of using precision-recall plots instead.
+- [The Precision-Recall Plot Is More Informative than the ROC Plot When
+  Evaluating Binary Classifiers on Imbalanced
+  Datasets](https://doi.org/10.1371/journal.pone.0118432) - our paper
+  that summarized potential pitfalls of ROC plots with imbalanced
+  datasets and advantages of using precision-recall plots instead.

@@ -54,8 +54,10 @@ ft3_create_mmpoints <- function(raw_curves = FALSE) {
   l4 <- c(1, 1, 0, 1)
   labels <- join_labels(l1, l2, l3, l4)
 
-  mdat <- mmdata(scores, labels, modnames = c("m1", "m2"), dsids = c(1, 2),
-                 expd_first = "modnames")
+  mdat <- mmdata(scores, labels,
+    modnames = c("m1", "m2"), dsids = c(1, 2),
+    expd_first = "modnames"
+  )
   evalmod(mdat, mode = "basic", raw_curves = raw_curves)
 }
 
@@ -65,8 +67,10 @@ test_that("fortify sspoints", {
   }
 
   data(P10N10)
-  sspoints <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
-                      mode = "basic")
+  sspoints <- evalmod(
+    scores = P10N10$scores, labels = P10N10$labels,
+    mode = "basic"
+  )
 
   point_df <- ggplot2::fortify(sspoints)
   expect_true(is.list(point_df))
@@ -78,12 +82,16 @@ test_that("fortify sspoints - dsid_modname", {
   }
 
   data(P10N10)
-  sspoints <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
-                      mode = "basic")
+  sspoints <- evalmod(
+    scores = P10N10$scores, labels = P10N10$labels,
+    mode = "basic"
+  )
 
   point_df <- ggplot2::fortify(sspoints)
-  expect_equal(as.character(point_df$dsid_modname),
-               paste(point_df$modname, point_df$dsid, sep = ":"))
+  expect_equal(
+    as.character(point_df$dsid_modname),
+    paste(point_df$modname, point_df$dsid, sep = ":")
+  )
 })
 
 test_that("fortify mspoints", {
@@ -105,8 +113,10 @@ test_that("fortify mspoints - dsid_modname", {
   mspoints <- ft3_create_mspoints()
 
   point_df <- ggplot2::fortify(mspoints)
-  expect_equal(as.character(point_df$dsid_modname),
-               paste(point_df$modname, point_df$dsid, sep = ":"))
+  expect_equal(
+    as.character(point_df$dsid_modname),
+    paste(point_df$modname, point_df$dsid, sep = ":")
+  )
 })
 
 test_that("fortify smpoints", {
@@ -128,8 +138,10 @@ test_that("fortify smpoints - dsid_modname", {
   smpoints <- ft3_create_smpoints(raw_curves = TRUE)
 
   point_df <- ggplot2::fortify(smpoints)
-  expect_equal(as.character(point_df$dsid_modname),
-               paste(point_df$modname, point_df$dsid, sep = ":"))
+  expect_equal(
+    as.character(point_df$dsid_modname),
+    paste(point_df$modname, point_df$dsid, sep = ":")
+  )
 })
 
 test_that("fortify mmpoints", {
@@ -151,20 +163,27 @@ test_that("fortify mmpoints - dsid_modname", {
   mmpoints <- ft3_create_mmpoints(raw_curves = TRUE)
 
   point_df <- ggplot2::fortify(mmpoints)
-  expect_equal(as.character(point_df$dsid_modname),
-               paste(point_df$modname, point_df$dsid, sep = ":"))
+  expect_equal(
+    as.character(point_df$dsid_modname),
+    paste(point_df$modname, point_df$dsid, sep = ":")
+  )
 
   samp1 <- create_sim_samples(5, 10, 10, c("random", "poor_er", "good_er"))
   samp1$modnames <- rep(c("random", "poor_er", "good_er"), each = 5)
   samp1$dsids <- rep(1:5, 3)
 
-  mmpoints <- evalmod(mode = "basic", scores = samp1$scores, labels = samp1$labels,
-                      modnames = samp1$modnames, dsids = samp1$dsids,
-                      raw_curves = TRUE)
+  mmpoints <- evalmod(
+    mode = "basic", scores = samp1$scores,
+    labels = samp1$labels,
+    modnames = samp1$modnames, dsids = samp1$dsids,
+    raw_curves = TRUE
+  )
   mmpoints_df <- fortify(mmpoints, raw_curves = TRUE)
 
-  expect_equal(unique(paste0(mmpoints_df$modname, ":", mmpoints_df$dsid)),
-               as.character(unique(mmpoints_df$dsid_modname)))
+  expect_equal(
+    unique(paste0(mmpoints_df$modname, ":", mmpoints_df$dsid)),
+    as.character(unique(mmpoints_df$dsid_modname))
+  )
 })
 
 test_that("fortify raw_curve option smpoints", {
@@ -190,7 +209,6 @@ test_that("fortify raw_curve option smpoints", {
 
   args2c <- .get_fortify_arglist(attr(points2, "args"), def_raw_curves = NULL)
   expect_true(args2c[["raw_curves"]])
-
 })
 
 test_that("fortify raw_curve option mmpoints", {
@@ -215,5 +233,4 @@ test_that("fortify raw_curve option mmpoints", {
 
   args2c <- .get_fortify_arglist(attr(points2, "args"), def_raw_curves = NULL)
   expect_true(args2c[["raw_curves"]])
-
 })

@@ -54,8 +54,10 @@ ft2_create_mmcurves <- function(raw_curves = FALSE) {
   l4 <- c(1, 1, 0, 1)
   labels <- join_labels(l1, l2, l3, l4)
 
-  mdat <- mmdata(scores, labels, modnames = c("m1", "m2"), dsids = c(1, 2),
-                 expd_first = "modnames")
+  mdat <- mmdata(scores, labels,
+    modnames = c("m1", "m2"), dsids = c(1, 2),
+    expd_first = "modnames"
+  )
   evalmod(mdat, raw_curves = raw_curves)
 }
 
@@ -85,8 +87,10 @@ test_that("sscurves - reduce points", {
   expect_lte(nrow(curve_df1b), 10000)
 
 
-  curves2 <- evalmod(scores = samp1$scores, labels = samp1$labels,
-                     x_bins = 100)
+  curves2 <- evalmod(
+    scores = samp1$scores, labels = samp1$labels,
+    x_bins = 100
+  )
   curve_df2a <- ggplot2::fortify(curves2)
   expect_gte(nrow(curve_df2a), 1000)
 
@@ -103,9 +107,10 @@ test_that("fortify sscurves - dsid_modname", {
   curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 
   curve_df <- ggplot2::fortify(curves)
-  expect_equal(as.character(curve_df$dsid_modname),
-               paste(curve_df$modname, curve_df$dsid, sep = ":"))
-
+  expect_equal(
+    as.character(curve_df$dsid_modname),
+    paste(curve_df$modname, curve_df$dsid, sep = ":")
+  )
 })
 
 test_that("fortify mscurves", {
@@ -132,8 +137,10 @@ test_that("mscurves - reduce points", {
   curve_df1b <- ggplot2::fortify(curves1, reduce_points = TRUE)
   expect_lte(nrow(curve_df1b), 40000)
 
-  curves2 <- evalmod(scores = samp2$scores, labels = samp2$labels,
-                     x_bins = 100)
+  curves2 <- evalmod(
+    scores = samp2$scores, labels = samp2$labels,
+    x_bins = 100
+  )
   curve_df2a <- ggplot2::fortify(curves2)
   expect_gte(nrow(curve_df2a), 4000)
 
@@ -149,8 +156,10 @@ test_that("fortify mscurves - dsid_modname", {
   curves <- ft2_create_mscurves()
 
   curve_df <- ggplot2::fortify(curves)
-  expect_equal(as.character(curve_df$dsid_modname),
-               paste(curve_df$modname, curve_df$dsid, sep = ":"))
+  expect_equal(
+    as.character(curve_df$dsid_modname),
+    paste(curve_df$modname, curve_df$dsid, sep = ":")
+  )
 })
 
 test_that("fortify smcurves", {
@@ -162,6 +171,10 @@ test_that("fortify smcurves", {
 
   curve_df <- ggplot2::fortify(curves)
   expect_true(is.list(curve_df))
+
+  attr(curves, "args")[["raw_curves"]] <- NULL
+  curve_df2 <- ggplot2::fortify(curves)
+  expect_true(is.list(curve_df2))
 })
 
 test_that("smcurves - reduce points", {
@@ -176,16 +189,20 @@ test_that("smcurves - reduce points", {
   curve_df1a <- ggplot2::fortify(curves1, raw_curves = TRUE)
   expect_gte(nrow(curve_df1a), 40000)
 
-  curve_df1b <- ggplot2::fortify(curves1, raw_curves = TRUE,
-                                 reduce_points = TRUE)
+  curve_df1b <- ggplot2::fortify(curves1,
+    raw_curves = TRUE,
+    reduce_points = TRUE
+  )
   expect_lte(nrow(curve_df1b), 40000)
 
   curves2 <- evalmod(mdat3, x_bins = 100, raw_curves = TRUE)
   curve_df2a <- ggplot2::fortify(curves2, raw_curves = TRUE)
   expect_gte(nrow(curve_df2a), 4000)
 
-  curve_df2b <- ggplot2::fortify(curves2, raw_curves = TRUE,
-                                 reduce_points = TRUE)
+  curve_df2b <- ggplot2::fortify(curves2,
+    raw_curves = TRUE,
+    reduce_points = TRUE
+  )
   expect_lte(nrow(curve_df2b), 4000)
 })
 
@@ -197,8 +214,10 @@ test_that("fortify smcurves - dsid_modname", {
   curves <- ft2_create_smcurves(raw_curves = TRUE)
 
   curve_df <- ggplot2::fortify(curves)
-  expect_equal(as.character(curve_df$dsid_modname),
-               paste(curve_df$modname, curve_df$dsid, sep = ":"))
+  expect_equal(
+    as.character(curve_df$dsid_modname),
+    paste(curve_df$modname, curve_df$dsid, sep = ":")
+  )
 })
 
 test_that("fortify mmcurves", {
@@ -210,6 +229,10 @@ test_that("fortify mmcurves", {
 
   curve_df <- ggplot2::fortify(curves)
   expect_true(is.list(curve_df))
+
+  attr(curves, "args")[["raw_curves"]] <- NULL
+  curve_df2 <- ggplot2::fortify(curves)
+  expect_true(is.list(curve_df2))
 })
 
 test_that("mmcurves - reduce points", {
@@ -218,23 +241,29 @@ test_that("mmcurves - reduce points", {
   }
 
   samp4 <- create_sim_samples(4, 5000, 5000)
-  mdat4 <- mmdata(samp4$scores, samp4$labels, modnames = c("m1", "m2"),
-                  dsids = c(1, 2), expd_first = "modnames")
+  mdat4 <- mmdata(samp4$scores, samp4$labels,
+    modnames = c("m1", "m2"),
+    dsids = c(1, 2), expd_first = "modnames"
+  )
 
   curves1 <- evalmod(mdat4, raw_curves = TRUE)
   curve_df1a <- ggplot2::fortify(curves1, raw_curves = TRUE)
   expect_gte(nrow(curve_df1a), 40000)
 
-  curve_df1b <- ggplot2::fortify(curves1, raw_curves = TRUE,
-                                 reduce_points = TRUE)
+  curve_df1b <- ggplot2::fortify(curves1,
+    raw_curves = TRUE,
+    reduce_points = TRUE
+  )
   expect_lte(nrow(curve_df1b), 40000)
 
   curves2 <- evalmod(mdat4, x_bins = 100, raw_curves = TRUE)
   curve_df2a <- ggplot2::fortify(curves2, raw_curves = TRUE)
   expect_gte(nrow(curve_df2a), 4000)
 
-  curve_df2b <- ggplot2::fortify(curves2, raw_curves = TRUE,
-                                 reduce_points = TRUE)
+  curve_df2b <- ggplot2::fortify(curves2,
+    raw_curves = TRUE,
+    reduce_points = TRUE
+  )
   expect_lte(nrow(curve_df2b), 4000)
 })
 
@@ -246,20 +275,29 @@ test_that("fortify mmcurves - dsid_modname", {
   curves <- ft2_create_mmcurves(raw_curves = TRUE)
 
   curve_df <- ggplot2::fortify(curves)
-  expect_equal(as.character(curve_df$dsid_modname),
-               paste(curve_df$modname, curve_df$dsid, sep = ":"))
+  expect_equal(
+    as.character(curve_df$dsid_modname),
+    paste(curve_df$modname, curve_df$dsid, sep = ":")
+  )
 
   samp1 <- create_sim_samples(5, 10, 10, c("random", "poor_er", "good_er"))
   samp1$modnames <- rep(c("random", "poor_er", "good_er"), each = 5)
   samp1$dsids <- rep(1:5, 3)
 
-  mmcurves <- evalmod(scores = samp1$scores, labels = samp1$labels,
-                      modnames = samp1$modnames, dsids = samp1$dsids,
-                      raw_curves = TRUE)
-  mmcurves_df <- subset(fortify(mmcurves, raw_curves = TRUE), curvetype == "PRC")
+  mmcurves <- evalmod(
+    scores = samp1$scores, labels = samp1$labels,
+    modnames = samp1$modnames, dsids = samp1$dsids,
+    raw_curves = TRUE
+  )
+  mmcurves_df <- subset(
+    fortify(mmcurves, raw_curves = TRUE),
+    curvetype == "PRC"
+  )
 
-  expect_equal(unique(paste0(mmcurves_df$modname, ":", mmcurves_df$dsid)),
-               as.character(unique(mmcurves_df$dsid_modname)))
+  expect_equal(
+    unique(paste0(mmcurves_df$modname, ":", mmcurves_df$dsid)),
+    as.character(unique(mmcurves_df$dsid_modname))
+  )
 })
 
 test_that("fortify raw_curve option smcurves", {
@@ -285,7 +323,6 @@ test_that("fortify raw_curve option smcurves", {
 
   args2c <- .get_fortify_arglist(attr(curves2, "args"), def_raw_curves = NULL)
   expect_true(args2c[["raw_curves"]])
-
 })
 
 test_that("fortify raw_curve option mmcurves", {
@@ -310,6 +347,4 @@ test_that("fortify raw_curve option mmcurves", {
 
   args2c <- .get_fortify_arglist(attr(curves2, "args"), def_raw_curves = NULL)
   expect_true(args2c[["raw_curves"]])
-
 })
-

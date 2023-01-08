@@ -6,8 +6,8 @@ context("MM 3: Reformat labels for single class datasets")
 test_that(".factor_labels() reterns positive label when pos vec is given", {
   expect_pos_label <- function(labels) {
     fmtlbs <- .factor_labels(labels, NULL)
-    eval(bquote(expect_equal(fmtlbs[["nn"]], 0)))
-    eval(bquote(expect_equal(fmtlbs[["np"]], length(labels))))
+    expect_equal(fmtlbs[["nn"]], 0)
+    expect_equal(fmtlbs[["np"]], length(labels))
   }
 
   expect_pos_label(c(2L, 2L, 2L))
@@ -20,8 +20,8 @@ test_that(".factor_labels() reterns positive label when pos vec is given", {
 test_that(".factor_labels() reterns nagative label when neg vec is given", {
   expect_neg_label <- function(labels) {
     fmtlbs <- .factor_labels(labels, NULL)
-    eval(bquote(expect_equal(fmtlbs[["nn"]], length(labels))))
-    eval(bquote(expect_equal(fmtlbs[["np"]], 0)))
+    expect_equal(fmtlbs[["nn"]], length(labels))
+    expect_equal(fmtlbs[["np"]], 0)
   }
 
   expect_neg_label(c(1L, 1L, 1L))
@@ -38,8 +38,8 @@ test_that(".factor_labels() reterns nagative label when neg vec is given", {
 test_that(".factor_labels() reterns default label when pos vec is given", {
   expect_defpos_label <- function(labels, def_pos) {
     fmtlbs <- .factor_labels(labels, def_pos)
-    eval(bquote(expect_equal(fmtlbs[["nn"]], 0)))
-    eval(bquote(expect_equal(fmtlbs[["np"]], length(labels))))
+    expect_equal(fmtlbs[["nn"]], 0)
+    expect_equal(fmtlbs[["np"]], length(labels))
   }
 
   expect_defpos_label(c(2L, 2L, 2L), 2L)
@@ -53,8 +53,8 @@ test_that(".factor_labels() reterns default label when pos vec is given", {
 test_that(".factor_labels() reterns non-default label when neg vec is given", {
   expect_defneg_label <- function(labels, def_pos) {
     fmtlbs <- .factor_labels(labels, def_pos)
-    eval(bquote(expect_equal(fmtlbs[["nn"]], length(labels))))
-    eval(bquote(expect_equal(fmtlbs[["np"]], 0)))
+    expect_equal(fmtlbs[["nn"]], length(labels))
+    expect_equal(fmtlbs[["np"]], 0)
   }
 
   expect_defneg_label(c(1L, 1L, 1L), 2L)

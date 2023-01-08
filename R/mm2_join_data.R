@@ -66,8 +66,10 @@
 #' @export
 join_scores <- function(..., byrow = FALSE, chklen = TRUE) {
   # Call join datasets
-  .join_datasets(..., efunc_vtype = .validate_scores, efunc_nrow = NULL,
-                 byrow = byrow, chklen = chklen)
+  .join_datasets(...,
+    efunc_vtype = .validate_scores, efunc_nrow = NULL,
+    byrow = byrow, chklen = chklen
+  )
 }
 
 #' Join observed labels of multiple test datasets into a list
@@ -137,8 +139,10 @@ join_scores <- function(..., byrow = FALSE, chklen = TRUE) {
 #' @export
 join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
   # Call join datasets
-  .join_datasets(..., efunc_vtype = .validate_labels, efunc_nrow = NULL,
-                 byrow = byrow, chklen = chklen)
+  .join_datasets(...,
+    efunc_vtype = .validate_labels, efunc_nrow = NULL,
+    byrow = byrow, chklen = chklen
+  )
 }
 
 #
@@ -146,11 +150,12 @@ join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
 #
 .join_datasets <- function(..., efunc_vtype = NULL, efunc_nrow = NULL,
                            byrow = FALSE, chklen = TRUE) {
-
   # Validate arguments
-  .validate_join_datasets_args(..., efunc_vtype = efunc_vtype,
-                               efunc_nrow = efunc_nrow, byrow = byrow,
-                               chklen = chklen)
+  .validate_join_datasets_args(...,
+    efunc_vtype = efunc_vtype,
+    efunc_nrow = efunc_nrow, byrow = byrow,
+    chklen = chklen
+  )
 
   # Set a default error function for checking values
   if (is.null(efunc_vtype)) {
@@ -182,9 +187,9 @@ join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
       cdat <- c(cdat, list(ds))
     } else if (is.matrix(ds) || is.data.frame(ds)) {
       if (byrow) {
-        cdat <- c(cdat, lapply(seq(nrow(ds)), function(i) ds[i, ]))
+        cdat <- c(cdat, lapply(seq_len(nrow(ds)), function(i) ds[i, ]))
       } else {
-        cdat <- c(cdat, lapply(seq(ncol(ds)), function(j) ds[, j]))
+        cdat <- c(cdat, lapply(seq_len(ncol(ds)), function(j) ds[, j]))
       }
     } else if (is.array(ds)) {
       if (length(dim(ds)) == 1) {
@@ -235,7 +240,6 @@ join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
 #
 .validate_join_datasets_args <- function(..., efunc_vtype, efunc_nrow, byrow,
                                          chklen) {
-
   # Check ...
   arglist <- list(...)
   if (length(arglist) == 0) {
@@ -243,25 +247,28 @@ join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
   }
 
   # Check efunc_vtype
-  if (!is.null(efunc_vtype)
-      && (!methods::is(efunc_vtype, "function")
-          || length(as.list(formals(efunc_vtype))) != 1)) {
+  if (!is.null(efunc_vtype) &&
+    (!methods::is(efunc_vtype, "function") ||
+      length(as.list(formals(efunc_vtype))) != 1)) {
     stop("efunc_vtype must be a function with 1 argument", call. = FALSE)
   }
 
   # Check efunc_nrow
-  if (!is.null(efunc_nrow)
-      && (!methods::is(efunc_nrow, "function")
-          || length(as.list(formals(efunc_nrow))) != 2)) {
+  if (!is.null(efunc_nrow) &&
+    (!methods::is(efunc_nrow, "function") ||
+      length(as.list(formals(efunc_nrow))) != 2)) {
     stop("efunc_nrow must be a function with 2 arguments", call. = FALSE)
   }
 
   # Check byrow
-  assertthat::assert_that(assertthat::is.flag(byrow),
-                          assertthat::noNA(byrow))
+  assertthat::assert_that(
+    assertthat::is.flag(byrow),
+    assertthat::noNA(byrow)
+  )
 
   # Check chklen
-  assertthat::assert_that(assertthat::is.flag(chklen),
-                          assertthat::noNA(chklen))
-
+  assertthat::assert_that(
+    assertthat::is.flag(chklen),
+    assertthat::noNA(chklen)
+  )
 }

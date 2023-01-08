@@ -117,7 +117,6 @@ void calc_tp_fp(const Rcpp::IntegerVector& olabs,
 // Solve tied scores
 void solve_ties(std::vector<double>& tp, std::vector<double>& fp,
                 unsigned curpos, unsigned ties) {
-
   const double tied_tp = (tp[curpos] - tp[curpos-ties-1]) / (ties + 1);
   const double tied_fp = (fp[curpos] - fp[curpos-ties-1]) / (ties + 1);
   for (unsigned i = 0; i < ties; ++i) {
@@ -795,7 +794,7 @@ void get_yval_single(const Rcpp::NumericVector& xs,
   n_y[vec_size - 2]  = 1;
 
   // Treat missing values
-  for (int i = 0; i < vec_size; ++i) {
+  for (unsigned i = 0; i < vec_size; ++i) {
     if (n_y[i] == 0) {
       if (n_y[i-1] != 0 && n_y[i+1] != 0) {
         s_y_val[i] = (s_y_val[i-1] + s_y_val[i+1]) / 2.0;
@@ -847,17 +846,17 @@ Rcpp::List calc_avg_points(const Rcpp::List& points, double ci_q) {
   std::vector<double> stot_y;        // Total of squared ys
 
   // Create all unique x values
-  for (int i = 0; i < points.size(); ++i) {
+  for (unsigned i = 0; i < static_cast<unsigned>(points.size()); ++i) {
     Rcpp::List c = Rcpp::as<Rcpp::List>(points[i]);
     Rcpp::NumericVector xs = c["x"];
 
-    for (int j = 0; j < xs.size(); ++j) {
+    for (unsigned j = 0; j < static_cast<unsigned>(xs.size()); ++j) {
       all_x_vals.insert(xs[j]);
     }
   }
 
   // Resize vectors
-  int vec_size = all_x_vals.size();
+  const unsigned vec_size = static_cast<const unsigned>(all_x_vals.size());
   x_val.resize(vec_size, 0.0);
   avg_y.resize(vec_size, 0.0);
   se_y.resize(vec_size, 0.0);
@@ -878,12 +877,12 @@ Rcpp::List calc_avg_points(const Rcpp::List& points, double ci_q) {
 
   // Calculate total
   idx = 0;
-  for (int i = 0; i < points.size(); ++i) {
+  for (unsigned i = 0; i < static_cast<unsigned>(points.size()); ++i) {
     Rcpp::List c = Rcpp::as<Rcpp::List>(points[i]);
     Rcpp::NumericVector xs = c["x"];
     Rcpp::NumericVector ys = c["y"];
 
-    for (int j = 0; j < ys.size(); ++j) {
+    for (unsigned j = 0; j < static_cast<unsigned>(ys.size()); ++j) {
       idx = x_vals_idx[xs[j]];
 
       tot_y[idx] += ys[j];
@@ -896,8 +895,8 @@ Rcpp::List calc_avg_points(const Rcpp::List& points, double ci_q) {
   double exp2;
   double sd;
   double n;
-  for (int i = 0; i < vec_size; ++i) {
-    n = double(count_y[i]);
+  for (unsigned i = 0; i < vec_size; ++i) {
+    n = static_cast<double>(count_y[i]);
 
     // y
     avg_y[i] = tot_y[i] / n;
@@ -928,5 +927,4 @@ Rcpp::List calc_avg_points(const Rcpp::List& points, double ci_q) {
 
   return ret_val;
 }
-
 

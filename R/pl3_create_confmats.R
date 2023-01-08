@@ -3,7 +3,6 @@
 #
 create_confmats <- function(fmdat, scores = NULL, labels = NULL,
                             keep_fmdat = FALSE, ...) {
-
   # === Validate input arguments ===
   # Create fmdat from scores and labels if fmdat is missing
   fmdat <- .create_src_obj(fmdat, "fmdat", reformat_data, scores, labels, ...)
@@ -11,8 +10,10 @@ create_confmats <- function(fmdat, scores = NULL, labels = NULL,
 
   # === Create confusion matrices for all ranks ===
   # Call a cpp function via Rcpp interface
-  cmats <- create_confusion_matrices(fmdat[["labels"]], fmdat[["ranks"]],
-                                     fmdat[["rank_idx"]])
+  cmats <- create_confusion_matrices(
+    fmdat[["labels"]], fmdat[["ranks"]],
+    fmdat[["rank_idx"]]
+  )
   .check_cpp_func_error(cmats, "create_confusion_matrices")
 
   # === Create an S3 object ===
@@ -49,50 +50,64 @@ create_confmats <- function(fmdat, scores = NULL, labels = NULL,
 
   # Validate class items and attributes
   item_names <- c("pos_num", "neg_num", "tp", "fp", "tn", "fn", "ranks")
-  attr_names <- c("modname", "dsid", "nn", "np", "args", "cpp_errmsg",
-                  "src", "validated")
-  arg_names <- c("na_worst", "na.last", "ties_method", "ties.method",
-                 "modname", "dsid", "keep_fmdat")
-  .validate_basic(cmats, "cmats", "create_confmats", item_names, attr_names,
-                  arg_names)
+  attr_names <- c(
+    "modname", "dsid", "nn", "np", "args", "cpp_errmsg",
+    "src", "validated"
+  )
+  arg_names <- c(
+    "na_worst", "na.last", "ties_method", "ties.method",
+    "modname", "dsid", "keep_fmdat"
+  )
+  .validate_basic(
+    cmats, "cmats", "create_confmats", item_names, attr_names,
+    arg_names
+  )
 
   # Check values of class items
   n <- length(cmats[["tp"]])
-  if (length(cmats[["fp"]]) != n || length(cmats[["tn"]]) != n
-      || length(cmats[["fn"]]) != n) {
+  if (length(cmats[["fp"]]) != n || length(cmats[["tn"]]) != n ||
+    length(cmats[["fn"]]) != n) {
     stop("tp, fp, tn, and fn in cmats must be all the same lengths",
-         call. = FALSE)
+      call. = FALSE
+    )
   }
 
   # TP
-  assertthat::assert_that(is.atomic(cmats[["tp"]]),
-                          is.vector(cmats[["tp"]]),
-                          is.numeric(cmats[["tp"]]),
-                          cmats[["tp"]][1] == 0,
-                          cmats[["tp"]][n] == cmats[["pos_num"]])
+  assertthat::assert_that(
+    is.atomic(cmats[["tp"]]),
+    is.vector(cmats[["tp"]]),
+    is.numeric(cmats[["tp"]]),
+    cmats[["tp"]][1] == 0,
+    cmats[["tp"]][n] == cmats[["pos_num"]]
+  )
 
   # FP
-  assertthat::assert_that(is.atomic(cmats[["fp"]]),
-                          is.vector(cmats[["fp"]]),
-                          is.numeric(cmats[["fp"]]),
-                          cmats[["fp"]][1] == 0,
-                          cmats[["fp"]][n] == cmats[["neg_num"]])
+  assertthat::assert_that(
+    is.atomic(cmats[["fp"]]),
+    is.vector(cmats[["fp"]]),
+    is.numeric(cmats[["fp"]]),
+    cmats[["fp"]][1] == 0,
+    cmats[["fp"]][n] == cmats[["neg_num"]]
+  )
 
   # FN
-  assertthat::assert_that(is.atomic(cmats[["fn"]]),
-                          is.vector(cmats[["fn"]]),
-                          is.numeric(cmats[["fn"]]),
-                          cmats[["fn"]][1] == cmats[["pos_num"]],
-                          cmats[["fn"]][n] == 0)
+  assertthat::assert_that(
+    is.atomic(cmats[["fn"]]),
+    is.vector(cmats[["fn"]]),
+    is.numeric(cmats[["fn"]]),
+    cmats[["fn"]][1] == cmats[["pos_num"]],
+    cmats[["fn"]][n] == 0
+  )
 
   # TN
-  assertthat::assert_that(is.atomic(cmats[["tn"]]),
-                          is.vector(cmats[["tn"]]),
-                          is.numeric(cmats[["tn"]]),
-                          cmats[["tn"]][1] == cmats[["neg_num"]],
-                          cmats[["tn"]][n] == 0)
+  assertthat::assert_that(
+    is.atomic(cmats[["tn"]]),
+    is.vector(cmats[["tn"]]),
+    is.numeric(cmats[["tn"]]),
+    cmats[["tn"]][1] == cmats[["neg_num"]],
+    cmats[["tn"]][n] == 0
+  )
 
   attr(cmats, "validated") <- TRUE
   cmats
 }
-

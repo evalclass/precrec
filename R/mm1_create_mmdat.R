@@ -119,7 +119,8 @@
 #'
 #' ## Multiple models & single test dataset
 #' msmdat1 <- mmdata(samps[["scores"]], samps[["labels"]],
-#'                   modnames = samps[["modnames"]])
+#'   modnames = samps[["modnames"]]
+#' )
 #' msmdat1
 #'
 #' ## Use join_scores and join_labels
@@ -144,8 +145,9 @@
 #'
 #' ## Single model & multiple test datasets
 #' smmdat <- mmdata(samps[["scores"]], samps[["labels"]],
-#'                  modnames = samps[["modnames"]],
-#'                  dsids = samps[["dsids"]])
+#'   modnames = samps[["modnames"]],
+#'   dsids = samps[["dsids"]]
+#' )
 #' smmdat
 #'
 #'
@@ -158,8 +160,9 @@
 #'
 #' ## Multiple models & multiple test datasets
 #' mmmdat <- mmdata(samps[["scores"]], samps[["labels"]],
-#'                  modnames = samps[["modnames"]],
-#'                  dsids = samps[["dsids"]])
+#'   modnames = samps[["modnames"]],
+#'   dsids = samps[["dsids"]]
+#' )
 #' mmmdat
 #'
 #'
@@ -172,15 +175,19 @@
 #' head(M2N50F5)
 #'
 #' ## Speficy nessesary columns to create mdat
-#' cvdat1 <- mmdata(nfold_df = M2N50F5, score_cols = c(1, 2),
-#'                  lab_col = 3, fold_col = 4,
-#'                  modnames = c("m1", "m2"), dsids = 1:5)
+#' cvdat1 <- mmdata(
+#'   nfold_df = M2N50F5, score_cols = c(1, 2),
+#'   lab_col = 3, fold_col = 4,
+#'   modnames = c("m1", "m2"), dsids = 1:5
+#' )
 #' cvdat1
 #'
 #' ## Use column names
-#' cvdat2 <- mmdata(nfold_df = M2N50F5, score_cols = c("score1", "score2"),
-#'                  lab_col = "label", fold_col = "fold",
-#'                  modnames = c("m1", "m2"), dsids = 1:5)
+#' cvdat2 <- mmdata(
+#'   nfold_df = M2N50F5, score_cols = c("score1", "score2"),
+#'   lab_col = "label", fold_col = "fold",
+#'   modnames = c("m1", "m2"), dsids = 1:5
+#' )
 #' cvdat2
 #'
 #' @export
@@ -189,10 +196,9 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
                    expd_first = NULL, mode = "rocprc",
                    nfold_df = NULL, score_cols = NULL, lab_col = NULL,
                    fold_col = NULL, ...) {
-
   # === Join datasets ===
-  if (!is.null(nfold_df) && !is.null(score_cols) && !is.null(lab_col)
-      && !is.null(fold_col)) {
+  if (!is.null(nfold_df) && !is.null(score_cols) && !is.null(lab_col) &&
+    !is.null(fold_col)) {
     nfold_list <- format_nfold(nfold_df, score_cols, lab_col, fold_col)
     lscores <- nfold_list$scores
     llabels <- nfold_list$labels
@@ -215,19 +221,22 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   mnames <- .create_modnames(length(lscores), modnames, dsids, new_expd_first)
   new_modnames <- mnames[["mn"]]
   new_dsids <- mnames[["ds"]]
-  data_info <- data.frame(modnames = new_modnames, dsids = new_dsids,
-                          nn = rep(NA, length(new_modnames)),
-                          np = rep(NA, length(new_modnames)),
-                          stringsAsFactors = FALSE)
+  data_info <- data.frame(
+    modnames = new_modnames, dsids = new_dsids,
+    nn = rep(NA, length(new_modnames)),
+    np = rep(NA, length(new_modnames)),
+    stringsAsFactors = FALSE
+  )
 
   # === Validate arguments and variables ===
   new_mode <- .pmatch_mode(mode)
   new_ties_method <- .pmatch_tiesmethod(ties_method, ...)
   new_na_worst <- .get_new_naworst(na_worst, ...)
   .validate_mmdata_args(lscores, llabels, new_modnames, new_dsids,
-                        posclass = posclass,
-                        na_worst = new_na_worst, ties_method = new_ties_method,
-                        expd_first = new_expd_first, mode = new_mode)
+    posclass = posclass,
+    na_worst = new_na_worst, ties_method = new_ties_method,
+    expd_first = new_expd_first, mode = new_mode
+  )
 
   # Replicate labels
   if (length(lscores) != 1 && length(llabels) == 1) {
@@ -236,10 +245,12 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
 
   # === Reformat input data ===
   func_fmdat <- function(i) {
-    reformat_data(lscores[[i]], llabels[[i]], posclass = posclass,
-                  na_worst = new_na_worst, ties_method = new_ties_method,
-                  modname = new_modnames[i], dsid = new_dsids[i],
-                  mode = new_mode, ...)
+    reformat_data(lscores[[i]], llabels[[i]],
+      posclass = posclass,
+      na_worst = new_na_worst, ties_method = new_ties_method,
+      modname = new_modnames[i], dsid = new_dsids[i],
+      mode = new_mode, ...
+    )
   }
   mmdat <- lapply(seq_along(lscores), func_fmdat)
 
@@ -255,11 +266,13 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   attr(s3obj, "data_info") <- data_info
   attr(s3obj, "uniq_modnames") <- unique(new_modnames)
   attr(s3obj, "uniq_dsids") <- unique(new_dsids)
-  attr(s3obj, "args") <- list(posclass = posclass,
-                              na_worst = new_na_worst,
-                              ties_method = new_ties_method,
-                              expd_first = new_expd_first,
-                              mode = new_mode)
+  attr(s3obj, "args") <- list(
+    posclass = posclass,
+    na_worst = new_na_worst,
+    ties_method = new_ties_method,
+    expd_first = new_expd_first,
+    mode = new_mode
+  )
   attr(s3obj, "validated") <- FALSE
 
   # Call .validate.mdat()
@@ -291,51 +304,28 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
 # Check partial match - ties method
 #
 .pmatch_tiesmethod <- function(val, ...) {
-
-  set_ties_dot_method <- FALSE
   arglist <- list(...)
   if (!is.null(arglist[["ties.method"]])) {
-    val = arglist[["ties.method"]]
-    set_ties_dot_method <- TRUE
+    val <- arglist[["ties.method"]]
   }
 
   if (assertthat::is.string(val)) {
-    if (!set_ties_dot_method) {
-      choices <- c("equiv", "random", "first")
-      if (val %in% choices) {
-        return(val)
-      }
-
-      if (!is.na(pmatch(val, "equiv"))) {
-        return("equiv")
-      }
-
-      if (!is.na(pmatch(val, "random"))) {
-        return("random")
-      }
-
-      if (!is.na(pmatch(val, "first"))) {
-        return("first")
-      }
-    } else {
-      choices <- c("average", "random", "last")
-      if (val %in% choices) {
-        return(val)
-      }
-
-      if (!is.na(pmatch(val, "average"))) {
-        return("equiv")
-      }
-
-      if (!is.na(pmatch(val, "random"))) {
-        return("random")
-      }
-
-      if (!is.na(pmatch(val, "last"))) {
-        return("first")
-      }
+    choices <- c("equiv", "random", "first")
+    if (val %in% choices) {
+      return(val)
     }
 
+    if (!is.na(pmatch(val, "equiv"))) {
+      return("equiv")
+    }
+
+    if (!is.na(pmatch(val, "random"))) {
+      return("random")
+    }
+
+    if (!is.na(pmatch(val, "first"))) {
+      return("first")
+    }
   }
 
   val
@@ -348,7 +338,7 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   set_na_last <- FALSE
   arglist <- list(...)
   if (!is.null(arglist[["na.last"]])) {
-    val = arglist[["na.last"]]
+    val <- arglist[["na.last"]]
     set_na_last <- TRUE
   }
 
@@ -419,7 +409,6 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
 
   # === Error handling ===
   stop("Invalid modnames and/or dsids", call. = FALSE)
-
 }
 
 #
@@ -427,11 +416,12 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
 #
 .validate_mmdata_args <- function(lscores, llabels, modnames, dsids, posclass,
                                   na_worst, ties_method, expd_first, mode) {
-
   # Check lscores and llabels
   if (length(llabels) != 1 && length(lscores) != length(llabels)) {
-    stop(paste0("scores and labels must be the same lengths",
-                ", or the length of labels must be 1"), call. = FALSE)
+    stop(paste0(
+      "scores and labels must be the same lengths",
+      ", or the length of labels must be 1"
+    ), call. = FALSE)
   }
 
   # Check model names
@@ -459,7 +449,6 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   if (length(modnames) != length(dsids)) {
     stop("modnames and dsids must be the same lengths", call. = FALSE)
   }
-
 }
 
 #
@@ -478,11 +467,15 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
 
   # Validate class items and attributes
   item_names <- NULL
-  attr_names <- c("data_info", "uniq_modnames", "uniq_dsids", "args",
-                  "validated")
+  attr_names <- c(
+    "data_info", "uniq_modnames", "uniq_dsids", "args",
+    "validated"
+  )
   arg_names <- c("posclass", "na_worst", "ties_method", "expd_first", "mode")
-  .validate_basic(mdat, "mdat", "mmdata", item_names, attr_names,
-                  arg_names)
+  .validate_basic(
+    mdat, "mdat", "mmdata", item_names, attr_names,
+    arg_names
+  )
 
   # Check values of class items
   if (length(mdat) != nrow(attr(mdat, "data_info"))) {

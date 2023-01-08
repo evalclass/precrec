@@ -3,16 +3,20 @@
 #
 calc_avg_rocprc <- function(curves, modnames, uniq_modnames, cb_alpha,
                             x_bins) {
-  .calc_avg_common(curves, "curve", "avgcurves", modnames, uniq_modnames,
-                   cb_alpha, x_bins)
+  .calc_avg_common(
+    curves, "curve", "avgcurves", modnames, uniq_modnames,
+    cb_alpha, x_bins
+  )
 }
 
 #
 # Calculate the average points for a model
 #
 calc_avg_basic <- function(epoints, modnames, uniq_modnames, cb_alpha) {
-  .calc_avg_common(epoints, "point", "avgpoints", modnames, uniq_modnames,
-                   cb_alpha, NULL)
+  .calc_avg_common(
+    epoints, "point", "avgpoints", modnames, uniq_modnames,
+    cb_alpha, NULL
+  )
 }
 
 #
@@ -20,7 +24,6 @@ calc_avg_basic <- function(epoints, modnames, uniq_modnames, cb_alpha) {
 #
 .calc_avg_common <- function(obj, mode, class_name, modnames, uniq_modnames,
                              cb_alpha, x_bins) {
-
   # === Validate input arguments ===
   if (is.null(x_bins) || any(is.na(x_bins))) {
     x_bins <- 1
@@ -43,7 +46,6 @@ calc_avg_basic <- function(epoints, modnames, uniq_modnames, cb_alpha) {
     if (mode == "curve") {
       avgs <- calc_avg_curve(obj_by_model[[i]], x_bins, cb_zval)
       .check_cpp_func_error(avgs, "calc_avg_curve")
-
     } else if (mode == "point") {
       avgs <- calc_avg_points(obj_by_model[[i]], cb_zval)
       .check_cpp_func_error(avgs, "calc_avg_basic")
@@ -60,8 +62,10 @@ calc_avg_basic <- function(epoints, modnames, uniq_modnames, cb_alpha) {
   attr(s3obj, "cb_zval") <- cb_zval
   attr(s3obj, "pauc") <- NA
   attr(s3obj, "spauc") <- NA
-  attr(s3obj, "args") <- list(cb_alpha = cb_alpha,
-                              x_bins = x_bins)
+  attr(s3obj, "args") <- list(
+    cb_alpha = cb_alpha,
+    x_bins = x_bins
+  )
   attr(s3obj, "validated") <- FALSE
 
   # Call .validate()
@@ -81,8 +85,10 @@ calc_avg_basic <- function(epoints, modnames, uniq_modnames, cb_alpha) {
   item_names <- NULL
   attr_names <- c("uniq_modnames", "cb_zval", "args", "validated")
   arg_names <- c("cb_alpha", "x_bins")
-  .validate_basic(avgobj, class_name, func_name, item_names, attr_names,
-                  arg_names)
+  .validate_basic(
+    avgobj, class_name, func_name, item_names, attr_names,
+    arg_names
+  )
 
   attr(avgobj, "validated") <- TRUE
   avgobj

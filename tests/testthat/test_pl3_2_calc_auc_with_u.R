@@ -19,7 +19,7 @@ test_that("calc_auc_with_u() reterns a 'uauc' object", {
 test_that("'sdat' must be a 'sdat' object", {
   expect_err_msg <- function(sdat) {
     err_msg <- "Unrecognized class for .validate()"
-    eval(bquote(expect_error(calc_auc_with_u(sdat), err_msg)))
+    expect_error(calc_auc_with_u(sdat), err_msg)
   }
 
   expect_err_msg(list())
@@ -29,23 +29,31 @@ test_that("'sdat' must be a 'sdat' object", {
 test_that("calc_auc_with_u() can directly take scores and labels", {
   sdat <- reformat_data(c(0.1, 0.2, 0.2, 0), c(1, 0, 1, 1), mode = "aucroc")
   auc1 <- calc_auc_with_u(sdat)
-  auc2 <- calc_auc_with_u(scores = c(0.1, 0.2, 0.2, 0),
-                          labels = c(1, 0, 1, 1))
+  auc2 <- calc_auc_with_u(
+    scores = c(0.1, 0.2, 0.2, 0),
+    labels = c(1, 0, 1, 1)
+  )
 
   expect_equal(auc1, auc2)
 })
 
 test_that("calc_auc_with_u() accepts arguments for reformat_data()", {
   err_msg <- "Invalid arguments: na.rm"
-  expect_error(calc_auc_with_u(scores = c(0.1, 0.2, 0.2, 0),
-                               labels = c(1, 0, 1, 1), na.rm = TRUE),
-               err_msg)
+  expect_error(
+    calc_auc_with_u(
+      scores = c(0.1, 0.2, 0.2, 0),
+      labels = c(1, 0, 1, 1), na.rm = TRUE
+    ),
+    err_msg
+  )
 
-  aucs <- calc_auc_with_u(scores = c(0.1, 0.2, 0),
-                          labels = c(1, 0, 1),
-                          na_worst = TRUE,
-                          ties_method = "first",
-                          keep_sdat = TRUE)
+  aucs <- calc_auc_with_u(
+    scores = c(0.1, 0.2, 0),
+    labels = c(1, 0, 1),
+    na_worst = TRUE,
+    ties_method = "first",
+    keep_sdat = TRUE
+  )
 
   expect_equal(.get_obj_arg(aucs, "sdat", "na_worst"), TRUE)
 })
@@ -105,10 +113,11 @@ test_that("ss test data", {
   uaucs1 <- calc_auc_with_u(scores = scores, labels = labels)
   expect_equal(aucs, uaucs1$auc, tolerance = 1e-4)
 
-  uaucs2 <- calc_auc_with_u(scores = scores, labels = labels,
-                            ustat_method = "sort")
+  uaucs2 <- calc_auc_with_u(
+    scores = scores, labels = labels,
+    ustat_method = "sort"
+  )
   expect_equal(aucs, uaucs2$auc, tolerance = 1e-4)
-
 })
 
 test_that("ms test data", {
@@ -128,8 +137,10 @@ test_that("ms test data", {
     uaucs1 <- calc_auc_with_u(scores = s, labels = l)
     expect_equal(aucs[i], uaucs1$auc, tolerance = 1e-4)
 
-    uaucs2 <- calc_auc_with_u(scores = s, labels = l,
-                              ustat_method = "sort")
+    uaucs2 <- calc_auc_with_u(
+      scores = s, labels = l,
+      ustat_method = "sort"
+    )
     expect_equal(aucs[i], uaucs2$auc, tolerance = 1e-4)
   }
 })
@@ -150,12 +161,12 @@ test_that("sm test data", {
     uaucs1 <- calc_auc_with_u(scores = s, labels = l)
     expect_equal(aucs[i], uaucs1$auc, tolerance = 1e-4)
 
-    uaucs2 <- calc_auc_with_u(scores = s, labels = l,
-                              ustat_method = "sort")
+    uaucs2 <- calc_auc_with_u(
+      scores = s, labels = l,
+      ustat_method = "sort"
+    )
     expect_equal(aucs[i], uaucs2$auc, tolerance = 1e-4)
   }
-
-
 })
 
 test_that("mm test data", {
@@ -175,10 +186,10 @@ test_that("mm test data", {
     uaucs1 <- calc_auc_with_u(scores = s, labels = l)
     expect_equal(aucs[i], uaucs1$auc, tolerance = 1e-4)
 
-    uaucs2 <- calc_auc_with_u(scores = s, labels = l,
-                              ustat_method = "sort")
+    uaucs2 <- calc_auc_with_u(
+      scores = s, labels = l,
+      ustat_method = "sort"
+    )
     expect_equal(aucs[i], uaucs2$auc, tolerance = 1e-4)
   }
-
 })
-

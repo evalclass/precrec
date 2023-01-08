@@ -14,7 +14,7 @@ test_that("rank_scores() reterns a numeric vector", {
 test_that("rank_scores() reterns a vector with the same length as input", {
   expect_equal_length <- function(scores) {
     ranks <- .rank_scores(scores)
-    eval(bquote(expect_equal(length(ranks[["ranks"]]), length(scores))))
+    expect_equal(length(ranks[["ranks"]]), length(scores))
   }
 
   scores1 <- c(-1.2, 1.0)
@@ -26,7 +26,7 @@ test_that("rank_scores() reterns a vector with the same length as input", {
 
 test_that("'scores' is an numeric vector", {
   expect_err_msg <- function(err_msg, scores) {
-    eval(bquote(expect_error(.rank_scores(scores), err_msg)))
+    expect_error(.rank_scores(scores), err_msg)
   }
 
   err_msg <- "scores is not a numeric or integer vector"
@@ -44,7 +44,7 @@ test_that("'scores' is an numeric vector", {
 test_that("Length of 'scores' must be >=1", {
   expect_err_msg <- function(scores) {
     err_msg <- "not greater than 0L"
-    eval(bquote(expect_error(.rank_scores(scores), err_msg)))
+    expect_error(.rank_scores(scores), err_msg)
   }
 
   expect_err_msg(as.numeric())
@@ -53,8 +53,7 @@ test_that("Length of 'scores' must be >=1", {
 test_that("'na_worst' should be TRUE or FALSE", {
   expect_err_msg <- function(err_msg, na_worst) {
     scores <- c(1.1, 2.2)
-    eval(bquote(expect_error(.rank_scores(scores, na_worst = na_worst),
-                             err_msg)))
+    expect_error(.rank_scores(scores, na_worst = na_worst), err_msg)
   }
 
   err_msg <- "na_worst contains 1 missing values"
@@ -72,8 +71,7 @@ test_that("'na_worst' should be TRUE or FALSE", {
 test_that("'ties_method' should be one of the three options", {
   expect_err_msg <- function(err_msg, ties_method) {
     scores <- c(1, 2)
-    eval(bquote(expect_error(.rank_scores(scores, ties_method = ties_method),
-                             err_msg)))
+    expect_error(.rank_scores(scores, ties_method = ties_method), err_msg)
   }
 
   err_msg <- "ties_method is not a string"
@@ -87,7 +85,7 @@ test_that("'ties_method' should be one of the three options", {
 test_that("NAs in 'scores' should be controlled by 'na_worst'", {
   expect_equal_ranks <- function(scores, na_worst, ranks) {
     sranks <- .rank_scores(scores, na_worst = na_worst)
-    eval(bquote(expect_equal(sranks[["ranks"]], ranks)))
+    expect_equal(sranks[["ranks"]], ranks)
   }
 
   na1_scores <- c(NA, 0.2, 0.1)
@@ -108,7 +106,7 @@ test_that("Ties should be controlled by 'ties_method'", {
   expect_equal_ranks <- function(ties_method, ranks) {
     scores <- c(0.1, 0.2, 0.2, 0.2, 0.3)
     sranks <- .rank_scores(scores, ties_method = ties_method)
-    eval(bquote(expect_equal(sranks[["ranks"]], ranks)))
+    expect_equal(sranks[["ranks"]], ranks)
   }
 
   expect_equal_ranks("equiv", c(5, 2, 2, 2, 1))
@@ -122,4 +120,3 @@ test_that("Ties should be controlled by 'ties_method'", {
 
   expect_true(any(r0[["ranks"]] == r1, r0[["ranks"]] == r2))
 })
-

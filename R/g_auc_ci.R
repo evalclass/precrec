@@ -43,8 +43,9 @@
 #' ## Create sample datasets with 100 positives and 100 negatives
 #' samps <- create_sim_samples(4, 100, 100, "good_er")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-#'                modnames = samps[["modnames"]],
-#'                dsids = samps[["dsids"]])
+#'   modnames = samps[["modnames"]],
+#'   dsids = samps[["dsids"]]
+#' )
 #'
 #' ## Generate an smcurve object that contains ROC and Precision-Recall curves
 #' smcurves <- evalmod(mdat)
@@ -62,8 +63,9 @@
 #' ## Create sample datasets with 100 positives and 100 negatives
 #' samps <- create_sim_samples(4, 100, 100, "all")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-#'                modnames = samps[["modnames"]],
-#'                dsids = samps[["dsids"]])
+#'   modnames = samps[["modnames"]],
+#'   dsids = samps[["dsids"]]
+#' )
 #'
 #' ## Generate an mscurve object that contains ROC and Precision-Recall curves
 #' mmcurves <- evalmod(mdat)
@@ -75,10 +77,12 @@
 #' mm_auc_ci
 #'
 #' @export
-auc_ci <- function(curves, alpha=NULL, dtype=NULL) UseMethod("auc_ci", curves)
+auc_ci <- function(curves, alpha = NULL, dtype = NULL) {
+  UseMethod("auc_ci", curves)
+}
 
 #' @export
-auc_ci.default <- function(curves, alpha=NULL, dtype=NULL) {
+auc_ci.default <- function(curves, alpha = NULL, dtype = NULL) {
   stop("An object of unknown class is specified")
 }
 
@@ -87,13 +91,16 @@ auc_ci.default <- function(curves, alpha=NULL, dtype=NULL) {
 #
 #' @rdname auc_ci
 #' @export
-auc_ci.aucs <- function(curves, alpha=0.05, dtype="normal") {
+auc_ci.aucs <- function(curves, alpha = 0.05, dtype = "normal") {
   # Validation
   .validate(curves)
   assertthat::assert_that(attr(curves, "dataset_type") == "multiple",
-                          msg = "'curves' must contain multiple datasets.")
-  assertthat::assert_that(assertthat::is.number(alpha),
-                          alpha >= 0 && alpha <= 1)
+    msg = "'curves' must contain multiple datasets."
+  )
+  assertthat::assert_that(
+    assertthat::is.number(alpha),
+    alpha >= 0 && alpha <= 1
+  )
   assertthat::assert_that(assertthat::is.string(dtype))
 
   # Check type of distribution
@@ -102,7 +109,10 @@ auc_ci.aucs <- function(curves, alpha=0.05, dtype="normal") {
   if (!is.na(dype_match)) {
     dtype <- dtype_tab[dype_match]
   }
-  err_msg = paste0("'dtype' must be one of ", paste(dtype_tab, collapse = ", "))
+  err_msg <- paste0(
+    "'dtype' must be one of ",
+    paste(dtype_tab, collapse = ", ")
+  )
   assertthat::assert_that(dtype %in% dtype_tab, msg = err_msg)
 
   # Get AUC scores
@@ -122,14 +132,18 @@ auc_ci.aucs <- function(curves, alpha=0.05, dtype="normal") {
       aucs_mean <- mean(aucs_subset$aucs)
       aucs_n <- length(aucs_subset$aucs)
       if (aucs_n < 2) {
-        ci_df <- rbind(ci_df,
-                       data.frame(modnames = modname,
-                                  curvetypes = curvetype,
-                                  mean = aucs_mean,
-                                  error = 0,
-                                  lower_bound = aucs_mean,
-                                  upper_bound = aucs_mean,
-                                  n = aucs_n))
+        ci_df <- rbind(
+          ci_df,
+          data.frame(
+            modnames = modname,
+            curvetypes = curvetype,
+            mean = aucs_mean,
+            error = 0,
+            lower_bound = aucs_mean,
+            upper_bound = aucs_mean,
+            n = aucs_n
+          )
+        )
         next
       }
       aucs_sd <- sd(aucs_subset$aucs)
@@ -145,16 +159,19 @@ auc_ci.aucs <- function(curves, alpha=0.05, dtype="normal") {
       acus_lower <- max(aucs_mean - aucs_error, 0.0)
       acus_upper <- min(aucs_mean + aucs_error, 1.0)
 
-      ci_df <- rbind(ci_df,
-                     data.frame(modnames = modname,
-                                curvetypes = curvetype,
-                                mean = aucs_mean,
-                                error = aucs_error,
-                                lower_bound = acus_lower,
-                                upper_bound = acus_upper,
-                                n = aucs_n))
+      ci_df <- rbind(
+        ci_df,
+        data.frame(
+          modnames = modname,
+          curvetypes = curvetype,
+          mean = aucs_mean,
+          error = aucs_error,
+          lower_bound = acus_lower,
+          upper_bound = acus_upper,
+          n = aucs_n
+        )
+      )
     }
-
   }
 
   ci_df

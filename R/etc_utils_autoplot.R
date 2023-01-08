@@ -160,8 +160,10 @@
 #' autoplot(sscurves, curvetype = "PRC")
 #'
 #' ## Generate an sspoints object that contains basic evaluation measures
-#' sspoints <- evalmod(mode = "basic", scores = P10N10$scores,
-#'                     labels = P10N10$labels)
+#' sspoints <- evalmod(
+#'   mode = "basic", scores = P10N10$scores,
+#'   labels = P10N10$labels
+#' )
 #'
 #' ## Normalized ranks vs. basic evaluation measures
 #' autoplot(sspoints)
@@ -177,7 +179,8 @@
 #' ## Create sample datasets with 100 positives and 100 negatives
 #' samps <- create_sim_samples(1, 100, 100, "all")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-#'                modnames = samps[["modnames"]])
+#'   modnames = samps[["modnames"]]
+#' )
 #'
 #' ## Generate an mscurve object that contains ROC and Precision-Recall curves
 #' mscurves <- evalmod(mdat)
@@ -215,8 +218,9 @@
 #' ## Create sample datasets with 100 positives and 100 negatives
 #' samps <- create_sim_samples(10, 100, 100, "good_er")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-#'                modnames = samps[["modnames"]],
-#'                dsids = samps[["dsids"]])
+#'   modnames = samps[["modnames"]],
+#'   dsids = samps[["dsids"]]
+#' )
 #'
 #' ## Generate an smcurve object that contains ROC and Precision-Recall curves
 #' smcurves <- evalmod(mdat, raw_curves = TRUE)
@@ -255,8 +259,9 @@
 #' ## Create sample datasets with 100 positives and 100 negatives
 #' samps <- create_sim_samples(10, 100, 100, "all")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-#'                modnames = samps[["modnames"]],
-#'                dsids = samps[["dsids"]])
+#'   modnames = samps[["modnames"]],
+#'   dsids = samps[["dsids"]]
+#' )
 #'
 #' ## Generate an mscurve object that contains ROC and Precision-Recall curves
 #' mmcurves <- evalmod(mdat, raw_curves = TRUE)
@@ -272,8 +277,10 @@
 #'
 #' ## Reduced/Full supporting points
 #' sampmm <- create_sim_samples(4, 5000, 5000)
-#' mdatmm <- mmdata(sampmm$scores, sampmm$labels, modnames = c("m1", "m2"),
-#'                  dsids = c(1, 2), expd_first = "modnames")
+#' mdatmm <- mmdata(sampmm$scores, sampmm$labels,
+#'   modnames = c("m1", "m2"),
+#'   dsids = c(1, 2), expd_first = "modnames"
+#' )
 #' evalmm <- evalmod(mdatmm, raw_curves = TRUE)
 #'
 #' # Reduced supporting point
@@ -297,9 +304,11 @@
 #' data(M2N50F5)
 #'
 #' ## Speficy nessesary columns to create mdat
-#' cvdat <- mmdata(nfold_df = M2N50F5, score_cols = c(1, 2),
-#'                 lab_col = 3, fold_col = 4,
-#'                 modnames = c("m1", "m2"), dsids = 1:5)
+#' cvdat <- mmdata(
+#'   nfold_df = M2N50F5, score_cols = c(1, 2),
+#'   lab_col = 3, fold_col = 4,
+#'   modnames = c("m1", "m2"), dsids = 1:5
+#' )
 #'
 #' ## Generate an mmcurve object that contains ROC and Precision-Recall curves
 #' cvcurves <- evalmod(cvdat)
@@ -315,7 +324,6 @@
 #'
 #' ## Normalized ranks vs. average basic evaluation measures
 #' autoplot(cvpoints)
-#'
 #' }
 #'
 #' @name autoplot
@@ -329,7 +337,6 @@ NULL
                                   def_raw_curves, def_add_np_nn,
                                   def_show_legend, def_ret_grob,
                                   def_reduce_points, def_multiplot_lib, ...) {
-
   arglist <- list(...)
 
   if (is.null(arglist[["curvetype"]])) {
@@ -345,7 +352,8 @@ NULL
   }
   if (!evalmod_args[["calc_avg"]] && arglist[["show_cb"]]) {
     stop("Invalid show_cb. Inconsistent with calc_avg of evalmod.",
-         call. = FALSE)
+      call. = FALSE
+    )
   }
 
   if (is.null(arglist[["raw_curves"]])) {
@@ -359,7 +367,8 @@ NULL
   }
   if (!evalmod_args[["raw_curves"]] && arglist[["raw_curves"]]) {
     stop("Invalid raw_curves. Inconsistent with the value of evalmod.",
-         call. = FALSE)
+      call. = FALSE
+    )
   }
 
   if (is.null(arglist[["add_np_nn"]])) {
@@ -413,9 +422,13 @@ NULL
 #
 .load_ggplot2 <- function() {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
-    stop(paste("ggplot2 is required to perform this function.",
-               "Please install it."),
-         call. = FALSE)
+    stop(
+      paste(
+        "ggplot2 is required to perform this function.",
+        "Please install it."
+      ),
+      call. = FALSE
+    )
   }
 }
 
@@ -425,17 +438,19 @@ NULL
 .load_grid <- function() {
   if (!requireNamespace("grid", quietly = TRUE)) {
     stop("grid is required to perform this function. Please install it.",
-         call. = FALSE)
+      call. = FALSE
+    )
   }
 }
 
 #
 # Load gridExtra
 #
-.load_gridExtra <- function() {
+.load_gridextra <- function() {
   if (!requireNamespace("gridExtra", quietly = TRUE)) {
     stop("gridExtra is required to perform this function. Please install it.",
-         call. = FALSE)
+      call. = FALSE
+    )
   }
 }
 
@@ -446,8 +461,13 @@ NULL
   if (requireNamespace("patchwork", quietly = TRUE)) {
     return(TRUE)
   } else {
-    warning("patchwork is not installed. grid and gridExtra will be used instead.",
-            call. = FALSE)
+    warning(
+      paste0(
+        "patchwork is not installed. ",
+        "grid and gridExtra will be used instead."
+      ),
+      call. = FALSE
+    )
     return(FALSE)
   }
 }
@@ -466,17 +486,16 @@ NULL
 
   show_cb <- arglist[["show_cb"]]
   if (!attr(object, "args")$calc_avg) {
-    show_cb = FALSE
+    show_cb <- FALSE
   }
 
   raw_curves <- arglist[["raw_curves"]]
   if (show_cb) {
-    raw_curves = FALSE
+    raw_curves <- FALSE
   }
 
   # === Check package availability  ===
   .load_ggplot2()
-  avail_pathwork <- .load_ggplot2()
   .validate(object)
   .check_curvetype(curvetype, object)
   .check_type(type)
@@ -488,22 +507,29 @@ NULL
   .check_multiplot_lib(multiplot_lib)
 
   # === Create a ggplot object for ROC&PRC, ROC, or PRC ===
-  curve_df <- ggplot2::fortify(object, raw_curves = raw_curves,
-                               reduce_points = reduce_points)
+  curve_df <- ggplot2::fortify(object,
+    raw_curves = raw_curves,
+    reduce_points = reduce_points
+  )
 
   func_plot <- function(ctype) {
-    .autoplot_single(object, curve_df, curvetype = ctype, type = type,
-                     show_cb = show_cb, raw_curves = raw_curves,
-                     reduce_points = reduce_points, show_legend = show_legend,
-                     add_np_nn = add_np_nn)
+    .autoplot_single(object, curve_df,
+      curvetype = ctype, type = type,
+      show_cb = show_cb, raw_curves = raw_curves,
+      reduce_points = reduce_points, show_legend = show_legend,
+      add_np_nn = add_np_nn
+    )
   }
   lcurves <- lapply(curvetype, func_plot)
   names(lcurves) <- curvetype
 
   if (length(lcurves) > 1) {
-    do.call(.combine_plots, c(lcurves, show_legend = show_legend,
-                              ret_grob = ret_grob, multiplot_lib = multiplot_lib,
-                              nplots = length(lcurves)))
+    do.call(.combine_plots, c(lcurves,
+      show_legend = show_legend,
+      ret_grob = ret_grob,
+      multiplot_lib = multiplot_lib,
+      nplots = length(lcurves)
+    ))
   } else {
     lcurves[[1]]
   }
@@ -520,7 +546,7 @@ NULL
   plots <- list(...)
 
   g <- ggplot2::ggplotGrob(plots[[1]]
-                           + ggplot2::theme(legend.position = "bottom"))$grobs
+  + ggplot2::theme(legend.position = "bottom"))$grobs
   legend <- g[[which(lapply(g, function(x) x$name) == "guide-box")]]
   lheight <- sum(legend$height)
 
@@ -531,7 +557,8 @@ NULL
     do.call(fncol, lapply(plots, fnolegend)),
     legend,
     heights = grid::unit.c(grid::unit(1, "npc") - lheight, lheight),
-    ncol = 1)
+    ncol = 1
+  )
 }
 
 #
@@ -574,7 +601,7 @@ NULL
   if (show_legend) {
     p <- p + patchwork::plot_layout(guides = "collect")
     if (length(plotlist) > 2) {
-      p <- p + ggplot2::theme(legend.position = 'bottom')
+      p <- p + ggplot2::theme(legend.position = "bottom")
     }
   }
 
@@ -594,8 +621,11 @@ NULL
   }
   if (multiplot_lib == "grid") {
     .load_grid()
-    .load_gridExtra()
-    .combine_plots_grid(..., show_legend = show_legend, ret_grob = ret_grob, nplots = nplots)
+    .load_gridextra()
+    .combine_plots_grid(...,
+      show_legend = show_legend,
+      ret_grob = ret_grob, nplots = nplots
+    )
   }
 }
 
@@ -606,40 +636,65 @@ NULL
                              show_cb = FALSE, raw_curves = FALSE,
                              reduce_points = TRUE, show_legend = FALSE,
                              add_np_nn = TRUE, ...) {
-
-  curve_df <- .prepare_autoplot(object, curve_df = curve_df,
-                                curvetype = curvetype,
-                                raw_curves = raw_curves,
-                                reduce_points = reduce_points, ...)
+  curve_df <- .prepare_autoplot(object,
+    curve_df = curve_df,
+    curvetype = curvetype,
+    raw_curves = raw_curves,
+    reduce_points = reduce_points, ...
+  )
 
   # === Create a ggplot object ===
+  x_col <- rlang::sym("x")
+  y_col <- rlang::sym("y")
+  ymin_col <- rlang::sym("ymin")
+  ymax_col <- rlang::sym("ymax")
+  modname_col <- rlang::sym("modname")
+  dsid_modname_col <- rlang::sym("dsid_modname")
   if (show_cb) {
-    p <- ggplot2::ggplot(curve_df,
-                         ggplot2::aes_string(x = 'x', y = 'y',
-                                             ymin = 'ymin', ymax = 'ymax'))
+    p <- ggplot2::ggplot(
+      curve_df,
+      ggplot2::aes(
+        x = !!x_col, y = !!y_col,
+        ymin = !!ymin_col, ymax = !!ymax_col
+      )
+    )
     if (type == "l") {
-      p <- p + ggplot2::geom_smooth(ggplot2::aes_string(color = 'modname'),
-                                    stat = "identity", na.rm = TRUE,
-                                    size = 0.5)
+      p <- p + ggplot2::geom_smooth(ggplot2::aes(color = !!modname_col),
+        stat = "identity", na.rm = TRUE,
+        linewidth = 0.5
+      )
     } else if (type == "b" || type == "p") {
-      p <- p + ggplot2::geom_ribbon(ggplot2::aes_string(ymin = 'ymin',
-                                                        ymax = 'ymax',
-                                                        group = 'modname'),
-                                    stat = "identity", alpha = 0.25,
-                                    fill = "grey25", na.rm = TRUE)
+      p <- p + ggplot2::geom_ribbon(
+        ggplot2::aes(
+          ymin = !!ymin_col,
+          ymax = !!ymax_col,
+          group = !!modname_col
+        ),
+        stat = "identity", alpha = 0.25,
+        fill = "grey25", na.rm = TRUE
+      )
       if (type == "b") {
-        p <- p + ggplot2::geom_line(ggplot2::aes_string(color = 'modname'),
-                                    alpha = 0.25, na.rm = TRUE)
+        p <- p + ggplot2::geom_line(ggplot2::aes(color = !!modname_col),
+          alpha = 0.25, na.rm = TRUE
+        )
       }
-      p <- p + ggplot2::geom_point(ggplot2::aes_string(x = 'x', y = 'y',
-                                                       color = 'modname'),
-                                   na.rm = TRUE)
+      p <- p + ggplot2::geom_point(
+        ggplot2::aes(
+          x = !!x_col, y = !!y_col,
+          color = !!modname_col
+        ),
+        na.rm = TRUE
+      )
     }
   } else if (raw_curves) {
-    p <- ggplot2::ggplot(curve_df,
-                         ggplot2::aes_string(x = 'x', y = 'y',
-                                             group = 'dsid_modname',
-                                             color = 'modname'))
+    p <- ggplot2::ggplot(
+      curve_df,
+      ggplot2::aes(
+        x = !!x_col, y = !!y_col,
+        group = !!dsid_modname_col,
+        color = !!modname_col
+      )
+    )
 
     if (type == "l") {
       p <- p + ggplot2::geom_line(na.rm = TRUE)
@@ -649,10 +704,11 @@ NULL
       }
       p <- p + ggplot2::geom_point(na.rm = TRUE)
     }
-
   } else {
-    p <- ggplot2::ggplot(curve_df, ggplot2::aes_string(x = 'x', y = 'y',
-                                                       color = 'modname'))
+    p <- ggplot2::ggplot(curve_df, ggplot2::aes(
+      x = !!x_col, y = !!y_col,
+      color = !!modname_col
+    ))
     if (type == "l") {
       p <- p + ggplot2::geom_line(na.rm = TRUE)
     } else if (type == "b" || type == "p") {
@@ -692,13 +748,15 @@ NULL
   }
   if (curvetype == "ROC" || curvetype == "PRC") {
     if (all(xlim == ylim)) {
-      ratio = 1
+      ratio <- 1
     } else {
-      ratio = NULL
+      ratio <- NULL
     }
   }
-  p <- func_g(p, object, show_legend = show_legend, add_np_nn = add_np_nn,
-              curve_df = curve_df, xlim = xlim, ylim = ylim, ratio = ratio, ...)
+  p <- func_g(p, object,
+    show_legend = show_legend, add_np_nn = add_np_nn,
+    curve_df = curve_df, xlim = xlim, ylim = ylim, ratio = ratio, ...
+  )
 
   p
 }
@@ -736,7 +794,6 @@ NULL
 #
 .geom_basic_roc <- function(p, object, show_legend = TRUE, add_np_nn = TRUE,
                             xlim, ylim, ratio, ...) {
-
   pn_info <- .get_pn_info(object)
 
   if (add_np_nn && pn_info$is_consistant) {
@@ -745,8 +802,10 @@ NULL
     main <- "ROC"
   }
 
-  p <- p + ggplot2::geom_abline(intercept = 0, slope = 1, colour = "grey",
-                                linetype = 3)
+  p <- p + ggplot2::geom_abline(
+    intercept = 0, slope = 1, colour = "grey",
+    linetype = 3
+  )
   p <- .set_coords(p, xlim, ylim, ratio)
   p <- .geom_basic(p, main, "1 - Specificity", "Sensitivity", show_legend)
 
@@ -758,7 +817,6 @@ NULL
 #
 .geom_basic_prc <- function(p, object, show_legend = TRUE, add_np_nn = TRUE,
                             xlim, ylim, ratio, ...) {
-
   pn_info <- .get_pn_info(object)
 
   if (add_np_nn && pn_info$is_consistant) {
@@ -767,8 +825,10 @@ NULL
     main <- "Precision-Recall"
   }
 
-  p <- p + ggplot2::geom_hline(yintercept = pn_info$prc_base, colour = "grey",
-                               linetype = 3)
+  p <- p + ggplot2::geom_hline(
+    yintercept = pn_info$prc_base, colour = "grey",
+    linetype = 3
+  )
   p <- .set_coords(p, xlim, ylim, ratio)
   p <- .geom_basic(p, main, "Recall", "Precision", show_legend)
 
@@ -779,8 +839,7 @@ NULL
 # Set coordinates for ROC and precision-recall
 #
 .set_coords <- function(p, xlim, ylim, ratio) {
-
-  if (is.null(ratio))  {
+  if (is.null(ratio)) {
     p <- p + ggplot2::coord_cartesian(xlim = xlim, ylim = ylim)
   } else {
     p <- p + ggplot2::coord_fixed(ratio = ratio, xlim = xlim, ylim = ylim)
@@ -794,14 +853,13 @@ NULL
 #
 .geom_basic_point <- function(p, object, show_legend = TRUE,
                               curve_df = curve_df, xlim, ylim, ratio, ...) {
-
   s <- curve_df[["curvetype"]][1]
   if (s == "mcc") {
     main <- "MCC"
   } else if (s == "label") {
     main <- "Label (1:pos, -1:neg)"
   } else {
-    main <- paste0(toupper(substring(s, 1, 1)), substring(s,2))
+    main <- paste0(toupper(substring(s, 1, 1)), substring(s, 2))
   }
   p <- .set_coords(p, xlim, ylim, ratio)
   p <- .geom_basic(p, main, "normalized rank", s, show_legend)

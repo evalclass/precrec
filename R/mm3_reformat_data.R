@@ -5,15 +5,16 @@ reformat_data <- function(scores, labels,
                           modname = as.character(NA), dsid = 1L,
                           posclass = NULL, na_worst = TRUE,
                           ties_method = "equiv", mode = "rocprc", ...) {
-
   # === Validate input arguments ===
   new_ties_method <- .pmatch_tiesmethod(ties_method, ...)
   new_na_worst <- .get_new_naworst(na_worst, ...)
   new_mode <- .pmatch_mode(mode)
-  .validate_reformat_data_args(scores, labels, modname = modname, dsid = dsid,
-                               posclass = posclass, na_worst = new_na_worst,
-                               ties_method = new_ties_method, mode = new_mode,
-                               ...)
+  .validate_reformat_data_args(scores, labels,
+    modname = modname, dsid = dsid,
+    posclass = posclass, na_worst = new_na_worst,
+    ties_method = new_ties_method, mode = new_mode,
+    ...
+  )
 
   # === Reformat input data ===
   # Get a factor with "positive" and "negative"
@@ -21,22 +22,31 @@ reformat_data <- function(scores, labels,
 
   if (mode == "aucroc") {
     # === Create an S3 object ===
-    s3obj <- structure(list(scores = scores,
-                            labels = fmtlabs[["labels"]]),
-                       class = "sdat")
+    s3obj <- structure(
+      list(
+        scores = scores,
+        labels = fmtlabs[["labels"]]
+      ),
+      class = "sdat"
+    )
   } else {
     # Get score ranks and sorted indices
     sranks <- .rank_scores(scores, new_na_worst, new_ties_method,
-                           validate = FALSE)
+      validate = FALSE
+    )
     ranks <- sranks[["ranks"]]
     rank_idx <- sranks[["rank_idx"]]
 
     # === Create an S3 object ===
-    s3obj <- structure(list(scores = scores,
-                            labels = fmtlabs[["labels"]],
-                            ranks = ranks,
-                            rank_idx = rank_idx),
-                       class = "fmdat")
+    s3obj <- structure(
+      list(
+        scores = scores,
+        labels = fmtlabs[["labels"]],
+        ranks = ranks,
+        rank_idx = rank_idx
+      ),
+      class = "fmdat"
+    )
   }
 
   # Set attributes
@@ -44,9 +54,11 @@ reformat_data <- function(scores, labels,
   attr(s3obj, "dsid") <- dsid
   attr(s3obj, "nn") <- fmtlabs[["nn"]]
   attr(s3obj, "np") <- fmtlabs[["np"]]
-  attr(s3obj, "args") <- list(posclass = posclass, na_worst = new_na_worst,
-                              ties_method = new_ties_method,
-                              modname = modname, dsid = dsid)
+  attr(s3obj, "args") <- list(
+    posclass = posclass, na_worst = new_na_worst,
+    ties_method = new_ties_method,
+    modname = modname, dsid = dsid
+  )
   attr(s3obj, "validated") <- FALSE
 
   # Call .validate.fmdat() / .validate.sdat()
@@ -88,7 +100,6 @@ reformat_data <- function(scores, labels,
 #
 .rank_scores <- function(scores, na_worst = TRUE, ties_method = "equiv",
                          validate = TRUE) {
-
   # === Validate input arguments ===
   if (validate) {
     .validate_scores(scores)
@@ -97,7 +108,6 @@ reformat_data <- function(scores, labels,
   }
 
   # === Create ranks ===
-  #   ranks <- rank(scores, na_worst, ties_method)
   sranks <- get_score_ranks(scores, na_worst, ties_method)
   .check_cpp_func_error(sranks, "get_score_ranks")
 
@@ -110,12 +120,12 @@ reformat_data <- function(scores, labels,
 .validate_reformat_data_args <- function(scores, labels, modname, dsid,
                                          posclass, na_worst, ties_method,
                                          mode, ...) {
-
   # Check '...'
   arglist <- list(...)
   if (!is.null(names(arglist))) {
     stop(paste0("Invalid arguments: ", paste(names(arglist), collapse = ", ")),
-         call. = FALSE)
+      call. = FALSE
+    )
   }
 
   # Check scores and labels
@@ -138,7 +148,6 @@ reformat_data <- function(scores, labels,
 
   # Check mode
   .validate_mode(mode)
-
 }
 
 #
@@ -154,30 +163,38 @@ reformat_data <- function(scores, labels,
   item_names <- c("scores", "labels", "ranks", "rank_idx")
   attr_names <- c("modname", "dsid", "nn", "np", "args", "validated")
   arg_names <- c("posclass", "na_worst", "ties_method", "modname", "dsid")
-  .validate_basic(fmdat, "fmdat", "reformat_data", item_names, attr_names,
-                  arg_names)
+  .validate_basic(
+    fmdat, "fmdat", "reformat_data", item_names, attr_names,
+    arg_names
+  )
 
   # Check values of class items
-  if (length(fmdat[["labels"]]) == 0
-      || length(fmdat[["labels"]]) != length(fmdat[["ranks"]])
-      || length(fmdat[["labels"]]) != length(fmdat[["rank_idx"]])) {
+  if (length(fmdat[["labels"]]) == 0 ||
+    length(fmdat[["labels"]]) != length(fmdat[["ranks"]]) ||
+    length(fmdat[["labels"]]) != length(fmdat[["rank_idx"]])) {
     stop("List items in fmdat must be all the same lengths", call. = FALSE)
   }
 
   # Labels
-  assertthat::assert_that(is.atomic(fmdat[["labels"]]),
-                          is.vector(fmdat[["labels"]]),
-                          is.numeric(fmdat[["labels"]]))
+  assertthat::assert_that(
+    is.atomic(fmdat[["labels"]]),
+    is.vector(fmdat[["labels"]]),
+    is.numeric(fmdat[["labels"]])
+  )
 
   # Ranks
-  assertthat::assert_that(is.atomic(fmdat[["ranks"]]),
-                          is.vector(fmdat[["ranks"]]),
-                          is.numeric(fmdat[["ranks"]]))
+  assertthat::assert_that(
+    is.atomic(fmdat[["ranks"]]),
+    is.vector(fmdat[["ranks"]]),
+    is.numeric(fmdat[["ranks"]])
+  )
 
   # Rank index
-  assertthat::assert_that(is.atomic(fmdat[["rank_idx"]]),
-                          is.vector(fmdat[["rank_idx"]]),
-                          is.integer(fmdat[["rank_idx"]]))
+  assertthat::assert_that(
+    is.atomic(fmdat[["rank_idx"]]),
+    is.vector(fmdat[["rank_idx"]]),
+    is.integer(fmdat[["rank_idx"]])
+  )
 
   attr(fmdat, "validated") <- TRUE
   fmdat
@@ -196,21 +213,24 @@ reformat_data <- function(scores, labels,
   item_names <- c("scores", "labels")
   attr_names <- c("modname", "dsid", "nn", "np", "args", "validated")
   arg_names <- c("posclass", "na_worst", "ties_method", "modname", "dsid")
-  .validate_basic(sdat, "sdat", "reformat_data", item_names, attr_names,
-                  arg_names)
+  .validate_basic(
+    sdat, "sdat", "reformat_data", item_names, attr_names,
+    arg_names
+  )
 
   # Check values of class items
-  if (length(sdat[["labels"]]) == 0
-      || length(sdat[["labels"]]) != length(sdat[["scores"]])) {
+  if (length(sdat[["labels"]]) == 0 ||
+    length(sdat[["labels"]]) != length(sdat[["scores"]])) {
     stop("List items in sdat must be all the same lengths", call. = FALSE)
   }
 
   # Labels
-  assertthat::assert_that(is.atomic(sdat[["labels"]]),
-                          is.vector(sdat[["labels"]]),
-                          is.numeric(sdat[["labels"]]))
+  assertthat::assert_that(
+    is.atomic(sdat[["labels"]]),
+    is.vector(sdat[["labels"]]),
+    is.numeric(sdat[["labels"]])
+  )
 
   attr(sdat, "validated") <- TRUE
   sdat
 }
-

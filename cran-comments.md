@@ -1,22 +1,24 @@
-## Version 0.12.9
+## Version 0.14.0
 
 This is a submission for updating the already published package - precrec. In this version I have:
 
--   Fix another case of incorrect assignment of dsid_modnames, and
+-   Replaced aes_string() with tidy aesthetics aes() and sym(),
+
+-   Included vdiffr to test ggplot2 results,
+
+-   Used patchwork to combine multiple plots instead of using grid and gridExtra, and
 
 -   Updated the version.
 
-    -   0.12.8 -> 0.12.9
+    -   0.12.9 -> 0.14.0
 
 ## Test environments
 
--   local Ubuntu 20.04, R 4.1.2
+-   local Ubuntu 22.04.1, R 4.2.1
 
--   local macOS Big Sur, R 4.1.2
+-   win-builder, R Under development (unstable) (2023-01-04 r83561 ucrt)
 
--   win-builder, R Under development (unstable) (2022-03-09 r81867 ucrt)
-
--   Windows Server 2012 R2 x64 (on AppVeyor), R 4.1.2 Patched (2022-02-25 r81819)
+-   Windows Server 2012 R2 x64 (on AppVeyor), R 4.2.2 Patched (2023-01-06 r83581 ucrt)
 
 -   GitHub Actions
 
@@ -30,4 +32,4 @@ This is a submission for updating the already published package - precrec. In th
 
 -   **NOTE** from **ALL Ubuntu** test environments.
 
-    -   sub-directories of 1Mb or more (it occurs because the size of `precrec.so` is over 5 MB)
+    -   sub-directories of 1Mb or more (it occurs because the size of `precrec.so` is over 4 MB)

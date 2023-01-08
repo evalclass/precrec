@@ -2,18 +2,21 @@
 # Calculate basic evaluation measures from confusion matrices
 #
 calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
-
   # === Validate input arguments ===
   # Create cmats from scores and labels if cmats is missing
-  cmats <- .create_src_obj(cmats, "cmats", create_confmats, scores, labels,
-                           ...)
+  cmats <- .create_src_obj(
+    cmats, "cmats", create_confmats, scores, labels,
+    ...
+  )
   .validate(cmats)
 
   # === Create confusion matrices for all ranks ===
   # Call a cpp function via Rcpp interface
-  pevals <- calc_basic_measures(attr(cmats, "np"), attr(cmats, "nn"),
-                                cmats[["tp"]], cmats[["fp"]],
-                                cmats[["tn"]], cmats[["fn"]])
+  pevals <- calc_basic_measures(
+    attr(cmats, "np"), attr(cmats, "nn"),
+    cmats[["tp"]], cmats[["fp"]],
+    cmats[["tn"]], cmats[["fn"]]
+  )
   .check_cpp_func_error(pevals, "calc_basic_measures")
 
   # === Create an S3 object ===
@@ -22,10 +25,14 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
   # Set attributes
   attr(s3obj, "modname") <- attr(cmats, "modname")
   if (all(is.na(attr(cmats, "src")))) {
-    s3obj[["basic"]][["score"]] <- rep(NA,
-                                       length(s3obj[["basic"]][["rank"]]))
-    s3obj[["basic"]][["label"]] <- rep(NA,
-                                       length(s3obj[["basic"]][["rank"]]))
+    s3obj[["basic"]][["score"]] <- rep(
+      NA,
+      length(s3obj[["basic"]][["rank"]])
+    )
+    s3obj[["basic"]][["label"]] <- rep(
+      NA,
+      length(s3obj[["basic"]][["rank"]])
+    )
   } else {
     ridx <- attr(cmats, "src")[["rank_idx"]]
     tscores <- attr(cmats, "src")[["scores"]][ridx]
@@ -58,79 +65,105 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
 
   # Validate class items and attributes
   item_names <- "basic"
-  attr_names <- c("modname", "dsid", "nn", "np", "args", "cpp_errmsg",
-                  "src", "validated")
-  arg_names <- c("na_worst", "na.last", "ties.method", "ties_method",
-                 "modname", "dsid", "keep_fmdat")
-  .validate_basic(pevals, "pevals", "calc_measures", item_names, attr_names,
-                  arg_names)
+  attr_names <- c(
+    "modname", "dsid", "nn", "np", "args", "cpp_errmsg",
+    "src", "validated"
+  )
+  arg_names <- c(
+    "na_worst", "na.last", "ties.method", "ties_method",
+    "modname", "dsid", "keep_fmdat"
+  )
+  .validate_basic(
+    pevals, "pevals", "calc_measures", item_names, attr_names,
+    arg_names
+  )
 
   pb <- pevals[["basic"]]
 
   # Check values of class items
   n <- length(pb[["error"]])
-  if (length(pb[["accuracy"]]) != n
-      || length(pb[["specificity"]]) != n
-      || length(pb[["sensitivity"]]) != n
-      || length(pb[["precision"]]) != n
-      || length(pb[["mcc"]]) != n
-      || length(pb[["fscore"]]) != n
-      || length(pb[["score"]]) != n
-      || length(pb[["label"]]) != n) {
+  if (length(pb[["accuracy"]]) != n ||
+    length(pb[["specificity"]]) != n ||
+    length(pb[["sensitivity"]]) != n ||
+    length(pb[["precision"]]) != n ||
+    length(pb[["mcc"]]) != n ||
+    length(pb[["fscore"]]) != n ||
+    length(pb[["score"]]) != n ||
+    length(pb[["label"]]) != n) {
     stop("Evaluation vectors must be all the same lengths", call. = FALSE)
   }
 
   # Scores
-  assertthat::assert_that(is.atomic(pb[["score"]]),
-                          is.vector(pb[["score"]]))
+  assertthat::assert_that(
+    is.atomic(pb[["score"]]),
+    is.vector(pb[["score"]])
+  )
 
   # Labels
-  assertthat::assert_that(is.atomic(pb[["label"]]),
-                          is.vector(pb[["label"]]))
+  assertthat::assert_that(
+    is.atomic(pb[["label"]]),
+    is.vector(pb[["label"]])
+  )
 
   # Error rate
-  assertthat::assert_that(is.atomic(pb[["error"]]),
-                          is.vector(pb[["error"]]),
-                          is.numeric(pb[["error"]]))
+  assertthat::assert_that(
+    is.atomic(pb[["error"]]),
+    is.vector(pb[["error"]]),
+    is.numeric(pb[["error"]])
+  )
 
   # Accuracy
-  assertthat::assert_that(is.atomic(pb[["accuracy"]]),
-                          is.vector(pb[["accuracy"]]),
-                          is.numeric(pb[["accuracy"]]))
+  assertthat::assert_that(
+    is.atomic(pb[["accuracy"]]),
+    is.vector(pb[["accuracy"]]),
+    is.numeric(pb[["accuracy"]])
+  )
 
   # Error rate & Arruracy
-  assertthat::assert_that(pb[["error"]][1] + pb[["accuracy"]][1] == 1,
-                          pb[["error"]][n] + pb[["accuracy"]][n] == 1)
+  assertthat::assert_that(
+    pb[["error"]][1] + pb[["accuracy"]][1] == 1,
+    pb[["error"]][n] + pb[["accuracy"]][n] == 1
+  )
 
   # SP
-  assertthat::assert_that(is.atomic(pb[["specificity"]]),
-                          is.vector(pb[["specificity"]]),
-                          is.numeric(pb[["specificity"]]),
-                          pb[["specificity"]][1] == 1,
-                          pb[["specificity"]][n] == 0)
+  assertthat::assert_that(
+    is.atomic(pb[["specificity"]]),
+    is.vector(pb[["specificity"]]),
+    is.numeric(pb[["specificity"]]),
+    pb[["specificity"]][1] == 1,
+    pb[["specificity"]][n] == 0
+  )
 
   # SN
-  assertthat::assert_that(is.atomic(pb[["sensitivity"]]),
-                          is.vector(pb[["sensitivity"]]),
-                          is.numeric(pb[["sensitivity"]]),
-                          pb[["sensitivity"]][1] == 0,
-                          pb[["sensitivity"]][n] == 1)
+  assertthat::assert_that(
+    is.atomic(pb[["sensitivity"]]),
+    is.vector(pb[["sensitivity"]]),
+    is.numeric(pb[["sensitivity"]]),
+    pb[["sensitivity"]][1] == 0,
+    pb[["sensitivity"]][n] == 1
+  )
 
   # PREC
-  assertthat::assert_that(is.atomic(pb[["precision"]]),
-                          is.vector(pb[["precision"]]),
-                          is.numeric(pb[["precision"]]),
-                          pb[["precision"]][1] == pb[["precision"]][2])
+  assertthat::assert_that(
+    is.atomic(pb[["precision"]]),
+    is.vector(pb[["precision"]]),
+    is.numeric(pb[["precision"]]),
+    pb[["precision"]][1] == pb[["precision"]][2]
+  )
 
   # Matthews correlation coefficient
-  assertthat::assert_that(is.atomic(pb[["mcc"]]),
-                          is.vector(pb[["mcc"]]),
-                          is.numeric(pb[["mcc"]]))
+  assertthat::assert_that(
+    is.atomic(pb[["mcc"]]),
+    is.vector(pb[["mcc"]]),
+    is.numeric(pb[["mcc"]])
+  )
 
   # F-score
-  assertthat::assert_that(is.atomic(pb[["fscore"]]),
-                          is.vector(pb[["fscore"]]),
-                          is.numeric(pb[["fscore"]]))
+  assertthat::assert_that(
+    is.atomic(pb[["fscore"]]),
+    is.vector(pb[["fscore"]]),
+    is.numeric(pb[["fscore"]])
+  )
 
   attr(pevals, "validated") <- TRUE
   pevals

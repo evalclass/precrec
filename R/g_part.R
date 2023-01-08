@@ -40,8 +40,8 @@
 #'   input with calculated pAUCs and standardized pAUCs.
 #'
 #' @seealso \code{\link{evalmod}} for generating \code{S3} objects with
-#'   performance evaluation measures. \code{\link{pauc}} for retrieving a dataset
-#'   of pAUCs.
+#'   performance evaluation measures. \code{\link{pauc}} for retrieving
+#'   a dataset of pAUCs.
 #'
 #' @examples
 #' \dontrun{
@@ -79,7 +79,8 @@
 #' ## Create sample datasets with 100 positives and 100 negatives
 #' samps <- create_sim_samples(1, 100, 100, "all")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-#'                modnames = samps[["modnames"]])
+#'   modnames = samps[["modnames"]]
+#' )
 #'
 #' ## Generate an mscurve object that contains ROC and Precision-Recall curves
 #' mscurves <- evalmod(mdat)
@@ -104,8 +105,9 @@
 #' ## Create sample datasets with 100 positives and 100 negatives
 #' samps <- create_sim_samples(4, 100, 100, "good_er")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-#'                modnames = samps[["modnames"]],
-#'                dsids = samps[["dsids"]])
+#'   modnames = samps[["modnames"]],
+#'   dsids = samps[["dsids"]]
+#' )
 #'
 #' ## Generate an smcurve object that contains ROC and Precision-Recall curves
 #' smcurves <- evalmod(mdat)
@@ -130,8 +132,9 @@
 #' ## Create sample datasets with 100 positives and 100 negatives
 #' samps <- create_sim_samples(4, 100, 100, "all")
 #' mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-#'                modnames = samps[["modnames"]],
-#'                dsids = samps[["dsids"]])
+#'   modnames = samps[["modnames"]],
+#'   dsids = samps[["dsids"]]
+#' )
 #'
 #' ## Generate an mscurve object that contains ROC and Precision-Recall curves
 #' mmcurves <- evalmod(mdat, raw_curves = TRUE)
@@ -150,10 +153,12 @@
 #' }
 #'
 #' @export
-part <- function(curves, xlim=NULL, ylim=NULL, curvetype=NULL) UseMethod("part", curves)
+part <- function(curves, xlim = NULL, ylim = NULL, curvetype = NULL) {
+  UseMethod("part", curves)
+}
 
 #' @export
-part.default <- function(curves, xlim=NULL, ylim=NULL, curvetype=NULL) {
+part.default <- function(curves, xlim = NULL, ylim = NULL, curvetype = NULL) {
   stop("An object of unknown class is specified")
 }
 
@@ -206,9 +211,13 @@ part.mmcurves <- function(curves, xlim = c(0, 1), ylim = c(0, 1),
   # Calculate partial AUC scores for ROC
   if ("ROC" %in% new_curvetype) {
     if (avg_only) {
-      attr(curves, "grp_avg")[["rocs"]] <- .calc_pauc(attr(curves,
-                                                           "grp_avg")[["rocs"]],
-                                                      xlim, ylim, avg_only)
+      attr(curves, "grp_avg")[["rocs"]] <- .calc_pauc(
+        attr(
+          curves,
+          "grp_avg"
+        )[["rocs"]],
+        xlim, ylim, avg_only
+      )
     } else {
       curves[["rocs"]] <- .calc_pauc(curves[["rocs"]], xlim, ylim, avg_only)
     }
@@ -219,9 +228,13 @@ part.mmcurves <- function(curves, xlim = c(0, 1), ylim = c(0, 1),
   # Calculate partial AUC scores for precision-recall
   if ("PRC" %in% new_curvetype) {
     if (avg_only) {
-      attr(curves, "grp_avg")[["prcs"]] <- .calc_pauc(attr(curves,
-                                                           "grp_avg")[["prcs"]],
-                                                      xlim, ylim, avg_only)
+      attr(curves, "grp_avg")[["prcs"]] <- .calc_pauc(
+        attr(
+          curves,
+          "grp_avg"
+        )[["prcs"]],
+        xlim, ylim, avg_only
+      )
     } else {
       curves[["prcs"]] <- .calc_pauc(curves[["prcs"]], xlim, ylim, avg_only)
     }
@@ -243,7 +256,6 @@ part.mmcurves <- function(curves, xlim = c(0, 1), ylim = c(0, 1),
 # Calculate partial AUC scores
 #
 .calc_pauc <- function(curves, xlim, ylim, avg_only) {
-
   for (i in seq_along(curves)) {
     # Trim x
     x <- curves[[i]][["x"]]
@@ -279,11 +291,11 @@ part.mmcurves <- function(curves, xlim = c(0, 1), ylim = c(0, 1),
 
     # Max 1
     if (pauc > 1) {
-      pauc = 1
+      pauc <- 1
     }
 
     if (spauc > 1) {
-      spauc = 1
+      spauc <- 1
     }
 
     attr(curves[[i]], "pauc") <- pauc
@@ -300,23 +312,28 @@ part.mmcurves <- function(curves, xlim = c(0, 1), ylim = c(0, 1),
 # Get pAUCs
 #
 .gather_paucs <- function(curves) {
-
   # Collect AUCs of ROC or PRC curves
   ct_len <- 2
   aucs <- attr(curves, "aucs")
-  paucs <- data.frame(modnames = aucs$modnames,
-                      dsids = aucs$dsids,
-                      curvetypes = aucs$curvetypes,
-                      paucs = rep(NA, length(aucs$modnames)),
-                      spaucs = rep(NA, length(aucs$modnames)),
-                      stringsAsFactors = FALSE)
+  paucs <- data.frame(
+    modnames = aucs$modnames,
+    dsids = aucs$dsids,
+    curvetypes = aucs$curvetypes,
+    paucs = rep(NA, length(aucs$modnames)),
+    spaucs = rep(NA, length(aucs$modnames)),
+    stringsAsFactors = FALSE
+  )
 
   for (i in seq_along(curves[["rocs"]])) {
     idx <- ct_len * i - 1
-    paucs[["paucs"]][idx:(idx + 1)] <- c(attr(curves[["rocs"]][[i]], "pauc"),
-                                         attr(curves[["prcs"]][[i]], "pauc"))
-    paucs[["spaucs"]][idx:(idx + 1)] <- c(attr(curves[["rocs"]][[i]], "spauc"),
-                                          attr(curves[["prcs"]][[i]], "spauc"))
+    paucs[["paucs"]][idx:(idx + 1)] <- c(
+      attr(curves[["rocs"]][[i]], "pauc"),
+      attr(curves[["prcs"]][[i]], "pauc")
+    )
+    paucs[["spaucs"]][idx:(idx + 1)] <- c(
+      attr(curves[["rocs"]][[i]], "spauc"),
+      attr(curves[["prcs"]][[i]], "spauc")
+    )
   }
 
   paucs
@@ -326,25 +343,30 @@ part.mmcurves <- function(curves, xlim = c(0, 1), ylim = c(0, 1),
 # Get pAUCs of average curves
 #
 .gather_paucs_avg <- function(curves) {
-
   avg_crvs <- attr(curves, "grp_avg")
 
   # Collect AUCs of ROC or PRC curves
   ct_len <- 2
   modnames <- attr(avg_crvs[["rocs"]], "uniq_modnames")
-  paucs <- data.frame(modnames = rep(modnames, each = ct_len),
-                      curvetypes = rep(c("ROC", "PRC"), length(modnames)),
-                      paucs = rep(NA, length(modnames) * ct_len),
-                      spaucs = rep(NA, length(modnames) * ct_len),
-                      stringsAsFactors = FALSE)
+  paucs <- data.frame(
+    modnames = rep(modnames, each = ct_len),
+    curvetypes = rep(c("ROC", "PRC"), length(modnames)),
+    paucs = rep(NA, length(modnames) * ct_len),
+    spaucs = rep(NA, length(modnames) * ct_len),
+    stringsAsFactors = FALSE
+  )
 
   for (i in seq_along(avg_crvs[["rocs"]])) {
     idx <- ct_len * i - 1
     idx2 <- idx + 1
-    paucs[["paucs"]][idx:idx2] <- c(attr(avg_crvs[["rocs"]][[i]], "pauc"),
-                                    attr(avg_crvs[["prcs"]][[i]], "pauc"))
-    paucs[["spaucs"]][idx:idx2] <- c(attr(avg_crvs[["rocs"]][[i]], "spauc"),
-                                     attr(avg_crvs[["prcs"]][[i]], "spauc"))
+    paucs[["paucs"]][idx:idx2] <- c(
+      attr(avg_crvs[["rocs"]][[i]], "pauc"),
+      attr(avg_crvs[["prcs"]][[i]], "pauc")
+    )
+    paucs[["spaucs"]][idx:idx2] <- c(
+      attr(avg_crvs[["rocs"]][[i]], "spauc"),
+      attr(avg_crvs[["prcs"]][[i]], "spauc")
+    )
   }
 
   paucs

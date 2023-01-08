@@ -65,16 +65,17 @@
 #'
 #' @export
 create_sim_samples <- function(n_repeat, np, nn, score_names = "random") {
-
   # === Validate input arguments ===
   choices <- c("random", "poor_er", "good_er", "excel", "perf")
-  if (assertthat::see_if(assertthat::is.string(score_names))
-      && any(score_names == "all")) {
+  if (assertthat::see_if(assertthat::is.string(score_names)) &&
+    any(score_names == "all")) {
     score_names <- choices
-  } else if (!is.atomic(score_names) || !is.character(score_names)
-             || !(all(score_names %in% choices))) {
-    stop(gettextf("'score_names' must be one of %s",
-                  paste(dQuote(choices), collapse = ", ")), call. = FALSE)
+  } else if (!is.atomic(score_names) || !is.character(score_names) ||
+    !(all(score_names %in% choices))) {
+    stop(gettextf(
+      "'score_names' must be one of %s",
+      paste(dQuote(choices), collapse = ", ")
+    ), call. = FALSE)
   }
   snames <- paste0(score_names, "_scores")
 
@@ -97,10 +98,12 @@ create_sim_samples <- function(n_repeat, np, nn, score_names = "random") {
   labels <- c(rep(1, np), rep(0, nn))
 
   # === Make a list ===
-  list(scores = scores,
-       labels = labels,
-       modnames = rep(score_names, n_repeat),
-       dsids = rep(seq(n_repeat), each = length(score_names)))
+  list(
+    scores = scores,
+    labels = labels,
+    modnames = rep(score_names, n_repeat),
+    dsids = rep(seq(n_repeat), each = length(score_names))
+  )
 }
 
 #
@@ -115,13 +118,14 @@ create_sim_samples <- function(n_repeat, np, nn, score_names = "random") {
   excel_scores <- c(stats::rnorm(np, 3, 1), stats::rnorm(nn, 0, 1))
   perf_scores <- c(rep(1, np), rep(0, nn))
 
-  list(np = np,
-       nn = nn,
-       labels = labels,
-       random_scores = random_scores,
-       poor_er_scores = poor_er_scores,
-       good_er_scores = good_er_scores,
-       excel_scores = excel_scores,
-       perf_scores = perf_scores
+  list(
+    np = np,
+    nn = nn,
+    labels = labels,
+    random_scores = random_scores,
+    poor_er_scores = poor_er_scores,
+    good_er_scores = good_er_scores,
+    excel_scores = excel_scores,
+    perf_scores = perf_scores
   )
 }

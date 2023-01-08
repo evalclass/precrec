@@ -15,12 +15,11 @@ test_that("'...' must be specified", {
 })
 
 test_that("'efunc_vtype' must be a function with 1 argument", {
-  expect_error(.join_datasets(0, efunc_vtype = function(a1) TRUE), NA)
+  expect_silent(.join_datasets(0, efunc_vtype = function(a1) TRUE))
 
   expect_err_msg <- function(efunc_vtype) {
     err_msg <- "efunc_vtype must be a function with 1 argument"
-    eval(bquote(expect_error(.join_datasets(0, efunc_vtype = efunc_vtype),
-                             err_msg)))
+    expect_error(.join_datasets(0, efunc_vtype = efunc_vtype), err_msg)
   }
 
   expect_err_msg(function(a1, a2) print())
@@ -28,12 +27,11 @@ test_that("'efunc_vtype' must be a function with 1 argument", {
 })
 
 test_that("'efunc_nrow' must be a function with 2 arguments", {
-  expect_error(.join_datasets(0, efunc_nrow = function(a1, a2) TRUE), NA)
+  expect_silent(.join_datasets(0, efunc_nrow = function(a1, a2) TRUE))
 
   expect_err_msg <- function(efunc_nrow) {
     err_msg <- "efunc_nrow must be a function with 2 arguments"
-    eval(bquote(expect_error(.join_datasets(0, efunc_nrow = efunc_nrow),
-                             err_msg)))
+    expect_error(.join_datasets(0, efunc_nrow = efunc_nrow), err_msg)
   }
 
   expect_err_msg(function(a1) print())
@@ -41,12 +39,11 @@ test_that("'efunc_nrow' must be a function with 2 arguments", {
 })
 
 test_that("'byrow' should be TRUE or FALSE", {
-  expect_error(.join_datasets(0, byrow = TRUE), NA)
-  expect_error(.join_datasets(0, byrow = FALSE), NA)
+  expect_silent(.join_datasets(0, byrow = TRUE))
+  expect_silent(.join_datasets(0, byrow = FALSE))
 
   expect_err_msg <- function(err_msg, byrow) {
-
-    eval(bquote(expect_error(.join_datasets(0, byrow = byrow), err_msg)))
+    expect_error(.join_datasets(0, byrow = byrow), err_msg)
   }
 
   err_msg <- "byrow contains 1 missing values"
@@ -61,12 +58,11 @@ test_that("'byrow' should be TRUE or FALSE", {
 })
 
 test_that("'chklen' should be TRUE or FALSE", {
-  expect_error(.join_datasets(0, chklen = TRUE), NA)
-  expect_error(.join_datasets(0, chklen = FALSE), NA)
+  expect_silent(.join_datasets(0, chklen = TRUE))
+  expect_silent(.join_datasets(0, chklen = FALSE))
 
   expect_err_msg <- function(err_msg, chklen) {
-
-    eval(bquote(expect_error(.join_datasets(0, chklen = chklen), err_msg)))
+    expect_error(.join_datasets(0, chklen = chklen), err_msg)
   }
 
   err_msg <- "chklen contains 1 missing values"
@@ -83,7 +79,7 @@ test_that("'chklen' should be TRUE or FALSE", {
 test_that(".join_datasets() only accepts basic data types", {
   expect_err_msg <- function(dat) {
     err_msg <- "Cannot join this type of data"
-    eval(bquote(expect_error(.join_datasets(dat), err_msg)))
+    expect_error(.join_datasets(dat), err_msg)
   }
 
   expect_err_msg(NULL)

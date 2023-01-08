@@ -3,11 +3,12 @@
 #
 create_curves <- function(pevals, scores = NULL, labels = NULL,
                           x_bins = 1000, keep_pevals = FALSE, ...) {
-
   # === Validate input arguments ===
   # Create pevals from scores and labels if pevals is missing
-  pevals <- .create_src_obj(pevals, "pevals", calc_measures, scores, labels,
-                                 ...)
+  pevals <- .create_src_obj(
+    pevals, "pevals", calc_measures, scores, labels,
+    ...
+  )
 
   if (is.null(x_bins) || any(is.na(x_bins))) {
     x_bins <- 1
@@ -16,10 +17,14 @@ create_curves <- function(pevals, scores = NULL, labels = NULL,
   .validate(pevals)
 
   # === Create ROC and Precision-Recall curves ===
-  roc_curve <- create_roc(pevals, x_bins = x_bins,
-                          keep_pevals = keep_pevals, ...)
-  prc_curve <- create_prc(pevals, x_bins = x_bins,
-                          keep_pevals = keep_pevals, ...)
+  roc_curve <- create_roc(pevals,
+    x_bins = x_bins,
+    keep_pevals = keep_pevals, ...
+  )
+  prc_curve <- create_prc(pevals,
+    x_bins = x_bins,
+    keep_pevals = keep_pevals, ...
+  )
 
   curves <- list(roc = roc_curve, prc = prc_curve)
 
@@ -48,11 +53,12 @@ create_curves <- function(pevals, scores = NULL, labels = NULL,
 #
 create_roc <- function(pevals, scores = NULL, labels = NULL, x_bins = 1000,
                        keep_pevals = FALSE, ...) {
-
   # === Create a ROC curve ===
-  .create_curve("specificity", "sensitivity", create_roc_curve,
-                "create_roc_curve", "roc_curve", pevals, scores, labels,
-                x_bins, keep_pevals, ...)
+  .create_curve(
+    "specificity", "sensitivity", create_roc_curve,
+    "create_roc_curve", "roc_curve", pevals, scores, labels,
+    x_bins, keep_pevals, ...
+  )
 }
 
 #
@@ -60,11 +66,12 @@ create_roc <- function(pevals, scores = NULL, labels = NULL, x_bins = 1000,
 #
 create_prc <- function(pevals, scores = NULL, labels = NULL, x_bins = 1000,
                        keep_pevals = FALSE, ...) {
-
   # === Create a Precision-Recall curve ===
-  .create_curve("sensitivity", "precision", create_prc_curve,
-                "create_prc_curve", "prc_curve", pevals, scores, labels,
-                x_bins, keep_pevals, ...)
+  .create_curve(
+    "sensitivity", "precision", create_prc_curve,
+    "create_prc_curve", "prc_curve", pevals, scores, labels,
+    x_bins, keep_pevals, ...
+  )
 }
 
 #
@@ -73,26 +80,31 @@ create_prc <- function(pevals, scores = NULL, labels = NULL, x_bins = 1000,
 .create_curve <- function(x_name, y_name, func, func_name, class_name,
                           pevals, scores = NULL, labels = NULL, x_bins = 1000,
                           keep_pevals = FALSE, ...) {
-
   # === Validate input arguments ===
   # Create pevals from scores and labels if pevals is missing
-  pevals <- .create_src_obj(pevals, "pevals", calc_measures, scores, labels,
-                            ...)
+  pevals <- .create_src_obj(
+    pevals, "pevals", calc_measures, scores, labels,
+    ...
+  )
   .validate_x_bins(x_bins, allow_zero = TRUE)
   .validate(pevals)
 
   # === Create a curve ===
   # Calculate a curve
   pb <- pevals[["basic"]]
-  crv <- func(attr(pevals, "src")[["tp"]], attr(pevals, "src")[["fp"]],
-              pb[[x_name]], pb[[y_name]], x_bins)
+  crv <- func(
+    attr(pevals, "src")[["tp"]], attr(pevals, "src")[["fp"]],
+    pb[[x_name]], pb[[y_name]], x_bins
+  )
   .check_cpp_func_error(crv, func_name)
 
   # Calculate AUC
   auc <- calc_auc(crv[["curve"]][["x"]], crv[["curve"]][["y"]])
   if (auc[["errmsg"]] == "invalid-x-vals") {
-    warning(paste0("Invalid ", x_name,
-                   " values detected. AUC can be inaccurate."))
+    warning(paste0(
+      "Invalid ", x_name,
+      " values detected. AUC can be inaccurate."
+    ))
   } else {
     .check_cpp_func_error(auc, "calc_auc")
   }
@@ -163,26 +175,32 @@ create_prc <- function(pevals, scores = NULL, labels = NULL, x_bins = 1000,
 .validate_curve <- function(obj, class_name, func_name) {
   # Validate class items and attributes
   item_names <- c("x", "y", "orig_points")
-  attr_names <- c("modname", "dsid", "nn", "np", "auc", "args",
-                  "cpp_errmsg1", "cpp_errmsg2", "src", "validated")
-  arg_names <- c("x_bins", "na_worst", "na.last", "ties_method", "ties.method",
-                 "modname", "dsid", "keep_fmdat", "keep_cmats")
-  .validate_basic(obj, class_name, func_name, item_names, attr_names,
-                  arg_names)
+  attr_names <- c(
+    "modname", "dsid", "nn", "np", "auc", "args",
+    "cpp_errmsg1", "cpp_errmsg2", "src", "validated"
+  )
+  arg_names <- c(
+    "x_bins", "na_worst", "na.last", "ties_method", "ties.method",
+    "modname", "dsid", "keep_fmdat", "keep_cmats"
+  )
+  .validate_basic(
+    obj, class_name, func_name, item_names, attr_names,
+    arg_names
+  )
 
   # Check values of class items
-  if ((length(obj[["x"]]) != length(obj[["y"]]))
-      || (length(obj[["x"]]) != length(obj[["orig_points"]]))) {
+  if ((length(obj[["x"]]) != length(obj[["y"]])) ||
+    (length(obj[["x"]]) != length(obj[["orig_points"]]))) {
     stop("x, y, and orig_points must be all the same lengths", call. = FALSE)
   } else if (!(length(obj[["x"]]) > 2)) {
     stop("The minimum length of x, y, and orig_points must be 3",
-         call. = FALSE)
+      call. = FALSE
+    )
   }
 
   # Check values of class attributes
   # AUC
   assertthat::assert_that((attr(obj, "auc") >= 0) && (attr(obj, "auc") <= 1))
-
 }
 
 #
@@ -196,12 +214,18 @@ create_prc <- function(pevals, scores = NULL, labels = NULL, x_bins = 1000,
 
   # Validate class items and attributes
   item_names <- c("roc", "prc")
-  attr_names <- c("modname", "dsid", "nn", "np", "args", "src",
-                  "validated")
-  arg_names <- c("x_bins", "na_worst", "na.last", "ties_method", "ties.method",
-                 "modname", "dsid", "keep_fmdat", "keep_cmats")
-  .validate_basic(curves, "curves", "calc_measures", item_names, attr_names,
-                  arg_names)
+  attr_names <- c(
+    "modname", "dsid", "nn", "np", "args", "src",
+    "validated"
+  )
+  arg_names <- c(
+    "x_bins", "na_worst", "na.last", "ties_method", "ties.method",
+    "modname", "dsid", "keep_fmdat", "keep_cmats"
+  )
+  .validate_basic(
+    curves, "curves", "calc_measures", item_names, attr_names,
+    arg_names
+  )
 
   # Check values of class items
   curves[["roc"]] <- .validate(curves[["roc"]])

@@ -44,8 +44,10 @@ pr_create_mmdat <- function() {
   l4 <- c(1, 1, 0, 1)
   labels <- join_labels(l1, l2, l3, l4)
 
-  mmdata(scores, labels, modnames = c("m1", "m2"), dsids = c(1, 2),
-         expd_first = "modnames")
+  mmdata(scores, labels,
+    modnames = c("m1", "m2"), dsids = c(1, 2),
+    expd_first = "modnames"
+  )
 }
 
 test_that("print sscurves", {
@@ -63,11 +65,11 @@ test_that("print mscurves", {
   expect_output(print(curves), "=== AUCs ===")
   expect_output(print(curves), "=== Input data ===")
 
-  curves.part <- part(curves, xlim = c(0.25, 0.75))
+  curves_part <- part(curves, xlim = c(0.25, 0.75))
 
-  expect_output(print(curves.part), "=== AUCs ===")
-  expect_output(print(curves.part), "=== partial AUCs ===")
-  expect_output(print(curves.part), "=== Input data ===")
+  expect_output(print(curves_part), "=== AUCs ===")
+  expect_output(print(curves_part), "=== partial AUCs ===")
+  expect_output(print(curves_part), "=== Input data ===")
 })
 
 test_that("print smcurves", {
@@ -77,18 +79,18 @@ test_that("print smcurves", {
   expect_output(print(curves), "=== AUCs ===")
   expect_output(print(curves), "=== Input data ===")
 
-  curves.part <- part(curves, xlim = c(0.25, 0.75))
+  curves_part <- part(curves, xlim = c(0.25, 0.75))
 
-  expect_output(print(curves.part), "=== AUCs ===")
-  expect_output(print(curves.part), "average curves only")
-  expect_output(print(curves.part), "=== Input data ===")
+  expect_output(print(curves_part), "=== AUCs ===")
+  expect_output(print(curves_part), "average curves only")
+  expect_output(print(curves_part), "=== Input data ===")
 
   curves <- evalmod(mdat, raw_curves = TRUE)
-  curves.part <- part(curves, xlim = c(0.25, 0.75))
+  curves_part <- part(curves, xlim = c(0.25, 0.75))
 
-  expect_output(print(curves.part), "=== AUCs ===")
-  expect_output(print(curves.part), "=== partial AUCs ===")
-  expect_output(print(curves.part), "=== Input data ===")
+  expect_output(print(curves_part), "=== AUCs ===")
+  expect_output(print(curves_part), "=== partial AUCs ===")
+  expect_output(print(curves_part), "=== Input data ===")
 })
 
 test_that("print mmcurves", {
@@ -98,24 +100,26 @@ test_that("print mmcurves", {
   expect_output(print(curves), "=== AUCs ===")
   expect_output(print(curves), "=== Input data ===")
 
-  curves.part <- part(curves, xlim = c(0.25, 0.75))
+  curves_part <- part(curves, xlim = c(0.25, 0.75))
 
-  expect_output(print(curves.part), "=== AUCs ===")
-  expect_output(print(curves.part), "average curves only")
-  expect_output(print(curves.part), "=== Input data ===")
+  expect_output(print(curves_part), "=== AUCs ===")
+  expect_output(print(curves_part), "average curves only")
+  expect_output(print(curves_part), "=== Input data ===")
 
   curves <- evalmod(mdat, raw_curves = TRUE)
-  curves.part <- part(curves, xlim = c(0.25, 0.75))
+  curves_part <- part(curves, xlim = c(0.25, 0.75))
 
-  expect_output(print(curves.part), "=== AUCs ===")
-  expect_output(print(curves.part), "=== partial AUCs ===")
-  expect_output(print(curves.part), "=== Input data ===")
+  expect_output(print(curves_part), "=== AUCs ===")
+  expect_output(print(curves_part), "=== partial AUCs ===")
+  expect_output(print(curves_part), "=== Input data ===")
 })
 
 test_that("print sspoints", {
   data(P10N10)
-  points <- evalmod(mode = "basic", scores = P10N10$scores,
-                    labels = P10N10$labels)
+  points <- evalmod(
+    mode = "basic", scores = P10N10$scores,
+    labels = P10N10$labels
+  )
 
   expect_output(print(points), "=== Basic performance evaluation measures ===")
   expect_output(print(points), "=== Input data ===")
@@ -152,4 +156,3 @@ test_that("print aucroc", {
   expect_output(print(aucroc), "=== Input data ===")
   expect_output(print(aucroc), "=== AUCs ===")
 })
-
