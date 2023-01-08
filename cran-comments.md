@@ -18,7 +18,7 @@ This is a submission for updating the already published package - precrec. In th
 
 -   win-builder, R Under development (unstable) (2022-03-09 r81867 ucrt)
 
--   Windows Server 2012 R2 x64 (on AppVeyor), R 4.1.2 Patched (2022-02-25 r81819)
+-   Windows Server 2012 R2 x64 (on AppVeyor), R 4.2.2 Patched (2023-01-06 r83581 ucrt)
 
 -   GitHub Actions
 

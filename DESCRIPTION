@@ -32,7 +32,7 @@ Imports:
     methods,
     data.table (>= 1.10.4),
     withr (>= 2.3.0),
-    graphics (>= 4.2.1),
+    graphics (>= 4.0.0),
     rlang (>= 1.0.0)
 RoxygenNote: 7.2.3
 Encoding: UTF-8
