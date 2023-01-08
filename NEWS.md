@@ -2,7 +2,9 @@
 
 * Use patchwork to combine multiple plots instead of using grid and gridExtra
 
-* Test ggplot results with vdiffr 
+* Test ggplot results with vdiffr
+
+* Use tidy aesthetics with aes() and sym() instead of aes_string()
 
 # precrec 0.12.9
 
