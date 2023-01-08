@@ -20,7 +20,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">precrec</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.13.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.14.1</span>
       </span>
     </div>
 
@@ -110,8 +110,8 @@ two points in [0, 1]</p></dd>
     <div id="see-also">
     <h2>See also</h2>
     <div class="dont-index"><p><code><a href="evalmod.html">evalmod</a></code> for generating <code>S3</code> objects with
-  performance evaluation measures. <code><a href="pauc.html">pauc</a></code> for retrieving a dataset
-  of pAUCs.</p></div>
+  performance evaluation measures. <code><a href="pauc.html">pauc</a></code> for retrieving
+  a dataset of pAUCs.</p></div>
     </div>
 
     <div id="ref-examples">
@@ -151,7 +151,8 @@ two points in [0, 1]</p></dd>
 <span class="r-in"><span><span class="co">## Create sample datasets with 100 positives and 100 negatives</span></span></span>
 <span class="r-in"><span><span class="va">samps</span> <span class="op">&lt;-</span> <span class="fu"><a href="create_sim_samples.html">create_sim_samples</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">100</span>, <span class="fl">100</span>, <span class="st">"all"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">mdat</span> <span class="op">&lt;-</span> <span class="fu"><a href="mmdata.html">mmdata</a></span><span class="op">(</span><span class="va">samps</span><span class="op">[[</span><span class="st">"scores"</span><span class="op">]</span><span class="op">]</span>, <span class="va">samps</span><span class="op">[[</span><span class="st">"labels"</span><span class="op">]</span><span class="op">]</span>,</span></span>
-<span class="r-in"><span>               modnames <span class="op">=</span> <span class="va">samps</span><span class="op">[[</span><span class="st">"modnames"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  modnames <span class="op">=</span> <span class="va">samps</span><span class="op">[[</span><span class="st">"modnames"</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Generate an mscurve object that contains ROC and Precision-Recall curves</span></span></span>
 <span class="r-in"><span><span class="va">mscurves</span> <span class="op">&lt;-</span> <span class="fu"><a href="evalmod.html">evalmod</a></span><span class="op">(</span><span class="va">mdat</span><span class="op">)</span></span></span>
@@ -176,8 +177,9 @@ two points in [0, 1]</p></dd>
 <span class="r-in"><span><span class="co">## Create sample datasets with 100 positives and 100 negatives</span></span></span>
 <span class="r-in"><span><span class="va">samps</span> <span class="op">&lt;-</span> <span class="fu"><a href="create_sim_samples.html">create_sim_samples</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">100</span>, <span class="fl">100</span>, <span class="st">"good_er"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">mdat</span> <span class="op">&lt;-</span> <span class="fu"><a href="mmdata.html">mmdata</a></span><span class="op">(</span><span class="va">samps</span><span class="op">[[</span><span class="st">"scores"</span><span class="op">]</span><span class="op">]</span>, <span class="va">samps</span><span class="op">[[</span><span class="st">"labels"</span><span class="op">]</span><span class="op">]</span>,</span></span>
-<span class="r-in"><span>               modnames <span class="op">=</span> <span class="va">samps</span><span class="op">[[</span><span class="st">"modnames"</span><span class="op">]</span><span class="op">]</span>,</span></span>
-<span class="r-in"><span>               dsids <span class="op">=</span> <span class="va">samps</span><span class="op">[[</span><span class="st">"dsids"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  modnames <span class="op">=</span> <span class="va">samps</span><span class="op">[[</span><span class="st">"modnames"</span><span class="op">]</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>  dsids <span class="op">=</span> <span class="va">samps</span><span class="op">[[</span><span class="st">"dsids"</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Generate an smcurve object that contains ROC and Precision-Recall curves</span></span></span>
 <span class="r-in"><span><span class="va">smcurves</span> <span class="op">&lt;-</span> <span class="fu"><a href="evalmod.html">evalmod</a></span><span class="op">(</span><span class="va">mdat</span><span class="op">)</span></span></span>
@@ -202,8 +204,9 @@ two points in [0, 1]</p></dd>
 <span class="r-in"><span><span class="co">## Create sample datasets with 100 positives and 100 negatives</span></span></span>
 <span class="r-in"><span><span class="va">samps</span> <span class="op">&lt;-</span> <span class="fu"><a href="create_sim_samples.html">create_sim_samples</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">100</span>, <span class="fl">100</span>, <span class="st">"all"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">mdat</span> <span class="op">&lt;-</span> <span class="fu"><a href="mmdata.html">mmdata</a></span><span class="op">(</span><span class="va">samps</span><span class="op">[[</span><span class="st">"scores"</span><span class="op">]</span><span class="op">]</span>, <span class="va">samps</span><span class="op">[[</span><span class="st">"labels"</span><span class="op">]</span><span class="op">]</span>,</span></span>
-<span class="r-in"><span>               modnames <span class="op">=</span> <span class="va">samps</span><span class="op">[[</span><span class="st">"modnames"</span><span class="op">]</span><span class="op">]</span>,</span></span>
-<span class="r-in"><span>               dsids <span class="op">=</span> <span class="va">samps</span><span class="op">[[</span><span class="st">"dsids"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  modnames <span class="op">=</span> <span class="va">samps</span><span class="op">[[</span><span class="st">"modnames"</span><span class="op">]</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>  dsids <span class="op">=</span> <span class="va">samps</span><span class="op">[[</span><span class="st">"dsids"</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Generate an mscurve object that contains ROC and Precision-Recall curves</span></span></span>
 <span class="r-in"><span><span class="va">mmcurves</span> <span class="op">&lt;-</span> <span class="fu"><a href="evalmod.html">evalmod</a></span><span class="op">(</span><span class="va">mdat</span>, raw_curves <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
@@ -235,7 +238,7 @@ two points in [0, 1]</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

@@ -41,7 +41,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">precrec</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.13.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.14.1</span>
       </span>
     </div>
 
@@ -79,7 +79,7 @@
 <div class="section level1">
 <div class="page-header"><h1 id="precrec-">Precrec <img src="reference/figures/logo.png" align="right" alt="" width="100"><a class="anchor" aria-label="anchor" href="#precrec-"></a>
 </h1></div>
-
+<p><a href="https://github.com/evalclass/precrec/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/evalclass/precrec/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a> <a href="https://ci.appveyor.com/project/takayasaito/precrec/" class="external-link"><img src="https://ci.appveyor.com/api/projects/status/github/evalclass/precrec?branch=main&amp;svg=true" alt="AppVeyor Build Status"></a> <a href="https://codecov.io/github/evalclass/precrec?branch=main" class="external-link"><img src="https://codecov.io/github/evalclass/precrec/coverage.svg?branch=main" alt="codecov.io"></a> <a href="https://www.codefactor.io/repository/github/evalclass/precrec/" class="external-link"><img src="https://www.codefactor.io/repository/github/evalclass/precrec/badge" alt="CodeFactor"></a> <a href="https://cran.r-project.org/package=precrec" class="external-link"><img src="https://www.r-pkg.org/badges/version-ago/precrec" alt="CRAN_Status_Badge"></a> <a href="https://cran.r-project.org/package=precrec" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/precrec" alt="CRAN_Logs_Badge"></a></p>
 <p>The aim of the <code>precrec</code> package is to provide an integrated platform that enables robust performance evaluations of binary classifiers. Specifically, <code>precrec</code> offers accurate calculations of ROC (Receiver Operator Characteristics) and precision-recall curves. All the main calculations of <code>precrec</code> are implemented with C++/<a href="https://cran.r-project.org/package=Rcpp" class="external-link">Rcpp</a>.</p>
 <div class="section level2">
 <h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
@@ -94,7 +94,7 @@
 <h2 id="six-key-features-of-precrec">Six key features of precrec<a class="anchor" aria-label="anchor" href="#six-key-features-of-precrec"></a>
 </h2>
 <div class="section level3">
-<h3 id="1-accurate-curve-calculations">1. Accurate curve calculations<a class="anchor" aria-label="anchor" href="#1-accurate-curve-calculations"></a>
+<h3 id="id_1-accurate-curve-calculations">1. Accurate curve calculations<a class="anchor" aria-label="anchor" href="#id_1-accurate-curve-calculations"></a>
 </h3>
 <p><code>precrec</code> provides accurate precision-recall curves.</p>
 <ul>
@@ -105,12 +105,12 @@
 <p><code>precrec</code> also calculates AUC scores with high accuracy.</p>
 </div>
 <div class="section level3">
-<h3 id="2-super-fast">2. Super fast<a class="anchor" aria-label="anchor" href="#2-super-fast"></a>
+<h3 id="id_2-super-fast">2. Super fast<a class="anchor" aria-label="anchor" href="#id_2-super-fast"></a>
 </h3>
 <p><code>precrec</code> calculates curves in a matter of seconds even for a fairly large dataset. It is much faster than most other tools that calculate ROC and precision-recall curves.</p>
 </div>
 <div class="section level3">
-<h3 id="3-various-evaluation-metrics">3. Various evaluation metrics<a class="anchor" aria-label="anchor" href="#3-various-evaluation-metrics"></a>
+<h3 id="id_3-various-evaluation-metrics">3. Various evaluation metrics<a class="anchor" aria-label="anchor" href="#id_3-various-evaluation-metrics"></a>
 </h3>
 <p>In addition to precision-recall and ROC curves, <code>precrec</code> offers basic evaluation measures.</p>
 <ul>
@@ -124,17 +124,17 @@
 </ul>
 </div>
 <div class="section level3">
-<h3 id="4-confidence-interval-band">4. Confidence interval band<a class="anchor" aria-label="anchor" href="#4-confidence-interval-band"></a>
+<h3 id="id_4-confidence-interval-band">4. Confidence interval band<a class="anchor" aria-label="anchor" href="#id_4-confidence-interval-band"></a>
 </h3>
 <p><code>precrec</code> calculates confidence intervals when multiple test sets are given. It automatically shows confidence bands about the averaged curve in the corresponding plot.</p>
 </div>
 <div class="section level3">
-<h3 id="5-calculation-of-partial-aucs-and-visualization-of-partial-curves">5. Calculation of partial AUCs and visualization of partial curves<a class="anchor" aria-label="anchor" href="#5-calculation-of-partial-aucs-and-visualization-of-partial-curves"></a>
+<h3 id="id_5-calculation-of-partial-aucs-and-visualization-of-partial-curves">5. Calculation of partial AUCs and visualization of partial curves<a class="anchor" aria-label="anchor" href="#id_5-calculation-of-partial-aucs-and-visualization-of-partial-curves"></a>
 </h3>
 <p><code>precrec</code> calculates partial AUCs for specified x and y ranges. It can also draw partial ROC and precision-recall curves for the specified ranges.</p>
 </div>
 <div class="section level3">
-<h3 id="6-supporting-functions">6. Supporting functions<a class="anchor" aria-label="anchor" href="#6-supporting-functions"></a>
+<h3 id="id_6-supporting-functions">6. Supporting functions<a class="anchor" aria-label="anchor" href="#id_6-supporting-functions"></a>
 </h3>
 <p><code>precrec</code> provides several useful functions that lack in most other evaluation tools.</p>
 <ul>
@@ -174,6 +174,10 @@
 </h2>
 <p>The <code>precrec</code> package provides the following six functions.</p>
 <table class="table">
+<colgroup>
+<col width="25%">
+<col width="75%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">Function</th>
 <th align="left">Description</th>
@@ -207,6 +211,11 @@
 </table>
 <p>Moreover, the <code>precrec</code> package provides nine S3 generics for the S3 object created by the <code>evalmod</code> function. <strong>N.B.</strong> The R language specifies S3 objects and S3 generic functions as part of the most basic object-oriented system in R.</p>
 <table class="table">
+<colgroup>
+<col width="16%">
+<col width="11%">
+<col width="71%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">S3 generic</th>
 <th align="left">Package</th>
@@ -283,7 +292,7 @@
 </h3>
 <p>The <code>autoplot</code> function outputs ROC and Precision-Recall curves by using the <code>ggplot2</code> package.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># The ggplot2 package is required </span></span>
+<code class="sourceCode R"><span><span class="co"># The ggplot2 package is required</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Show ROC and Precision-Recall plots</span></span>
@@ -343,17 +352,7 @@
 </ul>
 </div>
 
-<div class="dev-status">
-<h2 data-toc-skip>Dev status</h2>
-<ul class="list-unstyled">
-<li><a href="https://github.com/evalclass/precrec/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/evalclass/precrec/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://ci.appveyor.com/project/takayasaito/precrec/" class="external-link"><img src="https://ci.appveyor.com/api/projects/status/github/evalclass/precrec?branch=main&amp;svg=true" alt="AppVeyor Build Status"></a></li>
-<li><a href="https://codecov.io/github/evalclass/precrec?branch=main" class="external-link"><img src="https://codecov.io/github/evalclass/precrec/coverage.svg?branch=main" alt="codecov.io"></a></li>
-<li><a href="https://www.codefactor.io/repository/github/evalclass/precrec/" class="external-link"><img src="https://www.codefactor.io/repository/github/evalclass/precrec/badge" alt="CodeFactor"></a></li>
-<li><a href="https://cran.r-project.org/package=precrec" class="external-link"><img src="https://www.r-pkg.org/badges/version-ago/precrec" alt="CRAN_Status_Badge"></a></li>
-<li><a href="https://cran.r-project.org/package=precrec" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/precrec" alt="CRAN_Logs_Badge"></a></li>
-</ul>
-</div>
+
 
   </div>
 </div>
@@ -366,7 +365,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
