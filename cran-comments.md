@@ -1,4 +1,4 @@
-## Version 0.14.0
+## Version 0.14.1
 
 This is a submission for updating the already published package - precrec. In this version I have:
 
@@ -10,7 +10,7 @@ This is a submission for updating the already published package - precrec. In th
 
 -   Updated the version.
 
-    -   0.12.9 -> 0.14.0
+    -   0.12.9 -> 0.14.1
 
 ## Test environments
 
