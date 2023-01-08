@@ -80,6 +80,7 @@
 #' @importFrom graphics abline layout legend lines
 #' @importFrom graphics matplot plot plot.new polygon
 #' @importFrom methods is
+#' @importFrom rlang sym
 #' @importFrom stats qnorm rbeta rnorm sd qt
 #' @importFrom data.table frank
 #'
