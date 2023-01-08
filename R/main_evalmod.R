@@ -309,7 +309,8 @@
 #'
 #' # a function to test mode = "aucroc"
 #' func_evalmod_aucroc <- function(samp) {
-#'   uaucs <- evalmod(scores = samp$scores, labels = samp$labels, mode = "aucroc")
+#'   uaucs <- evalmod(scores = samp$scores, labels = samp$labels,
+#'                    mode = "aucroc")
 #'   as.data.frame(uaucs)
 #' }
 #'
