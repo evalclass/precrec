@@ -645,33 +645,33 @@ NULL
   if (show_cb) {
     p <- ggplot2::ggplot(
       curve_df,
-      ggplot2::aes_string(
-        x = "x", y = "y",
-        ymin = "ymin", ymax = "ymax"
+      ggplot2::aes(
+        x = x, y = y,
+        ymin = ymin, ymax = ymax
       )
     )
     if (type == "l") {
-      p <- p + ggplot2::geom_smooth(ggplot2::aes_string(color = "modname"),
+      p <- p + ggplot2::geom_smooth(ggplot2::aes(color = modname),
         stat = "identity", na.rm = TRUE,
-        size = 0.5
+        linewidth = 0.5
       )
     } else if (type == "b" || type == "p") {
-      p <- p + ggplot2::geom_ribbon(ggplot2::aes_string(
-        ymin = "ymin",
-        ymax = "ymax",
-        group = "modname"
+      p <- p + ggplot2::geom_ribbon(ggplot2::aes(
+        ymin = ymin,
+        ymax = ymax,
+        group = modname
       ),
       stat = "identity", alpha = 0.25,
       fill = "grey25", na.rm = TRUE
       )
       if (type == "b") {
-        p <- p + ggplot2::geom_line(ggplot2::aes_string(color = "modname"),
+        p <- p + ggplot2::geom_line(ggplot2::aes(color = modname),
           alpha = 0.25, na.rm = TRUE
         )
       }
-      p <- p + ggplot2::geom_point(ggplot2::aes_string(
-        x = "x", y = "y",
-        color = "modname"
+      p <- p + ggplot2::geom_point(ggplot2::aes(
+        x = x, y = y,
+        color = modname
       ),
       na.rm = TRUE
       )
@@ -679,10 +679,10 @@ NULL
   } else if (raw_curves) {
     p <- ggplot2::ggplot(
       curve_df,
-      ggplot2::aes_string(
-        x = "x", y = "y",
-        group = "dsid_modname",
-        color = "modname"
+      ggplot2::aes(
+        x = x, y = y,
+        group = dsid_modname,
+        color = modname
       )
     )
 
@@ -695,9 +695,9 @@ NULL
       p <- p + ggplot2::geom_point(na.rm = TRUE)
     }
   } else {
-    p <- ggplot2::ggplot(curve_df, ggplot2::aes_string(
-      x = "x", y = "y",
-      color = "modname"
+    p <- ggplot2::ggplot(curve_df, ggplot2::aes(
+      x = x, y = y,
+      color = modname
     ))
     if (type == "l") {
       p <- p + ggplot2::geom_line(na.rm = TRUE)
