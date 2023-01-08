@@ -164,7 +164,7 @@ The `autoplot` function outputs ROC and Precision-Recall curves by using
 the `ggplot2` package.
 
 ``` r
-# The ggplot2 package is required 
+# The ggplot2 package is required
 library(ggplot2)
 
 # Show ROC and Precision-Recall plots
