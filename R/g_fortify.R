@@ -30,14 +30,15 @@ fortify.cmats <- function(model, ...) {
       model[["tp"]], model[["fn"]],
       model[["fp"]], model[["tn"]]
     ),
-    group = factor(c(
-      rep("TPs", n), rep("FNs", n),
-      rep("FPs", n), rep("TNs", n)
-    ),
-    levels = c(
-      "TPs", "FNs",
-      "FPs", "TNs"
-    )
+    group = factor(
+      c(
+        rep("TPs", n), rep("FNs", n),
+        rep("FPs", n), rep("TNs", n)
+      ),
+      levels = c(
+        "TPs", "FNs",
+        "FPs", "TNs"
+      )
     )
   )
 }
@@ -64,28 +65,29 @@ fortify.pevals <- function(model, ...) {
       1 - pb[["specificity"]], pb[["precision"]],
       pb[["mcc"]], pb[["fscore"]]
     ),
-    group = factor(c(
-      rep("score", n),
-      rep("label", n),
-      rep("error", n),
-      rep("accuracy", n),
-      rep("specificity", n),
-      rep("sensitivity", n),
-      rep("1 - specificity", n),
-      rep("precision", n),
-      rep("mcc", n),
-      rep("fscore", n)
-    ),
-    levels = c(
-      "score", "label",
-      "error", "accuracy",
-      "specificity",
-      "sensitivity",
-      "1 - specificity",
-      "precision",
-      "mcc",
-      "fscore"
-    )
+    group = factor(
+      c(
+        rep("score", n),
+        rep("label", n),
+        rep("error", n),
+        rep("accuracy", n),
+        rep("specificity", n),
+        rep("sensitivity", n),
+        rep("1 - specificity", n),
+        rep("precision", n),
+        rep("mcc", n),
+        rep("fscore", n)
+      ),
+      levels = c(
+        "score", "label",
+        "error", "accuracy",
+        "specificity",
+        "sensitivity",
+        "1 - specificity",
+        "precision",
+        "mcc",
+        "fscore"
+      )
     )
   )
 }

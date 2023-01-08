@@ -150,7 +150,6 @@ join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
 #
 .join_datasets <- function(..., efunc_vtype = NULL, efunc_nrow = NULL,
                            byrow = FALSE, chklen = TRUE) {
-
   # Validate arguments
   .validate_join_datasets_args(...,
     efunc_vtype = efunc_vtype,
@@ -241,7 +240,6 @@ join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
 #
 .validate_join_datasets_args <- function(..., efunc_vtype, efunc_nrow, byrow,
                                          chklen) {
-
   # Check ...
   arglist <- list(...)
   if (length(arglist) == 0) {

@@ -358,11 +358,12 @@ NULL
 
       modname <- factor(rep(modnames[i], length(x)), levels = uniq_modnames)
       dsid <- factor(rep(dsids[i], length(x)), levels = uniq_dsids)
-      dsid_modname <- factor(rep(
-        paste(modnames[i], dsids[i], sep = ":"),
-        length(x)
-      ),
-      levels = dsid_modnames
+      dsid_modname <- factor(
+        rep(
+          paste(modnames[i], dsids[i], sep = ":"),
+          length(x)
+        ),
+        levels = dsid_modnames
       )
       curvename <- factor(rep(curvetype, length(x)),
         levels = names(curvetype_names)

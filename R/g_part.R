@@ -312,7 +312,6 @@ part.mmcurves <- function(curves, xlim = c(0, 1), ylim = c(0, 1),
 # Get pAUCs
 #
 .gather_paucs <- function(curves) {
-
   # Collect AUCs of ROC or PRC curves
   ct_len <- 2
   aucs <- attr(curves, "aucs")

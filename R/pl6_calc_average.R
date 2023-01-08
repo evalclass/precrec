@@ -24,7 +24,6 @@ calc_avg_basic <- function(epoints, modnames, uniq_modnames, cb_alpha) {
 #
 .calc_avg_common <- function(obj, mode, class_name, modnames, uniq_modnames,
                              cb_alpha, x_bins) {
-
   # === Validate input arguments ===
   if (is.null(x_bins) || any(is.na(x_bins))) {
     x_bins <- 1

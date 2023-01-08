@@ -501,7 +501,6 @@ NULL
 # matplot wrapper
 #
 .matplot_wrapper <- function(obj, type, curvetype, main, xlab, ylab) {
-
   # === Validate input arguments ===
   .validate(obj[[curvetype]])
 

@@ -124,12 +124,11 @@ sscurves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 The `autoplot` function outputs ROC and Precision-Recall curves by using the 
 `ggplot2` package.
 ```{r, fig.show='hide'}
-# The ggplot2 package is required 
+# The ggplot2 package is required
 library(ggplot2)
 
 # Show ROC and Precision-Recall plots
 autoplot(sscurves)
-
 ```
 
 ![](https://raw.githubusercontent.com/evalclass/precrec/main/README_files/figure-gfm/unnamed-chunk-2-1.png)

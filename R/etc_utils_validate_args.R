@@ -3,7 +3,6 @@
 #
 .validate_scores_and_labels <- function(obj, obj_name, scores, labels, ...) {
   if (missing(obj) || is.null(obj)) {
-
     # Check if scores and labels are specified
     if (is.null(scores) && !is.null(labels)) {
       stop("Invalid scores", call. = FALSE)
@@ -368,12 +367,13 @@
   if (!is.null(obj) && (attr(obj, "dataset_type") == "multiple")) {
     obj_calc_avg <- attr(obj, "args")[["calc_avg"]]
     if (show_cb && !obj_calc_avg) {
-      stop(paste0(
-        "calc_avg of the evalmod function",
-        " must be set as TRUE before using show_cb",
-        " of this function"
-      ),
-      call. = FALSE
+      stop(
+        paste0(
+          "calc_avg of the evalmod function",
+          " must be set as TRUE before using show_cb",
+          " of this function"
+        ),
+        call. = FALSE
       )
     }
   }
@@ -393,12 +393,13 @@
     obj_calc_avg <- attr(obj, "args")[["calc_avg"]]
     obj_raw_curves <- attr(obj, "args")[["raw_curves"]]
     if (raw_curves && (!obj_calc_avg || !obj_raw_curves)) {
-      stop(paste0(
-        "Both calc_avg and raw_curves of the evalmod function",
-        " must be set as TRUE before using raw_curves",
-        " of this function"
-      ),
-      call. = FALSE
+      stop(
+        paste0(
+          "Both calc_avg and raw_curves of the evalmod function",
+          " must be set as TRUE before using raw_curves",
+          " of this function"
+        ),
+        call. = FALSE
       )
     }
   }

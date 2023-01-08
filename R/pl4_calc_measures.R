@@ -2,7 +2,6 @@
 # Calculate basic evaluation measures from confusion matrices
 #
 calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
-
   # === Validate input arguments ===
   # Create cmats from scores and labels if cmats is missing
   cmats <- .create_src_obj(

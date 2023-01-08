@@ -309,8 +309,10 @@
 #'
 #' # a function to test mode = "aucroc"
 #' func_evalmod_aucroc <- function(samp) {
-#'   uaucs <- evalmod(scores = samp$scores, labels = samp$labels,
-#'                    mode = "aucroc")
+#'   uaucs <- evalmod(
+#'     scores = samp$scores, labels = samp$labels,
+#'     mode = "aucroc"
+#'   )
 #'   as.data.frame(uaucs)
 #' }
 #'
@@ -328,7 +330,6 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
                     posclass = NULL, na_worst = TRUE, ties_method = "equiv",
                     calc_avg = TRUE, cb_alpha = 0.05, raw_curves = FALSE,
                     x_bins = 1000, interpolate = TRUE, ...) {
-
   # Validation
   new_mode <- .get_new_mode(mode, mdat, "rocprc")
   new_ties_method <- .pmatch_tiesmethod(ties_method, ...)
@@ -375,11 +376,12 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
   if (!is.null(mode)) {
     new_mode <- .pmatch_mode(mode)
     if (new_mode != "aucroc" && !is.na(mdat_mode) && mdat_mode == "aucroc") {
-      stop(paste0(
-        "Invalid 'mode': evalmod <- '", new_mode,
-        "'', mmdata <- '", mdat_mode, "'"
-      ),
-      call. = FALSE
+      stop(
+        paste0(
+          "Invalid 'mode': evalmod <- '", new_mode,
+          "'', mmdata <- '", mdat_mode, "'"
+        ),
+        call. = FALSE
       )
     }
   } else if (!is.na(mdat_mode)) {
@@ -400,7 +402,6 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
                                    posclass, na_worst, ties_method,
                                    calc_avg, cb_alpha, raw_curves,
                                    x_bins, interpolate) {
-
   # Check mode
   .validate_mode(mode)
 

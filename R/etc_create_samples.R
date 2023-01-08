@@ -65,7 +65,6 @@
 #'
 #' @export
 create_sim_samples <- function(n_repeat, np, nn, score_names = "random") {
-
   # === Validate input arguments ===
   choices <- c("random", "poor_er", "good_er", "excel", "perf")
   if (assertthat::see_if(assertthat::is.string(score_names)) &&

@@ -315,7 +315,6 @@ test_that("pl_main() accepts 'x_bins'", {
 
 
 test_that("pl_main() accepts 'interpolate'", {
-
   # check x_bins instead of interpolate (TRUE -> x_bins:1000, FALSE -> x_bins:0)
   f_check_x_interpolate <- function(mdat) {
     for (ct in c("rocs", "prcs")) {

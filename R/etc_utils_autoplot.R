@@ -422,11 +422,12 @@ NULL
 #
 .load_ggplot2 <- function() {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
-    stop(paste(
-      "ggplot2 is required to perform this function.",
-      "Please install it."
-    ),
-    call. = FALSE
+    stop(
+      paste(
+        "ggplot2 is required to perform this function.",
+        "Please install it."
+      ),
+      call. = FALSE
     )
   }
 }
@@ -460,11 +461,12 @@ NULL
   if (requireNamespace("patchwork", quietly = TRUE)) {
     return(TRUE)
   } else {
-    warning(paste0(
-      "patchwork is not installed. ",
-      "grid and gridExtra will be used instead."
-    ),
-    call. = FALSE
+    warning(
+      paste0(
+        "patchwork is not installed. ",
+        "grid and gridExtra will be used instead."
+      ),
+      call. = FALSE
     )
     return(FALSE)
   }
@@ -662,24 +664,26 @@ NULL
         linewidth = 0.5
       )
     } else if (type == "b" || type == "p") {
-      p <- p + ggplot2::geom_ribbon(ggplot2::aes(
-        ymin = !!ymin_col,
-        ymax = !!ymax_col,
-        group = !!modname_col
-      ),
-      stat = "identity", alpha = 0.25,
-      fill = "grey25", na.rm = TRUE
+      p <- p + ggplot2::geom_ribbon(
+        ggplot2::aes(
+          ymin = !!ymin_col,
+          ymax = !!ymax_col,
+          group = !!modname_col
+        ),
+        stat = "identity", alpha = 0.25,
+        fill = "grey25", na.rm = TRUE
       )
       if (type == "b") {
         p <- p + ggplot2::geom_line(ggplot2::aes(color = !!modname_col),
           alpha = 0.25, na.rm = TRUE
         )
       }
-      p <- p + ggplot2::geom_point(ggplot2::aes(
-        x = !!x_col, y = !!y_col,
-        color = !!modname_col
-      ),
-      na.rm = TRUE
+      p <- p + ggplot2::geom_point(
+        ggplot2::aes(
+          x = !!x_col, y = !!y_col,
+          color = !!modname_col
+        ),
+        na.rm = TRUE
       )
     }
   } else if (raw_curves) {

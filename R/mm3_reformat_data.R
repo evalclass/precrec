@@ -5,7 +5,6 @@ reformat_data <- function(scores, labels,
                           modname = as.character(NA), dsid = 1L,
                           posclass = NULL, na_worst = TRUE,
                           ties_method = "equiv", mode = "rocprc", ...) {
-
   # === Validate input arguments ===
   new_ties_method <- .pmatch_tiesmethod(ties_method, ...)
   new_na_worst <- .get_new_naworst(na_worst, ...)
@@ -23,11 +22,12 @@ reformat_data <- function(scores, labels,
 
   if (mode == "aucroc") {
     # === Create an S3 object ===
-    s3obj <- structure(list(
-      scores = scores,
-      labels = fmtlabs[["labels"]]
-    ),
-    class = "sdat"
+    s3obj <- structure(
+      list(
+        scores = scores,
+        labels = fmtlabs[["labels"]]
+      ),
+      class = "sdat"
     )
   } else {
     # Get score ranks and sorted indices
@@ -38,13 +38,14 @@ reformat_data <- function(scores, labels,
     rank_idx <- sranks[["rank_idx"]]
 
     # === Create an S3 object ===
-    s3obj <- structure(list(
-      scores = scores,
-      labels = fmtlabs[["labels"]],
-      ranks = ranks,
-      rank_idx = rank_idx
-    ),
-    class = "fmdat"
+    s3obj <- structure(
+      list(
+        scores = scores,
+        labels = fmtlabs[["labels"]],
+        ranks = ranks,
+        rank_idx = rank_idx
+      ),
+      class = "fmdat"
     )
   }
 
@@ -99,7 +100,6 @@ reformat_data <- function(scores, labels,
 #
 .rank_scores <- function(scores, na_worst = TRUE, ties_method = "equiv",
                          validate = TRUE) {
-
   # === Validate input arguments ===
   if (validate) {
     .validate_scores(scores)
@@ -120,7 +120,6 @@ reformat_data <- function(scores, labels,
 .validate_reformat_data_args <- function(scores, labels, modname, dsid,
                                          posclass, na_worst, ties_method,
                                          mode, ...) {
-
   # Check '...'
   arglist <- list(...)
   if (!is.null(names(arglist))) {

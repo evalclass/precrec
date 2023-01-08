@@ -4,7 +4,6 @@
 pl_main <- function(mdat, mode = "rocprc", calc_avg = TRUE, cb_alpha = 0.05,
                     raw_curves = FALSE, x_bins = 1000, interpolate = TRUE,
                     na_worst = TRUE, ties_method = "equiv", validate = TRUE) {
-
   # === Validation ===
   new_mode <- .pmatch_mode(mode)
   if (validate) {
@@ -75,7 +74,6 @@ pl_main <- function(mdat, mode = "rocprc", calc_avg = TRUE, cb_alpha = 0.05,
 #
 .validate_pl_main_args <- function(mdat, mode, calc_avg, cb_alpha, raw_curves,
                                    x_bins, interpolate) {
-
   # Validate mdat
   .validate(mdat)
   if (mode != "aucroc" && !is.null(mdat) && length(mdat) > 0 &&
