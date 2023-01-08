@@ -422,11 +422,12 @@ NULL
 #
 .load_ggplot2 <- function() {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
-    stop(paste(
-      "ggplot2 is required to perform this function.",
-      "Please install it."
-    ),
-    call. = FALSE
+    stop(
+      paste(
+        "ggplot2 is required to perform this function.",
+        "Please install it."
+      ),
+      call. = FALSE
     )
   }
 }
@@ -460,11 +461,12 @@ NULL
   if (requireNamespace("patchwork", quietly = TRUE)) {
     return(TRUE)
   } else {
-    warning(paste0(
-      "patchwork is not installed. ",
-      "grid and gridExtra will be used instead."
-    ),
-    call. = FALSE
+    warning(
+      paste0(
+        "patchwork is not installed. ",
+        "grid and gridExtra will be used instead."
+      ),
+      call. = FALSE
     )
     return(FALSE)
   }
@@ -642,47 +644,55 @@ NULL
   )
 
   # === Create a ggplot object ===
+  x_col <- rlang::sym("x")
+  y_col <- rlang::sym("y")
+  ymin_col <- rlang::sym("ymin")
+  ymax_col <- rlang::sym("ymax")
+  modname_col <- rlang::sym("modname")
+  dsid_modname_col <- rlang::sym("dsid_modname")
   if (show_cb) {
     p <- ggplot2::ggplot(
       curve_df,
-      ggplot2::aes_string(
-        x = "x", y = "y",
-        ymin = "ymin", ymax = "ymax"
+      ggplot2::aes(
+        x = !!x_col, y = !!y_col,
+        ymin = !!ymin_col, ymax = !!ymax_col
       )
     )
     if (type == "l") {
-      p <- p + ggplot2::geom_smooth(ggplot2::aes_string(color = "modname"),
+      p <- p + ggplot2::geom_smooth(ggplot2::aes(color = !!modname_col),
         stat = "identity", na.rm = TRUE,
-        size = 0.5
+        linewidth = 0.5
       )
     } else if (type == "b" || type == "p") {
-      p <- p + ggplot2::geom_ribbon(ggplot2::aes_string(
-        ymin = "ymin",
-        ymax = "ymax",
-        group = "modname"
-      ),
-      stat = "identity", alpha = 0.25,
-      fill = "grey25", na.rm = TRUE
+      p <- p + ggplot2::geom_ribbon(
+        ggplot2::aes(
+          ymin = !!ymin_col,
+          ymax = !!ymax_col,
+          group = !!modname_col
+        ),
+        stat = "identity", alpha = 0.25,
+        fill = "grey25", na.rm = TRUE
       )
       if (type == "b") {
-        p <- p + ggplot2::geom_line(ggplot2::aes_string(color = "modname"),
+        p <- p + ggplot2::geom_line(ggplot2::aes(color = !!modname_col),
           alpha = 0.25, na.rm = TRUE
         )
       }
-      p <- p + ggplot2::geom_point(ggplot2::aes_string(
-        x = "x", y = "y",
-        color = "modname"
-      ),
-      na.rm = TRUE
+      p <- p + ggplot2::geom_point(
+        ggplot2::aes(
+          x = !!x_col, y = !!y_col,
+          color = !!modname_col
+        ),
+        na.rm = TRUE
       )
     }
   } else if (raw_curves) {
     p <- ggplot2::ggplot(
       curve_df,
-      ggplot2::aes_string(
-        x = "x", y = "y",
-        group = "dsid_modname",
-        color = "modname"
+      ggplot2::aes(
+        x = !!x_col, y = !!y_col,
+        group = !!dsid_modname_col,
+        color = !!modname_col
       )
     )
 
@@ -695,9 +705,9 @@ NULL
       p <- p + ggplot2::geom_point(na.rm = TRUE)
     }
   } else {
-    p <- ggplot2::ggplot(curve_df, ggplot2::aes_string(
-      x = "x", y = "y",
-      color = "modname"
+    p <- ggplot2::ggplot(curve_df, ggplot2::aes(
+      x = !!x_col, y = !!y_col,
+      color = !!modname_col
     ))
     if (type == "l") {
       p <- p + ggplot2::geom_line(na.rm = TRUE)

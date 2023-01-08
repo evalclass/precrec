@@ -143,7 +143,6 @@
 # Summarize basic evaluation measures
 #
 .summarize_basic <- function(lpoints, mdat) {
-
   # Summarize AUC of ROC or PRC curves
   modnames <- attr(mdat, "data_info")[["modnames"]]
   dsids <- attr(mdat, "data_info")[["dsids"]]

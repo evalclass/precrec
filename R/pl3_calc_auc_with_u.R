@@ -4,7 +4,6 @@
 calc_auc_with_u <- function(sdat, scores = NULL, labels = NULL, na_worst = TRUE,
                             ties_method = "equiv", keep_sdat = FALSE,
                             ustat_method = "frank", ...) {
-
   # === Validate input arguments ===
   # Create sdat from scores and labels if sdat is missing
   sdat <- .create_src_obj(sdat, "sdat", reformat_data, scores, labels,

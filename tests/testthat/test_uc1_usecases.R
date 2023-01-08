@@ -3,7 +3,6 @@
 context("UC 1: Use cases")
 
 test_that("calculation of correct avg and cb when x_bins = 8", {
-
   # Data creation
   # > samps1 <- create_sim_samples(2, 10, 10, "good_er")
   # > sscores1 <- round(samps3[["scores"]][[1]][[1]], 3) * 1000

@@ -3,7 +3,6 @@
 context("UC 2: Use cases 2")
 
 test_that("single class - positive", {
-
   # Data preparation
   sssamps1 <- create_sim_samples(1, 10, 0, "random")
   ssmdat1 <- mmdata(sssamps1$scores, sssamps1$labels)
@@ -32,7 +31,6 @@ test_that("single class - positive", {
 })
 
 test_that("single class - negative", {
-
   # Data preparation
   sssamps1 <- create_sim_samples(1, 0, 10, "random")
   ssmdat1 <- mmdata(sssamps1$scores, sssamps1$labels)
@@ -61,7 +59,6 @@ test_that("single class - negative", {
 })
 
 test_that("single class - positive (mode='basic')", {
-
   # Data preparation
   sssamps1 <- create_sim_samples(1, 10, 0, "random")
   ssmdat1 <- mmdata(sssamps1$scores, sssamps1$labels)
@@ -90,7 +87,6 @@ test_that("single class - positive (mode='basic')", {
 })
 
 test_that("single class - negative (mode='basic')", {
-
   # Data preparation
   sssamps1 <- create_sim_samples(1, 0, 10, "random")
   ssmdat1 <- mmdata(sssamps1$scores, sssamps1$labels)
@@ -119,7 +115,6 @@ test_that("single class - negative (mode='basic')", {
 })
 
 test_that("single class - positive (mode='aucroc')", {
-
   # Data preparation
   sssamps1 <- create_sim_samples(1, 10, 0, "random")
   ssmdat1 <- mmdata(sssamps1$scores, sssamps1$labels)
@@ -148,7 +143,6 @@ test_that("single class - positive (mode='aucroc')", {
 })
 
 test_that("single class - negative (mode='aucroc')", {
-
   # Data preparation
   sssamps1 <- create_sim_samples(1, 0, 10, "random")
   ssmdat1 <- mmdata(sssamps1$scores, sssamps1$labels)

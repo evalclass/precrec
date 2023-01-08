@@ -5,9 +5,11 @@ autoplot.fmdat <- function(object, ...) {
   curve_df <- .prepare_autoplot(object)
 
   # === Create a ggplot object ===
+  x_col <- rlang::sym("x")
+  y_col <- rlang::sym("y")
   p <- ggplot2::ggplot(
     curve_df,
-    ggplot2::aes_string(x = "x", y = "y", color = "x")
+    ggplot2::aes(x = !!x_col, y = !!y_col, color = !!x_col)
   )
   p <- p + ggplot2::geom_jitter()
   p <- p + ggplot2::coord_flip()
@@ -23,9 +25,12 @@ autoplot.cmats <- function(object, ...) {
   curve_df <- .prepare_autoplot(object)
 
   # === Create a ggplot object ===
+  x_col <- rlang::sym("x")
+  y_col <- rlang::sym("y")
+  group_col <- rlang::sym("group")
   p <- ggplot2::ggplot(
     curve_df,
-    ggplot2::aes_string(x = "x", y = "y", color = "group")
+    ggplot2::aes(x = !!x_col, y = !!y_col, color = !!group_col)
   )
   p <- p + ggplot2::geom_line()
   p <- .geom_basic(p, "TPs, FNs, FPs, and TNs by ranks",
@@ -41,9 +46,11 @@ autoplot.pevals <- function(object, ...) {
   curve_df <- .prepare_autoplot(object)
 
   # === Create a ggplot object ===
+  x_col <- rlang::sym("x")
+  y_col <- rlang::sym("y")
   p <- ggplot2::ggplot(
     curve_df,
-    ggplot2::aes_string(x = "x", y = "y")
+    ggplot2::aes(x = !!x_col, y = !!y_col)
   )
   p <- p + ggplot2::geom_line()
   p <- p + ggplot2::facet_wrap(~group, ncol = 2)

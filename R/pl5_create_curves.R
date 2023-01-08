@@ -3,7 +3,6 @@
 #
 create_curves <- function(pevals, scores = NULL, labels = NULL,
                           x_bins = 1000, keep_pevals = FALSE, ...) {
-
   # === Validate input arguments ===
   # Create pevals from scores and labels if pevals is missing
   pevals <- .create_src_obj(
@@ -54,7 +53,6 @@ create_curves <- function(pevals, scores = NULL, labels = NULL,
 #
 create_roc <- function(pevals, scores = NULL, labels = NULL, x_bins = 1000,
                        keep_pevals = FALSE, ...) {
-
   # === Create a ROC curve ===
   .create_curve(
     "specificity", "sensitivity", create_roc_curve,
@@ -68,7 +66,6 @@ create_roc <- function(pevals, scores = NULL, labels = NULL, x_bins = 1000,
 #
 create_prc <- function(pevals, scores = NULL, labels = NULL, x_bins = 1000,
                        keep_pevals = FALSE, ...) {
-
   # === Create a Precision-Recall curve ===
   .create_curve(
     "sensitivity", "precision", create_prc_curve,
@@ -83,7 +80,6 @@ create_prc <- function(pevals, scores = NULL, labels = NULL, x_bins = 1000,
 .create_curve <- function(x_name, y_name, func, func_name, class_name,
                           pevals, scores = NULL, labels = NULL, x_bins = 1000,
                           keep_pevals = FALSE, ...) {
-
   # === Validate input arguments ===
   # Create pevals from scores and labels if pevals is missing
   pevals <- .create_src_obj(

@@ -186,8 +186,10 @@ autoplot(sscurves, curvetype = "ROC")
 autoplot(sscurves, curvetype = "PRC")
 
 ## Generate an sspoints object that contains basic evaluation measures
-sspoints <- evalmod(mode = "basic", scores = P10N10$scores,
-                    labels = P10N10$labels)
+sspoints <- evalmod(
+  mode = "basic", scores = P10N10$scores,
+  labels = P10N10$labels
+)
 
 ## Normalized ranks vs. basic evaluation measures
 autoplot(sspoints)
@@ -203,7 +205,8 @@ autoplot(sspoints, curvetype = "precision")
 ## Create sample datasets with 100 positives and 100 negatives
 samps <- create_sim_samples(1, 100, 100, "all")
 mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-               modnames = samps[["modnames"]])
+  modnames = samps[["modnames"]]
+)
 
 ## Generate an mscurve object that contains ROC and Precision-Recall curves
 mscurves <- evalmod(mdat)
@@ -241,8 +244,9 @@ autoplot(mspoints, show_legend = FALSE)
 ## Create sample datasets with 100 positives and 100 negatives
 samps <- create_sim_samples(10, 100, 100, "good_er")
 mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-               modnames = samps[["modnames"]],
-               dsids = samps[["dsids"]])
+  modnames = samps[["modnames"]],
+  dsids = samps[["dsids"]]
+)
 
 ## Generate an smcurve object that contains ROC and Precision-Recall curves
 smcurves <- evalmod(mdat, raw_curves = TRUE)
@@ -281,8 +285,9 @@ autoplot(smpoints)
 ## Create sample datasets with 100 positives and 100 negatives
 samps <- create_sim_samples(10, 100, 100, "all")
 mdat <- mmdata(samps[["scores"]], samps[["labels"]],
-               modnames = samps[["modnames"]],
-               dsids = samps[["dsids"]])
+  modnames = samps[["modnames"]],
+  dsids = samps[["dsids"]]
+)
 
 ## Generate an mscurve object that contains ROC and Precision-Recall curves
 mmcurves <- evalmod(mdat, raw_curves = TRUE)
@@ -298,8 +303,10 @@ autoplot(mmcurves, raw_curves = TRUE)
 
 ## Reduced/Full supporting points
 sampmm <- create_sim_samples(4, 5000, 5000)
-mdatmm <- mmdata(sampmm$scores, sampmm$labels, modnames = c("m1", "m2"),
-                 dsids = c(1, 2), expd_first = "modnames")
+mdatmm <- mmdata(sampmm$scores, sampmm$labels,
+  modnames = c("m1", "m2"),
+  dsids = c(1, 2), expd_first = "modnames"
+)
 evalmm <- evalmod(mdatmm, raw_curves = TRUE)
 
 # Reduced supporting point
@@ -323,9 +330,11 @@ autoplot(mmpoints)
 data(M2N50F5)
 
 ## Speficy nessesary columns to create mdat
-cvdat <- mmdata(nfold_df = M2N50F5, score_cols = c(1, 2),
-                lab_col = 3, fold_col = 4,
-                modnames = c("m1", "m2"), dsids = 1:5)
+cvdat <- mmdata(
+  nfold_df = M2N50F5, score_cols = c(1, 2),
+  lab_col = 3, fold_col = 4,
+  modnames = c("m1", "m2"), dsids = 1:5
+)
 
 ## Generate an mmcurve object that contains ROC and Precision-Recall curves
 cvcurves <- evalmod(cvdat)
@@ -341,7 +350,6 @@ cvpoints <- evalmod(cvdat, mode = "basic")
 
 ## Normalized ranks vs. average basic evaluation measures
 autoplot(cvpoints)
-
 }
 
 }

@@ -196,7 +196,6 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
                    expd_first = NULL, mode = "rocprc",
                    nfold_df = NULL, score_cols = NULL, lab_col = NULL,
                    fold_col = NULL, ...) {
-
   # === Join datasets ===
   if (!is.null(nfold_df) && !is.null(score_cols) && !is.null(lab_col) &&
     !is.null(fold_col)) {
@@ -417,7 +416,6 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
 #
 .validate_mmdata_args <- function(lscores, llabels, modnames, dsids, posclass,
                                   na_worst, ties_method, expd_first, mode) {
-
   # Check lscores and llabels
   if (length(llabels) != 1 && length(lscores) != length(llabels)) {
     stop(paste0(

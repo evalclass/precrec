@@ -1,8 +1,8 @@
 Package: precrec
 Type: Package
 Title: Calculate Accurate Precision-Recall and ROC (Receiver Operator Characteristics) Curves
-Version: 0.13.1
-Date: 2022-08-29
+Version: 0.14.0
+Date: 2023-01-08
 Authors@R: c(
     person("Takaya", "Saito", email = "takaya.saito@outlook.com", role = c("aut", "cre"), 
            comment = c(ORCID = "0000-0002-0154-8452")),
@@ -17,21 +17,23 @@ License: GPL-3
 Language: en-US
 LazyData: TRUE
 Suggests:
-    testthat (>= 0.11.0),
+    testthat (>= 3.0.0),
     knitr (>= 1.11),
-    rmarkdown (>= 0.8.1),
+    rmarkdown (>= 2.0),
     vdiffr (>= 1.0.0),
     patchwork (>= 1.1.2)
 LinkingTo: Rcpp
 Imports:
-    Rcpp (>= 0.12.2),
-    ggplot2 (>= 2.1.0),
-    assertthat (>= 0.1),
+    Rcpp (>= 1.0.0),
+    ggplot2 (>= 3.0.0),
+    assertthat (>= 0.2),
     grid,
     gridExtra (>= 2.0.0),
     methods,
     data.table (>= 1.10.4),
     withr (>= 2.3.0),
-RoxygenNote: 7.2.1
+    graphics (>= 4.2.1),
+    rlang (>= 1.0.0)
+RoxygenNote: 7.2.3
 Encoding: UTF-8
 VignetteBuilder: knitr

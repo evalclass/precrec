@@ -80,7 +80,6 @@
 #'
 #' @export
 format_nfold <- function(nfold_df, score_cols, lab_col, fold_col) {
-
   # Validate arguments
   .validate_format_nfold_args(nfold_df, score_cols, lab_col, fold_col)
 

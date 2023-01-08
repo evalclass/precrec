@@ -5,7 +5,6 @@
                             calc_avg = FALSE, cb_alpha = 0.05,
                             raw_curves = FALSE, na_worst = TRUE,
                             ties_method = "equiv") {
-
   # === Calculate AUC ROC ===
   plfunc <- function(s) {
     # AUC with the U statistic

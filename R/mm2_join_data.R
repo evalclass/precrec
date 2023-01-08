@@ -150,7 +150,6 @@ join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
 #
 .join_datasets <- function(..., efunc_vtype = NULL, efunc_nrow = NULL,
                            byrow = FALSE, chklen = TRUE) {
-
   # Validate arguments
   .validate_join_datasets_args(...,
     efunc_vtype = efunc_vtype,
@@ -188,9 +187,9 @@ join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
       cdat <- c(cdat, list(ds))
     } else if (is.matrix(ds) || is.data.frame(ds)) {
       if (byrow) {
-        cdat <- c(cdat, lapply(seq(nrow(ds)), function(i) ds[i, ]))
+        cdat <- c(cdat, lapply(seq_len(nrow(ds)), function(i) ds[i, ]))
       } else {
-        cdat <- c(cdat, lapply(seq(ncol(ds)), function(j) ds[, j]))
+        cdat <- c(cdat, lapply(seq_len(ncol(ds)), function(j) ds[, j]))
       }
     } else if (is.array(ds)) {
       if (length(dim(ds)) == 1) {
@@ -241,7 +240,6 @@ join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
 #
 .validate_join_datasets_args <- function(..., efunc_vtype, efunc_nrow, byrow,
                                          chklen) {
-
   # Check ...
   arglist <- list(...)
   if (length(arglist) == 0) {
