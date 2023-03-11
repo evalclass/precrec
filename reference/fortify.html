@@ -18,7 +18,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">precrec</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.14.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.14.2</span>
       </span>
     </div>
 
@@ -59,28 +59,28 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for sscurves</span></span>
-<span><span class="fu">fortify</span><span class="op">(</span><span class="va">model</span>, raw_curves <span class="op">=</span> <span class="cn">NULL</span>, reduce_points <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">fortify</span><span class="op">(</span><span class="va">model</span>, <span class="va">data</span>, raw_curves <span class="op">=</span> <span class="cn">NULL</span>, reduce_points <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for mscurves</span></span>
-<span><span class="fu">fortify</span><span class="op">(</span><span class="va">model</span>, raw_curves <span class="op">=</span> <span class="cn">NULL</span>, reduce_points <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">fortify</span><span class="op">(</span><span class="va">model</span>, <span class="va">data</span>, raw_curves <span class="op">=</span> <span class="cn">NULL</span>, reduce_points <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for smcurves</span></span>
-<span><span class="fu">fortify</span><span class="op">(</span><span class="va">model</span>, raw_curves <span class="op">=</span> <span class="cn">NULL</span>, reduce_points <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">fortify</span><span class="op">(</span><span class="va">model</span>, <span class="va">data</span>, raw_curves <span class="op">=</span> <span class="cn">NULL</span>, reduce_points <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for mmcurves</span></span>
-<span><span class="fu">fortify</span><span class="op">(</span><span class="va">model</span>, raw_curves <span class="op">=</span> <span class="cn">NULL</span>, reduce_points <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">fortify</span><span class="op">(</span><span class="va">model</span>, <span class="va">data</span>, raw_curves <span class="op">=</span> <span class="cn">NULL</span>, reduce_points <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for sspoints</span></span>
-<span><span class="fu">fortify</span><span class="op">(</span><span class="va">model</span>, raw_curves <span class="op">=</span> <span class="cn">NULL</span>, reduce_points <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">fortify</span><span class="op">(</span><span class="va">model</span>, <span class="va">data</span>, raw_curves <span class="op">=</span> <span class="cn">NULL</span>, reduce_points <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for mspoints</span></span>
-<span><span class="fu">fortify</span><span class="op">(</span><span class="va">model</span>, raw_curves <span class="op">=</span> <span class="cn">NULL</span>, reduce_points <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">fortify</span><span class="op">(</span><span class="va">model</span>, <span class="va">data</span>, raw_curves <span class="op">=</span> <span class="cn">NULL</span>, reduce_points <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for smpoints</span></span>
-<span><span class="fu">fortify</span><span class="op">(</span><span class="va">model</span>, raw_curves <span class="op">=</span> <span class="cn">NULL</span>, reduce_points <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">fortify</span><span class="op">(</span><span class="va">model</span>, <span class="va">data</span>, raw_curves <span class="op">=</span> <span class="cn">NULL</span>, reduce_points <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for mmpoints</span></span>
-<span><span class="fu">fortify</span><span class="op">(</span><span class="va">model</span>, raw_curves <span class="op">=</span> <span class="cn">NULL</span>, reduce_points <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">fortify</span><span class="op">(</span><span class="va">model</span>, <span class="va">data</span>, raw_curves <span class="op">=</span> <span class="cn">NULL</span>, reduce_points <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -93,6 +93,10 @@
 <li><p>Basic evaluation measures (mode = "basic")</p>
 <p></p><table class="table table"><tr><td><strong><code>S3</code> object</strong></td><td><strong># of models</strong></td><td><strong># of test datasets</strong></td></tr><tr><td>sspoints</td><td>single</td><td>single</td></tr><tr><td>mspoints</td><td>multiple</td><td>single</td></tr><tr><td>smpoints</td><td>single</td><td>multiple</td></tr><tr><td>mmpoints</td><td>multiple</td><td>multiple</td></tr></table></li>
 </ol><p>See the <strong>Value</strong> section of <code><a href="evalmod.html">evalmod</a></code> for more details.</p></dd>
+
+
+<dt>data</dt>
+<dd><p>Not used by this method.</p></dd>
 
 
 <dt>raw_curves</dt>
