@@ -37,6 +37,8 @@
 #'
 #' See the \strong{Value} section of \code{\link{evalmod}} for more details.
 #'
+#' @param data Not used by this method.
+#'
 #' @param raw_curves A Boolean value to specify whether raw curves are
 #'   shown instead of the average curve. It is effective only
 #'   when \code{raw_curves} is set to \code{TRUE}
