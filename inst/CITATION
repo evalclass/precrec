@@ -1,9 +1,12 @@
 citHeader("To cite precrec in publications use:")
 
-citEntry(entry = "Article",
+bibentry(bibtype = "Article",
   title        = "Precrec: fast and accurate precision-recall and ROC curve calculations in R",
-  author       = personList(as.person("Takaya Saito"),
-                   as.person("Marc Rehmsmeier")),
+  author       = c(
+    person("Takaya", "Saito", email = "takaya.saito@outlook.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-0154-8452")),
+    person("Marc", "Rehmsmeier", email = "marc.rehmsmeier@ii.uib.no", role = c("aut"),
+           comment = c(ORCID = "0000-0002-5021-7721"))),
   journal      = "Bioinformatics",
   year         = "2017",
   volume       = "33 (1)",

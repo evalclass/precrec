@@ -2,7 +2,7 @@
 
 This is a submission for updating the already published package - precrec. In this version I have:
 
-- Updated the signature of the fortify generic funtion to suppress CRAN warnings, and
+- Updated the signature of the fortify generic function to suppress CRAN warnings, and
 
 - Updated the version.
 
@@ -12,9 +12,9 @@ This is a submission for updating the already published package - precrec. In th
 
 -   local Ubuntu 22.04.1, R 4.2.2
 
--   win-builder, R Under development (unstable) (2023-01-04 r83561 ucrt)
+-   win-builder, R Under development (unstable) (2023-03-10 r83967 ucrt)
 
--   Windows Server 2012 R2 x64 (on AppVeyor), R 4.2.2 Patched (2023-01-06 r83581 ucrt)
+-   Windows Server 2012 R2 x64 (on AppVeyor), R 4.2.2 Patched (2023-03-03 r83933 ucrt)
 
 -   GitHub Actions
 
