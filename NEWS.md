@@ -1,3 +1,7 @@
+# precrec 0.14.2
+
+* Update the signature of the fortify generic function 
+
 # precrec 0.14.0
 
 * Use tidy aesthetics with aes() and sym() instead of aes_string()

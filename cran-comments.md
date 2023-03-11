@@ -1,20 +1,16 @@
-## Version 0.14.1
+## Version 0.14.2
 
 This is a submission for updating the already published package - precrec. In this version I have:
 
--   Replaced aes_string() with tidy aesthetics aes() and sym(),
+- Updated the signature of the fortify generic funtion to suppress CRAN warnings, and
 
--   Included vdiffr to test ggplot2 results,
+- Updated the version.
 
--   Used patchwork to combine multiple plots instead of using grid and gridExtra, and
-
--   Updated the version.
-
-    -   0.12.9 -> 0.14.1
+    -   0.14.1 -> 0.14.2
 
 ## Test environments
 
--   local Ubuntu 22.04.1, R 4.2.1
+-   local Ubuntu 22.04.1, R 4.2.2
 
 -   win-builder, R Under development (unstable) (2023-01-04 r83561 ucrt)
 
