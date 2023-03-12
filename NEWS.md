@@ -1,3 +1,7 @@
+# precrec 0.14.3
+
+* Use new R setup configurations of GitHub actions
+
 # precrec 0.14.2
 
 * Update the signature of the fortify generic function 
