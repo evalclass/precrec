@@ -6,3 +6,4 @@ inst/doc
 docs
 .idea/
 .vscode/
+tests/testthat/Rplots.pdf
