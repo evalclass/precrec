@@ -4,7 +4,7 @@
 [![R-CMD-check](https://github.com/evalclass/precrec/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/evalclass/precrec/actions/workflows/R-CMD-check.yaml)
 [![AppVeyor Build
 Status](https://ci.appveyor.com/api/projects/status/github/evalclass/precrec?branch=main&svg=true)](https://ci.appveyor.com/project/takayasaito/precrec/)
-[![codecov.io](https://codecov.io/github/evalclass/precrec/coverage.svg?branch=main)](https://codecov.io/github/evalclass/precrec?branch=main)
+[![codecov.io](https://codecov.io/github/evalclass/precrec/coverage.svg?branch=main)](https://app.codecov.io/github/evalclass/precrec?branch=main)
 [![CodeFactor](https://www.codefactor.io/repository/github/evalclass/precrec/badge)](https://www.codefactor.io/repository/github/evalclass/precrec/)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version-ago/precrec)](https://cran.r-project.org/package=precrec)
 [![CRAN_Logs_Badge](https://cranlogs.r-pkg.org/badges/grand-total/precrec)](https://cran.r-project.org/package=precrec)
