@@ -1,3 +1,7 @@
+# precrec 0.14.4
+
+* Update unit tests to avoid is.atomic(NULL) issue
+
 # precrec 0.14.3
 
 * Use new R setup configurations of GitHub actions
