@@ -2,7 +2,9 @@
 
 This is a submission for updating the already published package - precrec. In this version I have:
 
-- Updated unit tests to avoid is.atomic(NULL) issue, and
+- Updated unit tests to avoid is.atomic(NULL) issue,
+
+- Updated argument names of S3 functions to keep them consistent, and
 
 - Updated the version.
 
@@ -12,9 +14,9 @@ This is a submission for updating the already published package - precrec. In th
 
 -   local Ubuntu 22.04.1, R 4.3.1
 
--   win-builder, R Under development (unstable) (2023-03-10 r83967 ucrt)
+-   win-builder, R Under development (unstable) (2023-10-10 r85312 ucrt)
 
--   Windows Server 2012 R2 x64 (on AppVeyor), R 4.2.2 Patched (2023-03-03 r83933 ucrt)
+-   Windows Server 2012 R2 x64 (on AppVeyor), R 4.3.1 Patched (2023-10-10 r85312 ucrt)
 
 -   GitHub Actions
 
