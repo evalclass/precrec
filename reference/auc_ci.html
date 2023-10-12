@@ -19,7 +19,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">precrec</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.14.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.14.4</span>
       </span>
     </div>
 
@@ -117,9 +117,9 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Shows the result</span></span></span>
 <span class="r-in"><span><span class="va">sm_auc_cis</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   modnames curvetypes      mean      error lower_bound upper_bound n</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  good_er        ROC 0.7902500 0.03548568   0.7547643   0.8257357 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  good_er        PRC 0.8233355 0.02693271   0.7964028   0.8502682 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   modnames curvetypes     mean      error lower_bound upper_bound n</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  good_er        ROC 0.803000 0.03527781   0.7677222   0.8382778 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  good_er        PRC 0.839866 0.02171738   0.8181486   0.8615834 4</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">##################################################</span></span></span>
 <span class="r-in"><span><span class="co">### Multiple models &amp; multiple test datasets</span></span></span>
@@ -140,17 +140,17 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Shows the result</span></span></span>
 <span class="r-in"><span><span class="va">mm_auc_ci</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    modnames curvetypes      mean       error lower_bound upper_bound n</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    random        ROC 0.4799250 0.017571922   0.4623531   0.4974969 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2    random        PRC 0.4862052 0.018035694   0.4681695   0.5042409 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   poor_er        ROC 0.7741750 0.032987653   0.7411873   0.8071627 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   poor_er        PRC 0.7280777 0.028701436   0.6993763   0.7567791 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   good_er        ROC 0.7835000 0.026187838   0.7573122   0.8096878 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   good_er        PRC 0.8245753 0.021075936   0.8034993   0.8456512 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7     excel        ROC 0.9850500 0.007876723   0.9771733   0.9929267 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8     excel        PRC 0.9866721 0.006335358   0.9803367   0.9930074 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9      perf        ROC 1.0000000 0.000000000   1.0000000   1.0000000 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10     perf        PRC 1.0000000 0.000000000   1.0000000   1.0000000 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    modnames curvetypes      mean        error lower_bound upper_bound n</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    random        ROC 0.4964000 0.0181331097   0.4782669   0.5145331 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    random        PRC 0.4995228 0.0256121857   0.4739106   0.5251350 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   poor_er        ROC 0.8077000 0.0206049613   0.7870950   0.8283050 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   poor_er        PRC 0.7550536 0.0220631502   0.7329905   0.7771168 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   good_er        ROC 0.8117500 0.0093396963   0.8024103   0.8210897 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   good_er        PRC 0.8443380 0.0106722320   0.8336658   0.8550103 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7     excel        ROC 0.9823250 0.0045456624   0.9777793   0.9868707 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8     excel        PRC 0.9822201 0.0008885572   0.9813316   0.9831087 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9      perf        ROC 1.0000000 0.0000000000   1.0000000   1.0000000 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10     perf        PRC 1.0000000 0.0000000000   1.0000000   1.0000000 4</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
