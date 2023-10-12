@@ -34,7 +34,8 @@ test_that("'labels' takes a vector", {
   err_msg <- "is not TRUE"
   expect_err_msg(err_msg, array(1))
   expect_err_msg(err_msg, matrix(1))
-  expect_err_msg(err_msg, NULL)
+
+  expect_error(.factor_labels(NULL, NULL))
 })
 
 test_that("'labels' takes a numeric vector", {
