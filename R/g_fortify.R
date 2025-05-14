@@ -1,6 +1,7 @@
 #
 # Convert a fmdat object to a data frame for ggplot2
 #
+#' @exportS3Method
 fortify.fmdat <- function(model, ...) {
   # === Check package availability  ===
   .load_ggplot2()
@@ -15,6 +16,7 @@ fortify.fmdat <- function(model, ...) {
 #
 # Convert a cmats object to a data frame for ggplot2
 #
+#' @exportS3Method
 fortify.cmats <- function(model, ...) {
   # === Check package availability  ===
   .load_ggplot2()
@@ -46,6 +48,7 @@ fortify.cmats <- function(model, ...) {
 #
 # Convert a pevals object to a data frame for ggplot2
 #
+#' @exportS3Method
 fortify.pevals <- function(model, ...) {
   # === Check package availability  ===
   .load_ggplot2()

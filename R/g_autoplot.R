@@ -1,6 +1,7 @@
 #
 #  Plot score distributions by rank
 #
+#' @exportS3Method
 autoplot.fmdat <- function(object, ...) {
   curve_df <- .prepare_autoplot(object)
 
@@ -21,6 +22,7 @@ autoplot.fmdat <- function(object, ...) {
 #
 # Plot TPs, FNs, FPs, TNs by ranks
 #
+#' @exportS3Method
 autoplot.cmats <- function(object, ...) {
   curve_df <- .prepare_autoplot(object)
 
@@ -42,6 +44,7 @@ autoplot.cmats <- function(object, ...) {
 #
 # Plot basic evaluation measures by rank
 #
+#' @exportS3Method
 autoplot.pevals <- function(object, ...) {
   curve_df <- .prepare_autoplot(object)
 

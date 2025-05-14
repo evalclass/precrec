@@ -34,6 +34,6 @@ Imports:
     withr (>= 2.3.0),
     graphics (>= 4.0.0),
     rlang (>= 1.0.0)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 Encoding: UTF-8
 VignetteBuilder: knitr
