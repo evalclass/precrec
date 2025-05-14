@@ -21,11 +21,20 @@
 </g>
 <defs>
   <clipPath id='cpMC4wMHw3MjAuMDB8MTA2LjgxfDQ2OS4xOQ=='>
-    <rect x='0.00' y='106.81' width='720.00' height='362.39' />
+    <rect x='0.000000000000050' y='106.81' width='720.00' height='362.39' />
   </clipPath>
 </defs>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MTA2LjgxfDQ2OS4xOQ==)'>
-<rect x='-0.000000000000064' y='106.81' width='720.00' height='362.39' style='stroke-width: 1.07; stroke: #FFFFFF; fill: #FFFFFF;' />
+<rect x='0.000000000000064' y='106.81' width='720.00' height='362.39' style='stroke-width: 1.07; stroke: #FFFFFF; fill: #FFFFFF;' />
+</g>
+<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
+</g>
+<defs>
+  <clipPath id='cpNDUuNjF8NjUyLjE0fDE1Mi4zN3w0MzIuODM='>
+    <rect x='45.61' y='152.37' width='606.52' height='280.46' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpNDUuNjF8NjUyLjE0fDE1Mi4zN3w0MzIuODM=)'>
 </g>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
 </g>
@@ -36,6 +45,16 @@
 </defs>
 <g clip-path='url(#cpNS40OHwzMzEuNTV8MTI5LjU5fDQ2My43Mg==)'>
 <rect x='5.48' y='129.59' width='326.07' height='334.13' style='stroke-width: 1.07; stroke: #FFFFFF; fill: #FFFFFF;' />
+</g>
+<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
+</g>
+<defs>
+  <clipPath id='cpMzMxLjU1fDcxNC41MnwxMjkuNTl8NDYzLjcy'>
+    <rect x='331.55' y='129.59' width='382.97' height='334.13' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpMzMxLjU1fDcxNC41MnwxMjkuNTl8NDYzLjcy)'>
+<rect x='331.55' y='129.59' width='382.97' height='334.13' style='stroke-width: 1.07; stroke: #FFFFFF; fill: #FFFFFF;' />
 </g>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
 </g>
@@ -101,16 +120,6 @@
 <text x='45.61' y='144.15' style='font-size: 13.20px; font-family: sans;' textLength='96.10px' lengthAdjust='spacingAndGlyphs'>ROC - P: 3, N: 1</text>
 </g>
 <defs>
-  <clipPath id='cpMzMxLjU1fDcxNC41MnwxMjkuNTl8NDYzLjcy'>
-    <rect x='331.55' y='129.59' width='382.97' height='334.13' />
-  </clipPath>
-</defs>
-<g clip-path='url(#cpMzMxLjU1fDcxNC41MnwxMjkuNTl8NDYzLjcy)'>
-<rect x='331.55' y='129.59' width='382.97' height='334.13' style='stroke-width: 1.07; stroke: #FFFFFF; fill: #FFFFFF;' />
-</g>
-<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
-</g>
-<defs>
   <clipPath id='cpMzcxLjY4fDY1Mi4xNHwxNTIuMzd8NDMyLjgz'>
     <rect x='371.68' y='152.37' width='280.46' height='280.46' />
   </clipPath>
@@ -170,56 +179,15 @@
 <text x='639.39' y='443.82' text-anchor='middle' style='font-size: 8.80px; fill: #4D4D4D; font-family: sans;' textLength='17.13px' lengthAdjust='spacingAndGlyphs'>1.00</text>
 <text x='511.91' y='455.95' text-anchor='middle' style='font-size: 11.00px; font-family: sans;' textLength='30.57px' lengthAdjust='spacingAndGlyphs'>Recall</text>
 <text x='371.68' y='144.15' style='font-size: 13.20px; font-family: sans;' textLength='162.14px' lengthAdjust='spacingAndGlyphs'>Precision-Recall - P: 3, N: 1</text>
-</g>
-<defs>
-  <clipPath id='cpNjYzLjA5fDcwOS4wNHwyNjcuMTB8MzE4LjEw'>
-    <rect x='663.09' y='267.10' width='45.95' height='51.00' />
-  </clipPath>
-</defs>
-<g clip-path='url(#cpNjYzLjA5fDcwOS4wNHwyNjcuMTB8MzE4LjEw)'>
-</g>
-<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
-<rect x='663.09' y='267.10' width='45.95' height='51.00' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
-</g>
-<g clip-path='url(#cpNjYzLjA5fDcwOS4wNHwyNjcuMTB8MzE4LjEw)'>
-</g>
-<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
-</g>
-<g clip-path='url(#cpNjYzLjA5fDcwOS4wNHwyNjcuMTB8MzE4LjEw)'>
-</g>
-<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
-<rect x='668.57' y='278.06' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
-</g>
-<g clip-path='url(#cpNjYzLjA5fDcwOS4wNHwyNjcuMTB8MzE4LjEw)'>
-</g>
-<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
-<rect x='668.57' y='278.06' width='17.28' height='17.28' style='stroke-width: 0.75; stroke: none; fill: #999999; fill-opacity: 0.40;' />
-<line x1='670.30' y1='286.70' x2='684.13' y2='286.70' style='stroke-width: 1.07; stroke: #F8766D; stroke-linecap: butt;' />
-</g>
-<g clip-path='url(#cpNjYzLjA5fDcwOS4wNHwyNjcuMTB8MzE4LjEw)'>
-</g>
-<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
-<rect x='668.57' y='295.34' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
-</g>
-<g clip-path='url(#cpNjYzLjA5fDcwOS4wNHwyNjcuMTB8MzE4LjEw)'>
-</g>
-<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
-<rect x='668.57' y='295.34' width='17.28' height='17.28' style='stroke-width: 0.75; stroke: none; fill: #999999; fill-opacity: 0.40;' />
-<line x1='670.30' y1='303.98' x2='684.13' y2='303.98' style='stroke-width: 1.07; stroke: #00BFC4; stroke-linecap: butt;' />
-</g>
-<g clip-path='url(#cpNjYzLjA5fDcwOS4wNHwyNjcuMTB8MzE4LjEw)'>
-</g>
-<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
-<text x='691.33' y='289.73' style='font-size: 8.80px; font-family: sans;' textLength='12.23px' lengthAdjust='spacingAndGlyphs'>m1</text>
-</g>
-<g clip-path='url(#cpNjYzLjA5fDcwOS4wNHwyNjcuMTB8MzE4LjEw)'>
-</g>
-<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
-<text x='691.33' y='307.01' style='font-size: 8.80px; font-family: sans;' textLength='12.23px' lengthAdjust='spacingAndGlyphs'>m2</text>
-</g>
-<g clip-path='url(#cpNjYzLjA5fDcwOS4wNHwyNjcuMTB8MzE4LjEw)'>
-</g>
-<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
+<rect x='663.09' y='269.84' width='45.95' height='45.52' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
+<rect x='668.57' y='275.32' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
+<rect x='668.57' y='275.32' width='17.28' height='17.28' style='stroke-width: 0.75; stroke: none; fill: #999999; fill-opacity: 0.40;' />
+<line x1='670.30' y1='283.96' x2='684.13' y2='283.96' style='stroke-width: 1.07; stroke: #F8766D; stroke-linecap: butt;' />
+<rect x='668.57' y='292.60' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
+<rect x='668.57' y='292.60' width='17.28' height='17.28' style='stroke-width: 0.75; stroke: none; fill: #999999; fill-opacity: 0.40;' />
+<line x1='670.30' y1='301.24' x2='684.13' y2='301.24' style='stroke-width: 1.07; stroke: #00BFC4; stroke-linecap: butt;' />
+<text x='691.33' y='286.99' style='font-size: 8.80px; font-family: sans;' textLength='12.23px' lengthAdjust='spacingAndGlyphs'>m1</text>
+<text x='691.33' y='304.27' style='font-size: 8.80px; font-family: sans;' textLength='12.23px' lengthAdjust='spacingAndGlyphs'>m2</text>
 <text x='10.96' y='121.37' style='font-size: 13.20px; font-family: sans;' textLength='136.50px' lengthAdjust='spacingAndGlyphs'>autoplot_mmcurves_cb</text>
 </g>
 </svg>
