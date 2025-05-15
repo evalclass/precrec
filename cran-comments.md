@@ -1,20 +1,22 @@
-## Version 0.14.2
+## Version 0.14.4
 
 This is a submission for updating the already published package - precrec. In this version I have:
 
-- Updated the signature of the fortify generic function to suppress CRAN warnings, and
+- Updated unit tests to avoid is.atomic(NULL) issue,
+
+- Updated argument names of S3 functions to keep them consistent, and
 
 - Updated the version.
 
-    -   0.14.1 -> 0.14.2
+    -   0.14.2 -> 0.14.4
 
 ## Test environments
 
--   local Ubuntu 22.04.1, R 4.2.2
+-   local Ubuntu 22.04.1, R 4.3.1
 
--   win-builder, R Under development (unstable) (2023-03-10 r83967 ucrt)
+-   win-builder, R Under development (unstable) (2023-10-10 r85312 ucrt)
 
--   Windows Server 2012 R2 x64 (on AppVeyor), R 4.2.2 Patched (2023-03-03 r83933 ucrt)
+-   Windows Server 2012 R2 x64 (on AppVeyor), R 4.3.1 Patched (2023-10-10 r85312 ucrt)
 
 -   GitHub Actions
 
