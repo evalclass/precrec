@@ -7,3 +7,4 @@ docs
 .idea/
 .vscode/
 tests/testthat/Rplots.pdf
+#tests/testthat/*/*.svg
