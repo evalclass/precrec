@@ -2,8 +2,6 @@
 # Precrec <img src="man/figures/logo.png" align="right" alt="" width="100" />
 
 [![R-CMD-check](https://github.com/evalclass/precrec/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/evalclass/precrec/actions/workflows/R-CMD-check.yaml)
-[![AppVeyor Build
-Status](https://ci.appveyor.com/api/projects/status/github/evalclass/precrec?branch=main&svg=true)](https://ci.appveyor.com/project/takayasaito/precrec/)
 [![codecov.io](https://codecov.io/github/evalclass/precrec/coverage.svg?branch=main)](https://app.codecov.io/github/evalclass/precrec?branch=main)
 [![CodeFactor](https://www.codefactor.io/repository/github/evalclass/precrec/badge)](https://www.codefactor.io/repository/github/evalclass/precrec/)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version-ago/precrec)](https://cran.r-project.org/package=precrec)
@@ -113,31 +111,31 @@ evaluation tools.
 
 The `precrec` package provides the following six functions.
 
-| Function           | Description                                                |
-|:-------------------|:-----------------------------------------------------------|
-| evalmod            | Main function to calculate evaluation measures             |
-| mmdata             | Reformat input data for performance evaluation calculation |
-| join_scores        | Join scores of multiple models into a list                 |
-| join_labels        | Join observed labels of multiple test datasets into a list |
-| create_sim_samples | Create random samples for simulations                      |
-| format_nfold       | Create n-fold cross validation dataset from data frame     |
+| Function | Description |
+|:---|:---|
+| evalmod | Main function to calculate evaluation measures |
+| mmdata | Reformat input data for performance evaluation calculation |
+| join_scores | Join scores of multiple models into a list |
+| join_labels | Join observed labels of multiple test datasets into a list |
+| create_sim_samples | Create random samples for simulations |
+| format_nfold | Create n-fold cross validation dataset from data frame |
 
 Moreover, the `precrec` package provides nine S3 generics for the S3
 object created by the `evalmod` function. **N.B.** The R language
 specifies S3 objects and S3 generic functions as part of the most basic
 object-oriented system in R.
 
-| S3 generic    | Package  | Description                                                    |
-|:--------------|:---------|:---------------------------------------------------------------|
-| print         | base     | Print the calculation results and the summary of the test data |
-| as.data.frame | base     | Convert a precrec object to a data frame                       |
-| plot          | graphics | Plot performance evaluation measures                           |
-| autoplot      | ggplot2  | Plot performance evaluation measures with ggplot2              |
-| fortify       | ggplot2  | Prepare a data frame for ggplot2                               |
-| auc           | precrec  | Make a data frame with AUC scores                              |
-| part          | precrec  | Calculate partial curves and partial AUC scores                |
-| pauc          | precrec  | Make a data frame with pAUC scores                             |
-| auc_ci        | precrec  | Calculate confidence intervals of AUC scores                   |
+| S3 generic | Package | Description |
+|:---|:---|:---|
+| print | base | Print the calculation results and the summary of the test data |
+| as.data.frame | base | Convert a precrec object to a data frame |
+| plot | graphics | Plot performance evaluation measures |
+| autoplot | ggplot2 | Plot performance evaluation measures with ggplot2 |
+| fortify | ggplot2 | Prepare a data frame for ggplot2 |
+| auc | precrec | Make a data frame with AUC scores |
+| part | precrec | Calculate partial curves and partial AUC scores |
+| pauc | precrec | Make a data frame with pAUC scores |
+| auc_ci | precrec | Calculate confidence intervals of AUC scores |
 
 ## Examples
 
