@@ -28,6 +28,6 @@ This is a submission for updating the already published package - precrec. In th
 
 ## R CMD check results
 
--   **NOTE** from **ALL Ubuntu** test environments.
+-   **NOTE** from **all Ubuntu** test environments.
 
     -   sub-directories of 1Mb or more (it occurs because the size of `precrec.so` is over 4 MB)
