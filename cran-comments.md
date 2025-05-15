@@ -1,22 +1,22 @@
-## Version 0.14.4
+## Version 0.14.5
 
 This is a submission for updating the already published package - precrec. In this version I have:
 
-- Updated unit tests to avoid is.atomic(NULL) issue,
+- Restructured unit tests for svg comparisons with vdiff
 
-- Updated argument names of S3 functions to keep them consistent, and
+- Reformatted signatures of S3 methods, and
 
 - Updated the version.
 
-    -   0.14.2 -> 0.14.4
+    -   0.14.4 -> 0.14.5
 
 ## Test environments
 
--   local Ubuntu 22.04.1, R 4.3.1
+-   local Ubuntu 22.04.1, R 4.5.0
 
--   win-builder, R Under development (unstable) (2023-10-10 r85312 ucrt)
+-   local MacBook Pro Ventura 13.7.6, R 4.5.0
 
--   Windows Server 2012 R2 x64 (on AppVeyor), R 4.3.1 Patched (2023-10-10 r85312 ucrt)
+-   win-builder, R Under development (unstable) (2025-05-13 r88200 ucrt)
 
 -   GitHub Actions
 
