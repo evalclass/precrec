@@ -1,20 +1,22 @@
-## Version 0.14.2
+## Version 0.14.5
 
 This is a submission for updating the already published package - precrec. In this version I have:
 
-- Updated the signature of the fortify generic function to suppress CRAN warnings, and
+- Restructured unit tests for svg comparisons with vdiff
+
+- Reformatted signatures of S3 methods, and
 
 - Updated the version.
 
-    -   0.14.1 -> 0.14.2
+    -   0.14.4 -> 0.14.5
 
 ## Test environments
 
--   local Ubuntu 22.04.1, R 4.2.2
+-   local Ubuntu 22.04.1, R 4.5.0
 
--   win-builder, R Under development (unstable) (2023-03-10 r83967 ucrt)
+-   local MacBook Pro Ventura 13.7.6, R 4.5.0
 
--   Windows Server 2012 R2 x64 (on AppVeyor), R 4.2.2 Patched (2023-03-03 r83933 ucrt)
+-   win-builder, R Under development (unstable) (2025-05-13 r88200 ucrt)
 
 -   GitHub Actions
 
@@ -26,6 +28,6 @@ This is a submission for updating the already published package - precrec. In th
 
 ## R CMD check results
 
--   **NOTE** from **ALL Ubuntu** test environments.
+-   **NOTE** from **all Ubuntu** test environments.
 
     -   sub-directories of 1Mb or more (it occurs because the size of `precrec.so` is over 4 MB)

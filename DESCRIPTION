@@ -1,8 +1,8 @@
 Package: precrec
 Type: Package
 Title: Calculate Accurate Precision-Recall and ROC (Receiver Operator Characteristics) Curves
-Version: 0.14.3
-Date: 2023-03-12
+Version: 0.14.5
+Date: 2025-05-15
 Authors@R: c(
     person("Takaya", "Saito", email = "takaya.saito@outlook.com", role = c("aut", "cre"), 
            comment = c(ORCID = "0000-0002-0154-8452")),
@@ -34,6 +34,6 @@ Imports:
     withr (>= 2.3.0),
     graphics (>= 4.0.0),
     rlang (>= 1.0.0)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 Encoding: UTF-8
 VignetteBuilder: knitr

@@ -6,3 +6,5 @@ inst/doc
 docs
 .idea/
 .vscode/
+tests/testthat/Rplots.pdf
+tests/testthat/_snaps/*/*.svg

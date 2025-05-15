@@ -110,7 +110,7 @@
 #' @importFrom stats qnorm rbeta rnorm sd qt
 #' @importFrom data.table frank
 #'
-NULL
+"_PACKAGE"
 
 .onUnload <- function(libpath) {
   library.dynam.unload("precrec", libpath)

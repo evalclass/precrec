@@ -30,11 +30,13 @@ test_that("'labels' takes a vector", {
   err_msg <- "labels is not an atomic vector"
   expect_err_msg(err_msg, list(1))
   expect_err_msg(err_msg, data.frame(1))
+  expect_err_msg(err_msg, NULL)
 
   err_msg <- "is not TRUE"
   expect_err_msg(err_msg, array(1))
   expect_err_msg(err_msg, matrix(1))
-  expect_err_msg(err_msg, NULL)
+
+  expect_error(.factor_labels(NULL, NULL))
 })
 
 test_that("'labels' takes a numeric vector", {

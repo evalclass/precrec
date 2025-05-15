@@ -2,6 +2,7 @@
 % Please edit documentation in R/precrec.R
 \docType{package}
 \name{precrec}
+\alias{precrec-package}
 \alias{precrec}
 \title{precrec: A package for computing accurate ROC and Precision-Recall curves}
 \description{
@@ -111,3 +112,20 @@ returns confidence intervals of AUCs for both ROC
 and precision-recall curves.
 }
 
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/evalclass/precrec}
+  \item Report bugs at \url{https://github.com/evalclass/precrec/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Takaya Saito \email{takaya.saito@outlook.com} (\href{https://orcid.org/0000-0002-0154-8452}{ORCID})
+
+Authors:
+\itemize{
+  \item Marc Rehmsmeier \email{marc.rehmsmeier@ii.uib.no} (\href{https://orcid.org/0000-0002-5021-7721}{ORCID})
+}
+
+}

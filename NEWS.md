@@ -1,3 +1,15 @@
+# precrec 0.14.5
+
+* Restructure unit tests for svg comparisons with vdiff
+
+* Reformat signatures of S3 methods
+
+# precrec 0.14.4
+
+* Update unit tests to avoid is.atomic(NULL) issue
+
+* Update argument names of S3 functions to keep them consistent
+
 # precrec 0.14.3
 
 * Use new R setup configurations of GitHub actions
