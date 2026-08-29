@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("PL 6: Calculate average points")
+# PL 6: Calculate average points
 # Test calc_avg_basic(epoints, modnames, uniq_modnames, cb_alpha)
 
 pl6_create_mdat_sm <- function() {

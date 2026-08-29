@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("AP 2: Autoplot for curves")
+# AP 2: Autoplot for curves
 # Test autoplot(object, ...)
 
 skip_on_cran()

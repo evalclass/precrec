@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("PL 4: Calculate evaluation measures")
+# PL 4: Calculate evaluation measures
 # Test calc_measures(cmats, scores, labels)
 
 test_that("calc_measures() reterns an 'pevals' object", {

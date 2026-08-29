@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("MM 2: Join score datasets")
+# MM 2: Join score datasets
 # Test join_scores(..., byrow, chklen)
 
 test_that("join_scores() combines muliple score datasets", {

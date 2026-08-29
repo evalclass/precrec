@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("PR 1: Print objects")
+# PR 1: Print objects
 # Test print(x, ...)
 
 pr_create_msdat <- function() {

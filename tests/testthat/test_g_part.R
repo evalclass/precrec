@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("PA 1: Calculate partial AUC")
+# PA 1: Calculate partial AUC
 # Test part(x, xlim = c(0, 1), ylim = c(0, 1), curvetype, ...)
 
 pa_create_msdat <- function() {

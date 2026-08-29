@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("PL 3: Calculate AUC (ROC) with the U statitics")
+# PL 3: Calculate AUC (ROC) with the U statitics
 # Test calc_auc_with_u(sdat, scores, labels, na_worst, ties_method, keep_sdat)
 
 test_that("calc_auc_with_u() reterns a 'uauc' object", {

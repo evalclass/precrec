@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("CI 1: AUC CIs")
+# CI 1: AUC CIs
 # Test auc_ci(curves)
 
 auc_ci_create_mscurves <- function() {

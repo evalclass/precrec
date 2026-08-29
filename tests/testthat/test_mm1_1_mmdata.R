@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("MM 1: Create mmdata")
+# MM 1: Create mmdata
 # Test .pmatch_tiesmethod(val),
 #      .pmatch_expd_first(val),
 #      mmdata(scores, labels, modnames, dsids,

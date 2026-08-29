@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("PL 5: Create ROC and Precision-Recall curves")
+# PL 5: Create ROC and Precision-Recall curves
 # Test create_curves(pevals, scores, labels, x_bins)
 
 test_that("create_curves() reterns a 'curves' object", {

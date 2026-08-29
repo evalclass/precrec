@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("PL 2: Pipeline main for basic evaluation values")
+# PL 2: Pipeline main for basic evaluation values
 # Test .pl_main_basic(mdat, model_type, dataset_type, class_name_pf,
 #                     cald_avg, cb_alpha, raw_curves)
 

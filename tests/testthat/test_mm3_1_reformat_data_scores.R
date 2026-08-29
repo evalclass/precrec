@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("MM 3: Reformat scores for evaluation")
+# MM 3: Reformat scores for evaluation
 # Test .rank_scores(scores, na_worst, ties_method)
 
 test_that("rank_scores() reterns a numeric vector", {

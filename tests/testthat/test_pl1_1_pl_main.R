@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("PL 1: Pipeline main")
+# PL 1: Pipeline main
 # Test .pmatch_mode(val)
 #      .make_prefix(model_type, data_type)
 #      pl_main(mdat, mode, calc_avg, cb_alpha, raw_curves, x_bins,

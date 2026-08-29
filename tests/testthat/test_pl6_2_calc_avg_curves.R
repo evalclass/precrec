@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("PL 6: Calculate average curves")
+# PL 6: Calculate average curves
 # Test calc_avg_rocprc(epoints, modnames, uniq_modnames, cb_alpha)
 
 pl6_create_mdat_sm <- function() {

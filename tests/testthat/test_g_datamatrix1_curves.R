@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("DF 1: as.data.frame curves")
+# DF 1: as.data.frame curves
 # Test as.data.frame(x, ...)
 
 df1_create_mscurves <- function() {

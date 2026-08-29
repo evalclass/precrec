@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("MA 1: evalmod")
+# MA 1: evalmod
 # Test evalmod()
 #
 

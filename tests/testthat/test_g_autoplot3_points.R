@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("AP 3: Autoplot for points")
+# AP 3: Autoplot for points
 # Test autoplot(object, ...)
 
 skip_on_cran()

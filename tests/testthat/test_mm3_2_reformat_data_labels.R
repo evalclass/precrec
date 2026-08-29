@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("MM 3: Reformat labels for evaluation")
+# MM 3: Reformat labels for evaluation
 # Test .factor_labels(labels, posclass)
 
 test_that(".factor_labels() reterns a numeric vector", {

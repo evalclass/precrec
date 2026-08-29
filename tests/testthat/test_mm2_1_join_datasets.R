@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("MM 2: Join datasets")
+# MM 2: Join datasets
 # Test .join_datasets(..., efunc_vtype, efunc_nrow, byrow, chklen)
 
 test_that(".join_datasets() returns a list", {

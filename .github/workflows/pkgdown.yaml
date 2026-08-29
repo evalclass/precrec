@@ -1,5 +1,8 @@
 # Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
+# NOTE: the '_develop' branch filter is intentional - it disables CI on
+# 'develop'. Running the full matrix on every develop push is too heavy.
+# Run devtools::check() locally before merging into develop.
 on:
   push:
     branches: [main, _develop]
@@ -19,7 +22,7 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       isPush: ${{ github.event_name == 'push' }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: r-lib/actions/setup-tinytex@v2
 

@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("DF 3: as.data.frame aucroc")
+# DF 3: as.data.frame aucroc
 # Test as.data.frame(x, ...)
 
 df3_create_msaucs <- function() {

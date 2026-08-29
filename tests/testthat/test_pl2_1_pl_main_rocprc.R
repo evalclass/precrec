@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("PL 2: Pipeline main for ROC and Precision-Recall")
+# PL 2: Pipeline main for ROC and Precision-Recall
 # Test .pl_main_rocprc(mdat, model_type, dataset_type, class_name_pf,
 #                      cald_avg, cb_alpha, raw_curves, x_bins,
 #                      interpolate)

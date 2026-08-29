@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("PL 5: Create a ROC curve")
+# PL 5: Create a ROC curve
 # Test create_roc(pevals, scores, labels, x_bins)
 
 test_that("create_roc() reterns a 'roc_curve' object", {

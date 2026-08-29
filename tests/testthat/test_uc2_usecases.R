@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("UC 2: Use cases 2")
+# UC 2: Use cases 2
 
 test_that("single class - positive", {
   # Data preparation

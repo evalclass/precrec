@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("PT 2: Plot points")
+# PT 2: Plot points
 # Test plot(x, y, ...)
 
 pt3_create_mspoints <- function() {

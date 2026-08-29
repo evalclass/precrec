@@ -1,3 +1,11 @@
+# precrec 0.15.0
+
+* Require R >= 4.1 (was R >= 3.2.1)
+
+* Migrate the unit tests to testthat edition 3, and run test files in parallel
+
+* Remove the deprecated `context()` calls from the unit tests
+
 # precrec 0.14.5
 
 * Restructure unit tests for svg comparisons with vdiff
