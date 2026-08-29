@@ -1,6 +1,6 @@
 #' Create random samples for simulations
 #'
-#' The \code{create_sim_samples} function generates random samples
+#' The `create_sim_samples` function generates random samples
 #'   with different performance levels.
 #'
 #' @param n_repeat The number of iterations to make samples.
@@ -20,7 +20,7 @@
 #'     \item{"all"}{All of the above}
 #'   }
 #'
-#' @return The \code{create_sim_samples} function returns a list
+#' @return The `create_sim_samples` function returns a list
 #'   with the following items.
 #'   \itemize{
 #'     \item scores: a list of numeric vectors
@@ -29,8 +29,8 @@
 #'     \item dsids: a character vector of the dataset IDs
 #'   }
 #'
-#' @seealso \code{\link{mmdata}} for formatting input data.
-#'   \code{\link{evalmod}} for calculation evaluation measures.
+#' @seealso [mmdata()] for formatting input data.
+#'   [evalmod()] for calculation evaluation measures.
 #'
 #' @examples
 #'

@@ -23,20 +23,20 @@ evalmod(
 )
 }
 \arguments{
-\item{mdat}{An \code{S3} object created by the \code{\link{mmdata}}
+\item{mdat}{An \code{S3} object created by the \code{\link[=mmdata]{mmdata()}}
 function. It contains formatted scores and labels.
 The \code{evalmod} function ignores the following arguments
 when \code{mdat} is specified.
 \itemize{
-  \item \code{scores}
-  \item \code{labels}
-  \item \code{modnames}
-  \item \code{dsids}
-  \item \code{posclass}
-  \item \code{na_worst}
-  \item \code{ties_method}
+\item \code{scores}
+\item \code{labels}
+\item \code{modnames}
+\item \code{dsids}
+\item \code{posclass}
+\item \code{na_worst}
+\item \code{ties_method}
 }
-These arguments are internally passed to the \code{\link{mmdata}} function
+These arguments are internally passed to the \code{\link[=mmdata]{mmdata()}} function
 when \code{mdat} is unspecified.
 In that case, both \code{scores} and \code{labels} must be
 at least specified.}
@@ -44,21 +44,21 @@ at least specified.}
 \item{mode}{A string that specifies the types of evaluation measures
 that the \code{evalmod} function calculates.
 \describe{
-  \item{"rocprc"}{ROC and Precision-Recall curves}
-  \item{"prcroc"}{Same as above}
-  \item{"basic"}{Normalized ranks vs. accuracy, error rate, specificity,
-                 sensitivity, precision, Matthews correlation coefficient,
-                 and F-score. }
-  \item{"aucroc"}{Fast AUC(ROC) calculation with the U statistic}
+\item{"rocprc"}{ROC and Precision-Recall curves}
+\item{"prcroc"}{Same as above}
+\item{"basic"}{Normalized ranks vs. accuracy, error rate, specificity,
+sensitivity, precision, Matthews correlation coefficient,
+and F-score. }
+\item{"aucroc"}{Fast AUC(ROC) calculation with the U statistic}
 }}
 
 \item{scores}{A numeric dataset of predicted scores. It can be a vector,
-a matrix, an array, a data frame, or a list. The \code{\link{join_scores}}
+a matrix, an array, a data frame, or a list. The \code{\link[=join_scores]{join_scores()}}
 function can be useful to make scores with multiple datasets.}
 
 \item{labels}{A numeric, character, logical, or factor dataset
 of observed labels. It can be a vector, a matrix, an array,
-a data frame, or a list. The \code{\link{join_labels}}
+a data frame, or a list. The \code{\link[=join_labels]{join_labels()}}
 function can be useful to make labels with multiple datasets.}
 
 \item{modnames}{A character vector for the names of the models.
@@ -79,15 +79,15 @@ detected when \code{posclass} is \code{NULL}.}
 \item{na_worst}{A Boolean value for controlling the treatment of NAs
 in \code{scores}.
 \describe{
-  \item{TRUE}{All NAs are treated as the worst scores}
-  \item{FALSE}{All NAs are treated as the best scores}
+\item{TRUE}{All NAs are treated as the worst scores}
+\item{FALSE}{All NAs are treated as the best scores}
 }}
 
 \item{ties_method}{A string for controlling ties in \code{scores}.
 \describe{
-  \item{"equiv"}{Ties are equivalently ranked}
-  \item{"first"}{Ties are ranked in an increasing order as appeared}
-  \item{"random"}{ Ties are ranked in random order}
+\item{"equiv"}{Ties are equivalently ranked}
+\item{"first"}{Ties are ranked in an increasing order as appeared}
+\item{"random"}{ Ties are ranked in random order}
 }}
 
 \item{calc_avg}{A logical value to specify whether average curves should
@@ -122,65 +122,55 @@ ignored and  when \code{x_bins} is set to \code{FALSE}.
 \code{interpolate} is effective only when \code{mode} is set
 to \code{rocprc} or \code{prcroc}.}
 
-\item{...}{These additional arguments are passed to \code{\link{mmdata}}
+\item{...}{These additional arguments are passed to \code{\link[=mmdata]{mmdata()}}
 for data preparation.}
 }
 \value{
 The \code{evalmod} function returns an \code{S3} object
-  that contains performance evaluation measures. The number of models and
-  the number of datasets can be controlled by \code{modnames} and
-  \code{dsids}. For example, the number of models is "single" and the number
-  of test datasets is "multiple" when \code{modnames = c("m1", "m1", "m1")}
-  and \code{dsids = c(1, 2, 3)} are specified.
+that contains performance evaluation measures. The number of models and
+the number of datasets can be controlled by \code{modnames} and
+\code{dsids}. For example, the number of models is "single" and the number
+of test datasets is "multiple" when \code{modnames = c("m1", "m1", "m1")}
+and \code{dsids = c(1, 2, 3)} are specified.
 
 Different \code{S3} objects have different default behaviors of \code{S3}
-  generics, such as \code{\link{plot}}, \code{\link{autoplot}}, and
-  \code{\link{fortify}}.
-
+generics, such as \code{\link[=plot]{plot()}}, \code{\link[=autoplot]{autoplot()}}, and
+\code{\link[=fortify]{fortify()}}.
 \enumerate{
+\item The \code{evalmod} function returns one of the following \code{S3}
 
-  \item  The \code{evalmod} function returns one of the following \code{S3}
-  objects when \code{mode} is "prcroc".
-  The objects contain ROC and Precision-Recall curves.
+objects when \code{mode} is "prcroc".
+The objects contain ROC and Precision-Recall curves.\tabular{lll}{
+   \strong{\code{S3} object} \tab \strong{# of models} \tab \strong{# of test datasets} \cr
+   sscurves \tab single \tab single \cr
+   mscurves \tab multiple \tab single \cr
+   smcurves \tab single \tab multiple \cr
+   mmcurves \tab multiple \tab multiple \cr
+}
 
-  \tabular{lll}{
-    \strong{\code{S3} object}
-    \tab \strong{# of models}
-    \tab \strong{# of test datasets} \cr
+\item The \code{evalmod} function returns one of the following \code{S3}
 
-    sscurves \tab single   \tab single   \cr
-    mscurves \tab multiple \tab single   \cr
-    smcurves \tab single   \tab multiple \cr
-    mmcurves \tab multiple \tab multiple
-  }
+objects when \code{mode} is "basic".
+They contain five different basic evaluation measures; error rate,
+accuracy, specificity, sensitivity, and precision.\tabular{lll}{
+   \strong{\code{S3} object} \tab \strong{# of models} \tab \strong{# of test datasets} \cr
+   sspoints \tab single \tab single \cr
+   mspoints \tab multiple \tab single \cr
+   smpoints \tab single \tab multiple \cr
+   mmpoints \tab multiple \tab multiple \cr
+}
 
-  \item The \code{evalmod} function returns one of the following \code{S3}
-  objects when \code{mode} is "basic".
-  They contain five different basic evaluation measures; error rate,
-  accuracy, specificity, sensitivity, and precision.
+\item The \code{evalmod} function returns the \code{aucroc} S3 object
 
-  \tabular{lll}{
-    \strong{\code{S3} object}
-    \tab \strong{# of models}
-    \tab \strong{# of test datasets} \cr
-
-    sspoints \tab single   \tab single   \cr
-    mspoints \tab multiple \tab single   \cr
-    smpoints \tab single   \tab multiple \cr
-    mmpoints \tab multiple \tab multiple
-  }
-
-  \item The \code{evalmod} function returns the \code{aucroc} S3 object
-  when \code{mode} is "aucroc", which can be used with 'print'
-  and 'as.data.frame'.
-
+when \code{mode} is "aucroc", which can be used with 'print'
+and 'as.data.frame'.
 }
 }
 \description{
 The \code{evalmod} function calculates ROC and Precision-Recall curves for
-  specified prediction scores and binary labels. It also calculate several
-  basic performance evaluation measures, such as accuracy, error rate, and
-  precision, by specifying \code{mode} as "basic".
+specified prediction scores and binary labels. It also calculate several
+basic performance evaluation measures, such as accuracy, error rate, and
+precision, by specifying \code{mode} as "basic".
 }
 \examples{
 
@@ -341,13 +331,13 @@ res2
 
 }
 \seealso{
-\code{\link{plot}} for plotting curves with the general R plot.
-  \code{\link{autoplot}} and \code{\link{fortify}} for plotting curves
-  with \pkg{ggplot2}. \code{\link{mmdata}} for formatting input data.
-  \code{\link{join_scores}} and \code{\link{join_labels}} for formatting
-  scores and labels with multiple datasets.
-  \code{\link{format_nfold}} for creating n-fold cross validation dataset
-  from data frame.
-  \code{\link{create_sim_samples}} for generating random samples
-  for simulations.
+\code{\link[=plot]{plot()}} for plotting curves with the general R plot.
+\code{\link[=autoplot]{autoplot()}} and \code{\link[=fortify]{fortify()}} for plotting curves
+with \pkg{ggplot2}. \code{\link[=mmdata]{mmdata()}} for formatting input data.
+\code{\link[=join_scores]{join_scores()}} and \code{\link[=join_labels]{join_labels()}} for formatting
+scores and labels with multiple datasets.
+\code{\link[=format_nfold]{format_nfold()}} for creating n-fold cross validation dataset
+from data frame.
+\code{\link[=create_sim_samples]{create_sim_samples()}} for generating random samples
+for simulations.
 }

@@ -1,6 +1,6 @@
 #' Join scores of multiple models into a list
 #'
-#' The \code{join_scores} function takes predicted scores from multiple models
+#' The `join_scores` function takes predicted scores from multiple models
 #'   and converts them to a list.
 #'
 #' @param ... Multiple datasets. They can be vectors, arrays, matrices,
@@ -12,12 +12,12 @@
 #' @param chklen A Boolean value to specify whether all list items must be
 #'   the same lengths.
 #'
-#' @return The \code{join_scores} function returns a list that
+#' @return The `join_scores` function returns a list that
 #'   contains all combined score data.
 #'
-#' @seealso \code{\link{evalmod}} for calculation evaluation measures.
-#'   \code{\link{mmdata}} for formatting input data.
-#'   \code{\link{join_labels}} for formatting labels with multiple datasets.
+#' @seealso [evalmod()] for calculation evaluation measures.
+#'   [mmdata()] for formatting input data.
+#'   [join_labels()] for formatting labels with multiple datasets.
 #'
 #' @examples
 #'
@@ -74,7 +74,7 @@ join_scores <- function(..., byrow = FALSE, chklen = TRUE) {
 
 #' Join observed labels of multiple test datasets into a list
 #'
-#' \code{join_labels} takes observed labels and converts them to a list.
+#' `join_labels` takes observed labels and converts them to a list.
 #'
 #' @param ... Multiple datasets. They can be vectors, arrays, matrices,
 #'   data frames, and lists.
@@ -85,12 +85,12 @@ join_scores <- function(..., byrow = FALSE, chklen = TRUE) {
 #' @param chklen A Boolean value to specify whether all list items must be
 #'   the same lengths.
 #'
-#' @return The \code{join_labels} function returns a list that
+#' @return The `join_labels` function returns a list that
 #'   contains all combined label data.
 #'
-#' @seealso \code{\link{evalmod}} for calculation evaluation measures.
-#'   \code{\link{mmdata}} for formatting input data.
-#'   \code{\link{join_scores}} for formatting scores with multiple datasets.
+#' @seealso [evalmod()] for calculation evaluation measures.
+#'   [mmdata()] for formatting input data.
+#'   [join_scores()] for formatting scores with multiple datasets.
 #'
 #' @examples
 #'

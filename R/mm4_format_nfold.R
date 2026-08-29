@@ -1,27 +1,27 @@
 #' Create n-fold cross validation dataset from data frame
 #'
-#' The \code{format_nfold} function takes a data frame with scores, label,
-#'   and n-fold columns and convert it to a list for \code{\link{evalmod}}
-#'   and \code{\link{mmdata}}.
+#' The `format_nfold` function takes a data frame with scores, label,
+#'   and n-fold columns and convert it to a list for [evalmod()]
+#'   and [mmdata()].
 #'
 #' @param nfold_df A data frame that contains at least one score column,
 #'   label and fold columns.
 #'
 #' @param score_cols A character/numeric vector that specifies score columns
-#'   of \code{nfold_df}.
+#'   of `nfold_df`.
 #'
 #' @param lab_col A number/string that specifies the label column
-#'   of \code{nfold_df}.
+#'   of `nfold_df`.
 #'
 #' @param fold_col A number/string that specifies the fold column
-#'   of \code{nfold_df}.
+#'   of `nfold_df`.
 #'
-#' @return The \code{format_nfold} function returns a list that
+#' @return The `format_nfold` function returns a list that
 #'   contains multiple scores and labels.
 #'
-#' @seealso \code{\link{evalmod}} for calculation evaluation measures.
-#'   \code{\link{mmdata}} for formatting input data.
-#'   \code{\link{join_scores}} and \code{\link{join_labels}} for formatting
+#' @seealso [evalmod()] for calculation evaluation measures.
+#'   [mmdata()] for formatting input data.
+#'   [join_scores()] and [join_labels()] for formatting
 #'   scores and labels with multiple datasets.
 #'
 #' @examples

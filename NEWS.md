@@ -6,6 +6,11 @@
 
 * Remove the deprecated `context()` calls from the unit tests
 
+* Convert the roxygen2 documentation to markdown. Links to functions now
+  render with parentheses, such as `evalmod()`, and links to other packages
+  are qualified, such as `gridExtra::arrangeGrob()`. The rendered help pages
+  are otherwise unchanged.
+
 # precrec 0.14.5
 
 * Restructure unit tests for svg comparisons with vdiff
