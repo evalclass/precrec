@@ -254,12 +254,35 @@ decompositions — implementable as one extra concatenated dataset).
 
 ### Optimization plan (benchmark-driven, in order of expected payoff)
 
-0. **Infrastructure first**: `bench/` directory (Rbuildignored) with
-   `bench::mark()` scripts over seeded datasets (1e4–1e7 rows; balanced +
-   imbalanced; with/without ties and NAs), storing baseline JSON so every
-   later change shows a before/after. Also add an ALTREP-safety and
-   correctness harness comparing against the pure-R fallback
-   (`use_rcpp = FALSE` path already exists in `.dataframe_common` — handy).
+0. **Infrastructure first** — **DONE (2026-08-30).** `bench/`
+   (Rbuildignored, `bench/README.md` documents it): seeded datasets over a
+   1e4–1e7 size sweep plus a shape sweep (imbalanced, ties, NAs, all three),
+   `bench::mark()` cases labelled with the C++ entry point each exercises,
+   JSON baselines with a `--compare` mode that flags regressions past 10%
+   above a 1 ms noise floor, and `run_correctness.R` covering the
+   `use_rcpp = FALSE` fallback, ALTREP inputs, and the ranking invariants.
+   The correctness harness was checked against a deliberately reintroduced
+   `DBL_MIN` bug: it fails 6 checks, so it is not vacuous.
+   Baseline recorded at `bench/baseline/develop.json` (commit `8092aee`).
+
+   **What the baseline says, and where it disagrees with the plan below.**
+   Slowest cases at 1e6 (median, mem_alloc):
+
+   | case | ms | MB |
+   | --- | --- | --- |
+   | `evalmod_avg_basic` / multi5_1e6 | 9870 | 570 |
+   | `as_data_frame_basic` / balanced_1e6 | 905 | 275 |
+   | `evalmod_avg_rocprc` / multi5_1e6 | 871 | 157 |
+   | `evalmod_rocprc` / balanced_1e6 | 842 | 156 |
+   | `evalmod_basic` / balanced_1e6 | 637 | 502 |
+   | `mmdata` / balanced_1e6 | 531 | 15 |
+
+   `calc_avg_points` is the single worst path by an order of magnitude and
+   **is not on the optimisation list below at all**. It is 15× the cost of
+   the non-averaged `evalmod_basic` on the same total row count, which
+   points at the `std::set<double>` + `std::map<double, int>` it builds over
+   every distinct x value, with a map lookup per point. Reorder the list to
+   put it first, or at least ahead of items 2–4.
 1. **Eliminate copy-then-wrap**: pervasive pattern is `std::vector<double>`
    filled, then `Rcpp::wrap()` copies into a new SEXP (e.g.
    `convert_curve_df`, `create_roc_curve`, `calc_avg_curve`). Write directly
@@ -351,7 +374,7 @@ Ship Tier 1 (+ F-beta) and Tier 2 (Brier, log loss). Defer Tier 3.
 ```
 1. E3 steps 1–3        CI refresh + testthat 3e → safe ground for everything else  [DONE]
 2. E4 correctness      DBL_MIN bug, Welford   → cheap, S-sized, ride on step 1     [DONE]
-3. E4 step 0           benchmark harness      → baseline
+3. E4 step 0           benchmark harness      → baseline                        [DONE]
 4. E1                  data.table internals   → touches df sites E5 also touches
 5. E3 steps 4–7        roxygen/cli/pkgdown    → mechanical, any time           [DONE]
 6. E4 optimizations    guided by benchmarks

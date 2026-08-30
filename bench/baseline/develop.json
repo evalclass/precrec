@@ -1,0 +1,592 @@
+{
+  "meta": {
+    "created": "2026-08-30 14:38:24",
+    "git_commit": "8092aee",
+    "r_version": "R version 4.6.1 (2026-06-24)",
+    "platform": "x86_64-pc-linux-gnu",
+    "precrec_version": "0.14.5",
+    "bench_version": "1.1.4"
+  },
+  "results": [
+    {
+      "benchmark": "mmdata",
+      "dataset": "balanced_1e4",
+      "n": 10000,
+      "median_s": 0.00488958,
+      "min_s": 0.00482616,
+      "mem_alloc": 160144,
+      "n_itr": 20,
+      "n_gc": 0
+    },
+    {
+      "benchmark": "evalmod_rocprc",
+      "dataset": "balanced_1e4",
+      "n": 10000,
+      "median_s": 0.01106936,
+      "min_s": 0.01020982,
+      "mem_alloc": 1681224,
+      "n_itr": 20,
+      "n_gc": 1
+    },
+    {
+      "benchmark": "evalmod_basic",
+      "dataset": "balanced_1e4",
+      "n": 10000,
+      "median_s": 0.01026955,
+      "min_s": 0.00988658,
+      "mem_alloc": 5265248,
+      "n_itr": 20,
+      "n_gc": 3
+    },
+    {
+      "benchmark": "evalmod_aucroc",
+      "dataset": "balanced_1e4",
+      "n": 10000,
+      "median_s": 0.00214057,
+      "min_s": 0.00211808,
+      "mem_alloc": 608488,
+      "n_itr": 20,
+      "n_gc": 0
+    },
+    {
+      "benchmark": "as_data_frame_rocprc",
+      "dataset": "balanced_1e4",
+      "n": 10000,
+      "median_s": 0.00197469,
+      "min_s": 0.0019577,
+      "mem_alloc": 947464,
+      "n_itr": 20,
+      "n_gc": 0
+    },
+    {
+      "benchmark": "as_data_frame_basic",
+      "dataset": "balanced_1e4",
+      "n": 10000,
+      "median_s": 0.00652955,
+      "min_s": 0.00637458,
+      "mem_alloc": 2880592,
+      "n_itr": 20,
+      "n_gc": 2
+    },
+    {
+      "benchmark": "auc",
+      "dataset": "balanced_1e4",
+      "n": 10000,
+      "median_s": 0.0000216,
+      "min_s": 0.00002027,
+      "mem_alloc": 0,
+      "n_itr": 20,
+      "n_gc": 0
+    },
+    {
+      "benchmark": "mmdata",
+      "dataset": "balanced_1e5",
+      "n": 100000,
+      "median_s": 0.0460475,
+      "min_s": 0.04569252,
+      "mem_alloc": 1600144,
+      "n_itr": 11,
+      "n_gc": 0
+    },
+    {
+      "benchmark": "evalmod_rocprc",
+      "dataset": "balanced_1e5",
+      "n": 100000,
+      "median_s": 0.07603364,
+      "min_s": 0.07255142,
+      "mem_alloc": 16441088,
+      "n_itr": 6,
+      "n_gc": 4
+    },
+    {
+      "benchmark": "evalmod_basic",
+      "dataset": "balanced_1e5",
+      "n": 100000,
+      "median_s": 0.06198498,
+      "min_s": 0.05537636,
+      "mem_alloc": 52604384,
+      "n_itr": 6,
+      "n_gc": 11
+    },
+    {
+      "benchmark": "evalmod_aucroc",
+      "dataset": "balanced_1e5",
+      "n": 100000,
+      "median_s": 0.00821452,
+      "min_s": 0.00801207,
+      "mem_alloc": 2416736,
+      "n_itr": 20,
+      "n_gc": 1
+    },
+    {
+      "benchmark": "as_data_frame_rocprc",
+      "dataset": "balanced_1e5",
+      "n": 100000,
+      "median_s": 0.01401541,
+      "min_s": 0.01367919,
+      "mem_alloc": 6464080,
+      "n_itr": 20,
+      "n_gc": 3
+    },
+    {
+      "benchmark": "as_data_frame_basic",
+      "dataset": "balanced_1e5",
+      "n": 100000,
+      "median_s": 0.06586457,
+      "min_s": 0.05848129,
+      "mem_alloc": 28800592,
+      "n_itr": 6,
+      "n_gc": 4
+    },
+    {
+      "benchmark": "auc",
+      "dataset": "balanced_1e5",
+      "n": 100000,
+      "median_s": 0.00002116,
+      "min_s": 0.00002016,
+      "mem_alloc": 0,
+      "n_itr": 20,
+      "n_gc": 0
+    },
+    {
+      "benchmark": "mmdata",
+      "dataset": "balanced_1e6",
+      "n": 1000000,
+      "median_s": 0.53107561,
+      "min_s": 0.53107561,
+      "mem_alloc": 16000144,
+      "n_itr": 1,
+      "n_gc": 0
+    },
+    {
+      "benchmark": "evalmod_rocprc",
+      "dataset": "balanced_1e6",
+      "n": 1000000,
+      "median_s": 0.84199098,
+      "min_s": 0.84199098,
+      "mem_alloc": 164041112,
+      "n_itr": 1,
+      "n_gc": 3
+    },
+    {
+      "benchmark": "evalmod_basic",
+      "dataset": "balanced_1e6",
+      "n": 1000000,
+      "median_s": 0.6373615,
+      "min_s": 0.6373615,
+      "mem_alloc": 526003648,
+      "n_itr": 1,
+      "n_gc": 4
+    },
+    {
+      "benchmark": "evalmod_aucroc",
+      "dataset": "balanced_1e6",
+      "n": 1000000,
+      "median_s": 0.07323002,
+      "min_s": 0.07261789,
+      "mem_alloc": 24016736,
+      "n_itr": 7,
+      "n_gc": 1
+    },
+    {
+      "benchmark": "as_data_frame_rocprc",
+      "dataset": "balanced_1e6",
+      "n": 1000000,
+      "median_s": 0.13586244,
+      "min_s": 0.12851449,
+      "mem_alloc": 64064096,
+      "n_itr": 4,
+      "n_gc": 3
+    },
+    {
+      "benchmark": "as_data_frame_basic",
+      "dataset": "balanced_1e6",
+      "n": 1000000,
+      "median_s": 0.90502022,
+      "min_s": 0.90502022,
+      "mem_alloc": 288000592,
+      "n_itr": 1,
+      "n_gc": 2
+    },
+    {
+      "benchmark": "auc",
+      "dataset": "balanced_1e6",
+      "n": 1000000,
+      "median_s": 0.00002116,
+      "min_s": 0.00002013,
+      "mem_alloc": 0,
+      "n_itr": 20,
+      "n_gc": 0
+    },
+    {
+      "benchmark": "mmdata",
+      "dataset": "imbalanced_1e5",
+      "n": 100000,
+      "median_s": 0.0460808,
+      "min_s": 0.04589162,
+      "mem_alloc": 1600144,
+      "n_itr": 11,
+      "n_gc": 0
+    },
+    {
+      "benchmark": "evalmod_rocprc",
+      "dataset": "imbalanced_1e5",
+      "n": 100000,
+      "median_s": 0.07591213,
+      "min_s": 0.07527376,
+      "mem_alloc": 16441208,
+      "n_itr": 7,
+      "n_gc": 0
+    },
+    {
+      "benchmark": "evalmod_basic",
+      "dataset": "imbalanced_1e5",
+      "n": 100000,
+      "median_s": 0.07106826,
+      "min_s": 0.05526347,
+      "mem_alloc": 52800928,
+      "n_itr": 8,
+      "n_gc": 1
+    },
+    {
+      "benchmark": "evalmod_aucroc",
+      "dataset": "imbalanced_1e5",
+      "n": 100000,
+      "median_s": 0.00805853,
+      "min_s": 0.00794186,
+      "mem_alloc": 2416736,
+      "n_itr": 20,
+      "n_gc": 0
+    },
+    {
+      "benchmark": "as_data_frame_rocprc",
+      "dataset": "imbalanced_1e5",
+      "n": 100000,
+      "median_s": 0.01377232,
+      "min_s": 0.01367546,
+      "mem_alloc": 6464272,
+      "n_itr": 20,
+      "n_gc": 0
+    },
+    {
+      "benchmark": "as_data_frame_basic",
+      "dataset": "imbalanced_1e5",
+      "n": 100000,
+      "median_s": 0.05798077,
+      "min_s": 0.05788355,
+      "mem_alloc": 28800592,
+      "n_itr": 9,
+      "n_gc": 0
+    },
+    {
+      "benchmark": "auc",
+      "dataset": "imbalanced_1e5",
+      "n": 100000,
+      "median_s": 0.00002229,
+      "min_s": 0.00002,
+      "mem_alloc": 0,
+      "n_itr": 20,
+      "n_gc": 0
+    },
+    {
+      "benchmark": "mmdata",
+      "dataset": "ties_1e5",
+      "n": 100000,
+      "median_s": 0.04426013,
+      "min_s": 0.04384976,
+      "mem_alloc": 1600144,
+      "n_itr": 12,
+      "n_gc": 0
+    },
+    {
+      "benchmark": "evalmod_rocprc",
+      "dataset": "ties_1e5",
+      "n": 100000,
+      "median_s": 0.07625013,
+      "min_s": 0.07607538,
+      "mem_alloc": 16441088,
+      "n_itr": 7,
+      "n_gc": 0
+    },
+    {
+      "benchmark": "evalmod_basic",
+      "dataset": "ties_1e5",
+      "n": 100000,
+      "median_s": 0.0526327,
+      "min_s": 0.05220351,
+      "mem_alloc": 52604384,
+      "n_itr": 9,
+      "n_gc": 1
+    },
+    {
+      "benchmark": "evalmod_aucroc",
+      "dataset": "ties_1e5",
+      "n": 100000,
+      "median_s": 0.00853814,
+      "min_s": 0.00833752,
+      "mem_alloc": 2017424,
+      "n_itr": 20,
+      "n_gc": 0
+    },
+    {
+      "benchmark": "as_data_frame_rocprc",
+      "dataset": "ties_1e5",
+      "n": 100000,
+      "median_s": 0.01370407,
+      "min_s": 0.01366466,
+      "mem_alloc": 6464080,
+      "n_itr": 20,
+      "n_gc": 0
+    },
+    {
+      "benchmark": "as_data_frame_basic",
+      "dataset": "ties_1e5",
+      "n": 100000,
+      "median_s": 0.05829577,
+      "min_s": 0.05805896,
+      "mem_alloc": 28800592,
+      "n_itr": 9,
+      "n_gc": 0
+    },
+    {
+      "benchmark": "auc",
+      "dataset": "ties_1e5",
+      "n": 100000,
+      "median_s": 0.00002139,
+      "min_s": 0.00002003,
+      "mem_alloc": 0,
+      "n_itr": 20,
+      "n_gc": 0
+    },
+    {
+      "benchmark": "mmdata",
+      "dataset": "nas_1e5",
+      "n": 100000,
+      "median_s": 0.04601953,
+      "min_s": 0.04592108,
+      "mem_alloc": 1600144,
+      "n_itr": 11,
+      "n_gc": 0
+    },
+    {
+      "benchmark": "evalmod_rocprc",
+      "dataset": "nas_1e5",
+      "n": 100000,
+      "median_s": 0.07655832,
+      "min_s": 0.07638156,
+      "mem_alloc": 16441088,
+      "n_itr": 7,
+      "n_gc": 0
+    },
+    {
+      "benchmark": "evalmod_basic",
+      "dataset": "nas_1e5",
+      "n": 100000,
+      "median_s": 0.0519005,
+      "min_s": 0.05163535,
+      "mem_alloc": 52484384,
+      "n_itr": 9,
+      "n_gc": 2
+    },
+    {
+      "benchmark": "evalmod_aucroc",
+      "dataset": "nas_1e5",
+      "n": 100000,
+      "median_s": 0.00829556,
+      "min_s": 0.00789856,
+      "mem_alloc": 2376752,
+      "n_itr": 20,
+      "n_gc": 0
+    },
+    {
+      "benchmark": "as_data_frame_rocprc",
+      "dataset": "nas_1e5",
+      "n": 100000,
+      "median_s": 0.01385454,
+      "min_s": 0.01367433,
+      "mem_alloc": 6464080,
+      "n_itr": 20,
+      "n_gc": 0
+    },
+    {
+      "benchmark": "as_data_frame_basic",
+      "dataset": "nas_1e5",
+      "n": 100000,
+      "median_s": 0.05850199,
+      "min_s": 0.05803207,
+      "mem_alloc": 28800592,
+      "n_itr": 7,
+      "n_gc": 1
+    },
+    {
+      "benchmark": "auc",
+      "dataset": "nas_1e5",
+      "n": 100000,
+      "median_s": 0.0000204,
+      "min_s": 0.00001939,
+      "mem_alloc": 0,
+      "n_itr": 20,
+      "n_gc": 0
+    },
+    {
+      "benchmark": "mmdata",
+      "dataset": "mixed_1e5",
+      "n": 100000,
+      "median_s": 0.04357526,
+      "min_s": 0.04342851,
+      "mem_alloc": 1600144,
+      "n_itr": 12,
+      "n_gc": 0
+    },
+    {
+      "benchmark": "evalmod_rocprc",
+      "dataset": "mixed_1e5",
+      "n": 100000,
+      "median_s": 0.07534381,
+      "min_s": 0.07496194,
+      "mem_alloc": 16441208,
+      "n_itr": 7,
+      "n_gc": 0
+    },
+    {
+      "benchmark": "evalmod_basic",
+      "dataset": "mixed_1e5",
+      "n": 100000,
+      "median_s": 0.05374049,
+      "min_s": 0.05314669,
+      "mem_alloc": 52680928,
+      "n_itr": 10,
+      "n_gc": 2
+    },
+    {
+      "benchmark": "evalmod_aucroc",
+      "dataset": "mixed_1e5",
+      "n": 100000,
+      "median_s": 0.00744343,
+      "min_s": 0.00710457,
+      "mem_alloc": 1997616,
+      "n_itr": 20,
+      "n_gc": 1
+    },
+    {
+      "benchmark": "as_data_frame_rocprc",
+      "dataset": "mixed_1e5",
+      "n": 100000,
+      "median_s": 0.01373353,
+      "min_s": 0.01366648,
+      "mem_alloc": 6464272,
+      "n_itr": 20,
+      "n_gc": 0
+    },
+    {
+      "benchmark": "as_data_frame_basic",
+      "dataset": "mixed_1e5",
+      "n": 100000,
+      "median_s": 0.05858367,
+      "min_s": 0.05803051,
+      "mem_alloc": 28800592,
+      "n_itr": 9,
+      "n_gc": 1
+    },
+    {
+      "benchmark": "auc",
+      "dataset": "mixed_1e5",
+      "n": 100000,
+      "median_s": 0.00002113,
+      "min_s": 0.00001939,
+      "mem_alloc": 0,
+      "n_itr": 20,
+      "n_gc": 0
+    },
+    {
+      "benchmark": "evalmod_avg_rocprc",
+      "dataset": "multi5_1e4",
+      "n": 10000,
+      "median_s": 0.0233786,
+      "min_s": 0.02282848,
+      "mem_alloc": 1925504,
+      "n_itr": 20,
+      "n_gc": 2
+    },
+    {
+      "benchmark": "evalmod_avg_basic",
+      "dataset": "multi5_1e4",
+      "n": 10000,
+      "median_s": 0.09550922,
+      "min_s": 0.09347335,
+      "mem_alloc": 6146152,
+      "n_itr": 6,
+      "n_gc": 1
+    },
+    {
+      "benchmark": "as_data_frame_avg",
+      "dataset": "multi5_1e4",
+      "n": 10000,
+      "median_s": 0.00073807,
+      "min_s": 0.0007221,
+      "mem_alloc": 80528,
+      "n_itr": 20,
+      "n_gc": 0
+    },
+    {
+      "benchmark": "evalmod_avg_rocprc",
+      "dataset": "multi5_1e5",
+      "n": 100000,
+      "median_s": 0.09577197,
+      "min_s": 0.09481209,
+      "mem_alloc": 16685824,
+      "n_itr": 6,
+      "n_gc": 0
+    },
+    {
+      "benchmark": "evalmod_avg_basic",
+      "dataset": "multi5_1e5",
+      "n": 100000,
+      "median_s": 0.84037883,
+      "min_s": 0.84037883,
+      "mem_alloc": 59966224,
+      "n_itr": 1,
+      "n_gc": 1
+    },
+    {
+      "benchmark": "as_data_frame_avg",
+      "dataset": "multi5_1e5",
+      "n": 100000,
+      "median_s": 0.00072388,
+      "min_s": 0.00069361,
+      "mem_alloc": 80528,
+      "n_itr": 20,
+      "n_gc": 0
+    },
+    {
+      "benchmark": "evalmod_avg_rocprc",
+      "dataset": "multi5_1e6",
+      "n": 1000000,
+      "median_s": 0.87076971,
+      "min_s": 0.87076971,
+      "mem_alloc": 164286664,
+      "n_itr": 1,
+      "n_gc": 5
+    },
+    {
+      "benchmark": "evalmod_avg_basic",
+      "dataset": "multi5_1e6",
+      "n": 1000000,
+      "median_s": 9.87049968,
+      "min_s": 9.87049968,
+      "mem_alloc": 598163920,
+      "n_itr": 1,
+      "n_gc": 8
+    },
+    {
+      "benchmark": "as_data_frame_avg",
+      "dataset": "multi5_1e6",
+      "n": 1000000,
+      "median_s": 0.00070519,
+      "min_s": 0.00069407,
+      "mem_alloc": 80528,
+      "n_itr": 20,
+      "n_gc": 0
+    }
+  ]
+}

@@ -16,6 +16,9 @@ exclusions: list(
     "tests/testthat" = list(
       commented_code_linter = Inf,
       object_usage_linter = Inf
+    ),
+    "bench" = list(
+      object_usage_linter = Inf
     )
   )
 encoding: "UTF-8"
