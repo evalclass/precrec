@@ -4,6 +4,7 @@
 #include <cmath>
 #include <string>
 #include <limits>
+#include <algorithm>
 #include "precrec_misc.h"
 
 /*
@@ -310,21 +311,32 @@ Rcpp::List calc_basic_measures(int np,
     return ret_val;
   }
 
+  // Loop-invariant, so lifted out. These stay divisions on purpose:
+  // multiplying by a precomputed reciprocal would move every published
+  // measure by an ulp, and the loop is dominated by a sqrt and eight
+  // stores rather than by three divides.
+  const double d_ranks = static_cast<double>(n - 1);
+  const double d_all = static_cast<double>(np) + static_cast<double>(nn);
+  const double d_nn = static_cast<double>(nn);
+  const double d_np = static_cast<double>(np);
+  const bool no_nn = (nn == 0);
+  const bool no_np = (np == 0);
+
   // Calculate evaluation measures for ranks
   // n should be >1
   for (unsigned i = 0; i < n; ++i) {
-    rank[i] = i / static_cast<double>(n - 1);
-    errrate[i] = (fps[i] + fns[i]) / (np + nn);
+    rank[i] = i / d_ranks;
+    errrate[i] = (fps[i] + fns[i]) / d_all;
     acc[i] = 1 - errrate[i];
-    if (nn == 0) {
+    if (no_nn) {
       sp[i] = ::NA_REAL;
     } else {
-      sp[i] = tns[i] / nn;
+      sp[i] = tns[i] / d_nn;
     }
-    if (np == 0) {
+    if (no_np) {
       sn[i] = ::NA_REAL;
     } else {
-      sn[i] = tps[i] / np;
+      sn[i] = tps[i] / d_np;
     }
     if (i > 0) {
       prec[i] = tps[i] / (tps[i] + fps[i]);
@@ -806,13 +818,6 @@ void get_yval_single(const Rcpp::NumericVector& xs,
   }
 }
 
-#include <Rcpp.h>
-#include <cmath>
-#include <vector>
-#include <set>
-#include <map>
-#include <string>
-
 /*
 ##############################################
  Name: calc_avg_points
@@ -831,58 +836,49 @@ Rcpp::List calc_avg_points(const Rcpp::List& points, double ci_q) {
   Rcpp::DataFrame df;
   std::string errmsg = "";
 
-  std::set<double> all_x_vals;       // all x values
-  std::map<double, int> x_vals_idx;  // map x values to indices
+  const unsigned n_curves = static_cast<unsigned>(points.size());
 
-  std::vector<double> x_val;         // x values
-  std::vector<double> avg_y;         // Average
-  std::vector<double> se_y;          // SE
-  std::vector<double> ci_h_y;        // CI upper bound
-  std::vector<double> ci_l_y;        // CI lower bound
-
-  std::vector<double> mean_y;        // Running mean of ys
-  std::vector<int> count_y;          // Count of ys
-  std::vector<double> m2_y;          // Running sum of squared devs
-
-  // Create all unique x values
-  for (unsigned i = 0; i < static_cast<unsigned>(points.size()); ++i) {
+  // Collect every x value of every dataset
+  unsigned n_all_x = 0;
+  for (unsigned i = 0; i < n_curves; ++i) {
     Rcpp::List c = Rcpp::as<Rcpp::List>(points[i]);
     Rcpp::NumericVector xs = c["x"];
-
-    for (unsigned j = 0; j < static_cast<unsigned>(xs.size()); ++j) {
-      all_x_vals.insert(xs[j]);
-    }
+    n_all_x += static_cast<unsigned>(xs.size());
   }
 
-  // Resize vectors
-  const unsigned vec_size = static_cast<const unsigned>(all_x_vals.size());
-  x_val.resize(vec_size, 0.0);
-  avg_y.resize(vec_size, 0.0);
-  se_y.resize(vec_size, 0.0);
-  ci_h_y.resize(vec_size, 0.0);
-  ci_l_y.resize(vec_size, 0.0);
-  mean_y.resize(vec_size, 0.0);
-  count_y.resize(vec_size, 0);
-  m2_y.resize(vec_size, 0.0);
-
-  // Make maps x vals to indices
-  std::set<double>::iterator set_it;
-  int idx = 0;
-  for (set_it = all_x_vals.begin(); set_it != all_x_vals.end(); ++set_it) {
-    x_val[idx] = *set_it;
-    x_vals_idx.insert(std::pair<double, int>(*set_it, idx));
-    ++idx;
+  std::vector<double> x_val;
+  x_val.reserve(n_all_x);
+  for (unsigned i = 0; i < n_curves; ++i) {
+    Rcpp::List c = Rcpp::as<Rcpp::List>(points[i]);
+    Rcpp::NumericVector xs = c["x"];
+    x_val.insert(x_val.end(), xs.begin(), xs.end());
   }
+
+  // Reduce to the unique values, in ascending order. A sorted vector plus a
+  // binary search replaces the std::set and std::map this used to build:
+  // both allocated a node per value and chased a pointer per comparison,
+  // and the lookup below runs once for every point of every dataset.
+  std::sort(x_val.begin(), x_val.end());
+  x_val.erase(std::unique(x_val.begin(), x_val.end()), x_val.end());
+  std::vector<double>(x_val).swap(x_val);  // Release the collection slack
+
+  const unsigned vec_size = static_cast<const unsigned>(x_val.size());
+  const std::vector<double>::const_iterator x_beg = x_val.begin();
+  const std::vector<double>::const_iterator x_end = x_val.end();
+
+  std::vector<double> mean_y(vec_size, 0.0);  // Running mean of ys
+  std::vector<int> count_y(vec_size, 0);      // Count of ys
+  std::vector<double> m2_y(vec_size, 0.0);    // Running sum of squared devs
 
   // Accumulate mean and variance with Welford's online algorithm
-  idx = 0;
-  for (unsigned i = 0; i < static_cast<unsigned>(points.size()); ++i) {
+  for (unsigned i = 0; i < n_curves; ++i) {
     Rcpp::List c = Rcpp::as<Rcpp::List>(points[i]);
     Rcpp::NumericVector xs = c["x"];
     Rcpp::NumericVector ys = c["y"];
 
     for (unsigned j = 0; j < static_cast<unsigned>(ys.size()); ++j) {
-      idx = x_vals_idx[xs[j]];
+      const unsigned idx = static_cast<unsigned>(
+        std::lower_bound(x_beg, x_end, xs[j]) - x_beg);
 
       ++count_y[idx];
       const double delta = ys[j] - mean_y[idx];
@@ -891,17 +887,25 @@ Rcpp::List calc_avg_points(const Rcpp::List& points, double ci_q) {
     }
   }
 
-  // Calculate average & CI
-  double sd;
-  double n;
+  // Calculate average & CI. Filled in place so that the results are never
+  // held twice, once in a std::vector and once in the wrapped copy.
+  Rcpp::NumericVector out_x(Rcpp::no_init(vec_size));
+  Rcpp::NumericVector avg_y(Rcpp::no_init(vec_size));
+  Rcpp::NumericVector se_y(Rcpp::no_init(vec_size));
+  Rcpp::NumericVector ci_h_y(Rcpp::no_init(vec_size));
+  Rcpp::NumericVector ci_l_y(Rcpp::no_init(vec_size));
+
   for (unsigned i = 0; i < vec_size; ++i) {
-    n = static_cast<double>(count_y[i]);
+    const double n = static_cast<double>(count_y[i]);
+
+    // x
+    out_x[i] = x_val[i];
 
     // y
     avg_y[i] = mean_y[i];
 
     // se
-    sd = ::sqrt(m2_y[i] / (n - 1.0));
+    const double sd = ::sqrt(m2_y[i] / (n - 1.0));
     se_y[i] = sd / ::sqrt(n);
 
     // ci upper bound
@@ -912,7 +916,7 @@ Rcpp::List calc_avg_points(const Rcpp::List& points, double ci_q) {
   }
 
   // Return a list
-  df["x"] = x_val;
+  df["x"] = out_x;
   df["y_avg"] = avg_y;
   df["y_se"] = se_y;
   df["y_ci_h"] = ci_h_y;

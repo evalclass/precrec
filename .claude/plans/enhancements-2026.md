@@ -249,7 +249,7 @@ decompositions — implementable as one extra concatenated dataset).
 
 ---
 
-## E4. Optimize the Rcpp layer — **M** (correctness items are S and come first)
+## E4. Optimize the Rcpp layer — **M** — **DONE (2026-08-30)**
 
 ### Correctness findings to fix before optimizing
 
@@ -303,52 +303,140 @@ decompositions — implementable as one extra concatenated dataset).
    `use_rcpp = FALSE` fallback, ALTREP inputs, and the ranking invariants.
    The correctness harness was checked against a deliberately reintroduced
    `DBL_MIN` bug: it fails 6 checks, so it is not vacuous.
-   Baseline recorded at `bench/baseline/develop.json` (commit `8092aee`).
 
-   **What the baseline says, and where it disagrees with the plan below.**
-   Slowest cases at 1e6 (median, mem_alloc):
+   **The harness was measuring a debug build, and the first baseline was
+   wrong.** `pkgload::load_all()` compiles `src/` through `pkgbuild`, which
+   adds `-UNDEBUG -Wall -pedantic -g -O0` and *overrides* R's `-O2`. Every
+   number recorded before this was found describes C++ running roughly an
+   order of magnitude slower than the copy a user installs — which made the
+   C++ look far more dominant than it is. `bench_load_precrec()` now sets
+   `options(pkg.build_extra_flags = FALSE)` and rebuilds from clean unless
+   `bench/.build-mode` says the objects on disk were already built that
+   way; the stamp is written after the build, so an object file newer than
+   it (an ordinary `devtools::test()`, say) forces a rebuild. Without that
+   mtime check a stale `-O0` build slips straight through — it did once,
+   and produced a full set of plausible-looking numbers.
 
-   | case | ms | MB |
+   `bench/baseline/develop.json` has been re-recorded with release flags.
+
+   **What the corrected baseline says.** Slowest cases at 1e6 (median ms,
+   and how the debug numbers had ranked them):
+
+   | case | release ms | debug ms |
    | --- | --- | --- |
-   | `evalmod_avg_basic` / multi5_1e6 | 9870 | 570 |
-   | `as_data_frame_basic` / balanced_1e6 | 905 | 275 |
-   | `evalmod_avg_rocprc` / multi5_1e6 | 871 | 157 |
-   | `evalmod_rocprc` / balanced_1e6 | 842 | 156 |
-   | `evalmod_basic` / balanced_1e6 | 637 | 502 |
-   | `mmdata` / balanced_1e6 | 531 | 15 |
+   | `evalmod_avg_basic` / multi5_1e6 | 1855 | 9887 |
+   | `evalmod_basic` / balanced_1e6 | 411 | 631 |
+   | `as_data_frame_basic` / balanced_1e6 | 336 | 912 |
+   | `evalmod_avg_rocprc` / multi5_1e6 | 316 | 861 |
+   | `evalmod_rocprc` / balanced_1e6 | 305 | 812 |
+   | `mmdata` / balanced_1e6 | 117 | 531 |
 
-   `calc_avg_points` is the single worst path by an order of magnitude and
-   **is not on the optimisation list below at all**. It is 15× the cost of
-   the non-averaged `evalmod_basic` on the same total row count, which
-   points at the `std::set<double>` + `std::map<double, int>` it builds over
-   every distinct x value, with a map lookup per point. Reorder the list to
-   put it first, or at least ahead of items 2–4.
-1. **Eliminate copy-then-wrap**: pervasive pattern is `std::vector<double>`
-   filled, then `Rcpp::wrap()` copies into a new SEXP (e.g.
-   `convert_curve_df`, `create_roc_curve`, `calc_avg_curve`). Write directly
-   into `Rcpp::NumericVector(Rcpp::no_init(n))`. Halves peak memory on the
-   biggest paths; measurable time win at 1e6+.
-2. **`get_score_ranks`**: replace the `vector<pair<unsigned,double>>` sort
-   with an index-vector sort using a lambda comparator (less memory traffic);
-   only `stable_sort` when `ties_method` requires stability.
-3. **`calc_basic_measures`**: hoist `1.0/(np+nn)`, `1.0/nn`, `1.0/np`
-   reciprocals out of the loop; the `nn==0`/`np==0` branches too (they are
-   loop-invariant). Minor but free.
-4. **`interpolate_prc`**: profile; it runs per adjacent point pair with
-   nonlinear steps — check for redundant recomputation of loop-invariant
-   terms.
-5. **Binary size**: the 4 MB `.so` (standing CRAN NOTE) is mostly template
-   instantiations (`make_new_labels` × 4 SEXP types) and Rcpp headers.
-   Try `-Os`-equivalent via `src/Makevars` only if it doesn't reconflict with
-   the "keep unstripped" decision from 0.10.1 — otherwise accept.
-6. **Parallelism**: don't add OpenMP in C++. The natural unit is
-   per-(model, dataset) `lapply` in `.pl_main_*` — if wanted, offer
-   opt-in `future.apply` at R level later. Not part of this pass.
+   `calc_avg_points` is still the worst path, but by 4.5x rather than 15x,
+   and `mmdata` drops from a headline case to a minor one. **Reordering the
+   list to put `calc_avg_points` first still holds** — it was done.
+
+   **`bench::mark()`'s `mem_alloc` cannot see this work.** It counts
+   R-level allocation only, and the copy-then-wrap pattern item 1 removes
+   holds its intermediates in `std::vector`, on the C++ heap. The
+   `mem_x` column sat at exactly 1.000 through changes that cut a third of
+   the peak. `bench/run_memory.R` was added to measure peak RSS instead,
+   one case per process.
+
+1. **Eliminate copy-then-wrap** — **DONE, for the converters.**
+   `convert_curve_df` and `convert_curve_avg_df` now fill
+   `Rcpp::NumericVector(Rcpp::no_init(n))` directly. The copy helpers in
+   `precrec_misc.cpp` were templated on their destination to allow it, and
+   a `trim_vec` helper handles the reduced-points path, where the real
+   length is only known at the end (the common path returns the vector
+   itself and copies nothing).
+
+   Peak RSS at 1e6, `evalmod()` plus `as.data.frame()`, reproducible to the
+   megabyte:
+
+   | case | before | after |
+   | --- | --- | --- |
+   | `mode = "basic"` | 897 MB | 584 MB |
+   | `mode = "rocprc"` | 470 MB | 424 MB |
+
+   `as.data.frame()` is **27% faster** (6.2 ms to 4.5 ms at 2e5), in every
+   run of every batch.
+
+   **The same change to `calc_basic_measures` was measured and reverted.**
+   Attributing the memory saving showed the converters account for all of
+   it: 897 -> 584 MB from the converters alone, and 596 MB with
+   `calc_basic_measures` converted too — *worse*. It saved 19 MB on the
+   `rocprc` path and cost 12 MB on `basic`, for a wash, extra code, and a
+   slower `as.data.frame`. The eight columns it builds are handed straight
+   back to R, so the wrapped copy it was making is short-lived and reuses
+   memory the allocator has already got.
+
+   **`Rcpp::Vector::operator[]` is not a free replacement for
+   `std::vector::operator[]`,** which is worth recording for whoever tries
+   this again. The first version of `calc_basic_measures` indexed the Rcpp
+   vectors directly and was **13% slower end to end** — far outside the
+   noise. `Rcpp::Vector` reaches its data through a cached pointer held
+   inside the object, and the compiler cannot prove that storing a double
+   does not clobber that cache, so it reloads all eight base pointers after
+   every store. Taking `double* p = v.begin()` once, before the loop,
+   recovered it. Anything writing several Rcpp vectors in one loop needs
+   that.
+2. **`get_score_ranks`** — **PARTLY DONE.** `sort_indices` passed its
+   comparator as a *function pointer*, which cannot be inlined into
+   `std::sort`'s inner loop; it is a function object now. `mmdata` is
+   **22–26% faster** across every shape and size. Both comparators order by
+   score alone, so the sequence of comparisons, and therefore the resulting
+   permutation, is unchanged.
+
+   The index-vector sort the plan proposed was **not** done: the existing
+   `vector<pair<unsigned, double>>` keeps the key beside the index, where an
+   index sort would chase a pointer into the score array on every
+   comparison. Writing `ranks` / `rank_idx` into `Rcpp::IntegerVector` was
+   also skipped — 4 MB each at 1e6 against a 424 MB peak, and item 1 shows
+   the change is not free.
+3. **`calc_basic_measures` reciprocals** — **PARTLY DONE.** The
+   loop-invariant `nn == 0` / `np == 0` branches and the int-to-double
+   conversions are hoisted; no measurable effect, kept because it is free
+   and clearer. The divisions stay divisions: multiplying by a precomputed
+   reciprocal would move every published measure by an ulp, and the loop is
+   dominated by a `sqrt` and eight stores, not by three divides.
+4. **`interpolate_prc`** — **MEASURED, NOT KEPT.** Hoisting every
+   loop-invariant read and the two differences out of the interpolation
+   loop measured at **exactly zero** across three alternating rounds. The
+   loop body usually runs no iterations at all — most adjacent point pairs
+   have no bin boundary between them — so there is nothing there to hoist
+   out of. Reverted rather than carried as unmeasurable complexity.
+5. **Binary size**: not attempted. See the note under Risks.
+6. **Parallelism**: not attempted, as planned.
+
+### Outcome
+
+| case | change |
+| --- | --- |
+| `as.data.frame()` (convert_curve_df) | **0.57–0.85x** |
+| `evalmod(calc_avg = TRUE, mode = "basic")` | **0.61–0.84x** |
+| `mmdata()` | **0.74–0.81x** |
+| `evalmod()`, `evalmod(mode = "basic")` | no measurable change |
+| peak RSS, `basic` / `rocprc` at 1e6 | **−35% / −10%** |
+
+**The noise floor is the main lesson.** The harness flags anything past
+10%, and that is far too tight here: the same case moves 3% run-to-run on
+`evalmod()` and up to 11% on `evalmod(mode = "basic")` with *identical*
+code, and batches drift against each other over minutes. A 5% "regression"
+on `evalmod()` survived three alternating rounds, survived reversing the
+order, and then evaporated when the change it was attributed to was
+isolated — it tracked nothing in the executed code. Every number above was
+settled by an alternating A/B with the variant built from a single changed
+function, and nothing under about 1.3x on a single case should be believed
+without one. Raising the default tolerance, or teaching `--compare` to
+want several runs, is the obvious follow-up.
 
 ### Risks
 
-- Item 1 changes allocation patterns near the R GC — every touched function
-  needs the correctness harness run before/after.
+- ~~Item 1 changes allocation patterns near the R GC — every touched
+  function needs the correctness harness run before/after.~~ Done; 40/40
+  before and after, and the full suite is unchanged at 0 failures.
+- Item 5 (binary size) was left alone. It is a standing CRAN NOTE, not a
+  regression, and the "keep unstripped" decision from 0.10.1 still stands.
 - ~~The fix in (1) does not change any public-API result.~~ It does — the
   `make_index_pairs` site is on the `evalmod()` path. See item (1).
 
@@ -417,7 +505,7 @@ Ship Tier 1 (+ F-beta) and Tier 2 (Brier, log loss). Defer Tier 3.
 3. E4 step 0           benchmark harness      → baseline                        [DONE]
 4. E1                  data.table internals   → touches df sites E5 also touches  [DONE]
 5. E3 steps 4–7        roxygen/cli/pkgdown    → mechanical, any time           [DONE]
-6. E4 optimizations    guided by benchmarks
+6. E4 optimizations    guided by benchmarks                            [DONE]
 7. E5 tiers 1–2        metrics on the new table plumbing
 8. E2                  multiclass             → largest, lands on modernized base
 ```
