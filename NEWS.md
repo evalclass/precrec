@@ -24,6 +24,19 @@
 * Add `inst/WORDLIST` and a spell-check test, plus a committed `.lintr`
   configuration.
 
+* Fix the ranking of `NA` scores when `na_worst = TRUE`. The sentinel value
+  used for `NA` was `DBL_MIN`, the smallest *positive* double, so `NA`s
+  outranked every negative score instead of being ranked last. Results change
+  only when the scores contain both `NA`s and negative values: `evalmod()`
+  now returns the same curves and AUCs for such input as it does when a
+  constant is added to every score. `na_worst = FALSE` was never affected.
+
+* Calculate the standard errors of averaged curves and averaged points with
+  Welford's algorithm instead of `E[x^2] - E[x]^2`. The previous formula lost
+  precision through catastrophic cancellation and clamped the resulting
+  negative variances to zero. Confidence bands from `evalmod(calc_avg = TRUE)`
+  change at around the 1e-8 level.
+
 # precrec 0.14.5
 
 * Restructure unit tests for svg comparisons with vdiff

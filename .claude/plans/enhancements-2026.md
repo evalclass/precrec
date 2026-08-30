@@ -213,27 +213,44 @@ decompositions — implementable as one extra concatenated dataset).
 
 ### Correctness findings to fix before optimizing
 
-1. **`calc_uauc` NA handling bug** (`precrec_plx.cpp:154`) — **verified,
-   but dormant.** `na_worst` maps NA to `DBL_MIN`, the smallest *positive*
-   double rather than the most negative, so NAs outrank every negative score.
-   Reproduced standalone: scores `c(-1,-2,NA,-3,-4)` / labels
-   `c(2,2,2,1,1)` returns AUC **1.0** where the correct value is 0.667.
-   *However*, `calc_uauc` is only reached via `ustat_method = "sort"` or when
-   data.table is unavailable — and `.pl_main_aucroc` calls
-   `calc_auc_with_u()` without `...`, so the public API can never select it,
-   while data.table is a hard `Imports` dependency. The default path,
-   `calc_uauc_frank`, delegates ranking to `data.table::frank` and is
-   correct. So: **no published result is affected**; this is a latent
-   fallback bug plus a test-coverage gap (the four `ustat_method = "sort"`
-   tests in `test_pl3_2_calc_auc_with_u.R` use only positive scores).
-   Fix: `std::numeric_limits<double>::lowest()`, and add a negative-scores +
-   NA case to the existing sort-path tests. One line; effort S.
-2. **`calc_avg_curve` variance** (`precrec_plx.cpp`): uses the
-   `E[x²]−E[x]²` formula and clamps negatives — catastrophic cancellation
-   territory. Switch to Welford's algorithm; CI bands change only at
-   ~1e-8 level but become numerically sound.
-3. Audit `get_yval_single`: `std::set<double> x_set` appears declared but
-   unused — remove or justify.
+1. **`DBL_MIN` NA sentinel bug** — **FIXED (2026-08-30).** `na_worst` maps
+   NA to `DBL_MIN`, the smallest *positive* double rather than the most
+   negative, so NAs outrank every negative score. Reproduced standalone:
+   scores `c(-1,-2,NA,-3,-4)` / labels `c(2,2,2,1,1)` returns AUC **1.0**
+   where the correct value is 0.667.
+
+   **The original assessment that this was dormant was wrong.** The same
+   sentinel appears twice, and only one of the two sites is unreachable:
+
+   - `calc_uauc` (`precrec_plx.cpp`) — genuinely dormant, as analysed:
+     reachable only via `ustat_method = "sort"`, which `.pl_main_aucroc`
+     cannot select, and the default `calc_uauc_frank` path is correct.
+   - `make_index_pairs` (`precrec_misc.cpp`) — **on the main pipeline
+     path.** `get_score_ranks` → `.rank_scores` → `reformat_data`, i.e.
+     every `evalmod()` call. Verified end to end: `evalmod()` on
+     `scores = c(-1,-2,NA,-3,-4)`, `labels = c(1,1,1,0,0)` returned
+     ROC 1.0 / PRC 1.0 instead of 0.667 / 0.851, and disagreed with the
+     same scores shifted by a constant.
+
+   So published results *were* affected whenever scores contained both NAs
+   and negative values and `na_worst = TRUE` (the default). NEWS describes
+   it as a results-changing fix, not an internal one. `na_worst = FALSE`
+   uses `DBL_MAX` and was always correct.
+
+   Fixed with `std::numeric_limits<double>::lowest()` at both sites.
+   Regression tests: negative-scores + NA cases in
+   `test_mm3_1_reformat_data_scores.R` (rank level, both `na_worst`
+   values), `test_pl3_2_calc_auc_with_u.R` (both `ustat_method`s, closing
+   the sort-path coverage gap) and `test_main_evalmod.R` (end to end).
+2. **Averaging variance** — **FIXED (2026-08-30).** `calc_avg_curve` *and*
+   `calc_avg_points` (`precrec_plx.cpp`) both used the `E[x²]−E[x]²` formula
+   with negatives clamped to zero — catastrophic cancellation territory.
+   Both now use Welford's algorithm. The full suite passes unchanged, so CI
+   bands move at most ~1e-8; regression tests in `test_pl6_1_*` /
+   `test_pl6_2_*` pin large-magnitude y values (offset 1e10) where the old
+   formula returned an SE of 64 instead of 0.707.
+3. Audit `get_yval_single` — **DONE (2026-08-30).** `std::set<double> x_set`
+   was declared and never used; removed.
 
 ### Optimization plan (benchmark-driven, in order of expected payoff)
 
@@ -269,9 +286,8 @@ decompositions — implementable as one extra concatenated dataset).
 
 - Item 1 changes allocation patterns near the R GC — every touched function
   needs the correctness harness run before/after.
-- The fix in (1) does **not** change any public-API result (the buggy path
-  is unreachable from `evalmod()`); NEWS should describe it as an internal
-  fallback fix, not a results-changing one.
+- ~~The fix in (1) does not change any public-API result.~~ It does — the
+  `make_index_pairs` site is on the `evalmod()` path. See item (1).
 
 ---
 
@@ -333,11 +349,11 @@ Ship Tier 1 (+ F-beta) and Tier 2 (Brier, log loss). Defer Tier 3.
 ## Sequencing
 
 ```
-1. E3 steps 1–3        CI refresh + testthat 3e → safe ground for everything else
-2. E4 correctness      DBL_MIN bug, Welford   → cheap, S-sized, ride on step 1
+1. E3 steps 1–3        CI refresh + testthat 3e → safe ground for everything else  [DONE]
+2. E4 correctness      DBL_MIN bug, Welford   → cheap, S-sized, ride on step 1     [DONE]
 3. E4 step 0           benchmark harness      → baseline
 4. E1                  data.table internals   → touches df sites E5 also touches
-5. E3 steps 4–7        roxygen/cli/pkgdown    → mechanical, any time
+5. E3 steps 4–7        roxygen/cli/pkgdown    → mechanical, any time           [DONE]
 6. E4 optimizations    guided by benchmarks
 7. E5 tiers 1–2        metrics on the new table plumbing
 8. E2                  multiclass             → largest, lands on modernized base

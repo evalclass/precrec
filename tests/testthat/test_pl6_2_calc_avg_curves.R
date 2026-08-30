@@ -179,3 +179,24 @@ test_that("mm test data", {
     tolerance = 1e-3
   )
 })
+
+test_that("calc_avg_curve() is numerically stable for large y values", {
+  # E[x^2] - E[x]^2 cancels catastrophically at this magnitude; Welford's
+  # algorithm does not
+  n <- 5
+  x_bins <- 4
+  offset <- 1e10
+  ys <- offset + seq_len(n)
+
+  xs <- seq(0, 1, length.out = x_bins + 1)
+  curves <- lapply(seq_len(n), function(i) {
+    list(x = xs, y = rep(offset + i, length(xs)))
+  })
+  avg <- calc_avg_curve(curves, x_bins, 1.96)[["avg"]]
+
+  expect_equal(avg[["y_avg"]], rep(mean(ys), length(avg[["y_avg"]])))
+  expect_equal(
+    avg[["y_se"]],
+    rep(stats::sd(ys) / sqrt(n), length(avg[["y_se"]]))
+  )
+})

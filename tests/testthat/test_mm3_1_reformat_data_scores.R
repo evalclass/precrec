@@ -105,6 +105,28 @@ test_that("NAs in 'scores' should be controlled by 'na_worst'", {
   expect_equal_ranks(na3_scores, FALSE, c(2, 3, 1))
 })
 
+test_that("'na_worst' works when all scores are negative", {
+  expect_equal_ranks <- function(scores, na_worst, ranks) {
+    sranks <- .rank_scores(scores, na_worst = na_worst)
+    expect_equal(sranks[["ranks"]], ranks)
+  }
+
+  na_scores <- c(-1, -2, NA, -3, -4)
+
+  expect_equal_ranks(na_scores, TRUE, c(1, 2, 5, 3, 4))
+  expect_equal_ranks(na_scores, FALSE, c(2, 3, 1, 4, 5))
+
+  # Ranks must not depend on the sign of the scores
+  expect_equal(
+    .rank_scores(na_scores, na_worst = TRUE)[["ranks"]],
+    .rank_scores(na_scores + 10, na_worst = TRUE)[["ranks"]]
+  )
+  expect_equal(
+    .rank_scores(na_scores, na_worst = FALSE)[["ranks"]],
+    .rank_scores(na_scores + 10, na_worst = FALSE)[["ranks"]]
+  )
+})
+
 test_that("Ties should be controlled by 'ties_method'", {
   expect_equal_ranks <- function(ties_method, ranks) {
     scores <- c(0.1, 0.2, 0.2, 0.2, 0.3)

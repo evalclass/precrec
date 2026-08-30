@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 #include <ctime>
-#include <cfloat>       // DBL_MIN, DBL_MAX
+#include <limits>       // std::numeric_limits
 
 /*
 ##############################################
@@ -121,11 +121,14 @@ void make_index_pairs(std::vector<std::pair<unsigned, double > >& indices,
                       const Rcpp::NumericVector& scores,
                       const bool na_worst) {
   // Determine NA values
+  // The sentinel must sort below (na_worst) or above (!na_worst) every real
+  // score. DBL_MIN is the smallest *positive* double, so it would rank NAs
+  // above every negative score; lowest() is the most negative one.
   double na_val;
   if (na_worst) {
-    na_val = DBL_MIN;
+    na_val = std::numeric_limits<double>::lowest();
   } else {
-    na_val = DBL_MAX;
+    na_val = std::numeric_limits<double>::max();
   }
 
   // Update NAs

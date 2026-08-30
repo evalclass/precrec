@@ -420,3 +420,19 @@ test_that("mm test data", {
   tolerance = 1e-3
   )
 })
+
+test_that("calc_avg_points() is numerically stable for large y values", {
+  # E[x^2] - E[x]^2 cancels catastrophically at this magnitude; Welford's
+  # algorithm does not
+  n <- 5
+  offset <- 1e10
+  ys <- offset + seq_len(n)
+
+  points <- lapply(seq_len(n), function(i) {
+    list(x = c(0, 0.5, 1), y = rep(offset + i, 3))
+  })
+  avg <- calc_avg_points(points, 1.96)[["avg"]]
+
+  expect_equal(avg[["y_avg"]], rep(mean(ys), 3))
+  expect_equal(avg[["y_se"]], rep(stats::sd(ys) / sqrt(n), 3))
+})
