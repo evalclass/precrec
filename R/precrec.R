@@ -37,7 +37,9 @@
 #'   be used with several different `S3` generics, such as `print` and
 #'   [plot()]. The [evalmod()] function can also
 #'   calculate basic evaluation measures - error rate, accuracy, specificity,
-#'   sensitivity, precision, Matthews correlation coefficient, and F-Score.
+#'   sensitivity, precision, Matthews correlation coefficient, F-score,
+#'   balanced accuracy, negative predictive value, informedness, markedness,
+#'   and Cohen's kappa.
 #'
 #' @section Data preparation:
 #' The [mmdata()] function creates an input dataset for
@@ -65,6 +67,11 @@
 #' and partial AUC scores, respectively. [auc_ci()]
 #' returns confidence intervals of AUCs for both ROC
 #' and precision-recall curves.
+#'
+#' @section Probability-based measures:
+#' [prob_metrics()] calculates the Brier score and the log loss of
+#' prediction scores that are probabilities, and [prob_metrics_ci()]
+#' returns their confidence intervals over multiple test datasets.
 #'
 #'
 #' @name precrec

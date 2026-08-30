@@ -19,6 +19,7 @@ evalmod(
   raw_curves = FALSE,
   x_bins = 1000,
   interpolate = TRUE,
+  beta = 1,
   ...
 )
 }
@@ -48,7 +49,8 @@ that the \code{evalmod} function calculates.
 \item{"prcroc"}{Same as above}
 \item{"basic"}{Normalized ranks vs. accuracy, error rate, specificity,
 sensitivity, precision, Matthews correlation coefficient,
-and F-score. }
+F-score, balanced accuracy, negative predictive value,
+informedness, markedness, and Cohen's kappa. }
 \item{"aucroc"}{Fast AUC(ROC) calculation with the U statistic}
 }}
 
@@ -122,6 +124,11 @@ ignored and  when \code{x_bins} is set to \code{FALSE}.
 \code{interpolate} is effective only when \code{mode} is set
 to \code{rocprc} or \code{prcroc}.}
 
+\item{beta}{A numeric value to specify the beta of the F-beta score,
+which weights recall \code{beta} times as heavily as precision.
+The default \code{1} gives the F1 score. \code{beta} is effective only
+when \code{mode} is set to \code{basic}.}
+
 \item{...}{These additional arguments are passed to \code{\link[=mmdata]{mmdata()}}
 for data preparation.}
 }
@@ -151,8 +158,10 @@ The objects contain ROC and Precision-Recall curves.\tabular{lll}{
 \item The \code{evalmod} function returns one of the following \code{S3}
 
 objects when \code{mode} is "basic".
-They contain five different basic evaluation measures; error rate,
-accuracy, specificity, sensitivity, and precision.\tabular{lll}{
+They contain the per-rank basic evaluation measures; error rate,
+accuracy, specificity, sensitivity, precision, Matthews correlation
+coefficient, F-score, balanced accuracy, negative predictive value,
+informedness, markedness, and Cohen's kappa.\tabular{lll}{
    \strong{\code{S3} object} \tab \strong{# of models} \tab \strong{# of test datasets} \cr
    sspoints \tab single \tab single \cr
    mspoints \tab multiple \tab single \cr

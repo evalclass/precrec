@@ -73,6 +73,11 @@ Multiple \code{curvetype} can be combined, such as
    precision \tab Normalized ranks vs. precision \cr
    mcc \tab Normalized ranks vs. Matthews correlation coefficient \cr
    fscore \tab Normalized ranks vs. F-score \cr
+   balanced_accuracy \tab Normalized ranks vs. balanced accuracy \cr
+   npv \tab Normalized ranks vs. negative predictive value \cr
+   informedness \tab Normalized ranks vs. informedness (Youden's J) \cr
+   markedness \tab Normalized ranks vs. markedness \cr
+   kappa \tab Normalized ranks vs. Cohen's kappa \cr
 }
 
 

@@ -1,5 +1,27 @@
 # precrec 0.15.0
 
+* Add five confusion-matrix measures to `evalmod(mode = "basic")`: balanced
+  accuracy, negative predictive value, informedness (Youden's J), markedness,
+  and Cohen's kappa. They are calculated in the same pass as the existing
+  measures and appear as new `curvetype` values in `as.data.frame()`,
+  `plot()`, `autoplot()`, `fortify()` and `print()`. Code that plots the
+  default set of measures now gets fourteen panels instead of nine; pass
+  `curvetype` to pick a subset. `evalmod(mode = "basic")` does about a third
+  more work for them and holds about 40% more memory at peak;
+  `evalmod()` in its default mode is unaffected, because the curves are drawn
+  from three measures and the rest are no longer built for it.
+
+* Add a `beta` argument to `evalmod()`, which generalizes `fscore` to the
+  F-beta score. The default `beta = 1` is the F1 score the function has always
+  returned, so existing results are unchanged.
+
+* Add `prob_metrics()` and `prob_metrics_ci()`, which calculate the Brier
+  score and the log loss of prediction scores together with their confidence
+  intervals over multiple test datasets. Both measures read the values of the
+  scores rather than their ranks, so the scores must be probabilities;
+  anything outside the range 0 to 1 is rejected with a
+  `precrec_error_invalid_scores` condition.
+
 * Require R >= 4.1 (was R >= 3.2.1)
 
 * Migrate the unit tests to testthat edition 3, and run test files in parallel

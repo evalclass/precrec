@@ -21,9 +21,14 @@ FPR
 fscore
 ggplot
 gridExtra
+informedness
+Informedness
 io
 lintr
+logloss
 Makevars
+markedness
+Markedness
 mcc
 mdat
 mmcurves
@@ -33,6 +38,7 @@ modnames
 mscurves
 mspoints
 nfold
+npv
 ORCID
 pauc
 pAUC
@@ -63,3 +69,4 @@ vdiffr
 Welford
 Welford's
 Xcode
+Youden's

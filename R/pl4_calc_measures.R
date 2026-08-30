@@ -1,7 +1,8 @@
 #
 # Calculate basic evaluation measures from confusion matrices
 #
-calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
+calc_measures <- function(cmats, scores = NULL, labels = NULL, beta = 1,
+                          extra_measures = TRUE, ...) {
   # === Validate input arguments ===
   # Create cmats from scores and labels if cmats is missing
   cmats <- .create_src_obj(
@@ -12,10 +13,12 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
 
   # === Create confusion matrices for all ranks ===
   # Call a cpp function via Rcpp interface
+  .validate_beta(beta)
+  .assert_flag(extra_measures, "extra_measures")
   pevals <- calc_basic_measures(
     attr(cmats, "np"), attr(cmats, "nn"),
     cmats[["tp"]], cmats[["fp"]],
-    cmats[["tn"]], cmats[["fn"]]
+    cmats[["tn"]], cmats[["fn"]], beta, extra_measures
   )
   .check_cpp_func_error(pevals, "calc_basic_measures")
 
@@ -80,16 +83,19 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
 
   pb <- x[["basic"]]
 
-  # Check values of class items
+  # Check values of class items. The curve pipeline asks calc_measures() for
+  # the reduced table, so an object either holds every measure or only the
+  # ones the curves are drawn from.
   n <- length(pb[["error"]])
-  if (length(pb[["accuracy"]]) != n ||
-    length(pb[["specificity"]]) != n ||
-    length(pb[["sensitivity"]]) != n ||
-    length(pb[["precision"]]) != n ||
-    length(pb[["mcc"]]) != n ||
-    length(pb[["fscore"]]) != n ||
-    length(pb[["score"]]) != n ||
-    length(pb[["label"]]) != n) {
+  extra <- c(
+    "balanced_accuracy", "npv", "informedness", "markedness", "kappa"
+  )
+  has_extra <- "kappa" %in% names(pb)
+  mnames <- names(.basic_metric_names())
+  if (!has_extra) {
+    mnames <- setdiff(mnames, extra)
+  }
+  if (any(vapply(mnames, function(m) length(pb[[m]]), integer(1)) != n)) {
     stop("Evaluation vectors must be all the same lengths", call. = FALSE)
   }
 
@@ -164,6 +170,21 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
     is.vector(pb[["fscore"]]),
     is.numeric(pb[["fscore"]])
   )
+
+  # Balanced accuracy, NPV, informedness, markedness and Cohen's kappa
+  if (has_extra) {
+    for (m in extra) {
+      .assert_internal(
+        is.atomic(pb[[m]]),
+        is.vector(pb[[m]]),
+        is.numeric(pb[[m]])
+      )
+    }
+
+    # NPV mirrors precision: the value of the lowest rank is undefined and is
+    # taken from its neighbour
+    .assert_internal(pb[["npv"]][n] == pb[["npv"]][n - 1])
+  }
 
   attr(x, "validated") <- TRUE
   x

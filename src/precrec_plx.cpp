@@ -288,7 +288,9 @@ Rcpp::List calc_basic_measures(int np,
                                const Rcpp::NumericVector& tps,
                                const Rcpp::NumericVector& fps,
                                const Rcpp::NumericVector& tns,
-                               const Rcpp::NumericVector& fns) {
+                               const Rcpp::NumericVector& fns,
+                               double beta = 1.0,
+                               bool extra_measures = true) {
   // Variables
   Rcpp::List ret_val;
   Rcpp::DataFrame df;
@@ -302,7 +304,17 @@ Rcpp::List calc_basic_measures(int np,
   std::vector<double> prec(n);      // Precision
   std::vector<double> mcc(n);       // Matthews correlation coefficient
   double tpfp, tpfn, tnfp, tnfn;    // For mcc calculation
-  std::vector<double> fscore(n);    // F1Score
+  std::vector<double> fscore(n);    // F-score
+
+  // The curve pipeline reads specificity, sensitivity and precision and
+  // nothing else, so it asks for the measures below to be left out rather
+  // than filling five more vectors the length of the input for nobody
+  const unsigned n_extra = extra_measures ? n : 0;
+  std::vector<double> bacc(n_extra);   // Balanced accuracy
+  std::vector<double> npv(n_extra);    // Negative predictive value
+  std::vector<double> infm(n_extra);   // Informedness (Youden's J)
+  std::vector<double> mkd(n_extra);    // Markedness
+  std::vector<double> kappa(n_extra);  // Cohen's kappa
 
   // Vector size must be >1
   if (n < 2) {
@@ -322,6 +334,11 @@ Rcpp::List calc_basic_measures(int np,
   const bool no_nn = (nn == 0);
   const bool no_np = (np == 0);
 
+  // F-beta weights recall beta^2 times as heavily as precision; beta == 1
+  // gives back the F1 score this used to compute unconditionally.
+  const double beta2 = beta * beta;
+  const double beta2_1 = 1.0 + beta2;
+
   // Calculate evaluation measures for ranks
   // n should be >1
   for (unsigned i = 0; i < n; ++i) {
@@ -338,8 +355,14 @@ Rcpp::List calc_basic_measures(int np,
     } else {
       sn[i] = tps[i] / d_np;
     }
-    if (i > 0) {
-      prec[i] = tps[i] / (tps[i] + fps[i]);
+    if (extra_measures) {
+      if (no_nn || no_np) {
+        bacc[i] = ::NA_REAL;
+        infm[i] = ::NA_REAL;
+      } else {
+        bacc[i] = (sn[i] + sp[i]) / 2;
+        infm[i] = sn[i] + sp[i] - 1;
+      }
     }
 
     tpfp = tps[i] + fps[i];
@@ -347,17 +370,48 @@ Rcpp::List calc_basic_measures(int np,
     tnfp = tns[i] + fps[i];
     tnfn = tns[i] + fns[i];
 
+    // Nothing is predicted positive at the first rank and nothing is
+    // predicted negative at the last one, so precision and NPV each have one
+    // undefined end. Both are filled in from their neighbour below.
+    if (i > 0) {
+      prec[i] = tps[i] / tpfp;
+    }
+    if (extra_measures && i + 1 < n) {
+      npv[i] = tns[i] / tnfn;
+    }
+
     if (tpfp == 0 || tpfn == 0 || tnfp == 0 || tnfn == 0) {
       mcc[i] = ::NA_REAL;
     } else {
       mcc[i] = ((tps[i] * tns[i]) - (fps[i] * fns[i]))
       / ::sqrt(tpfp * tpfn * tnfp * tnfn);
     }
-    fscore[i] = (2 * tps[i]) / (2 * tps[i] + fps[i] + fns[i]);
+    fscore[i] = (beta2_1 * tps[i])
+      / (beta2_1 * tps[i] + beta2 * fns[i] + fps[i]);
+
+    if (extra_measures) {
+      // Cohen's kappa: observed agreement against the agreement two raters
+      // with these margins would reach by chance
+      const double pe = ((tpfp * tpfn) + (tnfn * tnfp)) / (d_all * d_all);
+      if (pe == 1) {
+        kappa[i] = ::NA_REAL;
+      } else {
+        kappa[i] = (acc[i] - pe) / (1 - pe);
+      }
+
+      mkd[i] = prec[i] + npv[i] - 1;
+    }
   }
 
   // Update the precision value of the highest rank
   prec[0] = prec[1];
+  if (extra_measures) {
+    // The NPV of the lowest rank is undefined in the same way, and the two
+    // markedness values built from the two patched cells follow
+    npv[n - 1] = npv[n - 2];
+    mkd[0] = prec[0] + npv[0] - 1;
+    mkd[n - 1] = prec[n - 1] + npv[n - 1] - 1;
+  }
 
   // Return a list with P, N, and basic evaluation measures
   df["rank"] = rank;
@@ -368,6 +422,13 @@ Rcpp::List calc_basic_measures(int np,
   df["precision"] = prec;
   df["mcc"] = mcc;
   df["fscore"] = fscore;
+  if (extra_measures) {
+    df["balanced_accuracy"] = bacc;
+    df["npv"] = npv;
+    df["informedness"] = infm;
+    df["markedness"] = mkd;
+    df["kappa"] = kappa;
+  }
 
   ret_val["basic"] = df;
   ret_val["errmsg"] = errmsg;
@@ -927,3 +988,63 @@ Rcpp::List calc_avg_points(const Rcpp::List& points, double ci_q) {
   return ret_val;
 }
 
+
+/*
+##############################################
+ Name: calc_prob_metrics
+ R file: g_prob_metrics.R
+ R func: prob_metrics
+##############################################
+*/
+
+//
+// Calculate the Brier score and the log loss of predicted probabilities
+//
+// [[Rcpp::export]]
+Rcpp::List calc_prob_metrics(const Rcpp::NumericVector& scores,
+                             const Rcpp::IntegerVector& labels,
+                             double eps) {
+  // Variables
+  Rcpp::List ret_val;
+  std::string errmsg = "";
+  const unsigned n = static_cast<unsigned>(scores.size());
+
+  // Vector size must be >0 and the two vectors must agree
+  if (n == 0 || static_cast<unsigned>(labels.size()) != n) {
+    errmsg = "invalid-vecsize";
+    ret_val["errmsg"] = errmsg;
+    return ret_val;
+  }
+
+  // One pass, and no intermediate vector: both metrics are a mean over the
+  // same two values, so there is nothing to hold on to between elements.
+  double sum_sq = 0.0;
+  double sum_ll = 0.0;
+  const double hi = 1.0 - eps;
+
+  for (unsigned i = 0; i < n; ++i) {
+    const double p = scores[i];
+    const double y = static_cast<double>(labels[i]);
+    const double d = p - y;
+    sum_sq += d * d;
+
+    // A probability of exactly 0 or 1 that turns out to be wrong makes the
+    // log loss infinite. Clamping keeps a single such prediction from
+    // swallowing the whole sample, which is what every other implementation
+    // of this measure does too.
+    double q = p;
+    if (q < eps) {
+      q = eps;
+    } else if (q > hi) {
+      q = hi;
+    }
+    sum_ll += y * ::log(q) + (1.0 - y) * ::log(1.0 - q);
+  }
+
+  const double d_n = static_cast<double>(n);
+  ret_val["brier"] = sum_sq / d_n;
+  ret_val["logloss"] = -sum_ll / d_n;
+  ret_val["errmsg"] = errmsg;
+
+  return ret_val;
+}

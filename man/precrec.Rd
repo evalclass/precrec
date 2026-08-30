@@ -46,7 +46,9 @@ curves and returns an \code{S3} object. The generated \code{S3} object can
 be used with several different \code{S3} generics, such as \code{print} and
 \code{\link[=plot]{plot()}}. The \code{\link[=evalmod]{evalmod()}} function can also
 calculate basic evaluation measures - error rate, accuracy, specificity,
-sensitivity, precision, Matthews correlation coefficient, and F-Score.
+sensitivity, precision, Matthews correlation coefficient, F-score,
+balanced accuracy, negative predictive value, informedness, markedness,
+and Cohen's kappa.
 }
 
 \section{Data preparation}{
@@ -80,6 +82,13 @@ with calculated curve points.
 and partial AUC scores, respectively. \code{\link[=auc_ci]{auc_ci()}}
 returns confidence intervals of AUCs for both ROC
 and precision-recall curves.
+}
+
+\section{Probability-based measures}{
+
+\code{\link[=prob_metrics]{prob_metrics()}} calculates the Brier score and the log loss of
+prediction scores that are probabilities, and \code{\link[=prob_metrics_ci]{prob_metrics_ci()}}
+returns their confidence intervals over multiple test datasets.
 }
 
 \seealso{

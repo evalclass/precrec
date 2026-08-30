@@ -3,7 +3,7 @@
 #
 .pl_main_basic <- function(mdat, model_type, dataset_type, class_name_pf,
                            calc_avg = TRUE, cb_alpha = 0.05,
-                           raw_curves = FALSE) {
+                           raw_curves = FALSE, beta = 1) {
   if (dataset_type == "single") {
     calc_avg <- FALSE
     raw_curves <- TRUE
@@ -28,7 +28,7 @@
       stop(err_msg, call. = FALSE)
     }
     cdat <- create_confmats(mdat[[s]], keep_fmdat = TRUE)
-    calc_measures(cdat)
+    calc_measures(cdat, beta = beta)
   }
   lpoints <- lapply(seq_along(mdat), plfunc)
 
@@ -39,14 +39,9 @@
       calc_avg, cb_alpha
     )
   }
-  eval_names <- c(
-    "score", "label", "error", "accuracy", "specificity",
-    "sensitivity", "precision", "mcc", "fscore"
-  )
-  grp_row_names <- c(
-    "score", "label", "err", "acc", "sp", "sn", "prec", "mcc",
-    "fscore"
-  )
+  metric_names <- .basic_metric_names()
+  eval_names <- names(metric_names)
+  grp_row_names <- unname(metric_names)
   grp_points <- lapply(eval_names, grpfunc)
   names(grp_points) <- grp_row_names
 
@@ -85,7 +80,8 @@
     mode = "basic",
     calc_avg = calc_avg,
     cb_alpha = cb_alpha,
-    raw_curves = raw_curves
+    raw_curves = raw_curves,
+    beta = beta
   )
   attr(s3obj, "validated") <- FALSE
 
@@ -146,10 +142,7 @@
   # Summarize AUC of ROC or PRC curves
   modnames <- attr(mdat, "data_info")[["modnames"]]
   dsids <- attr(mdat, "data_info")[["dsids"]]
-  evaltypes <- c(
-    "rank", "score", "label", "error", "accuracy",
-    "specificity", "sensitivity", "precision", "mcc", "fscore"
-  )
+  evaltypes <- c("rank", names(.basic_metric_names()))
   elen <- length(evaltypes)
 
   # Filled as a matrix first: assigning a row into a data frame inside the
@@ -185,16 +178,13 @@
   }
 
   # Validate class items and attributes
-  item_names <- c(
-    "score", "label", "err", "acc", "sp", "sn", "prec", "mcc",
-    "fscore"
-  )
+  item_names <- unname(.basic_metric_names())
   attr_names <- c(
     "eval_summary", "grp_avg", "data_info", "uniq_modnames",
     "uniq_dsids", "model_type", "dataset_type", "args",
     "validated"
   )
-  arg_names <- c("mode", "calc_avg", "cb_alpha", "raw_curves")
+  arg_names <- c("mode", "calc_avg", "cb_alpha", "raw_curves", "beta")
   .validate_basic(
     points, class_name, ".pl_main_basic", item_names, attr_names,
     arg_names

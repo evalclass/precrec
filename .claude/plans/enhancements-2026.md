@@ -442,7 +442,79 @@ want several runs, is the obvious follow-up.
 
 ---
 
-## E5. Additional evaluation metrics — **M** (tiered)
+## E5. Additional evaluation metrics — **M** (tiered) — **DONE (2026-08-31)**
+
+### Outcome
+
+Implemented on `feature/Metrics`. Tiers 1 and 2 shipped; tier 3 stays
+deferred as planned.
+
+**Tier 1.** Balanced accuracy, NPV, informedness (Youden's J), markedness and
+Cohen's kappa are calculated in the same C++ loop as the existing measures,
+and `fscore` became F-beta through a new `beta` argument on `evalmod()`
+(default 1, so existing results are byte-identical). NPV needed the mirror of
+the trick precision already used: nothing is predicted negative at the last
+rank, so that cell is undefined and is taken from its neighbour, and the two
+markedness values built from the patched cells are recomputed after the loop.
+
+**The touch list was the work, as predicted — so it got shorter.** Rather
+than add five names to each of the eight places that hardcoded the measure
+list, the list moved into one helper, `.basic_metric_names()` in
+`R/etc_utils.R`, which maps each long name to its internal short one. The
+pipeline, the data-frame converter, the validator, `print`, `fortify`, the
+plot titles and `.check_curvetype` all read it now. Two more shared helpers
+came out of the same exercise: `.get_metric_title()` (which `plot` and
+`autoplot` had each been doing on their own) and `.is_signed_metric()` (the
+`-1..1` axis range that used to be spelled `curvetype == "mcc" || curvetype
+== "label"` in four places).
+
+`.set_layout()` in `R/etc_utils_plot.R` had a hardcoded ladder that stopped
+at nine panels and failed with "object 'mat1' not found" at fourteen. It now
+computes the grid, and shares its column count with the ggplot2 side through
+`.get_plot_ncol()`, so a set of measures is laid out the same way whichever
+draws it.
+
+**Tier 2.** `prob_metrics()` returns the Brier score and the log loss per
+model and dataset; `prob_metrics_ci()` summarises them over multiple
+datasets. Both take the same input as `evalmod()` — an `mmdata()` object or
+raw scores and labels — because that is where the raw scores live; the curve
+objects do not keep them. Scores outside [0, 1] are rejected with a
+`precrec_error_invalid_scores` condition, since both measures read values
+rather than ranks. The log loss clamps scores away from 0 and 1 by `eps`
+(default 1e-15), which is what every other implementation does; without it a
+single confident and wrong prediction makes the whole sample infinite.
+
+The CI machinery the plan wanted generalized turned out to be a clean
+extraction: `.calc_ci_stats()` and `.pmatch_dtype()` moved out of
+`auc_ci.aucs()` into `R/etc_utils.R`, with the clipping range as an argument.
+`auc_ci()` clips to [0, 1]; the Brier score does too, and the log loss is
+clipped below at 0 and left unbounded above.
+
+### Cost
+
+Five more measures is five more vectors the length of the input, per dataset,
+through the whole basic pipeline. Measured at 1e6 (release flags):
+
+| case | before | after | |
+|------|--------|-------|-|
+| `evalmod(mode = "basic")` | 411 ms | 526 ms | 1.28-1.44x across shapes |
+| `as.data.frame()` on basic points | 336 ms | 333 ms | unchanged |
+| peak RSS, basic | 581 MB | 817 MB | +41% |
+| `evalmod()` (rocprc) | 305 ms | 238 ms | unchanged by E5 |
+| peak RSS, rocprc | 401 MB | 402 MB | unchanged |
+
+The first cut of this work did regress `evalmod()` by 14-24%, because the
+curve pipeline calls `calc_measures()` too and was paying for five measures
+no curve is drawn from. `calc_measures()` and `calc_basic_measures()` grew an
+`extra_measures` flag, and `.pl_main_rocprc()` passes `FALSE`. Isolated at
+1e6: 179 ms for the full table, 86.6 ms for the reduced one. The rocprc
+numbers above are the phase-6 optimisations showing through, not an E5 gain.
+
+### Not done
+
+Tier 3 (lift/gain, DET, precision-recall-gain) stays out of scope, as the
+plan recommended.
+
 
 ### Current state
 
@@ -506,7 +578,7 @@ Ship Tier 1 (+ F-beta) and Tier 2 (Brier, log loss). Defer Tier 3.
 4. E1                  data.table internals   → touches df sites E5 also touches  [DONE]
 5. E3 steps 4–7        roxygen/cli/pkgdown    → mechanical, any time           [DONE]
 6. E4 optimizations    guided by benchmarks                            [DONE]
-7. E5 tiers 1–2        metrics on the new table plumbing
+7. E5 tiers 1–2        metrics on the new table plumbing         [DONE]
 8. E2                  multiclass             → largest, lands on modernized base
 ```
 

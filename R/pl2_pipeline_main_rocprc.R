@@ -34,7 +34,10 @@
       stop(err_msg, call. = FALSE)
     }
     cdat <- create_confmats(mdat[[s]])
-    pevals <- calc_measures(cdat)
+
+    # The curves are drawn from specificity, sensitivity and precision, so
+    # there is no reason to build the rest of the table here
+    pevals <- calc_measures(cdat, extra_measures = FALSE)
     create_curves(pevals, x_bins = x_bins)
   }
   lcurves <- lapply(seq_along(mdat), plfunc)
