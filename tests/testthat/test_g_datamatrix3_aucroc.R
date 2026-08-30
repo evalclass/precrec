@@ -90,3 +90,19 @@ test_that("as.data.frame aucroc mm", {
   expect_equal(nrow(aucs_df), 4)
   expect_equal(ncol(aucs_df), 4)
 })
+
+test_that("as.data.frame returns a plain data frame, not a data.table", {
+  data(P10N10)
+  aucroc <- evalmod(
+    scores = P10N10$scores, labels = P10N10$labels,
+    mode = "aucroc"
+  )
+
+  auc_df <- as.data.frame(aucroc)
+  expect_identical(class(auc_df), "data.frame")
+
+  # Modifying the returned frame must not reach the stored table
+  before <- as.data.frame(aucroc)[["aucs"]]
+  auc_df[["aucs"]] <- -1
+  expect_equal(as.data.frame(aucroc)[["aucs"]], before)
+})

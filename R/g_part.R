@@ -312,28 +312,29 @@ part.mmcurves <- function(curves, xlim = c(0, 1), ylim = c(0, 1),
   # Collect AUCs of ROC or PRC curves
   ct_len <- 2
   aucs <- attr(curves, "aucs")
-  paucs <- data.frame(
-    modnames = aucs$modnames,
-    dsids = aucs$dsids,
-    curvetypes = aucs$curvetypes,
-    paucs = rep(NA, length(aucs$modnames)),
-    spaucs = rep(NA, length(aucs$modnames)),
-    stringsAsFactors = FALSE
-  )
+  n <- length(aucs$modnames)
+  pauc_vals <- rep(NA_real_, n)
+  spauc_vals <- rep(NA_real_, n)
 
   for (i in seq_along(curves[["rocs"]])) {
     idx <- ct_len * i - 1
-    paucs[["paucs"]][idx:(idx + 1)] <- c(
+    pauc_vals[idx:(idx + 1)] <- c(
       attr(curves[["rocs"]][[i]], "pauc"),
       attr(curves[["prcs"]][[i]], "pauc")
     )
-    paucs[["spaucs"]][idx:(idx + 1)] <- c(
+    spauc_vals[idx:(idx + 1)] <- c(
       attr(curves[["rocs"]][[i]], "spauc"),
       attr(curves[["prcs"]][[i]], "spauc")
     )
   }
 
-  paucs
+  data.table::data.table(
+    modnames = aucs$modnames,
+    dsids = aucs$dsids,
+    curvetypes = aucs$curvetypes,
+    paucs = pauc_vals,
+    spaucs = spauc_vals
+  )
 }
 
 #
@@ -345,26 +346,27 @@ part.mmcurves <- function(curves, xlim = c(0, 1), ylim = c(0, 1),
   # Collect AUCs of ROC or PRC curves
   ct_len <- 2
   modnames <- attr(avg_crvs[["rocs"]], "uniq_modnames")
-  paucs <- data.frame(
-    modnames = rep(modnames, each = ct_len),
-    curvetypes = rep(c("ROC", "PRC"), length(modnames)),
-    paucs = rep(NA, length(modnames) * ct_len),
-    spaucs = rep(NA, length(modnames) * ct_len),
-    stringsAsFactors = FALSE
-  )
+  n <- length(modnames) * ct_len
+  pauc_vals <- rep(NA_real_, n)
+  spauc_vals <- rep(NA_real_, n)
 
   for (i in seq_along(avg_crvs[["rocs"]])) {
     idx <- ct_len * i - 1
     idx2 <- idx + 1
-    paucs[["paucs"]][idx:idx2] <- c(
+    pauc_vals[idx:idx2] <- c(
       attr(avg_crvs[["rocs"]][[i]], "pauc"),
       attr(avg_crvs[["prcs"]][[i]], "pauc")
     )
-    paucs[["spaucs"]][idx:idx2] <- c(
+    spauc_vals[idx:idx2] <- c(
       attr(avg_crvs[["rocs"]][[i]], "spauc"),
       attr(avg_crvs[["prcs"]][[i]], "spauc")
     )
   }
 
-  paucs
+  data.table::data.table(
+    modnames = rep(modnames, each = ct_len),
+    curvetypes = rep(c("ROC", "PRC"), length(modnames)),
+    paucs = pauc_vals,
+    spaucs = spauc_vals
+  )
 }

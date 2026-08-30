@@ -107,7 +107,7 @@
       vustat[i] <- aucs[[i]]$ustat
     }
 
-    auc_df <- data.frame(
+    auc_df <- data.table::data.table(
       modnames = vmodname,
       dsids = vdsid,
       aucs = vaucs,

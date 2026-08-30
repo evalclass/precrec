@@ -115,14 +115,16 @@ auc_ci.aucs <- function(curves, alpha = 0.05, dtype = "normal") {
     )
   }
 
-  # Get AUC scores
-  aucs <- attr(curves, "aucs")
+  # Get AUC scores. A plain data frame view, so the row subsetting below
+  # keeps base semantics - inside `[.data.table` the `i` expression would
+  # resolve `aucs` to the column of that name rather than the table.
+  aucs <- .as_plain_df(attr(curves, "aucs"), copy = TRUE)
 
   # Get unique model names, data set IDs and curve types
   uniq_modnames <- attr(curves, "uniq_modnames")
   uniq_curvetype <- unique(aucs$curvetypes)
 
-  ci_df <- NULL
+  ci_parts <- list()
   for (modname in uniq_modnames) {
     auc_mod <- aucs[aucs$modnames == modname, ]
     for (curvetype in uniq_curvetype) {
@@ -132,17 +134,14 @@ auc_ci.aucs <- function(curves, alpha = 0.05, dtype = "normal") {
       aucs_mean <- mean(aucs_subset$aucs)
       aucs_n <- length(aucs_subset$aucs)
       if (aucs_n < 2) {
-        ci_df <- rbind(
-          ci_df,
-          data.frame(
-            modnames = modname,
-            curvetypes = curvetype,
-            mean = aucs_mean,
-            error = 0,
-            lower_bound = aucs_mean,
-            upper_bound = aucs_mean,
-            n = aucs_n
-          )
+        ci_parts[[length(ci_parts) + 1L]] <- data.table::data.table(
+          modnames = modname,
+          curvetypes = curvetype,
+          mean = aucs_mean,
+          error = 0,
+          lower_bound = aucs_mean,
+          upper_bound = aucs_mean,
+          n = aucs_n
         )
         next
       }
@@ -159,20 +158,18 @@ auc_ci.aucs <- function(curves, alpha = 0.05, dtype = "normal") {
       acus_lower <- max(aucs_mean - aucs_error, 0.0)
       acus_upper <- min(aucs_mean + aucs_error, 1.0)
 
-      ci_df <- rbind(
-        ci_df,
-        data.frame(
-          modnames = modname,
-          curvetypes = curvetype,
-          mean = aucs_mean,
-          error = aucs_error,
-          lower_bound = acus_lower,
-          upper_bound = acus_upper,
-          n = aucs_n
-        )
+      ci_parts[[length(ci_parts) + 1L]] <- data.table::data.table(
+        modnames = modname,
+        curvetypes = curvetype,
+        mean = aucs_mean,
+        error = aucs_error,
+        lower_bound = acus_lower,
+        upper_bound = acus_upper,
+        n = aucs_n
       )
     }
   }
 
-  ci_df
+  # Freshly built, so setDF needs no copy
+  .as_plain_df(.rbind_parts(ci_parts))
 }

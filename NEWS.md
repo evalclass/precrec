@@ -37,6 +37,24 @@
   negative variances to zero. Confidence bands from `evalmod(calc_avg = TRUE)`
   change at around the 1e-8 level.
 
+* Add `as.data.table()` methods for the objects `evalmod()` returns, so the
+  table `precrec` builds internally can be had without a conversion. They
+  accept the same arguments as `as.data.frame()` and hold the same content.
+  `data.table` was already a dependency.
+
+* Build the internal tables with `data.table`. The public contract is
+  unchanged: `as.data.frame()`, `fortify()`, `auc()`, `pauc()` and
+  `auc_ci()` still return plain data frames, with the same columns, types
+  and row order as before. Tables reached through the returned frame can no
+  longer be modified by reference.
+
+* Speed up the pure-R conversion path used when `use_rcpp = FALSE`. It grew
+  the result with `rbind()` once per curve, copying everything collected so
+  far on every pass. Over 20 test datasets it is now around 38 times faster
+  and allocates around 43 times less memory. `auc_ci()` and the basic
+  measure summary had the same pattern and got the same treatment. The
+  default `Rcpp` path was never affected.
+
 # precrec 0.14.5
 
 * Restructure unit tests for svg comparisons with vdiff

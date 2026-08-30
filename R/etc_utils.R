@@ -69,6 +69,40 @@
 }
 
 #
+# Hand a plain data frame back at the public boundary
+#
+# The tables are data.tables internally, but `as.data.frame` and the
+# accessors keep their base contract: printing, `[` semantics and
+# copy-on-modify stay what callers have always seen.
+#
+# setDF() converts by reference, so a table that is stored somewhere - an
+# attribute the caller could mutate through - has to be copied first. A
+# table that was just built for this call does not.
+#
+.as_plain_df <- function(x, copy = FALSE) {
+  if (!data.table::is.data.table(x)) {
+    return(x)
+  }
+  if (copy) {
+    x <- data.table::copy(x)
+  }
+  data.table::setDF(x)
+}
+
+#
+# Bind tables collected inside a loop into one data.table
+#
+# The callers used to grow a data frame with rbind() on every pass, which
+# copies everything built so far each time. rbindlist() binds once.
+#
+.rbind_parts <- function(parts) {
+  if (length(parts) == 0L) {
+    return(NULL)
+  }
+  data.table::rbindlist(parts)
+}
+
+#
 # Load data.table
 #
 .load_data_table <- function() {

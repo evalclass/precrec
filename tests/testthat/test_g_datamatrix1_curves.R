@@ -280,3 +280,20 @@ test_that("as.data raw_curve option mmcurves", {
   args2c <- get_args(curves2)
   expect_true(args2c[["raw_curves"]])
 })
+
+test_that("as.data.frame returns a plain data frame, not a data.table", {
+  data(P10N10)
+  objs <- list(
+    sscurves = evalmod(scores = P10N10$scores, labels = P10N10$labels),
+    mscurves = df1_create_mscurves(),
+    smcurves = df1_create_smcurves(),
+    mmcurves = df1_create_mmcurves()
+  )
+
+  for (nm in names(objs)) {
+    curve_df <- as.data.frame(objs[[nm]])
+    expect_s3_class(curve_df, "data.frame")
+    expect_false(inherits(curve_df, "data.table"), info = nm)
+    expect_identical(class(curve_df), "data.frame", info = nm)
+  }
+})

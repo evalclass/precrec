@@ -124,6 +124,6 @@ auc.aucs <- function(curves) {
   # Validation
   .validate(curves)
 
-  # Return AUC scores
-  attr(curves, "aucs")
+  # Return AUC scores as a plain data frame
+  .as_plain_df(attr(curves, "aucs"), copy = TRUE)
 }

@@ -221,12 +221,6 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   mnames <- .create_modnames(length(lscores), modnames, dsids, new_expd_first)
   new_modnames <- mnames[["mn"]]
   new_dsids <- mnames[["ds"]]
-  data_info <- data.frame(
-    modnames = new_modnames, dsids = new_dsids,
-    nn = rep(NA, length(new_modnames)),
-    np = rep(NA, length(new_modnames)),
-    stringsAsFactors = FALSE
-  )
 
   # === Validate arguments and variables ===
   new_mode <- .pmatch_mode(mode)
@@ -254,10 +248,13 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   }
   mmdat <- lapply(seq_along(lscores), func_fmdat)
 
-  for (i in seq_along(mmdat)) {
-    data_info[["nn"]][i] <- attr(mmdat[[i]], "nn")
-    data_info[["np"]][i] <- attr(mmdat[[i]], "np")
-  }
+  # Built once the counts are known, rather than filled in cell by cell
+  data_info <- data.table::data.table(
+    modnames = new_modnames,
+    dsids = new_dsids,
+    nn = vapply(mmdat, function(m) attr(m, "nn"), numeric(1)),
+    np = vapply(mmdat, function(m) attr(m, "np"), numeric(1))
+  )
 
   # === Create an S3 object ===
   s3obj <- structure(mmdat, class = "mdat")

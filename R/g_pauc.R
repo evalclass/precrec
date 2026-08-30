@@ -120,6 +120,6 @@ pauc.aucs <- function(curves) {
     stop("part() should be used first.")
   }
 
-  # Return AUC scores
-  attr(curves, "paucs")
+  # Return pAUC scores as a plain data frame
+  .as_plain_df(attr(curves, "paucs"), copy = TRUE)
 }
