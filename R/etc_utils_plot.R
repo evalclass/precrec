@@ -247,7 +247,7 @@ NULL
 #
 .pmatch_curvetype_rocprc <- function(vals) {
   pfunc <- function(val) {
-    if (assertthat::is.string(val)) {
+    if (.is_string(val)) {
       sval <- tolower(val)
 
       if (!is.na(pmatch(sval, "roc"))) {
@@ -270,7 +270,7 @@ NULL
 #
 .pmatch_curvetype_basic <- function(vals) {
   pfunc <- function(val) {
-    if (assertthat::is.string(val)) {
+    if (.is_string(val)) {
       sval <- tolower(val)
 
       if (!is.na(pmatch(sval, "error rate"))) {
@@ -521,8 +521,8 @@ NULL
   y <- matrix(as.double(NA), nrow = max_nrow, ncol = ncol)
 
   for (i in seq_along(obj)) {
-    x[seq_len(length(obj[[i]][["x"]])), i] <- obj[[i]][["x"]]
-    y[seq_len(length(obj[[i]][["y"]])), i] <- obj[[i]][["y"]]
+    x[seq_along(obj[[i]][["x"]]), i] <- obj[[i]][["x"]]
+    y[seq_along(obj[[i]][["y"]]), i] <- obj[[i]][["y"]]
   }
 
   list(x = x, y = y)
@@ -561,7 +561,7 @@ NULL
     lcols <- grDevices::rainbow(length(avgcurves), alpha = 1)
   }
 
-  for (i in seq_len(length(avgcurves))) {
+  for (i in seq_along(avgcurves)) {
     .add_curve_with_ci(avgcurves, type, i, "grey", lcols[i], show_cb)
   }
 }
@@ -724,7 +724,7 @@ NULL
   min_score <- NA
 
   if (!all(is.na(avgcurves))) {
-    for (i in seq_len(length(avgcurves))) {
+    for (i in seq_along(avgcurves)) {
       max_score <- max(max_score, max(avgcurves[[i]][["y_ci_h"]], na.rm = TRUE),
         na.rm = TRUE
       )
@@ -733,7 +733,7 @@ NULL
       )
     }
   } else {
-    for (i in seq_len(length(curves))) {
+    for (i in seq_along(curves)) {
       max_score <- max(max_score, max(curves[[i]][["y"]], na.rm = TRUE),
         na.rm = TRUE
       )

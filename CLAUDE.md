@@ -25,9 +25,17 @@ plotting for binary classifiers. Hot paths are C++ via Rcpp.
 - **Every user-visible change needs a `NEWS.md` bullet** under a version
   heading, and the CRAN-facing summary in `cran-comments.md` at release time.
 - Keep `Language: en-US` spelling in docs and messages.
-- Errors use `stop(msg, call. = FALSE)`; argument checks live in
-  `R/etc_utils_validate_args.R`, object checks in the `.validate.<class>`
-  S3 methods next to the code that builds the object.
+- Argument checks live in `R/etc_utils_validate_args.R`, object checks in the
+  `.validate.<class>` S3 methods next to the code that builds the object.
+  Argument errors go through `.stop_invalid_arg(msg, arg)` (cli message,
+  condition classes `precrec_error_invalid_<arg>` /
+  `precrec_error_invalid_arg` / `precrec_error`); the typed helpers
+  `.assert_flag`/`.assert_string`/`.assert_number` cover the common cases.
+  Internal invariants use `.assert_internal(...)`. Plain
+  `stop(msg, call. = FALSE)` remains for the older domain-specific errors —
+  don't convert them wholesale, but new checks should use the helpers.
+- Tests match errors by condition class, not message text:
+  `expect_error(f(), class = "precrec_error_invalid_x")`.
 - Don't add hard dependencies. `Imports` is deliberately small; anything
   optional (`patchwork`, `vdiffr`, `data.table` at some call sites) is loaded
   through a `requireNamespace` helper in `R/etc_utils*.R` and belongs in

@@ -341,15 +341,17 @@ test_that("pl_main() accepts 'interpolate'", {
   mdat4 <- pl1_create_mdat_mm()
   f_check_x_interpolate(mdat4)
 
-  expect_err_msg <- function(err_msg, mdat, interpolate) {
-    expect_error(pl_main(mdat, interpolate = interpolate), err_msg)
+  expect_err_cls <- function(mdat, interpolate) {
+    expect_error(
+      pl_main(mdat, interpolate = interpolate),
+      class = "precrec_error_invalid_interpolate"
+    )
   }
 
-  err_msg <- "interpolate is not a flag"
-  expect_err_msg(err_msg, mdat1, 0)
-  expect_err_msg(err_msg, mdat1, 1)
-  expect_err_msg(err_msg, mdat1, "T")
-  expect_err_msg(err_msg, mdat1, "F")
-  expect_err_msg(err_msg, mdat1, c(10, 20))
-  expect_err_msg(err_msg, mdat1, c(TRUE, FALSE))
+  expect_err_cls(mdat1, 0)
+  expect_err_cls(mdat1, 1)
+  expect_err_cls(mdat1, "T")
+  expect_err_cls(mdat1, "F")
+  expect_err_cls(mdat1, c(10, 20))
+  expect_err_cls(mdat1, c(TRUE, FALSE))
 })

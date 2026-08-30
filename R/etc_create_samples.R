@@ -67,8 +67,7 @@
 create_sim_samples <- function(n_repeat, np, nn, score_names = "random") {
   # === Validate input arguments ===
   choices <- c("random", "poor_er", "good_er", "excel", "perf")
-  if (assertthat::see_if(assertthat::is.string(score_names)) &&
-    any(score_names == "all")) {
+  if (.is_string(score_names) && any(score_names == "all")) {
     score_names <- choices
   } else if (!is.atomic(score_names) || !is.character(score_names) ||
     !(all(score_names %in% choices))) {

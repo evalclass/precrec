@@ -283,7 +283,7 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
 # Check partial match - expd_first
 #
 .pmatch_expd_first <- function(val) {
-  if (assertthat::is.string(val)) {
+  if (.is_string(val)) {
     if (val == "dsids" || val == "modnames") {
       return(val)
     }
@@ -309,7 +309,7 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
     val <- arglist[["ties.method"]]
   }
 
-  if (assertthat::is.string(val)) {
+  if (.is_string(val)) {
     choices <- c("equiv", "random", "first")
     if (val %in% choices) {
       return(val)
@@ -342,8 +342,7 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
     set_na_last <- TRUE
   }
 
-  assertthat::is.flag(val)
-
+  # The value itself is validated by .validate_na_worst() in the caller.
   if (set_na_last) {
     val <- !val
   }

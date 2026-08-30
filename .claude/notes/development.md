@@ -8,9 +8,16 @@ devtools::document()             # roxygen -> NAMESPACE + man/*.Rd (also Rcpp st
 devtools::test()                 # all testthat tests
 testthat::test_file("tests/testthat/test_pl5_1_create_roc.R")   # one file
 devtools::check()                # full R CMD check, what CI runs
-devtools::spell_check()          # en-US
+devtools::spell_check()          # en-US; whitelist lives in inst/WORDLIST
+styler::style_pkg(exclude_files = "R/RcppExports.R")   # tidyverse style
+lintr::lint_package()            # config in .lintr; expects 0 lints
 pkgdown::build_site(run_dont_run = TRUE)   # local docs preview
 ```
+
+`lintr::lint_package()` needs precrec *installed* (it has compiled code), or
+`object_usage_linter` reports every package function as undefined. styler owns
+formatting, so `indentation_linter` is switched off in `.lintr` where the two
+disagree.
 
 Regenerate `README.md` from `README.Rmd` with
 `rmarkdown::render("README.Rmd")` — never edit `README.md` directly.

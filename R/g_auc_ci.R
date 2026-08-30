@@ -90,14 +90,14 @@ auc_ci.default <- function(curves, alpha = NULL, dtype = NULL) {
 auc_ci.aucs <- function(curves, alpha = 0.05, dtype = "normal") {
   # Validation
   .validate(curves)
-  assertthat::assert_that(attr(curves, "dataset_type") == "multiple",
-    msg = "'curves' must contain multiple datasets."
-  )
-  assertthat::assert_that(
-    assertthat::is.number(alpha),
-    alpha >= 0 && alpha <= 1
-  )
-  assertthat::assert_that(assertthat::is.string(dtype))
+  if (attr(curves, "dataset_type") != "multiple") {
+    .stop_invalid_arg(
+      "{.arg curves} must contain multiple datasets.",
+      arg = "curves"
+    )
+  }
+  .assert_number(alpha, "alpha", min = 0, max = 1)
+  .assert_string(dtype, "dtype")
 
   # Check type of distribution
   dtype_tab <- c("normal", "z", "t")
@@ -105,11 +105,15 @@ auc_ci.aucs <- function(curves, alpha = 0.05, dtype = "normal") {
   if (!is.na(dype_match)) {
     dtype <- dtype_tab[dype_match]
   }
-  err_msg <- paste0(
-    "'dtype' must be one of ",
-    paste(dtype_tab, collapse = ", ")
-  )
-  assertthat::assert_that(dtype %in% dtype_tab, msg = err_msg)
+  if (!(dtype %in% dtype_tab)) {
+    .stop_invalid_arg(
+      paste(
+        "{.arg dtype} must be one of {.or {.val {dtype_tab}}},",
+        "not {.val {dtype}}."
+      ),
+      arg = "dtype"
+    )
+  }
 
   # Get AUC scores
   aucs <- attr(curves, "aucs")

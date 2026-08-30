@@ -20,3 +20,4 @@
 ^.vscode$
 ^CLAUDE\.md$
 ^\.claude$
+^\.lintr$

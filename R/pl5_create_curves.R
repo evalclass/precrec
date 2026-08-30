@@ -200,7 +200,7 @@ create_prc <- function(pevals, scores = NULL, labels = NULL, x_bins = 1000,
 
   # Check values of class attributes
   # AUC
-  assertthat::assert_that((attr(obj, "auc") >= 0) && (attr(obj, "auc") <= 1))
+  .assert_internal((attr(obj, "auc") >= 0) && (attr(obj, "auc") <= 1))
 }
 
 #

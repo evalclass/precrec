@@ -443,7 +443,7 @@ NULL
 #
 .load_patchwork <- function() {
   if (requireNamespace("patchwork", quietly = TRUE)) {
-    return(TRUE)
+    TRUE
   } else {
     warning(
       paste0(
@@ -452,7 +452,7 @@ NULL
       ),
       call. = FALSE
     )
-    return(FALSE)
+    FALSE
   }
 }
 

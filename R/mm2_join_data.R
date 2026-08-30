@@ -207,7 +207,7 @@ join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
       if (any(unlist(lapply(ds, is.list)))) {
         f_unlist <- function(ds2) {
           new_list <- list()
-          for (i in seq_len(length(ds2))) {
+          for (i in seq_along(ds2)) {
             if (is.list(ds2[[i]])) {
               new_list <- c(new_list, f_unlist(ds2[[i]]))
             } else {
@@ -227,7 +227,7 @@ join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
 
   # Validate cdat with efunc_vtype and efunc_nrow
   m <- length(cdat[[1]])
-  for (i in seq_len(length(cdat))) {
+  for (i in seq_along(cdat)) {
     efunc_vtype(cdat[[i]])
     efunc_nrow(m, length(cdat[[i]]))
   }
@@ -261,14 +261,8 @@ join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
   }
 
   # Check byrow
-  assertthat::assert_that(
-    assertthat::is.flag(byrow),
-    assertthat::noNA(byrow)
-  )
+  .assert_flag(byrow, "byrow")
 
   # Check chklen
-  assertthat::assert_that(
-    assertthat::is.flag(chklen),
-    assertthat::noNA(chklen)
-  )
+  .assert_flag(chklen, "chklen")
 }

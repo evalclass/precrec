@@ -61,17 +61,20 @@ test_that(".pl_main_rocprc() accepts 'x_bins'", {
   expect_equal(attr(pl[["prcs"]][[1]], "args")[["x_bins"]], 10)
 
   expect_err_msg <- function(err_msg, mdat, x_bins) {
-    expect_error(.pl_main_rocprc(mdat, x_bins = x_bins), err_msg)
+    expect_error(
+      .pl_main_rocprc(mdat, x_bins = x_bins), err_msg,
+      class = "precrec_error_invalid_x_bins"
+    )
   }
 
-  err_msg <- "x_bins is not a number"
+  err_msg <- "single number"
   expect_err_msg(err_msg, mdat, c(10, 20))
 
-  err_msg <- "x_bins%%1 not equal to 0"
+  err_msg <- "whole number"
   expect_err_msg(err_msg, mdat, 1.5)
   expect_err_msg(err_msg, mdat, 0.001)
 
-  err_msg <- "x_bins not greater than or equal"
+  err_msg <- "0 or larger"
   expect_err_msg(err_msg, mdat, -1)
 })
 
@@ -221,7 +224,7 @@ test_that("curve object contains 'crvgrp', 'roc_curve', 'prc_curve'", {
       expect_true(is(pl[[ct]], "crvgrp"))
     }
 
-    for (i in seq_len(length(list_len))) {
+    for (i in seq_along(list_len)) {
       expect_true(is(pl[["rocs"]][[i]], "roc_curve"))
       expect_true(is(pl[["prcs"]][[i]], "prc_curve"))
     }

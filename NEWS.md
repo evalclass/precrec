@@ -11,6 +11,19 @@
   are qualified, such as `gridExtra::arrangeGrob()`. The rendered help pages
   are otherwise unchanged.
 
+* Replace `assertthat` with `cli` and `rlang` for argument validation.
+  `assertthat` is no longer a dependency. Errors raised by argument checks now
+  carry condition classes, so they can be caught by class rather than by
+  message: `precrec_error_invalid_<argument>`, `precrec_error_invalid_arg` and
+  `precrec_error`. The wording of these messages has changed, but the same
+  inputs are accepted and rejected as before.
+
+* Add the package website to `URL` in `DESCRIPTION`, and rebuild the pkgdown
+  site with the Bootstrap 5 template.
+
+* Add `inst/WORDLIST` and a spell-check test, plus a committed `.lintr`
+  configuration.
+
 # precrec 0.14.5
 
 * Restructure unit tests for svg comparisons with vdiff
@@ -90,7 +103,7 @@
 
 # precrec 0.10.1
 
-* Remove src/Makervars to keep .so file unstripped
+* Remove src/Makevars to keep .so file unstripped
 
 # precrec 0.10
 
