@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("MA 1: evalmod")
+# MA 1: evalmod
 # Test evalmod()
 #
 
@@ -123,4 +121,33 @@ test_that("'mode' must be consistent between 'mmdata' and 'evalmode'", {
   expect_silent(evalmod(md3, mode = "aucroc"))
   em3_4 <- evalmod(md3, mode = "aucroc")
   expect_equal(attr(em3_4, "args")[["mode"]], "aucroc")
+})
+
+test_that("evalmod() ranks NAs as 'na_worst' requests for negative scores", {
+  scores <- c(-1, -2, NA, -3, -4)
+  labels <- c(1, 1, 1, 0, 0)
+
+  # Adding a constant to every score must leave the curves unchanged
+  expect_equal(
+    auc(evalmod(scores = scores, labels = labels))[["aucs"]],
+    auc(evalmod(scores = scores + 10, labels = labels))[["aucs"]]
+  )
+
+  expect_equal(
+    auc(evalmod(scores = scores, labels = labels, na_worst = FALSE))[["aucs"]],
+    auc(evalmod(scores = scores + 10, labels = labels,
+      na_worst = FALSE
+    ))[["aucs"]]
+  )
+
+  # The NA belongs to a positive label, so ranking it worst lowers the AUCs
+  aucs_worst <- auc(evalmod(scores = scores, labels = labels))[["aucs"]]
+  aucs_best <- auc(evalmod(scores = scores, labels = labels,
+    na_worst = FALSE
+  ))[["aucs"]]
+  expect_true(all(aucs_worst < aucs_best))
+  expect_equal(subset(
+    auc(evalmod(scores = scores, labels = labels)),
+    curvetypes == "ROC"
+  )[["aucs"]], 2 / 3, tolerance = 1e-4)
 })

@@ -94,39 +94,39 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
   }
 
   # Scores
-  assertthat::assert_that(
+  .assert_internal(
     is.atomic(pb[["score"]]),
     is.vector(pb[["score"]])
   )
 
   # Labels
-  assertthat::assert_that(
+  .assert_internal(
     is.atomic(pb[["label"]]),
     is.vector(pb[["label"]])
   )
 
   # Error rate
-  assertthat::assert_that(
+  .assert_internal(
     is.atomic(pb[["error"]]),
     is.vector(pb[["error"]]),
     is.numeric(pb[["error"]])
   )
 
   # Accuracy
-  assertthat::assert_that(
+  .assert_internal(
     is.atomic(pb[["accuracy"]]),
     is.vector(pb[["accuracy"]]),
     is.numeric(pb[["accuracy"]])
   )
 
   # Error rate & Arruracy
-  assertthat::assert_that(
+  .assert_internal(
     pb[["error"]][1] + pb[["accuracy"]][1] == 1,
     pb[["error"]][n] + pb[["accuracy"]][n] == 1
   )
 
   # SP
-  assertthat::assert_that(
+  .assert_internal(
     is.atomic(pb[["specificity"]]),
     is.vector(pb[["specificity"]]),
     is.numeric(pb[["specificity"]]),
@@ -135,7 +135,7 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
   )
 
   # SN
-  assertthat::assert_that(
+  .assert_internal(
     is.atomic(pb[["sensitivity"]]),
     is.vector(pb[["sensitivity"]]),
     is.numeric(pb[["sensitivity"]]),
@@ -144,7 +144,7 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
   )
 
   # PREC
-  assertthat::assert_that(
+  .assert_internal(
     is.atomic(pb[["precision"]]),
     is.vector(pb[["precision"]]),
     is.numeric(pb[["precision"]]),
@@ -152,14 +152,14 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, ...) {
   )
 
   # Matthews correlation coefficient
-  assertthat::assert_that(
+  .assert_internal(
     is.atomic(pb[["mcc"]]),
     is.vector(pb[["mcc"]]),
     is.numeric(pb[["mcc"]])
   )
 
   # F-score
-  assertthat::assert_that(
+  .assert_internal(
     is.atomic(pb[["fscore"]]),
     is.vector(pb[["fscore"]]),
     is.numeric(pb[["fscore"]])

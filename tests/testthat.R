@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
 library(testthat)
+library(precrec)
 
-# test_check("precrec", reporter=ProgressReporter)
 test_check("precrec")

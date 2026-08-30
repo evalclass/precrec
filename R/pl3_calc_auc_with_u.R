@@ -98,8 +98,9 @@ calc_auc_with_u <- function(sdat, scores = NULL, labels = NULL, na_worst = TRUE,
 
   # AUC
   auc <- x[["auc"]]
-  assertthat::assert_that(
-    assertthat::is.number(auc),
+  .assert_internal(
+    is.numeric(auc),
+    length(auc) == 1L,
     auc >= 0, auc <= 1
   )
 

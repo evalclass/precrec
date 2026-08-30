@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("AC 1: Retrieve AUCs")
+# AC 1: Retrieve AUCs
 # Test auc(curves)
 
 auc_create_mscurves <- function() {

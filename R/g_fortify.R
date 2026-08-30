@@ -27,7 +27,7 @@ fortify.cmats <- function(model, ...) {
   # === Prepare a data frame for ggplot2 ===
   n <- length(model[["ranks"]])
   data.frame(
-    x = rep(seq_len(length(model[["ranks"]])), 4),
+    x = rep(seq_along(model[["ranks"]]), 4),
     y = c(
       model[["tp"]], model[["fn"]],
       model[["fp"]], model[["tn"]]
@@ -97,7 +97,8 @@ fortify.pevals <- function(model, ...) {
 
 #' @rdname fortify
 #' @export
-fortify.sscurves <- function(model, data, raw_curves = NULL, reduce_points = FALSE,
+fortify.sscurves <- function(model, data, raw_curves = NULL,
+                             reduce_points = FALSE,
                              ...) {
   .dataframe_common(model,
     raw_curves = TRUE, reduce_points = reduce_points,
@@ -107,7 +108,8 @@ fortify.sscurves <- function(model, data, raw_curves = NULL, reduce_points = FAL
 
 #' @rdname fortify
 #' @export
-fortify.mscurves <- function(model, data, raw_curves = NULL, reduce_points = FALSE,
+fortify.mscurves <- function(model, data, raw_curves = NULL,
+                             reduce_points = FALSE,
                              ...) {
   .dataframe_common(model,
     raw_curves = TRUE, reduce_points = reduce_points,
@@ -117,7 +119,8 @@ fortify.mscurves <- function(model, data, raw_curves = NULL, reduce_points = FAL
 
 #' @rdname fortify
 #' @export
-fortify.smcurves <- function(model, data, raw_curves = NULL, reduce_points = FALSE,
+fortify.smcurves <- function(model, data, raw_curves = NULL,
+                             reduce_points = FALSE,
                              ...) {
   arglist <- .get_fortify_arglist(attr(model, "args"),
     def_raw_curves = raw_curves, ...
@@ -131,7 +134,8 @@ fortify.smcurves <- function(model, data, raw_curves = NULL, reduce_points = FAL
 
 #' @rdname fortify
 #' @export
-fortify.mmcurves <- function(model, data, raw_curves = NULL, reduce_points = FALSE,
+fortify.mmcurves <- function(model, data, raw_curves = NULL,
+                             reduce_points = FALSE,
                              ...) {
   arglist <- .get_fortify_arglist(attr(model, "args"),
     def_raw_curves = raw_curves, ...
@@ -145,7 +149,8 @@ fortify.mmcurves <- function(model, data, raw_curves = NULL, reduce_points = FAL
 
 #' @rdname fortify
 #' @export
-fortify.sspoints <- function(model, data, raw_curves = NULL, reduce_points = FALSE,
+fortify.sspoints <- function(model, data, raw_curves = NULL,
+                             reduce_points = FALSE,
                              ...) {
   .dataframe_common(model,
     mode = "basic", raw_curves = TRUE,
@@ -155,7 +160,8 @@ fortify.sspoints <- function(model, data, raw_curves = NULL, reduce_points = FAL
 
 #' @rdname fortify
 #' @export
-fortify.mspoints <- function(model, data, raw_curves = NULL, reduce_points = FALSE,
+fortify.mspoints <- function(model, data, raw_curves = NULL,
+                             reduce_points = FALSE,
                              ...) {
   .dataframe_common(model,
     mode = "basic", raw_curves = TRUE,
@@ -165,7 +171,8 @@ fortify.mspoints <- function(model, data, raw_curves = NULL, reduce_points = FAL
 
 #' @rdname fortify
 #' @export
-fortify.smpoints <- function(model, data, raw_curves = NULL, reduce_points = FALSE,
+fortify.smpoints <- function(model, data, raw_curves = NULL,
+                             reduce_points = FALSE,
                              ...) {
   arglist <- .get_fortify_arglist(attr(model, "args"),
     def_raw_curves = raw_curves, ...
@@ -179,7 +186,8 @@ fortify.smpoints <- function(model, data, raw_curves = NULL, reduce_points = FAL
 
 #' @rdname fortify
 #' @export
-fortify.mmpoints <- function(model, data, raw_curves = NULL, reduce_points = FALSE,
+fortify.mmpoints <- function(model, data, raw_curves = NULL,
+                             reduce_points = FALSE,
                              ...) {
   arglist <- .get_fortify_arglist(attr(model, "args"),
     def_raw_curves = raw_curves, ...

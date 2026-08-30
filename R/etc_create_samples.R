@@ -1,6 +1,6 @@
 #' Create random samples for simulations
 #'
-#' The \code{create_sim_samples} function generates random samples
+#' The `create_sim_samples` function generates random samples
 #'   with different performance levels.
 #'
 #' @param n_repeat The number of iterations to make samples.
@@ -20,7 +20,7 @@
 #'     \item{"all"}{All of the above}
 #'   }
 #'
-#' @return The \code{create_sim_samples} function returns a list
+#' @return The `create_sim_samples` function returns a list
 #'   with the following items.
 #'   \itemize{
 #'     \item scores: a list of numeric vectors
@@ -29,8 +29,8 @@
 #'     \item dsids: a character vector of the dataset IDs
 #'   }
 #'
-#' @seealso \code{\link{mmdata}} for formatting input data.
-#'   \code{\link{evalmod}} for calculation evaluation measures.
+#' @seealso [mmdata()] for formatting input data.
+#'   [evalmod()] for calculation evaluation measures.
 #'
 #' @examples
 #'
@@ -67,8 +67,7 @@
 create_sim_samples <- function(n_repeat, np, nn, score_names = "random") {
   # === Validate input arguments ===
   choices <- c("random", "poor_er", "good_er", "excel", "perf")
-  if (assertthat::see_if(assertthat::is.string(score_names)) &&
-    any(score_names == "all")) {
+  if (.is_string(score_names) && any(score_names == "all")) {
     score_names <- choices
   } else if (!is.atomic(score_names) || !is.character(score_names) ||
     !(all(score_names %in% choices))) {

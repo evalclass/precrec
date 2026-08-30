@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("CI 1: AUC CIs")
+# CI 1: AUC CIs
 # Test auc_ci(curves)
 
 auc_ci_create_mscurves <- function() {
@@ -90,14 +88,14 @@ test_that("auc_ci for sscurves", {
   data(P10N10)
 
   curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
-  expect_error(auc_ci(curves), "'curves' must contain multiple datasets.")
+  expect_error(auc_ci(curves), class = "precrec_error_invalid_curves")
 })
 
 test_that("auc_ci for mscurves", {
   curves <- auc_ci_create_mscurves()
 
   curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
-  expect_error(auc_ci(curves), "'curves' must contain multiple datasets.")
+  expect_error(auc_ci(curves), class = "precrec_error_invalid_curves")
 })
 
 test_that("auc_ci for smcurves", {
@@ -128,21 +126,18 @@ test_that("auc_ci alpha", {
   expect_silent(auc_ci(curves, alpha = 0.5))
 
   # Check varialbe type
-  err_msg <- "alpha is not a number"
-  expect_error(auc_ci(curves, alpha = "0.5"), err_msg)
-  expect_error(auc_ci(curves, alpha = NA), err_msg)
-  expect_error(auc_ci(curves, alpha = NA), err_msg)
+  err_cls <- "precrec_error_invalid_alpha"
+  expect_error(auc_ci(curves, alpha = "0.5"), "single number", class = err_cls)
+  expect_error(auc_ci(curves, alpha = NA), "single number", class = err_cls)
 
   # Check lower limit
-  err_msg <- "alpha not greater than or equal to 0"
-  expect_error(auc_ci(curves, -0.1), err_msg)
-  expect_error(auc_ci(curves, alpha = -0.1), err_msg)
+  expect_error(auc_ci(curves, -0.1), "between 0 and 1", class = err_cls)
+  expect_error(auc_ci(curves, alpha = -0.1), "between 0 and 1", class = err_cls)
   expect_silent(auc_ci(curves, alpha = 0))
 
   # Check upper limit
-  err_msg <- "alpha not less than or equal to 1"
-  expect_error(auc_ci(curves, 1.1), err_msg)
-  expect_error(auc_ci(curves, alpha = 1.1), err_msg)
+  expect_error(auc_ci(curves, 1.1), "between 0 and 1", class = err_cls)
+  expect_error(auc_ci(curves, alpha = 1.1), "between 0 and 1", class = err_cls)
   expect_silent(auc_ci(curves, alpha = 1))
 })
 
@@ -156,13 +151,13 @@ test_that("auc_ci dtype", {
   expect_silent(auc_ci(curves, dtype = "normal"))
 
   # Check varialbe type
-  err_msg <- "dtype is not a string"
-  expect_error(auc_ci(curves, dtype = 0), err_msg)
-  expect_error(auc_ci(curves, dtype = NA), err_msg)
-  expect_error(auc_ci(curves, dtype = FALSE), err_msg)
+  err_cls <- "precrec_error_invalid_dtype"
+  expect_error(auc_ci(curves, dtype = 0), "single string", class = err_cls)
+  expect_error(auc_ci(curves, dtype = NA), "single string", class = err_cls)
+  expect_error(auc_ci(curves, dtype = FALSE), "single string", class = err_cls)
 
   # Check valid input
-  err_msg <- "'dtype' must be one of "
+  err_msg <- "must be one of"
   expect_silent(auc_ci(curves, dtype = "normal"))
   expect_silent(auc_ci(curves, dtype = "n"))
   expect_silent(auc_ci(curves, dtype = "Normal"))

@@ -1,3 +1,42 @@
+# precrec 0.15.0
+
+* Require R >= 4.1 (was R >= 3.2.1)
+
+* Migrate the unit tests to testthat edition 3, and run test files in parallel
+
+* Remove the deprecated `context()` calls from the unit tests
+
+* Convert the roxygen2 documentation to markdown. Links to functions now
+  render with parentheses, such as `evalmod()`, and links to other packages
+  are qualified, such as `gridExtra::arrangeGrob()`. The rendered help pages
+  are otherwise unchanged.
+
+* Replace `assertthat` with `cli` and `rlang` for argument validation.
+  `assertthat` is no longer a dependency. Errors raised by argument checks now
+  carry condition classes, so they can be caught by class rather than by
+  message: `precrec_error_invalid_<argument>`, `precrec_error_invalid_arg` and
+  `precrec_error`. The wording of these messages has changed, but the same
+  inputs are accepted and rejected as before.
+
+* Add the package website to `URL` in `DESCRIPTION`, and rebuild the pkgdown
+  site with the Bootstrap 5 template.
+
+* Add `inst/WORDLIST` and a spell-check test, plus a committed `.lintr`
+  configuration.
+
+* Fix the ranking of `NA` scores when `na_worst = TRUE`. The sentinel value
+  used for `NA` was `DBL_MIN`, the smallest *positive* double, so `NA`s
+  outranked every negative score instead of being ranked last. Results change
+  only when the scores contain both `NA`s and negative values: `evalmod()`
+  now returns the same curves and AUCs for such input as it does when a
+  constant is added to every score. `na_worst = FALSE` was never affected.
+
+* Calculate the standard errors of averaged curves and averaged points with
+  Welford's algorithm instead of `E[x^2] - E[x]^2`. The previous formula lost
+  precision through catastrophic cancellation and clamped the resulting
+  negative variances to zero. Confidence bands from `evalmod(calc_avg = TRUE)`
+  change at around the 1e-8 level.
+
 # precrec 0.14.5
 
 * Restructure unit tests for svg comparisons with vdiff
@@ -77,7 +116,7 @@
 
 # precrec 0.10.1
 
-* Remove src/Makervars to keep .so file unstripped
+* Remove src/Makevars to keep .so file unstripped
 
 # precrec 0.10
 

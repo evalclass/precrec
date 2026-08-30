@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("PC 1: Retrieve pAUCs")
+# PC 1: Retrieve pAUCs
 # Test auc(curves)
 
 pauc_create_mscurves <- function() {

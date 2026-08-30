@@ -1,30 +1,30 @@
 #' Evaluate models and calculate performance evaluation measures
 #'
-#' The \code{evalmod} function calculates ROC and Precision-Recall curves for
+#' The `evalmod` function calculates ROC and Precision-Recall curves for
 #'   specified prediction scores and binary labels. It also calculate several
 #'   basic performance evaluation measures, such as accuracy, error rate, and
-#'   precision, by specifying \code{mode} as "basic".
+#'   precision, by specifying `mode` as "basic".
 #'
-#' @param mdat An \code{S3} object created by the \code{\link{mmdata}}
+#' @param mdat An `S3` object created by the [mmdata()]
 #'   function. It contains formatted scores and labels.
-#'   The \code{evalmod} function ignores the following arguments
-#'   when \code{mdat} is specified.
+#'   The `evalmod` function ignores the following arguments
+#'   when `mdat` is specified.
 #'   \itemize{
-#'     \item \code{scores}
-#'     \item \code{labels}
-#'     \item \code{modnames}
-#'     \item \code{dsids}
-#'     \item \code{posclass}
-#'     \item \code{na_worst}
-#'     \item \code{ties_method}
+#'     \item `scores`
+#'     \item `labels`
+#'     \item `modnames`
+#'     \item `dsids`
+#'     \item `posclass`
+#'     \item `na_worst`
+#'     \item `ties_method`
 #'   }
-#'   These arguments are internally passed to the \code{\link{mmdata}} function
-#'   when \code{mdat} is unspecified.
-#'   In that case, both \code{scores} and \code{labels} must be
+#'   These arguments are internally passed to the [mmdata()] function
+#'   when `mdat` is unspecified.
+#'   In that case, both `scores` and `labels` must be
 #'   at least specified.
 #'
 #' @param mode A string that specifies the types of evaluation measures
-#'   that the \code{evalmod} function calculates.
+#'   that the `evalmod` function calculates.
 #'   \describe{
 #'     \item{"rocprc"}{ROC and Precision-Recall curves}
 #'     \item{"prcroc"}{Same as above}
@@ -35,37 +35,37 @@
 #'   }
 #'
 #' @param scores A numeric dataset of predicted scores. It can be a vector,
-#'   a matrix, an array, a data frame, or a list. The \code{\link{join_scores}}
+#'   a matrix, an array, a data frame, or a list. The [join_scores()]
 #'   function can be useful to make scores with multiple datasets.
 #'
 #' @param labels A numeric, character, logical, or factor dataset
 #'   of observed labels. It can be a vector, a matrix, an array,
-#'   a data frame, or a list. The \code{\link{join_labels}}
+#'   a data frame, or a list. The [join_labels()]
 #'   function can be useful to make labels with multiple datasets.
 #'
 #' @param modnames A character vector for the names of the models.
-#'   The \code{evalmod} function automatically generates default names
-#'   as "m1", "m2", "m3", and so on when it is \code{NULL}.
+#'   The `evalmod` function automatically generates default names
+#'   as "m1", "m2", "m3", and so on when it is `NULL`.
 #'
 #' @param dsids A numeric vector for test dataset IDs.
-#' The \code{evalmod} function automatically generates the default ID
-#' as \code{1} when it is \code{NULL}.
+#' The `evalmod` function automatically generates the default ID
+#' as `1` when it is `NULL`.
 #'
 #' @param posclass A scalar value to specify the label of positives
-#'   in \code{labels}. It must be the same data type as \code{labels}.
-#'   For example, \code{posclass = -1} changes the positive label
-#'   from \code{1} to \code{-1} when \code{labels} contains
-#'   \code{1} and \code{-1}. The positive label will be automatically
-#'   detected when \code{posclass} is \code{NULL}.
+#'   in `labels`. It must be the same data type as `labels`.
+#'   For example, `posclass = -1` changes the positive label
+#'   from `1` to `-1` when `labels` contains
+#'   `1` and `-1`. The positive label will be automatically
+#'   detected when `posclass` is `NULL`.
 #
 #' @param na_worst A Boolean value for controlling the treatment of NAs
-#'   in \code{scores}.
+#'   in `scores`.
 #'   \describe{
 #'     \item{TRUE}{All NAs are treated as the worst scores}
 #'     \item{FALSE}{All NAs are treated as the best scores}
 #'   }
 #'
-#' @param ties_method A string for controlling ties in \code{scores}.
+#' @param ties_method A string for controlling ties in `scores`.
 #'   \describe{
 #'     \item{"equiv"}{Ties are equivalently ranked}
 #'     \item{"first"}{Ties are ranked in an increasing order as appeared}
@@ -73,98 +73,89 @@
 #'   }
 #'
 #' @param calc_avg A logical value to specify whether average curves should
-#'   be calculated. It is effective only when \code{dsids} contains multiple
+#'   be calculated. It is effective only when `dsids` contains multiple
 #'   dataset IDs. For instance, the function calculates the average for the
-#'   model "m1" when \code{modnames} is \code{c("m1", "m1", "m1")} and
-#'   \code{dsids} is \code{c(1, 2, 3)}. The calculation points are defined by
-#'   \code{x_bins}.
+#'   model "m1" when `modnames` is `c("m1", "m1", "m1")` and
+#'   `dsids` is `c(1, 2, 3)`. The calculation points are defined by
+#'   `x_bins`.
 #'
-#' @param cb_alpha A numeric value with range [0, 1] to specify the alpha
+#' @param cb_alpha A numeric value with range \[0, 1\] to specify the alpha
 #'   value of the point-wise confidence bounds calculation. It is effective only
-#'   when \code{calc_avg} is set to \code{TRUE}. For example, it should be
-#'   \code{0.05} for the 95\% confidence level. The calculation points are
-#'   defined by \code{x_bins}.
+#'   when `calc_avg` is set to `TRUE`. For example, it should be
+#'   `0.05` for the 95% confidence level. The calculation points are
+#'   defined by `x_bins`.
 #'
 #' @param raw_curves A logical value to specify whether all raw curves
 #'   should be discarded after the average curves are calculated.
-#'   It is effective only when \code{calc_avg} is set to \code{TRUE}.
+#'   It is effective only when `calc_avg` is set to `TRUE`.
 #'
 #' @param x_bins An integer value to specify the number of minimum bins
 #'   on the x-axis. It is then used to define supporting points For instance,
-#'   the x-values of the supporting points will be \code{c(0, 0.5, 1)} and
-#'   \code{c(0, 0.25, 0.5, 0.75, 1)} when \code{x_bins = 2}
-#'   and \code{x_bins = 4}, respectively. All corresponding y-values of
-#'   the supporting points are calculated. \code{x_bins} is effective only
-#'   when \code{mode} is set to \code{rocprc} or \code{prcroc}.
+#'   the x-values of the supporting points will be `c(0, 0.5, 1)` and
+#'   `c(0, 0.25, 0.5, 0.75, 1)` when `x_bins = 2`
+#'   and `x_bins = 4`, respectively. All corresponding y-values of
+#'   the supporting points are calculated. `x_bins` is effective only
+#'   when `mode` is set to `rocprc` or `prcroc`.
 #'
 #' @param interpolate A Boolean value to specify whether or not
 #'   interpolation of ROC and precision-recall curves are
-#'   performed. \code{x_bins} and \code{calc_avg} are
-#'   ignored and  when \code{x_bins} is set to \code{FALSE}.
-#'   \code{interpolate} is effective only when \code{mode} is set
-#'   to \code{rocprc} or \code{prcroc}.
+#'   performed. `x_bins` and `calc_avg` are
+#'   ignored and  when `x_bins` is set to `FALSE`.
+#'   `interpolate` is effective only when `mode` is set
+#'   to `rocprc` or `prcroc`.
 #'
-#' @param ... These additional arguments are passed to \code{\link{mmdata}}
+#' @param ... These additional arguments are passed to [mmdata()]
 #'   for data preparation.
 #'
-#' @return The \code{evalmod} function returns an \code{S3} object
+#' @return The `evalmod` function returns an `S3` object
 #'   that contains performance evaluation measures. The number of models and
-#'   the number of datasets can be controlled by \code{modnames} and
-#'   \code{dsids}. For example, the number of models is "single" and the number
-#'   of test datasets is "multiple" when \code{modnames = c("m1", "m1", "m1")}
-#'   and \code{dsids = c(1, 2, 3)} are specified.
+#'   the number of datasets can be controlled by `modnames` and
+#'   `dsids`. For example, the number of models is "single" and the number
+#'   of test datasets is "multiple" when `modnames = c("m1", "m1", "m1")`
+#'   and `dsids = c(1, 2, 3)` are specified.
 #'
-#' Different \code{S3} objects have different default behaviors of \code{S3}
-#'   generics, such as \code{\link{plot}}, \code{\link{autoplot}}, and
-#'   \code{\link{fortify}}.
+#' Different `S3` objects have different default behaviors of `S3`
+#'   generics, such as [plot()], [autoplot()], and
+#'   [fortify()].
 #'
-#' \enumerate{
+#' 1. The `evalmod` function returns one of the following `S3`
 #'
-#'   \item  The \code{evalmod} function returns one of the following \code{S3}
-#'   objects when \code{mode} is "prcroc".
-#'   The objects contain ROC and Precision-Recall curves.
+#'    objects when `mode` is "prcroc".
+#'    The objects contain ROC and Precision-Recall curves.
 #'
-#'   \tabular{lll}{
-#'     \strong{\code{S3} object}
-#'     \tab \strong{# of models}
-#'     \tab \strong{# of test datasets} \cr
+#'    | **`S3` object** | **# of models** | **# of test datasets** |
+#'    |-----------------|-----------------|------------------------|
+#'    | sscurves        | single          | single                 |
+#'    | mscurves        | multiple        | single                 |
+#'    | smcurves        | single          | multiple               |
+#'    | mmcurves        | multiple        | multiple               |
 #'
-#'     sscurves \tab single   \tab single   \cr
-#'     mscurves \tab multiple \tab single   \cr
-#'     smcurves \tab single   \tab multiple \cr
-#'     mmcurves \tab multiple \tab multiple
-#'   }
+#' 2. The `evalmod` function returns one of the following `S3`
 #'
-#'   \item The \code{evalmod} function returns one of the following \code{S3}
-#'   objects when \code{mode} is "basic".
-#'   They contain five different basic evaluation measures; error rate,
-#'   accuracy, specificity, sensitivity, and precision.
+#'    objects when `mode` is "basic".
+#'    They contain five different basic evaluation measures; error rate,
+#'    accuracy, specificity, sensitivity, and precision.
 #'
-#'   \tabular{lll}{
-#'     \strong{\code{S3} object}
-#'     \tab \strong{# of models}
-#'     \tab \strong{# of test datasets} \cr
+#'    | **`S3` object** | **# of models** | **# of test datasets** |
+#'    |-----------------|-----------------|------------------------|
+#'    | sspoints        | single          | single                 |
+#'    | mspoints        | multiple        | single                 |
+#'    | smpoints        | single          | multiple               |
+#'    | mmpoints        | multiple        | multiple               |
 #'
-#'     sspoints \tab single   \tab single   \cr
-#'     mspoints \tab multiple \tab single   \cr
-#'     smpoints \tab single   \tab multiple \cr
-#'     mmpoints \tab multiple \tab multiple
-#'   }
+#' 3. The `evalmod` function returns the `aucroc` S3 object
 #'
-#'   \item The \code{evalmod} function returns the \code{aucroc} S3 object
-#'   when \code{mode} is "aucroc", which can be used with 'print'
-#'   and 'as.data.frame'.
+#'    when `mode` is "aucroc", which can be used with 'print'
+#'    and 'as.data.frame'.
 #'
-#' }
-#'
-#' @seealso \code{\link{plot}} for plotting curves with the general R plot.
-#'   \code{\link{autoplot}} and \code{\link{fortify}} for plotting curves
-#'   with \pkg{ggplot2}. \code{\link{mmdata}} for formatting input data.
-#'   \code{\link{join_scores}} and \code{\link{join_labels}} for formatting
+#' @seealso [plot()] for plotting curves with the general R plot.
+#'   [autoplot()] and [fortify()] for plotting curves
+#'   with \pkg{ggplot2}. [mmdata()] for formatting input data.
+#'   [join_scores()] and [join_labels()] for formatting
 #'   scores and labels with multiple datasets.
-#'   \code{\link{format_nfold}} for creating n-fold cross validation dataset
+#'   [format_nfold()] for creating n-fold cross validation dataset
 #'   from data frame.
-#'   \code{\link{create_sim_samples}} for generating random samples
+#'   [create_sim_samples()] for generating random samples
 #'   for simulations.
 #'
 #' @examples

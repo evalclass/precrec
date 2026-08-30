@@ -21,12 +21,12 @@ of \code{nfold_df}.}
 }
 \value{
 The \code{format_nfold} function returns a list that
-  contains multiple scores and labels.
+contains multiple scores and labels.
 }
 \description{
 The \code{format_nfold} function takes a data frame with scores, label,
-  and n-fold columns and convert it to a list for \code{\link{evalmod}}
-  and \code{\link{mmdata}}.
+and n-fold columns and convert it to a list for \code{\link[=evalmod]{evalmod()}}
+and \code{\link[=mmdata]{mmdata()}}.
 }
 \examples{
 
@@ -84,8 +84,8 @@ str(nfold_list3$labels)
 
 }
 \seealso{
-\code{\link{evalmod}} for calculation evaluation measures.
-  \code{\link{mmdata}} for formatting input data.
-  \code{\link{join_scores}} and \code{\link{join_labels}} for formatting
-  scores and labels with multiple datasets.
+\code{\link[=evalmod]{evalmod()}} for calculation evaluation measures.
+\code{\link[=mmdata]{mmdata()}} for formatting input data.
+\code{\link[=join_scores]{join_scores()}} and \code{\link[=join_labels]{join_labels()}} for formatting
+scores and labels with multiple datasets.
 }

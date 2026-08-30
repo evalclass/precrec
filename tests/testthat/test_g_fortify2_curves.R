@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("FT 2: Fortify curves")
+# FT 2: Fortify curves
 # Test fortify(model, ...)
 
 ft2_check_libs <- function() {

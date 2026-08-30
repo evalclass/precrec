@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("PL 3: Calculate AUC (ROC) with the U statitics")
+# PL 3: Calculate AUC (ROC) with the U statitics
 # Test calc_auc_with_u(sdat, scores, labels, na_worst, ties_method, keep_sdat)
 
 test_that("calc_auc_with_u() reterns a 'uauc' object", {
@@ -191,5 +189,31 @@ test_that("mm test data", {
       ustat_method = "sort"
     )
     expect_equal(aucs[i], uaucs2$auc, tolerance = 1e-4)
+  }
+})
+
+test_that("negative scores with NAs are ranked as 'na_worst' requests", {
+  scores <- c(-1, -2, NA, -3, -4)
+  labels <- c(1, 1, 1, 0, 0)
+
+  # Shifting all scores by a constant must not change any AUC
+  expected <- calc_auc_with_u(scores = scores + 10, labels = labels)$auc
+
+  for (ustat_method in c("frank", "sort")) {
+    uaucs <- calc_auc_with_u(
+      scores = scores, labels = labels,
+      ustat_method = ustat_method
+    )
+    expect_equal(uaucs$auc, expected, tolerance = 1e-4)
+    expect_equal(uaucs$auc, 2 / 3, tolerance = 1e-4)
+  }
+
+  # na_worst = FALSE ranks the NA first, so the positives lead
+  for (ustat_method in c("frank", "sort")) {
+    uaucs <- calc_auc_with_u(
+      scores = scores, labels = labels, na_worst = FALSE,
+      ustat_method = ustat_method
+    )
+    expect_equal(uaucs$auc, 1, tolerance = 1e-4)
   }
 })

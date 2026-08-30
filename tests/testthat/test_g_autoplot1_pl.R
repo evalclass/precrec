@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("AP 1: Autoplot for pipeline functions")
+# AP 1: Autoplot for pipeline functions
 # Test autoplot(object, ...)
 
 skip_on_cran()

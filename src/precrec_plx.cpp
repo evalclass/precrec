@@ -3,6 +3,7 @@
 #include <vector>
 #include <cmath>
 #include <string>
+#include <limits>
 #include "precrec_misc.h"
 
 /*
@@ -151,11 +152,14 @@ Rcpp::List calc_uauc(unsigned np, unsigned nn,
   const double nn_dbl = static_cast<const double>(nn);
 
   // Determin NA values
+  // The sentinel must sort below (na_worst) or above (!na_worst) every real
+  // score. DBL_MIN is the smallest *positive* double, so it would rank NAs
+  // above every negative score; lowest() is the most negative one.
   double na_val;
   if (na_worst) {
-    na_val = DBL_MIN;
+    na_val = std::numeric_limits<double>::lowest();
   } else {
-    na_val = DBL_MAX;
+    na_val = std::numeric_limits<double>::max();
   }
 
   // Create pos and neg vectors
@@ -678,26 +682,26 @@ Rcpp::List calc_avg_curve(const Rcpp::List& curves,
   std::vector<double> se_y(vec_size);          // SE
   std::vector<double> ci_h_y(vec_size);        // CI upper bound
   std::vector<double> ci_l_y(vec_size);        // CI lower bound
-  std::vector<double> tot_y(vec_size, 0.0);    // Total of ys
-  std::vector<double> stot_y(vec_size, 0.0);   // Total of squared ys
+  std::vector<double> mean_y(vec_size, 0.0);   // Running mean of ys
+  std::vector<double> m2_y(vec_size, 0.0);     // Running sum of squared devs
   std::vector<double> s_y_val(vec_size, 0.0);  // x values of a single curve
 
-  // Calculate total
+  // Accumulate mean and variance with Welford's online algorithm
   for (unsigned i = 0; i < n; ++i) {
     Rcpp::List c = Rcpp::as<Rcpp::List>(curves[i]);
 
     get_yval_single(c["x"], c["y"], x_interval, x_bins, vec_size, s_y_val);
 
     for (unsigned j = 0; j < vec_size; ++j) {
-      tot_y[j] += s_y_val[j];
-      stot_y[j] += (s_y_val[j] * s_y_val[j]);
+      const double delta = s_y_val[j] - mean_y[j];
+      mean_y[j] += delta / static_cast<double>(i + 1);
+      m2_y[j] += delta * (s_y_val[j] - mean_y[j]);
     }
     s_y_val.clear();
     s_y_val.resize(vec_size, 0.0);
   }
 
   // Calculate average & CI
-  double exp2;
   double sd;
   for (unsigned i = 0; i < vec_size; ++i) {
     // x
@@ -710,14 +714,10 @@ Rcpp::List calc_avg_curve(const Rcpp::List& curves,
     }
 
     // y
-    avg_y[i] = tot_y[i] / double(n);
+    avg_y[i] = mean_y[i];
 
     // se
-    exp2 = (stot_y[i] / double(n)) - (avg_y[i] * avg_y[i]);
-    if (exp2 < 0){
-      exp2 = 0;
-    }
-    sd =  ::sqrt(double(n) / double(n - 1)) * ::sqrt(exp2);
+    sd = ::sqrt(m2_y[i] / (double(n) - 1.0));
     se_y[i] = sd / ::sqrt(double(n));
 
     // ci upper bound
@@ -747,7 +747,6 @@ void get_yval_single(const Rcpp::NumericVector& xs,
                      std::vector<double>& s_y_val) {
   std::vector<double> y_tot(vec_size, 0.0); // Total of ys
   std::vector<int> n_y(vec_size, 0);        // Number of each point
-  std::set<double> x_set;
   unsigned idx;
   double rounded_xval;
 
@@ -841,9 +840,9 @@ Rcpp::List calc_avg_points(const Rcpp::List& points, double ci_q) {
   std::vector<double> ci_h_y;        // CI upper bound
   std::vector<double> ci_l_y;        // CI lower bound
 
-  std::vector<double> tot_y;         // Total of ys
+  std::vector<double> mean_y;        // Running mean of ys
   std::vector<int> count_y;          // Count of ys
-  std::vector<double> stot_y;        // Total of squared ys
+  std::vector<double> m2_y;          // Running sum of squared devs
 
   // Create all unique x values
   for (unsigned i = 0; i < static_cast<unsigned>(points.size()); ++i) {
@@ -862,9 +861,9 @@ Rcpp::List calc_avg_points(const Rcpp::List& points, double ci_q) {
   se_y.resize(vec_size, 0.0);
   ci_h_y.resize(vec_size, 0.0);
   ci_l_y.resize(vec_size, 0.0);
-  tot_y.resize(vec_size, 0.0);
+  mean_y.resize(vec_size, 0.0);
   count_y.resize(vec_size, 0);
-  stot_y.resize(vec_size, 0.0);
+  m2_y.resize(vec_size, 0.0);
 
   // Make maps x vals to indices
   std::set<double>::iterator set_it;
@@ -875,7 +874,7 @@ Rcpp::List calc_avg_points(const Rcpp::List& points, double ci_q) {
     ++idx;
   }
 
-  // Calculate total
+  // Accumulate mean and variance with Welford's online algorithm
   idx = 0;
   for (unsigned i = 0; i < static_cast<unsigned>(points.size()); ++i) {
     Rcpp::List c = Rcpp::as<Rcpp::List>(points[i]);
@@ -885,28 +884,24 @@ Rcpp::List calc_avg_points(const Rcpp::List& points, double ci_q) {
     for (unsigned j = 0; j < static_cast<unsigned>(ys.size()); ++j) {
       idx = x_vals_idx[xs[j]];
 
-      tot_y[idx] += ys[j];
-      stot_y[idx] += (ys[j] * ys[j]);
       ++count_y[idx];
+      const double delta = ys[j] - mean_y[idx];
+      mean_y[idx] += delta / static_cast<double>(count_y[idx]);
+      m2_y[idx] += delta * (ys[j] - mean_y[idx]);
     }
   }
 
   // Calculate average & CI
-  double exp2;
   double sd;
   double n;
   for (unsigned i = 0; i < vec_size; ++i) {
     n = static_cast<double>(count_y[i]);
 
     // y
-    avg_y[i] = tot_y[i] / n;
+    avg_y[i] = mean_y[i];
 
     // se
-    exp2 = (stot_y[i] / n) - (avg_y[i] * avg_y[i]);
-    if (exp2 < 0){
-      exp2 = 0;
-    }
-    sd =  ::sqrt(n / (n - 1)) * ::sqrt(exp2);
+    sd = ::sqrt(m2_y[i] / (n - 1.0));
     se_y[i] = sd / ::sqrt(n);
 
     // ci upper bound

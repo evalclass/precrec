@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("MM 1: Create mmdata")
+# MM 1: Create mmdata
 # Test .pmatch_tiesmethod(val),
 #      .pmatch_expd_first(val),
 #      mmdata(scores, labels, modnames, dsids,
@@ -159,8 +157,10 @@ test_that("mmdata() accepts 'modnames'", {
   err_msg <- "Invalid"
   expect_err_msg(err_msg, s1, l1, c("A", "B"))
 
-  err_msg <- "modnames is not a character vector"
-  expect_err_msg(err_msg, s1, l1, NA)
+  expect_error(
+    mmdata(s1, l1, modnames = NA),
+    class = "precrec_error_invalid_modnames"
+  )
 })
 
 test_that("mmdata() accepts 'dsids'", {
@@ -177,8 +177,10 @@ test_that("mmdata() accepts 'dsids'", {
   err_msg <- "Invalid"
   expect_err_msg(err_msg, s1, l1, c("A", "B"))
 
-  err_msg <- "dsids is not a numeric or integer vector"
-  expect_err_msg(err_msg, s1, l1, NA)
+  expect_error(
+    mmdata(s1, l1, dsids = NA),
+    class = "precrec_error_invalid_dsids"
+  )
 })
 
 test_that("mmdata() accepts 'posclass'", {
@@ -212,8 +214,10 @@ test_that("mmdata() accepts 'na_worst'", {
   expect_equal(attr(mdat[[1]], "args")[["na_worst"]], TRUE)
 
   expect_err_msg <- function(s1, l1, na_worst) {
-    err_msg <- "na_worst contains 1 missing values"
-    expect_error(mmdata(s1, l1, na_worst = na_worst), err_msg)
+    expect_error(
+      mmdata(s1, l1, na_worst = na_worst),
+      class = "precrec_error_invalid_na_worst"
+    )
   }
   expect_err_msg(s1, l1, as.logical(NA))
   expect_err_msg(s1, l1, NA)
@@ -233,8 +237,10 @@ test_that("mmdata() accepts 'ties_method'", {
   expect_equal(attr(mdat[[1]], "args")[["ties_method"]], "first")
 
   expect_err_msg <- function(s1, l1, ties_method) {
-    err_msg <- "ties_method must be one of "
-    expect_error(mmdata(s1, l1, ties_method = ties_method), err_msg)
+    expect_error(
+      mmdata(s1, l1, ties_method = ties_method), "must be one of",
+      class = "precrec_error_invalid_ties_method"
+    )
   }
   expect_err_msg(s1, l1, "min")
   expect_err_msg(s1, l1, "max")

@@ -7,14 +7,14 @@
 \format{
 A list with 8 items.
 \describe{
-  \item{np}{number of positives: 1000}
-  \item{nn}{number of negatives: 1000}
-  \item{labels}{labels of observed data}
-  \item{random_scores}{scores of a random performance level}
-  \item{poor_er_scores}{scores of a poor early retrieval level}
-  \item{good_er_scores}{scores of a good early retrieval level}
-  \item{excel_scores}{scores of an excellent level}
-  \item{perf_scores}{scores of the perfect level}
+\item{np}{number of positives: 1000}
+\item{nn}{number of negatives: 1000}
+\item{labels}{labels of observed data}
+\item{random_scores}{scores of a random performance level}
+\item{poor_er_scores}{scores of a poor early retrieval level}
+\item{good_er_scores}{scores of a good early retrieval level}
+\item{excel_scores}{scores of an excellent level}
+\item{perf_scores}{scores of the perfect level}
 }
 }
 \usage{

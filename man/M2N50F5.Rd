@@ -7,10 +7,10 @@
 \format{
 A data frame with 4 columns.
 \describe{
-  \item{score1}{50 random scores}
-  \item{score2}{50 random scores}
-  \item{label}{50 labels as 'pos' or 'neg'}
-  \item{fold}{50 fold IDs as 1:5}
+\item{score1}{50 random scores}
+\item{score2}{50 random scores}
+\item{label}{50 labels as 'pos' or 'neg'}
+\item{fold}{50 fold IDs as 1:5}
 }
 }
 \usage{

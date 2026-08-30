@@ -1,66 +1,66 @@
 #' Reformat input data for performance evaluation calculation
 #'
-#' The \code{mmdata} function takes predicted scores and labels
-#'   and returns an \code{mdat} object. The \code{\link{evalmod}} function
-#'   takes an \code{mdat} object as input data to calculate evaluation measures.
+#' The `mmdata` function takes predicted scores and labels
+#'   and returns an `mdat` object. The [evalmod()] function
+#'   takes an `mdat` object as input data to calculate evaluation measures.
 #'
 #' @param scores A numeric dataset of predicted scores. It can be a vector,
-#'   a matrix, an array, a data frame, or a list. The \code{\link{join_scores}}
+#'   a matrix, an array, a data frame, or a list. The [join_scores()]
 #'   function can be useful to make scores with multiple datasets.
 #'
 #' @param labels A numeric, character, logical, or factor dataset
 #'   of observed labels. It can be a vector, a matrix, an array,
-#'   a data frame, or a list. The \code{\link{join_labels}}
+#'   a data frame, or a list. The [join_labels()]
 #'   function can be useful to make labels with multiple datasets.
 #'
 #' @param modnames A character vector for the names of the models.
-#'   The \code{evalmod} function automatically generates default names
-#'   as "m1", "m2", "m3", and so on when it is \code{NULL}.
+#'   The `evalmod` function automatically generates default names
+#'   as "m1", "m2", "m3", and so on when it is `NULL`.
 #'
 #' @param dsids A numeric vector for test dataset IDs.
-#' The \code{evalmod} function automatically generates the default ID
-#' as \code{1} when it is \code{NULL}.
+#' The `evalmod` function automatically generates the default ID
+#' as `1` when it is `NULL`.
 #'
 #' @param posclass A scalar value to specify the label of positives
-#'   in \code{labels}. It must be the same data type as \code{labels}.
-#'   For example, \code{posclass = -1} changes the positive label
-#'   from \code{1} to \code{-1} when \code{labels} contains
-#'   \code{1} and \code{-1}. The positive label will be automatically
-#'   detected when \code{posclass} is \code{NULL}.
+#'   in `labels`. It must be the same data type as `labels`.
+#'   For example, `posclass = -1` changes the positive label
+#'   from `1` to `-1` when `labels` contains
+#'   `1` and `-1`. The positive label will be automatically
+#'   detected when `posclass` is `NULL`.
 #'
 #' @param na_worst A Boolean value for controlling the treatment of NAs
-#'   in \code{scores}.
+#'   in `scores`.
 #'   \describe{
 #'     \item{TRUE}{All NAs are treated as the worst scores}
 #'     \item{FALSE}{All NAs are treated as the best scores}
 #'   }
 #'
-#' @param ties_method A string for controlling ties in \code{scores}.
+#' @param ties_method A string for controlling ties in `scores`.
 #'   \describe{
 #'     \item{"equiv"}{Ties are equivalently ranked}
 #'     \item{"first"}{Ties are ranked in an increasing order as appeared}
 #'     \item{"random"}{ Ties are ranked in random order}
 #'   }
 #'
-#' @param expd_first A string to indicate which of the two variables
-#'   - model names or test dataset IDs
-#'   should be expanded first when they are automatically generated.
+#' @param expd_first A string to indicate which of the two variables - model
+#'   names or test dataset IDs should be expanded first when they are
+#'   automatically generated.
 #'
 #'   \describe{
 #'     \item{"modnames"}{Model names are expanded first. For example,
-#'            The \code{mmdata} function generates \code{modnames} as
-#'            \code{c("m1", "m2")} and \code{dsids} as \code{c(1, 1)}
+#'            The `mmdata` function generates `modnames` as
+#'            `c("m1", "m2")` and `dsids` as `c(1, 1)`
 #'            when two vectors are passed as input,
-#'            and \code{modnames} and \code{dsids} are unspecified.}
+#'            and `modnames` and `dsids` are unspecified.}
 #'     \item{"dsids"}{Test dataset IDs are expanded first. For example,
-#'            The \code{mmdata} function generates \code{modnames} as
-#'            \code{c("m1", "m1")} and \code{dsids} as \code{c(1, 2)}
+#'            The `mmdata` function generates `modnames` as
+#'            `c("m1", "m1")` and `dsids` as `c(1, 2)`
 #'            when two vectors are passed as input,
-#'            and \code{modnames} and \code{dsids} are unspecified.}
+#'            and `modnames` and `dsids` are unspecified.}
 #'   }
 #'
 #' @param mode A string that specifies the types of evaluation measures
-#'   that the \code{evalmod} function calculates.
+#'   that the `evalmod` function calculates.
 #'   \describe{
 #'     \item{"rocprc"}{ROC and Precision-Recall curves}
 #'     \item{"prcroc"}{Same as above}
@@ -74,24 +74,24 @@
 #'   label and fold columns.
 #'
 #' @param score_cols A character/numeric vector that specifies score columns
-#'   of \code{nfold_df}.
+#'   of `nfold_df`.
 #'
 #' @param lab_col A number/string that specifies the label column
-#'   of \code{nfold_df}.
+#'   of `nfold_df`.
 #'
 #' @param fold_col A number/string that specifies the fold column
-#'   of \code{nfold_df}.
+#'   of `nfold_df`.
 #'
 #' @param ... Not used by this method.
 #'
-#' @return The \code{mmdata} function returns an \code{mdat} object
+#' @return The `mmdata` function returns an `mdat` object
 #'   that contains formatted labels and score ranks. The object can
-#'   be used as input data for the \code{\link{evalmod}} function.
+#'   be used as input data for the [evalmod()] function.
 #'
-#' @seealso \code{\link{evalmod}} for calculation evaluation measures.
-#'   \code{\link{join_scores}} and \code{\link{join_labels}} for formatting
+#' @seealso [evalmod()] for calculation evaluation measures.
+#'   [join_scores()] and [join_labels()] for formatting
 #'   scores and labels with multiple datasets.
-#'   \code{\link{format_nfold}} for creating n-fold cross validation dataset
+#'   [format_nfold()] for creating n-fold cross validation dataset
 #'   from data frame.
 #'
 #' @examples
@@ -283,7 +283,7 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
 # Check partial match - expd_first
 #
 .pmatch_expd_first <- function(val) {
-  if (assertthat::is.string(val)) {
+  if (.is_string(val)) {
     if (val == "dsids" || val == "modnames") {
       return(val)
     }
@@ -309,7 +309,7 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
     val <- arglist[["ties.method"]]
   }
 
-  if (assertthat::is.string(val)) {
+  if (.is_string(val)) {
     choices <- c("equiv", "random", "first")
     if (val %in% choices) {
       return(val)
@@ -342,8 +342,7 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
     set_na_last <- TRUE
   }
 
-  assertthat::is.flag(val)
-
+  # The value itself is validated by .validate_na_worst() in the caller.
   if (set_na_last) {
     val <- !val
   }

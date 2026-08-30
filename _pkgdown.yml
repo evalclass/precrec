@@ -3,9 +3,9 @@ url: https://evalclass.github.io/precrec
 repo:
   branch: main
 
-templates:
-  params:
-    bootswatch: cerulean
+template:
+  bootstrap: 5
+  bootswatch: cerulean
 
 reference:
   - title: Package
@@ -31,7 +31,7 @@ reference:
     - as.data.frame
     - auc
     - pauc
-  - title: Partical AUC and partial curve
+  - title: Partial AUC and partial curve
     contents:
     - part
   - title: Confidence interval of AUC scores

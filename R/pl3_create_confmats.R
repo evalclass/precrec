@@ -73,7 +73,7 @@ create_confmats <- function(fmdat, scores = NULL, labels = NULL,
   }
 
   # TP
-  assertthat::assert_that(
+  .assert_internal(
     is.atomic(x[["tp"]]),
     is.vector(x[["tp"]]),
     is.numeric(x[["tp"]]),
@@ -82,7 +82,7 @@ create_confmats <- function(fmdat, scores = NULL, labels = NULL,
   )
 
   # FP
-  assertthat::assert_that(
+  .assert_internal(
     is.atomic(x[["fp"]]),
     is.vector(x[["fp"]]),
     is.numeric(x[["fp"]]),
@@ -91,7 +91,7 @@ create_confmats <- function(fmdat, scores = NULL, labels = NULL,
   )
 
   # FN
-  assertthat::assert_that(
+  .assert_internal(
     is.atomic(x[["fn"]]),
     is.vector(x[["fn"]]),
     is.numeric(x[["fn"]]),
@@ -100,7 +100,7 @@ create_confmats <- function(fmdat, scores = NULL, labels = NULL,
   )
 
   # TN
-  assertthat::assert_that(
+  .assert_internal(
     is.atomic(x[["tn"]]),
     is.vector(x[["tn"]]),
     is.numeric(x[["tn"]]),

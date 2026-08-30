@@ -7,10 +7,10 @@
 \format{
 A list with 4 items.
 \describe{
-  \item{np}{number of positives: 10}
-  \item{nn}{number of negatives: 10}
-  \item{labels}{20 labels of observed data}
-  \item{scores}{20 scores with some ties}
+\item{np}{number of positives: 10}
+\item{nn}{number of negatives: 10}
+\item{labels}{20 labels of observed data}
+\item{scores}{20 scores with some ties}
 }
 }
 \usage{

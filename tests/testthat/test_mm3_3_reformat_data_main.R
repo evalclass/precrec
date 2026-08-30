@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("MM 3: Reformat input data for evaluation")
+# MM 3: Reformat input data for evaluation
 # Test reformat_data(scores, labels,
 #                    na_worst, ties_method, modname)
 
@@ -52,20 +50,19 @@ test_that("'scores' and 'labels' should be the same length", {
 })
 
 test_that("'modname' must be a character vector", {
-  expect_err_msg <- function(err_msg, modname) {
-    expect_error(reformat_data(c(0, 1), c(0, 1), modname = modname), err_msg)
+  expect_err_cls <- function(modname) {
+    expect_error(
+      reformat_data(c(0, 1), c(0, 1), modname = modname), "single string",
+      class = "precrec_error_invalid_modname"
+    )
   }
 
-  err_msg <- "modname is not a string"
-  expect_err_msg(err_msg, c(0.1, 0.2))
-  expect_err_msg(err_msg, c("1", "2"))
-  expect_err_msg(err_msg, as.character())
-
-  err_msg <- "modname is not an atomic vector"
-  err_msg <- "modname is not a string"
-  expect_err_msg(err_msg, factor(c(0.1, 0.2)))
-  expect_err_msg(err_msg, list("1"))
-  expect_err_msg(err_msg, data.frame("1"))
+  expect_err_cls(c(0.1, 0.2))
+  expect_err_cls(c("1", "2"))
+  expect_err_cls(as.character())
+  expect_err_cls(factor(c(0.1, 0.2)))
+  expect_err_cls(list("1"))
+  expect_err_cls(data.frame("1"))
 })
 
 test_that("labels, ranks, and rank_idx must be the same length", {

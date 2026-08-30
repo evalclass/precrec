@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("PL 3: Create confusion matrices")
+# PL 3: Create confusion matrices
 # Test create_confmats(fmdat, scores, labels)
 
 test_that("create_confmats() reterns a 'cmats' object", {

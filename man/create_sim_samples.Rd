@@ -16,27 +16,27 @@ create_sim_samples(n_repeat, np, nn, score_names = "random")
 \item{score_names}{A character vector for the names of
 the following performance levels.
 \describe{
-  \item{"random"}{Random}
-  \item{"poor_er"}{Poor early retrieval}
-  \item{"good_er"}{Good early retrieval}
-  \item{"excel"}{Excellent}
-  \item{"perf"}{Perfect}
-  \item{"all"}{All of the above}
+\item{"random"}{Random}
+\item{"poor_er"}{Poor early retrieval}
+\item{"good_er"}{Good early retrieval}
+\item{"excel"}{Excellent}
+\item{"perf"}{Perfect}
+\item{"all"}{All of the above}
 }}
 }
 \value{
 The \code{create_sim_samples} function returns a list
-  with the following items.
-  \itemize{
-    \item scores: a list of numeric vectors
-    \item labels: an integer vector
-    \item modnames: a character vector of the model names
-    \item dsids: a character vector of the dataset IDs
-  }
+with the following items.
+\itemize{
+\item scores: a list of numeric vectors
+\item labels: an integer vector
+\item modnames: a character vector of the model names
+\item dsids: a character vector of the dataset IDs
+}
 }
 \description{
 The \code{create_sim_samples} function generates random samples
-  with different performance levels.
+with different performance levels.
 }
 \examples{
 
@@ -71,6 +71,6 @@ str(samps3)
 
 }
 \seealso{
-\code{\link{mmdata}} for formatting input data.
-  \code{\link{evalmod}} for calculation evaluation measures.
+\code{\link[=mmdata]{mmdata()}} for formatting input data.
+\code{\link[=evalmod]{evalmod()}} for calculation evaluation measures.
 }

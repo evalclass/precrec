@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("FT 1: Fortify pipeline objects")
+# FT 1: Fortify pipeline objects
 # Test fortify(model, ...)
 
 ft1_check_libs <- function() {

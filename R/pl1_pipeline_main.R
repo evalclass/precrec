@@ -42,7 +42,7 @@ pl_main <- function(mdat, mode = "rocprc", calc_avg = TRUE, cb_alpha = 0.05,
 # Check partial match - mode
 #
 .pmatch_mode <- function(val) {
-  if (assertthat::is.string(val)) {
+  if (.is_string(val)) {
     if (val == "rocprc" || val == "basic") {
       return(val)
     } else if (val == "prcroc") {
