@@ -152,27 +152,27 @@
   )
   elen <- length(evaltypes)
 
-  sbasic <- data.frame(
-    modnames = rep(modnames, each = elen),
-    dsids = rep(dsids, each = elen),
-    evaltypes = rep(evaltypes, length(modnames)),
-    minvals = rep(NA, length(modnames) * elen),
-    q25vals = rep(NA, length(modnames) * elen),
-    medianvals = rep(NA, length(modnames) * elen),
-    meanvals = rep(NA, length(modnames) * elen),
-    q75vals = rep(NA, length(modnames) * elen),
-    maxvals = rep(NA, length(modnames) * elen),
-    stringsAsFactors = FALSE
-  )
-
+  # Filled as a matrix first: assigning a row into a data frame inside the
+  # loop copied the whole frame on every pass
+  quantiles <- matrix(NA_real_, nrow = length(modnames) * elen, ncol = 6)
   for (i in seq_along(lpoints)) {
     for (j in seq_along(evaltypes)) {
       vals <- lpoints[[i]][["basic"]][[evaltypes[j]]]
-      sbasic[(i - 1) * length(evaltypes) + j, 4:9] <- summary(vals)[1:6]
+      quantiles[(i - 1) * elen + j, ] <- summary(vals)[1:6]
     }
   }
 
-  sbasic
+  data.table::data.table(
+    modnames = rep(modnames, each = elen),
+    dsids = rep(dsids, each = elen),
+    evaltypes = rep(evaltypes, length(modnames)),
+    minvals = quantiles[, 1],
+    q25vals = quantiles[, 2],
+    medianvals = quantiles[, 3],
+    meanvals = quantiles[, 4],
+    q75vals = quantiles[, 5],
+    maxvals = quantiles[, 6]
+  )
 }
 
 #

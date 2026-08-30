@@ -293,7 +293,8 @@ NULL
         dsid_modnames, curvetype_names, x_bins
       )
       .check_cpp_func_error(list_df, "convert_curve_df")
-      curve_df <- list_df[["df"]]
+      # setDT is by reference, and the frame is fresh out of C++
+      curve_df <- data.table::setDT(list_df[["df"]])
     } else {
       curve_df <- .dataframe_curve(
         obj, uniq_modnames, uniq_dsids, modnames,
@@ -309,7 +310,7 @@ NULL
         curvetype_names, x_bins
       )
       .check_cpp_func_error(list_df, "convert_curve_avg_df")
-      curve_df <- list_df[["df"]]
+      curve_df <- data.table::setDT(list_df[["df"]])
     } else {
       curve_df <- .dataframe_curve_avg(
         obj, uniq_modnames, uniq_dsids, modnames,
@@ -321,10 +322,9 @@ NULL
 
   if (!check_ggplot) {
     if ("dsid_modname" %in% names(curve_df)) {
-      curve_df[["dsid_modname"]] <- NULL
+      data.table::set(curve_df, j = "dsid_modname", value = NULL)
     }
-    colnum <- ncol(curve_df)
-    names(curve_df) <- c(names(curve_df)[1:(colnum - 1)], "type")
+    data.table::setnames(curve_df, ncol(curve_df), "type")
   }
 
   curve_df
@@ -335,7 +335,9 @@ NULL
 #
 .dataframe_curve <- function(obj, uniq_modnames, uniq_dsids, modnames, dsids,
                              dsid_modnames, curvetype_names) {
-  curve_df <- NULL
+  # Collect one table per curve and bind them once. Growing the table with
+  # rbind() inside the loop copied everything built so far on every pass.
+  parts <- list()
   for (curvetype in names(curvetype_names)) {
     curves <- obj[[curvetype_names[[curvetype]]]]
     for (i in seq_along(curves)) {
@@ -354,16 +356,16 @@ NULL
       curvename <- factor(rep(curvetype, length(x)),
         levels = names(curvetype_names)
       )
-      curve_df <- rbind(curve_df, data.frame(
+      parts[[length(parts) + 1L]] <- data.table::data.table(
         x = x, y = y, modname = modname,
         dsid = dsid,
         dsid_modname = dsid_modname,
         curvetype = curvename
-      ))
+      )
     }
   }
 
-  curve_df
+  .rbind_parts(parts)
 }
 
 #
@@ -372,7 +374,7 @@ NULL
 .dataframe_curve_avg <- function(obj, uniq_modnames, uniq_dsids, modnames,
                                  dsids, dsid_modnames, curvetype_names) {
   grp_avg <- attr(obj, "grp_avg")
-  curve_df <- NULL
+  parts <- list()
   for (curvetype in names(curvetype_names)) {
     avgcurves <- grp_avg[[curvetype_names[[curvetype]]]]
 
@@ -388,16 +390,16 @@ NULL
       curvename <- factor(rep(curvetype, length(x)),
         levels = names(curvetype_names)
       )
-      curve_df <- rbind(curve_df, data.frame(
+      parts[[length(parts) + 1L]] <- data.table::data.table(
         x = x, y = y,
         ymin = ymin, ymax = ymax,
         modname = modname,
         curvetype = curvename
-      ))
+      )
     }
   }
 
-  curve_df
+  .rbind_parts(parts)
 }
 
 #

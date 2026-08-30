@@ -148,23 +148,21 @@
   ct_len <- 2
   modnames <- attr(mdat, "data_info")[["modnames"]]
   dsids <- attr(mdat, "data_info")[["dsids"]]
-  aucs <- data.frame(
-    modnames = rep(modnames, each = ct_len),
-    dsids = rep(dsids, each = ct_len),
-    curvetypes = rep(c("ROC", "PRC"), length(modnames)),
-    aucs = rep(NA, length(modnames) * ct_len),
-    stringsAsFactors = FALSE
-  )
-
+  auc_vals <- rep(NA_real_, length(modnames) * ct_len)
   for (i in seq_along(lcurves)) {
     idx <- ct_len * i - 1
-    aucs[["aucs"]][idx:(idx + 1)] <- c(
+    auc_vals[idx:(idx + 1)] <- c(
       attr(lcurves[[i]][["roc"]], "auc"),
       attr(lcurves[[i]][["prc"]], "auc")
     )
   }
 
-  aucs
+  data.table::data.table(
+    modnames = rep(modnames, each = ct_len),
+    dsids = rep(dsids, each = ct_len),
+    curvetypes = rep(c("ROC", "PRC"), length(modnames)),
+    aucs = auc_vals
+  )
 }
 
 #

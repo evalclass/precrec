@@ -127,14 +127,19 @@ bench_compare <- function(results, baseline_path, tolerance = 0.10,
     stringsAsFactors = FALSE
   )
   cmp[["time_x"]] <- round(cmp[["new_ms"]] / cmp[["base_ms"]], 3)
-  cmp[["mem_x"]] <- round(cmp[["new_MB"]] / cmp[["base_MB"]], 3)
+  mem_x <- round(cmp[["new_MB"]] / cmp[["base_MB"]], 3)
+  # A baseline of 0 MB carries no ratio worth printing
+  mem_x[!is.finite(mem_x)] <- NA_real_
+  cmp[["mem_x"]] <- mem_x
 
   cat("\nBaseline: ", baseline_path, "\n", sep = "")
   cat("  recorded ", base[["meta"]][["created"]],
     " at ", base[["meta"]][["git_commit"]], "\n\n",
     sep = ""
   )
-  print(cmp, row.names = FALSE)
+  print(cmp[, c(
+    "benchmark", "dataset", "base_ms", "new_ms", "time_x", "mem_x"
+  )], row.names = FALSE)
 
   missing <- is.na(idx)
   if (any(missing)) {

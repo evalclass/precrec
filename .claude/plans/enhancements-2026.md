@@ -6,7 +6,47 @@ L ≈ 3–6 weeks, XL ≈ 2+ months.
 
 ---
 
-## E1. Store all data-frame data as `data.table` — **M**
+## E1. Store all data-frame data as `data.table` — **M** — **DONE (2026-08-30)**
+
+### Outcome
+
+Implemented on `feature/DataTable`. The internal tables are built with
+`data.table`; the public contract is unchanged (`as.data.frame`, `fortify`,
+`auc`, `pauc`, `auc_ci` all still hand back plain data frames), and
+`as.data.table.<class>` is the new opt-in.
+
+**Where the win actually was.** The default `Rcpp` path never had the
+quadratic problem, so the standard benchmarks move by less than 1% at 1e6.
+The whole payoff is in the R fallback: over 20 test datasets
+(118k rows), `.dataframe_curve` went from **706 ms / 698 MB to 18 ms /
+16 MB** — 38x faster, 43x less memory. That path runs whenever
+`use_rcpp = FALSE`.
+
+**Two deviations from the plan below, both deliberate:**
+
+1. `fortify.*` returns a plain data frame, not a data.table. The plan
+   floated returning the data.table directly; `fortify` is documented
+   public API here, `setDF()` on a freshly built table is free, and the
+   only gain would have been skipping that free call. The stated principle
+   — internal data.table, external contract unchanged — is better served
+   this way. Verified either way: the January vdiffr snapshots pass
+   untouched.
+2. `fortify.fmdat` / `.cmats` / `.pevals` still build plain data frames.
+   They are built once and returned, with no loop to fix and nothing to
+   convert back from.
+
+**What the reference semantics actually cost.** Accessors that hand back a
+stored table (`auc`, `pauc`, the `aucroc` frame) now copy it, because
+`setDF()` converts in place and would otherwise leave the caller holding a
+handle into the object. On these tables that is tens of microseconds
+(`auc()` went from 21 to 66 us, both far below anything a caller notices),
+and it buys back the guarantee that a returned frame can never mutate the
+object it came from — which is what a data.frame gave for free before.
+
+The `[.data.table` NSE collision the plan warned about did bite once, in
+`auc_ci()`: `aucs[aucs$modnames == modname, ]` resolves `aucs` to the
+column of that name inside `[.data.table`, not the table. Fixed by taking
+a plain data frame view at the top of the function.
 
 ### Current state
 
@@ -375,7 +415,7 @@ Ship Tier 1 (+ F-beta) and Tier 2 (Brier, log loss). Defer Tier 3.
 1. E3 steps 1–3        CI refresh + testthat 3e → safe ground for everything else  [DONE]
 2. E4 correctness      DBL_MIN bug, Welford   → cheap, S-sized, ride on step 1     [DONE]
 3. E4 step 0           benchmark harness      → baseline                        [DONE]
-4. E1                  data.table internals   → touches df sites E5 also touches
+4. E1                  data.table internals   → touches df sites E5 also touches  [DONE]
 5. E3 steps 4–7        roxygen/cli/pkgdown    → mechanical, any time           [DONE]
 6. E4 optimizations    guided by benchmarks
 7. E5 tiers 1–2        metrics on the new table plumbing

@@ -127,3 +127,17 @@ test_that("paucs for avg mmcurves", {
   expect_equal(nrow(subset(paucs, curvetypes == "PRC")), 2)
   expect_equal(nrow(subset(paucs, curvetypes == "ROC")), 2)
 })
+
+test_that("pauc() returns a plain data frame that does not alias the object", {
+  data(P10N10)
+  curves <- part(evalmod(scores = P10N10$scores, labels = P10N10$labels),
+    xlim = c(0, 0.25)
+  )
+
+  paucs <- pauc(curves)
+  expect_identical(class(paucs), "data.frame")
+
+  before <- pauc(curves)[["paucs"]]
+  paucs[["paucs"]] <- -1
+  expect_equal(pauc(curves)[["paucs"]], before)
+})

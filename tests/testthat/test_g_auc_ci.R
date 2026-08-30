@@ -409,3 +409,14 @@ test_that("auc_ci n = 1", {
   expect_equal(ci_n1_prc$lower_bound, ci_n1_prc$mean)
   expect_equal(ci_n1_prc$upper_bound, ci_n1_prc$mean)
 })
+
+test_that("auc_ci() returns a plain data frame", {
+  samps <- create_sim_samples(4, 10, 10, "good_er")
+  mdat <- mmdata(samps[["scores"]], samps[["labels"]],
+    modnames = samps[["modnames"]], dsids = samps[["dsids"]]
+  )
+  curves <- evalmod(mdat)
+
+  ci <- auc_ci(curves)
+  expect_identical(class(ci), "data.frame")
+})

@@ -100,9 +100,11 @@ fortify.pevals <- function(model, ...) {
 fortify.sscurves <- function(model, data, raw_curves = NULL,
                              reduce_points = FALSE,
                              ...) {
-  .dataframe_common(model,
-    raw_curves = TRUE, reduce_points = reduce_points,
-    check_ggplot = TRUE, ...
+  .as_plain_df(
+    .dataframe_common(model,
+      raw_curves = TRUE, reduce_points = reduce_points,
+      check_ggplot = TRUE, ...
+    )
   )
 }
 
@@ -111,9 +113,11 @@ fortify.sscurves <- function(model, data, raw_curves = NULL,
 fortify.mscurves <- function(model, data, raw_curves = NULL,
                              reduce_points = FALSE,
                              ...) {
-  .dataframe_common(model,
-    raw_curves = TRUE, reduce_points = reduce_points,
-    check_ggplot = TRUE, ...
+  .as_plain_df(
+    .dataframe_common(model,
+      raw_curves = TRUE, reduce_points = reduce_points,
+      check_ggplot = TRUE, ...
+    )
   )
 }
 
@@ -126,9 +130,11 @@ fortify.smcurves <- function(model, data, raw_curves = NULL,
     def_raw_curves = raw_curves, ...
   )
 
-  .dataframe_common(model,
-    raw_curves = arglist[["raw_curves"]],
-    reduce_points = reduce_points, check_ggplot = TRUE, ...
+  .as_plain_df(
+    .dataframe_common(model,
+      raw_curves = arglist[["raw_curves"]],
+      reduce_points = reduce_points, check_ggplot = TRUE, ...
+    )
   )
 }
 
@@ -141,9 +147,11 @@ fortify.mmcurves <- function(model, data, raw_curves = NULL,
     def_raw_curves = raw_curves, ...
   )
 
-  .dataframe_common(model,
-    raw_curves = arglist[["raw_curves"]],
-    reduce_points = reduce_points, check_ggplot = TRUE, ...
+  .as_plain_df(
+    .dataframe_common(model,
+      raw_curves = arglist[["raw_curves"]],
+      reduce_points = reduce_points, check_ggplot = TRUE, ...
+    )
   )
 }
 
@@ -152,9 +160,11 @@ fortify.mmcurves <- function(model, data, raw_curves = NULL,
 fortify.sspoints <- function(model, data, raw_curves = NULL,
                              reduce_points = FALSE,
                              ...) {
-  .dataframe_common(model,
-    mode = "basic", raw_curves = TRUE,
-    check_ggplot = TRUE, reduce_points = FALSE, ...
+  .as_plain_df(
+    .dataframe_common(model,
+      mode = "basic", raw_curves = TRUE,
+      check_ggplot = TRUE, reduce_points = FALSE, ...
+    )
   )
 }
 
@@ -163,9 +173,11 @@ fortify.sspoints <- function(model, data, raw_curves = NULL,
 fortify.mspoints <- function(model, data, raw_curves = NULL,
                              reduce_points = FALSE,
                              ...) {
-  .dataframe_common(model,
-    mode = "basic", raw_curves = TRUE,
-    check_ggplot = TRUE, reduce_points = FALSE, ...
+  .as_plain_df(
+    .dataframe_common(model,
+      mode = "basic", raw_curves = TRUE,
+      check_ggplot = TRUE, reduce_points = FALSE, ...
+    )
   )
 }
 
@@ -178,9 +190,11 @@ fortify.smpoints <- function(model, data, raw_curves = NULL,
     def_raw_curves = raw_curves, ...
   )
 
-  .dataframe_common(model,
-    mode = "basic", raw_curves = arglist[["raw_curves"]],
-    check_ggplot = TRUE, reduce_points = FALSE, ...
+  .as_plain_df(
+    .dataframe_common(model,
+      mode = "basic", raw_curves = arglist[["raw_curves"]],
+      check_ggplot = TRUE, reduce_points = FALSE, ...
+    )
   )
 }
 
@@ -193,8 +207,10 @@ fortify.mmpoints <- function(model, data, raw_curves = NULL,
     def_raw_curves = raw_curves, ...
   )
 
-  .dataframe_common(model,
-    mode = "basic", raw_curves = arglist[["raw_curves"]],
-    check_ggplot = TRUE, reduce_points = FALSE, ...
+  .as_plain_df(
+    .dataframe_common(model,
+      mode = "basic", raw_curves = arglist[["raw_curves"]],
+      check_ggplot = TRUE, reduce_points = FALSE, ...
+    )
   )
 }
