@@ -14,11 +14,55 @@
 
 # Load the package from the working tree, so the benchmarks measure the
 # source as it stands rather than an installed copy.
-bench_load_precrec <- function() {
-  if (requireNamespace("pkgload", quietly = TRUE)) {
-    pkgload::load_all(".", quiet = TRUE, export_all = TRUE)
-  } else {
+#
+# `pkgload::load_all()` compiles the C++ through pkgbuild, which by default
+# adds its development flags - `-UNDEBUG -Wall -pedantic -g -O0`. Those
+# override R's own `-O2`, so a plain `load_all()` benchmarks an unoptimised
+# build: the C++ runs roughly an order of magnitude slower than the copy a
+# user installs from CRAN, which makes the C++ look far more dominant than
+# it is. Turn the extra flags off, and rebuild from clean unless the objects
+# on disk are known to have been built that way already.
+.bench_build_stamp <- file.path("bench", ".build-mode")
+
+# Are the compiled objects the ones this stamp describes?
+#
+# The stamp is written after the build, so anything newer than it was built
+# by something else - an ordinary devtools::load_all() or devtools::test(),
+# which put the development flags back. Object files are cached, so that
+# build would otherwise be measured as if it were this one.
+.bench_build_current <- function(mode) {
+  if (!file.exists(.bench_build_stamp)) {
+    return(FALSE)
+  }
+  if (!identical(readLines(.bench_build_stamp, warn = FALSE)[[1L]], mode)) {
+    return(FALSE)
+  }
+  # The object files, not the shared library: pkgload relinks the library
+  # on its own schedule, while a .o is only ever rewritten by a compile.
+  objs <- list.files("src", pattern = "[.]o$", full.names = TRUE)
+  length(objs) > 0L &&
+    all(file.mtime(objs) <= file.mtime(.bench_build_stamp))
+}
+
+bench_load_precrec <- function(optimized = TRUE) {
+  if (!requireNamespace("pkgload", quietly = TRUE)) {
     library("precrec")
+    return(invisible(NULL))
+  }
+
+  mode <- if (optimized) "release" else "debug"
+  options(pkg.build_extra_flags = !optimized)
+
+  stale <- !.bench_build_current(mode)
+  if (stale) {
+    message("rebuilding src/ with ", mode, " flags")
+    pkgbuild::clean_dll(".")
+  }
+
+  pkgload::load_all(".", quiet = TRUE, export_all = TRUE)
+
+  if (stale) {
+    writeLines(mode, .bench_build_stamp)
   }
   invisible(NULL)
 }

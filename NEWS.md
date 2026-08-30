@@ -55,6 +55,26 @@
   measure summary had the same pattern and got the same treatment. The
   default `Rcpp` path was never affected.
 
+* Speed up `as.data.frame()` and `autoplot()` for large curve objects, and
+  cut the memory they need. The C++ converter filled a C++ buffer and then
+  copied it into the vectors it returned; it now fills those vectors
+  directly. Converting a curve object built from 200,000 observations is
+  around 27% faster, and one pass of `evalmod()` plus `as.data.frame()` over
+  1,000,000 observations peaks at 584 MB instead of 897 MB in
+  `mode = "basic"`, and 424 MB instead of 470 MB for ROC and
+  precision-recall curves.
+
+* Speed up `mmdata()` by around 25%. Scores are sorted through a comparison
+  the sort can inline, rather than through a function pointer, which it
+  could not. The resulting ranks are unchanged.
+
+* Speed up the averaging of basic evaluation measures across datasets,
+  which `evalmod(calc_avg = TRUE, mode = "basic")` performs. Collecting the
+  distinct x values used a `std::set` and a `std::map`, each allocating a
+  node per value and following a pointer per lookup, once for every point
+  of every dataset; a sorted vector and a binary search replace them. It is
+  around 1.6 times faster at 100,000 observations and above.
+
 # precrec 0.14.5
 
 * Restructure unit tests for svg comparisons with vdiff
