@@ -37,9 +37,12 @@ mmpoints
 modnames
 mscurves
 mspoints
+multiclass
+Multiclass
 nfold
 npv
 ORCID
+ovr
 pauc
 pAUC
 pAUCs

@@ -13,19 +13,16 @@
   # Create points
   plfunc <- function(s) {
     if (attr(mdat[[s]], "nn") == 0 || attr(mdat[[s]], "np") == 0) {
-      if (attr(mdat[[s]], "np") > 0) {
-        cl <- "positive"
-      } else {
-        cl <- "negative"
-      }
-      err_msg <- paste0(
-        "Basic measures cannot be calculated. ",
-        "Only a single class (", cl, ") ",
-        "found in dataset (modname: ",
-        attr(mdat[[s]], "modname"),
-        ", dsid: ", attr(mdat[[s]], "dsid"), ")."
+      # Accuracy and error rate are still defined here, and the measures that
+      # are not - specificity without negatives, sensitivity without
+      # positives - come back as NA, so this is a warning rather than the
+      # error the curve pipelines raise
+      warning(
+        .single_class_msg(
+          mdat[[s]], "Some basic measures cannot be calculated."
+        ),
+        call. = FALSE
       )
-      stop(err_msg, call. = FALSE)
     }
     cdat <- create_confmats(mdat[[s]], keep_fmdat = TRUE)
     calc_measures(cdat, beta = beta)

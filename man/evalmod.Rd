@@ -20,6 +20,7 @@ evalmod(
   x_bins = 1000,
   interpolate = TRUE,
   beta = 1,
+  on_single_class = "error",
   ...
 )
 }
@@ -129,8 +130,23 @@ which weights recall \code{beta} times as heavily as precision.
 The default \code{1} gives the F1 score. \code{beta} is effective only
 when \code{mode} is set to \code{basic}.}
 
+\item{on_single_class}{A string that specifies what the \code{evalmod}
+function does with a dataset in which every label belongs to the same
+class.
+\describe{
+\item{"error"}{Raise an error (default)}
+\item{"na"}{Warn, and return \code{NA} for the measures that
+are undefined}
+}
+ROC and precision-recall curves are undefined for such a dataset, so
+\code{on_single_class} is effective only when \code{mode} is set to
+\code{rocprc}, \code{prcroc}, or \code{aucroc}. \code{mode = "basic"} always
+warns and calculates what it can, because accuracy and error rate are
+still defined.}
+
 \item{...}{These additional arguments are passed to \code{\link[=mmdata]{mmdata()}}
-for data preparation.}
+for data preparation. \code{multiclass = "ovr"} asks for a one-vs-rest
+evaluation of a dataset with more than two classes; see \code{\link[=mmdata]{mmdata()}}.}
 }
 \value{
 The \code{evalmod} function returns an \code{S3} object
@@ -337,6 +353,21 @@ system.time(res2 <- func_evalmod_aucroc(samp1))
 # AUCs
 res1
 res2
+
+
+##################################################
+### Multiclass evaluation
+###
+
+## Load a 3-class dataset with one score column per class
+data(C3N150)
+
+## Each class is evaluated against the rest
+mccurves <- evalmod(scores = C3N150$scores, labels = C3N150$labels)
+mccurves
+
+## Per-class AUCs, plus their macro-average
+auc(mccurves)
 
 }
 \seealso{

@@ -443,6 +443,15 @@
 }
 
 #
+# Validate on_single_class
+#
+.validate_on_single_class <- function(on_single_class) {
+  .assert_string(on_single_class, "on_single_class", c("error", "na"))
+
+  invisible(TRUE)
+}
+
+#
 # Validate eps of the log loss
 #
 .validate_eps <- function(eps) {

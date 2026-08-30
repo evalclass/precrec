@@ -16,6 +16,12 @@
 #'
 #'    See the **Value** section of [evalmod()] for more details.
 #'
+#' @param macro A Boolean value to specify whether the macro-average of the
+#'   per-class AUCs is added. It is effective only for a multiclass
+#'   evaluation - see the `multiclass` argument of [mmdata()] - and the
+#'   added rows carry `macro-average` as their model name. Classes that
+#'   could not be evaluated are left out of the average.
+#'
 #' @return The `auc` function returns a data frame with AUC scores.
 #'
 #' @seealso [evalmod()] for generating `S3` objects with
@@ -107,11 +113,28 @@
 #' ## Shows AUCs
 #' mm_aucs_prc
 #'
+#'
+#' ##################################################
+#' ### Multiclass evaluation
+#' ###
+#'
+#' ## Load a 3-class dataset with one score column per class
+#' data(C3N150)
+#'
+#' ## One-vs-rest curves
+#' mccurves <- evalmod(scores = C3N150$scores, labels = C3N150$labels)
+#'
+#' ## Per-class AUCs, plus their macro-average
+#' auc(mccurves)
+#'
+#' ## Per-class AUCs only
+#' auc(mccurves, macro = FALSE)
+#'
 #' @export
-auc <- function(curves) UseMethod("auc", curves)
+auc <- function(curves, macro = TRUE) UseMethod("auc", curves)
 
 #' @export
-auc.default <- function(curves) {
+auc.default <- function(curves, macro = TRUE) {
   stop("An object of unknown class is specified")
 }
 
@@ -120,10 +143,63 @@ auc.default <- function(curves) {
 #
 #' @rdname auc
 #' @export
-auc.aucs <- function(curves) {
+auc.aucs <- function(curves, macro = TRUE) {
   # Validation
   .validate(curves)
+  .assert_flag(macro, "macro")
 
   # Return AUC scores as a plain data frame
-  .as_plain_df(attr(curves, "aucs"), copy = TRUE)
+  aucs <- .as_plain_df(attr(curves, "aucs"), copy = TRUE)
+  if (!macro || !.is_multiclass(curves)) {
+    return(aucs)
+  }
+
+  rbind(aucs, .macro_average_aucs(aucs, curves))
+}
+
+#
+# Average the per-class AUCs of a one-vs-rest evaluation
+#
+# One row per dataset and curve type, the unweighted mean over the classes.
+# Classes that could not be evaluated carry NA and are left out, so a fold
+# missing one class still gets an average over the rest.
+#
+.macro_average_aucs <- function(aucs, curves) {
+  info <- .as_plain_df(attr(curves, "data_info"), copy = TRUE)
+
+  # A model name is either the class on its own, when there is one model, or
+  # "class:model". Strip the class back off to group by model.
+  models <- ifelse(
+    info[["modnames"]] == info[["classes"]], "",
+    substring(info[["modnames"]], nchar(info[["classes"]]) + 2L)
+  )
+  names(models) <- info[["modnames"]]
+  row_models <- unname(models[as.character(aucs[["modnames"]])])
+
+  parts <- list()
+  for (model in unique(row_models)) {
+    if (model == "") {
+      modname <- "macro-average"
+    } else {
+      modname <- paste0("macro-average:", model)
+    }
+    for (dsid in unique(aucs[["dsids"]])) {
+      for (curvetype in unique(aucs[["curvetypes"]])) {
+        sel <- row_models == model & aucs[["dsids"]] == dsid &
+          aucs[["curvetypes"]] == curvetype
+        vals <- aucs[["aucs"]][sel]
+        vals <- vals[!is.na(vals)]
+
+        parts[[length(parts) + 1L]] <- data.table::data.table(
+          modnames = modname,
+          dsids = dsid,
+          curvetypes = curvetype,
+          aucs = if (length(vals) == 0L) NA_real_ else mean(vals)
+        )
+      }
+    }
+  }
+
+  # Freshly built, so setDF needs no copy
+  .as_plain_df(.rbind_parts(parts))
 }

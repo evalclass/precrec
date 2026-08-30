@@ -70,6 +70,29 @@
 #'     \item{"aucroc"}{Fast AUC(ROC) calculation with the U statistic}
 #'   }
 #'
+#' @param multiclass A string that specifies how a dataset with more than
+#'   two classes is evaluated.
+#'   \describe{
+#'     \item{"none"}{Binary evaluation. Labels with more than two classes
+#'                   are an error, as they have always been.}
+#'     \item{"ovr"}{One-vs-rest. Each class becomes its own binary problem -
+#'                  that class against all the others - and the `K`
+#'                  decompositions are carried on the model axis, so that
+#'                  they behave like `K` models evaluated on one dataset.}
+#'   }
+#'   `multiclass` is detected from the input when it is `NULL`:
+#'   "ovr" when `labels` hold more than two classes and `scores`
+#'   is a matrix or a data frame with one column per class, "none"
+#'   otherwise. `scores` columns are matched to classes by their column
+#'   names when those name the classes, and by position otherwise.
+#'
+#'   `posclass` is ignored in one-vs-rest mode, and `multiclass`
+#'   cannot be combined with `nfold_df`.
+#'
+#'   Note that each one-vs-rest decomposition has its own class balance, so
+#'   the baseline of a precision-recall curve differs from class to class.
+#'   The plots leave the baseline out for that reason.
+#'
 #' @param nfold_df A data frame that contains at least one score column,
 #'   label and fold columns.
 #'
@@ -190,15 +213,42 @@
 #' )
 #' cvdat2
 #'
+#'
+#' ##################################################
+#' ### Multiclass dataset
+#' ###
+#'
+#' ## Load a 3-class dataset with one score column per class
+#' data(C3N150)
+#'
+#' ## One-vs-rest decomposition, detected from the input
+#' mcmdat <- mmdata(C3N150$scores, C3N150$labels)
+#' mcmdat
+#'
 #' @export
 mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
                    posclass = NULL, na_worst = TRUE, ties_method = "equiv",
-                   expd_first = NULL, mode = "rocprc",
+                   expd_first = NULL, mode = "rocprc", multiclass = NULL,
                    nfold_df = NULL, score_cols = NULL, lab_col = NULL,
                    fold_col = NULL, ...) {
   # === Join datasets ===
+  new_multiclass <- "none"
+  classes <- NULL
+
+  # NA rather than NULL: assigning NULL would drop the attribute, and every
+  # mdat object carries the same set
+  classnames <- NA
   if (!is.null(nfold_df) && !is.null(score_cols) && !is.null(lab_col) &&
     !is.null(fold_col)) {
+    if (!is.null(multiclass) && .pmatch_multiclass(multiclass) == "ovr") {
+      .stop_invalid_arg(
+        paste(
+          "{.arg multiclass} cannot be used with {.arg nfold_df}.",
+          "Expand the folds into a list of score matrices instead."
+        ),
+        arg = "multiclass"
+      )
+    }
     nfold_list <- format_nfold(nfold_df, score_cols, lab_col, fold_col)
     lscores <- nfold_list$scores
     llabels <- nfold_list$labels
@@ -209,8 +259,24 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
     if (missing(scores) || missing(labels)) {
       stop("'scores' and/or 'lables' are missing", call. = FALSE)
     }
-    lscores <- join_scores(scores, chklen = FALSE)
-    llabels <- join_labels(labels, chklen = FALSE)
+    new_multiclass <- .get_new_multiclass(multiclass, scores, labels)
+    if (new_multiclass == "ovr") {
+      # One binary dataset per class, carried on the model axis
+      if (!is.null(posclass)) {
+        warning("posclass is ignored when multiclass = 'ovr'", call. = FALSE)
+        posclass <- NULL
+      }
+      mc <- .expand_multiclass(scores, labels, modnames, dsids)
+      lscores <- mc[["scores"]]
+      llabels <- mc[["labels"]]
+      modnames <- mc[["modnames"]]
+      dsids <- mc[["dsids"]]
+      classes <- mc[["classes"]]
+      classnames <- mc[["classnames"]]
+    } else {
+      lscores <- join_scores(scores, chklen = FALSE)
+      llabels <- join_labels(labels, chklen = FALSE)
+    }
     if (is.null(expd_first)) {
       expd_first <- "modnames"
     }
@@ -255,6 +321,13 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
     nn = vapply(mmdat, function(m) attr(m, "nn"), numeric(1)),
     np = vapply(mmdat, function(m) attr(m, "np"), numeric(1))
   )
+  if (!is.null(classes)) {
+    # Third column, so that it reads next to the model name it stands in for
+    data.table::set(data_info, j = "classes", value = classes)
+    data.table::setcolorder(
+      data_info, c("modnames", "dsids", "classes", "nn", "np")
+    )
+  }
 
   # === Create an S3 object ===
   s3obj <- structure(mmdat, class = "mdat")
@@ -263,12 +336,14 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   attr(s3obj, "data_info") <- data_info
   attr(s3obj, "uniq_modnames") <- unique(new_modnames)
   attr(s3obj, "uniq_dsids") <- unique(new_dsids)
+  attr(s3obj, "classnames") <- classnames
   attr(s3obj, "args") <- list(
     posclass = posclass,
     na_worst = new_na_worst,
     ties_method = new_ties_method,
     expd_first = new_expd_first,
-    mode = new_mode
+    mode = new_mode,
+    multiclass = new_multiclass
   )
   attr(s3obj, "validated") <- FALSE
 
@@ -464,10 +539,13 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   # Validate class items and attributes
   item_names <- NULL
   attr_names <- c(
-    "data_info", "uniq_modnames", "uniq_dsids", "args",
+    "data_info", "uniq_modnames", "uniq_dsids", "classnames", "args",
     "validated"
   )
-  arg_names <- c("posclass", "na_worst", "ties_method", "expd_first", "mode")
+  arg_names <- c(
+    "posclass", "na_worst", "ties_method", "expd_first", "mode",
+    "multiclass"
+  )
   .validate_basic(
     x, "mdat", "mmdata", item_names, attr_names,
     arg_names
@@ -478,7 +556,13 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
     stop("Invalid modnames and dsids", call. = FALSE)
   }
 
-  # Chekc data consistency among the same dsids
+  # Chekc data consistency among the same dsids. One-vs-rest decompositions
+  # of the same dataset differ in their class balance by construction, so
+  # the check would fire on every multiclass object.
+  if (identical(attr(x, "args")[["multiclass"]], "ovr")) {
+    attr(x, "validated") <- TRUE
+    return(x)
+  }
   dsid_nn <- list()
   dsid_np <- list()
   for (i in seq_along(x)) {

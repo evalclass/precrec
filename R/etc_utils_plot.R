@@ -653,7 +653,9 @@ NULL
 
   if (curvetype == "ROC") {
     graphics::abline(a = 0, b = 1, col = "grey", lty = 3)
-  } else if (curvetype == "PRC") {
+  } else if (curvetype == "PRC" && pn_info$is_consistant) {
+    # One baseline only means something when every dataset shares a
+    # prevalence, which one-vs-rest decompositions do not
     graphics::abline(h = pn_info$prc_base, col = "grey", lty = 3)
   }
 

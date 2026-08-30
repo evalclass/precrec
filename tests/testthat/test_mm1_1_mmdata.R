@@ -59,10 +59,13 @@ test_that("check validaiton of mdat class", {
   mdat <- mm1_create_simple_mdat()
   item_names <- NULL
   attr_names <- c(
-    "data_info", "uniq_modnames", "uniq_dsids", "args",
+    "data_info", "uniq_modnames", "uniq_dsids", "classnames", "args",
     "validated"
   )
-  arg_names <- c("posclass", "na_worst", "ties_method", "expd_first", "mode")
+  arg_names <- c(
+    "posclass", "na_worst", "ties_method", "expd_first", "mode",
+    "multiclass"
+  )
 
   # Validated
   expect_silent(.validate_basic(

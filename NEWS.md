@@ -1,5 +1,32 @@
 # precrec 0.15.0
 
+* Support datasets with more than two classes, by one-vs-rest decomposition.
+  Pass a matrix with one score column per class together with the class
+  labels and `mmdata()` builds one binary problem per class, carried on the
+  model axis, so `evalmod()`, `plot()`, `autoplot()`, `as.data.frame()` and
+  the averaging all treat the classes as they would several models on one
+  test set. `mmdata()` and `evalmod()` gain a `multiclass` argument
+  (`"none"` or `"ovr"`), detected from the input when it is left unset;
+  binary input is read exactly as before. `auc()` gains a `macro` argument
+  and reports the macro-average of the per-class AUCs alongside them. The
+  new `C3N150` sample dataset is a 3-class example.
+
+  Each one-vs-rest decomposition has its own class balance, so the baseline
+  of a precision-recall curve differs from class to class. The plots now
+  leave that baseline out whenever the datasets do not share a prevalence,
+  rather than drawing one line that fits none of them.
+
+* Handle a dataset in which every label belongs to the same class instead of
+  stopping on it. `evalmod(mode = "basic")` now warns and calculates what
+  it can - accuracy and error rate are defined, specificity without
+  negatives and sensitivity without positives come back as `NA` - where it
+  used to stop. ROC and precision-recall curves remain undefined for such a
+  dataset, so `evalmod()` still stops by default; the new
+  `on_single_class = "na"` asks it to warn and return `NA` instead, so that
+  one degenerate fold of an n-fold run no longer aborts the whole
+  evaluation. `auc_ci()` and `prob_metrics_ci()` leave those `NA`s out of
+  the interval and report how many datasets it was built from.
+
 * Add five confusion-matrix measures to `evalmod(mode = "basic")`: balanced
   accuracy, negative predictive value, informedness (Youden's J), markedness,
   and Cohen's kappa. They are calculated in the same pass as the existing

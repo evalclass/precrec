@@ -103,6 +103,20 @@
 #'   The default `1` gives the F1 score. `beta` is effective only
 #'   when `mode` is set to `basic`.
 #'
+#' @param on_single_class A string that specifies what the `evalmod`
+#'   function does with a dataset in which every label belongs to the same
+#'   class.
+#'   \describe{
+#'     \item{"error"}{Raise an error (default)}
+#'     \item{"na"}{Warn, and return `NA` for the measures that
+#'                 are undefined}
+#'   }
+#'   ROC and precision-recall curves are undefined for such a dataset, so
+#'   `on_single_class` is effective only when `mode` is set to
+#'   `rocprc`, `prcroc`, or `aucroc`. `mode = "basic"` always
+#'   warns and calculates what it can, because accuracy and error rate are
+#'   still defined.
+#'
 #' @param interpolate A Boolean value to specify whether or not
 #'   interpolation of ROC and precision-recall curves are
 #'   performed. `x_bins` and `calc_avg` are
@@ -111,7 +125,8 @@
 #'   to `rocprc` or `prcroc`.
 #'
 #' @param ... These additional arguments are passed to [mmdata()]
-#'   for data preparation.
+#'   for data preparation. `multiclass = "ovr"` asks for a one-vs-rest
+#'   evaluation of a dataset with more than two classes; see [mmdata()].
 #'
 #' @return The `evalmod` function returns an `S3` object
 #'   that contains performance evaluation measures. The number of models and
@@ -323,14 +338,31 @@
 #' res1
 #' res2
 #'
+#'
+#' ##################################################
+#' ### Multiclass evaluation
+#' ###
+#'
+#' ## Load a 3-class dataset with one score column per class
+#' data(C3N150)
+#'
+#' ## Each class is evaluated against the rest
+#' mccurves <- evalmod(scores = C3N150$scores, labels = C3N150$labels)
+#' mccurves
+#'
+#' ## Per-class AUCs, plus their macro-average
+#' auc(mccurves)
+#'
 #' @export
 evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
                     modnames = NULL, dsids = NULL,
                     posclass = NULL, na_worst = TRUE, ties_method = "equiv",
                     calc_avg = TRUE, cb_alpha = 0.05, raw_curves = FALSE,
-                    x_bins = 1000, interpolate = TRUE, beta = 1, ...) {
+                    x_bins = 1000, interpolate = TRUE, beta = 1,
+                    on_single_class = "error", ...) {
   # Validation
   new_mode <- .get_new_mode(mode, mdat, "rocprc")
+  new_on_single_class <- .pmatch_on_single_class(on_single_class)
   new_ties_method <- .pmatch_tiesmethod(ties_method, ...)
   new_na_worst <- .get_new_naworst(na_worst, ...)
   if (x_bins == 0) {
@@ -339,7 +371,7 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
   .validate_evalmod_args(
     new_mode, modnames, dsids, posclass, new_na_worst,
     new_ties_method, calc_avg, cb_alpha, raw_curves,
-    x_bins, interpolate, beta
+    x_bins, interpolate, beta, new_on_single_class
   )
 
   # Create mdat if not provided
@@ -357,7 +389,7 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
     mode = new_mode, calc_avg = calc_avg, cb_alpha = cb_alpha,
     raw_curves = raw_curves, x_bins = x_bins, interpolate = interpolate,
     na_worst = new_na_worst, ties_method = new_ties_method, beta = beta,
-    validate = FALSE
+    on_single_class = new_on_single_class, validate = FALSE
   )
 }
 
@@ -400,7 +432,8 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
 .validate_evalmod_args <- function(mode, modnames, dsids,
                                    posclass, na_worst, ties_method,
                                    calc_avg, cb_alpha, raw_curves,
-                                   x_bins, interpolate, beta = 1) {
+                                   x_bins, interpolate, beta = 1,
+                                   on_single_class = "error") {
   # Check mode
   .validate_mode(mode)
 
@@ -438,4 +471,7 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
 
   # Check beta
   .validate_beta(beta)
+
+  # Check on_single_class
+  .validate_on_single_class(on_single_class)
 }

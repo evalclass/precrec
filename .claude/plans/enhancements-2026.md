@@ -111,6 +111,89 @@ unchanged by default:
 
 ---
 
+## E2. Multi-label (multiclass) support, including single-label — **XL** — **DONE (2026-08-31)**
+
+### Outcome
+
+Implemented on `feature/Multiclass`. One-vs-rest, classes on the model axis,
+exactly as decided below. Binary behaviour is unchanged: the whole existing
+suite passes untouched, and `mmdata()` reads binary input by the same path it
+always did.
+
+**The decomposition.** `R/mm5_expand_multiclass.R` turns an n x K score
+matrix and K-level labels into K binary (scores, labels) pairs before
+`reformat_data()` ever runs, so no C++ changed. Score columns are matched to
+classes by name when the column names name the classes, and by position
+otherwise. Class names come from a factor's levels when the labels are a
+factor, which keeps a class that is missing from one fold of a cross
+validation from disappearing along with it. Several score matrices are read
+as several datasets rather than several models, because the model axis is
+about to be spent on the classes; supply `modnames` to get `class:model`
+names instead.
+
+`multiclass` is detected from the input when unset: `"ovr"` when the labels
+hold more than two classes and the scores hold one column per class. That
+cannot change how any existing call is read, because labels with more than
+two classes were an outright error before.
+
+**Two things had to give.** `.validate.mdat()` checked that every dataset
+sharing a `dsid` had the same `np`/`nn`; one-vs-rest decompositions differ in
+class balance by construction, so the check is skipped for them. And the
+precision-recall baseline was drawn unconditionally even though
+`.get_pn_info()` already worked out whether the datasets share a prevalence -
+harmless while prevalence was always shared, wrong the moment it is not. Both
+plot backends now draw it only when `is_consistant`. That is the pitfall this
+package's own paper is about, so a line that fits none of the classes is
+worse than no line.
+
+**Macro-average.** `auc()` gained a `macro` argument, default `TRUE`, which
+appends the unweighted mean of the per-class AUCs per dataset and curve type
+under the model name `macro-average` (or `macro-average:<model>`). It is
+ignored for binary objects, so `auc()` on existing input is untouched.
+Classes that could not be evaluated carry NA and are left out of the mean.
+
+**Single-class datasets.** `mode = "basic"` warns and calculates rather than
+stopping: accuracy and error rate are defined, and specificity without
+negatives and sensitivity without positives come back as NA, which
+`calc_basic_measures()` already produced. The curve pipelines still stop by
+default, and `on_single_class = "na"` asks them to warn and hand back a
+placeholder instead - `.create_na_curves()` and `.create_na_uauc()`. A
+degenerate fold then keeps its row in `auc()` with NA in it rather than
+aborting the run, and `.calc_ci_stats()` drops those NAs and reports how many
+datasets the interval was actually built from.
+
+Worth recording: feeding the existing C++ curve builders a specificity column
+of NAs **segfaults**. That is unreachable from the package - the pipeline
+guard has always stood in front of it - which is why the placeholder is built
+in R rather than by relaxing the guard and letting `create_curves()` run.
+
+### Not done
+
+- **Micro-average** (decision c called it optional). Pooling the K
+  decompositions into one concatenated dataset would count every observation
+  K times, which is a different measure from what the macro rows report and
+  wants its own explanation. Left out rather than shipped half-explained.
+- **`auc_ci()` macro rows.** Per-class intervals come free, because the
+  classes are models. An interval around a macro-average is not the average
+  of the per-class intervals, so it needs its own estimator rather than a
+  row.
+- **Multiclass with `nfold_df`.** Rejected with an error that says to pass a
+  list of score matrices instead. `format_nfold()` is built around one score
+  column per model, and widening it is its own change.
+- **Faceting by class.** Classes are models, so the existing multi-model
+  rendering colours them already; a class-aware legend title would be
+  cosmetic.
+
+### Cost
+
+No measurable change on any benchmark. The rocprc and basic paths gained one
+`attr()` test each and a branch before the `mmdata()` loop. The 1e5 shapes
+straddle 1.0 across runs, which is the noise floor phase 6 documented, not a
+change: `evalmod_rocprc` on `nas_1e5` read 1.306 and then 1.098 on the same
+code, and `imbalanced_1e5` and `ties_1e5` read 0.89 in the same run.
+
+---
+
 ## E2. Multi-label (multiclass) support, including single-label — **XL**
 
 ### Current state
@@ -579,7 +662,7 @@ Ship Tier 1 (+ F-beta) and Tier 2 (Brier, log loss). Defer Tier 3.
 5. E3 steps 4–7        roxygen/cli/pkgdown    → mechanical, any time           [DONE]
 6. E4 optimizations    guided by benchmarks                            [DONE]
 7. E5 tiers 1–2        metrics on the new table plumbing         [DONE]
-8. E2                  multiclass             → largest, lands on modernized base
+8. E2                  multiclass             → largest, lands on modernized base [DONE]
 ```
 
 Rationale: E2 rewires input handling that E1/E5 touch — doing it last avoids

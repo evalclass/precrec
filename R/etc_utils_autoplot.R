@@ -806,10 +806,14 @@ NULL
     main <- "Precision-Recall"
   }
 
-  p <- p + ggplot2::geom_hline(
-    yintercept = pn_info$prc_base, colour = "grey",
-    linetype = 3
-  )
+  if (pn_info$is_consistant) {
+    # One baseline only means something when every dataset shares a
+    # prevalence, which one-vs-rest decompositions do not
+    p <- p + ggplot2::geom_hline(
+      yintercept = pn_info$prc_base, colour = "grey",
+      linetype = 3
+    )
+  }
   p <- .set_coords(p, xlim, ylim, ratio)
   p <- .geom_basic(p, main, "Recall", "Precision", show_legend)
 

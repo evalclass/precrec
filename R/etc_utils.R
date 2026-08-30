@@ -176,10 +176,22 @@
 # Shared by `auc_ci()` and `prob_metrics_ci()`: same normal or t interval,
 # differing only in where the measure is allowed to sit. A single dataset has
 # no spread to estimate, so the interval collapses onto the value itself.
+# `n` is the number of datasets the interval was built from, which is not the
+# number supplied when some of them could not be evaluated.
 #
 .calc_ci_stats <- function(values, alpha, dtype, lower = -Inf, upper = Inf) {
+  # A dataset that could not be evaluated - a fold holding a single class,
+  # say - carries NA. Leaving it out is what makes the interval a statement
+  # about the datasets that were evaluated; `n` counts those.
+  values <- values[!is.na(values)]
   val_mean <- mean(values)
   val_n <- length(values)
+  if (val_n == 0L) {
+    return(list(
+      mean = NA_real_, error = NA_real_,
+      lower_bound = NA_real_, upper_bound = NA_real_, n = 0L
+    ))
+  }
   if (val_n < 2) {
     return(list(
       mean = val_mean, error = 0,
@@ -200,6 +212,37 @@
     lower_bound = max(val_mean - val_error, lower),
     upper_bound = min(val_mean + val_error, upper),
     n = val_n
+  )
+}
+
+#
+# Is this a one-vs-rest decomposition of a multiclass dataset?
+#
+# The class column of `data_info` is what says so. It travels with the object
+# from `mmdata()` through the pipeline, which saves every result class an
+# attribute of its own.
+#
+.is_multiclass <- function(obj) {
+  "classes" %in% names(attr(obj, "data_info"))
+}
+
+#
+# Describe a dataset that holds only one class
+#
+# The three pipelines word the first sentence differently - what cannot be
+# calculated is not the same in each - but the rest of the message names the
+# dataset the same way.
+#
+.single_class_msg <- function(fmdat, what) {
+  if (attr(fmdat, "np") > 0) {
+    cl <- "positive"
+  } else {
+    cl <- "negative"
+  }
+
+  paste0(
+    what, " Only a single class (", cl, ") found in dataset (modname: ",
+    attr(fmdat, "modname"), ", dsid: ", attr(fmdat, "dsid"), ")."
   )
 }
 
