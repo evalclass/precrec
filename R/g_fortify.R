@@ -59,39 +59,23 @@ fortify.pevals <- function(model, ...) {
   # === Prepare a data frame for ggplot2 ===
   pb <- model[["basic"]]
   n <- length(pb[["error"]])
+
+  # The measures the object holds, plus the one derived column that has no
+  # place of its own in the table
+  mnames <- names(.basic_metric_names())
+  vals <- lapply(mnames, function(m) pb[[m]])
+  names(vals) <- mnames
+  vals[["1 - specificity"]] <- 1 - pb[["specificity"]]
+
+  # Kept where it has always sat, between specificity and precision
+  gnames <- append(mnames, "1 - specificity",
+    after = match("sensitivity", mnames)
+  )
+
   data.frame(
-    x = rep(1:n, 10),
-    y = c(
-      pb[["score"]], pb[["label"]],
-      pb[["error"]], pb[["accuracy"]],
-      pb[["specificity"]], pb[["sensitivity"]],
-      1 - pb[["specificity"]], pb[["precision"]],
-      pb[["mcc"]], pb[["fscore"]]
-    ),
-    group = factor(
-      c(
-        rep("score", n),
-        rep("label", n),
-        rep("error", n),
-        rep("accuracy", n),
-        rep("specificity", n),
-        rep("sensitivity", n),
-        rep("1 - specificity", n),
-        rep("precision", n),
-        rep("mcc", n),
-        rep("fscore", n)
-      ),
-      levels = c(
-        "score", "label",
-        "error", "accuracy",
-        "specificity",
-        "sensitivity",
-        "1 - specificity",
-        "precision",
-        "mcc",
-        "fscore"
-      )
-    )
+    x = rep(1:n, length(gnames)),
+    y = unlist(vals[gnames], use.names = FALSE),
+    group = factor(rep(gnames, each = n), levels = gnames)
   )
 }
 

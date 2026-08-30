@@ -91,6 +91,11 @@ print.beval_info <- function(x, ...) {
   cat("      prec:   precision\n")
   cat("      mcc:    Matthews correlation coefficient\n")
   cat("      fscore: F-score\n")
+  cat("      bacc:   balanced accuracy\n")
+  cat("      npv:    negative predictive value\n")
+  cat("      infm:   informedness (Youden's J)\n")
+  cat("      mkd:    markedness\n")
+  cat("      kappa:  Cohen's kappa\n")
   cat("\n\n")
 
   eval_summary <- .as_plain_df(attr(x, "eval_summary"), copy = TRUE)
@@ -102,10 +107,7 @@ print.beval_info <- function(x, ...) {
     "Model", "ID", "Meas.", "Min.",
     "1st Qu.", "Median", "Mean", "3rd Qu.", "Max."
   )
-  evaltypes <- c(
-    "rank", "score", "label", "err", "acc", "sp", "sn", "prec",
-    "mcc", "fscore"
-  )
+  evaltypes <- c("rank", unname(.basic_metric_names()))
   eval_summary[, "Meas."] <- evaltypes
 
   print.data.frame(eval_summary, print.gap = 1)

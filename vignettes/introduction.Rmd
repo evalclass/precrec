@@ -431,15 +431,20 @@ autoplot(cvcurves3)
 The `evalmod` function also calculates basic evaluation measures - error, 
 accuracy, specificity, sensitivity, and precision.
 
-Measure     Description 
------------ --------------------------
-      error Error rate
-   accuracy Accuracy
-specificity Specificity, TNR, 1 - FPR
-sensitivity Sensitivity, TPR, Recall
-  precision Precision, PPV
-        mcc Matthews correlation coefficient
-     fscore F-score
+Measure           Description 
+----------------- ----------------------------------
+            error Error rate
+         accuracy Accuracy
+      specificity Specificity, TNR, 1 - FPR
+      sensitivity Sensitivity, TPR, Recall
+        precision Precision, PPV
+              mcc Matthews correlation coefficient
+           fscore F-score, F-beta with `beta`
+balanced_accuracy Balanced accuracy
+              npv Negative predictive value
+     informedness Informedness, Youden's J
+       markedness Markedness
+            kappa Cohen's kappa
 
 ### Basic measure calculations
 The `mode = "basic"` option makes the `evalmod` function calculate the basic 
@@ -461,6 +466,16 @@ autoplot(mmpoins, c("specificity", "sensitivity", "precision"))
 
 # Show normalized ranks vs. Matthews correlation coefficient and F-score
 autoplot(mmpoins, c("mcc", "fscore"))
+
+# Show normalized ranks vs. balanced accuracy, informedness, and kappa
+autoplot(mmpoins, c("balanced_accuracy", "informedness", "kappa"))
+```
+
+The `fscore` measure is the F-beta score. It defaults to the F1 score, and
+the `beta` argument weights recall more or less heavily than precision.
+```{r}
+# F2 weights recall twice as heavily as precision
+mmpoins.f2 <- evalmod(mmmdat2, mode = "basic", beta = 2)
 ```
 
 #### Normalized ranks and predicted scores
@@ -608,7 +623,43 @@ autoplot(simcurves1)
 autoplot(simcurves2)
 ```
 
-## 13. Citation
+## 13. Probability-based metrics
+The Brier score and the log loss measure how close predicted probabilities are
+to the observed labels. Unlike ROC and precision-recall curves, they read the
+values of the scores rather than their ranks, so the scores must be
+probabilities between 0 and 1.
+
+### Brier score and log loss
+The `prob_metrics` function takes the same input as `evalmod` and returns a
+data frame with one row per model, dataset, and metric.
+
+```{r}
+# The "poor_er" and "good_er" samples are drawn from beta distributions
+psamps <- create_sim_samples(4, 100, 100, c("poor_er", "good_er"))
+pmdat <- mmdata(psamps[["scores"]], psamps[["labels"]],
+  modnames = psamps[["modnames"]], dsids = psamps[["dsids"]]
+)
+
+# Calculate the Brier score and the log loss
+pmetrics.df <- prob_metrics(pmdat)
+
+# Use knitr::kable to display the result in a table format
+knitr::kable(head(pmetrics.df))
+```
+
+### Confidence intervals
+The `prob_metrics_ci` function summarizes those per-dataset values into a
+confidence interval for each model and metric.
+
+```{r}
+# Calculate the confidence intervals
+pmetrics.ci <- prob_metrics_ci(pmdat)
+
+# Use knitr::kable to display the result in a table format
+knitr::kable(pmetrics.ci)
+```
+
+## 14. Citation
 *Precrec: fast and accurate precision-recall and ROC curve calculations in R*
 
 Takaya Saito; Marc Rehmsmeier
@@ -617,7 +668,7 @@ Bioinformatics 2017; 33 (1): 145-147.
 
 doi: [10.1093/bioinformatics/btw570](https://doi.org/10.1093/bioinformatics/btw570)
 
-## 14. External links
+## 15. External links
 - [Classifier evaluation with imbalanced datasets](https://classeval.wordpress.com/) - our web site that contains several pages with useful tips for performance evaluation on binary classifiers.
 
 - [The Precision-Recall Plot Is More Informative than the ROC Plot When Evaluating Binary Classifiers on Imbalanced Datasets](https://doi.org/10.1371/journal.pone.0118432) - our paper that summarized potential pitfalls of ROC plots with imbalanced datasets and advantages of using precision-recall plots instead.

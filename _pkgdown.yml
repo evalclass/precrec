@@ -38,6 +38,10 @@ reference:
   - title: Confidence interval of AUC scores
     contents:
     - auc_ci
+  - title: Probability-based metrics
+    contents:
+    - prob_metrics
+    - prob_metrics_ci
   - title: Datasets
     desc: P10N10, B500, B1000, IB500, IB1000 and M2N50F5
     contents:

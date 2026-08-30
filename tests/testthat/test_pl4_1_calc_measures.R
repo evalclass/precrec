@@ -144,6 +144,89 @@ test_that("calc_measures() reterns correct evaluation values", {
   expect_equal(pb[["fscore"]], c(0, 2 / 3, 0.5, 0.8, 2 / 3), tolerance = 1e-4)
 })
 
+test_that("calc_measures() returns correct confusion-matrix measures", {
+  pevals <- calc_measures(
+    scores = c(0.1, 0.2, 0, 0.3),
+    labels = c(1, 0, 0, 1)
+  )
+  pb <- pevals[["basic"]]
+
+  #   "TPs" c(0, 1, 1, 2, 2)
+  #   "FNs" c(2, 1, 1, 0, 0)
+  #   "FPs" c(0, 0, 1, 1, 2)
+  #   "TNs" c(2, 2, 1, 1, 0)
+  expect_equal(pb[["balanced_accuracy"]], c(0.5, 0.75, 0.5, 0.75, 0.5))
+
+  # The last rank predicts nothing negative, so its NPV comes from the rank
+  # before it, the way the first rank's precision does
+  expect_equal(pb[["npv"]], c(0.5, 2 / 3, 0.5, 1, 1), tolerance = 1e-4)
+  expect_equal(pb[["informedness"]], c(0, 0.5, 0, 0.5, 0))
+  expect_equal(pb[["markedness"]], c(0.5, 2 / 3, 0, 2 / 3, 0.5),
+    tolerance = 1e-4
+  )
+  expect_equal(pb[["kappa"]], c(0, 0.5, 0, 0.5, 0))
+})
+
+test_that("calc_measures() handles imbalanced labels", {
+  pevals <- calc_measures(
+    scores = c(0.1, 0.2, 0, 0.3, 0.5),
+    labels = c(1, 0, 0, 0, 0)
+  )
+  pb <- pevals[["basic"]]
+
+  # 1 positive and 4 negatives, so chance agreement is high and kappa parts
+  # company with informedness
+  expect_equal(pb[["balanced_accuracy"]],
+    c(0.5, 0.375, 0.25, 0.125, 0.625, 0.5)
+  )
+  expect_equal(pb[["npv"]], c(0.8, 0.75, 2 / 3, 0.5, 1, 1), tolerance = 1e-4)
+  expect_equal(pb[["informedness"]], c(0, -0.25, -0.5, -0.75, 0.25, 0))
+  expect_equal(pb[["markedness"]],
+    c(-0.2, -0.25, -1 / 3, -0.5, 0.25, 0.2),
+    tolerance = 1e-4
+  )
+  expect_equal(pb[["kappa"]],
+    c(0, -0.25, -0.3636364, -0.4285714, 0.1176471, 0),
+    tolerance = 1e-4
+  )
+})
+
+test_that("calc_measures() takes the beta of the F-beta score", {
+  sc <- c(0.1, 0.2, 0, 0.3)
+  lb <- c(1, 0, 0, 1)
+  pb1 <- calc_measures(scores = sc, labels = lb)[["basic"]]
+  pb2 <- calc_measures(scores = sc, labels = lb, beta = 1)[["basic"]]
+  pb3 <- calc_measures(scores = sc, labels = lb, beta = 2)[["basic"]]
+
+  # beta = 1 is the F1 score the function has always returned
+  expect_equal(pb1[["fscore"]], pb2[["fscore"]])
+  expect_equal(pb3[["fscore"]],
+    c(0, 5 / 9, 0.5, 10 / 11, 5 / 6),
+    tolerance = 1e-4
+  )
+
+  # Only the F-score depends on beta
+  expect_equal(pb1[["precision"]], pb3[["precision"]])
+  expect_equal(pb1[["sensitivity"]], pb3[["sensitivity"]])
+})
+
+test_that("'beta' must be a single non-negative finite number", {
+  sc <- c(0.1, 0.2, 0, 0.3)
+  lb <- c(1, 0, 0, 1)
+  expect_error(calc_measures(scores = sc, labels = lb, beta = -1),
+    class = "precrec_error_invalid_beta"
+  )
+  expect_error(calc_measures(scores = sc, labels = lb, beta = "1"),
+    class = "precrec_error_invalid_beta"
+  )
+  expect_error(calc_measures(scores = sc, labels = lb, beta = c(1, 2)),
+    class = "precrec_error_invalid_beta"
+  )
+  expect_error(calc_measures(scores = sc, labels = lb, beta = Inf),
+    class = "precrec_error_invalid_beta"
+  )
+})
+
 pl4_create_ms_dat <- function() {
   s1 <- c(1, 2, 3, 4)
   s2 <- c(5, 6, 7, 8)

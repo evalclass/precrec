@@ -29,8 +29,8 @@ calc_uauc_frank <- function(np, nn, scores, olabs, na_last, ties_method, frank) 
     .Call(`_precrec_calc_uauc_frank`, np, nn, scores, olabs, na_last, ties_method, frank)
 }
 
-calc_basic_measures <- function(np, nn, tps, fps, tns, fns) {
-    .Call(`_precrec_calc_basic_measures`, np, nn, tps, fps, tns, fns)
+calc_basic_measures <- function(np, nn, tps, fps, tns, fns, beta = 1.0, extra_measures = TRUE) {
+    .Call(`_precrec_calc_basic_measures`, np, nn, tps, fps, tns, fns, beta, extra_measures)
 }
 
 create_roc_curve <- function(tps, fps, sp, sn, x_bins) {
@@ -51,5 +51,9 @@ calc_avg_curve <- function(curves, x_bins, ci_q) {
 
 calc_avg_points <- function(points, ci_q) {
     .Call(`_precrec_calc_avg_points`, points, ci_q)
+}
+
+calc_prob_metrics <- function(scores, labels, eps) {
+    .Call(`_precrec_calc_prob_metrics`, scores, labels, eps)
 }
 

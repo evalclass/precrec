@@ -429,6 +429,29 @@
 }
 
 #
+# Validate beta of the F-beta score
+#
+.validate_beta <- function(beta) {
+  if (!is.null(beta) && all(!is.na(beta))) {
+    .assert_number(beta, "beta", min = 0)
+    if (is.infinite(beta)) {
+      .stop_invalid_arg("{.arg beta} must be finite.", arg = "beta")
+    }
+  }
+
+  invisible(TRUE)
+}
+
+#
+# Validate eps of the log loss
+#
+.validate_eps <- function(eps) {
+  .assert_number(eps, "eps", min = 0, max = 0.5)
+
+  invisible(TRUE)
+}
+
+#
 # Validate score column names
 #
 .validate_score_cols <- function(score_cols, nfold_df) {
@@ -537,14 +560,8 @@
     }
   }
   roc_prc <- cfunc(curvetype, c("ROC", "PRC"), 2)
-  basic_eval <- cfunc(
-    curvetype, c(
-      "score", "label", "error", "accuracy",
-      "specificity", "sensitivity", "precision",
-      "mcc", "fscore"
-    ),
-    9
-  )
+  basic_names <- names(.basic_metric_names())
+  basic_eval <- cfunc(curvetype, basic_names, length(basic_names))
 
   if (!roc_prc && !basic_eval) {
     stop("Invalid curvetype", call. = FALSE)

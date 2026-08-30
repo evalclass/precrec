@@ -30,7 +30,8 @@
 #'     \item{"prcroc"}{Same as above}
 #'     \item{"basic"}{Normalized ranks vs. accuracy, error rate, specificity,
 #'                    sensitivity, precision, Matthews correlation coefficient,
-#'                    and F-score. }
+#'                    F-score, balanced accuracy, negative predictive value,
+#'                    informedness, markedness, and Cohen's kappa. }
 #'     \item{"aucroc"}{Fast AUC(ROC) calculation with the U statistic}
 #'   }
 #'
@@ -97,6 +98,11 @@
 #'   the supporting points are calculated. `x_bins` is effective only
 #'   when `mode` is set to `rocprc` or `prcroc`.
 #'
+#' @param beta A numeric value to specify the beta of the F-beta score,
+#'   which weights recall `beta` times as heavily as precision.
+#'   The default `1` gives the F1 score. `beta` is effective only
+#'   when `mode` is set to `basic`.
+#'
 #' @param interpolate A Boolean value to specify whether or not
 #'   interpolation of ROC and precision-recall curves are
 #'   performed. `x_bins` and `calc_avg` are
@@ -133,8 +139,10 @@
 #' 2. The `evalmod` function returns one of the following `S3`
 #'
 #'    objects when `mode` is "basic".
-#'    They contain five different basic evaluation measures; error rate,
-#'    accuracy, specificity, sensitivity, and precision.
+#'    They contain the per-rank basic evaluation measures; error rate,
+#'    accuracy, specificity, sensitivity, precision, Matthews correlation
+#'    coefficient, F-score, balanced accuracy, negative predictive value,
+#'    informedness, markedness, and Cohen's kappa.
 #'
 #'    | **`S3` object** | **# of models** | **# of test datasets** |
 #'    |-----------------|-----------------|------------------------|
@@ -320,7 +328,7 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
                     modnames = NULL, dsids = NULL,
                     posclass = NULL, na_worst = TRUE, ties_method = "equiv",
                     calc_avg = TRUE, cb_alpha = 0.05, raw_curves = FALSE,
-                    x_bins = 1000, interpolate = TRUE, ...) {
+                    x_bins = 1000, interpolate = TRUE, beta = 1, ...) {
   # Validation
   new_mode <- .get_new_mode(mode, mdat, "rocprc")
   new_ties_method <- .pmatch_tiesmethod(ties_method, ...)
@@ -331,7 +339,7 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
   .validate_evalmod_args(
     new_mode, modnames, dsids, posclass, new_na_worst,
     new_ties_method, calc_avg, cb_alpha, raw_curves,
-    x_bins, interpolate
+    x_bins, interpolate, beta
   )
 
   # Create mdat if not provided
@@ -348,7 +356,7 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
   pl_main(mdat,
     mode = new_mode, calc_avg = calc_avg, cb_alpha = cb_alpha,
     raw_curves = raw_curves, x_bins = x_bins, interpolate = interpolate,
-    na_worst = new_na_worst, ties_method = new_ties_method,
+    na_worst = new_na_worst, ties_method = new_ties_method, beta = beta,
     validate = FALSE
   )
 }
@@ -392,7 +400,7 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
 .validate_evalmod_args <- function(mode, modnames, dsids,
                                    posclass, na_worst, ties_method,
                                    calc_avg, cb_alpha, raw_curves,
-                                   x_bins, interpolate) {
+                                   x_bins, interpolate, beta = 1) {
   # Check mode
   .validate_mode(mode)
 
@@ -427,4 +435,7 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
 
   # Check interpolate
   .validate_interpolate(interpolate)
+
+  # Check beta
+  .validate_beta(beta)
 }

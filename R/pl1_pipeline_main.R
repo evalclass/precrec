@@ -3,13 +3,14 @@
 #
 pl_main <- function(mdat, mode = "rocprc", calc_avg = TRUE, cb_alpha = 0.05,
                     raw_curves = FALSE, x_bins = 1000, interpolate = TRUE,
-                    na_worst = TRUE, ties_method = "equiv", validate = TRUE) {
+                    na_worst = TRUE, ties_method = "equiv", beta = 1,
+                    validate = TRUE) {
   # === Validation ===
   new_mode <- .pmatch_mode(mode)
   if (validate) {
     .validate_pl_main_args(
       mdat, new_mode, calc_avg, cb_alpha, raw_curves,
-      x_bins, interpolate
+      x_bins, interpolate, beta
     )
   }
 
@@ -27,7 +28,7 @@ pl_main <- function(mdat, mode = "rocprc", calc_avg = TRUE, cb_alpha = 0.05,
   } else if (new_mode == "basic") {
     .pl_main_basic(mdat, model_type, dataset_type, class_name_pf,
       calc_avg = calc_avg, cb_alpha = cb_alpha,
-      raw_curves = raw_curves
+      raw_curves = raw_curves, beta = beta
     )
   } else if (new_mode == "aucroc") {
     .pl_main_aucroc(mdat, model_type, dataset_type, class_name_pf,
@@ -73,7 +74,7 @@ pl_main <- function(mdat, mode = "rocprc", calc_avg = TRUE, cb_alpha = 0.05,
 # Validate arguments of pl_main
 #
 .validate_pl_main_args <- function(mdat, mode, calc_avg, cb_alpha, raw_curves,
-                                   x_bins, interpolate) {
+                                   x_bins, interpolate, beta = 1) {
   # Validate mdat
   .validate(mdat)
   if (mode != "aucroc" && !is.null(mdat) && length(mdat) > 0 &&
@@ -100,6 +101,9 @@ pl_main <- function(mdat, mode = "rocprc", calc_avg = TRUE, cb_alpha = 0.05,
 
   # Check interpolate
   .validate_interpolate(interpolate)
+
+  # Check beta
+  .validate_beta(beta)
 }
 
 #

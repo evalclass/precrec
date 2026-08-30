@@ -97,23 +97,7 @@ auc_ci.aucs <- function(curves, alpha = 0.05, dtype = "normal") {
     )
   }
   .assert_number(alpha, "alpha", min = 0, max = 1)
-  .assert_string(dtype, "dtype")
-
-  # Check type of distribution
-  dtype_tab <- c("normal", "z", "t")
-  dype_match <- pmatch(tolower(dtype), dtype_tab)
-  if (!is.na(dype_match)) {
-    dtype <- dtype_tab[dype_match]
-  }
-  if (!(dtype %in% dtype_tab)) {
-    .stop_invalid_arg(
-      paste(
-        "{.arg dtype} must be one of {.or {.val {dtype_tab}}},",
-        "not {.val {dtype}}."
-      ),
-      arg = "dtype"
-    )
-  }
+  dtype <- .pmatch_dtype(dtype)
 
   # Get AUC scores. A plain data frame view, so the row subsetting below
   # keeps base semantics - inside `[.data.table` the `i` expression would
@@ -130,42 +114,19 @@ auc_ci.aucs <- function(curves, alpha = 0.05, dtype = "normal") {
     for (curvetype in uniq_curvetype) {
       aucs_subset <- auc_mod[auc_mod$curvetypes == curvetype, ]
 
-      # Prepare for CI calculation
-      aucs_mean <- mean(aucs_subset$aucs)
-      aucs_n <- length(aucs_subset$aucs)
-      if (aucs_n < 2) {
-        ci_parts[[length(ci_parts) + 1L]] <- data.table::data.table(
-          modnames = modname,
-          curvetypes = curvetype,
-          mean = aucs_mean,
-          error = 0,
-          lower_bound = aucs_mean,
-          upper_bound = aucs_mean,
-          n = aucs_n
-        )
-        next
-      }
-      aucs_sd <- sd(aucs_subset$aucs)
-
-      # Calculate CI
-      if (dtype == "normal" || dtype == "z") {
-        aucs_q <- qnorm(1 - (alpha / 2))
-      } else if (dtype == "t") {
-        aucs_q <- qt(1 - (alpha / 2), df = aucs_n - 1)
-      }
-
-      aucs_error <- aucs_q * aucs_sd / sqrt(aucs_n)
-      acus_lower <- max(aucs_mean - aucs_error, 0.0)
-      acus_upper <- min(aucs_mean + aucs_error, 1.0)
+      # AUCs cannot leave [0, 1], so the interval is clipped to it
+      ci <- .calc_ci_stats(aucs_subset$aucs, alpha, dtype,
+        lower = 0, upper = 1
+      )
 
       ci_parts[[length(ci_parts) + 1L]] <- data.table::data.table(
         modnames = modname,
         curvetypes = curvetype,
-        mean = aucs_mean,
-        error = aucs_error,
-        lower_bound = acus_lower,
-        upper_bound = acus_upper,
-        n = aucs_n
+        mean = ci[["mean"]],
+        error = ci[["error"]],
+        lower_bound = ci[["lower_bound"]],
+        upper_bound = ci[["upper_bound"]],
+        n = ci[["n"]]
       )
     }
   }

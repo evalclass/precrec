@@ -53,16 +53,60 @@
 }
 
 #
+# Map the basic evaluation measures to their internal short names
+#
+# One ordered list, used everywhere a measure is named: the columns the C++
+# layer returns, the slots of the points object, the rows of the summary
+# `print` shows, and the default panels of `plot()` and `autoplot()`. Keeping
+# it in one place is what stops those from drifting apart when a measure is
+# added.
+#
+.basic_metric_names <- function() {
+  c(
+    score = "score", label = "label", error = "err",
+    accuracy = "acc", specificity = "sp", sensitivity = "sn",
+    precision = "prec", mcc = "mcc", fscore = "fscore",
+    balanced_accuracy = "bacc", npv = "npv",
+    informedness = "infm", markedness = "mkd", kappa = "kappa"
+  )
+}
+
+#
+# Measures that run from -1 to 1 rather than from 0 to 1
+#
+# They share an axis range and an aspect ratio in the plots, so the plotting
+# helpers ask this rather than each carrying its own list.
+#
+.is_signed_metric <- function(curvetype) {
+  curvetype %in% c("label", "mcc", "informedness", "markedness", "kappa")
+}
+
+#
+# Get the plot title of a basic evaluation measure
+#
+# Capitalising the name covers most of them; the rest are acronyms or need
+# the units spelled out.
+#
+.get_metric_title <- function(curvetype) {
+  titles <- c(
+    label = "Label (1:pos, -1:neg)", mcc = "MCC", npv = "NPV",
+    balanced_accuracy = "Balanced accuracy"
+  )
+  if (curvetype %in% names(titles)) {
+    return(unname(titles[curvetype]))
+  }
+
+  paste0(toupper(substring(curvetype, 1, 1)), substring(curvetype, 2))
+}
+
+#
 # Get names of evaluation metrics
 #
 .get_metric_names <- function(mode) {
   if (mode == "rocprc" || mode == "prcroc") {
     mnames <- c("ROC", "PRC")
   } else if (mode == "basic") {
-    mnames <- c(
-      "score", "label", "error", "accuracy", "specificity",
-      "sensitivity", "precision", "mcc", "fscore"
-    )
+    mnames <- names(.basic_metric_names())
   }
 
   mnames
@@ -100,6 +144,81 @@
     return(NULL)
   }
   data.table::rbindlist(parts)
+}
+
+#
+# Check partial match - distribution used for a CI calculation
+#
+.pmatch_dtype <- function(dtype) {
+  .assert_string(dtype, "dtype")
+
+  dtype_tab <- c("normal", "z", "t")
+  dtype_match <- pmatch(tolower(dtype), dtype_tab)
+  if (!is.na(dtype_match)) {
+    dtype <- dtype_tab[dtype_match]
+  }
+  if (!(dtype %in% dtype_tab)) {
+    .stop_invalid_arg(
+      paste(
+        "{.arg dtype} must be one of {.or {.val {dtype_tab}}},",
+        "not {.val {dtype}}."
+      ),
+      arg = "dtype", .envir = environment()
+    )
+  }
+
+  dtype
+}
+
+#
+# Calculate a confidence interval of per-dataset values
+#
+# Shared by `auc_ci()` and `prob_metrics_ci()`: same normal or t interval,
+# differing only in where the measure is allowed to sit. A single dataset has
+# no spread to estimate, so the interval collapses onto the value itself.
+#
+.calc_ci_stats <- function(values, alpha, dtype, lower = -Inf, upper = Inf) {
+  val_mean <- mean(values)
+  val_n <- length(values)
+  if (val_n < 2) {
+    return(list(
+      mean = val_mean, error = 0,
+      lower_bound = val_mean, upper_bound = val_mean, n = val_n
+    ))
+  }
+
+  if (dtype == "t") {
+    val_q <- qt(1 - (alpha / 2), df = val_n - 1)
+  } else {
+    val_q <- qnorm(1 - (alpha / 2))
+  }
+  val_error <- val_q * sd(values) / sqrt(val_n)
+
+  list(
+    mean = val_mean,
+    error = val_error,
+    lower_bound = max(val_mean - val_error, lower),
+    upper_bound = min(val_mean + val_error, upper),
+    n = val_n
+  )
+}
+
+#
+# Number of columns of a multi-panel figure
+#
+# Shared by the base-R and the ggplot2 sides so that a set of measures is
+# laid out the same way whichever one draws it.
+#
+.get_plot_ncol <- function(nplots) {
+  if (nplots <= 3) {
+    nplots
+  } else if (nplots == 4) {
+    2
+  } else if (nplots <= 9) {
+    3
+  } else {
+    4
+  }
 }
 
 #

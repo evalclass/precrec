@@ -115,8 +115,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // calc_basic_measures
-Rcpp::List calc_basic_measures(int np, int nn, const Rcpp::NumericVector& tps, const Rcpp::NumericVector& fps, const Rcpp::NumericVector& tns, const Rcpp::NumericVector& fns);
-RcppExport SEXP _precrec_calc_basic_measures(SEXP npSEXP, SEXP nnSEXP, SEXP tpsSEXP, SEXP fpsSEXP, SEXP tnsSEXP, SEXP fnsSEXP) {
+Rcpp::List calc_basic_measures(int np, int nn, const Rcpp::NumericVector& tps, const Rcpp::NumericVector& fps, const Rcpp::NumericVector& tns, const Rcpp::NumericVector& fns, double beta, bool extra_measures);
+RcppExport SEXP _precrec_calc_basic_measures(SEXP npSEXP, SEXP nnSEXP, SEXP tpsSEXP, SEXP fpsSEXP, SEXP tnsSEXP, SEXP fnsSEXP, SEXP betaSEXP, SEXP extra_measuresSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -126,7 +126,9 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type fps(fpsSEXP);
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type tns(tnsSEXP);
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type fns(fnsSEXP);
-    rcpp_result_gen = Rcpp::wrap(calc_basic_measures(np, nn, tps, fps, tns, fns));
+    Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< bool >::type extra_measures(extra_measuresSEXP);
+    rcpp_result_gen = Rcpp::wrap(calc_basic_measures(np, nn, tps, fps, tns, fns, beta, extra_measures));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -197,6 +199,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// calc_prob_metrics
+Rcpp::List calc_prob_metrics(const Rcpp::NumericVector& scores, const Rcpp::IntegerVector& labels, double eps);
+RcppExport SEXP _precrec_calc_prob_metrics(SEXP scoresSEXP, SEXP labelsSEXP, SEXP epsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type scores(scoresSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type labels(labelsSEXP);
+    Rcpp::traits::input_parameter< double >::type eps(epsSEXP);
+    rcpp_result_gen = Rcpp::wrap(calc_prob_metrics(scores, labels, eps));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_precrec_convert_curve_df", (DL_FUNC) &_precrec_convert_curve_df, 8},
@@ -206,12 +221,13 @@ static const R_CallMethodDef CallEntries[] = {
     {"_precrec_create_confusion_matrices", (DL_FUNC) &_precrec_create_confusion_matrices, 3},
     {"_precrec_calc_uauc", (DL_FUNC) &_precrec_calc_uauc, 6},
     {"_precrec_calc_uauc_frank", (DL_FUNC) &_precrec_calc_uauc_frank, 7},
-    {"_precrec_calc_basic_measures", (DL_FUNC) &_precrec_calc_basic_measures, 6},
+    {"_precrec_calc_basic_measures", (DL_FUNC) &_precrec_calc_basic_measures, 8},
     {"_precrec_create_roc_curve", (DL_FUNC) &_precrec_create_roc_curve, 5},
     {"_precrec_create_prc_curve", (DL_FUNC) &_precrec_create_prc_curve, 5},
     {"_precrec_calc_auc", (DL_FUNC) &_precrec_calc_auc, 2},
     {"_precrec_calc_avg_curve", (DL_FUNC) &_precrec_calc_avg_curve, 3},
     {"_precrec_calc_avg_points", (DL_FUNC) &_precrec_calc_avg_points, 2},
+    {"_precrec_calc_prob_metrics", (DL_FUNC) &_precrec_calc_prob_metrics, 3},
     {NULL, NULL, 0}
 };
 

@@ -49,6 +49,11 @@
 #'    | precision     | Normalized ranks vs. precision                        |
 #'    | mcc           | Normalized ranks vs. Matthews correlation coefficient |
 #'    | fscore        | Normalized ranks vs. F-score                          |
+#'    | balanced_accuracy | Normalized ranks vs. balanced accuracy            |
+#'    | npv           | Normalized ranks vs. negative predictive value        |
+#'    | informedness  | Normalized ranks vs. informedness (Youden's J)        |
+#'    | markedness    | Normalized ranks vs. markedness                       |
+#'    | kappa         | Normalized ranks vs. Cohen's kappa                    |
 #'
 #'    Multiple `curvetype` can be combined, such as
 #'    `c("precision", "sensitivity")`.
@@ -549,11 +554,7 @@ NULL
 # Combine ROC and Precision-Recall plots by grid and gridExtra
 #
 .combine_plots_grid <- function(..., show_legend, ret_grob, nplots) {
-  if (nplots == 2 || nplots == 4) {
-    ncol <- 2
-  } else {
-    ncol <- 3
-  }
+  ncol <- .get_plot_ncol(nplots)
 
   if (show_legend) {
     grobframe <- .grid_arrange_shared_legend(..., main_ncol = ncol)
@@ -575,11 +576,7 @@ NULL
 .combine_plots_patchwork <- function(..., show_legend) {
   plotlist <- list(...)
 
-  if (length(plotlist) == 2 || length(plotlist) == 4) {
-    ncol <- 2
-  } else {
-    ncol <- 3
-  }
+  ncol <- .get_plot_ncol(length(plotlist))
 
   p <- patchwork::wrap_plots(plotlist, ncol = ncol)
   if (show_legend) {
@@ -717,7 +714,7 @@ NULL
   } else if (curvetype == "PRC") {
     xlim <- attr(object[["prcs"]], "xlim")
     ylim <- attr(object[["prcs"]], "ylim")
-  } else if (curvetype == "mcc" || curvetype == "label") {
+  } else if (.is_signed_metric(curvetype)) {
     xlim <- c(0, 1)
     ylim <- c(-1, 1)
     ratio <- 0.5
@@ -838,13 +835,7 @@ NULL
 .geom_basic_point <- function(p, object, show_legend = TRUE,
                               curve_df = curve_df, xlim, ylim, ratio, ...) {
   s <- curve_df[["curvetype"]][1]
-  if (s == "mcc") {
-    main <- "MCC"
-  } else if (s == "label") {
-    main <- "Label (1:pos, -1:neg)"
-  } else {
-    main <- paste0(toupper(substring(s, 1, 1)), substring(s, 2))
-  }
+  main <- .get_metric_title(s)
   p <- .set_coords(p, xlim, ylim, ratio)
   p <- .geom_basic(p, main, "normalized rank", s, show_legend)
 

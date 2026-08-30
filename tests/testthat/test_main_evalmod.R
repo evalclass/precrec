@@ -151,3 +151,60 @@ test_that("evalmod() ranks NAs as 'na_worst' requests for negative scores", {
     curvetypes == "ROC"
   )[["aucs"]], 2 / 3, tolerance = 1e-4)
 })
+
+test_that("evalmod() passes 'beta' through to the F-beta score", {
+  data(P10N10)
+  pfunc <- function(beta) {
+    points <- evalmod(
+      mode = "basic", scores = P10N10$scores,
+      labels = P10N10$labels, beta = beta
+    )
+    as.data.frame(points)
+  }
+
+  df1 <- pfunc(1)
+  df2 <- pfunc(2)
+
+  # Only the F-score moves
+  expect_equal(
+    df1[df1$type != "fscore", "y"],
+    df2[df2$type != "fscore", "y"]
+  )
+  expect_false(isTRUE(all.equal(
+    df1[df1$type == "fscore", "y"],
+    df2[df2$type == "fscore", "y"]
+  )))
+})
+
+test_that("evalmod() returns the new confusion-matrix measures", {
+  data(P10N10)
+  points <- evalmod(
+    mode = "basic", scores = P10N10$scores,
+    labels = P10N10$labels
+  )
+  df <- as.data.frame(points)
+
+  expect_true(all(
+    c(
+      "balanced_accuracy", "npv", "informedness", "markedness", "kappa"
+    ) %in% levels(df[["type"]])
+  ))
+})
+
+test_that("'beta' must be a single non-negative finite number", {
+  data(P10N10)
+  expect_err <- function(beta) {
+    expect_error(
+      evalmod(
+        mode = "basic", scores = P10N10$scores,
+        labels = P10N10$labels, beta = beta
+      ),
+      class = "precrec_error_invalid_beta"
+    )
+  }
+
+  expect_err(-1)
+  expect_err("1")
+  expect_err(c(1, 2))
+  expect_err(Inf)
+})

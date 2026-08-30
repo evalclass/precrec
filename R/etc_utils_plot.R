@@ -52,6 +52,11 @@
 #'    | precision     | Normalized ranks vs. precision                        |
 #'    | mcc           | Normalized ranks vs. Matthews correlation coefficient |
 #'    | fscore        | Normalized ranks vs. F-score                          |
+#'    | balanced_accuracy | Normalized ranks vs. balanced accuracy            |
+#'    | npv           | Normalized ranks vs. negative predictive value        |
+#'    | informedness  | Normalized ranks vs. informedness (Youden's J)        |
+#'    | markedness    | Normalized ranks vs. markedness                       |
+#'    | kappa         | Normalized ranks vs. Cohen's kappa                    |
 #'
 #'    Multiple `curvetype` can be combined, such as
 #'    `c("precision", "sensitivity")`.
@@ -303,6 +308,32 @@ NULL
         return("fscore")
       }
 
+      # After "mcc": a bare "m" has always meant MCC, and "matthews" is the
+      # longer of the two, so markedness only takes over from "mar" onwards
+      if (!is.na(pmatch(sval, "markedness"))) {
+        return("markedness")
+      }
+
+      if (!is.na(pmatch(sval, "balanced accuracy")) ||
+        !is.na(pmatch(sval, "balanced_accuracy")) || sval == "bacc") {
+        return("balanced_accuracy")
+      }
+
+      if (!is.na(pmatch(sval, "npv")) ||
+        !is.na(pmatch(sval, "negative predictive value"))) {
+        return("npv")
+      }
+
+      if (!is.na(pmatch(sval, "informedness")) ||
+        !is.na(pmatch(sval, "youden"))) {
+        return("informedness")
+      }
+
+      if (!is.na(pmatch(sval, "kappa")) ||
+        !is.na(pmatch(sval, "cohen's kappa"))) {
+        return("kappa")
+      }
+
       if (!is.na(pmatch(sval, "score"))) {
         return("score")
       }
@@ -435,49 +466,24 @@ NULL
 # Set layout
 #
 .set_layout <- function(ctype_len, show_legend) {
-  if (ctype_len == 1) {
-    nrow1 <- 2
-    ncol1 <- 1
-    mat1 <- c(1, 2)
-    mat2 <- 1
-    heights <- c(0.85, 0.15)
-  } else if (ctype_len == 2) {
-    nrow1 <- 2
-    ncol1 <- 2
-    mat1 <- c(1, 2, 3, 3)
-    mat2 <- c(1, 2)
-    heights <- c(0.85, 0.15)
-  } else if (ctype_len == 3) {
-    nrow1 <- 2
-    ncol1 <- 3
-    mat1 <- c(1, 2, 3, 4, 4, 4)
-    mat2 <- c(1, 2, 3)
-    heights <- c(0.85, 0.15)
-  } else if (ctype_len == 4) {
-    nrow1 <- 3
-    ncol1 <- 2
-    mat1 <- c(1, 2, 3, 4, 5, 5)
-    mat2 <- c(1, 2, 3, 4)
-    heights <- c(0.425, 0.425, 0.15)
-  } else if (ctype_len == 5 || ctype_len == 6) {
-    nrow1 <- 3
-    ncol1 <- 3
-    mat1 <- c(1, 2, 3, 4, 5, 6, 7, 7, 7)
-    mat2 <- c(1, 2, 3, 4, 5, 6)
-    heights <- c(0.425, 0.425, 0.15)
-  } else if (ctype_len == 7 || ctype_len == 8 || ctype_len == 9) {
-    nrow1 <- 4
-    ncol1 <- 3
-    mat1 <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10)
-    mat2 <- c(1, 2, 3, 4, 5, 6, 7, 8, 9)
-    heights <- c(0.28, 0.28, 0.28, 0.16)
-  }
+  # The panels fill a grid row by row; the legend, when shown, gets a strip of
+  # its own underneath. A grid with more cells than panels leaves the spare
+  # cells empty, which is what happens for e.g. five measures in two rows.
+  ncol1 <- .get_plot_ncol(ctype_len)
+  nrow_p <- ceiling(ctype_len / ncol1)
+  cells <- seq_len(nrow_p * ncol1)
 
   if (show_legend) {
-    m <- matrix(mat1, nrow = nrow1, ncol = ncol1, byrow = TRUE)
-    graphics::layout(mat = m, heights = heights)
+    legend_h <- 0.15
+    m <- matrix(c(cells, rep(length(cells) + 1, ncol1)),
+      nrow = nrow_p + 1, ncol = ncol1, byrow = TRUE
+    )
+    graphics::layout(
+      mat = m,
+      heights = c(rep((1 - legend_h) / nrow_p, nrow_p), legend_h)
+    )
   } else {
-    m <- matrix(mat2, nrow = nrow1 - 1, ncol = ncol1, byrow = TRUE)
+    m <- matrix(cells, nrow = nrow_p, ncol = ncol1, byrow = TRUE)
     graphics::layout(mat = m)
   }
 }
@@ -671,22 +677,8 @@ NULL
     tlist[["ylab"]] <- "Precision"
     tlist[["ctype"]] <- "prcs"
   } else {
-    mnames <- list(
-      score = "score", label = "label", error = "err",
-      accuracy = "acc", specificity = "sp", sensitivity = "sn",
-      precision = "prec", mcc = "mcc", fscore = "fscore"
-    )
-    if (curvetype == "mcc") {
-      main <- "MCC"
-    } else if (curvetype == "label") {
-      main <- "Label (1:pos, -1:neg)"
-    } else {
-      main <- paste0(
-        toupper(substring(curvetype, 1, 1)),
-        substring(curvetype, 2)
-      )
-    }
-    tlist[["main"]] <- main
+    mnames <- as.list(.basic_metric_names())
+    tlist[["main"]] <- .get_metric_title(curvetype)
     tlist[["xlab"]] <- "normalized rank"
     tlist[["ylab"]] <- curvetype
     tlist[["ctype"]] <- mnames[[curvetype]]
@@ -752,7 +744,7 @@ NULL
 .get_xlim <- function(obj, curvetype) {
   if (curvetype == "rocs" || curvetype == "prcs") {
     xlim <- attr(obj[[curvetype]], "xlim")
-  } else if (curvetype == "mcc" || curvetype == "label") {
+  } else if (.is_signed_metric(curvetype)) {
     xlim <- c(0, 1)
   } else if (curvetype == "score") {
     xlim <- c(0, 1)
@@ -769,7 +761,7 @@ NULL
 .get_ylim <- function(obj, curvetype) {
   if (curvetype == "rocs" || curvetype == "prcs") {
     ylim <- attr(obj[[curvetype]], "ylim")
-  } else if (curvetype == "mcc" || curvetype == "label") {
+  } else if (.is_signed_metric(curvetype)) {
     ylim <- c(-1, 1)
   } else if (curvetype == "score") {
     ylim <- .get_value_range(obj, curvetype)

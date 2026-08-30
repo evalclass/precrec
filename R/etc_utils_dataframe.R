@@ -268,12 +268,7 @@ NULL
       x_bins <- 0
     }
   } else if (new_mode == "basic") {
-    curvetype_names <- list(
-      score = "score", label = "label", error = "err",
-      accuracy = "acc", specificity = "sp",
-      sensitivity = "sn", precision = "prec", mcc = "mcc",
-      fscore = "fscore"
-    )
+    curvetype_names <- as.list(.basic_metric_names())
     x_bins <- 0
   }
 
