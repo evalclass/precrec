@@ -88,6 +88,11 @@
 # the units spelled out.
 #
 .get_metric_title <- function(curvetype) {
+  # The plot code reads the curve type out of a data frame column, where it is
+  # a factor. Indexing a named vector by a factor picks the integer level code
+  # instead of the name, so coerce before the lookup below.
+  curvetype <- as.character(curvetype)
+
   titles <- c(
     label = "Label (1:pos, -1:neg)", mcc = "MCC", npv = "NPV",
     balanced_accuracy = "Balanced accuracy"
@@ -224,6 +229,21 @@
 #
 .is_multiclass <- function(obj) {
   "classes" %in% names(attr(obj, "data_info"))
+}
+
+#
+# Consume arguments a method accepts but cannot act on
+#
+# Some `fortify` methods take an argument that does not apply to the object
+# they are given - point reduction is only defined for `mode = "rocprc"`, and
+# a single dataset has no average to contrast a raw curve with. The arguments
+# stay in the signature so every method shares one interface. The ggplot2
+# `fortify` generic runs `rlang::check_dots_used()` though, which reports an
+# argument whose promise is never forced as a possible misspelling, so the
+# methods hand the ones they ignore to this helper to force them.
+#
+.ignore_unused_args <- function(...) {
+  invisible(list(...))
 }
 
 #
