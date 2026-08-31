@@ -15,10 +15,13 @@ print.mdat <- function(x, ...) {
     width = 4,
     justify = "right"
   )
-  colnames(data_info) <- c(
-    "Model name", "Dataset ID", "# of negatives",
-    "# of positives"
+  # By lookup rather than by position: a multiclass object carries a class
+  # column that binary input does not have
+  col_labels <- c(
+    modnames = "Model name", dsids = "Dataset ID", classes = "Class",
+    nn = "# of negatives", np = "# of positives"
   )
+  colnames(data_info) <- unname(col_labels[colnames(data_info)])
 
   print.data.frame(data_info, print.gap = 1)
 

@@ -33,7 +33,7 @@ C++/[Rcpp](https://cran.r-project.org/package=Rcpp).
   `help(package = "precrec")` in R. The HTML version is also available
   on the [GitHub Pages](https://evalclass.github.io/precrec/reference/).
 
-## Six key features of precrec
+## Seven key features of precrec
 
 ### 1. Accurate curve calculations
 
@@ -62,7 +62,12 @@ evaluation measures.
 - Sensitivity, true positive rate (TPR), recall
 - Precision, positive predictive value (PPV)
 - Matthews correlation coefficient
-- F-score
+- F-score, and the F-beta score it generalizes
+- Balanced accuracy
+- Negative predictive value (NPV)
+- Informedness (Youden's J) and markedness
+- Cohen's kappa
+- Brier score and log loss, for scores that are probabilities
 
 ### 4. Confidence interval band
 
@@ -76,7 +81,14 @@ in the corresponding plot.
 also draw partial ROC and precision-recall curves for the specified
 ranges.
 
-### 6. Supporting functions
+### 6. Multiclass evaluation
+
+`precrec` evaluates a dataset with more than two classes by one-vs-rest
+decomposition. Each class becomes its own binary problem, so the accurate
+precision-recall calculations apply to it unchanged, and `auc` reports the
+per-class scores together with their macro-average.
+
+### 7. Supporting functions
 
 `precrec` provides several useful functions that lack in most other
 evaluation tools.
@@ -109,7 +121,7 @@ evaluation tools.
 
 ## Functions
 
-The `precrec` package provides the following six functions.
+The `precrec` package provides the following eight functions.
 
 | Function | Description |
 |:---|:---|
@@ -119,6 +131,8 @@ The `precrec` package provides the following six functions.
 | join_labels | Join observed labels of multiple test datasets into a list |
 | create_sim_samples | Create random samples for simulations |
 | format_nfold | Create n-fold cross validation dataset from data frame |
+| prob_metrics | Calculate the Brier score and the log loss |
+| prob_metrics_ci | Calculate CIs of the Brier score and the log loss |
 
 Moreover, the `precrec` package provides nine S3 generics for the S3
 object created by the `evalmod` function. **N.B.** The R language

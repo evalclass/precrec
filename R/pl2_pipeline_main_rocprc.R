@@ -4,7 +4,8 @@
 .pl_main_rocprc <- function(mdat, model_type, dataset_type, class_name_pf,
                             calc_avg = TRUE, cb_alpha = 0.05,
                             raw_curves = FALSE, x_bins = 1000,
-                            interpolate = TRUE) {
+                            interpolate = TRUE,
+                            on_single_class = "error") {
   if (!missing(dataset_type) && dataset_type == "single") {
     calc_avg <- FALSE
     raw_curves <- TRUE
@@ -19,19 +20,14 @@
   # Create curves
   plfunc <- function(s) {
     if (attr(mdat[[s]], "nn") == 0 || attr(mdat[[s]], "np") == 0) {
-      if (attr(mdat[[s]], "np") > 0) {
-        cl <- "positive"
-      } else {
-        cl <- "negative"
-      }
-      err_msg <- paste0(
-        "Curves cannot be calculated. ",
-        "Only a single class (", cl, ") ",
-        "found in dataset (modname: ",
-        attr(mdat[[s]], "modname"),
-        ", dsid: ", attr(mdat[[s]], "dsid"), ")."
+      msg <- .single_class_msg(
+        mdat[[s]], "Curves cannot be calculated."
       )
-      stop(err_msg, call. = FALSE)
+      if (on_single_class == "error") {
+        stop(msg, call. = FALSE)
+      }
+      warning(msg, call. = FALSE)
+      return(.create_na_curves(mdat[[s]], x_bins = x_bins))
     }
     cdat <- create_confmats(mdat[[s]])
 

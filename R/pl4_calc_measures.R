@@ -131,23 +131,36 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, beta = 1,
     pb[["error"]][n] + pb[["accuracy"]][n] == 1
   )
 
-  # SP
+  # SP. A dataset with no negatives has no specificity to report, and
+  # calc_basic_measures() fills the column with NA rather than 0/0.
   .assert_internal(
     is.atomic(pb[["specificity"]]),
     is.vector(pb[["specificity"]]),
-    is.numeric(pb[["specificity"]]),
-    pb[["specificity"]][1] == 1,
-    pb[["specificity"]][n] == 0
+    is.numeric(pb[["specificity"]])
   )
+  if (attr(x, "nn") == 0) {
+    .assert_internal(all(is.na(pb[["specificity"]])))
+  } else {
+    .assert_internal(
+      pb[["specificity"]][1] == 1,
+      pb[["specificity"]][n] == 0
+    )
+  }
 
-  # SN
+  # SN, likewise for a dataset with no positives
   .assert_internal(
     is.atomic(pb[["sensitivity"]]),
     is.vector(pb[["sensitivity"]]),
-    is.numeric(pb[["sensitivity"]]),
-    pb[["sensitivity"]][1] == 0,
-    pb[["sensitivity"]][n] == 1
+    is.numeric(pb[["sensitivity"]])
   )
+  if (attr(x, "np") == 0) {
+    .assert_internal(all(is.na(pb[["sensitivity"]])))
+  } else {
+    .assert_internal(
+      pb[["sensitivity"]][1] == 0,
+      pb[["sensitivity"]][n] == 1
+    )
+  }
 
   # PREC
   .assert_internal(

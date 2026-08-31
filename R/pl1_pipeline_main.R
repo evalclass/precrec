@@ -4,13 +4,14 @@
 pl_main <- function(mdat, mode = "rocprc", calc_avg = TRUE, cb_alpha = 0.05,
                     raw_curves = FALSE, x_bins = 1000, interpolate = TRUE,
                     na_worst = TRUE, ties_method = "equiv", beta = 1,
-                    validate = TRUE) {
+                    on_single_class = "error", validate = TRUE) {
   # === Validation ===
   new_mode <- .pmatch_mode(mode)
+  on_single_class <- .pmatch_on_single_class(on_single_class)
   if (validate) {
     .validate_pl_main_args(
       mdat, new_mode, calc_avg, cb_alpha, raw_curves,
-      x_bins, interpolate, beta
+      x_bins, interpolate, beta, on_single_class
     )
   }
 
@@ -23,7 +24,7 @@ pl_main <- function(mdat, mode = "rocprc", calc_avg = TRUE, cb_alpha = 0.05,
     .pl_main_rocprc(mdat, model_type, dataset_type, class_name_pf,
       calc_avg = calc_avg, cb_alpha = cb_alpha,
       raw_curves = raw_curves, x_bins = x_bins,
-      interpolate = interpolate
+      interpolate = interpolate, on_single_class = on_single_class
     )
   } else if (new_mode == "basic") {
     .pl_main_basic(mdat, model_type, dataset_type, class_name_pf,
@@ -34,7 +35,7 @@ pl_main <- function(mdat, mode = "rocprc", calc_avg = TRUE, cb_alpha = 0.05,
     .pl_main_aucroc(mdat, model_type, dataset_type, class_name_pf,
       calc_avg = calc_avg, cb_alpha = cb_alpha,
       raw_curves = raw_curves, na_worst = na_worst,
-      ties_method = ties_method
+      ties_method = ties_method, on_single_class = on_single_class
     )
   }
 }
@@ -71,10 +72,32 @@ pl_main <- function(mdat, mode = "rocprc", calc_avg = TRUE, cb_alpha = 0.05,
 }
 
 #
+# Check partial match - on_single_class
+#
+.pmatch_on_single_class <- function(val) {
+  if (.is_string(val)) {
+    if (val == "error" || val == "na") {
+      return(val)
+    }
+
+    if (!is.na(pmatch(val, "error"))) {
+      return("error")
+    }
+
+    if (!is.na(pmatch(val, "na"))) {
+      return("na")
+    }
+  }
+
+  val
+}
+
+#
 # Validate arguments of pl_main
 #
 .validate_pl_main_args <- function(mdat, mode, calc_avg, cb_alpha, raw_curves,
-                                   x_bins, interpolate, beta = 1) {
+                                   x_bins, interpolate, beta = 1,
+                                   on_single_class = "error") {
   # Validate mdat
   .validate(mdat)
   if (mode != "aucroc" && !is.null(mdat) && length(mdat) > 0 &&
@@ -104,6 +127,9 @@ pl_main <- function(mdat, mode = "rocprc", calc_avg = TRUE, cb_alpha = 0.05,
 
   # Check beta
   .validate_beta(beta)
+
+  # Check on_single_class
+  .validate_on_single_class(on_single_class)
 }
 
 #

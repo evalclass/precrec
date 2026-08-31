@@ -14,6 +14,7 @@ mmdata(
   ties_method = "equiv",
   expd_first = NULL,
   mode = "rocprc",
+  multiclass = NULL,
   nfold_df = NULL,
   score_cols = NULL,
   lab_col = NULL,
@@ -87,6 +88,29 @@ sensitivity, precision, Matthews correlation coefficient,
 and F-score. }
 \item{"aucroc"}{Fast AUC(ROC) calculation with the U statistic}
 }}
+
+\item{multiclass}{A string that specifies how a dataset with more than
+two classes is evaluated.
+\describe{
+\item{"none"}{Binary evaluation. Labels with more than two classes
+are an error, as they have always been.}
+\item{"ovr"}{One-vs-rest. Each class becomes its own binary problem -
+that class against all the others - and the \code{K}
+decompositions are carried on the model axis, so that
+they behave like \code{K} models evaluated on one dataset.}
+}
+\code{multiclass} is detected from the input when it is \code{NULL}:
+"ovr" when \code{labels} hold more than two classes and \code{scores}
+is a matrix or a data frame with one column per class, "none"
+otherwise. \code{scores} columns are matched to classes by their column
+names when those name the classes, and by position otherwise.
+
+\code{posclass} is ignored in one-vs-rest mode, and \code{multiclass}
+cannot be combined with \code{nfold_df}.
+
+Note that each one-vs-rest decomposition has its own class balance, so
+the baseline of a precision-recall curve differs from class to class.
+The plots leave the baseline out for that reason.}
 
 \item{nfold_df}{A data frame that contains at least one score column,
 label and fold columns.}
@@ -207,6 +231,18 @@ cvdat2 <- mmdata(
   modnames = c("m1", "m2"), dsids = 1:5
 )
 cvdat2
+
+
+##################################################
+### Multiclass dataset
+###
+
+## Load a 3-class dataset with one score column per class
+data(C3N150)
+
+## One-vs-rest decomposition, detected from the input
+mcmdat <- mmdata(C3N150$scores, C3N150$labels)
+mcmdat
 
 }
 \seealso{

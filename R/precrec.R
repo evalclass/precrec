@@ -221,3 +221,22 @@ NULL
 #' @name M2N50F5
 #' @usage data(M2N50F5)
 NULL
+
+#' Multiclass sample with three classes.
+#'
+#' A list contains labels and one score column per class for a 3-class
+#'   dataset. The three classes are separated to different degrees, so that a
+#'   one-vs-rest evaluation of them shows three clearly different curves.
+#'
+#' @format A list with 2 items.
+#' \describe{
+#'   \item{scores}{a 150 by 3 matrix of scores, one column per class,
+#'                 with the column names 'c1', 'c2' and 'c3'}
+#'   \item{labels}{150 labels as 'c1', 'c2' or 'c3', 50 of each}
+#' }
+#'
+#' @docType data
+#' @keywords datasets
+#' @name C3N150
+#' @usage data(C3N150)
+NULL

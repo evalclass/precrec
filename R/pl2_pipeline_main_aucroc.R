@@ -4,24 +4,20 @@
 .pl_main_aucroc <- function(mdat, model_type, dataset_type, class_name_pf,
                             calc_avg = FALSE, cb_alpha = 0.05,
                             raw_curves = FALSE, na_worst = TRUE,
-                            ties_method = "equiv") {
+                            ties_method = "equiv",
+                            on_single_class = "error") {
   # === Calculate AUC ROC ===
   plfunc <- function(s) {
     # AUC with the U statistic
     if (attr(mdat[[s]], "nn") == 0 || attr(mdat[[s]], "np") == 0) {
-      if (attr(mdat[[s]], "np") > 0) {
-        cl <- "positive"
-      } else {
-        cl <- "negative"
-      }
-      err_msg <- paste0(
-        "AUCs with the U statistic cannot be calculated. ",
-        "Only a single class (", cl, ") ",
-        "found in dataset (modname: ",
-        attr(mdat[[s]], "modname"),
-        ", dsid: ", attr(mdat[[s]], "dsid"), ")."
+      msg <- .single_class_msg(
+        mdat[[s]], "AUCs with the U statistic cannot be calculated."
       )
-      stop(err_msg, call. = FALSE)
+      if (on_single_class == "error") {
+        stop(msg, call. = FALSE)
+      }
+      warning(msg, call. = FALSE)
+      return(.create_na_uauc(mdat[[s]]))
     }
     calc_auc_with_u(mdat[[s]],
       na_worst = na_worst,

@@ -20,7 +20,7 @@ The aim of the `precrec` package is to provide an integrated platform that enabl
 
 - [Help pages](https://evalclass.github.io/precrec/reference/)  -- all the functions including the S3 generics except for `print` have their own help pages with plenty of examples. View the main help page with `help(package = "precrec")` in R. The HTML version is also available on the [GitHub Pages](https://evalclass.github.io/precrec/reference/).
 
-## Six key features of precrec
+## Seven key features of precrec
 
 ### 1. Accurate curve calculations
 `precrec` provides accurate precision-recall curves.
@@ -43,7 +43,12 @@ In addition to precision-recall and ROC curves, `precrec` offers basic evaluatio
 - Sensitivity, true positive rate (TPR), recall
 - Precision, positive predictive value (PPV)
 - Matthews correlation coefficient
-- F\-score
+- F\-score, and the F\-beta score it generalizes
+- Balanced accuracy
+- Negative predictive value (NPV)
+- Informedness (Youden's J) and markedness
+- Cohen's kappa
+- Brier score and log loss, for scores that are probabilities
 
 ### 4. Confidence interval band
 `precrec` calculates confidence intervals when multiple test sets are given. It automatically shows confidence bands about the averaged curve in the 
@@ -53,7 +58,10 @@ corresponding plot.
 `precrec` calculates partial AUCs for specified x and y ranges. It can also
 draw partial ROC and precision-recall curves for the specified ranges.
 
-### 6. Supporting functions
+### 6. Multiclass evaluation
+`precrec` evaluates a dataset with more than two classes by one\-vs\-rest decomposition. Each class becomes its own binary problem, so the accurate precision-recall calculations apply to it unchanged, and `auc` reports the per-class scores together with their macro-average.
+
+### 7. Supporting functions
 `precrec` provides several useful functions that lack in most other evaluation tools. 
 
 - Handling multiple models and multiple test sets
@@ -76,7 +84,7 @@ draw partial ROC and precision-recall curves for the specified ranges.
     3. Install `precrec` from the GitHub repository with `devtools::install_github("evalclass/precrec")`.
 
 ## Functions
-The `precrec` package provides the following six functions.
+The `precrec` package provides the following eight functions.
 
 Function           Description 
 ------------------ -----------------------------------------------------------
@@ -86,6 +94,8 @@ Function           Description
        join_labels Join observed labels of multiple test datasets into a list     
 create_sim_samples Create random samples for simulations
       format_nfold Create n-fold cross validation dataset from data frame
+      prob_metrics Calculate the Brier score and the log loss
+   prob_metrics_ci Calculate CIs of the Brier score and the log loss
     
 Moreover, the `precrec` package provides nine S3 generics for the S3 object created by the `evalmod` function. **N.B.** The R language specifies S3 objects and S3 generic functions as part of the most basic object-oriented system in R.
 

@@ -659,7 +659,54 @@ pmetrics.ci <- prob_metrics_ci(pmdat)
 knitr::kable(pmetrics.ci)
 ```
 
-## 14. Citation
+## 14. Multiclass evaluation
+A dataset with more than two classes is evaluated by one-vs-rest
+decomposition: each class becomes its own binary problem - that class against
+all the others - so the accurate precision-recall calculations apply to it
+unchanged.
+
+### One-vs-rest curves
+Pass a matrix with one score column per class together with the class labels.
+The `mmdata` function detects the decomposition, and the classes are carried
+on the model axis, so everything downstream treats them as it would several
+models on one test set.
+```{r}
+# Load a 3-class dataset with one score column per class
+data(C3N150)
+
+# The decomposition is detected from the input
+mcmdat <- mmdata(C3N150$scores, C3N150$labels)
+mcmdat
+
+# One curve per class
+mccurves <- evalmod(mcmdat)
+```
+
+`multiclass = "ovr"` asks for the decomposition explicitly, which is worth
+doing when the score columns are not named after the classes - they are then
+taken in the order of the class names.
+
+### Per-class and macro-averaged AUCs
+The `auc` function reports one row per class and curve type, followed by the
+macro-average of the per-class scores.
+```{r}
+# Use knitr::kable to display the result in a table format
+knitr::kable(auc(mccurves))
+```
+
+### S3 generics
+All the S3 generics work as they do for several models.
+```{r, fig.width=7, fig.show='hold'}
+# Show ROC and Precision-Recall curves, one line per class
+autoplot(mccurves)
+```
+
+Note that each one-vs-rest decomposition has its own class balance, so the
+baseline of a precision-recall curve differs from class to class. The plots
+leave the baseline out for that reason - which matters here more than
+anywhere else, because a precision-recall curve is read against its baseline.
+
+## 15. Citation
 *Precrec: fast and accurate precision-recall and ROC curve calculations in R*
 
 Takaya Saito; Marc Rehmsmeier
@@ -668,7 +715,7 @@ Bioinformatics 2017; 33 (1): 145-147.
 
 doi: [10.1093/bioinformatics/btw570](https://doi.org/10.1093/bioinformatics/btw570)
 
-## 15. External links
+## 16. External links
 - [Classifier evaluation with imbalanced datasets](https://classeval.wordpress.com/) - our web site that contains several pages with useful tips for performance evaluation on binary classifiers.
 
 - [The Precision-Recall Plot Is More Informative than the ROC Plot When Evaluating Binary Classifiers on Imbalanced Datasets](https://doi.org/10.1371/journal.pone.0118432) - our paper that summarized potential pitfalls of ROC plots with imbalanced datasets and advantages of using precision-recall plots instead.
