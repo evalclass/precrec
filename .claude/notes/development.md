@@ -99,12 +99,16 @@ before merging to `develop` instead.
 ## Release checklist
 
 1. `feature/*` work merged into `develop`.
-2. Bump `Version:` and `Date:` in `DESCRIPTION`.
+2. Bump `Version:` in `DESCRIPTION` (there is no `Date:` field).
 3. Add a `# precrec <version>` section to `NEWS.md` with a bullet per
    user-visible change.
-4. Rewrite `cran-comments.md`: what changed, the version bump, test
-   environments actually used, and R CMD check results. The known-and-accepted
-   NOTE is the >1Mb `libs` sub-directory (`precrec.so` is ~4 MB).
+4. Confirm `cran-comments.md`. It is kept current as work lands rather than
+   written from scratch at release, so it should already summarize the version
+   in a handful of grouped bullets — keep it that way and let `NEWS.md` carry
+   the detail. What still has to be checked at submission time is that the
+   test environments listed are the ones actually used and that the R CMD
+   check results match this run. The known-and-accepted NOTE is the >1Mb
+   `libs` sub-directory (`precrec.so` is ~4 MB).
 5. `devtools::document()`, `devtools::check()`, `devtools::spell_check()`.
 6. `devtools::check_win_devel()` / `check_win_release()`, and
    `devtools::revdep_check()` for reverse dependencies.
