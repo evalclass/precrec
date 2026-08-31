@@ -88,6 +88,11 @@
 # the units spelled out.
 #
 .get_metric_title <- function(curvetype) {
+  # The plot code reads the curve type out of a data frame column, where it is
+  # a factor. Indexing a named vector by a factor picks the integer level code
+  # instead of the name, so coerce before the lookup below.
+  curvetype <- as.character(curvetype)
+
   titles <- c(
     label = "Label (1:pos, -1:neg)", mcc = "MCC", npv = "NPV",
     balanced_accuracy = "Balanced accuracy"

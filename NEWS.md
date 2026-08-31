@@ -49,6 +49,11 @@
   anything outside the range 0 to 1 is rejected with a
   `precrec_error_invalid_scores` condition.
 
+* Fix the panel titles of `autoplot()` in `mode = "basic"`. The measure name
+  arrives from the plot data as a factor, and the title lookup read it by its
+  level code instead of its name, so the `label` panel was titled "MCC" and
+  the `mcc`, `npv` and `balanced_accuracy` panels were left untitled.
+
 * Require R >= 4.1 (was R >= 3.2.1)
 
 * Migrate the unit tests to testthat edition 3, and run test files in parallel

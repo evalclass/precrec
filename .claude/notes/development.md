@@ -54,6 +54,22 @@ try to commit them.
 
 `tests/testthat/Rplots.pdf` is base-graphics test output, also gitignored.
 
+**A changed snapshot is not a diagnosis.** vdiffr compares the SVG as text,
+byte for byte, and svglite bakes the measured text widths of the local "sans"
+font into every `<text>` element — so a baseline belongs to the machine that
+made it, and any change to the metric list, the panel layout, ggplot2, or
+svglite invalidates the lot at once. Accepting the new baseline is usually
+right, but read the rendered diff first: a real bug hides in the same "the
+snapshot changed" as a font difference. Accepting without looking is how the
+`autoplot()` panel-title bug got into the 0.15.0 development line.
+
+Because the baselines cannot travel, the machine-independent assertions in
+`test_etc_utils_autoplot.R` are what actually guards the plot code — panel
+count, which measure each panel draws, titles and axis labels, read off the
+ggplot object without rendering. They run on CI, where vdiffr does not. Add
+to them when you change what a plot contains; `gg_panels()` and `gg_labs()`
+in `setup.R` are the helpers.
+
 ### CRAN-sensitive tests
 
 Some tests are skipped on CRAN (`skip_on_cran()`) to keep check time and

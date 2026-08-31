@@ -51,6 +51,29 @@ test_that(".get_metric_title() capitalizes or spells out the name", {
   expect_equal(.get_metric_title("label"), "Label (1:pos, -1:neg)")
 })
 
+test_that(".get_metric_title() reads a factor by its label, not its code", {
+  # The plot code pulls the curve type out of a data frame, where it is a
+  # factor. Indexing the lookup vector by a factor would pick the integer
+  # level code instead of the name, which silently retitled the panels.
+  metrics <- names(.basic_metric_names())
+  as_factor <- function(x) factor(x, levels = metrics)
+
+  expect_equal(
+    .get_metric_title(as_factor("label")), "Label (1:pos, -1:neg)"
+  )
+  expect_equal(.get_metric_title(as_factor("mcc")), "MCC")
+  expect_equal(.get_metric_title(as_factor("npv")), "NPV")
+  expect_equal(
+    .get_metric_title(as_factor("balanced_accuracy")), "Balanced accuracy"
+  )
+  expect_equal(
+    vapply(as_factor(metrics), .get_metric_title, character(1),
+      USE.NAMES = FALSE
+    ),
+    vapply(metrics, .get_metric_title, character(1), USE.NAMES = FALSE)
+  )
+})
+
 # Test .is_signed_metric(curvetype)
 
 test_that(".is_signed_metric() picks out the measures that can go negative", {
