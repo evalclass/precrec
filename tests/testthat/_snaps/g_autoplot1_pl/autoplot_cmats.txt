@@ -1,0 +1,8 @@
+plot: 1 panel(s)
+  panel 1
+    title: TPs, FNs, FPs, and TNs by ranks
+    x: rank
+    y: count
+    layer 1: GeomLine  n=4004  groups=4  n_na_y=0
+      x: min=1 max=1001 mean=501 | 1 501 1 501 1001 501 1001 501 1001
+      y: min=0 max=500 mean=250 | 0 361 500 139 0 139 500 361 0

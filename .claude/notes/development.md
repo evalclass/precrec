@@ -40,35 +40,40 @@ file it covers. Names sort into the pipeline order (`test_mm*`, `test_pl*`,
 ### ggplot snapshots
 
 Plot tests go through `check_ggplot_fig(title, plot)` in
-`tests/testthat/setup.R`, which:
+`tests/testthat/setup.R`. It records what the plot *is* - its panels, their
+titles and axis labels, and the x/y/group data behind every layer - as text,
+and compares that against a named baseline in `tests/testthat/_snaps/`.
 
-- on CI, only asserts the object is a `ggplot` (rendering differs across
-  platforms and ggplot2 versions);
-- locally, runs `vdiffr::expect_doppelganger()` against
-  `tests/testthat/_snaps/`.
+**Those baselines are committed**, because the digest is identical on every
+machine. Rendering is not involved, so nothing depends on the local fonts or
+on the ggplot2 layout engine, and CI runs the same comparison everyone else
+does.
 
-**The `.svg` snapshot files are gitignored on purpose** (`_snaps/*/*.svg`).
-So a local vdiffr "failure" on a clean checkout usually means *no baseline
-exists yet*, not a regression. Generate baselines locally, compare, and don't
-try to commit them.
+When a snapshot fails, read the diff - it is plain text and names what moved:
 
-`tests/testthat/Rplots.pdf` is base-graphics test output, also gitignored.
+```r
+testthat::snapshot_review("g_autoplot3_points/")  # or diff the .new.txt
+```
 
-**A changed snapshot is not a diagnosis.** vdiffr compares the SVG as text,
-byte for byte, and svglite bakes the measured text widths of the local "sans"
-font into every `<text>` element — so a baseline belongs to the machine that
-made it, and any change to the metric list, the panel layout, ggplot2, or
-svglite invalidates the lot at once. Accepting the new baseline is usually
-right, but read the rendered diff first: a real bug hides in the same "the
-snapshot changed" as a font difference. Accepting without looking is how the
-`autoplot()` panel-title bug got into the 0.15.0 development line.
+Accept with `testthat::snapshot_accept()` **once you have confirmed the
+change is the one you meant to make**, and commit the updated baseline with
+the change that caused it.
 
-Because the baselines cannot travel, the machine-independent assertions in
-`test_etc_utils_autoplot.R` are what actually guards the plot code — panel
-count, which measure each panel draws, titles and axis labels, read off the
-ggplot object without rendering. They run on CI, where vdiffr does not. Add
-to them when you change what a plot contains; `gg_panels()` and `gg_labs()`
-in `setup.R` are the helpers.
+This replaced vdiffr in 0.15.0. vdiffr compared the rendered SVG byte for
+byte, and svglite bakes the measured width of the local "sans" font into
+every text element, so a baseline belonged to the machine that made it. The
+files could not be committed, every developer had to regenerate them, the
+comparison had to be skipped on CI, and a stale baseline was reported in the
+same words as a real regression - which is how the `autoplot()` panel-title
+bug got accepted into a baseline during 0.15.0 development. Deliberate visual
+inspection is still just `plot(x)` at the console.
+
+`tests/testthat/Rplots.pdf` is base-graphics test output, and is gitignored.
+
+Machine-independent assertions about plot structure also live in
+`test_etc_utils_autoplot.R` - panel counts, which measure each panel draws,
+titles and axis labels. Prefer those for anything you can state directly;
+the snapshots are for catching what you did not think to assert.
 
 ### CRAN-sensitive tests
 

@@ -4,12 +4,7 @@
 skip_on_cran()
 
 ap1_check_libs <- function() {
-  if (requireNamespace("ggplot2", quietly = TRUE) &&
-    requireNamespace("vdiffr", quietly = TRUE)) {
-    TRUE
-  } else {
-    FALSE
-  }
+  requireNamespace("ggplot2", quietly = TRUE)
 }
 
 test_that("autoplot fmdat", {
@@ -52,8 +47,8 @@ test_that("autoplot pevals", {
     scores = B500$good_er_scores,
     labels = B500$labels
   )
-  suppressWarnings(vdiffr::expect_doppelganger(
+  check_ggplot_fig(
     "autoplot_pevals",
-    ggplot2::autoplot(pevals)
-  ))
+    suppressWarnings(ggplot2::autoplot(pevals))
+  )
 })

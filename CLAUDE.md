@@ -14,7 +14,7 @@ plotting for binary classifiers. Hot paths are C++ via Rcpp.
   naming scheme, file-prefix convention, R↔C++ boundary. **Read before
   touching anything in `R/pl*`, `R/mm*`, or `src/`.**
 - [Development](.claude/notes/development.md) — build/test/check commands,
-  git-flow branching, release + CRAN checklist, vdiffr snapshot handling.
+  git-flow branching, release + CRAN checklist, plot snapshot handling.
 
 ## Hard rules
 
@@ -37,7 +37,7 @@ plotting for binary classifiers. Hot paths are C++ via Rcpp.
 - Tests match errors by condition class, not message text:
   `expect_error(f(), class = "precrec_error_invalid_x")`.
 - Don't add hard dependencies. `Imports` is deliberately small; anything
-  optional (`patchwork`, `vdiffr`, `data.table` at some call sites) is loaded
+  optional (`patchwork`, `data.table` at some call sites) is loaded
   through a `requireNamespace` helper in `R/etc_utils*.R` and belongs in
   `Suggests`.
 - `src/*.o` and `src/precrec.so` are local build artifacts — never commit them.

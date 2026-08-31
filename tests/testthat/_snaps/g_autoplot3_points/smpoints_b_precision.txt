@@ -1,0 +1,14 @@
+plot: 1 panel(s)
+  panel 1
+    title: Precision
+    x: normalized rank
+    y: precision
+    layer 1: GeomRibbon  n=5  groups=1  n_na_y=0
+      x: min=0 max=1 mean=0.5 | 0 0.25 0.5 0.75 1
+      y: min=0.5067 max=1 mean=0.7633 | 1 1 0.5067 0.56 0.75
+    layer 2: GeomLine  n=5  groups=1  n_na_y=0
+      x: min=0 max=1 mean=0.5 | 0 0.25 0.5 0.75 1
+      y: min=0.75 max=1 mean=0.8722 | 1 1 0.8333 0.7778 0.75
+    layer 3: GeomPoint  n=5  groups=1  n_na_y=0
+      x: min=0 max=1 mean=0.5 | 0 0.25 0.5 0.75 1
+      y: min=0.75 max=1 mean=0.8722 | 1 1 0.8333 0.7778 0.75

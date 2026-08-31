@@ -1,0 +1,8 @@
+plot: 1 panel(s)
+  panel 1
+    title: Score distributions by rank
+    x: -
+    y: rank
+    layer 1: GeomPoint  n=1000  groups=1  n_na_y=0
+      x: min=0.6028 max=2.399 mean=1.502 | 1.897 1.934 1.628 2.155 2.172 0.6258 1.1 1.166 0.8806
+      y: min=1.37 max=1000 mean=500.5 | 205.8 174.6 572.2 62.36 386.1 675.8 553.9 557.7 512
