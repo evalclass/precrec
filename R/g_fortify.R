@@ -84,6 +84,9 @@ fortify.pevals <- function(model, ...) {
 fortify.sscurves <- function(model, data, raw_curves = NULL,
                              reduce_points = FALSE,
                              ...) {
+  # One dataset has no average to contrast a raw curve with.
+  .ignore_unused_args(raw_curves)
+
   .as_plain_df(
     .dataframe_common(model,
       raw_curves = TRUE, reduce_points = reduce_points,
@@ -97,6 +100,9 @@ fortify.sscurves <- function(model, data, raw_curves = NULL,
 fortify.mscurves <- function(model, data, raw_curves = NULL,
                              reduce_points = FALSE,
                              ...) {
+  # One dataset has no average to contrast a raw curve with.
+  .ignore_unused_args(raw_curves)
+
   .as_plain_df(
     .dataframe_common(model,
       raw_curves = TRUE, reduce_points = reduce_points,
@@ -144,6 +150,10 @@ fortify.mmcurves <- function(model, data, raw_curves = NULL,
 fortify.sspoints <- function(model, data, raw_curves = NULL,
                              reduce_points = FALSE,
                              ...) {
+  # One dataset has no average to contrast a raw curve with, and the basic
+  # measures have no point reduction.
+  .ignore_unused_args(raw_curves, reduce_points)
+
   .as_plain_df(
     .dataframe_common(model,
       mode = "basic", raw_curves = TRUE,
@@ -157,6 +167,10 @@ fortify.sspoints <- function(model, data, raw_curves = NULL,
 fortify.mspoints <- function(model, data, raw_curves = NULL,
                              reduce_points = FALSE,
                              ...) {
+  # One dataset has no average to contrast a raw curve with, and the basic
+  # measures have no point reduction.
+  .ignore_unused_args(raw_curves, reduce_points)
+
   .as_plain_df(
     .dataframe_common(model,
       mode = "basic", raw_curves = TRUE,
@@ -170,6 +184,9 @@ fortify.mspoints <- function(model, data, raw_curves = NULL,
 fortify.smpoints <- function(model, data, raw_curves = NULL,
                              reduce_points = FALSE,
                              ...) {
+  # The basic measures have no point reduction.
+  .ignore_unused_args(reduce_points)
+
   arglist <- .get_fortify_arglist(attr(model, "args"),
     def_raw_curves = raw_curves, ...
   )
@@ -187,6 +204,9 @@ fortify.smpoints <- function(model, data, raw_curves = NULL,
 fortify.mmpoints <- function(model, data, raw_curves = NULL,
                              reduce_points = FALSE,
                              ...) {
+  # The basic measures have no point reduction.
+  .ignore_unused_args(reduce_points)
+
   arglist <- .get_fortify_arglist(attr(model, "args"),
     def_raw_curves = raw_curves, ...
   )

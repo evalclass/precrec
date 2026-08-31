@@ -49,6 +49,15 @@
   anything outside the range 0 to 1 is rejected with a
   `precrec_error_invalid_scores` condition.
 
+* Stop `autoplot()` and `fortify()` warning "Arguments in `...` must be used"
+  on every call. The `fortify` methods accept `raw_curves` and
+  `reduce_points` for a common interface, but a single test dataset has no
+  average to contrast a raw curve with and the basic measures have no point
+  reduction, so those methods never read the argument -- which the ggplot2
+  `fortify` generic reported as a possible misspelling. The behavior is
+  unchanged; the arguments are now consumed explicitly and documented as
+  having no effect on those objects.
+
 * Fix the panel titles of `autoplot()` in `mode = "basic"`. The measure name
   arrives from the plot data as a factor, and the title lookup read it by its
   level code instead of its name, so the `label` panel was titled "MCC" and

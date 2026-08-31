@@ -31,11 +31,15 @@
 #' @param raw_curves A Boolean value to specify whether raw curves are
 #'   shown instead of the average curve. It is effective only
 #'   when `raw_curves` is set to `TRUE`
-#'   of the [evalmod()] function.
+#'   of the [evalmod()] function. A single test dataset has no average to
+#'   contrast the raw curves with, so `sscurves` and `sspoints`, and likewise
+#'   `mscurves` and `mspoints`, always show the raw curves.
 #'
 #' @param reduce_points A Boolean value to decide whether the points should
-#'   be reduced. The points are reduced according to `x_bins`
-#'   of the [evalmod()] function. The default values is `FALSE`.
+#'   be reduced when `mode = "rocprc"`. The points are reduced according to
+#'   `x_bins` of the [evalmod()] function. The default values is `FALSE`.
+#'   The basic evaluation measures are not reduced, so the argument has no
+#'   effect for `sspoints`, `mspoints`, `smpoints` and `mmpoints`.
 #'
 #' @param ... Not used by this method.
 #'

@@ -57,11 +57,15 @@ See the \strong{Value} section of \code{\link[=evalmod]{evalmod()}} for more det
 \item{raw_curves}{A Boolean value to specify whether raw curves are
 shown instead of the average curve. It is effective only
 when \code{raw_curves} is set to \code{TRUE}
-of the \code{\link[=evalmod]{evalmod()}} function.}
+of the \code{\link[=evalmod]{evalmod()}} function. A single test dataset has no average to
+contrast the raw curves with, so \code{sscurves} and \code{sspoints}, and likewise
+\code{mscurves} and \code{mspoints}, always show the raw curves.}
 
 \item{reduce_points}{A Boolean value to decide whether the points should
-be reduced. The points are reduced according to \code{x_bins}
-of the \code{\link[=evalmod]{evalmod()}} function. The default values is \code{FALSE}.}
+be reduced when \code{mode = "rocprc"}. The points are reduced according to
+\code{x_bins} of the \code{\link[=evalmod]{evalmod()}} function. The default values is \code{FALSE}.
+The basic evaluation measures are not reduced, so the argument has no
+effect for \code{sspoints}, \code{mspoints}, \code{smpoints} and \code{mmpoints}.}
 
 \item{...}{Not used by this method.}
 }

@@ -141,3 +141,35 @@ test_that("autoplot draws a single curve type on its own", {
   expect_equal(gg_labs(p_prc, "title"), "Precision-Recall - P: 10, N: 10")
   expect_equal(gg_labs(p_prc, "y"), "Precision")
 })
+
+test_that("plotting does not warn about the arguments it cannot act on", {
+  if (!ap0_check_libs()) {
+    skip("Libraries cannot be loaded")
+  }
+
+  # The fortify methods take raw_curves and reduce_points for a common
+  # interface, but a single dataset has no average to contrast a raw curve
+  # with and the basic measures have no point reduction. ggplot2's fortify
+  # generic runs check_dots_used(), which reported every one of those as a
+  # possible misspelling until the methods consumed them explicitly.
+  ap0_build <- function(n_mod, n_ds, mode) {
+    n <- n_mod * n_ds
+    scores <- lapply(seq_len(n), function(i) seq_len(20))
+    labels <- lapply(seq_len(n), function(i) rep(c(1, 0), 10))
+    mdat <- mmdata(join_scores(scores), join_labels(labels),
+      modnames = rep(paste0("m", seq_len(n_mod)), each = n_ds),
+      dsids = rep(seq_len(n_ds), n_mod)
+    )
+    evalmod(mdat, mode = mode)
+  }
+
+  for (mode in c("rocprc", "basic")) {
+    for (n_mod in c(1, 2)) {
+      for (n_ds in c(1, 2)) {
+        obj <- ap0_build(n_mod, n_ds, mode)
+        expect_no_warning(ggplot2::fortify(obj))
+        expect_no_warning(ggplot2::autoplot(obj))
+      }
+    }
+  }
+})
