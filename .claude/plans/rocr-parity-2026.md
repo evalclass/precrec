@@ -9,6 +9,10 @@ Three threads, planned together because they touch the same files:
   time: retire the `apply` family, and put argument checking on a common
   footing.
 
+All the decisions that gate phases 1-4 are settled; see **Decisions taken**
+at the end. The only dependency change in the whole plan is `checkmate`
+(+ `backports`) added to `Imports` in phase 1.
+
 Effort key as in [enhancements-2026.md](enhancements-2026.md):
 S ≈ days, M ≈ 1–2 weeks, L ≈ 3–6 weeks.
 
@@ -45,8 +49,9 @@ multiclass, and correct non-linear PR interpolation.
 
 ### Tier A — 11 identifiers, algebra on vectors already computed — **S**
 
-Each is one line next to the existing `sp`/`sn`/`prec`/`npv` loop in
-`src/precrec_plx.cpp`. No new state, no new pass over the data.
+Each is a vectorized one-liner in `calc_measures()`, derived from columns the
+`pevals` table already holds or from the `cmats` counts. No C++ change, no
+new state, no new pass over the data. See **Decisions taken** below.
 
 | ROCR | Definition | In precrec's terms |
 | --- | --- | --- |
@@ -78,32 +83,83 @@ Each is one line next to the existing `sp`/`sn`/`prec`/`npv` loop in
 | `cal` | calibration error | sliding window over sorted scores; `window.size` argument |
 | `ecost` | expected-cost curve (Drummond & Holte) | a curve in its own space, with an obligatory x-axis |
 
-### Decisions this raises
+### How the new measures land
 
-**D1 — unbounded measures break an axis assumption.** Today every basic
-measure is either `[0, 1]` or, via `.is_signed_metric()`, `[-1, 1]`;
-`R/etc_utils_autoplot.R:717-727` hard-codes those two ranges, with a third
-branch that leaves `ylim = NULL` for `score`. `lift`, `odds`, `mi` and
-`chisq` are unbounded above, so they need that third branch, and
-`.is_signed_metric()` should become a three-way
-`.metric_range()` returning `"unit"`, `"signed"` or `"free"`.
+**Naming — standard where a standard exists, spelled out where ROCR is
+idiosyncratic.** precrec already ships `mcc` and `npv`, so abbreviations are
+not a new precedent; but `rpp`/`rnp`/`pcfall`/`pcmiss` are ROCR-local jargon
+with perfectly good standard names. Canonical name on the left, accepted
+aliases on the right.
 
-**D2 — `odds` is `Inf` at both ends of every curve.** At the most extreme
-cutoffs `FP` or `FN` is zero by construction, so the odds ratio is infinite
-for at least the first and last point of *every* dataset — not an edge case.
-Decide once: `NA` (consistent with how `precision` and `npv` already patch
-their undefined end), `Inf` (matches ROCR), or a Haldane–Anscombe +0.5
-correction. Recommend `NA` plus a documented note, because the existing
-`.is_signed_metric` / NA-handling machinery already copes and `Inf` would
-wreck any shared axis.
+| Canonical | Aliases | Definition |
+| --- | --- | --- |
+| `fpr` | `fall` | `FP/N` |
+| `fnr` | `miss` | `FN/P` |
+| `false_discovery_rate` | `fdr`, `pcfall` | `FP/(TP+FP)` |
+| `false_omission_rate` | `for`, `pcmiss` | `FN/(TN+FN)` |
+| `predicted_positive_rate` | `ppr`, `rpp` | `(TP+FP)/n` |
+| `predicted_negative_rate` | `pnr`, `rnp` | `(TN+FN)/n` |
+| `lift` | — | `sensitivity / predicted_positive_rate` |
+| `odds` | `odds_ratio` | `(TP·TN)/(FN·FP)` |
+| `mi` | `mutual_information` | `H(Y) − H(Y\|Ŷ)` |
+| `chisq` | — | Pearson χ² of the 2×2 table |
 
-**D3 — keep the new measures out of the curve hot path.** The C++ already
-splits "always computed" from "extra", sizing the extra vectors `n_extra`
-(`src/precrec_plx.cpp:313-317`) so `evalmod(mode = "rocprc")` never pays for
-measures it does not draw. Every Tier A/B measure goes in the extra set.
-This is the single most important performance guardrail in R1.
+Aliases resolve through the existing `.pmatch_curvetype_basic()` machinery,
+so ROCR's own identifiers keep working as input everywhere a measure name is
+accepted. Panel titles use the canonical name via `.get_metric_title()`.
 
----
+**The new measures are opt-in; the default set stays at 14.**
+`autoplot.*points` and `plot.*points` default to
+`curvetype = .get_metric_names("basic")`, which today returns all 14 measures.
+Adding Tier A/B to that would take an existing user's default plot from 14
+panels to 22, then 25, with no code change on their side. So
+`.basic_metric_names()` gains a per-measure `default` flag:
+`.get_metric_names("basic")` keeps returning the same 14, and a new
+`.get_metric_names("basic_all")` returns everything for validation and for
+`metric_curve()`. Named explicitly, the new measures work everywhere the old
+ones do.
+
+**Derive the new measures in R, not in C++.** This replaces the original
+"one line each next to the C++ loop" idea, and it is what makes opt-in free.
+`calc_measures(cmats, ..., extra_measures = TRUE)` already receives the
+confusion matrices, and `.validate.cmats()` confirms they carry
+`pos_num`, `neg_num`, `tp`, `fp`, `tn`, `fn`, `ranks`. Every Tier A and
+Tier B measure is a vectorized one-liner over those:
+
+- `fpr` = `1 - specificity`, `fnr` = `1 - sensitivity`,
+  `false_discovery_rate` = `1 - precision`,
+  `false_omission_rate` = `1 - npv` — pure transforms of columns the
+  `pevals` table already holds.
+- `predicted_positive_rate`, `predicted_negative_rate`, `lift`, `odds`,
+  `mi`, `chisq` — arithmetic on `tp`/`fp`/`tn`/`fn`.
+
+Consequences, all good: **no C++ change for Tier A or Tier B**, so no new
+`.o` churn and no Rcpp signature to regenerate; nothing is computed unless
+requested, so an unused measure costs zero time and zero memory; and the
+`n_extra` gating in `src/precrec_plx.cpp` stays exactly as it is. `cost`
+(Tier B) is the same shape, just with two user-supplied weights.
+
+The one thing to watch: these must be computed **before** the `x_bins`
+reduction, on the same rank grid as the measures they derive from, or a
+derived column will not line up with its siblings. Phase 3 pins that with a
+test that every basic column has equal length after reduction — the check
+`calc_measures()` already performs at `R/pl4_calc_measures.R:97`.
+
+**`odds` is `NA` at the ends, not `Inf`.** At the extreme cutoffs `FP` or
+`FN` is zero by construction, so the odds ratio is undefined for the first
+and last point of *every* dataset — not an edge case. `NA` matches how
+`precision` and `npv` already patch their own undefined end
+(`src/precrec_plx.cpp:407-412`), and keeps `Inf` out of any shared axis.
+ROCR returns `Inf`; the difference is documented, and the parity script
+(below) compares only the finite region.
+
+**Unbounded measures need a third axis range.** `R/etc_utils_autoplot.R:717-727`
+hard-codes `[0, 1]` or, via `.is_signed_metric()`, `[-1, 1]`, with a third
+branch leaving `ylim = NULL` for `score`. `lift`, `odds`, `mi` and `chisq`
+are unbounded above. Replace `.is_signed_metric()` with
+`.metric_range()` returning `"unit"`, `"signed"` or `"free"`; the `"free"`
+branch is the `ylim = NULL` path that already exists, so this is a rename
+plus one lookup table, not new plotting logic.
 
 ## R2. A free-form x-vs-y metric plot
 
@@ -115,47 +171,74 @@ stores them as parallel vectors indexed by rank. A ROCR-style
 pick two columns, plot one against the other. That is the whole feature, and
 framing it as a projection rather than a new pipeline is what keeps it cheap.
 
-Proposed public entry point:
+Public entry point:
 
 ```r
 metric_curve(mdat = NULL, scores = NULL, labels = NULL,
-             x_metric = "fpr", y_metric = "tpr", ...)
+             x_metric = "fpr", y_metric = "sensitivity", ...)
 ```
 
 returning `<ss|ms|sm|mm>xycurves` per the existing class scheme, with
-`plot`, `autoplot`, `fortify` and `as.data.frame` methods. Defaults chosen
-to reproduce ROCR's most common call, `performance(pred, "tpr", "fpr")`.
+`plot`, `autoplot`, `fortify` and `as.data.frame` methods. The defaults
+reproduce ROCR's most common call, `performance(pred, "tpr", "fpr")`; both
+arguments accept the aliases in the naming table, so `x_metric = "fall"` and
+`y_metric = "tpr"` work too.
 
-Name alternatives if `metric_curve` reads wrong: `xy_curve`,
-`perf_curve`, `performance_curve`. **Open — maintainer's call.**
+Because the projection reads the same table `mode = "basic"` produces, the
+four class variants come almost free — `ss`/`ms`/`sm`/`mm`, averaging and
+one-vs-rest multiclass all work because the underlying table already
+supports them.
 
-### D4 — the interpolation trap, and it is the real risk here
+### The joinable-pair registry — the real risk here, and how it is handled
 
 precrec exists because linear interpolation between PR points is wrong;
 `src/precrec_plx.cpp` interpolates ROC and PR curves specially
 (`interpolate_roc` and its PR counterpart). The basic-measure table holds
 **raw per-cutoff points with no interpolation**.
 
-So `metric_curve(x_metric = "rec", y_metric = "prec")` would draw a curve
-that visibly disagrees with `evalmod(mode = "rocprc")` on the same data — a
-package whose entire selling point is PR-curve correctness would ship a
-second, wrong PR curve behind a friendlier interface. Same, less severely,
-for `fpr`/`tpr`.
+So a naive `metric_curve(x_metric = "sensitivity", y_metric = "precision")`
+would draw a curve that visibly disagrees with `evalmod(mode = "rocprc")` on
+the same data — a package whose entire selling point is PR-curve correctness
+would ship a second, wrong PR curve behind a friendlier interface.
 
-Three ways out, in order of preference:
+**Design: an internal registry of pairs that may be joined by a line.** Not
+two hard-coded special cases — a table, so the set can grow as interpolation
+is defined for more pairs without touching the plotting code.
 
-1. **Special-case the two known pairs.** `(fpr, tpr)` and `(rec, prec)`
-   delegate to the existing curve code; everything else draws raw points.
-   Users get the right answer for the pairs they ask for most, and precrec
-   keeps one PR curve.
-2. **Draw points, not lines, by default** for arbitrary pairs, with
-   `geom = "line"` opt-in. Honest, but makes the common call look unlike
-   ROCR.
-3. Draw raw lines for everything and document the difference. Cheapest,
-   and the one that will generate bug reports.
+```r
+#
+# Metric pairs whose points have a defined interpolation
+#
+# Only a pair listed here may be joined into a curve; every other pair is
+# drawn as points, because joining raw per-cutoff points with straight lines
+# is exactly the error precrec exists to avoid. Adding a row here is how a
+# new joinable pair is registered - the plotting code reads this and nothing
+# else.
+#
+.joinable_pairs <- function() {
+  data.frame(
+    x     = c("fpr",         "sensitivity"),
+    y     = c("sensitivity", "precision"),
+    curve = c("ROC",         "PRC"),
+    stringsAsFactors = FALSE
+  )
+}
+```
 
-Recommend 1, with 2's point geometry as the default for pairs that have no
-defined interpolation.
+Rules, in order:
+
+1. Resolve both metric names through the alias table to canonical names.
+2. If the ordered pair is in the registry, **delegate to the existing curve
+   code** for that `curve` type. `metric_curve()` then returns exactly what
+   `evalmod(mode = "rocprc")` returns for that curve — one implementation,
+   one answer, no possibility of drift.
+3. Otherwise draw points (`geom = "point"`), with `geom = "line"` available
+   as an explicit opt-in for anyone who knows what they are asking for.
+
+Phase 4 pins rule 2 with a test asserting that `metric_curve()` and
+`evalmod(mode = "rocprc")` produce *identical* curve data for both
+registered pairs. That test is the guard against precrec ever shipping two
+different PR curves.
 
 ### D5 — cost measures need arguments the pipeline has no slot for
 
@@ -164,9 +247,8 @@ defined interpolation.
 `beta` through `evalmod()` for `fscore` already, so the precedent is
 "one named argument per measure", which does not scale past about three.
 Decide in Phase 5 whether Tier B/C measures get their own arguments or a
-single `metric_args = list(...)`.
-
----
+single `metric_args = list(...)`. **Still open, but it does not block
+phases 1-4.**
 
 ## R3. The two cross-cutting refactors
 
@@ -176,22 +258,28 @@ Current state: **44 calls across 13 files** — 37 `lapply`, 7 `vapply`. No
 `sapply`, `mapply`, `apply` or `tapply` anywhere, so the codebase is already
 half-disciplined; the type-unstable ones are gone.
 
-**D6 — `purrr` would be a new hard dependency, and `CLAUDE.md` forbids
-that.** The rule reads: *"Don't add hard dependencies. `Imports` is
-deliberately small."* precrec currently imports 10 packages and already has
-`rlang` and `cli`. Adding `purrr` pulls in `vctrs`, `lifecycle` and
-`magrittr` transitively. Three options:
+**Decided: internal `.map_*` helpers, no new dependency.** `CLAUDE.md` says
+*"Don't add hard dependencies. `Imports` is deliberately small"*, and `purrr`
+would pull in `vctrs`, `lifecycle` and `magrittr`. Since `purrr`'s main win
+over `lapply` is type stability — which `vapply` already provides — a small
+internal family in `R/etc_utils.R` gives the call-site readability without
+the install cost:
 
-| | New deps | Call sites read like | Notes |
-| --- | --- | --- | --- |
-| **a. Adopt `purrr`** | +4 | `map(x, f)`, `map_dbl(x, f)` | What was asked for. Overrides a standing rule — maintainer's call, and a legitimate one. |
-| **b. Standardize on base** | 0 | `vapply(x, f, double(1))` | `purrr`'s main win is type stability, which `vapply` already gives. Converts 37 `lapply` → `vapply` where the type is known. |
-| **c. Internal `.map_*` helpers** | 0 | `.map_dbl(x, f)` | `purrr`-shaped names, base implementations, ~40 lines in `R/etc_utils.R`. Swappable for real `purrr` later without touching call sites. |
+```r
+.map(x, f, ...)        # lapply
+.map_dbl(x, f, ...)    # vapply(..., double(1))
+.map_int(x, f, ...)    # vapply(..., integer(1))
+.map_chr(x, f, ...)    # vapply(..., character(1))
+.map_lgl(x, f, ...)    # vapply(..., logical(1))
+.map2(x, y, f, ...)    # Map, returning a plain list
+.imap(x, f, ...)       # over seq_along(x) with names
+```
 
-Recommend **c**: it delivers the readability the request is really about,
-costs nothing at install time, keeps `CLAUDE.md`'s rule intact, and leaves
-the door open. If the maintainer wants genuine `purrr`, **a** is fine — but
-`Imports`, never `Suggests`, since these are hot-path calls.
+Roughly 40 lines. The names are `purrr`'s, so if precrec ever does take the
+dependency the swap is an import change and not a call-site change. Where
+the return type is known — most of the 37 `lapply` calls — conversion goes
+to a typed helper, which is a genuine strictness gain over the status quo,
+not just a rename.
 
 **The gate that makes this safe:** this refactor must be a *pure no-op*. All
 35 plot snapshots stay byte-identical, all 2989 assertions pass, and
@@ -207,7 +295,8 @@ already has `.stop_invalid_arg()` (typed condition classes), `.assert_flag()`,
 `.assert_string(values = )`, `.assert_number(min, max, whole)` and
 `.assert_internal()`. Tests match on class, not message text.
 
-The gaps worth closing, all of them free because `rlang` is already imported:
+The gaps worth closing. Items 1-2 are free because `rlang` is already
+imported; items 3-4 build on `checkmate` (see below):
 
 1. **`rlang::arg_match()` for enum arguments.** `.assert_string(values = )`
    rejects a bad value; `arg_match()` rejects it *and* suggests the nearest
@@ -223,9 +312,29 @@ The gaps worth closing, all of them free because `rlang` is already imported:
    arguments cheap.
 4. `.assert_choice()` and `.assert_numeric_vector()` to round out the family.
 
-Explicitly **not** proposed: `checkmate`. It is the obvious library answer
-and it is very good, but it is another hard dependency for something
-`rlang` + 40 lines already covers.
+**Decided: adopt `checkmate`.** Its footprint is small enough to clear the
+`CLAUDE.md` bar — version 2.3.4, `Imports: backports (>= 1.1.0), utils`, no
+`LinkingTo`, and `backports` itself has no hard dependencies. Two small
+packages, neither compiled against anything else.
+
+**But not `checkmate::assert_*()`.** Those throw a plain `simpleError`, which
+would break precrec's `precrec_error_invalid_<arg>` contract and every
+`expect_error(..., class = )` test in the suite. Use the `check_*()`
+predicates instead — they return `TRUE` or a failure *string* — and route the
+string through the existing `.stop_invalid_arg()`:
+
+```r
+.assert_number <- function(x, arg, ...) {
+  res <- checkmate::check_number(x, ...)
+  if (!isTRUE(res)) .stop_invalid_arg(res, arg)
+  invisible(x)
+}
+```
+
+The `.assert_*` signatures do not change, so this is an internal swap: the
+helpers get checkmate's breadth and message quality, callers and tests see
+nothing new. New helpers (`.assert_choice()`, `.assert_numeric_vector()`)
+are then almost free to add.
 
 Per `CLAUDE.md`, existing `stop(msg, call. = FALSE)` domain errors are **not**
 converted wholesale. New code uses the new helpers; old checks migrate only
@@ -241,12 +350,12 @@ with its own `NEWS.md` bullets. CI is off on `develop` by design, so
 
 | # | Phase | Branch | Effort | Gate |
 | --- | --- | --- | --- | --- |
-| 1 | Argument-checking foundation (R3b) | `feature/ArgChecks` | S | Additive only; suite green; snapshots unchanged |
-| 2 | Retire the `apply` family (R3a) | `feature/MapHelpers` | M | **Snapshots byte-identical**; bench within noise |
-| 3 | Tier A measures (R1) | `feature/MetricsTierA` | M | ROCR parity script; new snapshots reviewed line by line |
-| 4 | `metric_curve()` + methods (R2) | `feature/MetricCurve` | M/L | Pairs `(fpr,tpr)`/`(rec,prec)` match `evalmod()` exactly |
-| 5 | Tier B measures + `cost` args (R1) | `feature/MetricsTierB` | M | ROCR parity script |
-| 6 | Tier C: `prbe`, `rch`, `sar`, `cal`, `ecost` (R1) | `feature/MetricsTierC` | L | Per-measure; **candidate for deferral** |
+| 1 | `checkmate` behind `.assert_*`, `arg_match()`, `.check_args()` spec | `feature/ArgChecks` | S | Additive; suite green; snapshots unchanged; error classes unchanged |
+| 2 | `.map_*` helpers, retire the 44 `apply` calls | `feature/MapHelpers` | M | **Snapshots byte-identical**; bench within noise |
+| 3 | Tier A measures, `default` flag, `.metric_range()` | `feature/MetricsTierA` | M | `.get_metric_names("basic")` still returns the same 14; parity script |
+| 4 | `metric_curve()`, `.joinable_pairs()`, methods | `feature/MetricCurve` | M | Registered pairs produce data **identical** to `evalmod(mode = "rocprc")` |
+| 5 | Tier B measures + `cost` arguments | `feature/MetricsTierB` | M | Parity script |
+| 6 | Tier C: `prbe`, `rch`, `sar`, `cal`, `ecost` | `feature/MetricsTierC` | L | Per-measure; **candidate for deferral** |
 | 7 | Vignette, pkgdown, release prep | `feature/Docs0160` | S | `check()`, `spell_check()`, `_pkgdown.yml` reference sections |
 
 ### Why this order
@@ -258,8 +367,10 @@ with its own `NEWS.md` bullets. CI is off on `develop` by design, so
 - **Phase 1 before 4.** `metric_curve()` is the function with the most new
   arguments in the package; it should be the first consumer of the new
   checking spec, not a retrofit.
-- **Phase 3 before 4.** `metric_curve()`'s defaults are `fpr`/`tpr`, and
-  `fpr` does not exist as a basic measure yet.
+- **Phase 3 before 4.** `metric_curve()`'s defaults are `fpr`/`sensitivity`,
+  and `fpr` does not exist as a basic measure yet. Phase 3 also introduces
+  the `default` flag that keeps the new measures opt-in, which phase 4's
+  `x_metric`/`y_metric` validation reads.
 - **Phase 6 last, and possibly never.** Tier C is five loosely related
   algorithms; `rch` and `ecost` are new curve types, which
   [enhancements-2026.md](enhancements-2026.md) already deferred once as
@@ -298,14 +409,23 @@ What this plan adds:
 - **Every fix validated by reverting it** and confirming the new test fails
   with a readable message.
 
-## Open decisions
+## Decisions taken
 
-| | Question | Recommendation |
+| | Question | Decision |
 | --- | --- | --- |
-| D1 | Axis range for unbounded measures | Three-way `.metric_range()` |
-| D2 | `odds` at the curve ends | `NA`, documented |
-| D3 | Keep new measures out of the curve path | Yes — extend the `n_extra` set |
-| D4 | Interpolation for `(rec, prec)` / `(fpr, tpr)` | Delegate to the real curve code |
-| D5 | Measure-specific parameters | Decide at phase 5 |
-| D6 | `purrr` vs base vs internal helpers | Internal `.map_*` helpers |
-| — | Name for the new function | `metric_curve()` |
+| D1 | Axis range for unbounded measures | `.metric_range()` returning `"unit"` / `"signed"` / `"free"` |
+| D2 | `odds` at the curve ends | `NA`, documented; parity script compares the finite region |
+| D3 | Keep new measures off the hot path | Derive in R in `calc_measures()`; no C++ change, nothing computed unless asked for |
+| D4 | Interpolation for registered pairs | `.joinable_pairs()` registry; registered pairs delegate to the real curve code, everything else draws points |
+| D6 | `purrr` vs base vs internal helpers | Internal `.map_*` helpers, no new dependency |
+| D7 | Argument checking library | `checkmate` via `check_*()` routed through `.stop_invalid_arg()`, preserving condition classes |
+| D8 | Do new measures join the default panel set | No — opt-in; `.get_metric_names("basic")` still returns 14 |
+| D9 | Measure naming | Standard abbreviations where standard; ROCR jargon spelled out; ROCR ids accepted as aliases |
+| D10 | Name of the new function | `metric_curve()` |
+
+## Still open
+
+| | Question | When it must be settled |
+| --- | --- | --- |
+| D5 | Measure-specific parameters: one argument each, or `metric_args = list(...)` | Phase 5 — does not block 1-4 |
+| D11 | Whether Tier C ships at all | Phase 6 — nothing depends on it |
