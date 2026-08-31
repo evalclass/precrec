@@ -76,10 +76,15 @@ test_that("single class - positive (mode='basic')", {
     points1 <- evalmod(ssmdat1, mode = "basic"),
     "Some basic measures cannot be calculated. Only a single class"
   )
-  expect_warning(
-    evalmod(smmdat1, mode = "basic"),
-    "Some basic measures cannot be calculated. Only a single class"
-  )
+  # Every one of the five datasets is single-class, so all five warn.
+  # expect_warning() would take the first and let the rest escape the test.
+  warns <- capture_warnings(evalmod(smmdat1, mode = "basic"))
+  expect_length(warns, 5)
+  expect_true(all(grepl(
+    "Some basic measures cannot be calculated. Only a single class",
+    warns,
+    fixed = TRUE
+  )))
 
   df1 <- as.data.frame(points1)
   expect_false(any(is.na(df1[df1$type == "accuracy", "y"])))
@@ -109,10 +114,15 @@ test_that("single class - negative (mode='basic')", {
     points1 <- evalmod(ssmdat1, mode = "basic"),
     "Some basic measures cannot be calculated. Only a single class"
   )
-  expect_warning(
-    evalmod(smmdat1, mode = "basic"),
-    "Some basic measures cannot be calculated. Only a single class"
-  )
+  # Every one of the five datasets is single-class, so all five warn.
+  # expect_warning() would take the first and let the rest escape the test.
+  warns <- capture_warnings(evalmod(smmdat1, mode = "basic"))
+  expect_length(warns, 5)
+  expect_true(all(grepl(
+    "Some basic measures cannot be calculated. Only a single class",
+    warns,
+    fixed = TRUE
+  )))
 
   df1 <- as.data.frame(points1)
   expect_false(any(is.na(df1[df1$type == "accuracy", "y"])))
