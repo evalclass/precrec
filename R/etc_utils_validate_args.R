@@ -87,7 +87,7 @@
 # Assert that an argument is a single TRUE or FALSE
 #
 .assert_flag <- function(x, arg) {
-  if (!is.logical(x) || length(x) != 1L || is.na(x)) {
+  if (!checkmate::test_flag(x)) {
     .stop_invalid_arg(
       paste(
         "{.arg {arg}} must be {.code TRUE} or {.code FALSE},",
@@ -107,7 +107,10 @@
 # such as an unnamed model.
 #
 .assert_string <- function(x, arg, values = NULL, allow_na = FALSE) {
-  if (!is.character(x) || length(x) != 1L || (is.na(x) && !allow_na)) {
+  # `na.ok` in checkmate accepts an NA of any type, but this package has always
+  # required a character one - a logical NA reaching a name argument means the
+  # caller passed the wrong thing. `is.character()` keeps that.
+  if (!checkmate::test_string(x, na.ok = allow_na) || !is.character(x)) {
     .stop_invalid_arg(
       "{.arg {arg}} must be a single string, not {.obj_type_friendly {x}}.",
       arg = arg, .envir = environment()
@@ -118,9 +121,102 @@
     return(invisible(TRUE))
   }
 
-  if (!is.null(values) && !(x %in% values)) {
+  if (!is.null(values) && !checkmate::test_choice(x, values)) {
+    near <- .nearest_value(x, values)
     .stop_invalid_arg(
-      "{.arg {arg}} must be one of {.or {.val {values}}}, not {.val {x}}.",
+      .msg_bad_choice(near),
+      arg = arg, .envir = environment()
+    )
+  }
+
+  invisible(TRUE)
+}
+
+#
+# Build the message for a value outside an allowed set
+#
+# Returns a cli template rather than a finished string, so `arg`, `x`, `values`
+# and `near` are interpolated from the calling assert function's environment -
+# which is the one `.stop_invalid_arg()` is handed. Both callers therefore have
+# to compute `near` themselves before raising.
+#
+.msg_bad_choice <- function(near) {
+  msg <- "{.arg {arg}} must be one of {.or {.val {values}}}, not {.val {x}}."
+  if (!is.null(near)) {
+    msg <- c(msg, "i" = "Did you mean {.val {near}}?")
+  }
+
+  msg
+}
+
+#
+# Find the allowed value closest to a rejected one
+#
+# A typo in a measure name should not send the reader back to the help page to
+# scan two dozen alternatives. The threshold scales with the length of what was
+# typed, so a short wrong word offers nothing rather than a coincidence: "xx"
+# is within 3 edits of plenty of names without resembling any of them.
+#
+.nearest_value <- function(x, values, max_dist = 3L) {
+  if (length(values) == 0L || !.is_string(x) || is.na(x)) {
+    return(NULL)
+  }
+
+  dists <- utils::adist(x, values, ignore.case = TRUE)[1, ]
+  limit <- min(max_dist, max(1L, floor(nchar(x) / 2)))
+  if (min(dists) > limit) {
+    return(NULL)
+  }
+
+  values[[which.min(dists)]]
+}
+
+#
+# Assert that an argument is one of a set of allowed values
+#
+# Unlike `.assert_string(values = )` this accepts any atomic type, for
+# arguments whose allowed set is not made of strings.
+#
+.assert_choice <- function(x, arg, values) {
+  if (!checkmate::test_choice(x, values)) {
+    near <- .nearest_value(x, values)
+    .stop_invalid_arg(
+      .msg_bad_choice(near),
+      arg = arg, .envir = environment()
+    )
+  }
+
+  invisible(TRUE)
+}
+
+#
+# Assert that an argument is a vector of one type, optionally of a given length
+#
+# `is.vector()` rather than a checkmate predicate on purpose: it rejects
+# anything carrying an attribute other than names, which is the behaviour the
+# callers below have always had, and which `test_atomic_vector()` would relax.
+#
+.assert_vector <- function(x, arg, type = c("character", "numeric"),
+                           len = NULL) {
+  type <- match.arg(type)
+  is_type <- switch(type,
+    character = is.character,
+    numeric = is.numeric
+  )
+
+  if (!is.vector(x) || !is_type(x)) {
+    .stop_invalid_arg(
+      paste(
+        "{.arg {arg}} must be a {type} vector,",
+        "not {.obj_type_friendly {x}}."
+      ),
+      arg = arg, .envir = environment()
+    )
+  }
+
+  if (!is.null(len) && length(x) != len) {
+    .stop_invalid_arg(
+      "{.arg {arg}} must be length {len}, not length {length(x)}.",
       arg = arg, .envir = environment()
     )
   }
@@ -135,7 +231,9 @@
 #
 .assert_number <- function(x, arg, min = NULL, max = NULL, whole = FALSE,
                            allow_na = FALSE) {
-  if (!is.numeric(x) || length(x) != 1L || (is.na(x) && !allow_na)) {
+  # See `.assert_string()` for why the type is checked alongside checkmate:
+  # `na.ok` would otherwise let a character NA through as a number.
+  if (!checkmate::test_number(x, na.ok = allow_na) || !is.numeric(x)) {
     .stop_invalid_arg(
       "{.arg {arg}} must be a single number, not {.obj_type_friendly {x}}.",
       arg = arg, .envir = environment()
@@ -146,7 +244,9 @@
     return(invisible(TRUE))
   }
 
-  if (whole && x %% 1 != 0) {
+  # `Inf %% 1` is `NaN`, so the modulo alone would fail with R's own "missing
+  # value where TRUE/FALSE needed" instead of a precrec condition.
+  if (whole && (!is.finite(x) || x %% 1 != 0)) {
     .stop_invalid_arg(
       "{.arg {arg}} must be a whole number, not {.val {x}}.",
       arg = arg, .envir = environment()
@@ -247,25 +347,7 @@
 #
 .validate_modnames <- function(modnames, datalen) {
   if (!is.null(modnames)) {
-    if (!is.vector(modnames) || !is.character(modnames)) {
-      .stop_invalid_arg(
-        paste(
-          "{.arg modnames} must be a character vector,",
-          "not {.obj_type_friendly {modnames}}."
-        ),
-        arg = "modnames", .envir = environment()
-      )
-    }
-
-    if (length(modnames) != datalen) {
-      .stop_invalid_arg(
-        paste(
-          "{.arg modnames} must be length {datalen},",
-          "not length {length(modnames)}."
-        ),
-        arg = "modnames", .envir = environment()
-      )
-    }
+    .assert_vector(modnames, "modnames", "character", len = datalen)
   }
 
   invisible(TRUE)
@@ -285,25 +367,7 @@
 #
 .validate_dsids <- function(dsids, datalen) {
   if (!is.null(dsids)) {
-    if (!is.vector(dsids) || !is.numeric(dsids)) {
-      .stop_invalid_arg(
-        paste(
-          "{.arg dsids} must be a numeric vector,",
-          "not {.obj_type_friendly {dsids}}."
-        ),
-        arg = "dsids", .envir = environment()
-      )
-    }
-
-    if (length(dsids) != datalen) {
-      .stop_invalid_arg(
-        paste(
-          "{.arg dsids} must be length {datalen},",
-          "not length {length(dsids)}."
-        ),
-        arg = "dsids", .envir = environment()
-      )
-    }
+    .assert_vector(dsids, "dsids", "numeric", len = datalen)
   }
 
   invisible(TRUE)
