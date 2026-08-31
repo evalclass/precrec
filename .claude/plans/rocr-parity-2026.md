@@ -350,13 +350,52 @@ with its own `NEWS.md` bullets. CI is off on `develop` by design, so
 
 | # | Phase | Branch | Effort | Gate |
 | --- | --- | --- | --- | --- |
-| 1 | `checkmate` behind `.assert_*`, `arg_match()`, `.check_args()` spec | `feature/ArgChecks` | S | Additive; suite green; snapshots unchanged; error classes unchanged |
+| 1 | `checkmate` behind `.assert_*`, near-miss hints, new helpers | `feature/ArgChecks` | S | **DONE (2026-09-01)** - see outcome below |
 | 2 | `.map_*` helpers, retire the 44 `apply` calls | `feature/MapHelpers` | M | **Snapshots byte-identical**; bench within noise |
 | 3 | Tier A measures, `default` flag, `.metric_range()` | `feature/MetricsTierA` | M | `.get_metric_names("basic")` still returns the same 14; parity script |
 | 4 | `metric_curve()`, `.joinable_pairs()`, methods | `feature/MetricCurve` | M | Registered pairs produce data **identical** to `evalmod(mode = "rocprc")` |
 | 5 | Tier B measures + `cost` arguments | `feature/MetricsTierB` | M | Parity script |
 | 6 | Tier C: `prbe`, `rch`, `sar`, `cal`, `ecost` | `feature/MetricsTierC` | L | Per-measure; **candidate for deferral** |
 | 7 | Vignette, pkgdown, release prep | `feature/Docs0160` | S | `check()`, `spell_check()`, `_pkgdown.yml` reference sections |
+
+### Phase 1 outcome (2026-09-01)
+
+Landed on `feature/ArgChecks`. `checkmate` (+ `backports`) is in `Imports`
+and drives the predicates inside `.assert_flag()`, `.assert_string()`,
+`.assert_number()` and the new `.assert_choice()`. Two guard clauses were
+needed: `checkmate`'s `na.ok` accepts an NA of *any* type, so `is.character()`
+and `is.numeric()` still ride alongside it to keep a logical `NA` out of a
+name argument and a character `NA` out of a numeric one. Every message and
+every condition class is unchanged.
+
+**Gate.** A 429-line behavioural probe recorded the exact class and message of
+all eight assert entry points across 33 inputs before the change, and was
+diffed against the same probe afterwards. Two lines moved, both the intended
+bug fix. Full suite `FAIL 0 | WARN 0 | PASS 2989 + 21 new`; `R CMD check`
+`0 errors | 0 warnings | 1 note` (the local `-mno-omit-leaf-frame-pointer`);
+no snapshot moved.
+
+**One real bug found and fixed.** `.assert_number(x, whole = TRUE)` computed
+`x %% 1 != 0`, and `Inf %% 1` is `NaN`, so `evalmod(x_bins = Inf)` failed with
+R's own "missing value where TRUE/FALSE needed" and no `precrec` class
+attached.
+
+**Near-miss hints** are hand-rolled on `utils::adist()` rather than
+`rlang::arg_match()`: `arg_match()` raises its own `rlang_error` and would
+have had to be caught and re-raised to keep the condition classes, and the
+threshold wanted tuning anyway. It scales with the length of what was typed,
+so `"sensitivty"` offers `"sensitivity"` while `"xx"` offers nothing. This is
+aimed squarely at phase 4, where `x_metric` and `y_metric` have ~25 valid
+values.
+
+**`.check_args()` was deliberately not built.** The declarative spec was
+planned as item 3 of R3b, but the `.validate_<arg>()` functions already *are*
+a per-argument registry reused across call sites, and several take a second
+argument (`.validate_modnames(modnames, datalen)`,
+`.validate_cb_alpha(cb_alpha, calc_avg)`) that a name-dispatch table cannot
+carry without escape hatches. Building a second mechanism before
+`metric_curve()` exists would be guessing at its shape. Revisit in phase 4,
+where there is a real consumer to design against.
 
 ### Why this order
 

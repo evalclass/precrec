@@ -90,6 +90,22 @@
   `precrec_error`. The wording of these messages has changed, but the same
   inputs are accepted and rejected as before.
 
+* Suggest the nearest valid value when an argument is given one that is not
+  allowed. `evalmod(mode = "ROCPRC")` now points at `rocprc` in the error, and
+  a `curvetype` with a typo in it is matched against the measure
+  names.
+  A value that resembles nothing in the set is reported as before, without a
+  guess.
+
+* Fix the error raised when an argument that must be a whole number is given
+  an infinite one. `evalmod(x_bins = Inf)` failed with R's own "missing value
+  where TRUE/FALSE needed" rather than a `precrec` condition, because
+  `Inf %% 1` is `NaN`.
+
+* Use `checkmate` for the argument type checks behind the existing helpers.
+  The messages and the condition classes are unchanged; `checkmate` and its
+  only dependency, `backports`, are the new `Imports`.
+
 * Add the package website to `URL` in `DESCRIPTION`, and rebuild the pkgdown
   site with the Bootstrap 5 template.
 

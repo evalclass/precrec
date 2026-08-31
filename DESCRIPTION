@@ -25,6 +25,7 @@ LinkingTo: Rcpp
 Imports:
     Rcpp (>= 1.0.0),
     ggplot2 (>= 3.0.0),
+    checkmate (>= 2.0.0),
     cli (>= 3.4.0),
     grid,
     gridExtra (>= 2.0.0),
@@ -32,7 +33,8 @@ Imports:
     data.table (>= 1.10.4),
     withr (>= 2.3.0),
     graphics (>= 4.0.0),
-    rlang (>= 1.0.0)
+    rlang (>= 1.0.0),
+    utils
 Encoding: UTF-8
 VignetteBuilder: knitr
 Config/testthat/edition: 3
