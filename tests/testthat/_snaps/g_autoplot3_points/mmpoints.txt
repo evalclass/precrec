@@ -1,0 +1,99 @@
+plot: 14 panel(s)
+  panel 1
+    title: Score
+    x: normalized rank
+    y: score
+    layer 1: GeomPoint  n=10  groups=2  n_na_y=2
+      x: min=0 max=1 mean=0.5 | 0 0.25 0.5 0.75 0 0.25 0.5 0.75 1
+      y: min=1.5 max=8 mean=4.75 | NA 6 4.5 3 NA 8 6.5 5 3.5
+  panel 2
+    title: Label (1:pos, -1:neg)
+    x: normalized rank
+    y: label
+    layer 1: GeomPoint  n=10  groups=2  n_na_y=2
+      x: min=0 max=1 mean=0.5 | 0 0.25 0.5 0.75 0 0.25 0.5 0.75 1
+      y: min=0 max=1 mean=0.5 | NA 1 0 0 NA 1 0 1 0
+  panel 3
+    title: Error
+    x: normalized rank
+    y: error
+    layer 1: GeomPoint  n=10  groups=2  n_na_y=0
+      x: min=0 max=1 mean=0.5 | 0 0.25 0.5 0.75 0 0.25 0.5 0.75 1
+      y: min=0.25 max=0.75 mean=0.475 | 0.75 0.5 0.5 0.5 0.75 0.5 0.5 0.25 0.25
+  panel 4
+    title: Accuracy
+    x: normalized rank
+    y: accuracy
+    layer 1: GeomPoint  n=10  groups=2  n_na_y=0
+      x: min=0 max=1 mean=0.5 | 0 0.25 0.5 0.75 0 0.25 0.5 0.75 1
+      y: min=0.25 max=0.75 mean=0.525 | 0.25 0.5 0.5 0.5 0.25 0.5 0.5 0.75 0.75
+  panel 5
+    title: Specificity
+    x: normalized rank
+    y: specificity
+    layer 1: GeomPoint  n=10  groups=2  n_na_y=0
+      x: min=0 max=1 mean=0.5 | 0 0.25 0.5 0.75 0 0.25 0.5 0.75 1
+      y: min=0 max=1 mean=0.55 | 1 1 0.5 0 1 1 0.5 0.5 0
+  panel 6
+    title: Sensitivity
+    x: normalized rank
+    y: sensitivity
+    layer 1: GeomPoint  n=10  groups=2  n_na_y=0
+      x: min=0 max=1 mean=0.5 | 0 0.25 0.5 0.75 0 0.25 0.5 0.75 1
+      y: min=0 max=1 mean=0.5167 | 0 0.3333 0.5 0.6667 0 0.3333 0.5 0.8333 1
+  panel 7
+    title: Precision
+    x: normalized rank
+    y: precision
+    layer 1: GeomPoint  n=10  groups=2  n_na_y=0
+      x: min=0 max=1 mean=0.5 | 0 0.25 0.5 0.75 0 0.25 0.5 0.75 1
+      y: min=0.6667 max=1 mean=0.85 | 1 1 0.75 0.6667 1 1 0.75 0.8333 0.75
+  panel 8
+    title: MCC
+    x: normalized rank
+    y: mcc
+    layer 1: GeomPoint  n=10  groups=2  n_na_y=4
+      x: min=0 max=1 mean=0.5 | 0 0.25 0.5 0.75 0 0.25 0.5 0.75 1
+      y: min=-0.3333 max=0.3333 mean=0.1111 | NA 0.3333 0 -0.3333 NA 0.3333 0 0.3333 NA
+  panel 9
+    title: Fscore
+    x: normalized rank
+    y: fscore
+    layer 1: GeomPoint  n=10  groups=2  n_na_y=0
+      x: min=0 max=1 mean=0.5 | 0 0.25 0.5 0.75 0 0.25 0.5 0.75 1
+      y: min=0 max=0.8571 mean=0.5414 | 0 0.5 0.6 0.6667 0 0.5 0.6 0.8333 0.8571
+  panel 10
+    title: Balanced accuracy
+    x: normalized rank
+    y: balanced_accuracy
+    layer 1: GeomPoint  n=10  groups=2  n_na_y=0
+      x: min=0 max=1 mean=0.5 | 0 0.25 0.5 0.75 0 0.25 0.5 0.75 1
+      y: min=0.3333 max=0.6667 mean=0.5333 | 0.5 0.6667 0.5 0.3333 0.5 0.6667 0.5 0.6667 0.5
+  panel 11
+    title: NPV
+    x: normalized rank
+    y: npv
+    layer 1: GeomPoint  n=10  groups=2  n_na_y=0
+      x: min=0 max=1 mean=0.5 | 0 0.25 0.5 0.75 0 0.25 0.5 0.75 1
+      y: min=0 max=0.5 mean=0.2667 | 0.25 0.3333 0.25 0 0.25 0.3333 0.25 0.5 0.5
+  panel 12
+    title: Informedness
+    x: normalized rank
+    y: informedness
+    layer 1: GeomPoint  n=10  groups=2  n_na_y=0
+      x: min=0 max=1 mean=0.5 | 0 0.25 0.5 0.75 0 0.25 0.5 0.75 1
+      y: min=-0.3333 max=0.3333 mean=0.06667 | 0 0.3333 -1.11e-16 -0.3333 0 0.3333 -1.11e-16 0.3333 0
+  panel 13
+    title: Markedness
+    x: normalized rank
+    y: markedness
+    layer 1: GeomPoint  n=10  groups=2  n_na_y=0
+      x: min=0 max=1 mean=0.5 | 0 0.25 0.5 0.75 0 0.25 0.5 0.75 1
+      y: min=-0.3333 max=0.3333 mean=0.1167 | 0.25 0.3333 0 -0.3333 0.25 0.3333 0 0.3333 0.25
+  panel 14
+    title: Kappa
+    x: normalized rank
+    y: kappa
+    layer 1: GeomPoint  n=10  groups=2  n_na_y=0
+      x: min=0 max=1 mean=0.5 | 0 0.25 0.5 0.75 0 0.25 0.5 0.75 1
+      y: min=-0.3333 max=0.3333 mean=0.04 | 0 0.2 0 -0.3333 0 0.2 0 0.3333 0

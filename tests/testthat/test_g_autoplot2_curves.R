@@ -6,12 +6,7 @@ skip_on_cran()
 test_extra_ap2 <- FALSE
 
 ap2_check_libs1 <- function() {
-  if (requireNamespace("ggplot2", quietly = TRUE) &&
-    requireNamespace("vdiffr", quietly = TRUE)) {
-    TRUE
-  } else {
-    FALSE
-  }
+  requireNamespace("ggplot2", quietly = TRUE)
 }
 
 ap2_check_libs2 <- function() {

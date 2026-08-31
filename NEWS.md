@@ -49,6 +49,15 @@
   anything outside the range 0 to 1 is rejected with a
   `precrec_error_invalid_scores` condition.
 
+* Replace the `vdiffr` plot tests with machine-independent snapshots, and
+  drop `vdiffr` from `Suggests`. The tests now record what a plot is made of
+  -- its panels, their titles and axis labels, and the x/y/group data behind
+  every layer -- as text, instead of comparing a rendered SVG. Rendering
+  brought in the local font metrics, so a baseline belonged to one machine,
+  could not be committed and had to be skipped on CI. The new baselines live
+  in `tests/testthat/_snaps/` under version control, the comparison runs
+  everywhere including CI, and a failure names what changed.
+
 * Stop `autoplot()` and `fortify()` warning "Arguments in `...` must be used"
   on every call. The `fortify` methods accept `raw_curves` and
   `reduce_points` for a common interface, but a single test dataset has no

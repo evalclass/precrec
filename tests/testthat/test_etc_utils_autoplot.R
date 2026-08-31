@@ -1,11 +1,11 @@
 # ETC utils: autoplot structure
 #
-# These tests assert what a plot *is* - how many panels it has, which measure
-# each one draws, how it is titled and labelled - rather than what it renders
-# to. vdiffr covers appearance, but its baselines are per-machine and
-# gitignored, so it is skipped on CI and a stale baseline is indistinguishable
-# from a regression. Structure survives crossing machines, so these run
-# everywhere and catch the changes vdiffr can only report as "the SVG moved".
+# These tests state directly what a plot should be - how many panels it has,
+# which measure each one draws, how it is titled and labelled. The snapshots
+# in _snaps/ catch anything that changes without being asked to; these say
+# what is supposed to be true, so a failure reads as a broken expectation
+# rather than as a diff to go and interpret. Prefer adding to these for
+# anything you can state outright.
 
 skip_on_cran()
 
