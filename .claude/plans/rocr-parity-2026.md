@@ -355,7 +355,7 @@ with its own `NEWS.md` bullets. CI is off on `develop` by design, so
 | 3 | Tier A measures, `default` flag, `.metric_range()` | `feature/MetricsTierA` | M | **DONE (2026-09-01)** - see outcome below |
 | 4 | `metric_curve()`, `.joinable_pairs()`, methods | `feature/MetricCurve` | M | **DONE (2026-09-01)** - see outcome below |
 | 5 | Tier B measures + `cost` arguments | `feature/MetricsTierB` | M | **DONE (2026-09-01)** - see outcome below |
-| 6 | Tier C: `prbe`, `rch`, `sar`, `cal`, `ecost` | `feature/MetricsTierC` | L | Per-measure; **candidate for deferral** |
+| 6 | Tier C: `prbe`, `rch`, `sar`, `cal`, `ecost` | `feature/MetricsTierC` | L | **DONE (2026-09-01)** - `prbe` and `sar` ship, three deferred; see outcome |
 | 7 | Vignette, pkgdown, release prep | `feature/Docs0160` | S | `check()`, `spell_check()`, `_pkgdown.yml` reference sections |
 
 ### Phase 1 outcome (2026-09-01)
@@ -577,6 +577,54 @@ of 1 is exactly the error rate, a column the package has always had. That
 equality is a test, and it would catch a transposed `FP`/`FN` or a missing
 `/n` immediately.
 
+### Phase 6 outcome (2026-09-01)
+
+Landed on `feature/MetricsTierC`. **D11 resolved per measure, not as a
+block** - Tier C is five loosely related algorithms and they do not have one
+answer between them.
+
+**`prbe` ships**, as a function alongside `auc()` rather than as a column:
+the break-even point is a scalar per dataset, not a per-cutoff measure. It
+belongs in this package more than it belongs in ROCR, for the reason the
+package exists.
+
+**Building its parity check found a bug in ROCR.** In the branch that
+interpolates, `.performance.precision.recall.break.even.point` collects
+`uniroot()$f.root` - the residual at the root, ~0 by construction - where it
+means to collect the recall at the root. On a heavily tied dataset that is
+the only value ROCR returns: a break-even point of -2.8e-17 for a curve that
+genuinely breaks even at 0.479. The lesson for the parity script is general:
+**the reference implementation is a reference, not an oracle.** The
+correctness check for `prbe` is against the curve - precision must equal
+recall at every value reported - and ROCR is compared only on the values it
+reports that are genuine break-even points.
+
+**`sar` ships** as a derived measure. Two things made it work:
+
+- Its AUC term is read off the confusion matrices by the trapezoid rule.
+  That is safe here in a way it would *not* be in precision-recall space:
+  ROC space is linearly interpolated by definition, so the trapezoid over
+  every cutoff is the curve rather than an approximation of it. A test pins
+  the result against `auc()`. The same shortcut in PR space would have been
+  the drift the phase 4 registry was built to prevent.
+- Its RMSE term reads the values of the scores, so it warns and returns NA
+  for non-probability scores rather than raising the error
+  `prob_metrics()` raises for the same input. This is one opt-in column
+  among twenty-seven, and `metrics = "all"` should not stop on a dataset
+  whose scores happen not to be probabilities.
+
+**Three are deferred, each for its own reason.**
+
+| | Why not |
+| --- | --- |
+| `rch` | A new curve type in a new space with its own S3 surface. [enhancements-2026.md](enhancements-2026.md) already deferred it once as a separate project. |
+| `ecost` | Same, and its x axis is the probability-cost function rather than anything the pipeline currently produces. |
+| `cal` | **Cannot be a column of the measure table at all.** Its x axis is the median score of a sliding window, so it has `n - window_size + 1` points against the table's `n`, and `.validate.pevals()` requires every column to be the same length. It needs an object of its own, and a calibration plot is better served by a feature designed for it. |
+
+All 36 ROCR identifiers are now either implemented or deferred with a
+recorded reason. The parity script runs **78 checks** over balanced,
+imbalanced and tied data, all passing.
+
 ### Why this order
 
 - **Phase 2 before 3.** The refactor's correctness gate is "no snapshot
@@ -636,15 +684,16 @@ What this plan adds:
 | D2 | `odds` at the curve ends | `NA`, documented; parity script compares the finite region |
 | D3 | Keep new measures off the hot path | Derive in R in `calc_measures()`; no C++ change, nothing computed unless asked for |
 | D4 | Interpolation for registered pairs | `.joinable_pairs()` registry; registered pairs delegate to the real curve code, everything else draws points |
+| D5 | Measure-specific parameters | One named argument per measure - `cost_fp`, `cost_fn` - following `beta`. Settled in phase 5; the count stops at two while Tier C is deferred |
 | D6 | `purrr` vs base vs internal helpers | Internal `.map_*` helpers, no new dependency |
 | D7 | Argument checking library | `checkmate` via `check_*()` routed through `.stop_invalid_arg()`, preserving condition classes |
 | D8 | Do new measures join the default panel set | No — opt-in; `.get_metric_names("basic")` still returns 14 |
 | D9 | Measure naming | Standard abbreviations where standard; ROCR jargon spelled out; ROCR ids accepted as aliases |
-| D5 | Measure-specific parameters | One named argument per measure - `cost_fp`, `cost_fn` - following `beta`. Settled in phase 5; the count stops at two while Tier C is deferred |
 | D10 | Name of the new function | `metric_curve()` |
+| D11 | Whether Tier C ships at all | Per measure. `prbe` and `sar` ship; `rch`, `ecost` and `cal` are deferred with a recorded reason each. Settled in phase 6 |
 
 ## Still open
 
-| | Question | When it must be settled |
-| --- | --- | --- |
-| D11 | Whether Tier C ships at all | Phase 6 — nothing depends on it |
+Nothing. D5 was settled in phase 5 and D11 in phase 6; both are recorded in
+the table above.
+
