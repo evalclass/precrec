@@ -127,3 +127,27 @@ plot.mmpoints <- function(x, y = NULL, ...) {
 
   .plot_multi(x, arglist)
 }
+
+#' @rdname plot
+#' @export
+plot.ssxycurves <- function(x, y = NULL, ...) {
+  .plot_xycurves(x, ...)
+}
+
+#' @rdname plot
+#' @export
+plot.msxycurves <- function(x, y = NULL, ...) {
+  .plot_xycurves(x, show_legend = TRUE, ...)
+}
+
+#' @rdname plot
+#' @export
+plot.smxycurves <- function(x, y = NULL, ...) {
+  .plot_xycurves(x, ...)
+}
+
+#' @rdname plot
+#' @export
+plot.mmxycurves <- function(x, y = NULL, ...) {
+  .plot_xycurves(x, show_legend = TRUE, ...)
+}

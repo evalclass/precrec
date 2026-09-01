@@ -803,3 +803,62 @@ NULL
 
   ylim
 }
+
+#
+# Draw the object of metric_curve() with base R graphics
+#
+# The ggplot2 side of this is `.autoplot_xycurves()`; the two take the same
+# arguments and choose the same default geom from the joinable-pair registry.
+#
+.plot_xycurves <- function(x, type = NULL, show_legend = FALSE,
+                           add_np_nn = TRUE, ...) {
+  .validate(x)
+  .check_type(type)
+  .assert_flag(show_legend, "show_legend")
+  .assert_flag(add_np_nn, "add_np_nn")
+
+  if (is.null(type)) {
+    type <- if (is.na(attr(x, "curve"))) "p" else "l"
+  }
+
+  if (attr(x, "model_type") == "single") {
+    line_col <- "black"
+  } else {
+    line_col <- .make_multi_colors(x)
+  }
+
+  lims <- .xycurve_lims(x)
+  mats <- .make_matplot_mats(x[["xy"]])
+
+  if (show_legend) {
+    withr::local_par(list(mfrow = c(1, 2)))
+  }
+  graphics::matplot(mats[["x"]], mats[["y"]],
+    type = type, lty = 1, pch = 19, col = line_col,
+    main = .xycurve_title(x, add_np_nn),
+    xlab = .get_metric_title(attr(x, "x_metric")),
+    ylab = .get_metric_title(attr(x, "y_metric")),
+    xlim = .xycurve_baselim(lims[["xlim"]], mats[["x"]]),
+    ylim = .xycurve_baselim(lims[["ylim"]], mats[["y"]])
+  )
+  if (show_legend) {
+    .show_legend(x, TRUE)
+  }
+
+  invisible(NULL)
+}
+
+#
+# matplot has no "read it off the data" limit, so an unbounded measure gets
+# the observed range rather than the NULL that ggplot2 understands
+#
+.xycurve_baselim <- function(lim, mat) {
+  if (!is.null(lim)) {
+    return(lim)
+  }
+  if (all(is.na(mat))) {
+    return(c(0, 1))
+  }
+
+  range(mat, na.rm = TRUE)
+}

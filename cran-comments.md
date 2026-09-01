@@ -7,6 +7,7 @@ prepared but not submitted, so this release carries both sets of changes.
 - Add the evaluation measures `ROCR` provides, opt-in through
   `evalmod(metrics = )`, plus confusion-matrix measures, F-beta, and
   probability-based metrics
+- Add `metric_curve()`, which draws one evaluation measure against another
 - Handle single-class datasets with a warning instead of an error
 - Fix the ranking of `NA` scores, the panel titles of `autoplot()`, and the
   y axis of `plot()` for the measures that can go negative

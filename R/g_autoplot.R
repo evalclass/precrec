@@ -215,3 +215,27 @@ autoplot.mmpoints <- function(object, curvetype = .get_obj_metrics(object),
 
   .autoplot_multi(object, arglist)
 }
+
+#' @rdname autoplot
+#' @export
+autoplot.ssxycurves <- function(object, ...) {
+  .autoplot_xycurves(object, ...)
+}
+
+#' @rdname autoplot
+#' @export
+autoplot.msxycurves <- function(object, ...) {
+  .autoplot_xycurves(object, show_legend = TRUE, ...)
+}
+
+#' @rdname autoplot
+#' @export
+autoplot.smxycurves <- function(object, ...) {
+  .autoplot_xycurves(object, ...)
+}
+
+#' @rdname autoplot
+#' @export
+autoplot.mmxycurves <- function(object, ...) {
+  .autoplot_xycurves(object, show_legend = TRUE, ...)
+}

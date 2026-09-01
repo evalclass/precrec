@@ -155,3 +155,43 @@ print.aucroc <- function(x, ...) {
   print.data.frame(aucs, print.gap = 1)
   cat("\n")
 }
+
+#
+# Print the summary of an object of metric_curve()
+#
+#' @export
+print.xycurve_info <- function(x, ...) {
+  # === Validate input arguments ===
+  .validate(x)
+
+  # === print ===
+  cat("\n")
+  cat("    === ", .xycurve_title_label(x), " ===\n\n", sep = "")
+
+  curve <- attr(x, "curve")
+  if (is.na(curve)) {
+    cat("     The points of this pair are not joined by a line.\n")
+    cat("     No interpolation is defined between them; see\n")
+    cat("     ?metric_curve for the pairs that have one.\n")
+  } else {
+    cat("     A registered pair: this is the ", curve, " curve, and is\n",
+      sep = ""
+    )
+    cat("     calculated by the same code as evalmod(mode = \"rocprc\").\n")
+  }
+  cat("\n")
+
+  npoints <- .map_int(x[["xy"]], function(cv) length(cv[["x"]]))
+  summ <- data.frame(
+    modnames = attr(x, "data_info")[["modnames"]],
+    dsids = attr(x, "data_info")[["dsids"]],
+    npoints = npoints
+  )
+  rownames(summ) <- format(rownames(summ), width = 4, justify = "right")
+  colnames(summ) <- c("Model name", "Dataset ID", "# of points")
+
+  print.data.frame(summ, print.gap = 1)
+  cat("\n")
+
+  print.mdat(x)
+}

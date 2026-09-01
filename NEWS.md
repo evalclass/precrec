@@ -1,5 +1,27 @@
 # precrec 0.16.0
 
+* Add `metric_curve()`, which takes the name of a measure for the x axis and
+  the name of a measure for the y axis and draws one against the other, the
+  way `ROCR::performance()` does. Every measure `evalmod()` can calculate is
+  available on both axes, under its own name or under the `ROCR` identifier.
+  It returns an `ssxycurves`, `msxycurves`, `smxycurves` or `mmxycurves`
+  object, chosen the way `evalmod()` chooses between its own, and the object
+  works with `print()`, `as.data.frame()`, `fortify()`, `plot()` and
+  `autoplot()`.
+
+  Only two pairs are joined by a line: false positive rate against
+  sensitivity, which is the ROC curve, and sensitivity against precision,
+  which is the precision-recall curve. Those two have a defined
+  interpolation, and for them `metric_curve()` hands the work to the same
+  code `evalmod(mode = "rocprc")` uses, so the two cannot disagree. Every
+  other pair is drawn as points, because joining raw per-cutoff points with
+  straight lines is the error this package was written to avoid; pass
+  `type = "l"` to join them anyway.
+
+  `metric_curve()` draws one curve per test dataset and does not average
+  over them. An average needs a rule for interpolating between the points of
+  each curve, which is what an unregistered pair does not have.
+
 * Add the evaluation measures `ROCR` provides that `precrec` did not:
   `fpr`, `fnr`, `false_discovery_rate`, `false_omission_rate`,
   `predicted_positive_rate`, `predicted_negative_rate`, `lift` and `odds`.

@@ -218,3 +218,27 @@ fortify.mmpoints <- function(model, data, raw_curves = NULL,
     )
   )
 }
+
+#' @rdname fortify
+#' @export
+fortify.ssxycurves <- function(model, data, ...) {
+  .as_plain_df(.dataframe_xycurves(model, check_ggplot = TRUE, ...))
+}
+
+#' @rdname fortify
+#' @export
+fortify.msxycurves <- function(model, data, ...) {
+  .as_plain_df(.dataframe_xycurves(model, check_ggplot = TRUE, ...))
+}
+
+#' @rdname fortify
+#' @export
+fortify.smxycurves <- function(model, data, ...) {
+  .as_plain_df(.dataframe_xycurves(model, check_ggplot = TRUE, ...))
+}
+
+#' @rdname fortify
+#' @export
+fortify.mmxycurves <- function(model, data, ...) {
+  .as_plain_df(.dataframe_xycurves(model, check_ggplot = TRUE, ...))
+}
