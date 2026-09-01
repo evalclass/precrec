@@ -351,7 +351,7 @@ with its own `NEWS.md` bullets. CI is off on `develop` by design, so
 | # | Phase | Branch | Effort | Gate |
 | --- | --- | --- | --- | --- |
 | 1 | `checkmate` behind `.assert_*`, near-miss hints, new helpers | `feature/ArgChecks` | S | **DONE (2026-09-01)** - see outcome below |
-| 2 | `.map_*` helpers, retire the 44 `apply` calls | `feature/MapHelpers` | M | **Snapshots byte-identical**; bench within noise |
+| 2 | `.map_*` helpers, retire the 44 `apply` calls | `feature/MapHelpers` | M | **DONE (2026-09-01)** - see outcome below |
 | 3 | Tier A measures, `default` flag, `.metric_range()` | `feature/MetricsTierA` | M | `.get_metric_names("basic")` still returns the same 14; parity script |
 | 4 | `metric_curve()`, `.joinable_pairs()`, methods | `feature/MetricCurve` | M | Registered pairs produce data **identical** to `evalmod(mode = "rocprc")` |
 | 5 | Tier B measures + `cost` arguments | `feature/MetricsTierB` | M | Parity script |
@@ -396,6 +396,36 @@ argument (`.validate_modnames(modnames, datalen)`,
 carry without escape hatches. Building a second mechanism before
 `metric_curve()` exists would be guessing at its shape. Revisit in phase 4,
 where there is a real consumer to design against.
+
+### Phase 2 outcome (2026-09-01)
+
+Landed on `feature/MapHelpers`. All 44 call sites now go through `.map()`,
+`.map_dbl()`, `.map_int()`, `.map_chr()`, `.map_lgl()`, `.map_idx()`,
+`.keep()` and `.flatten()` in `R/etc_utils.R`. `.map2()` and `.imap()` were
+written and then removed again: nothing in the package calls them, and a
+helper family carrying two dead members is worse than one that grows when a
+caller appears. They come back in phase 4 if `metric_curve()` wants them.
+
+**Gate met exactly.** All 35 plot snapshots byte-identical, `PASS 3018`
+before and after with the same assertion count, `bench/run_correctness.R`
+40/40, `R CMD check` `0 errors | 0 warnings | 1 note`.
+
+**The committed benchmark baseline was stale and had to be replaced.**
+`bench/run_bench.R --compare bench/baseline/develop.json` reported
+`evalmod_basic` and `as_data_frame_basic` 1.8x slower, which would have read
+as a refactor regression. It was not: the baseline predated the five new
+basic measures of 0.15.0, so it was measuring nine measures against fourteen,
+and it was missing 28 cases outright. Re-running the comparison against a
+baseline built from `develop` in the same session showed nothing beyond 10%.
+The file is regenerated as part of this phase. **A stale baseline produces a
+false regression that looks exactly like a real one** - regenerate it whenever
+a phase changes what the package computes, which phases 3, 5 and 6 all will.
+
+**Two conversions were deliberately left untyped.** `.pmatch_curvetype_rocprc()`
+and `.pmatch_curvetype_basic()` return their input unchanged when it is not a
+string, so `evalmod(curvetype = 1)` has to survive them to reach the validator
+that names the argument. A `.map_chr()` there would have thrown a type error
+from the wrong place. `unlist(.map(...))` keeps the existing behaviour.
 
 ### Why this order
 
