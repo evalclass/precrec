@@ -353,7 +353,7 @@ with its own `NEWS.md` bullets. CI is off on `develop` by design, so
 | 1 | `checkmate` behind `.assert_*`, near-miss hints, new helpers | `feature/ArgChecks` | S | **DONE (2026-09-01)** - see outcome below |
 | 2 | `.map_*` helpers, retire the 44 `apply` calls | `feature/MapHelpers` | M | **DONE (2026-09-01)** - see outcome below |
 | 3 | Tier A measures, `default` flag, `.metric_range()` | `feature/MetricsTierA` | M | **DONE (2026-09-01)** - see outcome below |
-| 4 | `metric_curve()`, `.joinable_pairs()`, methods | `feature/MetricCurve` | M | Registered pairs produce data **identical** to `evalmod(mode = "rocprc")` |
+| 4 | `metric_curve()`, `.joinable_pairs()`, methods | `feature/MetricCurve` | M | **DONE (2026-09-01)** - see outcome below |
 | 5 | Tier B measures + `cost` arguments | `feature/MetricsTierB` | M | Parity script |
 | 6 | Tier C: `prbe`, `rch`, `sar`, `cal`, `ecost` | `feature/MetricsTierC` | L | Per-measure; **candidate for deferral** |
 | 7 | Vignette, pkgdown, release prep | `feature/Docs0160` | S | `check()`, `spell_check()`, `_pkgdown.yml` reference sections |
@@ -486,6 +486,56 @@ carried by the snapshots, the 3100 assertions, the 40 correctness checks and
 the ROCR parity instead - all of which are equality checks and none of which
 the machine can perturb.
 
+### Phase 4 outcome (2026-09-01)
+
+Landed on `feature/MetricCurve`. `metric_curve()` is in `R/main_metric_curve.R`
+with its object and validators; the five S3 methods are in the `g_*.R` file
+of their own generic, per the file-prefix convention, and the two plotting
+helpers in `etc_utils_autoplot.R` / `etc_utils_plot.R`.
+
+**The registry works exactly as designed and the gate is met.** For the ROC
+and PRC pairs, `metric_curve()` produces `x`, `y`, `modname` and `dsid`
+identical to `as.data.frame(evalmod(raw_curves = TRUE))` for that curve,
+including under a non-default `x_bins`. That holds by construction rather
+than by luck: a registered pair is not calculated in this file at all, it is
+handed to the curve pipeline. The registry is also *ordered* -
+`sensitivity` against `precision` is registered, `precision` against
+`sensitivity` is not - and a test pins that too.
+
+**Averaging is out of scope, and that is a consequence of the registry
+rather than a shortcut.** An average over datasets needs a rule for
+interpolating between the points of each curve, which is precisely what an
+unregistered pair does not have. `metric_curve()` draws one curve per test
+dataset and the help and the vignette both say so, pointing at
+`evalmod(calc_avg = TRUE)` for averaged ROC and PR curves.
+
+**D5 turned out not to need settling here.** No Tier A measure takes a
+parameter, so `metric_curve()` gave no new evidence about one argument each
+versus `metric_args = list(...)`. It stays open for phase 5, where `cost`
+forces the question.
+
+**R3b item 3, the declarative argument spec, resolved as a dedupe rather
+than a mechanism.** With `metric_curve()` in front of me the duplication was
+visible and specific: it and `evalmod()` run the same five checks before
+handing their arguments to `mmdata()`. `.validate_data_args()` collects
+those. A name-dispatch table over the `.validate_<arg>()` functions would
+still have needed escape hatches for the ones taking a second argument, and
+would have bought nothing the shared helper does not. This is the answer to
+the item; it is not deferred again.
+
+**Two small things the implementation forced.** The internal `evalmod()`
+calls pass `cb_alpha = NULL`, because `calc_avg = FALSE` otherwise warns that
+the default confidence level is being ignored - which it is, and which this
+caller has no way of not asking for. And the data frame carries `modname`,
+`dsid` and `type` as factors in the object's own order, because that is what
+the curve and point frames do and what the plotting code reads back out.
+
+Five new plot snapshots, read line by line before acceptance per the
+anti-degradation rule: the ROC pair at 1007 interpolated points, the PRC pair
+ending at the 0.5 prevalence, an unregistered pair as 11 raw points with the
+expected `NA` lift at the top rank, the same pair under `type = "l"`, and
+three dataset curves in one panel.
+
 ### Why this order
 
 - **Phase 2 before 3.** The refactor's correctness gate is "no snapshot
@@ -555,5 +605,5 @@ What this plan adds:
 
 | | Question | When it must be settled |
 | --- | --- | --- |
-| D5 | Measure-specific parameters: one argument each, or `metric_args = list(...)` | Phase 5 — does not block 1-4 |
+| D5 | Measure-specific parameters: one argument each, or `metric_args = list(...)` | Phase 5 — phase 4 gave no new evidence, `cost` forces it |
 | D11 | Whether Tier C ships at all | Phase 6 — nothing depends on it |
