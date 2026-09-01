@@ -22,6 +22,8 @@ evalmod(
   beta = 1,
   on_single_class = "error",
   metrics = NULL,
+  cost_fp = 1,
+  cost_fn = 1,
   ...
 )
 }
@@ -157,17 +159,28 @@ the fourteen measures \code{evalmod} has always returned: \code{score},
 The measures that can be added are \code{fpr}, \code{fnr},
 \code{false_discovery_rate}, \code{false_omission_rate},
 \code{predicted_positive_rate}, \code{predicted_negative_rate},
-\code{lift} and \code{odds}. They are the measures \code{ROCR} provides
-that \code{precrec} did not, and each of them also answers to the
-identifier \code{ROCR} uses for it - \code{fall}, \code{miss},
-\code{pcfall}, \code{pcmiss}, \code{rpp} and \code{rnp} - and to its
-standard abbreviation where it has one.
+\code{lift}, \code{odds}, \code{mi}, \code{chisq} and \code{cost}. They
+are the measures \code{ROCR} provides that \code{precrec} did not, and
+each of them also answers to the identifier \code{ROCR} uses for it -
+\code{fall}, \code{miss}, \code{pcfall}, \code{pcmiss}, \code{rpp},
+\code{rnp} and \code{mutual_information} - and to its standard
+abbreviation where it has one.
 
 They are not calculated by default because each is another vector the
 size of the dataset, and because \code{plot} and \code{autoplot} draw
 one panel per measure the object holds. A measure that was not asked
 for cannot be plotted; \code{metrics} is effective only when \code{mode}
 is set to \code{basic}.}
+
+\item{cost_fp}{A numeric value for the cost of a false positive, used
+by the \code{cost} measure. \code{cost} is not normalized, following
+\code{ROCR}: it is
+\code{cost_fp * FP / n + cost_fn * FN / n}, which with the default
+weights of \code{1} is the error rate. \code{cost_fp} is effective only
+when \code{mode} is set to \code{basic} and \code{metrics} asks for
+\code{cost}.}
+
+\item{cost_fn}{A numeric value for the cost of a false negative.}
 
 \item{...}{These additional arguments are passed to \code{\link[=mmdata]{mmdata()}}
 for data preparation. \code{multiclass = "ovr"} asks for a one-vs-rest

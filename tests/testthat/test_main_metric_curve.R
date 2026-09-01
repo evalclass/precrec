@@ -248,3 +248,21 @@ test_that("the object validates and reports its own contents", {
   expect_equal(attr(xy, "curve"), "ROC")
   expect_true(attr(xy, "validated"))
 })
+
+test_that("metric_curve() passes the cost weights through", {
+  xy1 <- mc_single(x_metric = "score", y_metric = "cost")
+  xy2 <- mc_single(
+    x_metric = "score", y_metric = "cost",
+    cost_fp = 3, cost_fn = 0.5
+  )
+
+  expect_false(isTRUE(all.equal(
+    as.data.frame(xy1)[["y"]], as.data.frame(xy2)[["y"]]
+  )))
+})
+
+test_that("metric_curve() rejects a negative cost", {
+  expect_error(mc_single(cost_fp = -1),
+    class = "precrec_error_invalid_cost_fp"
+  )
+})

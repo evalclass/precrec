@@ -87,15 +87,20 @@ test_that(".basic_metric_names() still returns the fourteen defaults", {
   expect_equal(.get_metric_names("basic"), names(.basic_metric_names()))
 })
 
-test_that(".get_metric_names('basic_all') adds the eight new measures", {
+test_that(".get_metric_names('basic_all') adds the ROCR measures", {
   all_names <- .get_metric_names("basic_all")
-  expect_length(all_names, 22)
-  expect_equal(all_names[1:14], .get_metric_names("basic"))
+
+  # The defaults come first and in their own order, so an added measure
+  # cannot displace one
+  expect_equal(all_names[seq_along(.get_metric_names("basic"))],
+    .get_metric_names("basic")
+  )
   expect_equal(
-    all_names[15:22],
+    setdiff(all_names, .get_metric_names("basic")),
     c(
       "fpr", "fnr", "false_discovery_rate", "false_omission_rate",
-      "predicted_positive_rate", "predicted_negative_rate", "lift", "odds"
+      "predicted_positive_rate", "predicted_negative_rate", "lift", "odds",
+      "mi", "chisq", "cost"
     )
   )
 })

@@ -115,17 +115,28 @@
 #'   The measures that can be added are `fpr`, `fnr`,
 #'   `false_discovery_rate`, `false_omission_rate`,
 #'   `predicted_positive_rate`, `predicted_negative_rate`,
-#'   `lift` and `odds`. They are the measures `ROCR` provides
-#'   that `precrec` did not, and each of them also answers to the
-#'   identifier `ROCR` uses for it - `fall`, `miss`,
-#'   `pcfall`, `pcmiss`, `rpp` and `rnp` - and to its
-#'   standard abbreviation where it has one.
+#'   `lift`, `odds`, `mi`, `chisq` and `cost`. They
+#'   are the measures `ROCR` provides that `precrec` did not, and
+#'   each of them also answers to the identifier `ROCR` uses for it -
+#'   `fall`, `miss`, `pcfall`, `pcmiss`, `rpp`,
+#'   `rnp` and `mutual_information` - and to its standard
+#'   abbreviation where it has one.
 #'
 #'   They are not calculated by default because each is another vector the
 #'   size of the dataset, and because `plot` and `autoplot` draw
 #'   one panel per measure the object holds. A measure that was not asked
 #'   for cannot be plotted; `metrics` is effective only when `mode`
 #'   is set to `basic`.
+#'
+#' @param cost_fp A numeric value for the cost of a false positive, used
+#'   by the `cost` measure. `cost` is not normalized, following
+#'   `ROCR`: it is
+#'   `cost_fp * FP / n + cost_fn * FN / n`, which with the default
+#'   weights of `1` is the error rate. `cost_fp` is effective only
+#'   when `mode` is set to `basic` and `metrics` asks for
+#'   `cost`.
+#'
+#' @param cost_fn A numeric value for the cost of a false negative.
 #'
 #' @param on_single_class A string that specifies what the `evalmod`
 #'   function does with a dataset in which every label belongs to the same
@@ -383,7 +394,8 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
                     posclass = NULL, na_worst = TRUE, ties_method = "equiv",
                     calc_avg = TRUE, cb_alpha = 0.05, raw_curves = FALSE,
                     x_bins = 1000, interpolate = TRUE, beta = 1,
-                    on_single_class = "error", metrics = NULL, ...) {
+                    on_single_class = "error", metrics = NULL,
+                    cost_fp = 1, cost_fn = 1, ...) {
   # Validation
   new_mode <- .get_new_mode(mode, mdat, "rocprc")
   new_on_single_class <- .pmatch_on_single_class(on_single_class)
@@ -395,7 +407,8 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
   .validate_evalmod_args(
     new_mode, modnames, dsids, posclass, new_na_worst,
     new_ties_method, calc_avg, cb_alpha, raw_curves,
-    x_bins, interpolate, beta, new_on_single_class, metrics
+    x_bins, interpolate, beta, new_on_single_class, metrics,
+    cost_fp, cost_fn
   )
 
   # Create mdat if not provided
@@ -414,7 +427,7 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
     raw_curves = raw_curves, x_bins = x_bins, interpolate = interpolate,
     na_worst = new_na_worst, ties_method = new_ties_method, beta = beta,
     on_single_class = new_on_single_class, metrics = metrics,
-    validate = FALSE
+    cost_fp = cost_fp, cost_fn = cost_fn, validate = FALSE
   )
 }
 
@@ -459,7 +472,8 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
                                    calc_avg, cb_alpha, raw_curves,
                                    x_bins, interpolate, beta = 1,
                                    on_single_class = "error",
-                                   metrics = NULL) {
+                                   metrics = NULL, cost_fp = 1,
+                                   cost_fn = 1) {
   # Check mode
   .validate_mode(mode)
 
@@ -491,4 +505,7 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
 
   # Check metrics
   .resolve_metrics(metrics)
+
+  # Check the misclassification costs
+  .validate_costs(cost_fp, cost_fn)
 }

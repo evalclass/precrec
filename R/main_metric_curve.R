@@ -44,6 +44,11 @@
 #' @param interpolate A Boolean value to specify whether or not
 #'   interpolation of a registered pair is performed.
 #'
+#' @param cost_fp A numeric value for the cost of a false positive, used
+#'   when one of the two axes is the `cost` measure. See [evalmod()].
+#'
+#' @param cost_fn A numeric value for the cost of a false negative.
+#'
 #' @param ... These additional arguments are passed to [mmdata()]
 #'   for data preparation.
 #'
@@ -120,7 +125,8 @@ metric_curve <- function(mdat, scores = NULL, labels = NULL,
                          x_metric = "fpr", y_metric = "sensitivity",
                          modnames = NULL, dsids = NULL, posclass = NULL,
                          na_worst = TRUE, ties_method = "equiv",
-                         x_bins = 1000, interpolate = TRUE, ...) {
+                         x_bins = 1000, interpolate = TRUE,
+                         cost_fp = 1, cost_fn = 1, ...) {
   # === Validate input arguments ===
   x_metric <- .validate_metric_arg(x_metric, "x_metric")
   y_metric <- .validate_metric_arg(y_metric, "y_metric")
@@ -131,6 +137,7 @@ metric_curve <- function(mdat, scores = NULL, labels = NULL,
   )
   .validate_x_bins(x_bins)
   .validate_interpolate(interpolate)
+  .validate_costs(cost_fp, cost_fn)
 
   if (x_bins == 0) {
     x_bins <- 1
@@ -148,7 +155,7 @@ metric_curve <- function(mdat, scores = NULL, labels = NULL,
   # === Project the two measures ===
   curve <- .joinable_curve(x_metric, y_metric)
   if (is.na(curve)) {
-    xy <- .xy_from_points(mdat, x_metric, y_metric)
+    xy <- .xy_from_points(mdat, x_metric, y_metric, cost_fp, cost_fn)
   } else {
     xy <- .xy_from_curves(mdat, curve, x_bins, interpolate)
   }
@@ -175,7 +182,9 @@ metric_curve <- function(mdat, scores = NULL, labels = NULL,
     x_metric = x_metric,
     y_metric = y_metric,
     x_bins = x_bins,
-    interpolate = interpolate
+    interpolate = interpolate,
+    cost_fp = cost_fp,
+    cost_fn = cost_fn
   )
   attr(s3obj, "validated") <- FALSE
 
@@ -228,14 +237,16 @@ metric_curve <- function(mdat, scores = NULL, labels = NULL,
 #
 # Project two basic measures against each other, one curve per dataset
 #
-.xy_from_points <- function(mdat, x_metric, y_metric) {
+.xy_from_points <- function(mdat, x_metric, y_metric, cost_fp = 1,
+                            cost_fn = 1) {
   metrics <- unique(c(x_metric, y_metric))
   # `cb_alpha = NULL` because `calc_avg = FALSE` otherwise warns that the
   # default confidence level is being ignored - which it is, and which this
   # caller has no way of not asking for
   points <- evalmod(mdat,
     mode = "basic", metrics = metrics,
-    calc_avg = FALSE, cb_alpha = NULL
+    calc_avg = FALSE, cb_alpha = NULL,
+    cost_fp = cost_fp, cost_fn = cost_fn
   )
   short <- .basic_metric_names(.get_obj_metrics(points))
 
@@ -277,7 +288,10 @@ metric_curve <- function(mdat, scores = NULL, labels = NULL,
     "x_metric", "y_metric", "curve", "data_info", "uniq_modnames",
     "uniq_dsids", "model_type", "dataset_type", "args", "validated"
   )
-  arg_names <- c("mode", "x_metric", "y_metric", "x_bins", "interpolate")
+  arg_names <- c(
+    "mode", "x_metric", "y_metric", "x_bins", "interpolate",
+    "cost_fp", "cost_fn"
+  )
   .validate_basic(x, class_name, "metric_curve", "xy", attr_names, arg_names)
 
   .assert_internal(

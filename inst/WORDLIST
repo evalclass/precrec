@@ -6,6 +6,7 @@ bioinformatics
 Bioinformatics
 btw
 cb
+chisq
 ci
 CMD
 codecov
@@ -36,6 +37,7 @@ markedness
 Markedness
 mcc
 mdat
+mi
 mmcurves
 mmdata
 mmpoints

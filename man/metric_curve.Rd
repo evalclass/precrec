@@ -17,6 +17,8 @@ metric_curve(
   ties_method = "equiv",
   x_bins = 1000,
   interpolate = TRUE,
+  cost_fp = 1,
+  cost_fn = 1,
   ...
 )
 }
@@ -59,6 +61,11 @@ interpolation to place supporting points on.}
 
 \item{interpolate}{A Boolean value to specify whether or not
 interpolation of a registered pair is performed.}
+
+\item{cost_fp}{A numeric value for the cost of a false positive, used
+when one of the two axes is the \code{cost} measure. See \code{\link[=evalmod]{evalmod()}}.}
+
+\item{cost_fn}{A numeric value for the cost of a false negative.}
 
 \item{...}{These additional arguments are passed to \code{\link[=mmdata]{mmdata()}}
 for data preparation.}
