@@ -2,7 +2,8 @@
 % Please edit documentation in R/g_prob_metrics.R
 \name{prob_metrics}
 \alias{prob_metrics}
-\title{Calculate the Brier score and the log loss of predicted probabilities}
+\title{Calculate the Brier score, the RMSE and the log loss of predicted
+probabilities}
 \usage{
 prob_metrics(mdat, scores = NULL, labels = NULL, eps = 1e-15, ...)
 }
@@ -31,13 +32,15 @@ for data preparation.}
 \value{
 The \code{prob_metrics} function returns a data frame with the
 columns \code{modnames}, \code{dsids}, \code{metrics}, and
-\code{values}. \code{metrics} is either "brier" or "logloss", so
-each model and dataset combination takes up two rows.
+\code{values}. \code{metrics} is one of "brier", "rmse" or
+"logloss", so each model and dataset combination takes up three
+rows.
 }
 \description{
-The \code{prob_metrics} function calculates two probability-based evaluation
-metrics - the Brier score and the log loss - for prediction scores that
-are probabilities. Unlike ROC and Precision-Recall curves, both metrics
+The \code{prob_metrics} function calculates three probability-based
+evaluation metrics - the Brier score, its square root the root mean
+squared error, and the log loss - for prediction scores that are
+probabilities. Unlike ROC and Precision-Recall curves, these metrics
 depend on the values of the scores rather than on their ranks, so the
 scores must lie in the range [0, 1].
 }

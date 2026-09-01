@@ -74,15 +74,36 @@ test_that(".get_metric_title() reads a factor by its label, not its code", {
   )
 })
 
-# Test .is_signed_metric(curvetype)
+# Test .metric_range(curvetype)
 
-test_that(".is_signed_metric() picks out the measures that can go negative", {
-  expect_true(all(.is_signed_metric(
-    c("mcc", "informedness", "markedness", "kappa", "label")
-  )))
-  expect_false(any(.is_signed_metric(
-    c("accuracy", "precision", "npv", "balanced_accuracy", "fscore")
-  )))
+test_that(".metric_range() picks out the measures that can go negative", {
+  expect_equal(
+    .metric_range(c("mcc", "informedness", "markedness", "kappa", "label")),
+    rep("signed", 5)
+  )
+  expect_equal(
+    .metric_range(
+      c("accuracy", "precision", "npv", "balanced_accuracy", "fscore")
+    ),
+    rep("unit", 5)
+  )
+})
+
+test_that(".metric_range() marks the unbounded measures as free", {
+  expect_equal(.metric_range(c("score", "lift", "odds")), rep("free", 3))
+})
+
+test_that(".metric_range() reads the internal short name too", {
+  # The base-R plotting code indexes the points object, whose names are the
+  # short ones, so informedness reaches it as "infm"
+  expect_equal(
+    .metric_range(c("infm", "mkd", "sn")),
+    c("signed", "signed", "unit")
+  )
+})
+
+test_that(".metric_range() defaults to the unit range for an unknown name", {
+  expect_equal(.metric_range("nonesuch"), "unit")
 })
 
 # Test .get_plot_ncol(nplots)

@@ -464,3 +464,101 @@ test_that("mm test data", {
     tolerance = 1e-4
   )
 })
+
+# Test calc_measures(cmats, ..., metrics)
+
+test_that("calc_measures() calculates nothing extra by default", {
+  pevals <- calc_measures(scores = c(0.1, 0.2, 0), labels = c(1, 0, 1))
+
+  expect_setequal(
+    intersect(names(pevals[["basic"]]), .get_metric_names("basic_all")),
+    .get_metric_names("basic")
+  )
+})
+
+test_that("calc_measures() adds only the measures it is asked for", {
+  pevals <- calc_measures(
+    scores = c(0.1, 0.2, 0), labels = c(1, 0, 1),
+    metrics = .resolve_metrics(c("fpr", "odds"))
+  )
+  pb <- pevals[["basic"]]
+
+  expect_true(all(c("fpr", "odds") %in% names(pb)))
+  expect_false("lift" %in% names(pb))
+})
+
+test_that("the derived measures match their definitions", {
+  scores <- c(0.9, 0.8, 0.7, 0.6, 0.5, 0.4)
+  labels <- c(1, 1, 0, 1, 0, 0)
+  cmats <- create_confmats(scores = scores, labels = labels)
+  pb <- calc_measures(cmats, metrics = .resolve_metrics("all"))[["basic"]]
+
+  tp <- cmats[["tp"]]
+  fp <- cmats[["fp"]]
+  tn <- cmats[["tn"]]
+  fn <- cmats[["fn"]]
+  n_all <- cmats[["pos_num"]] + cmats[["neg_num"]]
+
+  expect_equal(pb[["fpr"]], fp / cmats[["neg_num"]])
+  expect_equal(pb[["fnr"]], fn / cmats[["pos_num"]])
+  expect_equal(pb[["predicted_positive_rate"]], (tp + fp) / n_all)
+  expect_equal(pb[["predicted_negative_rate"]], (tn + fn) / n_all)
+  expect_equal(pb[["false_discovery_rate"]], 1 - pb[["precision"]])
+  expect_equal(pb[["false_omission_rate"]], 1 - pb[["npv"]])
+  expect_equal(
+    pb[["lift"]],
+    pb[["sensitivity"]] / pb[["predicted_positive_rate"]]
+  )
+})
+
+test_that("the odds ratio is NA wherever it is undefined, never infinite", {
+  # FP is zero at the top of every dataset and FN at the bottom, so the ratio
+  # has an empty cell under it there by construction
+  scores <- c(0.9, 0.8, 0.7, 0.6, 0.5, 0.4)
+  labels <- c(1, 1, 0, 1, 0, 0)
+  pb <- calc_measures(
+    scores = scores, labels = labels,
+    metrics = .resolve_metrics("all")
+  )[["basic"]]
+
+  n <- length(pb[["odds"]])
+  expect_true(is.na(pb[["odds"]][1]))
+  expect_true(is.na(pb[["odds"]][n]))
+  expect_false(any(is.infinite(pb[["odds"]])))
+  expect_false(any(is.nan(pb[["odds"]])))
+  expect_false(any(is.infinite(pb[["lift"]])))
+})
+
+test_that("the derived measures line up with the ones they come from", {
+  pb <- calc_measures(
+    scores = c(0.1, 0.2, 0, 0.4), labels = c(1, 0, 1, 0),
+    metrics = .resolve_metrics("all")
+  )[["basic"]]
+
+  lens <- vapply(pb[.get_metric_names("basic_all")], length, integer(1))
+  expect_equal(unname(lens), rep(length(pb[["error"]]), 22))
+})
+
+test_that("a dataset with one class leaves the derived measures NA", {
+  # Specificity is NA without negatives, and the FPR that comes off it too
+  pb <- suppressWarnings(calc_measures(
+    scores = c(0.1, 0.2, 0.3), labels = c(1, 1, 1),
+    metrics = .resolve_metrics("all")
+  ))[["basic"]]
+
+  expect_true(all(is.na(pb[["fpr"]])))
+  expect_false(any(is.na(pb[["fnr"]])))
+})
+
+test_that("nothing is derived when no measure was asked for", {
+  # The curve pipelines and every default `evalmod()` call take this path, so
+  # it has to cost nothing: the table is not even read
+  cmats <- create_confmats(scores = c(0.1, 0.2, 0), labels = c(1, 0, 1))
+  pb <- calc_measures(cmats)[["basic"]]
+
+  expect_identical(.add_derived_measures(pb, cmats, NULL), pb)
+  expect_identical(.add_derived_measures(pb, cmats, character(0)), pb)
+  expect_identical(
+    .add_derived_measures(pb, cmats, .get_metric_names("basic")), pb
+  )
+})

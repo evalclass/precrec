@@ -1,8 +1,10 @@
-#' Calculate the Brier score and the log loss of predicted probabilities
+#' Calculate the Brier score, the RMSE and the log loss of predicted
+#' probabilities
 #'
-#' The `prob_metrics` function calculates two probability-based evaluation
-#'   metrics - the Brier score and the log loss - for prediction scores that
-#'   are probabilities. Unlike ROC and Precision-Recall curves, both metrics
+#' The `prob_metrics` function calculates three probability-based
+#'   evaluation metrics - the Brier score, its square root the root mean
+#'   squared error, and the log loss - for prediction scores that are
+#'   probabilities. Unlike ROC and Precision-Recall curves, these metrics
 #'   depend on the values of the scores rather than on their ranks, so the
 #'   scores must lie in the range \[0, 1\].
 #'
@@ -29,8 +31,9 @@
 #'
 #' @return The `prob_metrics` function returns a data frame with the
 #'   columns `modnames`, `dsids`, `metrics`, and
-#'   `values`. `metrics` is either "brier" or "logloss", so
-#'   each model and dataset combination takes up two rows.
+#'   `values`. `metrics` is one of "brier", "rmse" or
+#'   "logloss", so each model and dataset combination takes up three
+#'   rows.
 #'
 #' @seealso [prob_metrics_ci()] for the CIs of these metrics over multiple
 #'   datasets. [evalmod()] for generating `S3` objects with
@@ -89,10 +92,13 @@ prob_metrics <- function(mdat, scores = NULL, labels = NULL, eps = 1e-15,
     .check_cpp_func_error(pm, "calc_prob_metrics")
 
     data.table::data.table(
-      modnames = rep(modnames[i], 2),
-      dsids = rep(dsids[i], 2),
-      metrics = c("brier", "logloss"),
-      values = c(pm[["brier"]], pm[["logloss"]])
+      modnames = rep(modnames[i], 3),
+      dsids = rep(dsids[i], 3),
+      metrics = c("brier", "rmse", "logloss"),
+      # The RMSE of a probability against a 0/1 outcome is the square root of
+      # the Brier score, so it is read off the value already calculated
+      # rather than summed a second time
+      values = c(pm[["brier"]], sqrt(pm[["brier"]]), pm[["logloss"]])
     )
   }
 
@@ -157,8 +163,9 @@ prob_metrics_ci <- function(mdat, scores = NULL, labels = NULL, eps = 1e-15,
   }
 
   # === Calculate a CI per model and metric ===
-  # The Brier score cannot leave [0, 1]; the log loss is unbounded above
-  bounds <- list(brier = c(0, 1), logloss = c(0, Inf))
+  # The Brier score and its square root cannot leave [0, 1]; the log loss is
+  # unbounded above
+  bounds <- list(brier = c(0, 1), rmse = c(0, 1), logloss = c(0, Inf))
 
   ci_parts <- list()
   for (modname in unique(pmetrics[["modnames"]])) {

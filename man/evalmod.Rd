@@ -21,6 +21,7 @@ evalmod(
   interpolate = TRUE,
   beta = 1,
   on_single_class = "error",
+  metrics = NULL,
   ...
 )
 }
@@ -143,6 +144,30 @@ ROC and precision-recall curves are undefined for such a dataset, so
 \code{rocprc}, \code{prcroc}, or \code{aucroc}. \code{mode = "basic"} always
 warns and calculates what it can, because accuracy and error rate are
 still defined.}
+
+\item{metrics}{A character vector that names the basic evaluation
+measures to calculate in addition to the default set, or the string
+\code{"all"} for every measure \code{precrec} knows. The default \code{NULL} is
+the fourteen measures \code{evalmod} has always returned: \code{score},
+\code{label}, \code{error}, \code{accuracy}, \code{specificity},
+\code{sensitivity}, \code{precision}, \code{mcc}, \code{fscore},
+\code{balanced_accuracy}, \code{npv}, \code{informedness},
+\code{markedness} and \code{kappa}.
+
+The measures that can be added are \code{fpr}, \code{fnr},
+\code{false_discovery_rate}, \code{false_omission_rate},
+\code{predicted_positive_rate}, \code{predicted_negative_rate},
+\code{lift} and \code{odds}. They are the measures \code{ROCR} provides
+that \code{precrec} did not, and each of them also answers to the
+identifier \code{ROCR} uses for it - \code{fall}, \code{miss},
+\code{pcfall}, \code{pcmiss}, \code{rpp} and \code{rnp} - and to its
+standard abbreviation where it has one.
+
+They are not calculated by default because each is another vector the
+size of the dataset, and because \code{plot} and \code{autoplot} draw
+one panel per measure the object holds. A measure that was not asked
+for cannot be plotted; \code{metrics} is effective only when \code{mode}
+is set to \code{basic}.}
 
 \item{...}{These additional arguments are passed to \code{\link[=mmdata]{mmdata()}}
 for data preparation. \code{multiclass = "ovr"} asks for a one-vs-rest

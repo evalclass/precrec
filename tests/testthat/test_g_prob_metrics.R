@@ -9,16 +9,16 @@ pm_test_labels <- function() {
   c(1, 1, 1, 1, 1, 0, 0, 0, 0, 0)
 }
 
-test_that("prob_metrics() returns a data frame of both metrics", {
+test_that("prob_metrics() returns a data frame of all three metrics", {
   pm <- prob_metrics(scores = pm_test_scores(), labels = pm_test_labels())
 
   expect_true(is.data.frame(pm))
   expect_false(is(pm, "data.table"))
   expect_equal(names(pm), c("modnames", "dsids", "metrics", "values"))
-  expect_equal(pm[["metrics"]], c("brier", "logloss"))
+  expect_equal(pm[["metrics"]], c("brier", "rmse", "logloss"))
 })
 
-test_that("prob_metrics() matches the definitions of the two metrics", {
+test_that("prob_metrics() matches the definitions of the three metrics", {
   scores <- pm_test_scores()
   labels <- pm_test_labels()
   pm <- prob_metrics(scores = scores, labels = labels)
@@ -27,7 +27,8 @@ test_that("prob_metrics() matches the definitions of the two metrics", {
   logloss <- -mean(labels * log(scores) + (1 - labels) * log(1 - scores))
 
   expect_equal(pm[["values"]][1], brier)
-  expect_equal(pm[["values"]][2], logloss)
+  expect_equal(pm[["values"]][2], sqrt(brier))
+  expect_equal(pm[["values"]][3], logloss)
 })
 
 test_that("prob_metrics() accepts an 'mdat' object", {
@@ -47,26 +48,26 @@ test_that("prob_metrics() keeps model names and dataset IDs", {
   mdat <- mmdata(scores, labels, modnames = c("m1", "m1"), dsids = c(1, 2))
   pm <- prob_metrics(mdat)
 
-  expect_equal(nrow(pm), 4)
-  expect_equal(pm[["modnames"]], rep("m1", 4))
-  expect_equal(pm[["dsids"]], c(1, 1, 2, 2))
+  expect_equal(nrow(pm), 6)
+  expect_equal(pm[["modnames"]], rep("m1", 6))
+  expect_equal(pm[["dsids"]], c(1, 1, 1, 2, 2, 2))
 
-  # The reversed scores are the worse model on both counts
-  expect_true(all(pm[["values"]][3:4] > pm[["values"]][1:2]))
+  # The reversed scores are the worse model on all three counts
+  expect_true(all(pm[["values"]][4:6] > pm[["values"]][1:3]))
 })
 
 test_that("prob_metrics() clamps the log loss of certain predictions", {
   # A confident and wrong prediction would otherwise make the log loss
   # infinite
   pm1 <- prob_metrics(scores = c(1, 0, 0), labels = c(1, 0, 1))
-  expect_true(is.finite(pm1[["values"]][2]))
+  expect_true(is.finite(pm1[["values"]][3]))
 
   # A larger eps is a smaller penalty
   pm2 <- prob_metrics(
     scores = c(1, 0, 0), labels = c(1, 0, 1),
     eps = 1e-5
   )
-  expect_true(pm2[["values"]][2] < pm1[["values"]][2])
+  expect_true(pm2[["values"]][3] < pm1[["values"]][3])
 
   # The Brier score is not clamped
   expect_equal(pm1[["values"]][1], pm2[["values"]][1])
@@ -125,8 +126,8 @@ test_that("prob_metrics_ci() returns one row per model and metric", {
     "modnames", "metrics", "mean", "error",
     "lower_bound", "upper_bound", "n"
   ))
-  expect_equal(nrow(ci), 4)
-  expect_equal(ci[["n"]], rep(4, 4))
+  expect_equal(nrow(ci), 6)
+  expect_equal(ci[["n"]], rep(4, 6))
 })
 
 test_that("prob_metrics_ci() matches the per-dataset values", {

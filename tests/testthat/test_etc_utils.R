@@ -54,3 +54,89 @@ test_that(".flatten() removes exactly one level of nesting", {
   )
   expect_null(.flatten(list()))
 })
+
+# Test .basic_metric_table(), .basic_metric_names(metrics),
+#      .resolve_metrics(metrics), .get_metric_names(mode),
+#      .get_obj_metrics(obj), .pmatch_metric_names(metrics)
+
+test_that("the metric table is internally consistent", {
+  tab <- .basic_metric_table()
+
+  expect_false(any(duplicated(tab$name)))
+  expect_false(any(duplicated(tab$short)))
+  expect_true(all(tab$range %in% c("unit", "signed", "free")))
+  expect_equal(sum(tab$default), 14L)
+})
+
+test_that("every alias points at a name the table holds", {
+  tab <- .basic_metric_table()
+  expect_true(all(.basic_metric_aliases() %in% tab$name))
+  expect_false(any(names(.basic_metric_aliases()) %in% tab$name))
+})
+
+test_that(".basic_metric_names() still returns the fourteen defaults", {
+  # The panel count of an existing caller's plot depends on this
+  expect_equal(
+    names(.basic_metric_names()),
+    c(
+      "score", "label", "error", "accuracy", "specificity", "sensitivity",
+      "precision", "mcc", "fscore", "balanced_accuracy", "npv",
+      "informedness", "markedness", "kappa"
+    )
+  )
+  expect_equal(.get_metric_names("basic"), names(.basic_metric_names()))
+})
+
+test_that(".get_metric_names('basic_all') adds the eight new measures", {
+  all_names <- .get_metric_names("basic_all")
+  expect_length(all_names, 22)
+  expect_equal(all_names[1:14], .get_metric_names("basic"))
+  expect_equal(
+    all_names[15:22],
+    c(
+      "fpr", "fnr", "false_discovery_rate", "false_omission_rate",
+      "predicted_positive_rate", "predicted_negative_rate", "lift", "odds"
+    )
+  )
+})
+
+test_that(".resolve_metrics() keeps the default set whatever it is given", {
+  defaults <- .get_metric_names("basic")
+
+  expect_equal(.resolve_metrics(NULL), defaults)
+  expect_equal(.resolve_metrics("all"), .get_metric_names("basic_all"))
+  expect_equal(.resolve_metrics("lift"), c(defaults, "lift"))
+  expect_equal(.resolve_metrics("accuracy"), defaults)
+})
+
+test_that(".resolve_metrics() returns the measures in table order", {
+  expect_equal(
+    .resolve_metrics(c("odds", "fpr")),
+    c(.get_metric_names("basic"), "fpr", "odds")
+  )
+})
+
+test_that(".resolve_metrics() resolves the ROCR identifiers", {
+  expect_equal(.resolve_metrics("fall"), .resolve_metrics("fpr"))
+  expect_equal(.resolve_metrics("rpp"), .resolve_metrics(
+    "predicted_positive_rate"
+  ))
+  expect_equal(.resolve_metrics("pcmiss"), .resolve_metrics(
+    "false_omission_rate"
+  ))
+})
+
+test_that(".resolve_metrics() rejects a name it does not know", {
+  expect_error(.resolve_metrics("nonesuch"),
+    class = "precrec_error_invalid_metrics"
+  )
+  expect_error(.resolve_metrics(1), class = "precrec_error_invalid_metrics")
+  expect_error(.resolve_metrics(list("fpr")),
+    class = "precrec_error_invalid_metrics"
+  )
+})
+
+test_that(".get_obj_metrics() falls back to the default set", {
+  # An object built before `metrics` existed carries no attribute
+  expect_equal(.get_obj_metrics(structure(list())), .get_metric_names("basic"))
+})

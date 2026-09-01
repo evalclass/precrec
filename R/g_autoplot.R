@@ -140,7 +140,7 @@ autoplot.mmcurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
 
 #' @rdname autoplot
 #' @export
-autoplot.sspoints <- function(object, curvetype = .get_metric_names("basic"),
+autoplot.sspoints <- function(object, curvetype = .get_obj_metrics(object),
                               ...) {
   arglist <- .get_autoplot_arglist(attr(object, "args"),
     def_curvetype = curvetype, def_type = "p",
@@ -160,7 +160,7 @@ autoplot.sspoints <- function(object, curvetype = .get_metric_names("basic"),
 
 #' @rdname autoplot
 #' @export
-autoplot.mspoints <- function(object, curvetype = .get_metric_names("basic"),
+autoplot.mspoints <- function(object, curvetype = .get_obj_metrics(object),
                               ...) {
   arglist <- .get_autoplot_arglist(attr(object, "args"),
     def_curvetype = curvetype, def_type = "p",
@@ -180,7 +180,7 @@ autoplot.mspoints <- function(object, curvetype = .get_metric_names("basic"),
 
 #' @rdname autoplot
 #' @export
-autoplot.smpoints <- function(object, curvetype = .get_metric_names("basic"),
+autoplot.smpoints <- function(object, curvetype = .get_obj_metrics(object),
                               ...) {
   arglist <- .get_autoplot_arglist(attr(object, "args"),
     def_curvetype = curvetype, def_type = "p",
@@ -199,7 +199,7 @@ autoplot.smpoints <- function(object, curvetype = .get_metric_names("basic"),
 
 #' @rdname autoplot
 #' @export
-autoplot.mmpoints <- function(object, curvetype = .get_metric_names("basic"),
+autoplot.mmpoints <- function(object, curvetype = .get_obj_metrics(object),
                               ...) {
   arglist <- .get_autoplot_arglist(attr(object, "args"),
     def_curvetype = curvetype, def_type = "p",

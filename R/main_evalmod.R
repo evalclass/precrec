@@ -103,6 +103,30 @@
 #'   The default `1` gives the F1 score. `beta` is effective only
 #'   when `mode` is set to `basic`.
 #'
+#' @param metrics A character vector that names the basic evaluation
+#'   measures to calculate in addition to the default set, or the string
+#'   `"all"` for every measure `precrec` knows. The default `NULL` is
+#'   the fourteen measures `evalmod` has always returned: `score`,
+#'   `label`, `error`, `accuracy`, `specificity`,
+#'   `sensitivity`, `precision`, `mcc`, `fscore`,
+#'   `balanced_accuracy`, `npv`, `informedness`,
+#'   `markedness` and `kappa`.
+#'
+#'   The measures that can be added are `fpr`, `fnr`,
+#'   `false_discovery_rate`, `false_omission_rate`,
+#'   `predicted_positive_rate`, `predicted_negative_rate`,
+#'   `lift` and `odds`. They are the measures `ROCR` provides
+#'   that `precrec` did not, and each of them also answers to the
+#'   identifier `ROCR` uses for it - `fall`, `miss`,
+#'   `pcfall`, `pcmiss`, `rpp` and `rnp` - and to its
+#'   standard abbreviation where it has one.
+#'
+#'   They are not calculated by default because each is another vector the
+#'   size of the dataset, and because `plot` and `autoplot` draw
+#'   one panel per measure the object holds. A measure that was not asked
+#'   for cannot be plotted; `metrics` is effective only when `mode`
+#'   is set to `basic`.
+#'
 #' @param on_single_class A string that specifies what the `evalmod`
 #'   function does with a dataset in which every label belongs to the same
 #'   class.
@@ -359,7 +383,7 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
                     posclass = NULL, na_worst = TRUE, ties_method = "equiv",
                     calc_avg = TRUE, cb_alpha = 0.05, raw_curves = FALSE,
                     x_bins = 1000, interpolate = TRUE, beta = 1,
-                    on_single_class = "error", ...) {
+                    on_single_class = "error", metrics = NULL, ...) {
   # Validation
   new_mode <- .get_new_mode(mode, mdat, "rocprc")
   new_on_single_class <- .pmatch_on_single_class(on_single_class)
@@ -371,7 +395,7 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
   .validate_evalmod_args(
     new_mode, modnames, dsids, posclass, new_na_worst,
     new_ties_method, calc_avg, cb_alpha, raw_curves,
-    x_bins, interpolate, beta, new_on_single_class
+    x_bins, interpolate, beta, new_on_single_class, metrics
   )
 
   # Create mdat if not provided
@@ -389,7 +413,8 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
     mode = new_mode, calc_avg = calc_avg, cb_alpha = cb_alpha,
     raw_curves = raw_curves, x_bins = x_bins, interpolate = interpolate,
     na_worst = new_na_worst, ties_method = new_ties_method, beta = beta,
-    on_single_class = new_on_single_class, validate = FALSE
+    on_single_class = new_on_single_class, metrics = metrics,
+    validate = FALSE
   )
 }
 
@@ -433,7 +458,8 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
                                    posclass, na_worst, ties_method,
                                    calc_avg, cb_alpha, raw_curves,
                                    x_bins, interpolate, beta = 1,
-                                   on_single_class = "error") {
+                                   on_single_class = "error",
+                                   metrics = NULL) {
   # Check mode
   .validate_mode(mode)
 
@@ -474,4 +500,7 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
 
   # Check on_single_class
   .validate_on_single_class(on_single_class)
+
+  # Check metrics
+  .resolve_metrics(metrics)
 }

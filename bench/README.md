@@ -82,17 +82,68 @@ separate batches drift against each other over minutes. During the E4 work
 a 5% "regression" survived three alternating rounds and a reversed run
 order, and then evaporated once the change it was blamed on was isolated.
 
-So treat `--compare` as a screen, not a verdict. Anything under roughly
-1.3x on a single case wants an alternating A/B — build the variant with one
-changed function, run old/new/old/new in one sitting, and compare medians.
-A change worth keeping usually shows up far outside the noise:
-`as.data.frame()` went from 6.2 ms to 4.5 ms in every run of every batch.
+**And 11% is the floor on a quiet machine, not a ceiling.** During the
+0.16.0 work, two `--compare` runs of *the same code* against *the same
+baseline*, minutes apart, flagged different cases: `as_data_frame_basic`
+came out 1.87x on one dataset and 1.23x on it in the next run, while a
+different dataset went 2.02x in the second run having not been flagged at
+all in the first. `evalmod_basic` was simultaneously 1.19x on one dataset
+and 0.76x on another. A machine that has been running `R CMD check` and
+benchmark sweeps back to back cannot resolve anything under about 2x, and
+a single 2x reading on one case is not evidence of anything either.
+
+So treat `--compare` as a screen, not a verdict, and check what a run of
+unchanged code against the same baseline says before believing a number
+from it. Anything under roughly 1.3x on a single case wants an alternating
+A/B — build the variant with one changed function, run old/new/old/new in
+one sitting, and compare medians. A change worth keeping usually shows up
+far outside the noise: `as.data.frame()` went from 6.2 ms to 4.5 ms in
+every run of every batch.
+
+**Compare like with like.** A baseline saved with `--quick` and one saved
+without are not comparable: `--quick` runs 3 iterations at 0.05 s where the
+full run does 20 at 0.5 s, so the quick numbers carry warm-up that the full
+ones amortise away. Comparing across the two reads as a uniform regression
+of 1.5x or more on the heavier cases.
 
 `bench/baseline/develop.json` is the committed reference, recorded on
-`develop` before any E4 optimisation landed. Timings are machine-specific,
+`develop` at full settings. **Regenerate it whenever a phase changes what
+the package computes** — the copy that predated the five basic measures
+added in 0.15.0 reported their documented cost as a 1.8x regression in
+every later comparison, which looks exactly like a real one. Timings are machine-specific,
 so the ratios are what carry across machines, not the absolute numbers —
 record your own baseline with `--save` if you want a like-for-like
 comparison on your hardware.
+
+## Parity with ROCR
+
+```sh
+Rscript bench/run_rocr_parity.R
+```
+
+The measures added in 0.16.0 are the ones `ROCR` provides, so `ROCR` is the
+reference implementation for them and comparing against it is a stronger
+check than any internal invariant. `ROCR` is deliberately **not** a
+dependency, not even in `Suggests`; install it yourself to run this, and the
+script exits quietly when it is absent.
+
+```r
+install.packages("ROCR")
+```
+
+Two differences between the two packages are asserted rather than tolerated:
+
+- `odds` is `NA` in `precrec` wherever the 2x2 table has an empty cell,
+  which is the top and bottom rank of every dataset. `ROCR` reports `Inf`
+  or `NaN` there. The script checks that this is the *only* place the two
+  disagree.
+- `ROCR` reports one row per distinct cutoff where `precrec` reports one per
+  rank, so on tied scores the two have different row counts. They are lined
+  up on the cutoff, taking `precrec`'s **last** row at each one — the row
+  that counts every instance scoring at or above it, which is what `ROCR`'s
+  single row for that cutoff means. Any other choice compares different
+  confusion matrices and fails for every measure, the long-standing ones
+  included.
 
 ## Memory
 
@@ -140,6 +191,7 @@ wrong. The harness pins three properties and exits non-zero if any fails:
 | `run_bench.R` | timing entry point |
 | `run_memory.R` | peak-RSS entry point |
 | `run_correctness.R` | correctness entry point |
+| `run_rocr_parity.R` | cross-check of the basic measures against ROCR |
 | `baseline/` | committed baseline JSON |
 
 ## Datasets

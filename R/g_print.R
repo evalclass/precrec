@@ -73,6 +73,20 @@ print.curve_info <- function(x, ...) {
 }
 
 #
+# The short name and the description of each measure, one line each
+#
+# The normalized rank is not a measure and has no row in the table, but it is
+# a row of the summary below, so it heads the list.
+#
+.metric_legend <- function(metrics) {
+  tab <- .basic_metric_table()
+  tab <- tab[match(metrics, tab$name), ]
+  short <- c("rank", tab$short)
+  desc <- c("normalized rank", tab$desc)
+  paste0("      ", formatC(paste0(short, ":"), width = -7), " ", desc, "\n")
+}
+
+#
 # Print the summary of basic performance evaluation measures
 #
 #' @export
@@ -84,21 +98,8 @@ print.beval_info <- function(x, ...) {
   cat("\n")
   cat("    === Basic performance evaluation measures ===\n\n")
   cat("     ## Performance measures (Meas.)\n")
-  cat("      rank:   normalized rank\n")
-  cat("      score:  score\n")
-  cat("      label:  label\n")
-  cat("      err:    error rate\n")
-  cat("      acc:    accuracy\n")
-  cat("      sp:     specificity\n")
-  cat("      sn:     sensitivity\n")
-  cat("      prec:   precision\n")
-  cat("      mcc:    Matthews correlation coefficient\n")
-  cat("      fscore: F-score\n")
-  cat("      bacc:   balanced accuracy\n")
-  cat("      npv:    negative predictive value\n")
-  cat("      infm:   informedness (Youden's J)\n")
-  cat("      mkd:    markedness\n")
-  cat("      kappa:  Cohen's kappa\n")
+  # Only the measures this object holds - `evalmod(metrics = )` decides that
+  cat(.metric_legend(.get_obj_metrics(x)), sep = "")
   cat("\n\n")
 
   eval_summary <- .as_plain_df(attr(x, "eval_summary"), copy = TRUE)
@@ -110,7 +111,7 @@ print.beval_info <- function(x, ...) {
     "Model", "ID", "Meas.", "Min.",
     "1st Qu.", "Median", "Mean", "3rd Qu.", "Max."
   )
-  evaltypes <- c("rank", unname(.basic_metric_names()))
+  evaltypes <- c("rank", unname(.basic_metric_names(.get_obj_metrics(x))))
   eval_summary[, "Meas."] <- evaltypes
 
   print.data.frame(eval_summary, print.gap = 1)

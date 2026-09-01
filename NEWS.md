@@ -1,3 +1,35 @@
+# precrec 0.16.0
+
+* Add the evaluation measures `ROCR` provides that `precrec` did not:
+  `fpr`, `fnr`, `false_discovery_rate`, `false_omission_rate`,
+  `predicted_positive_rate`, `predicted_negative_rate`, `lift` and `odds`.
+  Each also answers to the identifier `ROCR` uses for it - `fall`, `miss`,
+  `pcfall`, `pcmiss`, `rpp`, `rnp` - and to its standard abbreviation
+  where it has one, so a call written against `ROCR` keeps working.
+
+  They are not calculated unless asked for. `evalmod()` gains a `metrics`
+  argument that names the measures to add, or takes `"all"`; the default
+  `NULL` is the fourteen measures the function has always returned, so an
+  existing call gets the same object with the same fourteen `plot()` and
+  `autoplot()` panels. A measure that was not calculated cannot be plotted,
+  and the error says which argument asks for it.
+
+  The odds ratio is `NA` at the top and the bottom of every dataset, where
+  the 2x2 table has an empty cell and the ratio is undefined. `ROCR` reports
+  an infinity there. `NA` is what `precision` and `npv` already do with
+  their own undefined end, and it keeps an infinity off a shared axis.
+
+* Add the root mean squared error to `prob_metrics()` and
+  `prob_metrics_ci()`, as the `"rmse"` metric. It is the square root of the
+  Brier score, so each model and dataset now takes up three rows rather than
+  two.
+
+* Fix the y axis of `plot()` for informedness and markedness. Both run from
+  -1 to 1, and both were drawn on a 0 to 1 axis, which cut off the negative
+  half of the curve. `autoplot()` was never affected. The axis range of a
+  measure now comes from one table rather than from a list of names that had
+  the internal short names missing from it.
+
 # precrec 0.15.0
 
 * Support datasets with more than two classes, by one-vs-rest decomposition.

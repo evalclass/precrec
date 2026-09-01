@@ -714,11 +714,13 @@ NULL
   } else if (curvetype == "PRC") {
     xlim <- attr(object[["prcs"]], "xlim")
     ylim <- attr(object[["prcs"]], "ylim")
-  } else if (.is_signed_metric(curvetype)) {
+  } else if (.metric_range(curvetype) == "signed") {
     xlim <- c(0, 1)
     ylim <- c(-1, 1)
     ratio <- 0.5
-  } else if (curvetype == "score") {
+  } else if (.metric_range(curvetype) == "free") {
+    # Unbounded above - the score, the lift and the odds ratio. ggplot2 reads
+    # the range off the data when it is not given one.
     xlim <- c(0, 1)
     ylim <- NULL
     ratio <- NULL
