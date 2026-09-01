@@ -60,6 +60,7 @@ pnr
 pos
 ppr
 PPV
+prbe
 prcroc
 Pre
 purrr
@@ -69,9 +70,12 @@ rmse
 RMSE
 rnp
 rocprc
+ROCR
 roxygen
 rpp
 Rtools
+sar
+SAR
 smcurves
 smpoints
 spAUCs

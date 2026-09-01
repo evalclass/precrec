@@ -48,6 +48,23 @@
   class for everything carries no information about the labels - that value
   is defined, and it is zero.
 
+* Add `prbe()`, which finds the points of a precision-recall curve at which
+  precision and recall are equal. It takes the object `evalmod()` returns and
+  gives back a data frame with one row per break-even point, in the manner of
+  `auc()`.
+
+  `ROCR::performance(pred, "prbe")` interpolates linearly between adjacent
+  raw precision-recall points to find the crossing, which is not correct and
+  is the reason this package exists; `prbe()` reads the crossing off the
+  curve `evalmod()` has already interpolated properly.
+
+* Add the `sar` measure, the mean of accuracy, the AUC of the ROC curve, and
+  one minus the root mean squared error. Like the other added measures it is
+  opt-in through `evalmod(metrics = )`. The RMSE reads the values of the
+  scores rather than their ranks, so `sar` warns and returns `NA` when the
+  scores are not probabilities between 0 and 1; every other measure asked for
+  in the same call is still returned.
+
 * Add the root mean squared error to `prob_metrics()` and
   `prob_metrics_ci()`, as the `"rmse"` metric. It is the square root of the
   Brier score, so each model and dataset now takes up three rows rather than

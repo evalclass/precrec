@@ -39,6 +39,9 @@ reference:
   - title: Confidence interval of AUC scores
     contents:
     - auc_ci
+  - title: Precision-recall break-even point
+    contents:
+    - prbe
   - title: Probability-based metrics
     contents:
     - prob_metrics

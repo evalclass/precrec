@@ -77,7 +77,8 @@ check <- function(label, ok) {
     odds = "odds",
     mi = "mi",
     chisq = "chisq",
-    cost = "cost"
+    cost = "cost",
+    sar = "sar"
   )
 }
 
@@ -210,6 +211,68 @@ check <- function(label, ok) {
   )
 }
 
+# `prbe` is a scalar per dataset rather than a per-cutoff column, so it has
+# its own function here and its own comparison.
+#
+# Two differences from ROCR, and the second is a bug on ROCR's side:
+#
+#   1. ROCR interpolates linearly between adjacent raw precision-recall
+#      points to find the crossing; precrec reads it off the curve it has
+#      already interpolated properly. They agree wherever the crossing falls
+#      on a point both hold.
+#   2. In the branch that interpolates, ROCR reports `uniroot()$f.root` -
+#      the residual at the root, which is ~0 by construction - where it means
+#      to report the recall at the root. So an interpolated crossing comes
+#      back from ROCR as ~0 whatever it actually is. On a heavily tied
+#      dataset that is the only value it returns.
+#
+# So the correctness check is against the curve rather than against ROCR:
+# precision must equal recall at every value precrec reports. ROCR is then
+# compared on the values it reports that are genuine break-even points.
+.check_prbe <- function(scores, labels, rocr_pred, tag) {
+  curves <- evalmod(scores = scores, labels = labels)
+  ours <- prbe(curves)[["prbe"]]
+  ours <- ours[!is.na(ours)]
+
+  df <- as.data.frame(curves)
+  df <- df[df$type == "PRC", ]
+
+  # Precision at a given recall, read off the supporting points
+  prec_at <- function(v) {
+    i <- which.min(abs(df$x - v))
+    df$y[i]
+  }
+
+  check(
+    paste0(
+      "prbe is a genuine crossing [", tag, "], ",
+      length(ours), " point(s)"
+    ),
+    length(ours) > 0 &&
+      all(vapply(ours, function(v) abs(prec_at(v) - v) < 1e-2, logical(1)))
+  )
+
+  rocr <- unique(ROCR::performance(rocr_pred, "prbe")@y.values[[1]])
+  genuine <- rocr[vapply(
+    rocr, function(v) abs(prec_at(v) - v) < 1e-2, logical(1)
+  )]
+  if (length(genuine) == 0L) {
+    return(check(
+      paste0("ROCR reported no usable prbe value [", tag, "] - skipped"),
+      TRUE
+    ))
+  }
+
+  check(
+    paste0(
+      "prbe vs ROCR:prbe [", tag, "], ", length(genuine), " point(s)"
+    ),
+    all(vapply(
+      genuine, function(v) min(abs(ours - v)) < 1e-3, logical(1)
+    ))
+  )
+}
+
 # --- Datasets --------------------------------------------------------------
 
 set.seed(20260901)
@@ -241,6 +304,7 @@ for (tag in names(cases)) {
   .check_odds_convention(pc, pred, tag)
   .check_mi_ends(d[["scores"]], d[["labels"]], tag)
   .check_cost_weights(d[["scores"]], d[["labels"]], pred, tag)
+  .check_prbe(d[["scores"]], d[["labels"]], pred, tag)
 }
 
 cat("\n")
