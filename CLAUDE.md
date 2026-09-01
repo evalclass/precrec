@@ -4,9 +4,11 @@ R package (CRAN) for accurate ROC and precision-recall curve calculation and
 plotting for binary classifiers. Hot paths are C++ via Rcpp.
 
 - Version/deps: `DESCRIPTION` · Exports: `NAMESPACE` (roxygen2-generated)
-- Public API: `evalmod`, `mmdata`, `join_scores`, `join_labels`,
-  `create_sim_samples`, `format_nfold` + S3 generics `print`, `as.data.frame`,
-  `plot`, `autoplot`, `fortify`, `auc`, `part`, `pauc`, `auc_ci`
+- Public API: `evalmod`, `metric_curve`, `mmdata`, `join_scores`,
+  `join_labels`, `create_sim_samples`, `format_nfold`, `prob_metrics`,
+  `prob_metrics_ci`, `prbe` + S3 generics `print`, `as.data.frame`,
+  `as.data.table`, `plot`, `autoplot`, `fortify`, `auc`, `part`, `pauc`,
+  `auc_ci`
 
 ## Extra docs
 

@@ -34,6 +34,7 @@ Imports:
     withr (>= 2.3.0),
     graphics (>= 4.0.0),
     rlang (>= 1.0.0),
+    stats,
     utils
 Encoding: UTF-8
 VignetteBuilder: knitr

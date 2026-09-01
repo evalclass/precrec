@@ -70,6 +70,8 @@
   Brier score, so each model and dataset now takes up three rows rather than
   two.
 
+* Declare `stats` in `Imports`. It was used but not listed.
+
 * Fix the y axis of `plot()` for informedness and markedness. Both run from
   -1 to 1, and both were drawn on a 0 to 1 axis, which cut off the negative
   half of the curve. `autoplot()` was never affected. The axis range of a

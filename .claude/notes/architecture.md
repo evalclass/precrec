@@ -4,8 +4,8 @@
 
 | Prefix | Role |
 | --- | --- |
-| `main_` | `evalmod()` — the single user-facing entry point |
-| `mm1`–`mm4` | **m**ake **m**odel data: input joining, validation, reformatting |
+| `main_` | `evalmod()` and `metric_curve()` — the user-facing entry points |
+| `mm1`–`mm5` | **m**ake **m**odel data: input joining, validation, reformatting, one-vs-rest expansion |
 | `pl1`–`pl6` | **p**ipe**l**ine stages that turn reformatted data into results |
 | `g_` | S3 **g**enerics and their methods (`plot`, `autoplot`, `auc`, …) |
 | `etc_utils*` | shared helpers: arg validation, object validation, plot/df utils |
@@ -48,12 +48,21 @@ pl_main(mdat, mode=)     pl1_pipeline_main.R
 
 `part()` (`g_part.R`) post-processes a `*curves` object in place, adding
 partial AUCs and `xlim`/`ylim` attributes and flipping `attr(x, "partial")`.
+`prbe()` (`g_prbe.R`) reads the precision-recall break-even point off the
+already-interpolated PR curve of such an object.
+
+`metric_curve()` (`main_metric_curve.R`) is a second entry point that
+projects two basic measures against each other. It does not add a pipeline
+stage: it calls `evalmod()` and takes two columns. See **The joinable-pair
+registry** below, which is the load-bearing part.
 
 ### Modes
 
 - `"rocprc"` (default, alias `"prcroc"`) — ROC + precision-recall curves.
-- `"basic"` — per-rank basic measures: score, label, error, accuracy,
-  specificity, sensitivity, precision, MCC, F-score (`.get_metric_names()`).
+- `"basic"` — per-rank basic measures. `.get_metric_names("basic")` is the
+  fourteen an object holds by default; `.get_metric_names("basic_all")` is
+  every measure `.basic_metric_table()` knows, and `evalmod(metrics = )`
+  chooses between them per object. See **The measure table** below.
 - `"aucroc"` — ROC AUC only, the fast path. Note `mmdata(mode = "aucroc")`
   produces `sdat` rather than `fmdat`, and the other modes reject it.
 
@@ -71,8 +80,11 @@ datasets, `s` = single, `m` = multiple:
 | **single model** | `sscurves` / `sspoints` | `smcurves` / `smpoints` |
 | **multiple models** | `mscurves` / `mspoints` | `mmcurves` / `mmpoints` |
 
+`metric_curve()` adds a third kind on the same grid: `ssxycurves`,
+`smxycurves`, `msxycurves`, `mmxycurves`.
+
 `curves` objects also carry `curve_info` and `aucs`; `points` objects carry
-`beval_info`. This is why generics come in sets of eight (`g_plot.R`,
+`beval_info`; `xycurves` objects carry `xycurve_info`. This is why generics come in sets of eight (`g_plot.R`,
 `g_autoplot.R`, `g_fortify.R`, `g_dataframe.R`) — **adding behaviour usually
 means editing all eight methods, or better, the shared helper they delegate
 to in `etc_utils_plot.R` / `etc_utils_autoplot.R` / `etc_utils_dataframe.R` /
@@ -122,6 +134,53 @@ Conventions in this layer:
   or `std::rand` — reproducibility under `set.seed()` and CRAN policy.
 - Each C++ block is commented with the R file and R function that calls it;
   keep those headers accurate when moving code.
+
+## The measure table
+
+`.basic_metric_table()` in `etc_utils.R` is the single list of basic
+evaluation measures. One row per measure, with:
+
+| Column | Used by |
+| --- | --- |
+| `name` | everything the user names a measure by |
+| `short` | the class-item names of a `points` object, and the `Meas.` column `print` shows |
+| `desc` | the legend `print.beval_info()` writes |
+| `default` | whether an object holds it when `evalmod(metrics = )` is not given |
+| `range` | `"unit"`, `"signed"` or `"free"` — the y axis the measure needs |
+
+**Two bugs in two consecutive releases came from a lookup keyed on one of
+the two naming schemes and missing the other**: the 0.15.0 panel-title bug
+read a factor by its level code, and `.is_signed_metric()` listed the long
+names while the base-R plotting path holds the short ones, so informedness
+and markedness were drawn on the wrong axis. `.metric_range()` accepts both.
+Prefer the table over a fresh list of names.
+
+Fourteen measures are `default = TRUE`; the rest are the ROCR-parity
+measures, off unless asked for. They are derived in R in
+`.add_derived_measures()` (`pl4_calc_measures.R`) from columns the C++ layer
+already produced or from the confusion-matrix counts behind them — no C++
+change, and nothing computed for a measure nobody asked for. The length
+check in `.validate.pevals()` is what pins a derived column to the same rank
+grid as its siblings.
+
+`.basic_metric_aliases()` holds the other names a measure answers to, ROCR's
+identifiers included. `.pmatch_added_metric()` is tried **last** in
+`.pmatch_curvetype_basic()`, so a prefix that used to reach one of the
+original measures still does: `"f"` is the F-score, `"l"` is the label.
+
+## The joinable-pair registry
+
+`.joinable_pairs()` in `main_metric_curve.R` lists the ordered metric pairs
+that may be joined by a line. It exists because the basic-measure table
+holds raw per-cutoff points with no interpolation, so joining an arbitrary
+pair of them with straight lines is the error this package exists to
+prevent.
+
+A pair in the registry is **not calculated by `metric_curve()` at all** — it
+is handed to the curve pipeline, and the result is what that pipeline
+produced. One implementation, one answer. Everything else is drawn as
+points. Adding a row is how a new joinable pair is registered; the drawing
+code reads this table and nothing else.
 
 ## Curve accuracy notes
 
