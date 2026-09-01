@@ -354,7 +354,7 @@ with its own `NEWS.md` bullets. CI is off on `develop` by design, so
 | 2 | `.map_*` helpers, retire the 44 `apply` calls | `feature/MapHelpers` | M | **DONE (2026-09-01)** - see outcome below |
 | 3 | Tier A measures, `default` flag, `.metric_range()` | `feature/MetricsTierA` | M | **DONE (2026-09-01)** - see outcome below |
 | 4 | `metric_curve()`, `.joinable_pairs()`, methods | `feature/MetricCurve` | M | **DONE (2026-09-01)** - see outcome below |
-| 5 | Tier B measures + `cost` arguments | `feature/MetricsTierB` | M | Parity script |
+| 5 | Tier B measures + `cost` arguments | `feature/MetricsTierB` | M | **DONE (2026-09-01)** - see outcome below |
 | 6 | Tier C: `prbe`, `rch`, `sar`, `cal`, `ecost` | `feature/MetricsTierC` | L | Per-measure; **candidate for deferral** |
 | 7 | Vignette, pkgdown, release prep | `feature/Docs0160` | S | `check()`, `spell_check()`, `_pkgdown.yml` reference sections |
 
@@ -536,6 +536,47 @@ ending at the 0.5 prevalence, an unregistered pair as 11 raw points with the
 expected `NA` lift at the top rank, the same pair under `type = "l"`, and
 three dataset curves in one panel.
 
+### Phase 5 outcome (2026-09-01)
+
+Landed on `feature/MetricsTierB`. `mi`, `chisq` and `cost` complete the ROCR
+measure set: **all 36 identifiers are now covered**. The parity script runs
+69 checks over balanced, imbalanced and tied data, all passing.
+
+**ROCR's own source settled the definitions, not its documentation.** The
+help page describes `mi` as `H(Y) - H(Y|Y-hat)` without naming a log base;
+`ROCR:::.performance.mutual.information` uses `log2`. `cost` is documented as
+taking `cost.fp` and `cost.fn` without giving the formula;
+`ROCR:::.performance.cost` is `(FN*cost_fn + FP*cost_fp)/n`, unnormalized.
+Reading the implementation rather than the prose is what made the numeric
+agreement exact rather than approximate.
+
+**`chisq` turned out to be free.** Pearson's chi-square of a 2x2 table is
+`n * mcc^2` - the same four margins under the same numerator - so it is read
+off a column that already exists, and inherits exactly the NA that column
+already carries wherever a margin is empty. One line, and no new decision
+about where the statistic is undefined.
+
+**`mi` is 0 at the ends, not NA, and that is a different call from `odds`.**
+A cutoff that predicts one class for everything carries no information about
+the labels: the value is defined and it is zero, under the usual convention
+that `0 log 0` is 0. ROCR reports NaN. `odds` and `chisq` at the same two
+points are genuinely undefined - a division by an empty margin with no limit
+- and stay NA. Three measures, two conventions, because the mathematics
+differs; both are documented and both are asserted in the parity script.
+
+**D5 settled: one named argument per measure.** `cost_fp` and `cost_fn` on
+`evalmod()` and `metric_curve()`, following the precedent `beta` set for
+`fscore`. The case for `metric_args = list(...)` was that named arguments do
+not scale past about three - but with Tier C deferred the count stops at two,
+and a bag would need its own validator and its own list of legal keys to buy
+back the documentation, completion and typed checking that named arguments
+have for nothing.
+
+**The cheapest test found is the best one.** `cost` with the default weights
+of 1 is exactly the error rate, a column the package has always had. That
+equality is a test, and it would catch a transposed `FP`/`FN` or a missing
+`/n` immediately.
+
 ### Why this order
 
 - **Phase 2 before 3.** The refactor's correctness gate is "no snapshot
@@ -599,11 +640,11 @@ What this plan adds:
 | D7 | Argument checking library | `checkmate` via `check_*()` routed through `.stop_invalid_arg()`, preserving condition classes |
 | D8 | Do new measures join the default panel set | No — opt-in; `.get_metric_names("basic")` still returns 14 |
 | D9 | Measure naming | Standard abbreviations where standard; ROCR jargon spelled out; ROCR ids accepted as aliases |
+| D5 | Measure-specific parameters | One named argument per measure - `cost_fp`, `cost_fn` - following `beta`. Settled in phase 5; the count stops at two while Tier C is deferred |
 | D10 | Name of the new function | `metric_curve()` |
 
 ## Still open
 
 | | Question | When it must be settled |
 | --- | --- | --- |
-| D5 | Measure-specific parameters: one argument each, or `metric_args = list(...)` | Phase 5 — phase 4 gave no new evidence, `cost` forces it |
 | D11 | Whether Tier C ships at all | Phase 6 — nothing depends on it |
