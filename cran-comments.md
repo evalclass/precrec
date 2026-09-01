@@ -7,6 +7,7 @@ prepared but not submitted, so this release carries both sets of changes.
 - Add the evaluation measures `ROCR` provides, opt-in through
   `evalmod(metrics = )`, plus confusion-matrix measures, F-beta, and
   probability-based metrics
+- Add one new dependency, `checkmate`, for the argument checks
 - Add `metric_curve()`, which draws one evaluation measure against another
 - Add `prbe()`, the precision-recall break-even point
 - Handle single-class datasets with a warning instead of an error

@@ -89,7 +89,7 @@ draw partial ROC and precision-recall curves for the specified ranges.
     3. Install `precrec` from the GitHub repository with `devtools::install_github("evalclass/precrec")`.
 
 ## Functions
-The `precrec` package provides the following eight functions.
+The `precrec` package provides the following ten functions.
 
 Function           Description 
 ------------------ -----------------------------------------------------------
@@ -104,7 +104,7 @@ create_sim_samples Create random samples for simulations
       metric_curve Draw one evaluation measure against another
               prbe Find the precision-recall break-even point
     
-Moreover, the `precrec` package provides nine S3 generics for the S3 object created by the `evalmod` function. **N.B.** The R language specifies S3 objects and S3 generic functions as part of the most basic object-oriented system in R.
+Moreover, the `precrec` package provides ten S3 generics for the S3 objects created by the `evalmod` and `metric_curve` functions. **N.B.** The R language specifies S3 objects and S3 generic functions as part of the most basic object-oriented system in R.
 
 S3 generic       Package   Description 
 ---------------  --------  ------------------------------------------------------------------
@@ -117,6 +117,7 @@ S3 generic       Package   Description
           part   precrec   Calculate partial curves and partial AUC scores
           pauc   precrec   Make a data frame with pAUC scores
         auc_ci   precrec   Calculate confidence intervals of AUC scores
+ as.data.table   data.table  Convert a precrec object to a data.table
 
 ## Examples
 
@@ -147,7 +148,7 @@ library(ggplot2)
 autoplot(sscurves)
 ```
 
-![](https://raw.githubusercontent.com/evalclass/precrec/main/README_files/figure-gfm/unnamed-chunk-2-1.png)
+![ROC and precision-recall curves of the P10N10 test dataset, drawn side by side](https://raw.githubusercontent.com/evalclass/precrec/main/README_files/figure-gfm/unnamed-chunk-2-1.png)
 
 ## Citation
 *Precrec: fast and accurate precision-recall and ROC curve calculations in R*
