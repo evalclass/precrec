@@ -356,7 +356,7 @@ with its own `NEWS.md` bullets. CI is off on `develop` by design, so
 | 4 | `metric_curve()`, `.joinable_pairs()`, methods | `feature/MetricCurve` | M | **DONE (2026-09-01)** - see outcome below |
 | 5 | Tier B measures + `cost` arguments | `feature/MetricsTierB` | M | **DONE (2026-09-01)** - see outcome below |
 | 6 | Tier C: `prbe`, `rch`, `sar`, `cal`, `ecost` | `feature/MetricsTierC` | L | **DONE (2026-09-01)** - `prbe` and `sar` ship, three deferred; see outcome |
-| 7 | Vignette, pkgdown, release prep | `feature/Docs0160` | S | `check()`, `spell_check()`, `_pkgdown.yml` reference sections |
+| 7 | Vignette, pkgdown, release prep | `feature/Docs0160` | S | **DONE (2026-09-01)** - see outcome below |
 
 ### Phase 1 outcome (2026-09-01)
 
@@ -625,6 +625,39 @@ All 36 ROCR identifiers are now either implemented or deferred with a
 recorded reason. The parity script runs **78 checks** over balanced,
 imbalanced and tied data, all passing.
 
+### Phase 7 outcome (2026-09-01)
+
+Landed on `feature/Docs0160`. The plan is complete: **all seven phases are
+done**, and 0.16.0 is ready for release whenever the maintainer wants to
+submit it.
+
+**One process mistake, found here rather than by a reviewer.**
+`.claude/notes/development.md` says to regenerate `README.md` from
+`README.Rmd` and never to edit it directly, and I had been editing both by
+hand through phases 3 to 6. They had drifted in formatting, and the function
+table still announced "eight functions" for a package that exports ten.
+Regenerating fixed both. The lesson is not about the README: **the notes
+already said what to do, and reading them at the start of the docs phase was
+too late.**
+
+**Two documentation sections earned their place by being where a future bug
+would come from.** The architecture note now carries the measure table and
+the joinable-pair registry, because those are the two structures a change to
+this area has to respect - and the measure-table section names the two bugs
+in two consecutive releases that came from a lookup keyed on one of the two
+naming schemes while missing the other.
+
+**Release-state verification, all on 0.16.0:** `R CMD check` 0 errors,
+0 warnings, 1 note (the local `-mno-omit-leaf-frame-pointer` flag);
+`FAIL 0 | WARN 0 | PASS 3214`; `bench/run_correctness.R` 40/40;
+`bench/run_rocr_parity.R` 78/78; spell check clean; `styler::style_pkg()`
+clean; `lintr::lint_package()` **zero lints** with the package installed;
+`pkgdown::build_site()` with no reported problems; every plot snapshot
+unchanged since phase 6.
+
+`stats` was used but not declared in `Imports`, which predates this work.
+Fixed.
+
 ### Why this order
 
 - **Phase 2 before 3.** The refactor's correctness gate is "no snapshot
@@ -646,7 +679,8 @@ imbalanced and tied data, all passing.
 ### Version
 
 Phases 1–2 are internal: patch. Phase 3 onward adds public measures and a
-public function: **0.16.0**, bumped when phase 3 merges.
+public function: **0.16.0**, bumped when phase 3 merged. 0.15.0 was prepared
+but never submitted, so 0.16.0 carries both sets of changes to CRAN.
 
 ---
 
