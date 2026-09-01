@@ -1,4 +1,66 @@
 #
+# Map a function over a list or a vector
+#
+# The `.map_*` family replaces the `apply` calls this package used to make. The
+# names follow purrr's, so the call sites read the same way, but nothing is
+# imported: purrr would pull in vctrs, lifecycle and magrittr, and the reason
+# to reach for it here is readability rather than anything base R cannot do.
+#
+# The typed variants are the point of the family. `lapply()` says nothing about
+# what comes back, so a helper that quietly returns a list of length two for one
+# input and a list of length one for another is only caught downstream, if at
+# all. `.map_dbl()` and its siblings fail at the call that broke.
+#
+.map <- function(.x, .f, ...) {
+  lapply(.x, .f, ...)
+}
+
+.map_dbl <- function(.x, .f, ...) {
+  vapply(.x, .f, double(1), ...)
+}
+
+.map_int <- function(.x, .f, ...) {
+  vapply(.x, .f, integer(1), ...)
+}
+
+.map_chr <- function(.x, .f, ...) {
+  vapply(.x, .f, character(1), ...)
+}
+
+.map_lgl <- function(.x, .f, ...) {
+  vapply(.x, .f, logical(1), ...)
+}
+
+#
+# Map over the indices of a list
+#
+# Several call sites need the position rather than the element - they index a
+# second list with it, or build an attribute out of it. Written out, that is
+# `lapply(seq_along(x), ...)`, which says "index" only after the reader has
+# checked what `seq_along()` was given.
+#
+.map_idx <- function(.x, .f, ...) {
+  lapply(seq_along(.x), .f, ...)
+}
+
+#
+# Keep the elements of a list that satisfy a predicate
+#
+.keep <- function(.x, .p, ...) {
+  .x[.map_lgl(.x, .p, ...)]
+}
+
+#
+# Flatten one level of nesting
+#
+# `unlist(x, recursive = FALSE)` reads as "make this a vector" until the second
+# argument is noticed, and it is the second argument that carries the meaning.
+#
+.flatten <- function(.x) {
+  unlist(.x, recursive = FALSE)
+}
+
+#
 # Check if an internal Rcpp function returns en error
 #
 .check_cpp_func_error <- function(obj, func_name) {

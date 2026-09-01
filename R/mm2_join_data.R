@@ -187,24 +187,24 @@ join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
       cdat <- c(cdat, list(ds))
     } else if (is.matrix(ds) || is.data.frame(ds)) {
       if (byrow) {
-        cdat <- c(cdat, lapply(seq_len(nrow(ds)), function(i) ds[i, ]))
+        cdat <- c(cdat, .map(seq_len(nrow(ds)), function(i) ds[i, ]))
       } else {
-        cdat <- c(cdat, lapply(seq_len(ncol(ds)), function(j) ds[, j]))
+        cdat <- c(cdat, .map(seq_len(ncol(ds)), function(j) ds[, j]))
       }
     } else if (is.array(ds)) {
       if (length(dim(ds)) == 1) {
         cdat <- c(cdat, list(as.vector(ds)))
       } else if (length(dim(ds)) == 2) {
         if (byrow) {
-          cdat <- c(cdat, lapply(seq(dim(ds)[1]), function(i) ds[i, ]))
+          cdat <- c(cdat, .map(seq(dim(ds)[1]), function(i) ds[i, ]))
         } else {
-          cdat <- c(cdat, lapply(seq(dim(ds)[2]), function(j) ds[, j]))
+          cdat <- c(cdat, .map(seq(dim(ds)[2]), function(j) ds[, j]))
         }
       } else {
         stop("Array must be 1 or 2 dimensions", call. = FALSE)
       }
     } else if (is.list(ds)) {
-      if (any(unlist(lapply(ds, is.list)))) {
+      if (any(.map_lgl(ds, is.list))) {
         f_unlist <- function(ds2) {
           new_list <- list()
           for (i in seq_along(ds2)) {

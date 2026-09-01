@@ -36,7 +36,7 @@
     pevals <- calc_measures(cdat, extra_measures = FALSE)
     create_curves(pevals, x_bins = x_bins)
   }
-  lcurves <- lapply(seq_along(mdat), plfunc)
+  lcurves <- .map_idx(mdat, plfunc)
 
   # Summarize curves by line type
   grpfunc <- function(lt) {
@@ -45,7 +45,7 @@
       calc_avg, cb_alpha, x_bins
     )
   }
-  grp_curves <- lapply(c("roc", "prc"), grpfunc)
+  grp_curves <- .map(c("roc", "prc"), grpfunc)
   names(grp_curves) <- c("rocs", "prcs")
 
   # Summarize AUCs
@@ -55,7 +55,7 @@
   grpfunc2 <- function(lt) {
     attr(grp_curves[[lt]], "avgcurves")
   }
-  grp_avg <- lapply(names(grp_curves), grpfunc2)
+  grp_avg <- .map(names(grp_curves), grpfunc2)
   names(grp_avg) <- names(grp_curves)
 
   # === Create an S3 object ===
@@ -63,7 +63,7 @@
     grpfunc3 <- function(lt) {
       .summarize_curves(NULL, lt, "crvgrp", mdat, NULL, NULL, NULL, NULL)
     }
-    grp_curves <- lapply(c("roc", "prc"), grpfunc3)
+    grp_curves <- .map(c("roc", "prc"), grpfunc3)
     names(grp_curves) <- c("rocs", "prcs")
   }
   s3obj <- structure(grp_curves, class = c(
@@ -102,7 +102,7 @@
                               dataset_type, calc_avg, cb_alpha, x_bins) {
   if (!is.null(lcurves)) {
     # Summarize ROC or PRC curves
-    mc <- lapply(seq_along(lcurves), function(s) lcurves[[s]][[curve_type]])
+    mc <- .map(lcurves, function(cv) cv[[curve_type]])
 
     # Calculate the average curves
     if (dataset_type == "multiple" && calc_avg) {

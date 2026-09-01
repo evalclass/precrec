@@ -88,7 +88,7 @@ create_sim_samples <- function(n_repeat, np, nn, score_names = "random") {
         FALSE
       }
     }
-    list_ids <- Filter(ffunc, seq_along(simdat))
+    list_ids <- .keep(seq_along(simdat), ffunc)
     sd <- simdat[list_ids]
     names(sd) <- NULL
     sd

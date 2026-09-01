@@ -89,13 +89,13 @@ format_nfold <- function(nfold_df, score_cols, lab_col, fold_col) {
 
   # Split data frame by dataset IDs
   slcols <- c(score_cols, lab_col)
-  split_df <- lapply(fids, function(fid) nfold_df[fold_vec == fid, slcols])
+  split_df <- .map(fids, function(fid) nfold_df[fold_vec == fid, slcols])
 
   # Combine scores
   f_comb_s <- function(col_idx) {
-    lapply(seq_along(split_df), function(i) c(split_df[[i]][[col_idx]]))
+    .map(split_df, function(fold) c(fold[[col_idx]]))
   }
-  scores <- unlist(lapply(seq_along(score_cols), f_comb_s), recursive = FALSE)
+  scores <- .flatten(.map_idx(score_cols, f_comb_s))
 
   # Combine labels
   lab_col_idx <- length(slcols)
@@ -107,9 +107,9 @@ format_nfold <- function(nfold_df, score_cols, lab_col, fold_col) {
     }
   }
   f_comb_l <- function(s_col) {
-    lapply(seq_along(split_df), cfunc)
+    .map_idx(split_df, cfunc)
   }
-  labels <- unlist(lapply(score_cols, f_comb_l), recursive = FALSE)
+  labels <- .flatten(.map(score_cols, f_comb_l))
 
   list(scores = scores, labels = labels)
 }

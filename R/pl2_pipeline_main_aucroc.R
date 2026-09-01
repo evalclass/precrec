@@ -24,7 +24,7 @@
       ties_method = ties_method
     )
   }
-  aucrocs <- lapply(seq_along(mdat), plfunc)
+  aucrocs <- .map_idx(mdat, plfunc)
   auc_df <- .summarize_uauc_results(
     aucrocs, attr(mdat, "uniq_modnames"),
     attr(mdat, "uniq_dsids"), calc_avg,

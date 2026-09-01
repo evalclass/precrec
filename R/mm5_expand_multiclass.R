@@ -107,10 +107,10 @@
   }
 
   if (is.list(scores) &&
-    all(vapply(scores, function(s) {
+    all(.map_lgl(scores, function(s) {
       is.matrix(s) || is.data.frame(s)
-    }, logical(1)))) {
-    return(lapply(scores, as.matrix))
+    }))) {
+    return(.map(scores, as.matrix))
   }
 
   .stop_invalid_arg(
@@ -131,7 +131,7 @@
   }
 
   if (is.matrix(labels) || is.data.frame(labels)) {
-    return(lapply(seq_len(ncol(labels)), function(j) labels[, j]))
+    return(.map(seq_len(ncol(labels)), function(j) labels[, j]))
   }
 
   list(labels)
@@ -145,14 +145,14 @@
 # else is read off the values, in sorted order.
 #
 .get_classnames <- function(llabels) {
-  if (all(vapply(llabels, is.factor, logical(1)))) {
-    lvs <- unique(unlist(lapply(llabels, levels)))
+  if (all(.map_lgl(llabels, is.factor))) {
+    lvs <- unique(unlist(.map(llabels, levels)))
     if (length(lvs) > 0L) {
       return(lvs)
     }
   }
 
-  vals <- unique(unlist(lapply(llabels, function(l) as.character(unique(l)))))
+  vals <- unique(unlist(.map(llabels, function(l) as.character(unique(l)))))
   sort(vals)
 }
 
@@ -227,14 +227,14 @@
 
   is_matrix <- is.matrix(scores) || is.data.frame(scores) ||
     (is.list(scores) && length(scores) > 0L &&
-      all(vapply(scores, function(s) {
+      all(.map_lgl(scores, function(s) {
         is.matrix(s) || is.data.frame(s)
-      }, logical(1))))
+      })))
   if (!is_matrix) {
     return("none")
   }
 
-  ncols <- vapply(.as_score_matrices(scores), ncol, integer(1))
+  ncols <- .map_int(.as_score_matrices(scores), ncol)
   if (all(ncols == n_class)) {
     "ovr"
   } else {

@@ -509,7 +509,7 @@ NULL
       add_np_nn = add_np_nn
     )
   }
-  lcurves <- lapply(curvetype, func_plot)
+  lcurves <- .map(curvetype, func_plot)
   names(lcurves) <- curvetype
 
   if (length(lcurves) > 1) {
@@ -536,14 +536,14 @@ NULL
 
   g <- ggplot2::ggplotGrob(plots[[1]]
   + ggplot2::theme(legend.position = "bottom"))$grobs
-  legend <- g[[which(lapply(g, function(x) x$name) == "guide-box")]]
+  legend <- g[[which(.map_chr(g, function(x) x$name) == "guide-box")]]
   lheight <- sum(legend$height)
 
   fncol <- function(...) gridExtra::arrangeGrob(..., ncol = main_ncol)
   fnolegend <- function(x) x + ggplot2::theme(legend.position = "none")
 
   gridExtra::arrangeGrob(
-    do.call(fncol, lapply(plots, fnolegend)),
+    do.call(fncol, .map(plots, fnolegend)),
     legend,
     heights = grid::unit.c(grid::unit(1, "npc") - lheight, lheight),
     ncol = 1

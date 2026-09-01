@@ -267,7 +267,7 @@ NULL
     val
   }
 
-  unlist(lapply(vals, pfunc))
+  unlist(.map(vals, pfunc))
 }
 
 #
@@ -346,7 +346,7 @@ NULL
     val
   }
 
-  unlist(lapply(vals, pfunc))
+  unlist(.map(vals, pfunc))
 }
 
 #
@@ -521,7 +521,7 @@ NULL
 .make_matplot_mats <- function(obj) {
   ncol <- length(obj)
 
-  max_nrow <- max(unlist(lapply(obj, function(o) length(o[["x"]]))))
+  max_nrow <- max(.map_int(obj, function(o) length(o[["x"]])))
 
   x <- matrix(as.double(NA), nrow = max_nrow, ncol = ncol)
   y <- matrix(as.double(NA), nrow = max_nrow, ncol = ncol)
@@ -543,7 +543,7 @@ NULL
 
   uniq_col <- grDevices::rainbow(length(uniq_modnames), alpha = 1)
   modnams_idx <- as.numeric(factor(modnames, levels = uniq_modnames))
-  unlist(lapply(seq_along(modnames), function(i) uniq_col[modnams_idx[i]]))
+  .map_chr(seq_along(modnames), function(i) uniq_col[modnams_idx[i]])
 }
 
 #
