@@ -617,6 +617,21 @@
 }
 
 #
+# Check the misclassification costs
+#
+# A cost is a weight on an error count, so it has to be a single finite
+# number and cannot be negative - a negative cost would reward the mistake it
+# is weighting. The two are checked together because they are only ever
+# passed together.
+#
+.validate_costs <- function(cost_fp, cost_fn) {
+  .assert_number(cost_fp, "cost_fp", min = 0)
+  .assert_number(cost_fn, "cost_fn", min = 0)
+
+  invisible(TRUE)
+}
+
+#
 # Validate the arguments that describe the input data
 #
 # `evalmod()` and `metric_curve()` both hand these five to `mmdata()`, and

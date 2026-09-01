@@ -70,7 +70,8 @@ evaluation measures.
 - Brier score, RMSE and log loss, for scores that are probabilities
 - False positive rate, false negative rate, false discovery rate, false
   omission rate, rate of positive predictions, rate of negative predictions,
-  lift and odds ratio, on request through `evalmod(metrics = )`
+  lift, odds ratio, mutual information, chi-square and weighted
+  misclassification cost, on request through `evalmod(metrics = )`
 
 ### 4. Confidence interval band
 

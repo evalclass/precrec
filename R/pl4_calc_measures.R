@@ -2,7 +2,8 @@
 # Calculate basic evaluation measures from confusion matrices
 #
 calc_measures <- function(cmats, scores = NULL, labels = NULL, beta = 1,
-                          extra_measures = TRUE, metrics = NULL, ...) {
+                          extra_measures = TRUE, metrics = NULL,
+                          cost_fp = 1, cost_fn = 1, ...) {
   # === Validate input arguments ===
   # Create cmats from scores and labels if cmats is missing
   cmats <- .create_src_obj(
@@ -24,7 +25,8 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, beta = 1,
 
   # === Derive the measures that are algebra on the ones just calculated ===
   pevals[["basic"]] <- .add_derived_measures(
-    pevals[["basic"]], cmats, metrics
+    pevals[["basic"]], cmats, metrics,
+    cost_fp = cost_fp, cost_fn = cost_fn
   )
 
   # === Create an S3 object ===
@@ -75,7 +77,8 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, beta = 1,
 # before any x_bins reduction, so a derived column lines up with its siblings.
 # `.validate.pevals()` checks that.
 #
-.add_derived_measures <- function(pb, cmats, metrics) {
+.add_derived_measures <- function(pb, cmats, metrics, cost_fp = 1,
+                                  cost_fn = 1) {
   # Checked before the table is read, so that the common call - the curve
   # pipelines and every `evalmod()` that does not pass `metrics` - does no
   # work at all here
@@ -109,6 +112,17 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, beta = 1,
   )
   vals[["lift"]] <- pb[["sensitivity"]] / vals[["predicted_positive_rate"]]
   vals[["odds"]] <- (tp * tn) / (fn * fp)
+  vals[["mi"]] <- .calc_mutual_information(tp, fp, tn, fn, n_all)
+
+  # Pearson's chi-square of the 2x2 table is n times the square of the
+  # Matthews correlation coefficient - the same four margins under the same
+  # numerator - so it is read off the column that already exists, and
+  # inherits the NA that column carries wherever a margin is empty.
+  vals[["chisq"]] <- n_all * pb[["mcc"]]^2
+
+  # Not normalized, following ROCR. With the default weights this is the
+  # error rate, which is the check that the two agree.
+  vals[["cost"]] <- (fn * cost_fn + fp * cost_fp) / n_all
 
   # `fn * fp` is zero at both ends of every dataset, and the numerator with
   # it, so the odds ratio is undefined there by construction rather than by
@@ -121,6 +135,34 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, beta = 1,
 
   pb[derived] <- vals[derived]
   pb
+}
+
+#
+# Mutual information of the predictions and the labels, in bits
+#
+# I(Y-hat; Y) = sum p_ij log2(p_ij / (p_i. p_.j)) over the four cells of the
+# 2x2 table. An empty cell contributes nothing, by the usual convention that
+# 0 log 0 is 0, which is also what makes the value correct at the ends: a
+# cutoff that predicts one class for everything carries no information about
+# the labels, so the answer there is 0 rather than undefined. ROCR reports
+# NaN at those two points.
+#
+.calc_mutual_information <- function(tp, fp, tn, fn, n_all) {
+  cell <- function(obs, row_total, col_total) {
+    p <- obs / n_all
+    ratio <- (obs * n_all) / (row_total * col_total)
+    out <- p * log2(ratio)
+    out[obs == 0] <- 0
+    out
+  }
+
+  pos_pred <- tp + fp
+  neg_pred <- tn + fn
+  pos <- tp + fn
+  neg <- fp + tn
+
+  cell(tp, pos_pred, pos) + cell(fp, pos_pred, neg) +
+    cell(fn, neg_pred, pos) + cell(tn, neg_pred, neg)
 }
 
 #

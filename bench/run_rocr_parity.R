@@ -15,9 +15,12 @@
 # Two differences are expected and are asserted here rather than tolerated
 # silently:
 #
-#   1. `odds` is NA in `precrec` wherever the 2x2 table has an empty cell,
-#      which is the top and bottom rank of every dataset. ROCR reports Inf or
-#      NaN there. Only the region both call finite is compared.
+#   1. `odds` and `chisq` are NA in `precrec` wherever the 2x2 table has an
+#      empty cell, which is the top and bottom rank of every dataset. ROCR
+#      reports Inf or NaN there. `mi` is 0 at those two points rather than
+#      NaN, because a cutoff that predicts one class for everything carries
+#      no information about the labels - that value is defined, not missing.
+#      Only the region both call finite is compared.
 #   2. ROCR reports one row per distinct cutoff; `precrec` reports one per
 #      rank. Where scores are tied the two therefore have different row
 #      counts, and are lined up on the cutoff. ROCR's row for a cutoff counts
@@ -71,7 +74,10 @@ check <- function(label, ok) {
     predicted_positive_rate = "rpp",
     predicted_negative_rate = "rnp",
     lift = "lift",
-    odds = "odds"
+    odds = "odds",
+    mi = "mi",
+    chisq = "chisq",
+    cost = "cost"
   )
 }
 
@@ -91,7 +97,13 @@ check <- function(label, ok) {
 }
 
 .compare_measure <- function(pc, rocr_pred, pc_name, rocr_name, tag) {
-  perf <- ROCR::performance(rocr_pred, measure = rocr_name)
+  # ROCR calculates `chisq` through `stats::chisq.test()`, which warns about
+  # the approximation on every sparse 2x2 table it is handed - once per
+  # cutoff. The warnings are ROCR's, not this package's, and they bury the
+  # output.
+  perf <- suppressWarnings(
+    ROCR::performance(rocr_pred, measure = rocr_name)
+  )
   rocr <- data.frame(
     cutoff = perf@x.values[[1]],
     value = perf@y.values[[1]]
@@ -152,6 +164,52 @@ check <- function(label, ok) {
   )
 }
 
+# `pc` has had the leading no-cutoff row dropped so it can be joined to ROCR,
+# so this reads the measure off the object rather than off that frame.
+.check_mi_ends <- function(scores, labels, tag) {
+  pts <- evalmod(
+    scores = scores, labels = labels, mode = "basic", metrics = "mi"
+  )
+  df <- as.data.frame(pts)
+  mi <- df$y[df$type == "mi"]
+
+  check(
+    paste0("mi is 0 where the prediction is constant [", tag, "]"),
+    isTRUE(all.equal(mi[[1]], 0)) &&
+      isTRUE(all.equal(mi[[length(mi)]], 0)) && !any(is.na(mi))
+  )
+}
+
+# `cost` takes two weights, which the measure map cannot carry, so it is
+# checked on its own against ROCR's own weighted call.
+.check_cost_weights <- function(scores, labels, rocr_pred, tag) {
+  perf <- ROCR::performance(rocr_pred,
+    measure = "cost", cost.fp = 3, cost.fn = 0.5
+  )
+  rocr <- data.frame(
+    cutoff = perf@x.values[[1]],
+    value = perf@y.values[[1]]
+  )
+
+  pts <- evalmod(
+    scores = scores, labels = labels, mode = "basic",
+    metrics = c("cost", "score"), cost_fp = 3, cost_fn = 0.5
+  )
+  df <- as.data.frame(pts)
+  pc <- data.frame(
+    cutoff = df$y[df$type == "score"],
+    cost = df$y[df$type == "cost"]
+  )
+  pc <- pc[!is.na(pc$cutoff), ]
+  last <- !duplicated(pc$cutoff, fromLast = TRUE)
+  merged <- merge(rocr, pc[last, ], by = "cutoff")
+
+  check(
+    paste0("cost with weights 3/0.5 vs ROCR [", tag, "]"),
+    isTRUE(all.equal(merged$value, merged$cost, tolerance = 1e-10))
+  )
+}
+
 # --- Datasets --------------------------------------------------------------
 
 set.seed(20260901)
@@ -181,6 +239,8 @@ for (tag in names(cases)) {
   }
   .check_odds_ends(d[["scores"]], d[["labels"]], tag)
   .check_odds_convention(pc, pred, tag)
+  .check_mi_ends(d[["scores"]], d[["labels"]], tag)
+  .check_cost_weights(d[["scores"]], d[["labels"]], pred, tag)
 }
 
 cat("\n")

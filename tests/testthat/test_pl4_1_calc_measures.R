@@ -535,8 +535,11 @@ test_that("the derived measures line up with the ones they come from", {
     metrics = .resolve_metrics("all")
   )[["basic"]]
 
-  lens <- vapply(pb[.get_metric_names("basic_all")], length, integer(1))
-  expect_equal(unname(lens), rep(length(pb[["error"]]), 22))
+  all_names <- .get_metric_names("basic_all")
+  lens <- vapply(pb[all_names], length, integer(1))
+  expect_equal(
+    unname(lens), rep(length(pb[["error"]]), length(all_names))
+  )
 })
 
 test_that("a dataset with one class leaves the derived measures NA", {
@@ -560,5 +563,112 @@ test_that("nothing is derived when no measure was asked for", {
   expect_identical(.add_derived_measures(pb, cmats, character(0)), pb)
   expect_identical(
     .add_derived_measures(pb, cmats, .get_metric_names("basic")), pb
+  )
+})
+
+test_that("mutual information matches its definition", {
+  scores <- c(0.9, 0.8, 0.7, 0.6, 0.5, 0.4)
+  labels <- c(1, 1, 0, 1, 0, 0)
+  cmats <- create_confmats(scores = scores, labels = labels)
+  pb <- calc_measures(cmats, metrics = .resolve_metrics("mi"))[["basic"]]
+
+  # I(Y-hat; Y) over the four cells, in bits, calculated the long way
+  n <- cmats[["pos_num"]] + cmats[["neg_num"]]
+  expected <- vapply(seq_along(pb[["mi"]]), function(i) {
+    tab <- matrix(
+      c(
+        cmats[["tp"]][i], cmats[["fp"]][i],
+        cmats[["fn"]][i], cmats[["tn"]][i]
+      ),
+      nrow = 2
+    )
+    p <- tab / n
+    rows <- rowSums(p)
+    cols <- colSums(p)
+    out <- 0
+    for (r in 1:2) {
+      for (cc in 1:2) {
+        if (p[r, cc] > 0) {
+          out <- out + p[r, cc] * log2(p[r, cc] / (rows[r] * cols[cc]))
+        }
+      }
+    }
+    out
+  }, numeric(1))
+
+  expect_equal(pb[["mi"]], expected)
+})
+
+test_that("mutual information is zero, not NA, where it is defined to be", {
+  # A cutoff that predicts one class for everything carries no information
+  # about the labels. ROCR reports NaN at those two points
+  pb <- calc_measures(
+    scores = c(0.9, 0.8, 0.7, 0.6), labels = c(1, 0, 1, 0),
+    metrics = .resolve_metrics("mi")
+  )[["basic"]]
+
+  n <- length(pb[["mi"]])
+  expect_equal(pb[["mi"]][1], 0)
+  expect_equal(pb[["mi"]][n], 0)
+  expect_false(any(is.na(pb[["mi"]])))
+})
+
+test_that("chi-square is n times the squared MCC", {
+  scores <- c(0.9, 0.8, 0.7, 0.6, 0.5, 0.4)
+  labels <- c(1, 1, 0, 1, 0, 0)
+  cmats <- create_confmats(scores = scores, labels = labels)
+  pb <- calc_measures(cmats, metrics = .resolve_metrics("chisq"))[["basic"]]
+  n <- cmats[["pos_num"]] + cmats[["neg_num"]]
+
+  expect_equal(pb[["chisq"]], n * pb[["mcc"]]^2)
+
+  # And therefore NA wherever a margin of the table is empty, which is where
+  # the MCC is already NA
+  expect_equal(is.na(pb[["chisq"]]), is.na(pb[["mcc"]]))
+})
+
+test_that("chi-square matches Pearson's statistic", {
+  scores <- c(0.9, 0.8, 0.7, 0.6, 0.5, 0.4)
+  labels <- c(1, 1, 0, 1, 0, 0)
+  cmats <- create_confmats(scores = scores, labels = labels)
+  pb <- calc_measures(cmats, metrics = .resolve_metrics("chisq"))[["basic"]]
+
+  i <- 3
+  tab <- matrix(
+    c(
+      cmats[["tp"]][i], cmats[["fp"]][i],
+      cmats[["fn"]][i], cmats[["tn"]][i]
+    ),
+    nrow = 2
+  )
+  expected <- suppressWarnings(
+    unname(stats::chisq.test(tab, correct = FALSE)$statistic)
+  )
+
+  expect_equal(pb[["chisq"]][i], expected)
+})
+
+test_that("cost with the default weights is the error rate", {
+  pb <- calc_measures(
+    scores = c(0.9, 0.8, 0.7, 0.6), labels = c(1, 0, 1, 0),
+    metrics = .resolve_metrics("cost")
+  )[["basic"]]
+
+  expect_equal(pb[["cost"]], pb[["error"]])
+})
+
+test_that("cost weights the two error counts", {
+  scores <- c(0.9, 0.8, 0.7, 0.6, 0.5, 0.4)
+  labels <- c(1, 1, 0, 1, 0, 0)
+  cmats <- create_confmats(scores = scores, labels = labels)
+  pb <- calc_measures(cmats,
+    metrics = .resolve_metrics("cost"),
+    cost_fp = 3, cost_fn = 0.5
+  )[["basic"]]
+  n <- cmats[["pos_num"]] + cmats[["neg_num"]]
+
+  expect_equal(
+    pb[["cost"]],
+    (cmats[["fn"]] * 0.5 + cmats[["fp"]] * 3) / n
   )
 })

@@ -141,12 +141,13 @@
       "precision", "mcc", "fscore", "balanced_accuracy", "npv",
       "informedness", "markedness", "kappa", "fpr", "fnr",
       "false_discovery_rate", "false_omission_rate",
-      "predicted_positive_rate", "predicted_negative_rate", "lift", "odds"
+      "predicted_positive_rate", "predicted_negative_rate", "lift", "odds",
+      "mi", "chisq", "cost"
     ),
     short = c(
       "score", "label", "err", "acc", "sp", "sn", "prec", "mcc", "fscore",
       "bacc", "npv", "infm", "mkd", "kappa", "fpr", "fnr", "fdr", "for",
-      "ppr", "pnr", "lift", "odds"
+      "ppr", "pnr", "lift", "odds", "mi", "chisq", "cost"
     ),
     desc = c(
       "score", "label", "error rate", "accuracy", "specificity",
@@ -155,13 +156,16 @@
       "informedness (Youden's J)", "markedness", "Cohen's kappa",
       "false positive rate", "false negative rate", "false discovery rate",
       "false omission rate", "rate of positive predictions",
-      "rate of negative predictions", "lift", "odds ratio"
+      "rate of negative predictions", "lift", "odds ratio",
+      "mutual information (bits)", "chi-square statistic",
+      "misclassification cost"
     ),
-    default = c(rep(TRUE, 14), rep(FALSE, 8)),
+    default = c(rep(TRUE, 14), rep(FALSE, 11)),
     range = c(
       "free", "signed", "unit", "unit", "unit", "unit", "unit", "signed",
       "unit", "unit", "unit", "signed", "signed", "signed", "unit", "unit",
-      "unit", "unit", "unit", "unit", "free", "free"
+      "unit", "unit", "unit", "unit", "free", "free", "unit", "free",
+      "free"
     ),
     stringsAsFactors = FALSE
   )
@@ -187,7 +191,8 @@
     rpp = "predicted_positive_rate",
     pnr = "predicted_negative_rate",
     rnp = "predicted_negative_rate",
-    odds_ratio = "odds"
+    odds_ratio = "odds",
+    mutual_information = "mi"
   )
 }
 
@@ -291,7 +296,8 @@
 
   titles <- c(
     label = "Label (1:pos, -1:neg)", mcc = "MCC", npv = "NPV",
-    fpr = "FPR", fnr = "FNR", odds = "Odds ratio"
+    fpr = "FPR", fnr = "FNR", odds = "Odds ratio",
+    mi = "Mutual information", chisq = "Chi-square"
   )
   if (curvetype %in% names(titles)) {
     return(unname(titles[curvetype]))

@@ -241,7 +241,7 @@ test_that("evalmod(metrics = ) adds the measures it is given", {
 test_that("evalmod(metrics = 'all') holds every measure", {
   mp <- evalmod(em_metrics_mdat(), mode = "basic", metrics = "all")
 
-  expect_length(mp, 22)
+  expect_length(mp, length(.get_metric_names("basic_all")))
   expect_equal(attr(mp, "metrics"), .get_metric_names("basic_all"))
 })
 
@@ -286,5 +286,37 @@ test_that("a measure that was not calculated cannot be plotted", {
   )
   expect_error(plot(mp, curvetype = "lift"),
     class = "precrec_error_invalid_curvetype"
+  )
+})
+
+# Test evalmod(cost_fp = , cost_fn = )
+
+test_that("the cost weights reach the measure", {
+  mdat <- em_metrics_mdat()
+  mp1 <- evalmod(mdat, mode = "basic", metrics = "cost")
+  mp2 <- evalmod(mdat,
+    mode = "basic", metrics = "cost",
+    cost_fp = 3, cost_fn = 0.5
+  )
+
+  cost1 <- as.data.frame(mp1)
+  cost2 <- as.data.frame(mp2)
+  expect_false(isTRUE(all.equal(
+    cost1[cost1$type == "cost", "y"],
+    cost2[cost2$type == "cost", "y"]
+  )))
+})
+
+test_that("a cost must be a single number and cannot be negative", {
+  mdat <- em_metrics_mdat()
+
+  expect_error(evalmod(mdat, mode = "basic", cost_fp = -1),
+    class = "precrec_error_invalid_cost_fp"
+  )
+  expect_error(evalmod(mdat, mode = "basic", cost_fn = "1"),
+    class = "precrec_error_invalid_cost_fn"
+  )
+  expect_error(evalmod(mdat, mode = "basic", cost_fp = c(1, 2)),
+    class = "precrec_error_invalid_cost_fp"
   )
 })

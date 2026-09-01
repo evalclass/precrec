@@ -3,7 +3,8 @@
 #
 .pl_main_basic <- function(mdat, model_type, dataset_type, class_name_pf,
                            calc_avg = TRUE, cb_alpha = 0.05,
-                           raw_curves = FALSE, beta = 1, metrics = NULL) {
+                           raw_curves = FALSE, beta = 1, metrics = NULL,
+                           cost_fp = 1, cost_fn = 1) {
   metric_names <- .basic_metric_names(.resolve_metrics(metrics))
   # Only the measures derived in R reach calc_measures(); the C++ layer has
   # always produced the rest, and handing it the whole list once per dataset
@@ -30,7 +31,10 @@
       )
     }
     cdat <- create_confmats(mdat[[s]], keep_fmdat = TRUE)
-    calc_measures(cdat, beta = beta, metrics = derived)
+    calc_measures(cdat,
+      beta = beta, metrics = derived,
+      cost_fp = cost_fp, cost_fn = cost_fn
+    )
   }
   lpoints <- .map_idx(mdat, plfunc)
 
@@ -84,7 +88,9 @@
     cb_alpha = cb_alpha,
     raw_curves = raw_curves,
     beta = beta,
-    metrics = metrics
+    metrics = metrics,
+    cost_fp = cost_fp,
+    cost_fn = cost_fn
   )
   attr(s3obj, "validated") <- FALSE
 
@@ -188,7 +194,8 @@
     "validated"
   )
   arg_names <- c(
-    "mode", "calc_avg", "cb_alpha", "raw_curves", "beta", "metrics"
+    "mode", "calc_avg", "cb_alpha", "raw_curves", "beta", "metrics",
+    "cost_fp", "cost_fn"
   )
   .validate_basic(
     points, class_name, ".pl_main_basic", item_names, attr_names,

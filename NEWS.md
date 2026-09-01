@@ -24,10 +24,13 @@
 
 * Add the evaluation measures `ROCR` provides that `precrec` did not:
   `fpr`, `fnr`, `false_discovery_rate`, `false_omission_rate`,
-  `predicted_positive_rate`, `predicted_negative_rate`, `lift` and `odds`.
-  Each also answers to the identifier `ROCR` uses for it - `fall`, `miss`,
-  `pcfall`, `pcmiss`, `rpp`, `rnp` - and to its standard abbreviation
-  where it has one, so a call written against `ROCR` keeps working.
+  `predicted_positive_rate`, `predicted_negative_rate`, `lift`, `odds`,
+  `mi`, `chisq` and `cost`. Each also answers to the identifier `ROCR` uses
+  for it - `fall`, `miss`, `pcfall`, `pcmiss`, `rpp`, `rnp`,
+  `mutual_information` - and to its standard abbreviation where it has one,
+  so a call written against `ROCR` keeps working. `evalmod()` gains
+  `cost_fp` and `cost_fn` for the two weights the `cost` measure takes;
+  with the default weights of `1` it is the error rate.
 
   They are not calculated unless asked for. `evalmod()` gains a `metrics`
   argument that names the measures to add, or takes `"all"`; the default
@@ -36,10 +39,14 @@
   `autoplot()` panels. A measure that was not calculated cannot be plotted,
   and the error says which argument asks for it.
 
-  The odds ratio is `NA` at the top and the bottom of every dataset, where
-  the 2x2 table has an empty cell and the ratio is undefined. `ROCR` reports
-  an infinity there. `NA` is what `precision` and `npv` already do with
-  their own undefined end, and it keeps an infinity off a shared axis.
+  The odds ratio and the chi-square statistic are `NA` at the top and the
+  bottom of every dataset, where the 2x2 table has an empty cell and neither
+  is defined. `ROCR` reports an infinity or a `NaN` there. `NA` is what
+  `precision` and `npv` already do with their own undefined end, and it
+  keeps an infinity off a shared axis. The mutual information is `0` at
+  those two points rather than `NA`, because a cutoff that predicts one
+  class for everything carries no information about the labels - that value
+  is defined, and it is zero.
 
 * Add the root mean squared error to `prob_metrics()` and
   `prob_metrics_ci()`, as the `"rmse"` metric. It is the square root of the

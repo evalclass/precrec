@@ -479,21 +479,24 @@ mmpoins.f2 <- evalmod(mmmdat2, mode = "basic", beta = 2)
 ```
 
 ### Additional measures
-Eight more measures are available on request. They are the ones `ROCR`
+Eleven more measures are available on request. They are the ones `ROCR`
 provides that `precrec` did not, and they are left out of the default set
 because each is another vector the size of the dataset and another panel in
 the default plot.
 
-Measure                 Alternative names       Description
------------------------ ----------------------- --------------------------
-                    fpr                    fall False positive rate, FP/N
-                    fnr                    miss False negative rate, FN/P
-   false_discovery_rate          fdr, pcfall     False discovery rate
-    false_omission_rate          for, pcmiss     False omission rate
-predicted_positive_rate          ppr, rpp        Rate of positive predictions
-predicted_negative_rate          pnr, rnp        Rate of negative predictions
-                   lift                          Sensitivity over ppr
-                   odds             odds_ratio    Odds ratio, TP*TN/(FN*FP)
+Measure                 Alternative names   Description
+----------------------- ------------------- ------------------------------
+                    fpr                fall False positive rate, FP/N
+                    fnr                miss False negative rate, FN/P
+   false_discovery_rate      fdr, pcfall     False discovery rate
+    false_omission_rate      for, pcmiss     False omission rate
+predicted_positive_rate      ppr, rpp        Rate of positive predictions
+predicted_negative_rate      pnr, rnp        Rate of negative predictions
+                   lift                      Sensitivity over ppr
+                   odds         odds_ratio    Odds ratio, TP*TN/(FN*FP)
+                     mi  mutual_information   Mutual information, in bits
+                  chisq                       Pearson chi-square of the table
+                   cost                       Weighted misclassification cost
 
 The `metrics` argument names the ones to add, or `"all"` for every measure.
 The default set is always kept, so nothing that worked before stops working.
@@ -505,10 +508,30 @@ mmpoins.extra <- evalmod(mmmdat2, mode = "basic", metrics = c("fpr", "lift"))
 autoplot(mmpoins.extra, c("fpr", "lift"))
 ```
 
-The odds ratio is `NA` at the top and the bottom of every dataset, where the
-2x2 table has an empty cell and the ratio is undefined. `ROCR` reports an
-infinity there; `precrec` reports `NA`, as it already does for the
-undefined end of precision and of the negative predictive value.
+The `cost` measure weights the two kinds of error separately. It is not
+normalized, following `ROCR`: it is
+`cost_fp * FP / n + cost_fn * FN / n`, so with the default weights of 1 it
+is the error rate.
+```{r, fig.width=7, fig.show='hold'}
+# A false positive costs six times what a false negative costs
+mmpoins.cost <- evalmod(mmmdat2,
+  mode = "basic", metrics = "cost",
+  cost_fp = 3, cost_fn = 0.5
+)
+autoplot(mmpoins.cost, "cost")
+```
+
+Three of these are undefined somewhere, and `precrec` says so differently
+from `ROCR` in two of the three cases:
+
+- The odds ratio and the chi-square statistic are `NA` at the top and the
+  bottom of every dataset, where the 2x2 table has an empty cell. `ROCR`
+  reports an infinity or a `NaN` there; `precrec` reports `NA`, as it
+  already does for the undefined end of precision and of the negative
+  predictive value.
+- The mutual information is `0` at those two points rather than `NA`. A
+  cutoff that predicts one class for everything carries no information about
+  the labels, so that value is defined and it is zero.
 
 #### Normalized ranks and predicted scores
 In addition to the basic measures, the `autoplot` function can plot normalized 
