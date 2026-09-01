@@ -135,14 +135,16 @@ test_that("evalmod() ranks NAs as 'na_worst' requests for negative scores", {
 
   expect_equal(
     auc(evalmod(scores = scores, labels = labels, na_worst = FALSE))[["aucs"]],
-    auc(evalmod(scores = scores + 10, labels = labels,
+    auc(evalmod(
+      scores = scores + 10, labels = labels,
       na_worst = FALSE
     ))[["aucs"]]
   )
 
   # The NA belongs to a positive label, so ranking it worst lowers the AUCs
   aucs_worst <- auc(evalmod(scores = scores, labels = labels))[["aucs"]]
-  aucs_best <- auc(evalmod(scores = scores, labels = labels,
+  aucs_best <- auc(evalmod(
+    scores = scores, labels = labels,
     na_worst = FALSE
   ))[["aucs"]]
   expect_true(all(aucs_worst < aucs_best))

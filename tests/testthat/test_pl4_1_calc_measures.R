@@ -176,7 +176,8 @@ test_that("calc_measures() handles imbalanced labels", {
 
   # 1 positive and 4 negatives, so chance agreement is high and kappa parts
   # company with informedness
-  expect_equal(pb[["balanced_accuracy"]],
+  expect_equal(
+    pb[["balanced_accuracy"]],
     c(0.5, 0.375, 0.25, 0.125, 0.625, 0.5)
   )
   expect_equal(pb[["npv"]], c(0.8, 0.75, 2 / 3, 0.5, 1, 1), tolerance = 1e-4)

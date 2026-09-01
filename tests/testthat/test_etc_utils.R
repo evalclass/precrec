@@ -92,7 +92,8 @@ test_that(".get_metric_names('basic_all') adds the ROCR measures", {
 
   # The defaults come first and in their own order, so an added measure
   # cannot displace one
-  expect_equal(all_names[seq_along(.get_metric_names("basic"))],
+  expect_equal(
+    all_names[seq_along(.get_metric_names("basic"))],
     .get_metric_names("basic")
   )
   expect_equal(

@@ -4,7 +4,8 @@
 test_that(".pmatch_curvetype_basic() resolves the measure names", {
   expect_equal(.pmatch_curvetype_basic("error"), "error")
   expect_equal(.pmatch_curvetype_basic("accuracy"), "accuracy")
-  expect_equal(.pmatch_curvetype_basic("balanced_accuracy"),
+  expect_equal(
+    .pmatch_curvetype_basic("balanced_accuracy"),
     "balanced_accuracy"
   )
   expect_equal(.pmatch_curvetype_basic("npv"), "npv")
@@ -17,7 +18,8 @@ test_that(".pmatch_curvetype_basic() accepts the common aliases", {
   expect_equal(.pmatch_curvetype_basic("recall"), "sensitivity")
   expect_equal(.pmatch_curvetype_basic("ppv"), "precision")
   expect_equal(.pmatch_curvetype_basic("bacc"), "balanced_accuracy")
-  expect_equal(.pmatch_curvetype_basic("balanced accuracy"),
+  expect_equal(
+    .pmatch_curvetype_basic("balanced accuracy"),
     "balanced_accuracy"
   )
   expect_equal(.pmatch_curvetype_basic("negative predictive value"), "npv")
