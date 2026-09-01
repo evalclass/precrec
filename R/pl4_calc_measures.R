@@ -95,7 +95,7 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, beta = 1,
   if (!has_extra) {
     mnames <- setdiff(mnames, extra)
   }
-  if (any(vapply(mnames, function(m) length(pb[[m]]), integer(1)) != n)) {
+  if (any(.map_int(mnames, function(m) length(pb[[m]])) != n)) {
     stop("Evaluation vectors must be all the same lengths", call. = FALSE)
   }
 

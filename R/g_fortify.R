@@ -63,7 +63,7 @@ fortify.pevals <- function(model, ...) {
   # The measures the object holds, plus the one derived column that has no
   # place of its own in the table
   mnames <- names(.basic_metric_names())
-  vals <- lapply(mnames, function(m) pb[[m]])
+  vals <- .map(mnames, function(m) pb[[m]])
   names(vals) <- mnames
   vals[["1 - specificity"]] <- 1 - pb[["specificity"]]
 

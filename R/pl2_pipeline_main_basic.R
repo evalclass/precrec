@@ -27,7 +27,7 @@
     cdat <- create_confmats(mdat[[s]], keep_fmdat = TRUE)
     calc_measures(cdat, beta = beta)
   }
-  lpoints <- lapply(seq_along(mdat), plfunc)
+  lpoints <- .map_idx(mdat, plfunc)
 
   # Summarize points by evaluation measure
   grpfunc <- function(m) {
@@ -39,7 +39,7 @@
   metric_names <- .basic_metric_names()
   eval_names <- names(metric_names)
   grp_row_names <- unname(metric_names)
-  grp_points <- lapply(eval_names, grpfunc)
+  grp_points <- .map(eval_names, grpfunc)
   names(grp_points) <- grp_row_names
 
   # Summarize basic evaluation measures
@@ -49,7 +49,7 @@
   grpfunc2 <- function(et) {
     attr(grp_points[[et]], "avgcurves")
   }
-  grp_avg <- lapply(names(grp_points), grpfunc2)
+  grp_avg <- .map(names(grp_points), grpfunc2)
   names(grp_avg) <- names(grp_points)
 
   # === Create an S3 object ===
@@ -57,7 +57,7 @@
     grpfunc3 <- function(m) {
       .summarize_points(NULL, m, "pointgrp", mdat, NULL, NULL, NULL)
     }
-    grp_points <- lapply(eval_names, grpfunc3)
+    grp_points <- .map(eval_names, grpfunc3)
     names(grp_points) <- grp_row_names
   }
   s3obj <- structure(grp_points, class = c(
@@ -93,13 +93,13 @@
                               dataset_type, calc_avg, cb_alpha) {
   if (!is.null(lpoints)) {
     # Summarize basic evaluation measures
-    grp_func <- function(s) {
+    grp_func <- function(pt) {
       list(
-        x = lpoints[[s]][["basic"]][["rank"]],
-        y = lpoints[[s]][["basic"]][[eval_type]]
+        x = pt[["basic"]][["rank"]],
+        y = pt[["basic"]][[eval_type]]
       )
     }
-    pevals <- lapply(seq_along(lpoints), grp_func)
+    pevals <- .map(lpoints, grp_func)
 
     # Calculate the average curves
     if (dataset_type == "multiple" && calc_avg) {

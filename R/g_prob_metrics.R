@@ -97,7 +97,7 @@ prob_metrics <- function(mdat, scores = NULL, labels = NULL, eps = 1e-15,
   }
 
   # Freshly built, so setDF needs no copy
-  .as_plain_df(.rbind_parts(lapply(seq_along(mdat), pfunc)))
+  .as_plain_df(.rbind_parts(.map_idx(mdat, pfunc)))
 }
 
 #' Calculate CIs of the Brier score and the log loss

@@ -312,14 +312,14 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
       mode = new_mode, ...
     )
   }
-  mmdat <- lapply(seq_along(lscores), func_fmdat)
+  mmdat <- .map_idx(lscores, func_fmdat)
 
   # Built once the counts are known, rather than filled in cell by cell
   data_info <- data.table::data.table(
     modnames = new_modnames,
     dsids = new_dsids,
-    nn = vapply(mmdat, function(m) attr(m, "nn"), numeric(1)),
-    np = vapply(mmdat, function(m) attr(m, "np"), numeric(1))
+    nn = .map_dbl(mmdat, function(m) attr(m, "nn")),
+    np = .map_dbl(mmdat, function(m) attr(m, "np"))
   )
   if (!is.null(classes)) {
     # Third column, so that it reads next to the model name it stands in for

@@ -106,6 +106,13 @@
   The messages and the condition classes are unchanged; `checkmate` and its
   only dependency, `backports`, are the new `Imports`.
 
+* Replace the `apply` family with a small internal `.map_*` family. All 44
+  `lapply`, `vapply` and `Filter` calls in the package now go through helpers
+  named after their purrr equivalents, and most of them through a typed one
+  that states what the call returns. No dependency was added and no behavior
+  changed: the plot snapshots, the correctness suite and the benchmarks are
+  the same before and after.
+
 * Add the package website to `URL` in `DESCRIPTION`, and rebuild the pkgdown
   site with the Bootstrap 5 template.
 
