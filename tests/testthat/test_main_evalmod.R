@@ -208,3 +208,83 @@ test_that("'beta' must be a single non-negative finite number", {
   expect_err(c(1, 2))
   expect_err(Inf)
 })
+
+# Test evalmod(mode = "basic", metrics = )
+
+em_metrics_mdat <- function() {
+  set.seed(1)
+  samps <- create_sim_samples(2, 20, 20, "good_er")
+  mmdata(samps[["scores"]], samps[["labels"]],
+    modnames = samps[["modnames"]], dsids = samps[["dsids"]]
+  )
+}
+
+test_that("evalmod() holds fourteen measures when 'metrics' is not given", {
+  # An existing caller's default plot has one panel per measure, so this is
+  # what keeps the new measures from changing it
+  mp <- evalmod(em_metrics_mdat(), mode = "basic")
+
+  expect_length(mp, 14)
+  expect_equal(attr(mp, "metrics"), .get_metric_names("basic"))
+})
+
+test_that("evalmod(metrics = ) adds the measures it is given", {
+  mp <- evalmod(em_metrics_mdat(), mode = "basic", metrics = c("lift", "fpr"))
+
+  expect_length(mp, 16)
+  expect_equal(
+    attr(mp, "metrics"),
+    c(.get_metric_names("basic"), "fpr", "lift")
+  )
+})
+
+test_that("evalmod(metrics = 'all') holds every measure", {
+  mp <- evalmod(em_metrics_mdat(), mode = "basic", metrics = "all")
+
+  expect_length(mp, 22)
+  expect_equal(attr(mp, "metrics"), .get_metric_names("basic_all"))
+})
+
+test_that("evalmod() accepts the ROCR identifiers for the new measures", {
+  mp <- evalmod(em_metrics_mdat(), mode = "basic", metrics = c("fall", "rpp"))
+
+  expect_true(
+    all(c("fpr", "predicted_positive_rate") %in% attr(mp, "metrics"))
+  )
+})
+
+test_that("evalmod() rejects a measure it does not know", {
+  expect_error(
+    evalmod(em_metrics_mdat(), mode = "basic", metrics = "nonesuch"),
+    class = "precrec_error_invalid_metrics"
+  )
+})
+
+test_that("the added measures survive averaging over datasets", {
+  mp <- evalmod(em_metrics_mdat(), mode = "basic", metrics = "all")
+  avg <- attr(mp, "grp_avg")
+
+  expect_true("lift" %in% names(avg))
+  expect_false(all(is.na(avg[["lift"]])))
+})
+
+test_that("as.data.frame() carries only the measures the object holds", {
+  df1 <- as.data.frame(evalmod(em_metrics_mdat(), mode = "basic"))
+  df2 <- as.data.frame(
+    evalmod(em_metrics_mdat(), mode = "basic", metrics = "fpr")
+  )
+
+  expect_false("fpr" %in% levels(factor(df1[["type"]])))
+  expect_true("fpr" %in% levels(factor(df2[["type"]])))
+})
+
+test_that("a measure that was not calculated cannot be plotted", {
+  mp <- evalmod(em_metrics_mdat(), mode = "basic")
+
+  expect_error(autoplot(mp, curvetype = "lift"),
+    class = "precrec_error_invalid_curvetype"
+  )
+  expect_error(plot(mp, curvetype = "lift"),
+    class = "precrec_error_invalid_curvetype"
+  )
+})

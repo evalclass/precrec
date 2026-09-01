@@ -3,7 +3,12 @@
 #
 .pl_main_basic <- function(mdat, model_type, dataset_type, class_name_pf,
                            calc_avg = TRUE, cb_alpha = 0.05,
-                           raw_curves = FALSE, beta = 1) {
+                           raw_curves = FALSE, beta = 1, metrics = NULL) {
+  metric_names <- .basic_metric_names(.resolve_metrics(metrics))
+  # Only the measures derived in R reach calc_measures(); the C++ layer has
+  # always produced the rest, and handing it the whole list once per dataset
+  # would make it look the table up for nothing
+  derived <- setdiff(names(metric_names), .get_metric_names("basic"))
   if (dataset_type == "single") {
     calc_avg <- FALSE
     raw_curves <- TRUE
@@ -25,7 +30,7 @@
       )
     }
     cdat <- create_confmats(mdat[[s]], keep_fmdat = TRUE)
-    calc_measures(cdat, beta = beta)
+    calc_measures(cdat, beta = beta, metrics = derived)
   }
   lpoints <- .map_idx(mdat, plfunc)
 
@@ -36,14 +41,13 @@
       calc_avg, cb_alpha
     )
   }
-  metric_names <- .basic_metric_names()
   eval_names <- names(metric_names)
   grp_row_names <- unname(metric_names)
   grp_points <- .map(eval_names, grpfunc)
   names(grp_points) <- grp_row_names
 
   # Summarize basic evaluation measures
-  eval_summary <- .summarize_basic(lpoints, mdat)
+  eval_summary <- .summarize_basic(lpoints, mdat, eval_names)
 
   # Summarize average
   grpfunc2 <- function(et) {
@@ -66,6 +70,7 @@
   ))
 
   # Set attributes
+  attr(s3obj, "metrics") <- eval_names
   attr(s3obj, "eval_summary") <- eval_summary
   attr(s3obj, "grp_avg") <- grp_avg
   attr(s3obj, "data_info") <- attr(mdat, "data_info")
@@ -78,7 +83,8 @@
     calc_avg = calc_avg,
     cb_alpha = cb_alpha,
     raw_curves = raw_curves,
-    beta = beta
+    beta = beta,
+    metrics = metrics
   )
   attr(s3obj, "validated") <- FALSE
 
@@ -135,11 +141,11 @@
 #
 # Summarize basic evaluation measures
 #
-.summarize_basic <- function(lpoints, mdat) {
+.summarize_basic <- function(lpoints, mdat, eval_names) {
   # Summarize AUC of ROC or PRC curves
   modnames <- attr(mdat, "data_info")[["modnames"]]
   dsids <- attr(mdat, "data_info")[["dsids"]]
-  evaltypes <- c("rank", names(.basic_metric_names()))
+  evaltypes <- c("rank", eval_names)
   elen <- length(evaltypes)
 
   # Filled as a matrix first: assigning a row into a data frame inside the
@@ -175,13 +181,15 @@
   }
 
   # Validate class items and attributes
-  item_names <- unname(.basic_metric_names())
+  item_names <- unname(.basic_metric_names(.get_obj_metrics(points)))
   attr_names <- c(
-    "eval_summary", "grp_avg", "data_info", "uniq_modnames",
+    "metrics", "eval_summary", "grp_avg", "data_info", "uniq_modnames",
     "uniq_dsids", "model_type", "dataset_type", "args",
     "validated"
   )
-  arg_names <- c("mode", "calc_avg", "cb_alpha", "raw_curves", "beta")
+  arg_names <- c(
+    "mode", "calc_avg", "cb_alpha", "raw_curves", "beta", "metrics"
+  )
   .validate_basic(
     points, class_name, ".pl_main_basic", item_names, attr_names,
     arg_names

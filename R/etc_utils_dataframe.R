@@ -268,7 +268,7 @@ NULL
       x_bins <- 0
     }
   } else if (new_mode == "basic") {
-    curvetype_names <- as.list(.basic_metric_names())
+    curvetype_names <- as.list(.basic_metric_names(.get_obj_metrics(obj)))
     x_bins <- 0
   }
 

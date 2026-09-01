@@ -341,12 +341,45 @@ NULL
       if (!is.na(pmatch(sval, "label"))) {
         return("label")
       }
+
+      added <- .pmatch_added_metric(sval)
+      if (!is.null(added)) {
+        return(added)
+      }
     }
 
     val
   }
 
   unlist(.map(vals, pfunc))
+}
+
+#
+# Check partial match - the measures added for ROCR parity
+#
+# Tried last, after every measure this package has always had, so that a
+# prefix which used to reach one of those still does: "f" stays the F-score
+# rather than becoming ambiguous with the false discovery rate, and "l" stays
+# the label rather than the lift.
+#
+.pmatch_added_metric <- function(sval) {
+  aliases <- .basic_metric_aliases()
+  if (sval %in% names(aliases)) {
+    return(unname(aliases[[sval]]))
+  }
+
+  tab <- .basic_metric_table()
+  added <- tab$name[!tab$default]
+  if (sval %in% added) {
+    return(sval)
+  }
+
+  hit <- pmatch(sval, added)
+  if (!is.na(hit)) {
+    return(added[hit])
+  }
+
+  NULL
 }
 
 #
@@ -746,11 +779,8 @@ NULL
 .get_xlim <- function(obj, curvetype) {
   if (curvetype == "rocs" || curvetype == "prcs") {
     xlim <- attr(obj[[curvetype]], "xlim")
-  } else if (.is_signed_metric(curvetype)) {
-    xlim <- c(0, 1)
-  } else if (curvetype == "score") {
-    xlim <- c(0, 1)
   } else {
+    # Every basic measure is drawn against the normalized rank
     xlim <- c(0, 1)
   }
 
@@ -763,12 +793,12 @@ NULL
 .get_ylim <- function(obj, curvetype) {
   if (curvetype == "rocs" || curvetype == "prcs") {
     ylim <- attr(obj[[curvetype]], "ylim")
-  } else if (.is_signed_metric(curvetype)) {
-    ylim <- c(-1, 1)
-  } else if (curvetype == "score") {
-    ylim <- .get_value_range(obj, curvetype)
   } else {
-    ylim <- c(0, 1)
+    ylim <- switch(.metric_range(curvetype),
+      signed = c(-1, 1),
+      free = .get_value_range(obj, curvetype),
+      c(0, 1)
+    )
   }
 
   ylim

@@ -633,7 +633,7 @@
     }
   }
   roc_prc <- cfunc(curvetype, c("ROC", "PRC"), 2)
-  basic_names <- names(.basic_metric_names())
+  basic_names <- .get_metric_names("basic_all")
   basic_eval <- cfunc(curvetype, basic_names, length(basic_names))
 
   if (!roc_prc && !basic_eval) {
@@ -646,7 +646,40 @@
       ((obj_mode == "basic") && !basic_eval)) {
       stop("Invalid curvetype", call. = FALSE)
     }
+    if (obj_mode == "basic") {
+      .check_curvetype_held(curvetype, obj)
+    }
   }
+}
+
+#
+# Check that the object holds the measures being asked for
+#
+# A measure this package knows but that was not calculated is a different
+# mistake from a measure that does not exist, and it has a different fix:
+# `evalmod(metrics = )` decides which measures an object carries, so the
+# error says so rather than repeating the list of valid names.
+#
+.check_curvetype_held <- function(curvetype, obj) {
+  held <- .get_obj_metrics(obj)
+  missing_types <- setdiff(curvetype, held)
+  if (length(missing_types) == 0L) {
+    return(invisible(TRUE))
+  }
+
+  .stop_invalid_arg(
+    c(
+      paste(
+        "{.arg curvetype} names {.val {missing_types}}, which",
+        "{?is/are} not among the measures this object holds."
+      ),
+      "i" = paste(
+        "Ask for {?it/them} with",
+        "{.code evalmod(metrics = {.val {missing_types}})}."
+      )
+    ),
+    arg = "curvetype", .envir = environment()
+  )
 }
 
 #

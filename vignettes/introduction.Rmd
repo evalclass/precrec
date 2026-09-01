@@ -478,6 +478,38 @@ the `beta` argument weights recall more or less heavily than precision.
 mmpoins.f2 <- evalmod(mmmdat2, mode = "basic", beta = 2)
 ```
 
+### Additional measures
+Eight more measures are available on request. They are the ones `ROCR`
+provides that `precrec` did not, and they are left out of the default set
+because each is another vector the size of the dataset and another panel in
+the default plot.
+
+Measure                 Alternative names       Description
+----------------------- ----------------------- --------------------------
+                    fpr                    fall False positive rate, FP/N
+                    fnr                    miss False negative rate, FN/P
+   false_discovery_rate          fdr, pcfall     False discovery rate
+    false_omission_rate          for, pcmiss     False omission rate
+predicted_positive_rate          ppr, rpp        Rate of positive predictions
+predicted_negative_rate          pnr, rnp        Rate of negative predictions
+                   lift                          Sensitivity over ppr
+                   odds             odds_ratio    Odds ratio, TP*TN/(FN*FP)
+
+The `metrics` argument names the ones to add, or `"all"` for every measure.
+The default set is always kept, so nothing that worked before stops working.
+```{r, fig.width=7, fig.show='hold'}
+# Add the false positive rate and the lift to the default measures
+mmpoins.extra <- evalmod(mmmdat2, mode = "basic", metrics = c("fpr", "lift"))
+
+# Show normalized ranks vs. false positive rate and lift
+autoplot(mmpoins.extra, c("fpr", "lift"))
+```
+
+The odds ratio is `NA` at the top and the bottom of every dataset, where the
+2x2 table has an empty cell and the ratio is undefined. `ROCR` reports an
+infinity there; `precrec` reports `NA`, as it already does for the
+undefined end of precision and of the negative predictive value.
+
 #### Normalized ranks and predicted scores
 In addition to the basic measures, the `autoplot` function can plot normalized 
 ranks vs. scores and labels.
@@ -624,12 +656,12 @@ autoplot(simcurves2)
 ```
 
 ## 13. Probability-based metrics
-The Brier score and the log loss measure how close predicted probabilities are
-to the observed labels. Unlike ROC and precision-recall curves, they read the
-values of the scores rather than their ranks, so the scores must be
-probabilities between 0 and 1.
+The Brier score, its square root the root mean squared error, and the log loss
+measure how close predicted probabilities are to the observed labels. Unlike
+ROC and precision-recall curves, they read the values of the scores rather
+than their ranks, so the scores must be probabilities between 0 and 1.
 
-### Brier score and log loss
+### Brier score, RMSE and log loss
 The `prob_metrics` function takes the same input as `evalmod` and returns a
 data frame with one row per model, dataset, and metric.
 
@@ -640,7 +672,7 @@ pmdat <- mmdata(psamps[["scores"]], psamps[["labels"]],
   modnames = psamps[["modnames"]], dsids = psamps[["dsids"]]
 )
 
-# Calculate the Brier score and the log loss
+# Calculate the Brier score, the RMSE and the log loss
 pmetrics.df <- prob_metrics(pmdat)
 
 # Use knitr::kable to display the result in a table format

@@ -1,11 +1,15 @@
-## Version 0.15.0
+## Version 0.16.0
 
-An update of the published package `precrec` (0.14.5 -> 0.15.0).
+An update of the published package `precrec` (0.14.5 -> 0.16.0). 0.15.0 was
+prepared but not submitted, so this release carries both sets of changes.
 
 - Support datasets with more than two classes by one-vs-rest decomposition
-- Add confusion-matrix measures, F-beta, and probability-based metrics
+- Add the evaluation measures `ROCR` provides, opt-in through
+  `evalmod(metrics = )`, plus confusion-matrix measures, F-beta, and
+  probability-based metrics
 - Handle single-class datasets with a warning instead of an error
-- Fix the ranking of `NA` scores and the panel titles of `autoplot()`
+- Fix the ranking of `NA` scores, the panel titles of `autoplot()`, and the
+  y axis of `plot()` for the measures that can go negative
 - Raise the R dependency to >= 4.1, and modernize the tests and internals
 
 `NEWS.md` has the full list.

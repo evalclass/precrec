@@ -67,7 +67,10 @@ evaluation measures.
 - Negative predictive value (NPV)
 - Informedness (Youden's J) and markedness
 - Cohen's kappa
-- Brier score and log loss, for scores that are probabilities
+- Brier score, RMSE and log loss, for scores that are probabilities
+- False positive rate, false negative rate, false discovery rate, false
+  omission rate, rate of positive predictions, rate of negative predictions,
+  lift and odds ratio, on request through `evalmod(metrics = )`
 
 ### 4. Confidence interval band
 
@@ -131,8 +134,8 @@ The `precrec` package provides the following eight functions.
 | join_labels | Join observed labels of multiple test datasets into a list |
 | create_sim_samples | Create random samples for simulations |
 | format_nfold | Create n-fold cross validation dataset from data frame |
-| prob_metrics | Calculate the Brier score and the log loss |
-| prob_metrics_ci | Calculate CIs of the Brier score and the log loss |
+| prob_metrics | Calculate the Brier score, the RMSE and the log loss |
+| prob_metrics_ci | Calculate CIs of the Brier score, the RMSE and the log loss |
 
 Moreover, the `precrec` package provides nine S3 generics for the S3
 object created by the `evalmod` function. **N.B.** The R language
