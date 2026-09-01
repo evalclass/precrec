@@ -463,20 +463,8 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
   # Check mode
   .validate_mode(mode)
 
-  # Check model names
-  .validate_modnames(modnames, length(modnames))
-
-  # Check dataset IDs
-  .validate_dsids(dsids, length(dsids))
-
-  # Check posclass
-  .validate_posclass(posclass)
-
-  # Check na_worst
-  .validate_na_worst(na_worst)
-
-  # Check ties_method
-  .validate_ties_method(ties_method)
+  # Check the arguments that describe the input data
+  .validate_data_args(modnames, dsids, posclass, na_worst, ties_method)
 
 
   # Validate calc_avg

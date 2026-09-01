@@ -617,6 +617,25 @@
 }
 
 #
+# Validate the arguments that describe the input data
+#
+# `evalmod()` and `metric_curve()` both hand these five to `mmdata()`, and
+# both check them before they get there. One helper rather than two identical
+# blocks: an argument added to `mmdata()`'s front door is then checked the
+# same way by both.
+#
+.validate_data_args <- function(modnames, dsids, posclass, na_worst,
+                                ties_method) {
+  .validate_modnames(modnames, length(modnames))
+  .validate_dsids(dsids, length(dsids))
+  .validate_posclass(posclass)
+  .validate_na_worst(na_worst)
+  .validate_ties_method(ties_method)
+
+  invisible(TRUE)
+}
+
+#
 # Check curve types
 #
 .check_curvetype <- function(curvetype, obj = NULL) {

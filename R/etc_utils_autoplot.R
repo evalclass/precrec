@@ -847,3 +847,107 @@ NULL
 
   p
 }
+
+#
+# Draw the object of metric_curve() with ggplot2
+#
+# One panel, one curve per test dataset. The default geom comes from the
+# joinable-pair registry rather than from the data: a pair with no defined
+# interpolation is drawn as points, because a straight line between two raw
+# per-cutoff points asserts something about the space between them that
+# nobody has checked. `type` overrides it for a caller who has.
+#
+.autoplot_xycurves <- function(object, type = NULL, show_legend = FALSE,
+                               add_np_nn = TRUE, ...) {
+  .load_ggplot2()
+  .validate(object)
+  .check_type(type)
+  .assert_flag(show_legend, "show_legend")
+  .assert_flag(add_np_nn, "add_np_nn")
+
+  if (is.null(type)) {
+    type <- if (is.na(attr(object, "curve"))) "p" else "l"
+  }
+
+  curve_df <- .as_plain_df(.dataframe_xycurves(object))
+  curve_df[["dsid_modname"]] <- paste(
+    curve_df[["modname"]], curve_df[["dsid"]],
+    sep = ":"
+  )
+
+  x_col <- rlang::sym("x")
+  y_col <- rlang::sym("y")
+  modname_col <- rlang::sym("modname")
+  dsid_modname_col <- rlang::sym("dsid_modname")
+
+  p <- ggplot2::ggplot(curve_df, ggplot2::aes(
+    x = !!x_col, y = !!y_col,
+    group = !!dsid_modname_col,
+    color = !!modname_col
+  ))
+  if (type == "l") {
+    p <- p + ggplot2::geom_line(na.rm = TRUE)
+  } else {
+    if (type == "b") {
+      p <- p + ggplot2::geom_line(alpha = 0.25, na.rm = TRUE)
+    }
+    p <- p + ggplot2::geom_point(na.rm = TRUE)
+  }
+
+  lims <- .xycurve_lims(object)
+  p <- .set_coords(p, lims[["xlim"]], lims[["ylim"]], lims[["ratio"]])
+  p <- .geom_basic(
+    p, .xycurve_title(object, add_np_nn),
+    .get_metric_title(attr(object, "x_metric")),
+    .get_metric_title(attr(object, "y_metric")),
+    show_legend
+  )
+
+  p
+}
+
+#
+# The axis limits of an xy curve
+#
+# Both axes are measures, so each takes the range its own measure needs. A
+# measure that is unbounded above gets NULL, which is ggplot2 reading the
+# range off the data, and a fixed aspect ratio is only meaningful when the
+# two axes cover the same interval.
+#
+.xycurve_lims <- function(object) {
+  lim_of <- function(metric) {
+    switch(.metric_range(metric),
+      signed = c(-1, 1),
+      free = NULL,
+      c(0, 1)
+    )
+  }
+
+  xlim <- lim_of(attr(object, "x_metric"))
+  ylim <- lim_of(attr(object, "y_metric"))
+  ratio <- NULL
+  if (!is.null(xlim) && !is.null(ylim) && all(xlim == ylim)) {
+    ratio <- 1
+  }
+
+  list(xlim = xlim, ylim = ylim, ratio = ratio)
+}
+
+#
+# The title of an xy curve plot
+#
+.xycurve_title <- function(object, add_np_nn) {
+  main <- .xycurve_title_label(object)
+  if (!add_np_nn) {
+    return(main)
+  }
+
+  pn_info <- .get_pn_info(object)
+  if (!pn_info[["is_consistant"]]) {
+    return(main)
+  }
+
+  paste0(
+    main, " - P: ", pn_info[["avg_np"]], ", N: ", pn_info[["avg_nn"]]
+  )
+}

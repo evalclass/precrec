@@ -136,6 +136,7 @@ The `precrec` package provides the following eight functions.
 | format_nfold | Create n-fold cross validation dataset from data frame |
 | prob_metrics | Calculate the Brier score, the RMSE and the log loss |
 | prob_metrics_ci | Calculate CIs of the Brier score, the RMSE and the log loss |
+| metric_curve | Draw one evaluation measure against another |
 
 Moreover, the `precrec` package provides nine S3 generics for the S3
 object created by the `evalmod` function. **N.B.** The R language
