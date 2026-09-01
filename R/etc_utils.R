@@ -142,12 +142,12 @@
       "informedness", "markedness", "kappa", "fpr", "fnr",
       "false_discovery_rate", "false_omission_rate",
       "predicted_positive_rate", "predicted_negative_rate", "lift", "odds",
-      "mi", "chisq", "cost"
+      "mi", "chisq", "cost", "sar"
     ),
     short = c(
       "score", "label", "err", "acc", "sp", "sn", "prec", "mcc", "fscore",
       "bacc", "npv", "infm", "mkd", "kappa", "fpr", "fnr", "fdr", "for",
-      "ppr", "pnr", "lift", "odds", "mi", "chisq", "cost"
+      "ppr", "pnr", "lift", "odds", "mi", "chisq", "cost", "sar"
     ),
     desc = c(
       "score", "label", "error rate", "accuracy", "specificity",
@@ -158,14 +158,15 @@
       "false omission rate", "rate of positive predictions",
       "rate of negative predictions", "lift", "odds ratio",
       "mutual information (bits)", "chi-square statistic",
-      "misclassification cost"
+      "misclassification cost",
+      "mean of accuracy, AUC(ROC) and 1 - RMSE"
     ),
-    default = c(rep(TRUE, 14), rep(FALSE, 11)),
+    default = c(rep(TRUE, 14), rep(FALSE, 12)),
     range = c(
       "free", "signed", "unit", "unit", "unit", "unit", "unit", "signed",
       "unit", "unit", "unit", "signed", "signed", "signed", "unit", "unit",
       "unit", "unit", "unit", "unit", "free", "free", "unit", "free",
-      "free"
+      "free", "unit"
     ),
     stringsAsFactors = FALSE
   )
@@ -297,7 +298,7 @@
   titles <- c(
     label = "Label (1:pos, -1:neg)", mcc = "MCC", npv = "NPV",
     fpr = "FPR", fnr = "FNR", odds = "Odds ratio",
-    mi = "Mutual information", chisq = "Chi-square"
+    mi = "Mutual information", chisq = "Chi-square", sar = "SAR"
   )
   if (curvetype %in% names(titles)) {
     return(unname(titles[curvetype]))

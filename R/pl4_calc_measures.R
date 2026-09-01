@@ -6,8 +6,22 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, beta = 1,
                           cost_fp = 1, cost_fn = 1, ...) {
   # === Validate input arguments ===
   # Create cmats from scores and labels if cmats is missing
+  #
+  # `sar` reads the values of the scores, which reach this function only
+  # through the formatted data the confusion matrices were told to keep. When
+  # this call is the one building them it can simply ask, so `keep_fmdat` is
+  # taken over rather than left to the caller - a caller who did not ask for
+  # `sar` is unaffected.
+  make_cmats <- create_confmats
+  if ("sar" %in% metrics) {
+    make_cmats <- function(scores, labels, keep_fmdat = TRUE, ...) {
+      create_confmats(
+        scores = scores, labels = labels, keep_fmdat = TRUE, ...
+      )
+    }
+  }
   cmats <- .create_src_obj(
-    cmats, "cmats", create_confmats, scores, labels,
+    cmats, "cmats", make_cmats, scores, labels,
     ...
   )
   .validate(cmats)
@@ -124,6 +138,10 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, beta = 1,
   # error rate, which is the check that the two agree.
   vals[["cost"]] <- (fn * cost_fn + fp * cost_fp) / n_all
 
+  if ("sar" %in% derived) {
+    vals[["sar"]] <- .calc_sar(pb, cmats, tp, fp, tn, fn)
+  }
+
   # `fn * fp` is zero at both ends of every dataset, and the numerator with
   # it, so the odds ratio is undefined there by construction rather than by
   # accident; the lift is 0/0 at the top rank for the same reason. ROCR
@@ -135,6 +153,76 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, beta = 1,
 
   pb[derived] <- vals[derived]
   pb
+}
+
+#
+# SAR: the mean of accuracy, AUC(ROC) and 1 - RMSE
+#
+# Three quantities on three different scales, averaged with equal weight -
+# a per-cutoff measure, a curve-level scalar and a score-level scalar. Only
+# the first varies along the curve; the other two are constants added to
+# every point, which is what ROCR does too.
+#
+# The RMSE reads the values of the scores rather than their ranks, so the
+# scores have to be probabilities. That is the same requirement
+# `prob_metrics()` has, and it is checked the same way.
+#
+.calc_sar <- function(pb, cmats, tp, fp, tn, fn) {
+  src <- attr(cmats, "src")
+  if (all(is.na(src))) {
+    stop(paste(
+      "The 'sar' measure needs the prediction scores.",
+      "Use create_confmats(keep_fmdat = TRUE)."
+    ), call. = FALSE)
+  }
+
+  scores <- src[["scores"]]
+  # Labels are stored as 1 for negatives and 2 for positives
+  outcomes <- as.integer(src[["labels"]]) - 1L
+
+  # A warning and NA rather than the error `prob_metrics()` raises for the
+  # same input: this is one opt-in column among twenty-six, and
+  # `metrics = "all"` should not stop on a dataset whose scores happen not
+  # to be probabilities. Every other measure it asked for is still returned.
+  if (anyNA(scores) || min(scores) < 0 || max(scores) > 1) {
+    warning(
+      paste0(
+        "The 'sar' measure needs scores that are probabilities between 0",
+        " and 1, and returns NA otherwise (modname: ",
+        attr(cmats, "modname"), ", dsid: ", attr(cmats, "dsid"), ")."
+      ),
+      call. = FALSE
+    )
+    return(rep(NA_real_, length(pb[["accuracy"]])))
+  }
+
+  rmse <- sqrt(mean((scores - outcomes)^2))
+
+  (pb[["accuracy"]] + .roc_auc_from_counts(tp, fp, cmats) + (1 - rmse)) / 3
+}
+
+#
+# The area under the ROC curve, by the trapezoid rule over the counts
+#
+# Reading it off the confusion matrices rather than asking the curve pipeline
+# for it is safe here in a way it would not be for a precision-recall curve:
+# the ROC space *is* linearly interpolated - that is what makes a straight
+# line between two ROC points correct and a straight line between two
+# precision-recall points wrong - so the trapezoid over every cutoff is the
+# curve, not an approximation of it.
+#
+.roc_auc_from_counts <- function(tp, fp, cmats) {
+  np <- cmats[["pos_num"]]
+  nn <- cmats[["neg_num"]]
+  if (np == 0 || nn == 0) {
+    return(NA_real_)
+  }
+
+  x <- fp / nn
+  y <- tp / np
+  n <- length(x)
+
+  sum(diff(x) * (y[-1] + y[-n]) / 2)
 }
 
 #

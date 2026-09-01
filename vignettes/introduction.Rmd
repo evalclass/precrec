@@ -497,6 +497,7 @@ predicted_negative_rate      pnr, rnp        Rate of negative predictions
                      mi  mutual_information   Mutual information, in bits
                   chisq                       Pearson chi-square of the table
                    cost                       Weighted misclassification cost
+                    sar                       Mean of accuracy, AUC and 1-RMSE
 
 The `metrics` argument names the ones to add, or `"all"` for every measure.
 The default set is always kept, so nothing that worked before stops working.
@@ -532,6 +533,12 @@ from `ROCR` in two of the three cases:
 - The mutual information is `0` at those two points rather than `NA`. A
   cutoff that predicts one class for everything carries no information about
   the labels, so that value is defined and it is zero.
+
+The `sar` measure averages accuracy, the AUC of the ROC curve, and one minus
+the root mean squared error. The last of those reads the values of the scores
+rather than their ranks, so `sar` warns and returns `NA` when the scores are
+not probabilities between 0 and 1. Every other measure asked for in the same
+call is still returned.
 
 #### Normalized ranks and predicted scores
 In addition to the basic measures, the `autoplot` function can plot normalized 
@@ -714,7 +721,33 @@ pmetrics.ci <- prob_metrics_ci(pmdat)
 knitr::kable(pmetrics.ci)
 ```
 
-## 14. One measure against another
+## 14. Precision-recall break-even point
+The break-even point of a precision-recall curve is where precision and
+recall are equal. The `prbe` function finds it, and returns a data frame with
+one row per break-even point in the manner of `auc`.
+
+```{r}
+prsamps <- create_sim_samples(2, 100, 100, c("poor_er", "good_er"))
+prmdat <- mmdata(prsamps[["scores"]], prsamps[["labels"]],
+  modnames = prsamps[["modnames"]], dsids = prsamps[["dsids"]]
+)
+prcurves <- evalmod(prmdat, raw_curves = TRUE)
+
+# Use knitr::kable to display the result in a table format
+knitr::kable(prbe(prcurves))
+```
+
+A curve can cross the diagonal more than once, and then the data frame holds
+one row per crossing. A curve that never reaches equal precision and recall
+gets a single row of `NA`.
+
+`ROCR::performance(pred, "prbe")` interpolates linearly between adjacent raw
+precision-recall points to find the crossing. Linear interpolation between
+precision-recall points is not correct, which is the reason this package
+exists, so `prbe` reads the crossing off the curve `evalmod` has already
+interpolated properly.
+
+## 15. One measure against another
 The `metric_curve` function takes the name of a measure for the x axis and
 the name of a measure for the y axis and draws one against the other, in the
 manner of `ROCR::performance`. Every measure `evalmod` can calculate is
@@ -775,7 +808,7 @@ xy3 <- metric_curve(xymdat, x_metric = "score", y_metric = "precision")
 autoplot(xy3)
 ```
 
-## 15. Multiclass evaluation
+## 16. Multiclass evaluation
 A dataset with more than two classes is evaluated by one-vs-rest
 decomposition: each class becomes its own binary problem - that class against
 all the others - so the accurate precision-recall calculations apply to it
@@ -822,7 +855,7 @@ baseline of a precision-recall curve differs from class to class. The plots
 leave the baseline out for that reason - which matters here more than
 anywhere else, because a precision-recall curve is read against its baseline.
 
-## 16. Citation
+## 17. Citation
 *Precrec: fast and accurate precision-recall and ROC curve calculations in R*
 
 Takaya Saito; Marc Rehmsmeier
@@ -831,7 +864,7 @@ Bioinformatics 2017; 33 (1): 145-147.
 
 doi: [10.1093/bioinformatics/btw570](https://doi.org/10.1093/bioinformatics/btw570)
 
-## 17. External links
+## 18. External links
 - [Classifier evaluation with imbalanced datasets](https://classeval.wordpress.com/) - our web site that contains several pages with useful tips for performance evaluation on binary classifiers.
 
 - [The Precision-Recall Plot Is More Informative than the ROC Plot When Evaluating Binary Classifiers on Imbalanced Datasets](https://doi.org/10.1371/journal.pone.0118432) - our paper that summarized potential pitfalls of ROC plots with imbalanced datasets and advantages of using precision-recall plots instead.

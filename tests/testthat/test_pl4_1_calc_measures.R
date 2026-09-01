@@ -491,7 +491,9 @@ test_that("calc_measures() adds only the measures it is asked for", {
 test_that("the derived measures match their definitions", {
   scores <- c(0.9, 0.8, 0.7, 0.6, 0.5, 0.4)
   labels <- c(1, 1, 0, 1, 0, 0)
-  cmats <- create_confmats(scores = scores, labels = labels)
+  cmats <- create_confmats(
+    scores = scores, labels = labels, keep_fmdat = TRUE
+  )
   pb <- calc_measures(cmats, metrics = .resolve_metrics("all"))[["basic"]]
 
   tp <- cmats[["tp"]]
@@ -672,4 +674,80 @@ test_that("cost weights the two error counts", {
     pb[["cost"]],
     (cmats[["fn"]] * 0.5 + cmats[["fp"]] * 3) / n
   )
+})
+
+test_that("sar is the mean of accuracy, AUC(ROC) and 1 - RMSE", {
+  scores <- c(0.95, 0.8, 0.7, 0.55, 0.4, 0.2)
+  labels <- c(1, 1, 0, 1, 0, 0)
+  cmats <- create_confmats(
+    scores = scores, labels = labels, keep_fmdat = TRUE
+  )
+  pb <- calc_measures(cmats, metrics = .resolve_metrics("sar"))[["basic"]]
+
+  roc_auc <- auc(evalmod(scores = scores, labels = labels))
+  roc_auc <- roc_auc[roc_auc$curvetypes == "ROC", "aucs"]
+  rmse <- sqrt(mean((scores - labels)^2))
+
+  expect_equal(pb[["sar"]], (pb[["accuracy"]] + roc_auc + (1 - rmse)) / 3)
+})
+
+test_that("the AUC inside sar is the one auc() reports", {
+  scores <- c(0.95, 0.8, 0.7, 0.55, 0.4, 0.2)
+  labels <- c(1, 1, 0, 1, 0, 0)
+  cmats <- create_confmats(
+    scores = scores, labels = labels, keep_fmdat = TRUE
+  )
+
+  from_counts <- .roc_auc_from_counts(
+    cmats[["tp"]], cmats[["fp"]], cmats
+  )
+  reported <- auc(evalmod(scores = scores, labels = labels))
+  expect_equal(
+    from_counts, reported[reported$curvetypes == "ROC", "aucs"]
+  )
+})
+
+test_that("sar warns and returns NA when the scores are not probabilities", {
+  cmats <- create_confmats(
+    scores = c(9, 8, 7, 6), labels = c(1, 0, 1, 0), keep_fmdat = TRUE
+  )
+
+  expect_warning(
+    pb <- calc_measures(cmats, metrics = .resolve_metrics("sar"))[["basic"]],
+    "probabilities"
+  )
+  expect_true(all(is.na(pb[["sar"]])))
+
+  # The measures that do not need the score values are still returned
+  expect_false(any(is.na(pb[["accuracy"]])))
+})
+
+test_that("sar says so when it is handed matrices without the scores", {
+  # calc_measures() asks for them when it builds the matrices itself, so this
+  # is only reachable by handing it a cmats object built elsewhere
+  cmats <- create_confmats(scores = c(0.9, 0.8), labels = c(1, 0))
+
+  expect_error(
+    calc_measures(cmats, metrics = .resolve_metrics("sar")),
+    "keep_fmdat"
+  )
+})
+
+test_that("calc_measures() keeps the scores when sar is asked for", {
+  pb <- calc_measures(
+    scores = c(0.9, 0.8, 0.7, 0.6), labels = c(1, 0, 1, 0),
+    metrics = .resolve_metrics("sar")
+  )[["basic"]]
+
+  expect_false(any(is.na(pb[["sar"]])))
+})
+
+test_that("the AUC of a dataset with one class is NA inside sar", {
+  cmats <- suppressWarnings(create_confmats(
+    scores = c(0.9, 0.8, 0.7), labels = c(1, 1, 1), keep_fmdat = TRUE
+  ))
+
+  expect_true(is.na(
+    .roc_auc_from_counts(cmats[["tp"]], cmats[["fp"]], cmats)
+  ))
 })

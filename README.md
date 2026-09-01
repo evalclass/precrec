@@ -70,8 +70,9 @@ evaluation measures.
 - Brier score, RMSE and log loss, for scores that are probabilities
 - False positive rate, false negative rate, false discovery rate, false
   omission rate, rate of positive predictions, rate of negative predictions,
-  lift, odds ratio, mutual information, chi-square and weighted
-  misclassification cost, on request through `evalmod(metrics = )`
+  lift, odds ratio, mutual information, chi-square, weighted
+  misclassification cost and SAR, on request through `evalmod(metrics = )`
+- Precision-recall break-even point
 
 ### 4. Confidence interval band
 
@@ -138,6 +139,7 @@ The `precrec` package provides the following eight functions.
 | prob_metrics | Calculate the Brier score, the RMSE and the log loss |
 | prob_metrics_ci | Calculate CIs of the Brier score, the RMSE and the log loss |
 | metric_curve | Draw one evaluation measure against another |
+| prbe | Find the precision-recall break-even point |
 
 Moreover, the `precrec` package provides nine S3 generics for the S3
 object created by the `evalmod` function. **N.B.** The R language

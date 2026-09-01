@@ -101,7 +101,7 @@ test_that(".get_metric_names('basic_all') adds the ROCR measures", {
     c(
       "fpr", "fnr", "false_discovery_rate", "false_omission_rate",
       "predicted_positive_rate", "predicted_negative_rate", "lift", "odds",
-      "mi", "chisq", "cost"
+      "mi", "chisq", "cost", "sar"
     )
   )
 })
