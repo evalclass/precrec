@@ -352,7 +352,7 @@ with its own `NEWS.md` bullets. CI is off on `develop` by design, so
 | --- | --- | --- | --- | --- |
 | 1 | `checkmate` behind `.assert_*`, near-miss hints, new helpers | `feature/ArgChecks` | S | **DONE (2026-09-01)** - see outcome below |
 | 2 | `.map_*` helpers, retire the 44 `apply` calls | `feature/MapHelpers` | M | **DONE (2026-09-01)** - see outcome below |
-| 3 | Tier A measures, `default` flag, `.metric_range()` | `feature/MetricsTierA` | M | `.get_metric_names("basic")` still returns the same 14; parity script |
+| 3 | Tier A measures, `default` flag, `.metric_range()` | `feature/MetricsTierA` | M | **DONE (2026-09-01)** - see outcome below |
 | 4 | `metric_curve()`, `.joinable_pairs()`, methods | `feature/MetricCurve` | M | Registered pairs produce data **identical** to `evalmod(mode = "rocprc")` |
 | 5 | Tier B measures + `cost` arguments | `feature/MetricsTierB` | M | Parity script |
 | 6 | Tier C: `prbe`, `rch`, `sar`, `cal`, `ecost` | `feature/MetricsTierC` | L | Per-measure; **candidate for deferral** |
@@ -426,6 +426,65 @@ and `.pmatch_curvetype_basic()` return their input unchanged when it is not a
 string, so `evalmod(curvetype = 1)` has to survive them to reach the validator
 that names the argument. A `.map_chr()` there would have thrown a type error
 from the wrong place. `unlist(.map(...))` keeps the existing behaviour.
+
+### Phase 3 outcome (2026-09-01)
+
+Landed on `feature/MetricsTierA`, and the version is now **0.16.0**. All
+eight Tier A curve measures plus `rmse` in `prob_metrics()`. `evalmod()`
+gains `metrics`, `.basic_metric_table()` replaces the old name vector and
+carries `short`, `desc`, `default` and `range` per measure, and
+`.metric_range()` replaces `.is_signed_metric()`.
+
+**The parity script is real, and ROCR agrees to 1e-10.** ROCR was installed
+into a scratch library outside the project to run it - it is still not a
+dependency, not even `Suggests`. 54 checks over balanced, imbalanced and
+tied data, all passing, covering the eight new measures and the eight
+long-standing ones ROCR also has.
+
+Getting there found the one thing that would have made the script useless.
+Joined naively on the cutoff, **every** measure disagreed on tied scores,
+the ones precrec has shipped for years included. ROCR reports one row per
+distinct cutoff and precrec one per rank, and ROCR's row counts every
+instance scoring at or above that cutoff - which is precrec's *last* row at
+it, not its first. A parity script that had quietly dropped the tied case
+would have looked like it was passing.
+
+**Two design points changed under contact with the code.**
+
+*The default `curvetype` reads the object, not the table.* The plan had
+`.get_metric_names("basic")` staying as the plot default forever, which
+would have made a caller ask for a measure twice - once at `evalmod()` and
+again at `plot()`. `plot()` and `autoplot()` now default to
+`.get_obj_metrics(object)`. This still satisfies D8 exactly: a caller who
+does not pass `metrics` holds fourteen measures and gets fourteen panels.
+
+*Nothing is computed unless requested had to be enforced twice.*
+`.add_derived_measures()` returning early was not enough, because building
+the 22-row measure table to decide there was nothing to do still cost a
+data.frame construction per dataset on the curve path. The length check
+moved above the table read, and `.pl_main_basic()` now passes only the
+derived names rather than the whole set.
+
+**One pre-existing bug fixed.** `plot()` drew informedness and markedness on
+a 0-to-1 axis, cutting the negative half off the curve. `.is_signed_metric()`
+listed measure names, but the base-R plotting path indexes the points object
+and therefore holds the *short* names, where `infm` and `mkd` matched
+nothing. `autoplot()` was never affected because it holds the long names.
+This is the second bug in two phases caused by the same thing - a lookup
+keyed on one of the two naming schemes - which is the argument for the table
+now carrying both.
+
+**The benchmark gate could not be met, and the reason is recorded.** Two
+`--compare` runs of *identical* code against the same baseline, minutes
+apart, flagged different cases at up to 2.02x while reporting 0.76x
+elsewhere. The plan's "~11% noise floor" holds on a quiet machine and not on
+one that has been running `R CMD check` and benchmark sweeps back to back.
+Separately, the phase 2 baseline regeneration made `--compare --quick`
+invalid, because `--quick` is 3 iterations at 0.05s against the full run's
+20 at 0.5s. Both are now written into `bench/README.md`. The phase gate was
+carried by the snapshots, the 3100 assertions, the 40 correctness checks and
+the ROCR parity instead - all of which are equality checks and none of which
+the machine can perturb.
 
 ### Why this order
 
