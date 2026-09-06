@@ -1,0 +1,80 @@
+---
+title: "Average over several test sets"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE, comment = "#>", fig.width = 7, fig.height = 4
+)
+```
+
+One model tested on several datasets gives several curves. `precrec` averages
+them and draws a confidence band around the average.
+
+```{r}
+library(precrec)
+library(ggplot2)
+
+# 10 test sets for one model
+samps <- create_sim_samples(10, 100, 100, "good_er")
+
+mdat <- mmdata(samps[["scores"]], samps[["labels"]], dsids = samps[["dsids"]])
+```
+
+`dsids` is what marks these as several test sets rather than several models.
+
+## The average curve
+
+```{r}
+curves <- evalmod(mdat)
+
+autoplot(curves, "PRC")
+```
+
+The shaded band is the point-wise 95% confidence interval of the average. It
+appears on its own as soon as a model has more than one test set.
+
+## The individual curves
+
+Ask for them with `raw_curves = TRUE`.
+
+```{r}
+raw <- evalmod(mdat, raw_curves = TRUE)
+
+autoplot(raw, "PRC", show_cb = FALSE)
+```
+
+## Averaged areas
+
+`auc()` reports the mean area over the test sets.
+
+```{r}
+knitr::kable(auc(curves))
+```
+
+`auc_ci()` puts a confidence interval on it.
+
+```{r}
+knitr::kable(auc_ci(curves))
+```
+
+## Both at once
+
+Several models *and* several test sets is the same call with both
+identifiers set. Each model gets one average curve.
+
+```{r}
+samps2 <- create_sim_samples(10, 100, 100, c("poor_er", "good_er"))
+
+mdat2 <- mmdata(samps2[["scores"]], samps2[["labels"]],
+  modnames = samps2[["modnames"]], dsids = samps2[["dsids"]]
+)
+
+autoplot(evalmod(mdat2), "PRC")
+```
+
+## Next
+
+- [Confidence bands](plots-confidence-bands.html) - how the band is built and
+  how to change it
+- [Evaluate cross-validation folds](howto-cross-validation.html)

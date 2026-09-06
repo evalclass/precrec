@@ -1,8 +1,8 @@
-## Version 0.16.1
+## Version 0.16.2
 
-An update of the published package `precrec` (0.14.5 -> 0.16.1). 0.15.0 and
-0.16.0 were prepared but not submitted, so this release carries all three
-sets of changes.
+An update of the published package `precrec` (0.14.5 -> 0.16.2). 0.15.0,
+0.16.0 and 0.16.1 were prepared but not submitted, so this release carries
+all four sets of changes.
 
 - Support datasets with more than two classes by one-vs-rest decomposition
 - Add the evaluation measures `ROCR` provides, opt-in through
@@ -17,6 +17,8 @@ sets of changes.
   instances with tied scores, which was left to the C++ standard library and
   so differed between platforms
 - Raise the R dependency to >= 4.1, and modernize the tests and internals
+- Replace the single long vignette with a short one; the rest of the
+  documentation moved to the package website, so the tarball did not grow
 
 `NEWS.md` has the full list.
 

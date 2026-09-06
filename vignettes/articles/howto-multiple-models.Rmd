@@ -1,0 +1,70 @@
+---
+title: "Compare several models"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE, comment = "#>", fig.width = 7, fig.height = 4
+)
+```
+
+Several models tested on the *same* data give one curve each, drawn together
+on one plot.
+
+```{r}
+library(precrec)
+library(ggplot2)
+
+samps <- create_sim_samples(1, 100, 100, "all")
+
+mdat <- mmdata(samps[["scores"]], samps[["labels"]],
+  modnames = samps[["modnames"]]
+)
+```
+
+The five models here are the five simulated quality levels, from random to
+perfect.
+
+## Calculate and plot
+
+`evalmod()` notices there is more than one model and labels the curves
+accordingly.
+
+```{r, fig.height = 4}
+curves <- evalmod(mdat)
+
+autoplot(curves)
+```
+
+## Compare the areas
+
+```{r}
+knitr::kable(auc(curves))
+```
+
+The gap between the two curve types is the point of the package: ROC areas
+stay high for models the precision-recall areas show to be weak. See
+[balanced and imbalanced data](howto-imbalanced-data.html).
+
+## One curve type at a time
+
+```{r, fig.height = 4}
+autoplot(curves, "PRC")
+```
+
+## Naming the models
+
+Without `modnames`, models are named `m1`, `m2` and so on. Pass your own
+names to `mmdata()` or straight to `evalmod()`.
+
+```{r}
+curves2 <- evalmod(
+  scores = samps[["scores"]], labels = samps[["labels"]],
+  modnames = c("random", "poor", "good", "excellent", "perfect")
+)
+```
+
+## Next
+
+- [Average over several test sets](howto-multiple-test-sets.html)
+- [Get the numbers out](howto-results-as-data.html)
