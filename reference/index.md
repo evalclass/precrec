@@ -115,6 +115,11 @@
 - [`prbe()`](https://evalclass.github.io/precrec/reference/prbe.md) :
   Calculate the precision-recall break-even point
 
+## Average precision
+
+- [`average_precision()`](https://evalclass.github.io/precrec/reference/average_precision.md)
+  : Calculate the average precision
+
 ## Probability-based metrics
 
 - [`prob_metrics()`](https://evalclass.github.io/precrec/reference/prob_metrics.md)

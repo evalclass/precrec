@@ -94,6 +94,11 @@ respectively.
 returns confidence intervals of AUCs for both ROC and precision-recall
 curves.
 
+[`average_precision()`](https://evalclass.github.io/precrec/reference/average_precision.md)
+returns the step estimator of the area under the precision-recall curve,
+and [`prbe()`](https://evalclass.github.io/precrec/reference/prbe.md)
+the precision-recall break-even point.
+
 ## Probability-based measures
 
 [`prob_metrics()`](https://evalclass.github.io/precrec/reference/prob_metrics.md)

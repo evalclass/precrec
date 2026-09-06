@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -211,6 +211,76 @@ macro-average of the per-class scores.</p>
 </tr>
 </tbody>
 </table>
+<p><code>macro = FALSE</code> leaves the average out and reports the
+classes alone.</p>
+<p>The average weights every class equally by default, so a class with
+ten observations counts as much as one with a thousand.
+<code>macro_weight = "prevalence"</code> weights each class by its size
+instead.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="../reference/auc.html">auc</a></span><span class="op">(</span><span class="va">curves</span>, macro_weight <span class="op">=</span> <span class="st">"prevalence"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">modnames</th>
+<th align="right">dsids</th>
+<th align="left">curvetypes</th>
+<th align="right">aucs</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">c1</td>
+<td align="right">1</td>
+<td align="left">ROC</td>
+<td align="right">0.9732000</td>
+</tr>
+<tr class="even">
+<td align="left">c1</td>
+<td align="right">1</td>
+<td align="left">PRC</td>
+<td align="right">0.9558435</td>
+</tr>
+<tr class="odd">
+<td align="left">c2</td>
+<td align="right">1</td>
+<td align="left">ROC</td>
+<td align="right">0.7758000</td>
+</tr>
+<tr class="even">
+<td align="left">c2</td>
+<td align="right">1</td>
+<td align="left">PRC</td>
+<td align="right">0.6550357</td>
+</tr>
+<tr class="odd">
+<td align="left">c3</td>
+<td align="right">1</td>
+<td align="left">ROC</td>
+<td align="right">0.5336000</td>
+</tr>
+<tr class="even">
+<td align="left">c3</td>
+<td align="right">1</td>
+<td align="left">PRC</td>
+<td align="right">0.4162555</td>
+</tr>
+<tr class="odd">
+<td align="left">macro-average-weighted</td>
+<td align="right">1</td>
+<td align="left">ROC</td>
+<td align="right">0.7608667</td>
+</tr>
+<tr class="even">
+<td align="left">macro-average-weighted</td>
+<td align="right">1</td>
+<td align="left">PRC</td>
+<td align="right">0.6757116</td>
+</tr>
+</tbody>
+</table>
+<p>Use the uniform average when every class matters equally - usually
+the case when the rare classes are the interesting ones - and the
+weighted average when you want the average case. Other packages call
+these <code>roc_aunu</code> and <code>roc_aunp</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="one-thing-to-watch">One thing to watch<a class="anchor" aria-label="anchor" href="#one-thing-to-watch"></a>

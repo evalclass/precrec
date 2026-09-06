@@ -229,7 +229,7 @@ ssmdat2
 #>     === Input data ===
 #> 
 #>      Model name Dataset ID # of negatives # of positives
-#>    1         m1          1              4              4
+#>    1         m1          1              3              5
 #> 
 
 

@@ -73,6 +73,33 @@ knitr::kable(auc(curves))
 | macro-average |     1 | ROC        | 0.7608667 |
 | macro-average |     1 | PRC        | 0.6757116 |
 
+`macro = FALSE` leaves the average out and reports the classes alone.
+
+The average weights every class equally by default, so a class with ten
+observations counts as much as one with a thousand.
+`macro_weight = "prevalence"` weights each class by its size instead.
+
+``` r
+
+knitr::kable(auc(curves, macro_weight = "prevalence"))
+```
+
+| modnames               | dsids | curvetypes |      aucs |
+|:-----------------------|------:|:-----------|----------:|
+| c1                     |     1 | ROC        | 0.9732000 |
+| c1                     |     1 | PRC        | 0.9558435 |
+| c2                     |     1 | ROC        | 0.7758000 |
+| c2                     |     1 | PRC        | 0.6550357 |
+| c3                     |     1 | ROC        | 0.5336000 |
+| c3                     |     1 | PRC        | 0.4162555 |
+| macro-average-weighted |     1 | ROC        | 0.7608667 |
+| macro-average-weighted |     1 | PRC        | 0.6757116 |
+
+Use the uniform average when every class matters equally - usually the
+case when the rare classes are the interesting ones - and the weighted
+average when you want the average case. Other packages call these
+`roc_aunu` and `roc_aunp`.
+
 ## One thing to watch
 
 Each one-vs-rest split has its own class balance, so the baseline of a

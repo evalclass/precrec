@@ -36,7 +36,7 @@ gets a panel in the default plot.
 | `informedness` | `infm` | [Agreement and balance](https://evalclass.github.io/precrec/articles/measures-agreement.md) |
 | `markedness` | `mkd` | [Agreement and balance](https://evalclass.github.io/precrec/articles/measures-agreement.md) |
 
-## The ten you ask for
+## The fourteen you ask for
 
 Each of these is another vector the size of your dataset and another
 panel in the plot, so they are left out unless named.
@@ -55,6 +55,8 @@ panel in the plot, so they are left out unless named.
 | `chisq` |  | [Ranking and cost](https://evalclass.github.io/precrec/articles/measures-ranking-cost.md) |
 | `cost` |  | [Ranking and cost](https://evalclass.github.io/precrec/articles/measures-ranking-cost.md) |
 | `sar` |  | [Ranking and cost](https://evalclass.github.io/precrec/articles/measures-ranking-cost.md) |
+| `roc_dist` |  | [Agreement and balance](https://evalclass.github.io/precrec/articles/measures-agreement.md) |
+| `sedi` |  | [Agreement and balance](https://evalclass.github.io/precrec/articles/measures-agreement.md) |
 
 ## Asking for them
 
@@ -93,7 +95,8 @@ rather than one cutoff, and have their own functions:
   [`auc()`](https://evalclass.github.io/precrec/reference/auc.md),
   [`pauc()`](https://evalclass.github.io/precrec/reference/pauc.md),
   [`auc_ci()`](https://evalclass.github.io/precrec/reference/auc_ci.md),
-  [`prbe()`](https://evalclass.github.io/precrec/reference/prbe.md)
+  [`prbe()`](https://evalclass.github.io/precrec/reference/prbe.md),
+  [`average_precision()`](https://evalclass.github.io/precrec/reference/average_precision.md)
 - [Probability-based
   metrics](https://evalclass.github.io/precrec/articles/measures-probability.md) -
   [`prob_metrics()`](https://evalclass.github.io/precrec/reference/prob_metrics.md),

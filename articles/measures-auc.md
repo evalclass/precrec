@@ -26,7 +26,7 @@ knitr::kable(auc(curves))
 | Curve | What the area means | Baseline |
 |----|----|----|
 | ROC | Probability a random positive outranks a random negative | 0.5 |
-| PRC | Average precision over all recall levels | The proportion of positives |
+| PRC | Mean precision across all recall levels | The proportion of positives |
 
 The ROC baseline is always 0.5. The precision-recall baseline is not -
 it moves with the class balance, so a PRC area of 0.4 is poor on
@@ -35,6 +35,40 @@ balanced data and good when positives are 5% of the total.
 `precrec` computes the precision-recall area from the properly
 interpolated curve. Tools that join raw points with straight lines
 overestimate it.
+
+## Average precision
+
+Average precision is the other way to summarize a precision-recall
+curve: the precision at each cutoff, weighted by the recall it gains
+over the cutoff before it.
+
+``` r
+
+knitr::kable(average_precision(curves))
+```
+
+| modnames | dsids |       aps |
+|:---------|------:|----------:|
+| m1       |     1 | 0.7454008 |
+
+It is a different estimator from the area above, not a different way of
+adding up the same one. It joins the raw points with horizontal steps
+instead of interpolating between them, so it reads high wherever the two
+disagree - which on this dataset is by about 0.006.
+
+``` r
+
+knitr::kable(auc(curves))
+```
+
+| modnames | dsids | curvetypes |      aucs |
+|:---------|------:|:-----------|----------:|
+| m1       |     1 | ROC        | 0.7200000 |
+| m1       |     1 | PRC        | 0.7397716 |
+
+Prefer the area under the interpolated curve. Average precision is here
+because several other packages report it under this name, and because
+the size of the gap between the two is worth being able to see.
 
 ## Partial areas
 
@@ -134,6 +168,58 @@ recall gets a single row of `NA`.
 the crossing off the interpolated curve. Finding it by linear
 interpolation between raw precision-recall points, as some tools do, is
 the error this package exists to avoid.
+
+## Averaging over classes
+
+For a multiclass evaluation,
+[`auc()`](https://evalclass.github.io/precrec/reference/auc.md) adds the
+macro-average of the per-class areas. `macro_weight` chooses how the
+classes are weighted.
+
+``` r
+
+mccurves <- evalmod(scores = C3N150$scores, labels = C3N150$labels)
+
+knitr::kable(auc(mccurves))
+```
+
+| modnames      | dsids | curvetypes |      aucs |
+|:--------------|------:|:-----------|----------:|
+| c1            |     1 | ROC        | 0.9732000 |
+| c1            |     1 | PRC        | 0.9558435 |
+| c2            |     1 | ROC        | 0.7758000 |
+| c2            |     1 | PRC        | 0.6550357 |
+| c3            |     1 | ROC        | 0.5336000 |
+| c3            |     1 | PRC        | 0.4162555 |
+| macro-average |     1 | ROC        | 0.7608667 |
+| macro-average |     1 | PRC        | 0.6757116 |
+
+The default, `"uniform"`, gives every class the same weight, so a rare
+class counts as much as a common one. `"prevalence"` weights each class
+by the number of observations it has, and the rows are named
+`macro-average-weighted` to keep the two apart.
+
+``` r
+
+knitr::kable(auc(mccurves, macro_weight = "prevalence"))
+```
+
+| modnames               | dsids | curvetypes |      aucs |
+|:-----------------------|------:|:-----------|----------:|
+| c1                     |     1 | ROC        | 0.9732000 |
+| c1                     |     1 | PRC        | 0.9558435 |
+| c2                     |     1 | ROC        | 0.7758000 |
+| c2                     |     1 | PRC        | 0.6550357 |
+| c3                     |     1 | ROC        | 0.5336000 |
+| c3                     |     1 | PRC        | 0.4162555 |
+| macro-average-weighted |     1 | ROC        | 0.7608667 |
+| macro-average-weighted |     1 | PRC        | 0.6757116 |
+
+The two agree on a balanced dataset, as this one is. Which to use is the
+same question as always: uniform if every class matters equally,
+prevalence if you care about the average case. Other packages call these
+two `roc_aunu` and `roc_aunp`. See [more than two
+classes](https://evalclass.github.io/precrec/articles/howto-multiclass.md).
 
 ## The fast path
 

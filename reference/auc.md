@@ -8,10 +8,10 @@ ROC and Precision-Recall curves.
 ## Usage
 
 ``` r
-auc(curves, macro = TRUE)
+auc(curves, macro = TRUE, macro_weight = c("uniform", "prevalence"))
 
 # S3 method for class 'aucs'
-auc(curves, macro = TRUE)
+auc(curves, macro = TRUE, macro_weight = c("uniform", "prevalence"))
 ```
 
 ## Arguments
@@ -43,6 +43,18 @@ auc(curves, macro = TRUE)
   and the added rows carry `macro-average` as their model name. Classes
   that could not be evaluated are left out of the average.
 
+- macro_weight:
+
+  How the per-class AUCs are weighted in that average. `"uniform"`, the
+  default, gives every class the same weight, so a rare class counts as
+  much as a common one. `"prevalence"` weights each class by the number
+  of observations it has, so the average follows the class distribution
+  of the data. The weighted rows are named `macro-average-weighted` to
+  keep the two apart. The two agree on a balanced dataset.
+
+  For a ROC evaluation the two are the measures other packages call
+  `roc_aunu` and `roc_aunp` respectively.
+
 ## Value
 
 The `auc` function returns a data frame with AUC scores.
@@ -53,6 +65,8 @@ The `auc` function returns a data frame with AUC scores.
 for generating `S3` objects with performance evaluation measures.
 [`pauc()`](https://evalclass.github.io/precrec/reference/pauc.md) for
 retrieving a dataset of pAUCs.
+[`average_precision()`](https://evalclass.github.io/precrec/reference/average_precision.md)
+for the step estimator of the area under the precision-recall curve.
 
 ## Examples
 
@@ -263,4 +277,16 @@ auc(mccurves, macro = FALSE)
 #> 4       c2     1        PRC 0.6550357
 #> 5       c3     1        ROC 0.5336000
 #> 6       c3     1        PRC 0.4162555
+
+## Weighted by the class distribution instead
+auc(mccurves, macro_weight = "prevalence")
+#>                 modnames dsids curvetypes      aucs
+#> 1                     c1     1        ROC 0.9732000
+#> 2                     c1     1        PRC 0.9558435
+#> 3                     c2     1        ROC 0.7758000
+#> 4                     c2     1        PRC 0.6550357
+#> 5                     c3     1        ROC 0.5336000
+#> 6                     c3     1        PRC 0.4162555
+#> 7 macro-average-weighted     1        ROC 0.7608667
+#> 8 macro-average-weighted     1        PRC 0.6757116
 ```

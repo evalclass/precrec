@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -105,8 +105,8 @@
     
     
 <p>These combine several cells of the confusion matrix into one number
-that does not collapse when the classes are imbalanced. All six are in
-the default set.</p>
+that does not collapse when the classes are imbalanced. The first six
+are in the default set; the last two are asked for by name.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/evalclass/precrec" class="external-link">precrec</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
@@ -213,12 +213,75 @@ MCC.</p>
 <p><img src="measures-agreement_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="" width="672"></p>
 </div>
 <div class="section level2">
+<h2 id="skill-scores">Skill scores<a class="anchor" aria-label="anchor" href="#skill-scores"></a>
+</h2>
+<table class="table">
+<colgroup>
+<col width="33%">
+<col width="33%">
+<col width="33%">
+</colgroup>
+<thead><tr class="header">
+<th>Measure</th>
+<th>Formula</th>
+<th>Range</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code>roc_dist</code></td>
+<td>distance to the perfect point in ROC space</td>
+<td>0 to sqrt(2)</td>
+</tr>
+<tr class="even">
+<td><code>sedi</code></td>
+<td>symmetric extremal dependence index</td>
+<td>-1 to 1</td>
+</tr>
+</tbody>
+</table>
+<p>These two are not in the default set, so name them in
+<code>metrics =</code>.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">skill</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span>,</span>
+<span>  mode <span class="op">=</span> <span class="st">"basic"</span>, metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"roc_dist"</span>, <span class="st">"sedi"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">skill</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"roc_dist"</span>, <span class="st">"sedi"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="measures-agreement_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="672"></p>
+<p><code>roc_dist</code> is the straight-line distance from the point
+<code>(1 - specificity, sensitivity)</code> to the top-left corner of
+ROC space, where both are 1. It is the only measure on this page that is
+<strong>better when it is smaller</strong>, and the only one whose
+maximum is <code>sqrt(2)</code> rather than 1. Picking the cutoff that
+minimizes it is one of the standard ways of choosing an operating point
+off a ROC curve.</p>
+<p><code>sedi</code> comes from forecast verification, where the event
+being predicted is often rare. It is built so that it does not drift
+towards a fixed value as the positive class gets rarer, which is the
+failure mode that makes several other skill scores useless for rare
+events. It is 0 for a classifier no better than chance and 1 for a
+perfect one.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="fu"><a href="../reference/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">skill</span><span class="op">)</span>, <span class="va">type</span> <span class="op">==</span> <span class="st">"sedi"</span><span class="op">)</span>, <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="co">#&gt;        x         y modname dsid type</span></span>
+<span><span class="co">#&gt; 316 0.00 0.0000000      m1    1 sedi</span></span>
+<span><span class="co">#&gt; 317 0.05 0.8009110      m1    1 sedi</span></span>
+<span><span class="co">#&gt; 318 0.10 0.8572931      m1    1 sedi</span></span>
+<span><span class="co">#&gt; 319 0.15 0.1912334      m1    1 sedi</span></span></code></pre></div>
+<p>Both measures are undefined at the two ends of the ranking, where
+every prediction is one class: <code>roc_dist</code> is still finite
+there, and the four logarithms <code>sedi</code> needs are clamped away
+from 0 and 1 so that it is too.</p>
+</div>
+<div class="section level2">
 <h2 id="which-to-report">Which to report<a class="anchor" aria-label="anchor" href="#which-to-report"></a>
 </h2>
 <p>For a single number on imbalanced data, <code>mcc</code> is the
 safest of these - it has no blind spot in any cell of the table.
 <code>fscore</code> ignores the true negatives entirely, which is
-usually deliberate but worth knowing.</p>
+usually deliberate but worth knowing. For choosing an operating point
+rather than scoring one, <code>roc_dist</code> is the more direct
+answer, since minimizing it is the question you are actually asking.</p>
 <p>None of them replaces a curve: each still describes one cutoff, and
 the cutoff is a choice you have to justify. See <a href="measures-auc.html">AUC and other curve summaries</a>.</p>
 </div>

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,6 +66,23 @@
       <small>Source: <a href="https://github.com/evalclass/precrec/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.17.0" id="precrec-0170">precrec 0.17.0<a class="anchor" aria-label="anchor" href="#precrec-0170"></a></h2>
+<ul><li>
+<p>Add the <code>roc_dist</code> and <code>sedi</code> basic measures, opt-in through <code>evalmod(metrics = )</code> like the other added measures.</p>
+<p><code>roc_dist</code> is the distance from the point <code>(1 - specificity, sensitivity)</code> to the perfect corner of ROC space. It is the one measure in the table that is better when it is smaller, and the one whose maximum is <code>sqrt(2)</code> rather than <code>1</code>; minimizing it is one of the standard ways of choosing an operating point off a ROC curve.</p>
+<p><code>sedi</code> is the symmetric extremal dependence index, a skill score from forecast verification built to stay informative when the positive class is rare. The four logarithms in its definition are undefined at both ends of every dataset, so the rates are clamped away from <code>0</code> and <code>1</code> first.</p>
+</li>
+<li>
+<p>Add <code><a href="../reference/average_precision.html">average_precision()</a></code>, which returns the step estimator of the area under a precision-recall curve - the precision at each cutoff weighted by the recall it gains over the cutoff before it.</p>
+<p>It is a different estimator from the one <code><a href="../reference/auc.html">auc()</a></code> reports, not a different way of adding up the same one: it joins the raw precision-recall points with horizontal steps, where <code><a href="../reference/auc.html">auc()</a></code> measures the area under the curve <code><a href="../reference/evalmod.html">evalmod()</a></code> has interpolated the way Davis and Goadrich showed is correct. The step estimator reads high wherever the two disagree, and <code><a href="../reference/auc.html">auc()</a></code> remains the number to prefer. <code><a href="../reference/average_precision.html">average_precision()</a></code> is here because several other packages report it under this name, and because the size of the gap between the two is worth being able to see.</p>
+<p>It is read off the raw per-cutoff points rather than off the curve, so <code>x_bins</code> does not change it, and unlike <code><a href="../reference/prbe.html">prbe()</a></code> it survives <code>evalmod(raw_curves = FALSE)</code>.</p>
+</li>
+<li>
+<p>Add the <code>macro_weight</code> argument to <code><a href="../reference/auc.html">auc()</a></code>. The macro-average of the per-class AUCs of a multiclass evaluation has always weighted every class equally; <code>macro_weight = "prevalence"</code> weights each class by the number of observations it has instead, and names the added rows <code>macro-average-weighted</code> to keep the two apart. The default is unchanged, and the two agree on a balanced dataset.</p>
+<p>For a ROC evaluation the two are the measures other packages call <code>roc_aunu</code> and <code>roc_aunp</code>.</p>
+</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.16.2" id="precrec-0162">precrec 0.16.2<a class="anchor" aria-label="anchor" href="#precrec-0162"></a></h2>
 <ul><li><p>Rewrite the package website. The single long <code>Introduction</code> vignette is now a short <code>Get started</code> page plus three sets of short articles, reachable from new <code>How-to</code>, <code>Measures</code> and <code>Plots</code> menus: one page per task, one page per family of measures, and one page per plot. The vignette shipped with the package is the <code>Get started</code> page; the rest are on the website only, so nothing was added to the size of the package.</p></li>

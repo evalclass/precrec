@@ -13,7 +13,7 @@ precision, by specifying mode as "basic".'><meta property="og:image" content="ht
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -287,12 +287,18 @@ the fourteen measures <code>evalmod</code> has always returned: <code>score</cod
 <p>The measures that can be added are <code>fpr</code>, <code>fnr</code>,
 <code>false_discovery_rate</code>, <code>false_omission_rate</code>,
 <code>predicted_positive_rate</code>, <code>predicted_negative_rate</code>,
-<code>lift</code>, <code>odds</code>, <code>mi</code>, <code>chisq</code> and <code>cost</code>. They
-are the measures <code>ROCR</code> provides that <code>precrec</code> did not, and
-each of them also answers to the identifier <code>ROCR</code> uses for it -
-<code>fall</code>, <code>miss</code>, <code>pcfall</code>, <code>pcmiss</code>, <code>rpp</code>,
-<code>rnp</code> and <code>mutual_information</code> - and to its standard
-abbreviation where it has one.</p>
+<code>lift</code>, <code>odds</code>, <code>mi</code>, <code>chisq</code>, <code>cost</code> and
+<code>sar</code>. They are the measures <code>ROCR</code> provides that <code>precrec</code>
+did not, and each of them also answers to the identifier <code>ROCR</code>
+uses for it - <code>fall</code>, <code>miss</code>, <code>pcfall</code>, <code>pcmiss</code>,
+<code>rpp</code>, <code>rnp</code> and <code>mutual_information</code> - and to its
+standard abbreviation where it has one.</p>
+<p><code>roc_dist</code> and <code>sedi</code> can be added on the same footing.
+<code>roc_dist</code> is the distance from <code>(1 - specificity, sensitivity)</code>
+to the perfect corner of ROC space, and is the one measure here that
+is better when it is smaller. <code>sedi</code> is the symmetric extremal
+dependence index, a skill score built to stay informative when the
+positive class is rare.</p>
 <p>They are not calculated by default because each is another vector the
 size of the dataset, and because <code>plot</code> and <code>autoplot</code> draw
 one panel per measure the object holds. A measure that was not asked
@@ -468,14 +474,14 @@ for simulations.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     === AUCs ===</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      Model name Dataset ID Curve type       AUC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1     random          1        ROC 0.4613000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2     random          1        PRC 0.4718958</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    3    poor_er          1        ROC 0.7796000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4    poor_er          1        PRC 0.7088592</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5    good_er          1        ROC 0.7364000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    6    good_er          1        PRC 0.7861169</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    7      excel          1        ROC 0.9852000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    8      excel          1        PRC 0.9865822</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    1     random          1        ROC 0.4827000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    2     random          1        PRC 0.5045877</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    3    poor_er          1        ROC 0.8688000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    4    poor_er          1        PRC 0.8420661</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    5    good_er          1        ROC 0.7817000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    6    good_er          1        PRC 0.8076452</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    7      excel          1        ROC 0.9801000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    8      excel          1        PRC 0.9800466</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    9       perf          1        ROC 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   10       perf          1        PRC 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -514,158 +520,158 @@ for simulations.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       kappa:  Cohen's kappa</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        Model ID  Meas.         Min.     1st Qu.      Median         Mean</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1  random  1   rank  0.000000000  0.25000000  0.50000000  0.500000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2  random  1  score -2.625232982 -0.76743379 -0.12512491 -0.162316745</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    3  random  1  label -1.000000000 -1.00000000  0.00000000  0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4  random  1    err  0.455000000  0.50500000  0.52000000  0.519253731</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5  random  1    acc  0.425000000  0.46000000  0.48000000  0.480746269</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    6  random  1     sp  0.000000000  0.23000000  0.46000000  0.480746269</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    7  random  1     sn  0.000000000  0.19000000  0.46000000  0.480746269</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    8  random  1   prec  0.333333333  0.42857143  0.46268657  0.466389684</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    9  random  1    mcc -0.169939626 -0.09069832 -0.05114036 -0.035084735</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   10  random  1 fscore  0.000000000  0.25333333  0.45771144  0.424904954</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   11  random  1   bacc  0.425000000  0.46000000  0.48000000  0.480746269</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   12  random  1    npv  0.442307692  0.46666667  0.47674419  0.524041966</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   13  random  1   infm -0.150000000 -0.08000000 -0.04000000 -0.038507463</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   14  random  1    mkd -0.192529842 -0.10256410 -0.06305170 -0.009568351</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   15  random  1  kappa -0.150000000 -0.08000000 -0.04000000 -0.038507463</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   16 poor_er  1   rank  0.000000000  0.25000000  0.50000000  0.500000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   17 poor_er  1  score  0.011450813  0.47464434  0.70177878  0.642896467</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   18 poor_er  1  label -1.000000000 -1.00000000  0.00000000  0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   19 poor_er  1    err  0.290000000  0.31000000  0.32500000  0.360895522</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   20 poor_er  1    acc  0.490000000  0.59000000  0.67500000  0.639104478</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   21 poor_er  1     sp  0.000000000  0.43000000  0.71000000  0.639104478</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   22 poor_er  1     sn  0.000000000  0.39000000  0.71000000  0.639104478</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   23 poor_er  1   prec  0.000000000  0.62000000  0.66964286  0.665626286</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   24 poor_er  1    mcc -0.100503782  0.27356200  0.38276591  0.328566131</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   25 poor_er  1 fscore  0.000000000  0.51655629  0.68728522  0.591288219</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   26 poor_er  1   bacc  0.490000000  0.59000000  0.67500000  0.639104478</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   27 poor_er  1    npv  0.494949495  0.59210526  0.70526316  0.734620516</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   28 poor_er  1   infm -0.020000000  0.18000000  0.35000000  0.278208955</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   29 poor_er  1    mkd -0.505050505  0.37202381  0.41004100  0.400246802</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   30 poor_er  1  kappa -0.020000000  0.18000000  0.35000000  0.278208955</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   31 good_er  1   rank  0.000000000  0.25000000  0.50000000  0.500000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   32 good_er  1  score  0.002605057  0.07422731  0.23868407  0.310583495</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   33 good_er  1  label -1.000000000 -1.00000000  0.00000000  0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   34 good_er  1    err  0.290000000  0.34000000  0.36500000  0.382388060</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   35 good_er  1    acc  0.500000000  0.57500000  0.63500000  0.617611940</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   36 good_er  1     sp  0.000000000  0.36000000  0.67000000  0.617611940</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   37 good_er  1     sn  0.000000000  0.44000000  0.67000000  0.617611940</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   38 good_er  1   prec  0.500000000  0.57333333  0.66336634  0.712573333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   39 good_er  1    mcc  0.000000000  0.21716721  0.29538063  0.284896479</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   40 good_er  1 fscore  0.000000000  0.58666667  0.66331658  0.581905091</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   41 good_er  1   bacc  0.500000000  0.57500000  0.63500000  0.617611940</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   42 good_er  1    npv  0.500000000  0.61666667  0.66019417  0.657780751</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   43 good_er  1   infm  0.000000000  0.15000000  0.27000000  0.235223881</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   44 good_er  1    mkd  0.000000000  0.29069767  0.32051282  0.370354083</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   45 good_er  1  kappa  0.000000000  0.15000000  0.27000000  0.235223881</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   46   excel  1   rank  0.000000000  0.25000000  0.50000000  0.500000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   47   excel  1  score -2.472072577 -0.29064226  1.41853356  1.421932466</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   48   excel  1  label -1.000000000 -1.00000000  0.00000000  0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   49   excel  1    err  0.060000000  0.13500000  0.25000000  0.258606965</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   50   excel  1    acc  0.500000000  0.62500000  0.75000000  0.741393035</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   51   excel  1     sp  0.000000000  0.50000000  0.93000000  0.741393035</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   52   excel  1     sn  0.000000000  0.50000000  0.93000000  0.741393035</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   53   excel  1   prec  0.500000000  0.66666667  0.93137255  0.838920518</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   54   excel  1    mcc  0.070888121  0.38226007  0.57735027  0.558509644</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   55   excel  1 fscore  0.000000000  0.66666667  0.76335878  0.703185485</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   56   excel  1   bacc  0.500000000  0.62500000  0.75000000  0.741393035</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   57   excel  1    npv  0.500000000  0.66666667  0.93069307  0.838261377</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   58   excel  1   infm  0.000000000  0.25000000  0.50000000  0.482786070</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   59   excel  1    mkd  0.500000000  0.57142857  0.66666667  0.677181896</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   60   excel  1  kappa  0.000000000  0.25000000  0.50000000  0.482786070</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   61    perf  1   rank  0.000000000  0.25000000  0.50000000  0.500000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   62    perf  1  score  0.000000000  0.00000000  0.50000000  0.500000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   63    perf  1  label -1.000000000 -1.00000000  0.00000000  0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   64    perf  1    err  0.000000000  0.12500000  0.25000000  0.251243781</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   65    perf  1    acc  0.500000000  0.62500000  0.75000000  0.748756219</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   66    perf  1     sp  0.000000000  0.50000000  1.00000000  0.748756219</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   67    perf  1     sn  0.000000000  0.50000000  1.00000000  0.748756219</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   68    perf  1   prec  0.500000000  0.66666667  1.00000000  0.846096234</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   69    perf  1    mcc  0.070888121  0.38226007  0.57735027  0.573525244</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   70    perf  1 fscore  0.000000000  0.66666667  0.76335878  0.710427365</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   71    perf  1   bacc  0.500000000  0.62500000  0.75000000  0.748756219</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   72    perf  1    npv  0.500000000  0.66666667  1.00000000  0.846096234</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   73    perf  1   infm  0.000000000  0.25000000  0.50000000  0.497512438</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   74    perf  1    mkd  0.500000000  0.57142857  0.66666667  0.692192468</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   75    perf  1  kappa  0.000000000  0.25000000  0.50000000  0.497512438</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          3rd Qu.      Max.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1  0.75000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2  0.43118237 2.8909175</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    3  1.00000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4  0.54000000 0.5750000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5  0.49500000 0.5450000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    6  0.69000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    7  0.73000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    8  0.49689441 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    9 -0.01250263 0.2170724</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   10  0.58634538 0.6872852</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   11  0.49500000 0.5450000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   12  0.49740933 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   13 -0.01000000 0.0900000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   14 -0.01390627 0.5235602</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   15 -0.01000000 0.0900000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   16  0.75000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   17  0.87113793 0.9996329</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   18  1.00000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   19  0.41000000 0.5100000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   20  0.69000000 0.7100000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   21  0.89000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   22  0.93000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   23  0.75675676 0.8125000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   24  0.41011540 0.4752485</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   25  0.72992701 0.7637795</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   26  0.69000000 0.7100000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   27  0.86538462 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   28  0.38000000 0.4200000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   29  0.49376299 0.5988024</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   30  0.38000000 0.4200000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   31  0.75000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   32  0.44978463 0.9968168</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   33  1.00000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   34  0.42500000 0.5000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   35  0.66000000 0.7100000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   36  0.94000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   37  0.86000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   38  0.88235294 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   39  0.35286410 0.4730162</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   40  0.67619048 0.6935484</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   41  0.66000000 0.7100000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   42  0.69696970 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   43  0.32000000 0.4200000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   44  0.50179211 0.5813953</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   45  0.32000000 0.4200000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   46  0.75000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   47  2.98753715 5.7917107</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   48  1.00000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   49  0.37500000 0.5000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   50  0.86500000 0.9400000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   51  1.00000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   52  1.00000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   53  1.00000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   54  0.75604925 0.8801761</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   55  0.86842105 0.9405941</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   56  0.86500000 0.9400000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   57  1.00000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   58  0.73000000 0.8800000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   59  0.77866667 0.8803521</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   60  0.73000000 0.8800000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   61  0.75000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   62  1.00000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   63  1.00000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   64  0.37500000 0.5000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   65  0.87500000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   66  1.00000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   67  1.00000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   68  1.00000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   69  0.77459667 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   70  0.87640449 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   71  0.87500000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   72  1.00000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   73  0.75000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   74  0.80000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   75  0.75000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        Model ID  Meas.          Min.     1st Qu.     Median        Mean</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    1  random  1   rank  0.0000000000  0.25000000  0.5000000  0.50000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    2  random  1  score -2.8200342587 -0.55073147  0.1039170  0.03265130</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    3  random  1  label -1.0000000000 -1.00000000  0.0000000  0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    4  random  1    err  0.4800000000  0.49500000  0.5050000  0.50860697</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    5  random  1    acc  0.4550000000  0.48000000  0.4950000  0.49139303</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    6  random  1     sp  0.0000000000  0.23000000  0.4900000  0.49139303</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    7  random  1     sn  0.0000000000  0.25000000  0.4900000  0.49139303</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    8  random  1   prec  0.3333333333  0.48502994  0.4921875  0.50375604</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    9  random  1    mcc -0.1613587437 -0.05600023 -0.0200040 -0.02613107</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   10  random  1 fscore  0.0000000000  0.32679739  0.4950495  0.44429904</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   11  random  1   bacc  0.4550000000  0.48000000  0.4950000  0.49139303</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   12  random  1    npv  0.0000000000  0.45283019  0.4936709  0.45077962</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   13  random  1   infm -0.0900000000 -0.04000000 -0.0100000 -0.01721393</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   14  random  1    mkd -0.5102040816 -0.06953136 -0.0200080 -0.04546433</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   15  random  1  kappa -0.0900000000 -0.04000000 -0.0100000 -0.01721393</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   16 poor_er  1   rank  0.0000000000  0.25000000  0.5000000  0.50000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   17 poor_er  1  score  0.0299690408  0.38545888  0.7130317  0.63590847</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   18 poor_er  1  label -1.0000000000 -1.00000000  0.0000000  0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   19 poor_er  1    err  0.1850000000  0.24500000  0.3000000  0.31651741</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   20 poor_er  1    acc  0.5000000000  0.61500000  0.7000000  0.68348259</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   21 poor_er  1     sp  0.0000000000  0.48000000  0.7800000  0.68348259</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   22 poor_er  1     sn  0.0000000000  0.45000000  0.7800000  0.68348259</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   23 poor_er  1   prec  0.5000000000  0.65333333  0.7757009  0.75822006</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   24 poor_er  1    mcc  0.0708881205  0.33843904  0.4669351  0.43286533</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   25 poor_er  1 fscore  0.0000000000  0.59602649  0.7168459  0.63996505</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   26 poor_er  1   bacc  0.5000000000  0.61500000  0.7000000  0.68348259</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   27 poor_er  1    npv  0.5000000000  0.63013699  0.7777778  0.78209272</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   28 poor_er  1   infm  0.0000000000  0.23000000  0.4000000  0.36696517</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   29 poor_er  1    mkd  0.3076923077  0.50179211  0.5254309  0.54031278</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   30 poor_er  1  kappa  0.0000000000  0.23000000  0.4000000  0.36696517</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   31 good_er  1   rank  0.0000000000  0.25000000  0.5000000  0.50000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   32 good_er  1  score  0.0003745525  0.13064732  0.2509382  0.34603080</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   33 good_er  1  label -1.0000000000 -1.00000000  0.0000000  0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   34 good_er  1    err  0.2900000000  0.32000000  0.3350000  0.35985075</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   35 good_er  1    acc  0.5000000000  0.60500000  0.6650000  0.64014925</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   36 good_er  1     sp  0.0000000000  0.40000000  0.6700000  0.64014925</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   37 good_er  1     sn  0.0000000000  0.44000000  0.6700000  0.64014925</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   38 good_er  1   prec  0.5000000000  0.60000000  0.6700000  0.72985498</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   39 good_er  1    mcc  0.0708881205  0.31294750  0.3512086  0.34091221</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   40 good_er  1 fscore  0.0000000000  0.58503401  0.6688963  0.60174822</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   41 good_er  1   bacc  0.5000000000  0.60500000  0.6650000  0.64014925</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   42 good_er  1    npv  0.5000000000  0.62658228  0.6732673  0.71556904</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   43 good_er  1   infm  0.0000000000  0.21000000  0.3300000  0.28029851</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   44 good_er  1    mkd  0.3171355499  0.38919684  0.4448535  0.44542402</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   45 good_er  1  kappa  0.0000000000  0.21000000  0.3300000  0.28029851</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   46   excel  1   rank  0.0000000000  0.25000000  0.5000000  0.50000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   47   excel  1  score -3.3551544513  0.35188881  1.4806172  1.50135386</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   48   excel  1  label -1.0000000000 -1.00000000  0.0000000  0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   49   excel  1    err  0.0650000000  0.14000000  0.2500000  0.26114428</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   50   excel  1    acc  0.5000000000  0.62500000  0.7500000  0.73885572</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   51   excel  1     sp  0.0000000000  0.50000000  0.9200000  0.73885572</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   52   excel  1     sn  0.0000000000  0.50000000  0.9200000  0.73885572</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   53   excel  1   prec  0.5000000000  0.66666667  0.9207921  0.83564365</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   54   excel  1    mcc  0.0708881205  0.38226007  0.5773503  0.55332057</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   55   excel  1 fscore  0.0000000000  0.66666667  0.7633588  0.70031441</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   56   excel  1   bacc  0.5000000000  0.62500000  0.7500000  0.73885572</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   57   excel  1    npv  0.5000000000  0.66666667  0.9215686  0.83633658</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   58   excel  1   infm  0.0000000000  0.25000000  0.5000000  0.47771144</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   59   excel  1    mkd  0.5000000000  0.57142857  0.6666667  0.67198024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   60   excel  1  kappa  0.0000000000  0.25000000  0.5000000  0.47771144</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   61    perf  1   rank  0.0000000000  0.25000000  0.5000000  0.50000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   62    perf  1  score  0.0000000000  0.00000000  0.5000000  0.50000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   63    perf  1  label -1.0000000000 -1.00000000  0.0000000  0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   64    perf  1    err  0.0000000000  0.12500000  0.2500000  0.25124378</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   65    perf  1    acc  0.5000000000  0.62500000  0.7500000  0.74875622</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   66    perf  1     sp  0.0000000000  0.50000000  1.0000000  0.74875622</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   67    perf  1     sn  0.0000000000  0.50000000  1.0000000  0.74875622</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   68    perf  1   prec  0.5000000000  0.66666667  1.0000000  0.84609623</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   69    perf  1    mcc  0.0708881205  0.38226007  0.5773503  0.57352524</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   70    perf  1 fscore  0.0000000000  0.66666667  0.7633588  0.71042736</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   71    perf  1   bacc  0.5000000000  0.62500000  0.7500000  0.74875622</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   72    perf  1    npv  0.5000000000  0.66666667  1.0000000  0.84609623</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   73    perf  1   infm  0.0000000000  0.25000000  0.5000000  0.49751244</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   74    perf  1    mkd  0.5000000000  0.57142857  0.6666667  0.69219247</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   75    perf  1  kappa  0.0000000000  0.25000000  0.5000000  0.49751244</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         3rd Qu.       Max.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    1 0.75000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    2 0.68441697 2.32649442</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    3 1.00000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    4 0.52000000 0.54500000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    5 0.50500000 0.52000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    6 0.75000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    7 0.73000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    8 0.50666667 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    9 0.01025675 0.07235746</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   10 0.58064516 0.66666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   11 0.50500000 0.52000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   12 0.50306748 0.51807229</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   13 0.01000000 0.04000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   14 0.01066667 0.50251256</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   15 0.01000000 0.04000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   16 0.75000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   17 0.88049755 0.99806839</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   18 1.00000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   19 0.38500000 0.50000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   20 0.75500000 0.81500000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   21 0.95000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   22 0.98000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   23 0.86111111 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   24 0.53963524 0.63539194</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   25 0.78087649 0.82727273</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   26 0.75500000 0.81500000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   27 0.96000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   28 0.51000000 0.63000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   29 0.60148602 0.64583333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   30 0.51000000 0.63000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   31 0.75000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   32 0.51202716 0.99942064</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   33 1.00000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   34 0.39500000 0.50000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   35 0.68000000 0.71000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   36 0.94000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   37 0.90000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   38 0.88000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   39 0.38868988 0.49102862</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   40 0.70802920 0.72950820</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   41 0.68000000 0.71000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   42 0.80357143 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   43 0.36000000 0.42000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   44 0.50545358 0.60277275</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   45 0.36000000 0.42000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   46 0.75000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   47 2.74061967 5.68705714</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   48 1.00000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   49 0.37500000 0.50000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   50 0.86000000 0.93500000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   51 1.00000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   52 1.00000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   53 1.00000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   54 0.74782186 0.87108954</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   55 0.86666667 0.93333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   56 0.86000000 0.93500000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   57 1.00000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   58 0.72000000 0.87000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   59 0.77220077 0.87218045</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   60 0.72000000 0.87000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   61 0.75000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   62 1.00000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   63 1.00000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   64 0.37500000 0.50000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   65 0.87500000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   66 1.00000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   67 1.00000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   68 1.00000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   69 0.77459667 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   70 0.87640449 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   71 0.87500000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   72 1.00000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   73 0.75000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   74 0.80000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   75 0.75000000 1.00000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     === Input data ===</span>
@@ -697,14 +703,14 @@ for simulations.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     === AUCs ===</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      Model name Dataset ID Curve type       AUC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1    good_er          1        ROC 0.8273000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2    good_er          1        PRC 0.8615398</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    3    good_er          2        ROC 0.8211000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4    good_er          2        PRC 0.8477956</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5    good_er          3        ROC 0.7880000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    6    good_er          3        PRC 0.8272355</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    7    good_er          4        ROC 0.8078000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    8    good_er          4        PRC 0.8451917</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    1    good_er          1        ROC 0.8309000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    2    good_er          1        PRC 0.8518567</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    3    good_er          2        ROC 0.8416000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    4    good_er          2        PRC 0.8766286</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    5    good_er          3        ROC 0.7692000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    6    good_er          3        PRC 0.8189129</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    7    good_er          4        ROC 0.7669000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    8    good_er          4        PRC 0.8167236</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     === Input data ===</span>
@@ -740,128 +746,128 @@ for simulations.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       kappa:  Cohen's kappa</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        Model ID  Meas.          Min.     1st Qu.    Median      Mean   3rd Qu.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1 good_er  1   rank  0.0000000000  0.25000000 0.5000000 0.5000000 0.7500000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2 good_er  1  score  0.0009256685  0.09590163 0.2438201 0.3368616 0.5058031</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    3 good_er  1  label -1.0000000000 -1.00000000 0.0000000 0.0000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4 good_er  1    err  0.2450000000  0.26500000 0.3050000 0.3371642 0.4050000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5 good_er  1    acc  0.5000000000  0.59500000 0.6950000 0.6628358 0.7350000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    6 good_er  1     sp  0.0000000000  0.41000000 0.7500000 0.6628358 0.9800000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    7 good_er  1     sn  0.0000000000  0.48000000 0.7500000 0.6628358 0.9100000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    8 good_er  1   prec  0.5000000000  0.60666667 0.7473684 0.7625079 0.9600000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    9 good_er  1    mcc  0.0708881205  0.27747917 0.4253394 0.3857951 0.4907128</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   10 good_er  1 fscore  0.0000000000  0.64000000 0.6996198 0.6274156 0.7317073</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   11 good_er  1   bacc  0.5000000000  0.59500000 0.6950000 0.6628358 0.7350000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   12 good_er  1    npv  0.5000000000  0.65306122 0.7474747 0.7230258 0.8030303</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   13 good_er  1   infm  0.0000000000  0.19000000 0.3900000 0.3256716 0.4700000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   14 good_er  1    mkd  0.2551020408  0.42900043 0.4900490 0.4855337 0.5425347</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   15 good_er  1  kappa  0.0000000000  0.19000000 0.3900000 0.3256716 0.4700000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   16 good_er  2   rank  0.0000000000  0.25000000 0.5000000 0.5000000 0.7500000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   17 good_er  2  score  0.0035396582  0.11678363 0.2818819 0.3359957 0.5011444</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   18 good_er  2  label -1.0000000000 -1.00000000 0.0000000 0.0000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   19 good_er  2    err  0.2500000000  0.27000000 0.3300000 0.3402488 0.3900000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   20 good_er  2    acc  0.5000000000  0.61000000 0.6700000 0.6597512 0.7300000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   21 good_er  2     sp  0.0000000000  0.39000000 0.7400000 0.6597512 0.9800000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   22 good_er  2     sn  0.0000000000  0.48000000 0.7400000 0.6597512 0.8900000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   23 good_er  2   prec  0.5000000000  0.59615385 0.7403846 0.7552153 0.9523810</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   24 good_er  2    mcc  0.0411345035  0.32226437 0.3958333 0.3807775 0.4800877</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   25 good_er  2 fscore  0.0000000000  0.64000000 0.7078652 0.6229962 0.7235772</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   26 good_er  2   bacc  0.5000000000  0.61000000 0.6700000 0.6597512 0.7300000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   27 good_er  2    npv  0.5000000000  0.65333333 0.7373737 0.7270756 0.7843137</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   28 good_er  2   infm  0.0000000000  0.22000000 0.3400000 0.3195025 0.4600000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   29 good_er  2    mkd  0.1692047377  0.44485351 0.4901961 0.4822909 0.5257143</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   30 good_er  2  kappa  0.0000000000  0.22000000 0.3400000 0.3195025 0.4600000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   31 good_er  3   rank  0.0000000000  0.25000000 0.5000000 0.5000000 0.7500000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   32 good_er  3  score  0.0003870733  0.11381581 0.2867032 0.3503578 0.5177063</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   33 good_er  3  label -1.0000000000 -1.00000000 0.0000000 0.0000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   34 good_er  3    err  0.2600000000  0.29500000 0.3350000 0.3567164 0.4150000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   35 good_er  3    acc  0.4950000000  0.58500000 0.6650000 0.6432836 0.7050000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   36 good_er  3     sp  0.0000000000  0.38000000 0.7100000 0.6432836 0.9600000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   37 good_er  3     sn  0.0000000000  0.46000000 0.7100000 0.6432836 0.8800000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   38 good_er  3   prec  0.4974619289  0.58940397 0.7113402 0.7407338 0.9074074</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   39 good_er  3    mcc -0.0708881205  0.25132279 0.3801927 0.3380444 0.4330569</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   40 good_er  3 fscore  0.0000000000  0.60927152 0.6836364 0.6079563 0.7076923</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   41 good_er  3   bacc  0.4950000000  0.58500000 0.6650000 0.6432836 0.7050000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   42 good_er  3    npv  0.0000000000  0.61538462 0.6990291 0.6723969 0.7500000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   43 good_er  3   infm -0.0100000000  0.17000000 0.3300000 0.2865672 0.4100000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   44 good_er  3    mkd -0.5025125628  0.35842294 0.4222016 0.4131307 0.5154639</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   45 good_er  3  kappa -0.0100000000  0.17000000 0.3300000 0.2865672 0.4100000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   46 good_er  4   rank  0.0000000000  0.25000000 0.5000000 0.5000000 0.7500000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   47 good_er  4  score  0.0021737290  0.10038831 0.3338746 0.3619188 0.5892401</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   48 good_er  4  label -1.0000000000 -1.00000000 0.0000000 0.0000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   49 good_er  4    err  0.2400000000  0.27000000 0.3350000 0.3468657 0.4150000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   50 good_er  4    acc  0.5000000000  0.58500000 0.6650000 0.6531343 0.7300000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   51 good_er  4     sp  0.0000000000  0.36000000 0.7500000 0.6531343 0.9800000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   52 good_er  4     sn  0.0000000000  0.48000000 0.7500000 0.6531343 0.8600000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   53 good_er  4   prec  0.5000000000  0.57615894 0.7450980 0.7520778 0.9500000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   54 good_er  4    mcc  0.0708881205  0.24691259 0.3834129 0.3634790 0.4904171</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   55 good_er  4 fscore  0.0000000000  0.63157895 0.6909091 0.6184292 0.7181818</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   56 good_er  4   bacc  0.5000000000  0.58500000 0.6650000 0.6531343 0.7300000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   57 good_er  4    npv  0.5000000000  0.64900662 0.7281553 0.7090432 0.7553191</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   58 good_er  4   infm  0.0000000000  0.17000000 0.3300000 0.3062687 0.4600000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   59 good_er  4    mkd  0.2622377622  0.37878788 0.4924128 0.4611210 0.5347594</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   60 good_er  4  kappa  0.0000000000  0.17000000 0.3300000 0.3062687 0.4600000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        Model ID  Meas.          Min.    1st Qu.    Median      Mean   3rd Qu.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    1 good_er  1   rank  0.0000000000  0.2500000 0.5000000 0.5000000 0.7500000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    2 good_er  1  score  0.0005527905  0.1254571 0.2897201 0.3575120 0.5451061</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    3 good_er  1  label -1.0000000000 -1.0000000 0.0000000 0.0000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    4 good_er  1    err  0.2200000000  0.2550000 0.3350000 0.3353731 0.4050000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    5 good_er  1    acc  0.5000000000  0.5950000 0.6650000 0.6646269 0.7450000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    6 good_er  1     sp  0.0000000000  0.4100000 0.7800000 0.6646269 0.9400000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    7 good_er  1     sn  0.0000000000  0.4400000 0.7800000 0.6646269 0.9100000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    8 good_er  1   prec  0.5000000000  0.6040268 0.7755102 0.7586114 0.8888889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    9 good_er  1    mcc  0.0708881205  0.2855330 0.4078502 0.3875567 0.5062977</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   10 good_er  1 fscore  0.0000000000  0.5866667 0.6988848 0.6276122 0.7435897</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   11 good_er  1   bacc  0.5000000000  0.5950000 0.6650000 0.6646269 0.7450000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   12 good_er  1    npv  0.5000000000  0.6266667 0.7722772 0.7263583 0.8076923</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   13 good_er  1   infm  0.0000000000  0.1900000 0.3300000 0.3292537 0.4900000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   14 good_er  1    mkd  0.2551020408  0.4137931 0.5102041 0.4849697 0.5420954</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   15 good_er  1  kappa  0.0000000000  0.1900000 0.3300000 0.3292537 0.4900000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   16 good_er  2   rank  0.0000000000  0.2500000 0.5000000 0.5000000 0.7500000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   17 good_er  2  score  0.0017857724  0.0898539 0.2402709 0.3330578 0.5136449</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   18 good_er  2  label -1.0000000000 -1.0000000 0.0000000 0.0000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   19 good_er  2    err  0.2100000000  0.2450000 0.3100000 0.3300498 0.4100000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   20 good_er  2    acc  0.4950000000  0.5900000 0.6900000 0.6699502 0.7550000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   21 good_er  2     sp  0.0000000000  0.4100000 0.7700000 0.6699502 0.9800000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   22 good_er  2     sn  0.0000000000  0.4800000 0.7700000 0.6699502 0.9100000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   23 good_er  2   prec  0.4974619289  0.6066667 0.7700000 0.7716198 0.9574468</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   24 good_er  2    mcc -0.0708881205  0.2746758 0.4525696 0.3941844 0.5307005</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   25 good_er  2 fscore  0.0000000000  0.6357616 0.6992481 0.6356556 0.7575758</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   26 good_er  2   bacc  0.4950000000  0.5900000 0.6900000 0.6699502 0.7550000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   27 good_er  2    npv  0.0000000000  0.6265823 0.7333333 0.6988217 0.7941176</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   28 good_er  2   infm -0.0100000000  0.1800000 0.3800000 0.3399005 0.5100000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   29 good_er  2    mkd -0.5025125628  0.4137931 0.5300530 0.4704415 0.5797986</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   30 good_er  2  kappa -0.0100000000  0.1800000 0.3800000 0.3399005 0.5100000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   31 good_er  3   rank  0.0000000000  0.2500000 0.5000000 0.5000000 0.7500000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   32 good_er  3  score  0.0007231320  0.1320840 0.2428511 0.3360475 0.5035083</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   33 good_er  3  label -1.0000000000 -1.0000000 0.0000000 0.0000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   34 good_er  3    err  0.2550000000  0.3100000 0.3500000 0.3660697 0.4300000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   35 good_er  3    acc  0.5000000000  0.5700000 0.6500000 0.6339303 0.6900000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   36 good_er  3     sp  0.0000000000  0.3700000 0.6800000 0.6339303 0.9700000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   37 good_er  3     sn  0.0000000000  0.4700000 0.6800000 0.6339303 0.8700000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   38 good_er  3   prec  0.5000000000  0.5763889 0.6767677 0.7336876 0.9347826</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   39 good_er  3    mcc  0.0708881205  0.2229814 0.3239199 0.3219825 0.4162597</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   40 good_er  3 fscore  0.0000000000  0.6266667 0.6767677 0.5998677 0.6829268</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   41 good_er  3   bacc  0.5000000000  0.5700000 0.6500000 0.6339303 0.6900000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   42 good_er  3    npv  0.5000000000  0.6466667 0.6785714 0.6832068 0.7179487</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   43 good_er  3   infm  0.0000000000  0.1400000 0.3000000 0.2678607 0.3800000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   44 good_er  3    mkd  0.2057142857  0.3198604 0.3947768 0.4168944 0.5319149</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   45 good_er  3  kappa  0.0000000000  0.1400000 0.3000000 0.2678607 0.3800000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   46 good_er  4   rank  0.0000000000  0.2500000 0.5000000 0.5000000 0.7500000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   47 good_er  4  score  0.0008682671  0.1144044 0.2663099 0.3359253 0.4903323</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   48 good_er  4  label -1.0000000000 -1.0000000 0.0000000 0.0000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   49 good_er  4    err  0.2800000000  0.3050000 0.3650000 0.3672139 0.4200000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   50 good_er  4    acc  0.4950000000  0.5800000 0.6350000 0.6327861 0.6950000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   51 good_er  4     sp  0.0000000000  0.3600000 0.6900000 0.6327861 0.9500000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   52 good_er  4     sn  0.0000000000  0.4500000 0.6900000 0.6327861 0.8600000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   53 good_er  4   prec  0.4974874372  0.5733333 0.6900000 0.7323105 0.9038462</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   54 good_er  4    mcc -0.0708881205  0.2413256 0.3061862 0.3191171 0.4256480</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   55 good_er  4 fscore  0.0000000000  0.6081081 0.6781116 0.5983535 0.6867925</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   56 good_er  4   bacc  0.4950000000  0.5800000 0.6350000 0.6327861 0.6950000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   57 good_er  4    npv  0.0000000000  0.6333333 0.6829268 0.6694099 0.7118644</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   58 good_er  4   infm -0.0100000000  0.1600000 0.2700000 0.2655721 0.3900000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   59 good_er  4    mkd -0.5025125628  0.3038194 0.4025765 0.4017204 0.5181347</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   60 good_er  4  kappa -0.0100000000  0.1600000 0.2700000 0.2655721 0.3900000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           Max.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    1 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2 0.9966341</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    2 0.9988285</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    3 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    4 0.5000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5 0.7550000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    5 0.7800000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    6 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    7 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    8 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    9 0.5464008</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   10 0.7655502</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   11 0.7550000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    9 0.5618006</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   10 0.7843137</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   11 0.7800000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   12 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   13 0.5100000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   14 0.6451613</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   15 0.5100000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   13 0.5600000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   14 0.5744485</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   15 0.5600000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   16 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   17 0.9975991</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   17 0.9953815</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   18 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   19 0.5000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   20 0.7500000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   19 0.5050000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   20 0.7900000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   21 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   22 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   23 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   24 0.5391624</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   25 0.7549020</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   26 0.7500000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   27 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   28 0.5000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   29 0.6185024</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   30 0.5000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   24 0.5955947</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   25 0.7826087</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   26 0.7900000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   27 0.8285714</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   28 0.5800000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   29 0.6250000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   30 0.5800000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   31 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   32 0.9996034</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   32 0.9854039</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   33 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   34 0.5050000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   35 0.7400000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   34 0.5000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   35 0.7450000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   36 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   37 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   38 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   39 0.5039033</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   40 0.7281106</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   41 0.7400000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   42 0.7931034</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   43 0.4800000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   44 0.5892658</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   45 0.4800000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   39 0.5324775</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   40 0.7099567</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   41 0.7450000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   42 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   43 0.4900000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   44 0.6032602</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   45 0.4900000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   46 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   47 0.9924562</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   47 0.9998552</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   48 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   49 0.5000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   50 0.7600000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   49 0.5050000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   50 0.7200000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   51 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   52 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   53 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   54 0.5489586</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   55 0.7562189</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   56 0.7600000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   57 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   58 0.5200000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   59 0.6133333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   60 0.5200000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   54 0.4917076</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   55 0.7005076</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   56 0.7200000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   57 0.9285714</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   58 0.4400000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   59 0.5988024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   60 0.4400000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     === Input data ===</span>
@@ -892,44 +898,44 @@ for simulations.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     === AUCs ===</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      Model name Dataset ID Curve type       AUC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1     random          1        ROC 0.4698000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2     random          1        PRC 0.4889832</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    3    poor_er          1        ROC 0.8006000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4    poor_er          1        PRC 0.7659710</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5    good_er          1        ROC 0.8003000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    6    good_er          1        PRC 0.8365382</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    7      excel          1        ROC 0.9825000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    8      excel          1        PRC 0.9846561</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    1     random          1        ROC 0.5678000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    2     random          1        PRC 0.5240844</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    3    poor_er          1        ROC 0.8299000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    4    poor_er          1        PRC 0.8106666</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    5    good_er          1        ROC 0.8190000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    6    good_er          1        PRC 0.8665520</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    7      excel          1        ROC 0.9913000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    8      excel          1        PRC 0.9920591</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    9       perf          1        ROC 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   10       perf          1        PRC 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   11     random          2        ROC 0.5034000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   12     random          2        PRC 0.4981629</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   13    poor_er          2        ROC 0.7836000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   14    poor_er          2        PRC 0.7684940</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   15    good_er          2        ROC 0.8108000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   16    good_er          2        PRC 0.8406739</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   17      excel          2        ROC 0.9857000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   18      excel          2        PRC 0.9869817</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   11     random          2        ROC 0.4719000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   12     random          2        PRC 0.4980368</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   13    poor_er          2        ROC 0.7879000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   14    poor_er          2        PRC 0.7619653</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   15    good_er          2        ROC 0.8377000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   16    good_er          2        PRC 0.8747640</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   17      excel          2        ROC 0.9858000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   18      excel          2        PRC 0.9834684</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   19       perf          2        ROC 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   20       perf          2        PRC 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   21     random          3        ROC 0.5503000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   22     random          3        PRC 0.5425962</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   23    poor_er          3        ROC 0.8097000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   24    poor_er          3        PRC 0.7688925</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   25    good_er          3        ROC 0.8066000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   26    good_er          3        PRC 0.8400369</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   27      excel          3        ROC 0.9862000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   28      excel          3        PRC 0.9847615</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   21     random          3        ROC 0.5254000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   22     random          3        PRC 0.4996127</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   23    poor_er          3        ROC 0.8214000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   24    poor_er          3        PRC 0.7731334</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   25    good_er          3        ROC 0.8176000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   26    good_er          3        PRC 0.8500151</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   27      excel          3        ROC 0.9850000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   28      excel          3        PRC 0.9853962</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   29       perf          3        ROC 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   30       perf          3        PRC 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   31     random          4        ROC 0.4962000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   32     random          4        PRC 0.5355406</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   33    poor_er          4        ROC 0.7849000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   34    poor_er          4        PRC 0.7386785</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   35    good_er          4        ROC 0.8202000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   36    good_er          4        PRC 0.8463619</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   37      excel          4        ROC 0.9802000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   38      excel          4        PRC 0.9816984</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   31     random          4        ROC 0.5168000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   32     random          4        PRC 0.5245181</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   33    poor_er          4        ROC 0.7782000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   34    poor_er          4        PRC 0.7291026</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   35    good_er          4        ROC 0.7819000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   36    good_er          4        PRC 0.8283109</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   37      excel          4        ROC 0.9806000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   38      excel          4        PRC 0.9807111</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   39       perf          4        ROC 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   40       perf          4        PRC 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -985,65 +991,65 @@ for simulations.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Model ID  Meas.          Min.     1st Qu.       Median          Mean</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    1  random  1   rank  0.0000000000  0.25000000  0.500000000  0.5000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2  random  1  score -3.0385697604 -0.66505450  0.057564205 -0.0032225087</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    2  random  1  score -3.1654053854 -0.58975462  0.008348982  0.0078300686</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    3  random  1  label -1.0000000000 -1.00000000  0.000000000  0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4  random  1    err  0.4750000000  0.50000000  0.520000000  0.5150248756</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5  random  1    acc  0.4450000000  0.47500000  0.480000000  0.4849751244</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    6  random  1     sp  0.0000000000  0.22000000  0.470000000  0.4849751244</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    7  random  1     sn  0.0000000000  0.23000000  0.470000000  0.4849751244</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    8  random  1   prec  0.3333333333  0.46236559  0.480000000  0.4874532473</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    9  random  1    mcc -0.1120409274 -0.06173634 -0.041424651 -0.0284866414</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   10  random  1 fscore  0.0000000000  0.30666667  0.470000000  0.4339723461</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   11  random  1   bacc  0.4450000000  0.47500000  0.480000000  0.4849751244</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   12  random  1    npv  0.4255319149  0.46728972  0.485549133  0.5006075925</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   13  random  1   infm -0.1100000000 -0.05000000 -0.040000000 -0.0300497512</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   14  random  1    mkd -0.1692047377 -0.07168459 -0.046019328 -0.0119391602</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   15  random  1  kappa -0.1100000000 -0.05000000 -0.040000000 -0.0300497512</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    4  random  1    err  0.4050000000  0.45000000  0.465000000  0.4662686567</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    5  random  1    acc  0.4850000000  0.52000000  0.535000000  0.5337313433</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    6  random  1     sp  0.0000000000  0.33000000  0.530000000  0.5337313433</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    7  random  1     sn  0.0000000000  0.28000000  0.530000000  0.5337313433</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    8  random  1   prec  0.0000000000  0.51648352  0.535031847  0.5171274437</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    9  random  1    mcc -0.1005037815  0.04841590  0.079305159  0.0795460615</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   10  random  1 fscore  0.0000000000  0.37333333  0.530000000  0.4804759895</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   11  random  1   bacc  0.4850000000  0.52000000  0.535000000  0.5337313433</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   12  random  1    npv  0.0000000000  0.51655629  0.530000000  0.5697337529</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   13  random  1   infm -0.0300000000  0.04000000  0.070000000  0.0674626866</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   14  random  1    mkd -0.5050505051  0.05000500  0.084697911  0.0868611966</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   15  random  1  kappa -0.0300000000  0.04000000  0.070000000  0.0674626866</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   16 poor_er  1   rank  0.0000000000  0.25000000  0.500000000  0.5000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   17 poor_er  1  score  0.0063572009  0.47349096  0.723741804  0.6575554870</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   17 poor_er  1  score  0.0019574498  0.49987752  0.760255502  0.6716741309</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   18 poor_er  1  label -1.0000000000 -1.00000000  0.000000000  0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   19 poor_er  1    err  0.2600000000  0.29000000  0.335000000  0.3504477612</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   20 poor_er  1    acc  0.5000000000  0.59000000  0.665000000  0.6495522388</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   21 poor_er  1     sp  0.0000000000  0.46000000  0.740000000  0.6495522388</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   22 poor_er  1     sn  0.0000000000  0.39000000  0.740000000  0.6495522388</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   23 poor_er  1   prec  0.5000000000  0.63380282  0.732673267  0.7103268206</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   24 poor_er  1    mcc  0.0708881205  0.26561731  0.393534185  0.3570862767</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   25 poor_er  1 fscore  0.0000000000  0.52000000  0.692041522  0.6029304206</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   26 poor_er  1   bacc  0.5000000000  0.59000000  0.665000000  0.6495522388</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   27 poor_er  1    npv  0.5000000000  0.59333333  0.734693878  0.7460340970</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   28 poor_er  1   infm  0.0000000000  0.18000000  0.330000000  0.2991044776</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   29 poor_er  1    mkd  0.2906976744  0.39277298  0.461389024  0.4563609176</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   30 poor_er  1  kappa  0.0000000000  0.18000000  0.330000000  0.2991044776</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   19 poor_er  1    err  0.2150000000  0.27000000  0.330000000  0.3358706468</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   20 poor_er  1    acc  0.5000000000  0.61500000  0.670000000  0.6641293532</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   21 poor_er  1     sp  0.0000000000  0.48000000  0.730000000  0.6641293532</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   22 poor_er  1     sn  0.0000000000  0.41000000  0.730000000  0.6641293532</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   23 poor_er  1   prec  0.5000000000  0.65100671  0.729166667  0.7375302616</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   24 poor_er  1    mcc  0.0708881205  0.32905341  0.387835876  0.3930361980</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   25 poor_er  1 fscore  0.0000000000  0.54666667  0.689655172  0.6189511566</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   26 poor_er  1   bacc  0.5000000000  0.61500000  0.670000000  0.6641293532</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   27 poor_er  1    npv  0.5000000000  0.60666667  0.730000000  0.7642722465</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   28 poor_er  1   infm  0.0000000000  0.23000000  0.340000000  0.3282587065</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   29 poor_er  1    mkd  0.3392130258  0.43706294  0.507305195  0.5018025081</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   30 poor_er  1  kappa  0.0000000000  0.23000000  0.340000000  0.3282587065</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   31 good_er  1   rank  0.0000000000  0.25000000  0.500000000  0.5000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   32 good_er  1  score  0.0019544715  0.09464476  0.266800885  0.3325140075</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   32 good_er  1  score  0.0042922271  0.10597487  0.249923627  0.3387038313</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   33 good_er  1  label -1.0000000000 -1.00000000  0.000000000  0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   34 good_er  1    err  0.2550000000  0.30000000  0.320000000  0.3505970149</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   35 good_er  1    acc  0.5000000000  0.59500000  0.680000000  0.6494029851</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   36 good_er  1     sp  0.0000000000  0.39000000  0.700000000  0.6494029851</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   37 good_er  1     sn  0.0000000000  0.46000000  0.700000000  0.6494029851</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   38 good_er  1   prec  0.5000000000  0.59459459  0.696969697  0.7467080156</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   39 good_er  1    mcc  0.0708881205  0.28553298  0.389194875  0.3591459762</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   40 good_er  1 fscore  0.0000000000  0.60927152  0.687719298  0.6132535773</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   41 good_er  1   bacc  0.5000000000  0.59500000  0.680000000  0.6494029851</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   42 good_er  1    npv  0.5000000000  0.63758389  0.693069307  0.7156984245</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   43 good_er  1   infm  0.0000000000  0.19000000  0.360000000  0.2988059701</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   44 good_er  1    mkd  0.3447650154  0.39097744  0.441361917  0.4624064401</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   45 good_er  1  kappa  0.0000000000  0.19000000  0.360000000  0.2988059701</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   34 good_er  1    err  0.2200000000  0.25500000  0.320000000  0.3412935323</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   35 good_er  1    acc  0.4950000000  0.58000000  0.680000000  0.6587064677</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   36 good_er  1     sp  0.0000000000  0.38000000  0.750000000  0.6587064677</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   37 good_er  1     sn  0.0000000000  0.50000000  0.750000000  0.6587064677</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   38 good_er  1   prec  0.4973821990  0.58666667  0.752475248  0.7635817871</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   39 good_er  1    mcc -0.0241191535  0.23754989  0.411813845  0.3697101761</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   40 good_er  1 fscore  0.0000000000  0.65517241  0.687022901  0.6260901970</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   41 good_er  1   bacc  0.4950000000  0.58000000  0.680000000  0.6587064677</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   42 good_er  1    npv  0.4444444444  0.62893082  0.709677419  0.6920062719</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   43 good_er  1   infm -0.0100000000  0.16000000  0.360000000  0.3174129353</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   44 good_er  1    mkd -0.0581733566  0.38871473  0.505050505  0.4555880590</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   45 good_er  1  kappa -0.0100000000  0.16000000  0.360000000  0.3174129353</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   46   excel  1   rank  0.0000000000  0.25000000  0.500000000  0.5000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   47   excel  1  score -2.2999037945 -0.07517908  1.398519946  1.4432471963</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   47   excel  1  score -2.9825331637 -0.11921578  1.457976635  1.4203342391</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   48   excel  1  label -1.0000000000 -1.00000000  0.000000000  0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   49   excel  1    err  0.0600000000  0.13000000  0.255000000  0.2599502488</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   50   excel  1    acc  0.5000000000  0.62500000  0.745000000  0.7400497512</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   51   excel  1     sp  0.0000000000  0.49000000  0.910000000  0.7400497512</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   52   excel  1     sn  0.0000000000  0.50000000  0.910000000  0.7400497512</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   53   excel  1   prec  0.5000000000  0.66225166  0.912621359  0.8377698064</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   54   excel  1    mcc  0.0708881205  0.38226007  0.569651921  0.5556460798</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   55   excel  1 fscore  0.0000000000  0.66666667  0.763358779  0.7019566075</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   56   excel  1   bacc  0.5000000000  0.62500000  0.745000000  0.7400497512</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   57   excel  1    npv  0.5000000000  0.66666667  0.910891089  0.8364102486</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   58   excel  1   infm  0.0000000000  0.25000000  0.490000000  0.4800995025</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   59   excel  1    mkd  0.5000000000  0.57142857  0.657894737  0.6741800550</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   60   excel  1  kappa  0.0000000000  0.25000000  0.490000000  0.4800995025</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   49   excel  1    err  0.0300000000  0.13000000  0.250000000  0.2555721393</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   50   excel  1    acc  0.5000000000  0.62500000  0.750000000  0.7444278607</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   51   excel  1     sp  0.0000000000  0.50000000  0.970000000  0.7444278607</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   52   excel  1     sn  0.0000000000  0.50000000  0.970000000  0.7444278607</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   53   excel  1   prec  0.5000000000  0.66666667  0.969387755  0.8418558051</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   54   excel  1    mcc  0.0708881205  0.38226007  0.577350269  0.5646430017</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   55   excel  1 fscore  0.0000000000  0.66666667  0.763358779  0.7061687974</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   56   excel  1   bacc  0.5000000000  0.62500000  0.750000000  0.7444278607</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   57   excel  1    npv  0.5000000000  0.66666667  0.969696970  0.8413995748</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   58   excel  1   infm  0.0000000000  0.25000000  0.500000000  0.4888557214</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   59   excel  1    mkd  0.5000000000  0.57142857  0.666666667  0.6832553799</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   60   excel  1  kappa  0.0000000000  0.25000000  0.500000000  0.4888557214</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   61    perf  1   rank  0.0000000000  0.25000000  0.500000000  0.5000000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   62    perf  1  score  0.0000000000  0.00000000  0.500000000  0.5000000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   63    perf  1  label -1.0000000000 -1.00000000  0.000000000  0.0000000000</span>
@@ -1060,65 +1066,65 @@ for simulations.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   74    perf  1    mkd  0.5000000000  0.57142857  0.666666667  0.6921924681</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   75    perf  1  kappa  0.0000000000  0.25000000  0.500000000  0.4975124378</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   76  random  2   rank  0.0000000000  0.25000000  0.500000000  0.5000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   77  random  2  score -2.1808823604 -0.55260870 -0.002567253  0.0717506381</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   77  random  2  score -3.2606467067 -0.54716372  0.096607745  0.0970309833</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   78  random  2  label -1.0000000000 -1.00000000  0.000000000  0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   79  random  2    err  0.4300000000  0.49000000  0.505000000  0.4983084577</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   80  random  2    acc  0.4650000000  0.48500000  0.495000000  0.5016915423</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   81  random  2     sp  0.0000000000  0.24000000  0.490000000  0.5016915423</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   82  random  2     sn  0.0000000000  0.31000000  0.490000000  0.5016915423</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   83  random  2   prec  0.0000000000  0.48245614  0.494252874  0.4894635718</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   84  random  2    mcc -0.1205957675 -0.05095448 -0.020004001 -0.0005702774</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   85  random  2 fscore  0.0000000000  0.41059603  0.494949495  0.4539690404</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   86  random  2   bacc  0.4650000000  0.48500000  0.495000000  0.5016915423</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   87  random  2    npv  0.0000000000  0.47169811  0.494505495  0.4901034564</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   88  random  2   infm -0.0700000000 -0.03000000 -0.010000000  0.0033830846</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   89  random  2    mkd -0.5050505051 -0.06422608 -0.020292208 -0.0204329718</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   90  random  2  kappa -0.0700000000 -0.03000000 -0.010000000  0.0033830846</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   79  random  2    err  0.4750000000  0.49500000  0.510000000  0.5139800995</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   80  random  2    acc  0.4300000000  0.47000000  0.490000000  0.4860199005</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   81  random  2     sp  0.0000000000  0.26000000  0.470000000  0.4860199005</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   82  random  2     sn  0.0000000000  0.21000000  0.470000000  0.4860199005</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   83  random  2   prec  0.4000000000  0.45744681  0.486486486  0.4929426286</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   84  random  2    mcc -0.1418271572 -0.07012990 -0.030183164 -0.0319662382</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   85  random  2 fscore  0.0000000000  0.28378378  0.467661692  0.4345840498</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   86  random  2   bacc  0.4300000000  0.47000000  0.490000000  0.4860199005</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   87  random  2    npv  0.2500000000  0.46400000  0.491525424  0.4793282172</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   88  random  2   infm -0.1400000000 -0.06000000 -0.020000000 -0.0279601990</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   89  random  2    mkd -0.2551020408 -0.08469791 -0.041528239 -0.0277291542</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   90  random  2  kappa -0.1400000000 -0.06000000 -0.020000000 -0.0279601990</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   91 poor_er  2   rank  0.0000000000  0.25000000  0.500000000  0.5000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   92 poor_er  2  score  0.0011442418  0.46281111  0.723817175  0.6546701299</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   92 poor_er  2  score  0.0192075598  0.44510428  0.749008547  0.6567613187</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   93 poor_er  2  label -1.0000000000 -1.00000000  0.000000000  0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   94 poor_er  2    err  0.2900000000  0.31500000  0.330000000  0.3589054726</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   95 poor_er  2    acc  0.5000000000  0.60000000  0.670000000  0.6410945274</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   96 poor_er  2     sp  0.0000000000  0.46000000  0.670000000  0.6410945274</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   97 poor_er  2     sn  0.0000000000  0.40000000  0.670000000  0.6410945274</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   98 poor_er  2   prec  0.5000000000  0.63698630  0.672897196  0.7099988135</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   99 poor_er  2    mcc  0.0708881205  0.30241917  0.360288346  0.3416028557</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  100 poor_er  2 fscore  0.0000000000  0.53333333  0.673366834  0.5963945117</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  101 poor_er  2   bacc  0.5000000000  0.60000000  0.670000000  0.6410945274</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  102 poor_er  2    npv  0.5000000000  0.60000000  0.676190476  0.7339439314</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  103 poor_er  2   infm  0.0000000000  0.20000000  0.340000000  0.2821890547</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  104 poor_er  2    mkd  0.3300330033  0.38244767  0.425230333  0.4439427449</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  105 poor_er  2  kappa  0.0000000000  0.20000000  0.340000000  0.2821890547</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   94 poor_er  2    err  0.2800000000  0.30500000  0.345000000  0.3567661692</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   95 poor_er  2    acc  0.5000000000  0.60500000  0.655000000  0.6432338308</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   96 poor_er  2     sp  0.0000000000  0.44000000  0.700000000  0.6432338308</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   97 poor_er  2     sn  0.0000000000  0.40000000  0.700000000  0.6432338308</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   98 poor_er  2   prec  0.5000000000  0.63157895  0.695238095  0.7068611082</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   99 poor_er  2    mcc  0.0708881205  0.31086702  0.355617784  0.3456871716</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  100 poor_er  2 fscore  0.0000000000  0.53691275  0.682593857  0.5977382819</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  101 poor_er  2   bacc  0.5000000000  0.60500000  0.655000000  0.6432338308</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  102 poor_er  2    npv  0.5000000000  0.60135135  0.702970297  0.7392395415</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  103 poor_er  2   infm  0.0000000000  0.21000000  0.310000000  0.2864676617</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  104 poor_er  2    mkd  0.3076923077  0.38888889  0.429565990  0.4461006497</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  105 poor_er  2  kappa  0.0000000000  0.21000000  0.310000000  0.2864676617</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  106 good_er  2   rank  0.0000000000  0.25000000  0.500000000  0.5000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  107 good_er  2  score  0.0083967150  0.11215977  0.339638552  0.3768638288</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  107 good_er  2  score  0.0008981645  0.11986767  0.282729457  0.3354048473</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  108 good_er  2  label -1.0000000000 -1.00000000  0.000000000  0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  109 good_er  2    err  0.2400000000  0.28500000  0.325000000  0.3453731343</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  110 good_er  2    acc  0.5000000000  0.60000000  0.675000000  0.6546268657</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  111 good_er  2     sp  0.0000000000  0.41000000  0.730000000  0.6546268657</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  112 good_er  2     sn  0.0000000000  0.47000000  0.730000000  0.6546268657</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  113 good_er  2   prec  0.5000000000  0.60810811  0.727272727  0.7504424146</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  114 good_er  2    mcc  0.0708881205  0.29019428  0.391924758  0.3672571613</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  115 good_er  2 fscore  0.0000000000  0.62162162  0.693140794  0.6182402355</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  116 good_er  2   bacc  0.5000000000  0.60000000  0.675000000  0.6546268657</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  117 good_er  2    npv  0.5000000000  0.64383562  0.731182796  0.7145186936</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  118 good_er  2   infm  0.0000000000  0.20000000  0.350000000  0.3092537313</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  119 good_er  2    mkd  0.2220577350  0.41178334  0.480769231  0.4649611083</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  120 good_er  2  kappa  0.0000000000  0.20000000  0.350000000  0.3092537313</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  109 good_er  2    err  0.1950000000  0.25000000  0.315000000  0.3319900498</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  110 good_er  2    acc  0.4950000000  0.58500000  0.685000000  0.6680099502</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  111 good_er  2     sp  0.0000000000  0.40000000  0.760000000  0.6680099502</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  112 good_er  2     sn  0.0000000000  0.48000000  0.760000000  0.6680099502</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  113 good_er  2   prec  0.4974874372  0.60264901  0.760000000  0.7701271339</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  114 good_er  2    mcc -0.0708881205  0.27238140  0.428410224  0.3921974502</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  115 good_er  2 fscore  0.0000000000  0.64000000  0.699386503  0.6339542820</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  116 good_er  2   bacc  0.4950000000  0.58500000  0.685000000  0.6680099502</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  117 good_er  2    npv  0.0000000000  0.64052288  0.747572816  0.7041701653</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  118 good_er  2   infm -0.0100000000  0.17000000  0.370000000  0.3360199005</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  119 good_er  2    mkd -0.5025125628  0.40794841  0.518134715  0.4742972992</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  120 good_er  2  kappa -0.0100000000  0.17000000  0.370000000  0.3360199005</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  121   excel  2   rank  0.0000000000  0.25000000  0.500000000  0.5000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  122   excel  2  score -3.5720617171  0.03688547  1.463896647  1.4038660084</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  122   excel  2  score -3.2078866813 -0.15240843  1.699977893  1.4486631563</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  123   excel  2  label -1.0000000000 -1.00000000  0.000000000  0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  124   excel  2    err  0.0600000000  0.13500000  0.250000000  0.2583582090</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  125   excel  2    acc  0.5000000000  0.62500000  0.750000000  0.7416417910</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  126   excel  2     sp  0.0000000000  0.50000000  0.920000000  0.7416417910</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  127   excel  2     sn  0.0000000000  0.50000000  0.920000000  0.7416417910</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  128   excel  2   prec  0.5000000000  0.66666667  0.923076923  0.8391552741</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  129   excel  2    mcc  0.0708881205  0.38226007  0.577350269  0.5590601659</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  130   excel  2 fscore  0.0000000000  0.66666667  0.763358779  0.7034180234</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  131   excel  2   bacc  0.5000000000  0.62500000  0.750000000  0.7416417910</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  132   excel  2    npv  0.5000000000  0.66666667  0.920792079  0.8386217420</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  133   excel  2   infm  0.0000000000  0.25000000  0.500000000  0.4832835821</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  134   excel  2    mkd  0.5000000000  0.57142857  0.666666667  0.6777770161</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  135   excel  2  kappa  0.0000000000  0.25000000  0.500000000  0.4832835821</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  124   excel  2    err  0.0550000000  0.13000000  0.255000000  0.2583084577</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  125   excel  2    acc  0.5000000000  0.62500000  0.745000000  0.7416915423</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  126   excel  2     sp  0.0000000000  0.50000000  0.930000000  0.7416915423</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  127   excel  2     sn  0.0000000000  0.49000000  0.930000000  0.7416915423</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  128   excel  2   prec  0.5000000000  0.66666667  0.927835052  0.8376364559</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  129   excel  2    mcc  0.0708881205  0.38226007  0.569651921  0.5588659736</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  130   excel  2 fscore  0.0000000000  0.65333333  0.760456274  0.7028535462</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  131   excel  2   bacc  0.5000000000  0.62500000  0.745000000  0.7416915423</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  132   excel  2    npv  0.5000000000  0.66000000  0.928571429  0.8396112536</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  133   excel  2   infm  0.0000000000  0.25000000  0.490000000  0.4833830846</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  134   excel  2    mkd  0.5000000000  0.57142857  0.653594771  0.6772477095</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  135   excel  2  kappa  0.0000000000  0.25000000  0.490000000  0.4833830846</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  136    perf  2   rank  0.0000000000  0.25000000  0.500000000  0.5000000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  137    perf  2  score  0.0000000000  0.00000000  0.500000000  0.5000000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  138    perf  2  label -1.0000000000 -1.00000000  0.000000000  0.0000000000</span>
@@ -1135,65 +1141,65 @@ for simulations.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  149    perf  2    mkd  0.5000000000  0.57142857  0.666666667  0.6921924681</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  150    perf  2  kappa  0.0000000000  0.25000000  0.500000000  0.4975124378</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  151  random  3   rank  0.0000000000  0.25000000  0.500000000  0.5000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  152  random  3  score -3.6245118960 -0.61962623  0.035365241  0.0490521464</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  152  random  3  score -2.6846332535 -0.74103171 -0.019840582  0.0003724096</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  153  random  3  label -1.0000000000 -1.00000000  0.000000000  0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  154  random  3    err  0.4300000000  0.45000000  0.480000000  0.4749751244</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  155  random  3    acc  0.4850000000  0.50500000  0.520000000  0.5250248756</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  156  random  3     sp  0.0000000000  0.27000000  0.550000000  0.5250248756</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  157  random  3     sn  0.0000000000  0.29000000  0.550000000  0.5250248756</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  158  random  3   prec  0.2500000000  0.50261780  0.528925620  0.5392324946</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  159  random  3    mcc -0.0714285714  0.01227805  0.046188022  0.0544612984</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  160  random  3 fscore  0.0000000000  0.38666667  0.555555556  0.4781834656</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  161  random  3   bacc  0.4850000000  0.50500000  0.520000000  0.5250248756</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  162  random  3    npv  0.0000000000  0.50261780  0.524590164  0.5199986065</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  163  random  3   infm -0.0300000000  0.01000000  0.040000000  0.0500497512</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  164  random  3    mkd -0.5025125628  0.01481262  0.061199510  0.0592311010</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  165  random  3  kappa -0.0300000000  0.01000000  0.040000000  0.0500497512</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  154  random  3    err  0.4350000000  0.47500000  0.490000000  0.4873631841</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  155  random  3    acc  0.4700000000  0.49500000  0.510000000  0.5126368159</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  156  random  3     sp  0.0000000000  0.31000000  0.490000000  0.5126368159</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  157  random  3     sn  0.0000000000  0.26000000  0.490000000  0.5126368159</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  158  random  3   prec  0.0000000000  0.49473684  0.508379888  0.4913873983</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  159  random  3    mcc -0.1428571429 -0.01025178  0.024119154  0.0272086265</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  160  random  3 fscore  0.0000000000  0.34666667  0.492462312  0.4595020071</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  161  random  3   bacc  0.4700000000  0.49500000  0.510000000  0.5126368159</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  162  random  3    npv  0.0000000000  0.49685535  0.510344828  0.5246322698</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  163  random  3   infm -0.0600000000 -0.01000000  0.020000000  0.0252736318</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  164  random  3    mkd -0.5102040816 -0.01078632  0.032144005  0.0160196682</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  165  random  3  kappa -0.0600000000 -0.01000000  0.020000000  0.0252736318</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  166 poor_er  3   rank  0.0000000000  0.25000000  0.500000000  0.5000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  167 poor_er  3  score  0.0186685207  0.46536186  0.696133738  0.6416807653</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  167 poor_er  3  score  0.0016994083  0.44550795  0.722484558  0.6463469552</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  168 poor_er  3  label -1.0000000000 -1.00000000  0.000000000  0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  169 poor_er  3    err  0.2350000000  0.28500000  0.340000000  0.3459203980</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  170 poor_er  3    acc  0.5000000000  0.59500000  0.660000000  0.6540796020</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  171 poor_er  3     sp  0.0000000000  0.45000000  0.720000000  0.6540796020</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  172 poor_er  3     sn  0.0000000000  0.41000000  0.720000000  0.6540796020</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  173 poor_er  3   prec  0.5000000000  0.63333333  0.724137931  0.7128833908</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  174 poor_er  3    mcc  0.0708881205  0.29877085  0.382917848  0.3662738605</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  175 poor_er  3 fscore  0.0000000000  0.54666667  0.689655172  0.6075207773</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  176 poor_er  3   bacc  0.5000000000  0.59500000  0.660000000  0.6540796020</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  177 poor_er  3    npv  0.5000000000  0.60666667  0.720000000  0.7510625217</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  178 poor_er  3   infm  0.0000000000  0.19000000  0.320000000  0.3081592040</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  179 poor_er  3    mkd  0.2551020408  0.39932745  0.451127820  0.4639459126</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  180 poor_er  3  kappa  0.0000000000  0.19000000  0.320000000  0.3081592040</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  169 poor_er  3    err  0.2250000000  0.26500000  0.335000000  0.3400995025</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  170 poor_er  3    acc  0.5000000000  0.59500000  0.665000000  0.6599004975</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  171 poor_er  3     sp  0.0000000000  0.48000000  0.730000000  0.6599004975</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  172 poor_er  3     sn  0.0000000000  0.38000000  0.730000000  0.6599004975</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  173 poor_er  3   prec  0.5000000000  0.65333333  0.732142857  0.7157424148</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  174 poor_er  3    mcc  0.0708881205  0.28381430  0.398348238  0.3779613795</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  175 poor_er  3 fscore  0.0000000000  0.50666667  0.701754386  0.6117613559</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  176 poor_er  3   bacc  0.5000000000  0.59500000  0.665000000  0.6599004975</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  177 poor_er  3    npv  0.5000000000  0.58666667  0.733333333  0.7605262021</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  178 poor_er  3   infm  0.0000000000  0.19000000  0.330000000  0.3198009950</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  179 poor_er  3    mkd  0.2038043478  0.38853813  0.494001411  0.4762686170</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  180 poor_er  3  kappa  0.0000000000  0.19000000  0.330000000  0.3198009950</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  181 good_er  3   rank  0.0000000000  0.25000000  0.500000000  0.5000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  182 good_er  3  score  0.0002239683  0.12733396  0.250207858  0.3233809979</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  182 good_er  3  score  0.0014233844  0.10737586  0.281686501  0.3554744610</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  183 good_er  3  label -1.0000000000 -1.00000000  0.000000000  0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  184 good_er  3    err  0.2400000000  0.28500000  0.325000000  0.3474626866</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  185 good_er  3    acc  0.5000000000  0.59000000  0.675000000  0.6525373134</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  186 good_er  3     sp  0.0000000000  0.38000000  0.730000000  0.6525373134</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  187 good_er  3     sn  0.0000000000  0.46000000  0.730000000  0.6525373134</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  188 good_er  3   prec  0.5000000000  0.58666667  0.729166667  0.7494676288</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  189 good_er  3    mcc  0.0708881205  0.25920125  0.382805469  0.3640749897</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  190 good_er  3 fscore  0.0000000000  0.60927152  0.692579505  0.6169208435</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  191 good_er  3   bacc  0.5000000000  0.59000000  0.675000000  0.6525373134</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  192 good_er  3    npv  0.5000000000  0.63758389  0.722222222  0.7159282057</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  193 good_er  3   infm  0.0000000000  0.18000000  0.350000000  0.3050746269</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  194 good_er  3    mkd  0.2834868887  0.39787798  0.475756656  0.4653958345</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  195 good_er  3  kappa  0.0000000000  0.18000000  0.350000000  0.3050746269</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  184 good_er  3    err  0.2450000000  0.26500000  0.325000000  0.3419900498</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  185 good_er  3    acc  0.5000000000  0.58500000  0.675000000  0.6580099502</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  186 good_er  3     sp  0.0000000000  0.39000000  0.750000000  0.6580099502</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  187 good_er  3     sn  0.0000000000  0.46000000  0.750000000  0.6580099502</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  188 good_er  3   prec  0.5000000000  0.59333333  0.750000000  0.7558439068</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  189 good_er  3    mcc  0.0708881205  0.25972454  0.417586537  0.3745910390</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  190 good_er  3 fscore  0.0000000000  0.61333333  0.691176471  0.6223121173</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  191 good_er  3   bacc  0.5000000000  0.58500000  0.675000000  0.6580099502</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  192 good_er  3    npv  0.5000000000  0.64000000  0.745098039  0.7178513891</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  193 good_er  3   infm  0.0000000000  0.17000000  0.350000000  0.3160199005</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  194 good_er  3    mkd  0.2834868887  0.41379310  0.492412823  0.4736952959</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  195 good_er  3  kappa  0.0000000000  0.17000000  0.350000000  0.3160199005</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  196   excel  3   rank  0.0000000000  0.25000000  0.500000000  0.5000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  197   excel  3  score -1.6232730521 -0.02764254  1.517342521  1.5004948803</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  197   excel  3  score -2.1323541001 -0.14455152  1.716453572  1.4991040901</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  198   excel  3  label -1.0000000000 -1.00000000  0.000000000  0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  199   excel  3    err  0.0500000000  0.13500000  0.250000000  0.2581094527</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  200   excel  3    acc  0.5000000000  0.62500000  0.750000000  0.7418905473</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  201   excel  3     sp  0.0000000000  0.50000000  0.930000000  0.7418905473</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  202   excel  3     sn  0.0000000000  0.50000000  0.930000000  0.7418905473</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  203   excel  3   prec  0.5000000000  0.66666667  0.932038835  0.8382946868</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  204   excel  3    mcc  0.0708881205  0.38226007  0.577350269  0.5594325489</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  205   excel  3 fscore  0.0000000000  0.66666667  0.760456274  0.7031840887</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  206   excel  3   bacc  0.5000000000  0.62500000  0.750000000  0.7418905473</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  207   excel  3    npv  0.5000000000  0.66666667  0.932692308  0.8397097868</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  208   excel  3   infm  0.0000000000  0.25000000  0.500000000  0.4837810945</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  209   excel  3    mkd  0.5000000000  0.57142857  0.662251656  0.6780044736</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  210   excel  3  kappa  0.0000000000  0.25000000  0.500000000  0.4837810945</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  199   excel  3    err  0.0700000000  0.13000000  0.250000000  0.2587064677</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  200   excel  3    acc  0.5000000000  0.62500000  0.750000000  0.7412935323</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  201   excel  3     sp  0.0000000000  0.50000000  0.920000000  0.7412935323</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  202   excel  3     sn  0.0000000000  0.50000000  0.920000000  0.7412935323</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  203   excel  3   prec  0.5000000000  0.66666667  0.920000000  0.8384627075</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  204   excel  3    mcc  0.0708881205  0.38226007  0.577350269  0.5583851630</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  205   excel  3 fscore  0.0000000000  0.66666667  0.763358779  0.7028977623</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  206   excel  3   bacc  0.5000000000  0.62500000  0.750000000  0.7412935323</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  207   excel  3    npv  0.5000000000  0.66666667  0.918367347  0.8386753149</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  208   excel  3   infm  0.0000000000  0.25000000  0.500000000  0.4825870647</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  209   excel  3    mkd  0.5000000000  0.57142857  0.666666667  0.6771380224</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  210   excel  3  kappa  0.0000000000  0.25000000  0.500000000  0.4825870647</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  211    perf  3   rank  0.0000000000  0.25000000  0.500000000  0.5000000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  212    perf  3  score  0.0000000000  0.00000000  0.500000000  0.5000000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  213    perf  3  label -1.0000000000 -1.00000000  0.000000000  0.0000000000</span>
@@ -1210,65 +1216,65 @@ for simulations.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  224    perf  3    mkd  0.5000000000  0.57142857  0.666666667  0.6921924681</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  225    perf  3  kappa  0.0000000000  0.25000000  0.500000000  0.4975124378</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  226  random  4   rank  0.0000000000  0.25000000  0.500000000  0.5000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  227  random  4  score -2.7048139123 -0.68637147 -0.014199461 -0.0061517084</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  227  random  4  score -2.5933324230 -0.62212527  0.150844909  0.0836118865</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  228  random  4  label -1.0000000000 -1.00000000  0.000000000  0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  229  random  4    err  0.4750000000  0.49000000  0.505000000  0.5018905473</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  230  random  4    acc  0.4750000000  0.48500000  0.495000000  0.4981094527</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  231  random  4     sp  0.0000000000  0.23000000  0.490000000  0.4981094527</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  232  random  4     sn  0.0000000000  0.26000000  0.490000000  0.4981094527</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  233  random  4   prec  0.4687500000  0.49107143  0.496774194  0.5274055213</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  234  random  4    mcc -0.1428571429 -0.03079966 -0.011076296 -0.0031980351</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  235  random  4 fscore  0.0000000000  0.34210526  0.489583333  0.4513323482</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  236  random  4   bacc  0.4750000000  0.48500000  0.495000000  0.4981094527</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  237  random  4    npv  0.0000000000  0.47916667  0.492537313  0.4712522010</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  238  random  4   infm -0.0500000000 -0.03000000 -0.010000000 -0.0037810945</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  239  random  4    mkd -0.5102040816 -0.03387534 -0.012268433 -0.0013422776</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  240  random  4  kappa -0.0500000000 -0.03000000 -0.010000000 -0.0037810945</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  229  random  4    err  0.4500000000  0.47000000  0.490000000  0.4916417910</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  230  random  4    acc  0.4550000000  0.49000000  0.510000000  0.5083582090</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  231  random  4     sp  0.0000000000  0.24000000  0.510000000  0.5083582090</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  232  random  4     sn  0.0000000000  0.27000000  0.510000000  0.5083582090</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  233  random  4   prec  0.2857142857  0.49333333  0.508474576  0.5218835949</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  234  random  4    mcc -0.1973855085 -0.02674812  0.020016019  0.0113873403</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  235  random  4 fscore  0.0000000000  0.36734694  0.517412935  0.4627223284</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  236  random  4   bacc  0.4550000000  0.49000000  0.510000000  0.5083582090</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  237  random  4    npv  0.0000000000  0.48648649  0.508771930  0.4723683559</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  238  random  4   infm -0.0900000000 -0.02000000  0.020000000  0.0167164179</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  239  random  4    mkd -0.5050505051 -0.03921569  0.020072260 -0.0057480493</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  240  random  4  kappa -0.0900000000 -0.02000000  0.020000000  0.0167164179</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  241 poor_er  4   rank  0.0000000000  0.25000000  0.500000000  0.5000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  242 poor_er  4  score  0.0059061577  0.48643478  0.696801578  0.6499215100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  242 poor_er  4  score  0.0114088112  0.48913826  0.723865944  0.6557810605</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  243 poor_er  4  label -1.0000000000 -1.00000000  0.000000000  0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  244 poor_er  4    err  0.2500000000  0.30000000  0.345000000  0.3582587065</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  245 poor_er  4    acc  0.5000000000  0.58000000  0.655000000  0.6417412935</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  246 poor_er  4     sp  0.0000000000  0.41000000  0.740000000  0.6417412935</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  247 poor_er  4     sn  0.0000000000  0.38000000  0.740000000  0.6417412935</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  248 poor_er  4   prec  0.5000000000  0.60839161  0.727272727  0.6927666934</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  249 poor_er  4    mcc  0.0411345035  0.25132279  0.361808177  0.3346890466</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  250 poor_er  4 fscore  0.0000000000  0.51006711  0.701754386  0.5955620739</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  251 poor_er  4   bacc  0.5000000000  0.58000000  0.655000000  0.6417412935</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  252 poor_er  4    npv  0.5000000000  0.58940397  0.742574257  0.7295150558</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  253 poor_er  4   infm  0.0000000000  0.16000000  0.310000000  0.2834825871</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  254 poor_er  4    mkd  0.1692047377  0.37264094  0.437062937  0.4222817492</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  255 poor_er  4  kappa  0.0000000000  0.16000000  0.310000000  0.2834825871</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  244 poor_er  4    err  0.2500000000  0.31000000  0.345000000  0.3615920398</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  245 poor_er  4    acc  0.5000000000  0.58500000  0.655000000  0.6384079602</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  246 poor_er  4     sp  0.0000000000  0.45000000  0.690000000  0.6384079602</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  247 poor_er  4     sn  0.0000000000  0.37000000  0.690000000  0.6384079602</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  248 poor_er  4   prec  0.5000000000  0.63576159  0.687022901  0.6867660399</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  249 poor_er  4    mcc  0.0320256308  0.24936953  0.360476772  0.3308233590</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  250 poor_er  4 fscore  0.0000000000  0.49664430  0.680203046  0.5902696242</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  251 poor_er  4   bacc  0.5000000000  0.58500000  0.655000000  0.6384079602</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  252 poor_er  4    npv  0.5000000000  0.58108108  0.693069307  0.7350164407</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  253 poor_er  4   infm  0.0000000000  0.17000000  0.310000000  0.2768159204</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  254 poor_er  4    mkd  0.1025641026  0.35063114  0.385551948  0.4217824806</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  255 poor_er  4  kappa  0.0000000000  0.17000000  0.310000000  0.2768159204</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  256 good_er  4   rank  0.0000000000  0.25000000  0.500000000  0.5000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  257 good_er  4  score  0.0014192720  0.09999452  0.273171522  0.3398996594</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  257 good_er  4  score  0.0007582405  0.10587415  0.297907895  0.3570225576</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  258 good_er  4  label -1.0000000000 -1.00000000  0.000000000  0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  259 good_er  4    err  0.2400000000  0.27500000  0.320000000  0.3406965174</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  260 good_er  4    acc  0.4950000000  0.60500000  0.680000000  0.6593034826</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  261 good_er  4     sp  0.0000000000  0.42000000  0.730000000  0.6593034826</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  262 good_er  4     sn  0.0000000000  0.46000000  0.730000000  0.6593034826</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  263 good_er  4   prec  0.4974619289  0.61333333  0.727272727  0.7545238130</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  264 good_er  4    mcc -0.0708881205  0.31861207  0.422200331  0.3753975565</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  265 good_er  4 fscore  0.0000000000  0.61333333  0.705882353  0.6224938859</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  266 good_er  4   bacc  0.4950000000  0.60500000  0.680000000  0.6593034826</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  267 good_er  4    npv  0.0000000000  0.61635220  0.718446602  0.7027802531</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  268 good_er  4   infm -0.0100000000  0.21000000  0.360000000  0.3186069652</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  269 good_er  4    mkd -0.5025125628  0.43739192  0.463811887  0.4573040661</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  270 good_er  4  kappa -0.0100000000  0.21000000  0.360000000  0.3186069652</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  259 good_er  4    err  0.2400000000  0.29500000  0.365000000  0.3597512438</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  260 good_er  4    acc  0.5000000000  0.58000000  0.635000000  0.6402487562</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  261 good_er  4     sp  0.0000000000  0.37000000  0.690000000  0.6402487562</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  262 good_er  4     sn  0.0000000000  0.46000000  0.690000000  0.6402487562</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  263 good_er  4   prec  0.5000000000  0.57664234  0.696078431  0.7400124637</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  264 good_er  4    mcc  0.0708881205  0.24124895  0.309897047  0.3382940085</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  265 good_er  4 fscore  0.0000000000  0.61744966  0.683453237  0.6061241082</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  266 good_er  4   bacc  0.5000000000  0.58000000  0.635000000  0.6402487562</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  267 good_er  4    npv  0.5000000000  0.64238411  0.693069307  0.6992808186</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  268 good_er  4   infm  0.0000000000  0.16000000  0.270000000  0.2804975124</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  269 good_er  4    mkd  0.2297794118  0.31933186  0.487602448  0.4392932822</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  270 good_er  4  kappa  0.0000000000  0.16000000  0.270000000  0.2804975124</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  271   excel  4   rank  0.0000000000  0.25000000  0.500000000  0.5000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  272   excel  4  score -2.2016953324  0.12495678  1.275541833  1.4058527536</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  272   excel  4  score -2.3699971030  0.16953255  1.524408552  1.5001273007</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  273   excel  4  label -1.0000000000 -1.00000000  0.000000000  0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  274   excel  4    err  0.0800000000  0.13500000  0.250000000  0.2610945274</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  275   excel  4    acc  0.5000000000  0.62500000  0.750000000  0.7389054726</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  276   excel  4     sp  0.0000000000  0.50000000  0.910000000  0.7389054726</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  277   excel  4     sn  0.0000000000  0.50000000  0.910000000  0.7389054726</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  278   excel  4   prec  0.5000000000  0.66666667  0.909090909  0.8363311924</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  279   excel  4    mcc  0.0708881205  0.38226007  0.577350269  0.5535080918</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  280   excel  4 fscore  0.0000000000  0.66666667  0.763358779  0.7006467208</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  281   excel  4   bacc  0.5000000000  0.62500000  0.750000000  0.7389054726</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  282   excel  4    npv  0.5000000000  0.66666667  0.909090909  0.8359246368</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  283   excel  4   infm  0.0000000000  0.25000000  0.500000000  0.4778109453</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  284   excel  4    mkd  0.5000000000  0.57142857  0.666666667  0.6722558291</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  285   excel  4  kappa  0.0000000000  0.25000000  0.500000000  0.4778109453</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  274   excel  4    err  0.0600000000  0.14000000  0.250000000  0.2608955224</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  275   excel  4    acc  0.5000000000  0.62500000  0.750000000  0.7391044776</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  276   excel  4     sp  0.0000000000  0.50000000  0.920000000  0.7391044776</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  277   excel  4     sn  0.0000000000  0.50000000  0.920000000  0.7391044776</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  278   excel  4   prec  0.5000000000  0.66666667  0.923076923  0.8359827238</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  279   excel  4    mcc  0.0708881205  0.38226007  0.577350269  0.5538418044</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  280   excel  4 fscore  0.0000000000  0.66666667  0.763358779  0.7005990135</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  281   excel  4   bacc  0.5000000000  0.62500000  0.750000000  0.7391044776</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  282   excel  4    npv  0.5000000000  0.66666667  0.920792079  0.8365334898</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  283   excel  4   infm  0.0000000000  0.25000000  0.500000000  0.4782089552</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  284   excel  4    mkd  0.5000000000  0.57142857  0.666666667  0.6725162135</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  285   excel  4  kappa  0.0000000000  0.25000000  0.500000000  0.4782089552</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  286    perf  4   rank  0.0000000000  0.25000000  0.500000000  0.5000000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  287    perf  4  score  0.0000000000  0.00000000  0.500000000  0.5000000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  288    perf  4  label -1.0000000000 -1.00000000  0.000000000  0.0000000000</span>
@@ -1286,65 +1292,65 @@ for simulations.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  300    perf  4  kappa  0.0000000000  0.25000000  0.500000000  0.4975124378</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         3rd Qu.      Max.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    1 0.75000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2 0.70383112 2.9137159</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    2 0.64373225 3.1229390</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    3 1.00000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4 0.52500000 0.5550000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5 0.50000000 0.5250000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    6 0.73000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    7 0.72000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    8 0.50000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    9 0.00000000 0.1005038</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   10 0.57707510 0.6711409</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   11 0.50000000 0.5250000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   12 0.50000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   13 0.00000000 0.0500000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   14 0.00000000 0.5050505</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   15 0.00000000 0.0500000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    4 0.48000000 0.5150000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    5 0.55000000 0.5950000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    6 0.78000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    7 0.83000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    8 0.54966887 0.5813953</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    9 0.12974484 0.2083138</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   10 0.66115702 0.6804124</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   11 0.55000000 0.5950000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   12 0.64516129 0.8888889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   13 0.10000000 0.1900000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   14 0.18315018 0.4072135</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   15 0.10000000 0.1900000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   16 0.75000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   17 0.91004596 0.9985957</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   17 0.90591710 0.9968292</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   18 1.00000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   19 0.41000000 0.5000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   20 0.71000000 0.7400000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   21 0.89000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   22 0.96000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   23 0.77083333 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   24 0.45354924 0.5031767</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   25 0.74436090 0.7739130</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   26 0.71000000 0.7400000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   27 0.91489362 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   28 0.42000000 0.4800000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   29 0.51546392 0.5952381</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   30 0.42000000 0.4800000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   19 0.38500000 0.5000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   20 0.73000000 0.7850000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   21 0.91000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   22 0.98000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   23 0.82692308 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   24 0.49969981 0.5995352</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   25 0.76153846 0.8138528</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   26 0.73000000 0.7850000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   27 0.95833333 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   28 0.46000000 0.5700000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   29 0.56818182 0.6372379</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   30 0.46000000 0.5700000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   31 0.75000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   32 0.54258792 0.9892889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   32 0.52818064 0.9965829</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   33 1.00000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   34 0.40500000 0.5000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   35 0.70000000 0.7450000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   36 0.96000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   37 0.89000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   38 0.91304348 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   39 0.43696789 0.5089004</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   40 0.70588235 0.7466667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   41 0.70000000 0.7450000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   42 0.78787879 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   43 0.40000000 0.4900000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   44 0.52852982 0.6134969</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   45 0.40000000 0.4900000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   34 0.42000000 0.5050000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   35 0.74500000 0.7800000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   36 1.00000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   37 0.88000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   38 1.00000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   39 0.52208695 0.5773503</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   40 0.73640167 0.7692308</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   41 0.74500000 0.7800000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   42 0.75675676 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   43 0.49000000 0.5600000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   44 0.56179775 0.6666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   45 0.49000000 0.5600000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   46 0.75000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   47 2.81743566 5.4504118</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   47 2.87322333 5.5806975</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   48 1.00000000 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   49 0.37500000 0.5000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   50 0.87000000 0.9400000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   50 0.87000000 0.9700000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   51 1.00000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   52 0.99000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   52 1.00000000 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   53 1.00000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   54 0.76227922 0.8844333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   55 0.86516854 0.9368421</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   56 0.87000000 0.9400000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   57 0.98750000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   58 0.74000000 0.8800000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   59 0.78522920 0.8888889</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   60 0.74000000 0.8800000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   54 0.76431763 0.9401881</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   55 0.86842105 0.9702970</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   56 0.87000000 0.9700000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   57 1.00000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   58 0.74000000 0.9400000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   59 0.78740157 0.9403762</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   60 0.74000000 0.9400000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   61 0.75000000 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   62 1.00000000 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   63 1.00000000 1.0000000</span>
@@ -1361,65 +1367,65 @@ for simulations.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   74 0.80000000 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   75 0.75000000 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   76 0.75000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   77 0.73469464 2.7604293</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   77 0.73844141 2.9847024</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   78 1.00000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   79 0.51500000 0.5350000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   80 0.51000000 0.5700000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   81 0.81000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   82 0.74000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   83 0.51162791 0.6304348</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   84 0.03964718 0.1559024</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   85 0.58730159 0.6689420</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   86 0.51000000 0.5700000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   87 0.52032520 0.7142857</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   88 0.02000000 0.1400000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   89 0.04974299 0.2220577</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   90 0.02000000 0.1400000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   79 0.53000000 0.5700000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   80 0.50500000 0.5250000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   81 0.71000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   82 0.76000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   83 0.50292398 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   84 0.01023051 0.1234035</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   85 0.60629921 0.6688963</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   86 0.50500000 0.5250000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   87 0.50259067 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   88 0.01000000 0.0500000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   89 0.01106317 0.5076142</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   90 0.01000000 0.0500000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   91 0.75000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   92 0.88196813 0.9996147</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   92 0.91147743 0.9998158</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   93 1.00000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   94 0.40000000 0.5000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   95 0.68500000 0.7100000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   94 0.39500000 0.5000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   95 0.69500000 0.7200000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   96 0.90000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   97 0.96000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   98 0.80392157 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   99 0.40091700 0.4917076</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  100 0.72262774 0.7698413</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  101 0.68500000 0.7100000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  102 0.91836735 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  103 0.37000000 0.4200000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  104 0.51282051 0.5827506</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  105 0.37000000 0.4200000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   97 0.94000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   98 0.80000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   99 0.41443025 0.5078008</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  100 0.73504274 0.7734375</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  101 0.69500000 0.7200000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  102 0.88235294 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  103 0.39000000 0.4400000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  104 0.50735667 0.6289308</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  105 0.39000000 0.4400000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  106 0.75000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  107 0.59775645 0.9717329</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  107 0.49760630 0.9883169</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  108 1.00000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  109 0.40000000 0.5000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  110 0.71500000 0.7600000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  111 0.97000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  112 0.91000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  113 0.93333333 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  114 0.46282255 0.5226197</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  115 0.72636816 0.7473684</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  116 0.71500000 0.7600000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  117 0.80000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  118 0.43000000 0.5200000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  119 0.52012664 0.6030702</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  120 0.43000000 0.5200000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  109 0.41500000 0.5050000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  110 0.75000000 0.8050000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  111 0.98000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  112 0.90000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  113 0.95833333 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  114 0.52946904 0.6300053</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  115 0.74747475 0.7788462</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  116 0.75000000 0.8050000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  117 0.78409091 0.8571429</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  118 0.50000000 0.6100000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  119 0.58280719 0.6506667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  120 0.50000000 0.6100000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  121 0.75000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  122 2.81980197 5.7493668</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  122 2.92338811 5.0077595</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  123 1.00000000 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  124 0.37500000 0.5000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  125 0.86500000 0.9400000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  126 1.00000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  125 0.87000000 0.9450000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  126 0.99000000 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  127 1.00000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  128 1.00000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  129 0.75413386 0.8807048</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  130 0.86956522 0.9411765</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  131 0.86500000 0.9400000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  128 0.98765432 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  129 0.76431763 0.8921885</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  130 0.87150838 0.9468599</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  131 0.87000000 0.9450000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  132 1.00000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  133 0.73000000 0.8800000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  134 0.77763766 0.8814103</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  135 0.73000000 0.8800000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  133 0.74000000 0.8900000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  134 0.78740157 0.8943825</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  135 0.74000000 0.8900000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  136 0.75000000 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  137 1.00000000 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  138 1.00000000 1.0000000</span>
@@ -1436,65 +1442,65 @@ for simulations.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  149 0.80000000 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  150 0.75000000 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  151 0.75000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  152 0.73628310 3.1319450</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  152 0.64195103 2.5323981</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  153 1.00000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  154 0.49500000 0.5150000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  155 0.55000000 0.5700000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  156 0.79000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  157 0.77000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  158 0.56976744 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  159 0.11000550 0.1527525</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  160 0.61176471 0.6666667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  161 0.55000000 0.5700000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  162 0.54676259 0.6666667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  163 0.10000000 0.1400000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  164 0.12004802 0.5025126</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  165 0.10000000 0.1400000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  154 0.50500000 0.5300000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  155 0.52500000 0.5650000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  156 0.76000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  157 0.81000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  158 0.52727273 0.5555556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  159 0.06861916 0.1491300</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  160 0.63281250 0.6689895</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  161 0.52500000 0.5650000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  162 0.56250000 0.7142857</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  163 0.05000000 0.1300000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  164 0.08912656 0.2220577</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  165 0.05000000 0.1300000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  166 0.75000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  167 0.88174590 0.9987441</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  167 0.89334235 0.9997019</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  168 1.00000000 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  169 0.40500000 0.5000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  170 0.71500000 0.7650000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  171 0.91000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  172 0.95000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  173 0.78571429 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  174 0.45038310 0.5446004</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  175 0.74716981 0.7896996</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  176 0.71500000 0.7650000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  177 0.90196078 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  178 0.43000000 0.5300000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  179 0.53763441 0.5988024</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  180 0.43000000 0.5300000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  170 0.73500000 0.7750000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  171 0.88000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  172 0.98000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  173 0.77142857 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  174 0.49082113 0.5920142</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  175 0.76153846 0.8101266</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  176 0.73500000 0.7750000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  177 0.95833333 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  178 0.47000000 0.5500000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  179 0.55555556 0.6372379</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  180 0.47000000 0.5500000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  181 0.75000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  182 0.50651386 0.9992257</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  182 0.58777409 0.9747818</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  183 1.00000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  184 0.41000000 0.5000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  185 0.71500000 0.7600000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  184 0.41500000 0.5000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  185 0.73500000 0.7550000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  186 0.96000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  187 0.88000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  188 0.91489362 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  189 0.46915820 0.5405484</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  190 0.71861472 0.7389163</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  191 0.71500000 0.7600000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  192 0.76119403 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  193 0.43000000 0.5200000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  194 0.53475936 0.6027728</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  195 0.43000000 0.5200000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  187 0.89000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  188 0.92000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  189 0.48487426 0.5345225</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  190 0.72573840 0.7671233</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  191 0.73500000 0.7550000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  192 0.78313253 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  193 0.47000000 0.5100000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  194 0.53763441 0.5952381</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  195 0.47000000 0.5100000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  196 0.75000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  197 2.97201532 4.8355899</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  197 2.88662362 5.1511163</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  198 1.00000000 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  199 0.37500000 0.5000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  200 0.86500000 0.9500000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  200 0.87000000 0.9300000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  201 1.00000000 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  202 1.00000000 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  203 1.00000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  204 0.75837159 0.9007209</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  205 0.86666667 0.9489796</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  206 0.86500000 0.9500000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  204 0.76431763 0.8627653</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  205 0.87150838 0.9295775</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  206 0.87000000 0.9300000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  207 1.00000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  208 0.73000000 0.9000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  209 0.78125000 0.9014423</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  210 0.73000000 0.9000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  208 0.74000000 0.8600000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  209 0.78740157 0.8655395</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  210 0.74000000 0.8600000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  211 0.75000000 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  212 1.00000000 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  213 1.00000000 1.0000000</span>
@@ -1511,65 +1517,65 @@ for simulations.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  224 0.80000000 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  225 0.75000000 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  226 0.75000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  227 0.65239610 2.4673076</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  227 0.76938285 2.9229714</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  228 1.00000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  229 0.51500000 0.5250000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  230 0.51000000 0.5250000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  231 0.76000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  232 0.73000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  233 0.51851852 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  234 0.02155255 0.1601282</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  235 0.58775510 0.6666667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  236 0.51000000 0.5250000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  237 0.50609756 0.5166667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  238 0.02000000 0.0500000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  239 0.02660282 0.5128205</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  240 0.02000000 0.0500000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  229 0.51000000 0.5450000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  230 0.53000000 0.5500000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  231 0.77000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  232 0.74000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  233 0.55000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  234 0.06462471 0.1063349</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  235 0.59349593 0.6666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  236 0.53000000 0.5500000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  237 0.52023121 0.5373134</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  238 0.06000000 0.1000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  239 0.07322942 0.5025126</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  240 0.06000000 0.1000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  241 0.75000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  242 0.88883935 0.9987629</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  242 0.89033449 0.9999074</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  243 1.00000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  244 0.42000000 0.5000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  245 0.70000000 0.7500000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  246 0.88000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  247 0.91000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  248 0.76344086 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  249 0.42032279 0.5001000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  250 0.72800000 0.7592593</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  251 0.70000000 0.7500000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  252 0.83018868 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  253 0.40000000 0.5000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  254 0.48076923 0.5649718</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  255 0.40000000 0.5000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  244 0.41500000 0.5000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  245 0.69000000 0.7500000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  246 0.87000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  247 0.95000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  248 0.74074074 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  249 0.39911048 0.5316743</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  250 0.72463768 0.7863248</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  251 0.69000000 0.7500000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  252 0.90196078 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  253 0.38000000 0.5000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  254 0.52083333 0.5928854</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  255 0.38000000 0.5000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  256 0.75000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  257 0.54580444 0.9880928</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  257 0.56484372 0.9941320</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  258 1.00000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  259 0.39500000 0.5050000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  260 0.72500000 0.7600000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  259 0.42000000 0.5000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  260 0.70500000 0.7600000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  261 0.96000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  262 0.92000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  263 0.90909091 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  264 0.46083024 0.5385205</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  265 0.73076923 0.7522936</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  266 0.72500000 0.7600000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  267 0.80000000 0.8800000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  268 0.45000000 0.5200000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  269 0.53475936 0.5847953</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  270 0.45000000 0.5200000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  262 0.87000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  263 0.92857143 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  264 0.45226834 0.5356557</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  265 0.69523810 0.7272727</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  266 0.70500000 0.7600000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  267 0.72972973 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  268 0.41000000 0.5200000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  269 0.53763441 0.6073174</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  270 0.41000000 0.5200000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  271 0.75000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  272 2.61587430 6.1800547</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  272 3.04988349 4.9741119</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  273 1.00000000 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  274 0.37500000 0.5000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  275 0.86500000 0.9200000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  275 0.86000000 0.9400000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  276 1.00000000 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  277 1.00000000 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  278 1.00000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  279 0.76021848 0.8442318</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  280 0.86842105 0.9183673</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  281 0.86500000 0.9200000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  279 0.74782186 0.8807048</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  280 0.86206897 0.9411765</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  281 0.86000000 0.9400000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  282 1.00000000 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  283 0.73000000 0.8400000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  284 0.78522920 0.8491049</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  285 0.73000000 0.8400000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  283 0.72000000 0.8800000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  284 0.77077394 0.8814103</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  285 0.72000000 0.8800000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  286 0.75000000 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  287 1.00000000 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  288 1.00000000 1.0000000</span>
@@ -2116,19 +2122,19 @@ for simulations.</p></div>
 <span class="r-in"><span><span class="co"># Process time</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="va">res1</span> <span class="op">&lt;-</span> <span class="fu">func_evalmod_rocprc</span><span class="op">(</span><span class="va">samp1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    user  system elapsed </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   0.027   0.006   0.033 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   0.031   0.005   0.036 </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="va">res2</span> <span class="op">&lt;-</span> <span class="fu">func_evalmod_aucroc</span><span class="op">(</span><span class="va">samp1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    user  system elapsed </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   0.023   0.000   0.014 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   0.023   0.000   0.013 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># AUCs</span></span></span>
 <span class="r-in"><span><span class="va">res1</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   modnames dsids curvetypes      aucs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1       m1     1        ROC 0.4997636</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2       m1     1        PRC 0.4989021</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       m1     1        ROC 0.4999385</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       m1     1        PRC 0.4989090</span>
 <span class="r-in"><span><span class="va">res2</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   modnames dsids      aucs     ustats</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1       m1     1 0.4997636 1249409114</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       m1     1 0.4999385 1249846248</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">##################################################</span></span></span>
