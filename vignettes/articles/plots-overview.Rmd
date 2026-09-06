@@ -1,0 +1,72 @@
+---
+title: "Plots overview"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE, comment = "#>", fig.width = 7, fig.height = 4
+)
+```
+
+Every `precrec` object knows how to draw itself two ways.
+
+```{r}
+library(precrec)
+library(ggplot2)
+
+curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
+```
+
+## plot or autoplot
+
+| Function | Draws with | Use it when |
+|---|---|---|
+| `plot()` | base graphics | You want a picture with no dependencies |
+| `autoplot()` | `ggplot2` | You want to restyle, relabel or combine the result |
+
+```{r}
+plot(curves)
+```
+
+`autoplot()` returns a `ggplot` object, so anything you can do to a plot from
+`ggplot2` you can do to this one.
+
+```{r}
+autoplot(curves)
+```
+
+## Choosing what to draw
+
+The second argument picks the curve or the measure.
+
+```{r}
+autoplot(curves, "PRC")
+```
+
+For `mode = "basic"` objects it names measures instead, one panel each. See
+[basic measure plots](plots-basic-measures.html).
+
+## Arguments both functions share
+
+| Argument | Effect |
+|---|---|
+| `type` | `"l"` lines, `"p"` points, `"b"` both |
+| `show_cb` | Draw the confidence band around an average curve |
+| `raw_curves` | Draw every test set instead of the average |
+| `show_legend` | Show or hide the legend |
+| `reduce_points` | Thin the points before drawing; on by default |
+
+```{r}
+autoplot(curves, "PRC", type = "b")
+```
+
+## The four pages
+
+- [ROC and precision-recall curves](plots-roc-prc.html) - the main plot
+- [Basic measure plots](plots-basic-measures.html) - measures against
+  normalized rank
+- [One measure against another](plots-metric-curve.html) - free-form pairs
+- [Confidence bands](plots-confidence-bands.html) and [partial
+  curves](plots-partial-curves.html) - the two variations
+
+And [customizing plots](plots-customizing.html) for changing what comes out.

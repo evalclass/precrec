@@ -1,3 +1,20 @@
+# precrec 0.16.2
+
+* Rewrite the package website. The single long `Introduction` vignette is now
+  a short `Get started` page plus three sets of short articles, reachable
+  from new `How-to`, `Measures` and `Plots` menus: one page per task, one
+  page per family of measures, and one page per plot. The vignette shipped
+  with the package is the `Get started` page; the rest are on the website
+  only, so nothing was added to the size of the package.
+
+* Update `README.md` to match, and to describe the measures added in 0.15.0
+  and 0.16.0.
+
+* Shrink the logo. `man/figures/logo.png` was 3392 x 3392 pixels and 430 KB,
+  and ships inside the package; it is now 240 x 240 and 13 KB, which is the
+  size the `README` and the website actually display. The favicons are
+  regenerated from it.
+
 # precrec 0.16.1
 
 * Fix the order in which instances with tied scores are returned. The sort

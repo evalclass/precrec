@@ -1,0 +1,69 @@
+---
+title: "Evaluate more than two classes"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE, comment = "#>", fig.width = 7, fig.height = 4
+)
+```
+
+A dataset with more than two classes is evaluated by one-vs-rest
+decomposition: each class becomes its own binary problem - that class against
+all the others - so the accurate precision-recall calculations apply to it
+unchanged.
+
+```{r}
+library(precrec)
+library(ggplot2)
+```
+
+## The input
+
+Pass a matrix with one score column per class, together with the class
+labels.
+
+```{r}
+# A 3-class dataset with one score column per class
+data(C3N150)
+
+mdat <- mmdata(C3N150$scores, C3N150$labels)
+mdat
+```
+
+The decomposition is detected from the input. The classes are carried on the
+model axis, so everything downstream treats them the way it treats several
+models on one test set.
+
+Add `multiclass = "ovr"` to ask for the decomposition explicitly. That is
+worth doing when the score columns are not named after the classes - they are
+then taken in the order of the class names.
+
+## One curve per class
+
+```{r}
+curves <- evalmod(mdat)
+
+autoplot(curves)
+```
+
+## Per-class and macro-averaged areas
+
+`auc()` reports one row per class and curve type, then the macro-average of
+the per-class scores.
+
+```{r}
+knitr::kable(auc(curves))
+```
+
+## One thing to watch
+
+Each one-vs-rest split has its own class balance, so the baseline of a
+precision-recall curve differs from class to class. The plots leave the
+baseline out for that reason - which matters here more than anywhere else,
+because a precision-recall curve is read against its baseline.
+
+## Next
+
+- [Balanced and imbalanced data](howto-imbalanced-data.html)
+- [AUC and other curve summaries](measures-auc.html)

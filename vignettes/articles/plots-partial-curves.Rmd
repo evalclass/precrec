@@ -1,0 +1,74 @@
+---
+title: "Partial curves"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE, comment = "#>", fig.width = 7, fig.height = 4
+)
+```
+
+Often only part of a curve matters - the low-false-positive end when every
+alert costs a review, or the high-recall end when a miss is expensive.
+`part()` restricts a curve to that range.
+
+```{r}
+library(precrec)
+library(ggplot2)
+
+curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
+```
+
+## Restricting the range
+
+```{r}
+partial <- part(curves, xlim = c(0, 0.25))
+
+autoplot(partial)
+```
+
+The full curve stays visible in outline and the selected part is highlighted,
+so the region is read in context rather than in isolation.
+
+`ylim` restricts the other axis, and both can be given at once.
+
+```{r}
+partial_y <- part(curves, ylim = c(0.5, 1))
+
+autoplot(partial_y)
+```
+
+## The areas
+
+`pauc()` returns the area over the restricted range.
+
+```{r}
+knitr::kable(pauc(partial))
+```
+
+`paucs` is the raw area, which is small simply because the range is narrow.
+`spaucs` is the standardized version, rescaled to 0 to 1 so that ranges of
+different widths can be compared with each other and against a full AUC.
+
+Report the standardized one unless you have a reason not to. A partial AUC of
+0.18 sounds poor and may be excellent for the quarter of the axis it covers.
+
+## Several models
+
+`part()` works on any `evalmod()` object, so the comparison carries over.
+
+```{r}
+samps <- create_sim_samples(1, 100, 100, "all")
+mdat <- mmdata(samps[["scores"]], samps[["labels"]],
+  modnames = samps[["modnames"]]
+)
+
+mpartial <- part(evalmod(mdat), xlim = c(0, 0.25))
+
+knitr::kable(pauc(mpartial))
+```
+
+## Next
+
+- [AUC and other curve summaries](measures-auc.html)
+- [Customizing plots](plots-customizing.html)

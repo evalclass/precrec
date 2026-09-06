@@ -36,6 +36,7 @@ Makevars
 markedness
 Markedness
 mcc
+MCC
 mdat
 mi
 mmcurves
@@ -48,6 +49,7 @@ multiclass
 Multiclass
 nfold
 npv
+NPV
 ORCID
 ovr
 pauc
