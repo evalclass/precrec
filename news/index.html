@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,6 +32,10 @@
       <small>Source: <a href="https://github.com/evalclass/precrec/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.16.1" id="precrec-0161">precrec 0.16.1<a class="anchor" aria-label="anchor" href="#precrec-0161"></a></h2>
+<ul><li>Fix the order in which instances with tied scores are returned. The sort left the order of equal scores to the C++ standard library, which meant the <code>label</code> column of <code>as.data.frame(evalmod(mode = "basic"))</code>, and the label panel <code><a href="../reference/plot.html">plot()</a></code> and <code><a href="../reference/autoplot.html">autoplot()</a></code> draw from it, could come out in a different order on macOS than on Linux for the same data. Tied scores now keep the order they were given in, on every platform. No evaluation measure changes; only the order of the tied instances themselves.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.16.0" id="precrec-0160">precrec 0.16.0<a class="anchor" aria-label="anchor" href="#precrec-0160"></a></h2>
 <ul><li>

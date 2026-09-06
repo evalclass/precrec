@@ -91,9 +91,9 @@ system.time(autoplot(eval1, reduce_points = FALSE))
 ```
 
     ##    user  system elapsed 
-    ##   0.086   0.000   0.086 
+    ##   0.088   0.000   0.089 
     ##    user  system elapsed 
-    ##   0.371   0.015   0.385
+    ##   0.413   0.018   0.431
 
 #### Example of the auc function
 
