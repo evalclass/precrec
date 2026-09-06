@@ -5,7 +5,14 @@
 \title{Calculate the Brier score, the RMSE and the log loss of predicted
 probabilities}
 \usage{
-prob_metrics(mdat, scores = NULL, labels = NULL, eps = 1e-15, ...)
+prob_metrics(
+  mdat,
+  scores = NULL,
+  labels = NULL,
+  eps = 1e-15,
+  metrics = NULL,
+  ...
+)
 }
 \arguments{
 \item{mdat}{An \code{S3} object created by the \code{\link[=mmdata]{mmdata()}} function.
@@ -26,6 +33,23 @@ a data frame, or a list.}
 and \code{1} before the log loss is calculated. A single confident and
 wrong prediction would otherwise make the log loss infinite.}
 
+\item{metrics}{A character vector of additional metrics to calculate.
+The three metrics above are always returned; \code{"d2_brier"} and
+\code{"d2_logloss"} are returned as well when they are named here, and
+\code{"all"} asks for every metric the function knows.
+
+A D2 score rescales a loss against the loss of the null model, the
+one that predicts the observed prevalence for every case and ignores
+the scores:
+
+\code{D2 = 1 - loss(model) / loss(null)}
+
+It is \code{1} for a perfect model and \code{0} for one that does no
+better than the prevalence, and it is negative for a model that does
+worse - which is a real result rather than an error, so it is not
+clipped. A dataset holding a single class has a null loss of \code{0}
+and so a D2 score of \code{NA}.}
+
 \item{...}{These additional arguments are passed to \code{\link[=mmdata]{mmdata()}}
 for data preparation.}
 }
@@ -34,7 +58,7 @@ The \code{prob_metrics} function returns a data frame with the
 columns \code{modnames}, \code{dsids}, \code{metrics}, and
 \code{values}. \code{metrics} is one of "brier", "rmse" or
 "logloss", so each model and dataset combination takes up three
-rows.
+rows - plus one row for each metric named in \code{metrics}.
 }
 \description{
 The \code{prob_metrics} function calculates three probability-based
@@ -75,6 +99,12 @@ pm <- prob_metrics(mdat)
 
 ## Show the Brier scores only
 subset(pm, metrics == "brier")
+
+## The D2 scores, which say how much of each loss the model explains
+subset(
+  prob_metrics(mdat, metrics = c("d2_brier", "d2_logloss")),
+  dsids == 1
+)
 
 }
 \seealso{

@@ -173,6 +173,15 @@ is better when it is smaller. \code{sedi} is the symmetric extremal
 dependence index, a skill score built to stay informative when the
 positive class is rare.
 
+\code{jaccard}, \code{positive_likelihood_ratio} and
+\code{negative_likelihood_ratio} come from \code{scikit-learn}.
+\code{jaccard} is the Jaccard index, also called the critical success
+index: \code{TP / (TP + FP + FN)}, the confusion matrix with its true
+negative corner left out, which is the same omission \code{precision}
+and \code{sensitivity} make. The two likelihood ratios are
+\code{sensitivity / fpr} and \code{fnr / specificity}; \code{odds},
+the diagnostic odds ratio, is their quotient.
+
 They are not calculated by default because each is another vector the
 size of the dataset, and because \code{plot} and \code{autoplot} draw
 one panel per measure the object holds. A measure that was not asked

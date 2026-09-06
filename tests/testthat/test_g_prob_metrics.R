@@ -192,3 +192,96 @@ test_that("'alpha' must be a single number between 0 and 1", {
     class = "precrec_error_invalid_alpha"
   )
 })
+
+test_that("prob_metrics() returns the three default metrics unasked", {
+  pm <- prob_metrics(scores = pm_test_scores(), labels = pm_test_labels())
+
+  expect_equal(pm[["metrics"]], c("brier", "rmse", "logloss"))
+})
+
+test_that("'metrics' adds the D2 scores to the default three", {
+  pm <- prob_metrics(
+    scores = pm_test_scores(), labels = pm_test_labels(),
+    metrics = "d2_brier"
+  )
+
+  expect_equal(pm[["metrics"]], c("brier", "rmse", "logloss", "d2_brier"))
+
+  pm_all <- prob_metrics(
+    scores = pm_test_scores(), labels = pm_test_labels(),
+    metrics = "all"
+  )
+
+  expect_equal(
+    pm_all[["metrics"]],
+    c("brier", "rmse", "logloss", "d2_brier", "d2_logloss")
+  )
+})
+
+test_that("the D2 scores match their definitions", {
+  scores <- pm_test_scores()
+  labels <- pm_test_labels()
+  pm <- prob_metrics(scores = scores, labels = labels, metrics = "all")
+
+  brier <- mean((scores - labels)^2)
+  logloss <- -mean(labels * log(scores) + (1 - labels) * log(1 - scores))
+  p <- mean(labels)
+
+  expect_equal(pm[["values"]][4], 1 - brier / (p * (1 - p)))
+  expect_equal(
+    pm[["values"]][5],
+    1 - logloss / -(p * log(p) + (1 - p) * log(1 - p))
+  )
+})
+
+test_that("a D2 score is 0 for the model that predicts the prevalence", {
+  labels <- pm_test_labels()
+  p <- mean(labels)
+  pm <- prob_metrics(
+    scores = rep(p, length(labels)), labels = labels, metrics = "all"
+  )
+
+  expect_equal(pm[["values"]][4], 0)
+  expect_equal(pm[["values"]][5], 0)
+})
+
+test_that("a D2 score is negative for a model worse than the prevalence", {
+  # Scores that point the wrong way: the positives get the low ones
+  labels <- pm_test_labels()
+  scores <- c(rep(0.1, 5), rep(0.9, 5))
+  pm <- prob_metrics(scores = scores, labels = labels, metrics = "all")
+
+  expect_true(pm[["values"]][4] < 0)
+  expect_true(pm[["values"]][5] < 0)
+})
+
+test_that("the D2 scores approach 1 for a nearly perfect model", {
+  labels <- pm_test_labels()
+  scores <- ifelse(labels == 1, 0.999, 0.001)
+  pm <- prob_metrics(scores = scores, labels = labels, metrics = "all")
+
+  expect_true(pm[["values"]][4] > 0.99)
+  expect_true(pm[["values"]][5] > 0.99)
+  expect_true(all(pm[["values"]][4:5] <= 1))
+})
+
+test_that("'metrics' must name a metric the function knows", {
+  expect_error(
+    prob_metrics(
+      scores = pm_test_scores(), labels = pm_test_labels(),
+      metrics = "d2_rmse"
+    ),
+    class = "precrec_error_invalid_metrics"
+  )
+})
+
+test_that("prob_metrics_ci() passes 'metrics' through", {
+  ci <- prob_metrics_ci(pm_test_mdat(), metrics = "all")
+
+  expect_true(all(c("d2_brier", "d2_logloss") %in% ci[["metrics"]]))
+
+  # A D2 score is unbounded below, so its interval is not clipped at 0 the
+  # way the Brier score's is
+  d2 <- ci[ci$metrics == "d2_brier", ]
+  expect_equal(d2[["lower_bound"]], d2[["mean"]] - d2[["error"]])
+})

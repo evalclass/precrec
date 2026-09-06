@@ -125,10 +125,11 @@
 # apart when a measure is added.
 #
 # `default` is what an object holds when `evalmod()` is not told otherwise.
-# The measures added for ROCR and yardstick parity are FALSE: turning them on
-# by default would take an existing caller from twelve panels to twenty-six,
-# and make every `evalmod(mode = "basic")` call carry fourteen more vectors it
-# was not asked for. `evalmod(metrics = )` is how they are turned on.
+# The measures added for ROCR, yardstick and scikit-learn parity are FALSE:
+# turning them on by default would take an existing caller from twelve panels
+# to twenty-nine, and make every `evalmod(mode = "basic")` call carry
+# seventeen more vectors it was not asked for. `evalmod(metrics = )` is
+# how they are turned on.
 #
 # `range` is the y axis a measure needs: "unit" for [0, 1], "signed" for
 # [-1, 1], and "free" for one that is unbounded above and has to be read off
@@ -142,13 +143,14 @@
       "informedness", "markedness", "kappa", "fpr", "fnr",
       "false_discovery_rate", "false_omission_rate",
       "predicted_positive_rate", "predicted_negative_rate", "lift", "odds",
-      "mi", "chisq", "cost", "sar", "roc_dist", "sedi"
+      "mi", "chisq", "cost", "sar", "roc_dist", "sedi", "jaccard",
+      "positive_likelihood_ratio", "negative_likelihood_ratio"
     ),
     short = c(
       "score", "label", "err", "acc", "sp", "sn", "prec", "mcc", "fscore",
       "bacc", "npv", "infm", "mkd", "kappa", "fpr", "fnr", "fdr", "for",
       "ppr", "pnr", "lift", "odds", "mi", "chisq", "cost", "sar",
-      "rocdist", "sedi"
+      "rocdist", "sedi", "jacc", "lrp", "lrn"
     ),
     desc = c(
       "score", "label", "error rate", "accuracy", "specificity",
@@ -162,14 +164,16 @@
       "misclassification cost",
       "mean of accuracy, AUC(ROC) and 1 - RMSE",
       "distance to the perfect point in ROC space",
-      "symmetric extremal dependence index"
+      "symmetric extremal dependence index",
+      "Jaccard index (critical success index)",
+      "positive likelihood ratio", "negative likelihood ratio"
     ),
-    default = c(rep(TRUE, 14), rep(FALSE, 14)),
+    default = c(rep(TRUE, 14), rep(FALSE, 17)),
     range = c(
       "free", "signed", "unit", "unit", "unit", "unit", "unit", "signed",
       "unit", "unit", "unit", "signed", "signed", "signed", "unit", "unit",
       "unit", "unit", "unit", "unit", "free", "free", "unit", "free",
-      "free", "unit", "free", "signed"
+      "free", "unit", "free", "signed", "unit", "free", "free"
     ),
     stringsAsFactors = FALSE
   )
@@ -302,7 +306,9 @@
     label = "Label (1:pos, -1:neg)", mcc = "MCC", npv = "NPV",
     fpr = "FPR", fnr = "FNR", odds = "Odds ratio",
     mi = "Mutual information", chisq = "Chi-square", sar = "SAR",
-    roc_dist = "ROC distance", rocdist = "ROC distance", sedi = "SEDI"
+    roc_dist = "ROC distance", rocdist = "ROC distance", sedi = "SEDI",
+    jaccard = "Jaccard index", jacc = "Jaccard index",
+    lrp = "Positive likelihood ratio", lrn = "Negative likelihood ratio"
   )
   if (curvetype %in% names(titles)) {
     return(unname(titles[curvetype]))

@@ -11,6 +11,7 @@ prob_metrics_ci(
   eps = 1e-15,
   alpha = 0.05,
   dtype = "normal",
+  metrics = NULL,
   ...
 )
 }
@@ -41,6 +42,23 @@ wrong prediction would otherwise make the log loss infinite.}
    z \tab Normal distribution \cr
    t \tab t-distribution \cr
 }}
+
+\item{metrics}{A character vector of additional metrics to calculate.
+The three metrics above are always returned; \code{"d2_brier"} and
+\code{"d2_logloss"} are returned as well when they are named here, and
+\code{"all"} asks for every metric the function knows.
+
+A D2 score rescales a loss against the loss of the null model, the
+one that predicts the observed prevalence for every case and ignores
+the scores:
+
+\code{D2 = 1 - loss(model) / loss(null)}
+
+It is \code{1} for a perfect model and \code{0} for one that does no
+better than the prevalence, and it is negative for a model that does
+worse - which is a real result rather than an error, so it is not
+clipped. A dataset holding a single class has a null loss of \code{0}
+and so a D2 score of \code{NA}.}
 
 \item{...}{These additional arguments are passed to \code{\link[=mmdata]{mmdata()}}
 for data preparation.}
