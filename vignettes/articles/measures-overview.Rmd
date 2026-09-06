@@ -43,7 +43,7 @@ panel in the default plot.
 | `informedness` | `infm` | [Agreement and balance](measures-agreement.html) |
 | `markedness` | `mkd` | [Agreement and balance](measures-agreement.html) |
 
-## The fourteen you ask for
+## The seventeen you ask for
 
 Each of these is another vector the size of your dataset and another panel in
 the plot, so they are left out unless named.
@@ -58,12 +58,15 @@ the plot, so they are left out unless named.
 | `predicted_negative_rate` | `pnr`, `rnp` | [Confusion-matrix rates](measures-confusion-matrix.html) |
 | `lift` | | [Ranking and cost](measures-ranking-cost.html) |
 | `odds` | `odds_ratio` | [Ranking and cost](measures-ranking-cost.html) |
+| `positive_likelihood_ratio` | `lrp` | [Ranking and cost](measures-ranking-cost.html) |
+| `negative_likelihood_ratio` | `lrn` | [Ranking and cost](measures-ranking-cost.html) |
 | `mi` | `mutual_information` | [Ranking and cost](measures-ranking-cost.html) |
 | `chisq` | | [Ranking and cost](measures-ranking-cost.html) |
 | `cost` | | [Ranking and cost](measures-ranking-cost.html) |
 | `sar` | | [Ranking and cost](measures-ranking-cost.html) |
 | `roc_dist` | | [Agreement and balance](measures-agreement.html) |
 | `sedi` | | [Agreement and balance](measures-agreement.html) |
+| `jaccard` | `jacc` | [Confusion-matrix rates](measures-confusion-matrix.html) |
 
 ## Asking for them
 
@@ -93,4 +96,5 @@ than one cutoff, and have their own functions:
 - [AUC and other curve summaries](measures-auc.html) - `auc()`, `pauc()`,
   `auc_ci()`, `prbe()`, `average_precision()`
 - [Probability-based metrics](measures-probability.html) - `prob_metrics()`,
-  for scores that are genuine probabilities
+  for scores that are genuine probabilities, and the D2 scores that rescale
+  its losses against a null model
