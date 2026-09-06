@@ -22,11 +22,23 @@
 #'   added rows carry `macro-average` as their model name. Classes that
 #'   could not be evaluated are left out of the average.
 #'
+#' @param macro_weight How the per-class AUCs are weighted in that average.
+#'   `"uniform"`, the default, gives every class the same weight, so a rare
+#'   class counts as much as a common one. `"prevalence"` weights each class
+#'   by the number of observations it has, so the average follows the class
+#'   distribution of the data. The weighted rows are named
+#'   `macro-average-weighted` to keep the two apart. The two agree on a
+#'   balanced dataset.
+#'
+#'   For a ROC evaluation the two are the measures other packages call
+#'   `roc_aunu` and `roc_aunp` respectively.
+#'
 #' @return The `auc` function returns a data frame with AUC scores.
 #'
 #' @seealso [evalmod()] for generating `S3` objects with
 #'   performance evaluation measures. [pauc()] for retrieving
-#'   a dataset of pAUCs.
+#'   a dataset of pAUCs. [average_precision()] for the step estimator of
+#'   the area under the precision-recall curve.
 #'
 #' @examples
 #'
@@ -130,11 +142,18 @@
 #' ## Per-class AUCs only
 #' auc(mccurves, macro = FALSE)
 #'
+#' ## Weighted by the class distribution instead
+#' auc(mccurves, macro_weight = "prevalence")
+#'
 #' @export
-auc <- function(curves, macro = TRUE) UseMethod("auc", curves)
+auc <- function(curves, macro = TRUE,
+                macro_weight = c("uniform", "prevalence")) {
+  UseMethod("auc", curves)
+}
 
 #' @export
-auc.default <- function(curves, macro = TRUE) {
+auc.default <- function(curves, macro = TRUE,
+                        macro_weight = c("uniform", "prevalence")) {
   stop("An object of unknown class is specified")
 }
 
@@ -143,10 +162,12 @@ auc.default <- function(curves, macro = TRUE) {
 #
 #' @rdname auc
 #' @export
-auc.aucs <- function(curves, macro = TRUE) {
+auc.aucs <- function(curves, macro = TRUE,
+                     macro_weight = c("uniform", "prevalence")) {
   # Validation
   .validate(curves)
   .assert_flag(macro, "macro")
+  macro_weight <- match.arg(macro_weight)
 
   # Return AUC scores as a plain data frame
   aucs <- .as_plain_df(attr(curves, "aucs"), copy = TRUE)
@@ -154,7 +175,7 @@ auc.aucs <- function(curves, macro = TRUE) {
     return(aucs)
   }
 
-  rbind(aucs, .macro_average_aucs(aucs, curves))
+  rbind(aucs, .macro_average_aucs(aucs, curves, macro_weight))
 }
 
 #
@@ -164,7 +185,7 @@ auc.aucs <- function(curves, macro = TRUE) {
 # Classes that could not be evaluated carry NA and are left out, so a fold
 # missing one class still gets an average over the rest.
 #
-.macro_average_aucs <- function(aucs, curves) {
+.macro_average_aucs <- function(aucs, curves, macro_weight = "uniform") {
   info <- .as_plain_df(attr(curves, "data_info"), copy = TRUE)
 
   # A model name is either the class on its own, when there is one model, or
@@ -176,25 +197,51 @@ auc.aucs <- function(curves, macro = TRUE) {
   names(models) <- info[["modnames"]]
   row_models <- unname(models[as.character(aucs[["modnames"]])])
 
+  # The weight of a class is the number of positives it has, which for a
+  # one-vs-rest expansion is the number of observations in that class. It is
+  # looked up per dataset as well as per class, because a fold need not hold
+  # the classes in the proportions the whole dataset does.
+  weighted <- macro_weight == "prevalence"
+  np <- info[["np"]]
+  names(np) <- paste(info[["modnames"]], info[["dsids"]])
+  row_np <- unname(np[paste(aucs[["modnames"]], aucs[["dsids"]])])
+
+  label <- if (weighted) "macro-average-weighted" else "macro-average"
+
   parts <- list()
   for (model in unique(row_models)) {
     if (model == "") {
-      modname <- "macro-average"
+      modname <- label
     } else {
-      modname <- paste0("macro-average:", model)
+      modname <- paste0(label, ":", model)
     }
     for (dsid in unique(aucs[["dsids"]])) {
       for (curvetype in unique(aucs[["curvetypes"]])) {
         sel <- row_models == model & aucs[["dsids"]] == dsid &
           aucs[["curvetypes"]] == curvetype
         vals <- aucs[["aucs"]][sel]
-        vals <- vals[!is.na(vals)]
+        wts <- row_np[sel]
+
+        # A class that could not be evaluated is dropped along with its
+        # weight, so the remaining weights still sum to one over the
+        # classes that are actually being averaged.
+        keep <- !is.na(vals)
+        vals <- vals[keep]
+        wts <- wts[keep]
+
+        if (length(vals) == 0L) {
+          avg <- NA_real_
+        } else if (weighted && !anyNA(wts) && sum(wts) > 0) {
+          avg <- sum(vals * wts) / sum(wts)
+        } else {
+          avg <- mean(vals)
+        }
 
         parts[[length(parts) + 1L]] <- data.table::data.table(
           modnames = modname,
           dsids = dsid,
           curvetypes = curvetype,
-          aucs = if (length(vals) == 0L) NA_real_ else mean(vals)
+          aucs = avg
         )
       }
     }

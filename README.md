@@ -58,7 +58,7 @@ website](https://evalclass.github.io/precrec/), in short pages:
   – one page per task: several models, several test sets,
   cross-validation, more than two classes, large datasets.
 - [Measures](https://evalclass.github.io/precrec/articles/measures-overview.html)
-  – what each of the 24 available measures means and when it misleads.
+  – what each of the 26 available measures means and when it misleads.
 - [Plots](https://evalclass.github.io/precrec/articles/plots-overview.html)
   – every plot the package draws, and how to change it.
 - [Reference](https://evalclass.github.io/precrec/reference/) – the help
@@ -122,6 +122,7 @@ devtools::install_github("evalclass/precrec")
 | `prob_metrics_ci`    | Calculate CIs of the Brier score, the RMSE and the log loss |
 | `metric_curve`       | Draw one evaluation measure against another                 |
 | `prbe`               | Find the precision-recall break-even point                  |
+| `average_precision`  | Calculate the step estimator of the PRC area                |
 
 Ten S3 generics work on the objects `evalmod` and `metric_curve` return.
 

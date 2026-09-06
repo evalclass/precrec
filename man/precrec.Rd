@@ -82,6 +82,10 @@ with calculated curve points.
 and partial AUC scores, respectively. \code{\link[=auc_ci]{auc_ci()}}
 returns confidence intervals of AUCs for both ROC
 and precision-recall curves.
+
+\code{\link[=average_precision]{average_precision()}} returns the step estimator of the area under the
+precision-recall curve, and \code{\link[=prbe]{prbe()}} the precision-recall break-even
+point.
 }
 
 \section{Probability-based measures}{
