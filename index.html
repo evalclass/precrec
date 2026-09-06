@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,9 +37,49 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="articles/introduction.html">Introduction</a></li>
+<li class="nav-item"><a class="nav-link" href="articles/introduction.html">Get started</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-how-to" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">How-to</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-how-to">
+<li><a class="dropdown-item" href="articles/howto-prepare-data.html">Prepare your data</a></li>
+    <li><a class="dropdown-item" href="articles/howto-multiple-models.html">Compare several models</a></li>
+    <li><a class="dropdown-item" href="articles/howto-multiple-test-sets.html">Average over several test sets</a></li>
+    <li><a class="dropdown-item" href="articles/howto-cross-validation.html">Evaluate cross-validation folds</a></li>
+    <li><a class="dropdown-item" href="articles/howto-multiclass.html">Evaluate more than two classes</a></li>
+    <li><a class="dropdown-item" href="articles/howto-large-datasets.html">Work with large datasets</a></li>
+    <li><a class="dropdown-item" href="articles/howto-results-as-data.html">Get the numbers out</a></li>
+    <li><a class="dropdown-item" href="articles/howto-imbalanced-data.html">Balanced and imbalanced data</a></li>
+  </ul>
+</li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-measures" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Measures</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-measures">
+<li><a class="dropdown-item" href="articles/measures-overview.html">Measures overview</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="articles/measures-confusion-matrix.html">Confusion-matrix rates</a></li>
+    <li><a class="dropdown-item" href="articles/measures-agreement.html">Agreement and balance</a></li>
+    <li><a class="dropdown-item" href="articles/measures-ranking-cost.html">Ranking and cost</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="articles/measures-auc.html">AUC and other curve summaries</a></li>
+    <li><a class="dropdown-item" href="articles/measures-probability.html">Probability-based metrics</a></li>
+  </ul>
+</li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-plots" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Plots</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-plots">
+<li><a class="dropdown-item" href="articles/plots-overview.html">Plots overview</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="articles/plots-roc-prc.html">ROC and precision-recall curves</a></li>
+    <li><a class="dropdown-item" href="articles/plots-basic-measures.html">Basic measure plots</a></li>
+    <li><a class="dropdown-item" href="articles/plots-metric-curve.html">One measure against another</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="articles/plots-confidence-bands.html">Confidence bands</a></li>
+    <li><a class="dropdown-item" href="articles/plots-partial-curves.html">Partial curves</a></li>
+    <li><a class="dropdown-item" href="articles/plots-customizing.html">Customizing plots</a></li>
+  </ul>
+</li>
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
-<li class="nav-item"><a class="nav-link" href="news/index.html">Change log</a></li>
+<li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -59,238 +99,10 @@
 </h1>
 </div>
 <p><a href="https://github.com/evalclass/precrec/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/evalclass/precrec/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a> <a href="https://app.codecov.io/github/evalclass/precrec?branch=main" class="external-link"><img src="https://codecov.io/github/evalclass/precrec/coverage.svg?branch=main" alt="codecov.io"></a> <a href="https://www.codefactor.io/repository/github/evalclass/precrec/" class="external-link"><img src="https://www.codefactor.io/repository/github/evalclass/precrec/badge" alt="CodeFactor"></a> <a href="https://cran.r-project.org/package=precrec" class="external-link"><img src="https://www.r-pkg.org/badges/version-ago/precrec" alt="CRAN_Status_Badge"></a> <a href="https://cran.r-project.org/package=precrec" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/precrec" alt="CRAN_Logs_Badge"></a></p>
-<p>The aim of the <code>precrec</code> package is to provide an integrated platform that enables robust performance evaluations of binary classifiers. Specifically, <code>precrec</code> offers accurate calculations of ROC (Receiver Operator Characteristics) and precision-recall curves. All the main calculations of <code>precrec</code> are implemented with C++/<a href="https://cran.r-project.org/package=Rcpp" class="external-link">Rcpp</a>.</p>
+<p><code>precrec</code> calculates and plots ROC and precision-recall curves for binary classifiers. It is built for the case where the two curves disagree: on an imbalanced dataset a ROC curve can look excellent while the precision-recall curve shows the classifier is not usable. All the main calculations are implemented in C++ through <a href="https://cran.r-project.org/package=Rcpp" class="external-link">Rcpp</a>.</p>
 <div class="section level2">
-<h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
+<h2 id="quick-example">Quick example<a class="anchor" aria-label="anchor" href="#quick-example"></a>
 </h2>
-<ul>
-<li><p><a href="https://evalclass.github.io/precrec/">Package website</a> – GitHub pages that contain all precrec documentation.</p></li>
-<li><p><a href="https://evalclass.github.io/precrec/articles/introduction.html">Introduction to precrec</a> – a package vignette that contains the descriptions of the functions with several useful examples. View the vignette with <code><a href="articles/introduction.html">vignette("introduction", package = "precrec")</a></code> in R. The HTML version is also available on the <a href="https://evalclass.github.io/precrec/articles/introduction.html">GitHub Pages</a>.</p></li>
-<li><p><a href="https://evalclass.github.io/precrec/reference/">Help pages</a> – all the functions including the S3 generics except for <code>print</code> have their own help pages with plenty of examples. View the main help page with <code><a href="https://evalclass.github.io/precrec/reference">help(package = "precrec")</a></code> in R. The HTML version is also available on the <a href="https://evalclass.github.io/precrec/reference/">GitHub Pages</a>.</p></li>
-</ul>
-</div>
-<div class="section level2">
-<h2 id="seven-key-features-of-precrec">Seven key features of precrec<a class="anchor" aria-label="anchor" href="#seven-key-features-of-precrec"></a>
-</h2>
-<div class="section level3">
-<h3 id="id_1-accurate-curve-calculations">1. Accurate curve calculations<a class="anchor" aria-label="anchor" href="#id_1-accurate-curve-calculations"></a>
-</h3>
-<p><code>precrec</code> provides accurate precision-recall curves.</p>
-<ul>
-<li>Non-linear interpolation</li>
-<li>Elongation to the y-axis to estimate the first point when necessary</li>
-<li>Use of score-wise threshold values instead of fixed bins</li>
-</ul>
-<p><code>precrec</code> also calculates AUC scores with high accuracy.</p>
-</div>
-<div class="section level3">
-<h3 id="id_2-super-fast">2. Super fast<a class="anchor" aria-label="anchor" href="#id_2-super-fast"></a>
-</h3>
-<p><code>precrec</code> calculates curves in a matter of seconds even for a fairly large dataset. It is much faster than most other tools that calculate ROC and precision-recall curves.</p>
-</div>
-<div class="section level3">
-<h3 id="id_3-various-evaluation-metrics">3. Various evaluation metrics<a class="anchor" aria-label="anchor" href="#id_3-various-evaluation-metrics"></a>
-</h3>
-<p>In addition to precision-recall and ROC curves, <code>precrec</code> offers basic evaluation measures.</p>
-<ul>
-<li>Error rate</li>
-<li>Accuracy</li>
-<li>Specificity</li>
-<li>Sensitivity, true positive rate (TPR), recall</li>
-<li>Precision, positive predictive value (PPV)</li>
-<li>Matthews correlation coefficient</li>
-<li>F-score, and the F-beta score it generalizes</li>
-<li>Balanced accuracy</li>
-<li>Negative predictive value (NPV)</li>
-<li>Informedness (Youden’s J) and markedness</li>
-<li>Cohen’s kappa</li>
-<li>Brier score, RMSE and log loss, for scores that are probabilities</li>
-<li>False positive rate, false negative rate, false discovery rate, false omission rate, rate of positive predictions, rate of negative predictions, lift, odds ratio, mutual information, chi-square, weighted misclassification cost and SAR, on request through <code>evalmod(metrics = )</code>
-</li>
-<li>Precision-recall break-even point</li>
-</ul>
-</div>
-<div class="section level3">
-<h3 id="id_4-confidence-interval-band">4. Confidence interval band<a class="anchor" aria-label="anchor" href="#id_4-confidence-interval-band"></a>
-</h3>
-<p><code>precrec</code> calculates confidence intervals when multiple test sets are given. It automatically shows confidence bands about the averaged curve in the corresponding plot.</p>
-</div>
-<div class="section level3">
-<h3 id="id_5-calculation-of-partial-aucs-and-visualization-of-partial-curves">5. Calculation of partial AUCs and visualization of partial curves<a class="anchor" aria-label="anchor" href="#id_5-calculation-of-partial-aucs-and-visualization-of-partial-curves"></a>
-</h3>
-<p><code>precrec</code> calculates partial AUCs for specified x and y ranges. It can also draw partial ROC and precision-recall curves for the specified ranges.</p>
-</div>
-<div class="section level3">
-<h3 id="id_6-multiclass-evaluation">6. Multiclass evaluation<a class="anchor" aria-label="anchor" href="#id_6-multiclass-evaluation"></a>
-</h3>
-<p><code>precrec</code> evaluates a dataset with more than two classes by one-vs-rest decomposition. Each class becomes its own binary problem, so the accurate precision-recall calculations apply to it unchanged, and <code>auc</code> reports the per-class scores together with their macro-average.</p>
-</div>
-<div class="section level3">
-<h3 id="id_7-supporting-functions">7. Supporting functions<a class="anchor" aria-label="anchor" href="#id_7-supporting-functions"></a>
-</h3>
-<p><code>precrec</code> provides several useful functions that lack in most other evaluation tools.</p>
-<ul>
-<li>Handling multiple models and multiple test sets</li>
-<li>Handling tied scores and missing scores</li>
-<li>Pre- and post-process functions of simple data preparation and curve analysis</li>
-</ul>
-</div>
-</div>
-<div class="section level2">
-<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
-</h2>
-<ul>
-<li><p>Install the release version of <code>precrec</code> from CRAN with <code>install.packages("precrec")</code>.</p></li>
-<li>
-<p>Alternatively, you can install a development version of <code>precrec</code> from <a href="https://github.com/evalclass/precrec/" class="external-link">our GitHub repository</a>. To install it:</p>
-<ol style="list-style-type: decimal">
-<li>
-<p>Make sure you have a working development environment.</p>
-<ul>
-<li>
-<strong>Windows</strong>: Install Rtools (available on the CRAN website).</li>
-<li>
-<strong>Mac</strong>: Install Xcode from the Mac App Store.</li>
-<li>
-<strong>Linux</strong>: Install a compiler and various development libraries (details vary across different flavors of Linux).</li>
-</ul>
-</li>
-<li><p>Install <code>devtools</code> from CRAN with <code>install.packages("devtools")</code>.</p></li>
-<li><p>Install <code>precrec</code> from the GitHub repository with <code>devtools::install_github("evalclass/precrec")</code>.</p></li>
-</ol>
-</li>
-</ul>
-</div>
-<div class="section level2">
-<h2 id="functions">Functions<a class="anchor" aria-label="anchor" href="#functions"></a>
-</h2>
-<p>The <code>precrec</code> package provides the following ten functions.</p>
-<table class="table">
-<colgroup>
-<col width="24%">
-<col width="75%">
-</colgroup>
-<thead><tr>
-<th align="left">Function</th>
-<th align="left">Description</th>
-</tr></thead>
-<tbody>
-<tr>
-<td align="left">evalmod</td>
-<td align="left">Main function to calculate evaluation measures</td>
-</tr>
-<tr>
-<td align="left">mmdata</td>
-<td align="left">Reformat input data for performance evaluation calculation</td>
-</tr>
-<tr>
-<td align="left">join_scores</td>
-<td align="left">Join scores of multiple models into a list</td>
-</tr>
-<tr>
-<td align="left">join_labels</td>
-<td align="left">Join observed labels of multiple test datasets into a list</td>
-</tr>
-<tr>
-<td align="left">create_sim_samples</td>
-<td align="left">Create random samples for simulations</td>
-</tr>
-<tr>
-<td align="left">format_nfold</td>
-<td align="left">Create n-fold cross validation dataset from data frame</td>
-</tr>
-<tr>
-<td align="left">prob_metrics</td>
-<td align="left">Calculate the Brier score, the RMSE and the log loss</td>
-</tr>
-<tr>
-<td align="left">prob_metrics_ci</td>
-<td align="left">Calculate CIs of the Brier score, the RMSE and the log loss</td>
-</tr>
-<tr>
-<td align="left">metric_curve</td>
-<td align="left">Draw one evaluation measure against another</td>
-</tr>
-<tr>
-<td align="left">prbe</td>
-<td align="left">Find the precision-recall break-even point</td>
-</tr>
-</tbody>
-</table>
-<p>Moreover, the <code>precrec</code> package provides ten S3 generics for the S3 objects created by the <code>evalmod</code> and <code>metric_curve</code> functions. <strong>N.B.</strong> The R language specifies S3 objects and S3 generic functions as part of the most basic object-oriented system in R.</p>
-<table class="table">
-<colgroup>
-<col width="16%">
-<col width="13%">
-<col width="70%">
-</colgroup>
-<thead><tr>
-<th align="left">S3 generic</th>
-<th align="left">Package</th>
-<th align="left">Description</th>
-</tr></thead>
-<tbody>
-<tr>
-<td align="left">print</td>
-<td align="left">base</td>
-<td align="left">Print the calculation results and the summary of the test data</td>
-</tr>
-<tr>
-<td align="left">as.data.frame</td>
-<td align="left">base</td>
-<td align="left">Convert a precrec object to a data frame</td>
-</tr>
-<tr>
-<td align="left">plot</td>
-<td align="left">graphics</td>
-<td align="left">Plot performance evaluation measures</td>
-</tr>
-<tr>
-<td align="left">autoplot</td>
-<td align="left">ggplot2</td>
-<td align="left">Plot performance evaluation measures with ggplot2</td>
-</tr>
-<tr>
-<td align="left">fortify</td>
-<td align="left">ggplot2</td>
-<td align="left">Prepare a data frame for ggplot2</td>
-</tr>
-<tr>
-<td align="left">auc</td>
-<td align="left">precrec</td>
-<td align="left">Make a data frame with AUC scores</td>
-</tr>
-<tr>
-<td align="left">part</td>
-<td align="left">precrec</td>
-<td align="left">Calculate partial curves and partial AUC scores</td>
-</tr>
-<tr>
-<td align="left">pauc</td>
-<td align="left">precrec</td>
-<td align="left">Make a data frame with pAUC scores</td>
-</tr>
-<tr>
-<td align="left">auc_ci</td>
-<td align="left">precrec</td>
-<td align="left">Calculate confidence intervals of AUC scores</td>
-</tr>
-<tr>
-<td align="left">as.data.table</td>
-<td align="left">data.table</td>
-<td align="left">Convert a precrec object to a data.table</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section level2">
-<h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
-</h2>
-<p>Following two examples show the basic usage of <code>precrec</code> functions.</p>
-<div class="section level3">
-<h3 id="roc-and-precision-recall-calculations">ROC and Precision-Recall calculations<a class="anchor" aria-label="anchor" href="#roc-and-precision-recall-calculations"></a>
-</h3>
-<p>The <code>evalmod</code> function calculates ROC and Precision-Recall curves and returns an S3 object.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/evalclass/precrec" class="external-link">precrec</a></span><span class="op">)</span></span>
 <span></span>
@@ -299,11 +111,6 @@
 <span></span>
 <span><span class="co"># Calculate ROC and Precision-Recall curves</span></span>
 <span><span class="va">sscurves</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="visualization-of-the-curves">Visualization of the curves<a class="anchor" aria-label="anchor" href="#visualization-of-the-curves"></a>
-</h3>
-<p>The <code>autoplot</code> function outputs ROC and Precision-Recall curves by using the <code>ggplot2</code> package.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># The ggplot2 package is required</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
@@ -312,8 +119,166 @@
 <span><span class="fu"><a href="reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">sscurves</span><span class="op">)</span></span></code></pre></div>
 <figure><img src="https://raw.githubusercontent.com/evalclass/precrec/main/README_files/figure-gfm/unnamed-chunk-2-1.png" alt="ROC and precision-recall curves of the P10N10 test dataset, drawn side by side"><figcaption aria-hidden="true">
 ROC and precision-recall curves of the P10N10 test dataset, drawn side by side
-</figcaption></figure>
+</figcaption></figure><p><code>auc(sscurves)</code> gives the areas, and <code>as.data.frame(sscurves)</code> gives the curve points.</p>
 </div>
+<div class="section level2">
+<h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
+</h2>
+<p>Everything is on the <a href="https://evalclass.github.io/precrec/">package website</a>, in short pages:</p>
+<ul>
+<li>
+<a href="https://evalclass.github.io/precrec/articles/introduction.html">Get started</a> – the five-minute tour. Also available offline with <code><a href="articles/introduction.html">vignette("introduction", package = "precrec")</a></code>.</li>
+<li>
+<a href="https://evalclass.github.io/precrec/articles/howto-prepare-data.html">How-to</a> – one page per task: several models, several test sets, cross-validation, more than two classes, large datasets.</li>
+<li>
+<a href="https://evalclass.github.io/precrec/articles/measures-overview.html">Measures</a> – what each of the 24 available measures means and when it misleads.</li>
+<li>
+<a href="https://evalclass.github.io/precrec/articles/plots-overview.html">Plots</a> – every plot the package draws, and how to change it.</li>
+<li>
+<a href="https://evalclass.github.io/precrec/reference/">Reference</a> – the help page of every function, each with examples. Also <code><a href="https://evalclass.github.io/precrec/reference">help(package = "precrec")</a></code>.</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="why-precrec">Why precrec<a class="anchor" aria-label="anchor" href="#why-precrec"></a>
+</h2>
+<p><strong>Accurate curves.</strong> Non-linear interpolation, elongation to the y axis where the first point is undefined, and score-wise thresholds instead of fixed bins. Joining raw precision-recall points with straight lines – what most tools do – overestimates the area.</p>
+<p><strong>Fast.</strong> Curves over a large dataset take seconds. <code>mode = "aucroc"</code> computes the ROC area from the U statistic without building the curve at all.</p>
+<p><strong>Many measures.</strong> Fourteen per-cutoff measures by default and ten more on request, plus AUC, partial AUC, the precision-recall break-even point, and the probability-based Brier score, RMSE and log loss. See the <a href="https://evalclass.github.io/precrec/articles/measures-overview.html">measures overview</a>.</p>
+<p><strong>Several models and several test sets.</strong> Averaged curves with confidence bands, cross-validation folds, and confidence intervals of the AUC.</p>
+<p><strong>More than two classes.</strong> One-vs-rest decomposition, with per-class and macro-averaged areas.</p>
+<p><strong>Partial curves.</strong> Partial AUCs for any x or y range, standardized so ranges of different widths can be compared.</p>
+</div>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>Install the release version from CRAN:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"precrec"</span><span class="op">)</span></span></code></pre></div>
+<p>Or the development version from GitHub, which needs a working compiler (Rtools on Windows, Xcode on macOS, the usual build tools on Linux):</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"evalclass/precrec"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="functions">Functions<a class="anchor" aria-label="anchor" href="#functions"></a>
+</h2>
+<table class="table">
+<colgroup>
+<col width="26%">
+<col width="73%">
+</colgroup>
+<thead><tr>
+<th>Function</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>evalmod</code></td>
+<td>Main function to calculate evaluation measures</td>
+</tr>
+<tr>
+<td><code>mmdata</code></td>
+<td>Reformat input data for performance evaluation calculation</td>
+</tr>
+<tr>
+<td><code>join_scores</code></td>
+<td>Join scores of multiple models into a list</td>
+</tr>
+<tr>
+<td><code>join_labels</code></td>
+<td>Join observed labels of multiple test datasets into a list</td>
+</tr>
+<tr>
+<td><code>create_sim_samples</code></td>
+<td>Create random samples for simulations</td>
+</tr>
+<tr>
+<td><code>format_nfold</code></td>
+<td>Create n-fold cross validation dataset from data frame</td>
+</tr>
+<tr>
+<td><code>prob_metrics</code></td>
+<td>Calculate the Brier score, the RMSE and the log loss</td>
+</tr>
+<tr>
+<td><code>prob_metrics_ci</code></td>
+<td>Calculate CIs of the Brier score, the RMSE and the log loss</td>
+</tr>
+<tr>
+<td><code>metric_curve</code></td>
+<td>Draw one evaluation measure against another</td>
+</tr>
+<tr>
+<td><code>prbe</code></td>
+<td>Find the precision-recall break-even point</td>
+</tr>
+</tbody>
+</table>
+<p>Ten S3 generics work on the objects <code>evalmod</code> and <code>metric_curve</code> return.</p>
+<table class="table">
+<colgroup>
+<col width="18%">
+<col width="12%">
+<col width="68%">
+</colgroup>
+<thead><tr>
+<th>S3 generic</th>
+<th>Package</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>print</code></td>
+<td>base</td>
+<td>Print the calculation results and the summary of the test data</td>
+</tr>
+<tr>
+<td><code>as.data.frame</code></td>
+<td>base</td>
+<td>Convert a precrec object to a data frame</td>
+</tr>
+<tr>
+<td><code>as.data.table</code></td>
+<td>data.table</td>
+<td>Convert a precrec object to a data.table</td>
+</tr>
+<tr>
+<td><code>plot</code></td>
+<td>graphics</td>
+<td>Plot performance evaluation measures</td>
+</tr>
+<tr>
+<td><code>autoplot</code></td>
+<td>ggplot2</td>
+<td>Plot performance evaluation measures with ggplot2</td>
+</tr>
+<tr>
+<td><code>fortify</code></td>
+<td>ggplot2</td>
+<td>Prepare a data frame for ggplot2</td>
+</tr>
+<tr>
+<td><code>auc</code></td>
+<td>precrec</td>
+<td>Make a data frame with AUC scores</td>
+</tr>
+<tr>
+<td><code>part</code></td>
+<td>precrec</td>
+<td>Calculate partial curves and partial AUC scores</td>
+</tr>
+<tr>
+<td><code>pauc</code></td>
+<td>precrec</td>
+<td>Make a data frame with pAUC scores</td>
+</tr>
+<tr>
+<td><code>auc_ci</code></td>
+<td>precrec</td>
+<td>Calculate confidence intervals of AUC scores</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section level2">
 <h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>

@@ -2,8 +2,29 @@ pandoc: 3.8.3
 pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
+  articles/howto-cross-validation: howto-cross-validation.html
+  articles/howto-imbalanced-data: howto-imbalanced-data.html
+  articles/howto-large-datasets: howto-large-datasets.html
+  articles/howto-multiclass: howto-multiclass.html
+  articles/howto-multiple-models: howto-multiple-models.html
+  articles/howto-multiple-test-sets: howto-multiple-test-sets.html
+  articles/howto-prepare-data: howto-prepare-data.html
+  articles/howto-results-as-data: howto-results-as-data.html
   introduction: introduction.html
-last_built: 2026-09-06T11:07Z
+  articles/measures-agreement: measures-agreement.html
+  articles/measures-auc: measures-auc.html
+  articles/measures-confusion-matrix: measures-confusion-matrix.html
+  articles/measures-overview: measures-overview.html
+  articles/measures-probability: measures-probability.html
+  articles/measures-ranking-cost: measures-ranking-cost.html
+  articles/plots-basic-measures: plots-basic-measures.html
+  articles/plots-confidence-bands: plots-confidence-bands.html
+  articles/plots-customizing: plots-customizing.html
+  articles/plots-metric-curve: plots-metric-curve.html
+  articles/plots-overview: plots-overview.html
+  articles/plots-partial-curves: plots-partial-curves.html
+  articles/plots-roc-prc: plots-roc-prc.html
+last_built: 2026-09-06T15:23Z
 urls:
   reference: https://evalclass.github.io/precrec/reference
   article: https://evalclass.github.io/precrec/articles

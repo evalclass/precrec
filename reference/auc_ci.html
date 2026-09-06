@@ -11,7 +11,7 @@ are specified."><meta property="og:image" content="https://evalclass.github.io/p
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,9 +19,43 @@ are specified."><meta property="og:image" content="https://evalclass.github.io/p
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/introduction.html">Introduction</a></li>
+      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/introduction.html">Get started</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-how-to" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">How-to</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-how-to"><li><a class="dropdown-item" href="../articles/howto-prepare-data.html">Prepare your data</a></li>
+    <li><a class="dropdown-item" href="../articles/howto-multiple-models.html">Compare several models</a></li>
+    <li><a class="dropdown-item" href="../articles/howto-multiple-test-sets.html">Average over several test sets</a></li>
+    <li><a class="dropdown-item" href="../articles/howto-cross-validation.html">Evaluate cross-validation folds</a></li>
+    <li><a class="dropdown-item" href="../articles/howto-multiclass.html">Evaluate more than two classes</a></li>
+    <li><a class="dropdown-item" href="../articles/howto-large-datasets.html">Work with large datasets</a></li>
+    <li><a class="dropdown-item" href="../articles/howto-results-as-data.html">Get the numbers out</a></li>
+    <li><a class="dropdown-item" href="../articles/howto-imbalanced-data.html">Balanced and imbalanced data</a></li>
+  </ul></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-measures" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Measures</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-measures"><li><a class="dropdown-item" href="../articles/measures-overview.html">Measures overview</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/measures-confusion-matrix.html">Confusion-matrix rates</a></li>
+    <li><a class="dropdown-item" href="../articles/measures-agreement.html">Agreement and balance</a></li>
+    <li><a class="dropdown-item" href="../articles/measures-ranking-cost.html">Ranking and cost</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/measures-auc.html">AUC and other curve summaries</a></li>
+    <li><a class="dropdown-item" href="../articles/measures-probability.html">Probability-based metrics</a></li>
+  </ul></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-plots" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Plots</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-plots"><li><a class="dropdown-item" href="../articles/plots-overview.html">Plots overview</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/plots-roc-prc.html">ROC and precision-recall curves</a></li>
+    <li><a class="dropdown-item" href="../articles/plots-basic-measures.html">Basic measure plots</a></li>
+    <li><a class="dropdown-item" href="../articles/plots-metric-curve.html">One measure against another</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/plots-confidence-bands.html">Confidence bands</a></li>
+    <li><a class="dropdown-item" href="../articles/plots-partial-curves.html">Partial curves</a></li>
+    <li><a class="dropdown-item" href="../articles/plots-customizing.html">Customizing plots</a></li>
+  </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
-<li class="nav-item"><a class="nav-link" href="../news/index.html">Change log</a></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/evalclass/precrec/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
