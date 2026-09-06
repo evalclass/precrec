@@ -17,7 +17,7 @@ scores must lie in the range [0, 1]."><meta property="og:image" content="https:/
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,7 +88,14 @@ scores must lie in the range [0, 1].</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">prob_metrics</span><span class="op">(</span><span class="va">mdat</span>, scores <span class="op">=</span> <span class="cn">NULL</span>, labels <span class="op">=</span> <span class="cn">NULL</span>, eps <span class="op">=</span> <span class="fl">1e-15</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">prob_metrics</span><span class="op">(</span></span>
+<span>  <span class="va">mdat</span>,</span>
+<span>  scores <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  labels <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  eps <span class="op">=</span> <span class="fl">1e-15</span>,</span>
+<span>  metrics <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -121,6 +128,22 @@ and <code>1</code> before the log loss is calculated. A single confident and
 wrong prediction would otherwise make the log loss infinite.</p></dd>
 
 
+<dt id="arg-metrics">metrics<a class="anchor" aria-label="anchor" href="#arg-metrics"></a></dt>
+<dd><p>A character vector of additional metrics to calculate.
+The three metrics above are always returned; <code>"d2_brier"</code> and
+<code>"d2_logloss"</code> are returned as well when they are named here, and
+<code>"all"</code> asks for every metric the function knows.</p>
+<p>A D2 score rescales a loss against the loss of the null model, the
+one that predicts the observed prevalence for every case and ignores
+the scores:</p>
+<p><code>D2 = 1 - loss(model) / loss(null)</code></p>
+<p>It is <code>1</code> for a perfect model and <code>0</code> for one that does no
+better than the prevalence, and it is negative for a model that does
+worse - which is a real result rather than an error, so it is not
+clipped. A dataset holding a single class has a null loss of <code>0</code>
+and so a D2 score of <code>NA</code>.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>These additional arguments are passed to <code><a href="mmdata.html">mmdata()</a></code>
 for data preparation.</p></dd>
@@ -132,7 +155,7 @@ for data preparation.</p></dd>
 columns <code>modnames</code>, <code>dsids</code>, <code>metrics</code>, and
 <code>values</code>. <code>metrics</code> is one of "brier", "rmse" or
 "logloss", so each model and dataset combination takes up three
-rows.</p>
+rows - plus one row for each metric named in <code>metrics</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -182,6 +205,23 @@ performance evaluation measures. <code><a href="mmdata.html">mmdata()</a></code>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 16  good_er     3   brier 0.2054167</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 19  poor_er     4   brier 0.1781563</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 22  good_er     4   brier 0.2131959</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## The D2 scores, which say how much of each loss the model explains</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu">prob_metrics</span><span class="op">(</span><span class="va">mdat</span>, metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"d2_brier"</span>, <span class="st">"d2_logloss"</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="va">dsids</span> <span class="op">==</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    modnames dsids    metrics     values</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   poor_er     1      brier 0.20567281</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   poor_er     1       rmse 0.45351165</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   poor_er     1    logloss 0.65079815</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   poor_er     1   d2_brier 0.17730875</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   poor_er     1 d2_logloss 0.06109674</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   good_er     1      brier 0.18952365</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7   good_er     1       rmse 0.43534314</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8   good_er     1    logloss 0.64008714</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9   good_er     1   d2_brier 0.24190542</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10  good_er     1 d2_logloss 0.07654946</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

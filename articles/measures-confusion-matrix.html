@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -283,12 +283,90 @@ spent.</p>
 <p><img src="measures-confusion-matrix_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="" width="672"></p>
 </div>
 <div class="section level2">
+<h2 id="leaving-out-the-true-negatives">Leaving out the true negatives<a class="anchor" aria-label="anchor" href="#leaving-out-the-true-negatives"></a>
+</h2>
+<table class="table">
+<colgroup>
+<col width="33%">
+<col width="33%">
+<col width="33%">
+</colgroup>
+<thead><tr class="header">
+<th>Measure</th>
+<th>Formula</th>
+<th>Also known as</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td><code>jaccard</code></td>
+<td>TP / (TP + FP + FN)</td>
+<td>Jaccard index, critical success index, threat score</td>
+</tr></tbody>
+</table>
+<p>The Jaccard index is the 2x2 table with one corner deleted. Three of
+the four cells count toward it and the true negatives do not, which is
+the same omission precision and sensitivity make, and it is why the
+three move together on imbalanced data while accuracy does not.</p>
+<p>That is easiest to see by padding a dataset with negatives the
+classifier gets right. Nothing about its handling of the positives has
+changed, and the Jaccard index does not move; accuracy climbs, because
+on the padded dataset most of what it is counting is the padding.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">best_of</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">scores</span>, <span class="va">labels</span>, <span class="va">metric</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">points</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">scores</span>, labels <span class="op">=</span> <span class="va">labels</span>,</span>
+<span>    mode <span class="op">=</span> <span class="st">"basic"</span>, metrics <span class="op">=</span> <span class="va">metric</span></span>
+<span>  <span class="op">)</span></span>
+<span>  <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">points</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">y</span><span class="op">[</span><span class="va">df</span><span class="op">$</span><span class="va">type</span> <span class="op">==</span> <span class="va">metric</span><span class="op">]</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># The shipped labels are 1 and -1, and the scores run from 5 to 20, so the</span></span>
+<span><span class="co"># padding is negatives the classifier scores below all of them</span></span>
+<span><span class="va">padded_scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">200</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">padded_labels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">200</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  dataset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P10N10"</span>, <span class="st">"P10N10 + 200 easy negatives"</span><span class="op">)</span>,</span>
+<span>  jaccard <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="fu">best_of</span><span class="op">(</span><span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, <span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span>, <span class="st">"jaccard"</span><span class="op">)</span>,</span>
+<span>    <span class="fu">best_of</span><span class="op">(</span><span class="va">padded_scores</span>, <span class="va">padded_labels</span>, <span class="st">"jaccard"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  accuracy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="fu">best_of</span><span class="op">(</span><span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, <span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span>, <span class="st">"accuracy"</span><span class="op">)</span>,</span>
+<span>    <span class="fu">best_of</span><span class="op">(</span><span class="va">padded_scores</span>, <span class="va">padded_labels</span>, <span class="st">"accuracy"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">dataset</th>
+<th align="right">jaccard</th>
+<th align="right">accuracy</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">P10N10</td>
+<td align="right">0.5625</td>
+<td align="right">0.7000000</td>
+</tr>
+<tr class="even">
+<td align="left">P10N10 + 200 easy negatives</td>
+<td align="right">0.5625</td>
+<td align="right">0.9727273</td>
+</tr>
+</tbody>
+</table>
+<p>Forecast verification calls the same quantity the critical success
+index or threat score, for the same reason: a rare event has so many
+true negatives that any measure counting them reports mostly the
+rarity.</p>
+</div>
+<div class="section level2">
 <h2 id="undefined-ends">Undefined ends<a class="anchor" aria-label="anchor" href="#undefined-ends"></a>
 </h2>
 <p>Precision has no value at the cutoff where nothing is predicted
 positive, and NPV none where nothing is predicted negative.
 <code>precrec</code> fills each in from its neighbor rather than
-dropping the point.</p>
+dropping the point. <code>jaccard</code> needs no such treatment: its
+denominator is 0 only for a dataset with no positives at all.</p>
 </div>
 <div class="section level2">
 <h2 id="next">Next<a class="anchor" aria-label="anchor" href="#next"></a>

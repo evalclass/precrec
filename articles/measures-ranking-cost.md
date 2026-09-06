@@ -40,6 +40,43 @@ autoplot(points, "lift")
 
 ![](measures-ranking-cost_files/figure-html/unnamed-chunk-3-1.png)
 
+## Likelihood ratios
+
+| Measure                     | Formula           | Range    |
+|-----------------------------|-------------------|----------|
+| `positive_likelihood_ratio` | sensitivity / FPR | 0 upward |
+| `negative_likelihood_ratio` | FNR / specificity | 0 upward |
+
+These are the two halves of the odds ratio above - LR+ divided by LR- is
+exactly `odds` - and they are worth keeping apart because they answer
+different questions. LR+ is how much a positive prediction multiplies
+the odds that a case really is positive; LR- is how much a negative
+prediction multiplies them. A test can be worth using on the strength of
+one alone, a large LR+ to confirm or a small LR- to rule out, and the
+odds ratio, being the quotient, hides which of the two is doing the
+work.
+
+Both are ratios of rates rather than of counts, so neither moves when
+the prevalence does. That is what lets a value measured on one
+population be carried to another, and it is also the catch: a cutoff
+with an excellent LR+ still flags mostly false positives if positives
+are rare enough. The measure that answers *that* question is precision,
+on the [confusion-matrix
+page](https://evalclass.github.io/precrec/articles/measures-confusion-matrix.md).
+
+``` r
+
+lrs <- evalmod(
+  scores = samps$scores, labels = samps$labels,
+  mode = "basic",
+  metrics = c("positive_likelihood_ratio", "negative_likelihood_ratio")
+)
+
+autoplot(lrs, "positive_likelihood_ratio")
+```
+
+![](measures-ranking-cost_files/figure-html/unnamed-chunk-4-1.png)
+
 ## Cost
 
 `cost` weights the two kinds of error separately:
@@ -61,7 +98,7 @@ costs <- evalmod(
 autoplot(costs, "cost")
 ```
 
-![](measures-ranking-cost_files/figure-html/unnamed-chunk-4-1.png)
+![](measures-ranking-cost_files/figure-html/unnamed-chunk-5-1.png)
 
 The measure is not normalized, following `ROCR`, so its scale is the
 scale of the weights you gave.
@@ -90,12 +127,18 @@ for in the same call is still returned.
 
 ## Where values are undefined
 
-Three of these are undefined at the very top and bottom of the ranking,
-where the 2x2 table has an empty cell.
+Several of these are undefined at the very top and bottom of the
+ranking, where the 2x2 table has an empty cell.
 
 - `odds` and `chisq` are `NA` there. Some other tools report an infinity
   or a `NaN`; `precrec` reports `NA`, as it already does for the
   undefined end of precision and NPV.
+- The likelihood ratios are `NA` over a longer stretch than the others,
+  and not only at the ends. `positive_likelihood_ratio` divides by the
+  false positive rate, which is 0 for every cutoff above the
+  highest-scoring negative, and `negative_likelihood_ratio` divides by
+  the specificity, which is 0 from the point where every negative has
+  been flagged onward.
 - `mi` is `0` there rather than `NA`. A cutoff that predicts one class
   for everything carries no information about the labels, so the value
   is defined and it is zero.

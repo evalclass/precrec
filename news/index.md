@@ -1,5 +1,46 @@
 # Changelog
 
+## precrec 0.18.0
+
+- Add the `jaccard`, `positive_likelihood_ratio` and
+  `negative_likelihood_ratio` basic measures, opt-in through
+  `evalmod(metrics = )` like the other added measures. They are the
+  `scikit-learn` classification metrics `precrec` did not already have
+  under a name of its own.
+
+  `jaccard` is the Jaccard index, `TP / (TP + FP + FN)`, also called the
+  critical success index or threat score. It is the confusion matrix
+  with its true negative corner left out, which is the same omission
+  `precision` and `sensitivity` make, and it is why it holds still on an
+  imbalanced dataset where `accuracy` is mostly counting true negatives.
+
+  The two likelihood ratios are `sensitivity / fpr` and
+  `fnr / specificity`. `precrec` already carried their quotient - the
+  diagnostic odds ratio `odds` is `LR+ / LR-` - but neither one alone,
+  and a classifier can be worth using on the strength of one of them.
+  Both divide by a rate that is `0` over part of every ranking, and are
+  `NA` there, as `odds` and `lift` already are where their own
+  denominator vanishes.
+
+- Add the D2 scores `d2_brier` and `d2_logloss` to
+  [`prob_metrics()`](https://evalclass.github.io/precrec/reference/prob_metrics.md)
+  and
+  [`prob_metrics_ci()`](https://evalclass.github.io/precrec/reference/prob_metrics_ci.md),
+  through a new `metrics` argument.
+
+  A D2 score divides a loss by the loss of the null model - the one that
+  predicts the observed prevalence for every case and ignores the
+  scores - and subtracts the result from `1`, so it reads like
+  R-squared: `1` is perfect, `0` is no better than knowing the
+  prevalence, and a negative value is a model that does worse than that.
+  Negative values are not clipped, and a dataset holding a single class
+  has a null loss of `0` and so a D2 score of `NA`.
+
+  The argument defaults to `NULL`, which is the three metrics
+  [`prob_metrics()`](https://evalclass.github.io/precrec/reference/prob_metrics.md)
+  has always returned, so an existing call still gets three rows per
+  model and dataset. `metrics = "all"` asks for all five.
+
 ## precrec 0.17.0
 
 - Add the `roc_dist` and `sedi` basic measures, opt-in through

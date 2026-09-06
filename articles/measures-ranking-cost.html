@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -152,6 +152,52 @@ against the odds among the rest.</p>
 <p><img src="measures-ranking-cost_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="" width="672"></p>
 </div>
 <div class="section level2">
+<h2 id="likelihood-ratios">Likelihood ratios<a class="anchor" aria-label="anchor" href="#likelihood-ratios"></a>
+</h2>
+<table class="table">
+<thead><tr class="header">
+<th>Measure</th>
+<th>Formula</th>
+<th>Range</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code>positive_likelihood_ratio</code></td>
+<td>sensitivity / FPR</td>
+<td>0 upward</td>
+</tr>
+<tr class="even">
+<td><code>negative_likelihood_ratio</code></td>
+<td>FNR / specificity</td>
+<td>0 upward</td>
+</tr>
+</tbody>
+</table>
+<p>These are the two halves of the odds ratio above - LR+ divided by LR-
+is exactly <code>odds</code> - and they are worth keeping apart because
+they answer different questions. LR+ is how much a positive prediction
+multiplies the odds that a case really is positive; LR- is how much a
+negative prediction multiplies them. A test can be worth using on the
+strength of one alone, a large LR+ to confirm or a small LR- to rule
+out, and the odds ratio, being the quotient, hides which of the two is
+doing the work.</p>
+<p>Both are ratios of rates rather than of counts, so neither moves when
+the prevalence does. That is what lets a value measured on one
+population be carried to another, and it is also the catch: a cutoff
+with an excellent LR+ still flags mostly false positives if positives
+are rare enough. The measure that answers <em>that</em> question is
+precision, on the <a href="measures-confusion-matrix.html">confusion-matrix page</a>.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">lrs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span></span>
+<span>  scores <span class="op">=</span> <span class="va">samps</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">samps</span><span class="op">$</span><span class="va">labels</span>,</span>
+<span>  mode <span class="op">=</span> <span class="st">"basic"</span>,</span>
+<span>  metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"positive_likelihood_ratio"</span>, <span class="st">"negative_likelihood_ratio"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">lrs</span>, <span class="st">"positive_likelihood_ratio"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="measures-ranking-cost_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="672"></p>
+</div>
+<div class="section level2">
 <h2 id="cost">Cost<a class="anchor" aria-label="anchor" href="#cost"></a>
 </h2>
 <p><code>cost</code> weights the two kinds of error separately:</p>
@@ -159,7 +205,7 @@ against the odds among the rest.</p>
 <p>With the default weights of 1 it is the error rate. Set the weights
 to what the two mistakes actually cost you, and the minimum of the curve
 is the cutoff to use.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">costs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span></span>
 <span>  scores <span class="op">=</span> <span class="va">samps</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">samps</span><span class="op">$</span><span class="va">labels</span>,</span>
 <span>  mode <span class="op">=</span> <span class="st">"basic"</span>, metrics <span class="op">=</span> <span class="st">"cost"</span>,</span>
@@ -167,7 +213,7 @@ is the cutoff to use.</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">costs</span>, <span class="st">"cost"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="measures-ranking-cost_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="672"></p>
+<p><img src="measures-ranking-cost_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="672"></p>
 <p>The measure is not normalized, following <code>ROCR</code>, so its
 scale is the scale of the weights you gave.</p>
 </div>
@@ -218,7 +264,7 @@ other measure asked for in the same call is still returned.</p>
 <div class="section level2">
 <h2 id="where-values-are-undefined">Where values are undefined<a class="anchor" aria-label="anchor" href="#where-values-are-undefined"></a>
 </h2>
-<p>Three of these are undefined at the very top and bottom of the
+<p>Several of these are undefined at the very top and bottom of the
 ranking, where the 2x2 table has an empty cell.</p>
 <ul>
 <li>
@@ -226,6 +272,13 @@ ranking, where the 2x2 table has an empty cell.</p>
 Some other tools report an infinity or a <code>NaN</code>;
 <code>precrec</code> reports <code>NA</code>, as it already does for the
 undefined end of precision and NPV.</li>
+<li>The likelihood ratios are <code>NA</code> over a longer stretch than
+the others, and not only at the ends.
+<code>positive_likelihood_ratio</code> divides by the false positive
+rate, which is 0 for every cutoff above the highest-scoring negative,
+and <code>negative_likelihood_ratio</code> divides by the specificity,
+which is 0 from the point where every negative has been flagged
+onward.</li>
 <li>
 <code>mi</code> is <code>0</code> there rather than <code>NA</code>.
 A cutoff that predicts one class for everything carries no information

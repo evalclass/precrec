@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -212,7 +212,7 @@ rates</a></td>
 </table>
 </div>
 <div class="section level2">
-<h2 id="the-fourteen-you-ask-for">The fourteen you ask for<a class="anchor" aria-label="anchor" href="#the-fourteen-you-ask-for"></a>
+<h2 id="the-seventeen-you-ask-for">The seventeen you ask for<a class="anchor" aria-label="anchor" href="#the-seventeen-you-ask-for"></a>
 </h2>
 <p>Each of these is another vector the size of your dataset and another
 panel in the plot, so they are left out unless named.</p>
@@ -283,6 +283,16 @@ rates</a></td>
 <td><a href="measures-ranking-cost.html">Ranking and cost</a></td>
 </tr>
 <tr class="odd">
+<td><code>positive_likelihood_ratio</code></td>
+<td><code>lrp</code></td>
+<td><a href="measures-ranking-cost.html">Ranking and cost</a></td>
+</tr>
+<tr class="even">
+<td><code>negative_likelihood_ratio</code></td>
+<td><code>lrn</code></td>
+<td><a href="measures-ranking-cost.html">Ranking and cost</a></td>
+</tr>
+<tr class="odd">
 <td><code>mi</code></td>
 <td><code>mutual_information</code></td>
 <td><a href="measures-ranking-cost.html">Ranking and cost</a></td>
@@ -311,6 +321,12 @@ rates</a></td>
 <td><code>sedi</code></td>
 <td></td>
 <td><a href="measures-agreement.html">Agreement and balance</a></td>
+</tr>
+<tr class="odd">
+<td><code>jaccard</code></td>
+<td><code>jacc</code></td>
+<td><a href="measures-confusion-matrix.html">Confusion-matrix
+rates</a></td>
 </tr>
 </tbody>
 </table>
@@ -347,8 +363,8 @@ rather than one cutoff, and have their own functions:</p>
 </li>
 <li>
 <a href="measures-probability.html">Probability-based metrics</a> -
-<code><a href="../reference/prob_metrics.html">prob_metrics()</a></code>, for scores that are genuine
-probabilities</li>
+<code><a href="../reference/prob_metrics.html">prob_metrics()</a></code>, for scores that are genuine probabilities,
+and the D2 scores that rescale its losses against a null model</li>
 </ul>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

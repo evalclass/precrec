@@ -36,7 +36,7 @@ gets a panel in the default plot.
 | `informedness` | `infm` | [Agreement and balance](https://evalclass.github.io/precrec/articles/measures-agreement.md) |
 | `markedness` | `mkd` | [Agreement and balance](https://evalclass.github.io/precrec/articles/measures-agreement.md) |
 
-## The fourteen you ask for
+## The seventeen you ask for
 
 Each of these is another vector the size of your dataset and another
 panel in the plot, so they are left out unless named.
@@ -51,12 +51,15 @@ panel in the plot, so they are left out unless named.
 | `predicted_negative_rate` | `pnr`, `rnp` | [Confusion-matrix rates](https://evalclass.github.io/precrec/articles/measures-confusion-matrix.md) |
 | `lift` |  | [Ranking and cost](https://evalclass.github.io/precrec/articles/measures-ranking-cost.md) |
 | `odds` | `odds_ratio` | [Ranking and cost](https://evalclass.github.io/precrec/articles/measures-ranking-cost.md) |
+| `positive_likelihood_ratio` | `lrp` | [Ranking and cost](https://evalclass.github.io/precrec/articles/measures-ranking-cost.md) |
+| `negative_likelihood_ratio` | `lrn` | [Ranking and cost](https://evalclass.github.io/precrec/articles/measures-ranking-cost.md) |
 | `mi` | `mutual_information` | [Ranking and cost](https://evalclass.github.io/precrec/articles/measures-ranking-cost.md) |
 | `chisq` |  | [Ranking and cost](https://evalclass.github.io/precrec/articles/measures-ranking-cost.md) |
 | `cost` |  | [Ranking and cost](https://evalclass.github.io/precrec/articles/measures-ranking-cost.md) |
 | `sar` |  | [Ranking and cost](https://evalclass.github.io/precrec/articles/measures-ranking-cost.md) |
 | `roc_dist` |  | [Agreement and balance](https://evalclass.github.io/precrec/articles/measures-agreement.md) |
 | `sedi` |  | [Agreement and balance](https://evalclass.github.io/precrec/articles/measures-agreement.md) |
+| `jaccard` | `jacc` | [Confusion-matrix rates](https://evalclass.github.io/precrec/articles/measures-confusion-matrix.md) |
 
 ## Asking for them
 
@@ -100,4 +103,5 @@ rather than one cutoff, and have their own functions:
 - [Probability-based
   metrics](https://evalclass.github.io/precrec/articles/measures-probability.md) -
   [`prob_metrics()`](https://evalclass.github.io/precrec/reference/prob_metrics.md),
-  for scores that are genuine probabilities
+  for scores that are genuine probabilities, and the D2 scores that
+  rescale its losses against a null model

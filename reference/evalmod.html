@@ -13,7 +13,7 @@ precision, by specifying mode as "basic".'><meta property="og:image" content="ht
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -299,6 +299,14 @@ to the perfect corner of ROC space, and is the one measure here that
 is better when it is smaller. <code>sedi</code> is the symmetric extremal
 dependence index, a skill score built to stay informative when the
 positive class is rare.</p>
+<p><code>jaccard</code>, <code>positive_likelihood_ratio</code> and
+<code>negative_likelihood_ratio</code> come from <code>scikit-learn</code>.
+<code>jaccard</code> is the Jaccard index, also called the critical success
+index: <code>TP / (TP + FP + FN)</code>, the confusion matrix with its true
+negative corner left out, which is the same omission <code>precision</code>
+and <code>sensitivity</code> make. The two likelihood ratios are
+<code>sensitivity / fpr</code> and <code>fnr / specificity</code>; <code>odds</code>,
+the diagnostic odds ratio, is their quotient.</p>
 <p>They are not calculated by default because each is another vector the
 size of the dataset, and because <code>plot</code> and <code>autoplot</code> draw
 one panel per measure the object holds. A measure that was not asked
@@ -2122,10 +2130,10 @@ for simulations.</p></div>
 <span class="r-in"><span><span class="co"># Process time</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="va">res1</span> <span class="op">&lt;-</span> <span class="fu">func_evalmod_rocprc</span><span class="op">(</span><span class="va">samp1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    user  system elapsed </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   0.031   0.005   0.036 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   0.031   0.006   0.038 </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="va">res2</span> <span class="op">&lt;-</span> <span class="fu">func_evalmod_aucroc</span><span class="op">(</span><span class="va">samp1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    user  system elapsed </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   0.023   0.000   0.013 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   0.020   0.001   0.013 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># AUCs</span></span></span>
 <span class="r-in"><span><span class="va">res1</span></span></span>

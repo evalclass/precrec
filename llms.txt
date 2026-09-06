@@ -58,7 +58,7 @@ website](https://evalclass.github.io/precrec/), in short pages:
   – one page per task: several models, several test sets,
   cross-validation, more than two classes, large datasets.
 - [Measures](https://evalclass.github.io/precrec/articles/measures-overview.html)
-  – what each of the 26 available measures means and when it misleads.
+  – what each of the 29 available measures means and when it misleads.
 - [Plots](https://evalclass.github.io/precrec/articles/plots-overview.html)
   – every plot the package draws, and how to change it.
 - [Reference](https://evalclass.github.io/precrec/reference/) – the help

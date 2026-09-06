@@ -10,7 +10,14 @@ scores must lie in the range \[0, 1\].
 ## Usage
 
 ``` r
-prob_metrics(mdat, scores = NULL, labels = NULL, eps = 1e-15, ...)
+prob_metrics(
+  mdat,
+  scores = NULL,
+  labels = NULL,
+  eps = 1e-15,
+  metrics = NULL,
+  ...
+)
 ```
 
 ## Arguments
@@ -42,6 +49,25 @@ prob_metrics(mdat, scores = NULL, labels = NULL, eps = 1e-15, ...)
   the log loss is calculated. A single confident and wrong prediction
   would otherwise make the log loss infinite.
 
+- metrics:
+
+  A character vector of additional metrics to calculate. The three
+  metrics above are always returned; `"d2_brier"` and `"d2_logloss"` are
+  returned as well when they are named here, and `"all"` asks for every
+  metric the function knows.
+
+  A D2 score rescales a loss against the loss of the null model, the one
+  that predicts the observed prevalence for every case and ignores the
+  scores:
+
+  `D2 = 1 - loss(model) / loss(null)`
+
+  It is `1` for a perfect model and `0` for one that does no better than
+  the prevalence, and it is negative for a model that does worse - which
+  is a real result rather than an error, so it is not clipped. A dataset
+  holding a single class has a null loss of `0` and so a D2 score of
+  `NA`.
+
 - ...:
 
   These additional arguments are passed to
@@ -53,7 +79,7 @@ prob_metrics(mdat, scores = NULL, labels = NULL, eps = 1e-15, ...)
 The `prob_metrics` function returns a data frame with the columns
 `modnames`, `dsids`, `metrics`, and `values`. `metrics` is one of
 "brier", "rmse" or "logloss", so each model and dataset combination
-takes up three rows.
+takes up three rows - plus one row for each metric named in `metrics`.
 
 ## See also
 
@@ -106,4 +132,21 @@ subset(pm, metrics == "brier")
 #> 16  good_er     3   brier 0.2054167
 #> 19  poor_er     4   brier 0.1781563
 #> 22  good_er     4   brier 0.2131959
+
+## The D2 scores, which say how much of each loss the model explains
+subset(
+  prob_metrics(mdat, metrics = c("d2_brier", "d2_logloss")),
+  dsids == 1
+)
+#>    modnames dsids    metrics     values
+#> 1   poor_er     1      brier 0.20567281
+#> 2   poor_er     1       rmse 0.45351165
+#> 3   poor_er     1    logloss 0.65079815
+#> 4   poor_er     1   d2_brier 0.17730875
+#> 5   poor_er     1 d2_logloss 0.06109674
+#> 6   good_er     1      brier 0.18952365
+#> 7   good_er     1       rmse 0.43534314
+#> 8   good_er     1    logloss 0.64008714
+#> 9   good_er     1   d2_brier 0.24190542
+#> 10  good_er     1 d2_logloss 0.07654946
 ```

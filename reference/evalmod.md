@@ -232,6 +232,14 @@ evalmod(
   it is smaller. `sedi` is the symmetric extremal dependence index, a
   skill score built to stay informative when the positive class is rare.
 
+  `jaccard`, `positive_likelihood_ratio` and `negative_likelihood_ratio`
+  come from `scikit-learn`. `jaccard` is the Jaccard index, also called
+  the critical success index: `TP / (TP + FP + FN)`, the confusion
+  matrix with its true negative corner left out, which is the same
+  omission `precision` and `sensitivity` make. The two likelihood ratios
+  are `sensitivity / fpr` and `fnr / specificity`; `odds`, the
+  diagnostic odds ratio, is their quotient.
+
   They are not calculated by default because each is another vector the
   size of the dataset, and because `plot` and `autoplot` draw one panel
   per measure the object holds. A measure that was not asked for cannot
@@ -2086,10 +2094,10 @@ func_evalmod_aucroc <- function(samp) {
 # Process time
 system.time(res1 <- func_evalmod_rocprc(samp1))
 #>    user  system elapsed 
-#>   0.031   0.005   0.036 
+#>   0.031   0.006   0.038 
 system.time(res2 <- func_evalmod_aucroc(samp1))
 #>    user  system elapsed 
-#>   0.023   0.000   0.013 
+#>   0.020   0.001   0.013 
 
 # AUCs
 res1

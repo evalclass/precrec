@@ -49,6 +49,46 @@ knitr::kable(head(prob_metrics(mdat)))
 
 One row per model, dataset and metric.
 
+## D2: how much of the loss the model explains
+
+A Brier score of 0.12 is hard to read on its own. Whether it is good
+depends on the prevalence: on a dataset that is 1% positive, predicting
+0.01 for every case and thinking about nothing else already scores
+0.0099.
+
+A D2 score answers that by dividing the loss by the loss of exactly that
+null model, the one that predicts the observed prevalence and ignores
+the scores:
+
+| Metric       | Formula                   | Range   | Best |
+|--------------|---------------------------|---------|------|
+| `d2_brier`   | 1 - brier / (p x (1 - p)) | up to 1 | 1    |
+| `d2_logloss` | 1 - logloss / entropy(p)  | up to 1 | 1    |
+
+where p is the observed prevalence, so the denominator in each row is
+what the null model itself scores.
+
+It reads like R-squared. `1` is a perfect model, `0` is one that does no
+better than knowing the prevalence, and a negative value is a model that
+does worse than that - which happens, and is not clipped away.
+
+``` r
+
+knitr::kable(head(prob_metrics(mdat, metrics = "all"), 5))
+```
+
+| modnames | dsids | metrics    |    values |
+|:---------|------:|:-----------|----------:|
+| poor_er  |     1 | brier      | 0.1882575 |
+| poor_er  |     1 | rmse       | 0.4338865 |
+| poor_er  |     1 | logloss    | 0.5835319 |
+| poor_er  |     1 | d2_brier   | 0.2469701 |
+| poor_er  |     1 | d2_logloss | 0.1581414 |
+
+`metrics =` is how they are asked for, either by name or with `"all"`.
+The three metrics above are always returned, so a call that did not ask
+for the D2 scores gets exactly what it always got.
+
 ## Confidence intervals
 
 [`prob_metrics_ci()`](https://evalclass.github.io/precrec/reference/prob_metrics_ci.md)

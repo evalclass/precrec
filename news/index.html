@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,6 +66,19 @@
       <small>Source: <a href="https://github.com/evalclass/precrec/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.18.0" id="precrec-0180">precrec 0.18.0<a class="anchor" aria-label="anchor" href="#precrec-0180"></a></h2>
+<ul><li>
+<p>Add the <code>jaccard</code>, <code>positive_likelihood_ratio</code> and <code>negative_likelihood_ratio</code> basic measures, opt-in through <code>evalmod(metrics = )</code> like the other added measures. They are the <code>scikit-learn</code> classification metrics <code>precrec</code> did not already have under a name of its own.</p>
+<p><code>jaccard</code> is the Jaccard index, <code>TP / (TP + FP + FN)</code>, also called the critical success index or threat score. It is the confusion matrix with its true negative corner left out, which is the same omission <code>precision</code> and <code>sensitivity</code> make, and it is why it holds still on an imbalanced dataset where <code>accuracy</code> is mostly counting true negatives.</p>
+<p>The two likelihood ratios are <code>sensitivity / fpr</code> and <code>fnr / specificity</code>. <code>precrec</code> already carried their quotient - the diagnostic odds ratio <code>odds</code> is <code>LR+ / LR-</code> - but neither one alone, and a classifier can be worth using on the strength of one of them. Both divide by a rate that is <code>0</code> over part of every ranking, and are <code>NA</code> there, as <code>odds</code> and <code>lift</code> already are where their own denominator vanishes.</p>
+</li>
+<li>
+<p>Add the D2 scores <code>d2_brier</code> and <code>d2_logloss</code> to <code><a href="../reference/prob_metrics.html">prob_metrics()</a></code> and <code><a href="../reference/prob_metrics_ci.html">prob_metrics_ci()</a></code>, through a new <code>metrics</code> argument.</p>
+<p>A D2 score divides a loss by the loss of the null model - the one that predicts the observed prevalence for every case and ignores the scores - and subtracts the result from <code>1</code>, so it reads like R-squared: <code>1</code> is perfect, <code>0</code> is no better than knowing the prevalence, and a negative value is a model that does worse than that. Negative values are not clipped, and a dataset holding a single class has a null loss of <code>0</code> and so a D2 score of <code>NA</code>.</p>
+<p>The argument defaults to <code>NULL</code>, which is the three metrics <code><a href="../reference/prob_metrics.html">prob_metrics()</a></code> has always returned, so an existing call still gets three rows per model and dataset. <code>metrics = "all"</code> asks for all five.</p>
+</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.17.0" id="precrec-0170">precrec 0.17.0<a class="anchor" aria-label="anchor" href="#precrec-0170"></a></h2>
 <ul><li>
