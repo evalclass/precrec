@@ -1,3 +1,46 @@
+# precrec 0.17.0
+
+* Add the `roc_dist` and `sedi` basic measures, opt-in through
+  `evalmod(metrics = )` like the other added measures.
+
+  `roc_dist` is the distance from the point `(1 - specificity, sensitivity)`
+  to the perfect corner of ROC space. It is the one measure in the table that
+  is better when it is smaller, and the one whose maximum is `sqrt(2)` rather
+  than `1`; minimizing it is one of the standard ways of choosing an
+  operating point off a ROC curve.
+
+  `sedi` is the symmetric extremal dependence index, a skill score from
+  forecast verification built to stay informative when the positive class is
+  rare. The four logarithms in its definition are undefined at both ends of
+  every dataset, so the rates are clamped away from `0` and `1` first.
+
+* Add `average_precision()`, which returns the step estimator of the area
+  under a precision-recall curve - the precision at each cutoff weighted by
+  the recall it gains over the cutoff before it.
+
+  It is a different estimator from the one `auc()` reports, not a different
+  way of adding up the same one: it joins the raw precision-recall points
+  with horizontal steps, where `auc()` measures the area under the curve
+  `evalmod()` has interpolated the way Davis and Goadrich showed is correct.
+  The step estimator reads high wherever the two disagree, and `auc()`
+  remains the number to prefer. `average_precision()` is here because several
+  other packages report it under this name, and because the size of the gap
+  between the two is worth being able to see.
+
+  It is read off the raw per-cutoff points rather than off the curve, so
+  `x_bins` does not change it, and unlike `prbe()` it survives
+  `evalmod(raw_curves = FALSE)`.
+
+* Add the `macro_weight` argument to `auc()`. The macro-average of the
+  per-class AUCs of a multiclass evaluation has always weighted every class
+  equally; `macro_weight = "prevalence"` weights each class by the number of
+  observations it has instead, and names the added rows
+  `macro-average-weighted` to keep the two apart. The default is unchanged,
+  and the two agree on a balanced dataset.
+
+  For a ROC evaluation the two are the measures other packages call
+  `roc_aunu` and `roc_aunp`.
+
 # precrec 0.16.2
 
 * Rewrite the package website. The single long `Introduction` vignette is now

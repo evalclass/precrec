@@ -1,8 +1,8 @@
-## Version 0.16.2
+## Version 0.17.0
 
-An update of the published package `precrec` (0.14.5 -> 0.16.2). 0.15.0,
-0.16.0 and 0.16.1 were prepared but not submitted, so this release carries
-all four sets of changes.
+An update of the published package `precrec` (0.14.5 -> 0.17.0). 0.15.0,
+0.16.0, 0.16.1 and 0.16.2 were prepared but not submitted, so this release
+carries all five sets of changes.
 
 - Support datasets with more than two classes by one-vs-rest decomposition
 - Add the evaluation measures `ROCR` provides, opt-in through
@@ -10,7 +10,11 @@ all four sets of changes.
   probability-based metrics
 - Add one new dependency, `checkmate`, for the argument checks
 - Add `metric_curve()`, which draws one evaluation measure against another
-- Add `prbe()`, the precision-recall break-even point
+- Add `prbe()`, the precision-recall break-even point, and
+  `average_precision()`, the step estimator of the area under the
+  precision-recall curve
+- Add the `roc_dist` and `sedi` measures, and the `macro_weight` argument of
+  `auc()` for weighting the per-class average by the class distribution
 - Handle single-class datasets with a warning instead of an error
 - Fix the ranking of `NA` scores, the panel titles of `autoplot()`, the
   y axis of `plot()` for the measures that can go negative, and the order of

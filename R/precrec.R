@@ -68,6 +68,10 @@
 #' returns confidence intervals of AUCs for both ROC
 #' and precision-recall curves.
 #'
+#' [average_precision()] returns the step estimator of the area under the
+#' precision-recall curve, and [prbe()] the precision-recall break-even
+#' point.
+#'
 #' @section Probability-based measures:
 #' [prob_metrics()] calculates the Brier score and the log loss of
 #' prediction scores that are probabilities, and [prob_metrics_ci()]

@@ -159,12 +159,19 @@ the fourteen measures \code{evalmod} has always returned: \code{score},
 The measures that can be added are \code{fpr}, \code{fnr},
 \code{false_discovery_rate}, \code{false_omission_rate},
 \code{predicted_positive_rate}, \code{predicted_negative_rate},
-\code{lift}, \code{odds}, \code{mi}, \code{chisq} and \code{cost}. They
-are the measures \code{ROCR} provides that \code{precrec} did not, and
-each of them also answers to the identifier \code{ROCR} uses for it -
-\code{fall}, \code{miss}, \code{pcfall}, \code{pcmiss}, \code{rpp},
-\code{rnp} and \code{mutual_information} - and to its standard
-abbreviation where it has one.
+\code{lift}, \code{odds}, \code{mi}, \code{chisq}, \code{cost} and
+\code{sar}. They are the measures \code{ROCR} provides that \code{precrec}
+did not, and each of them also answers to the identifier \code{ROCR}
+uses for it - \code{fall}, \code{miss}, \code{pcfall}, \code{pcmiss},
+\code{rpp}, \code{rnp} and \code{mutual_information} - and to its
+standard abbreviation where it has one.
+
+\code{roc_dist} and \code{sedi} can be added on the same footing.
+\code{roc_dist} is the distance from \verb{(1 - specificity, sensitivity)}
+to the perfect corner of ROC space, and is the one measure here that
+is better when it is smaller. \code{sedi} is the symmetric extremal
+dependence index, a skill score built to stay informative when the
+positive class is rare.
 
 They are not calculated by default because each is another vector the
 size of the dataset, and because \code{plot} and \code{autoplot} draw

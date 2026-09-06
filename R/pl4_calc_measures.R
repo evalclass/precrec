@@ -138,6 +138,16 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, beta = 1,
   # error rate, which is the check that the two agree.
   vals[["cost"]] <- (fn * cost_fn + fp * cost_fp) / n_all
 
+  # The distance from the point (1 - specificity, sensitivity) to the perfect
+  # corner of ROC space. It is the one measure in the table that is better
+  # when it is smaller, and the one whose maximum is sqrt(2) rather than 1,
+  # which is why its range is "free".
+  vals[["roc_dist"]] <- sqrt(
+    (1 - pb[["sensitivity"]])^2 + (1 - pb[["specificity"]])^2
+  )
+
+  vals[["sedi"]] <- .calc_sedi(pb[["sensitivity"]], vals[["fpr"]])
+
   if ("sar" %in% derived) {
     vals[["sar"]] <- .calc_sar(pb, cmats, tp, fp, tn, fn)
   }
@@ -223,6 +233,37 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, beta = 1,
   n <- length(x)
 
   sum(diff(x) * (y[-1] + y[-n]) / 2)
+}
+
+#
+# Symmetric extremal dependence index
+#
+# A skill score from forecast verification, built to stay informative for
+# rare events, where the hit rate and the false alarm rate both go to zero
+# and the usual scores degenerate with them:
+#
+#   SEDI = (log F - log H - log(1 - F) + log(1 - H))
+#          / (log F + log H + log(1 - F) + log(1 - H))
+#
+# with H the hit rate (sensitivity) and F the false alarm rate (FPR). It is
+# 0 for a classifier that does no better than chance, and 1 for a perfect
+# one. The denominator cannot vanish: each of the four factors is below 1 in
+# the open interval, so the sum of their logs is strictly negative.
+#
+# All four logs are undefined at 0 and at 1, which is exactly where both ends
+# of every dataset sit, so the rates are clamped away from the boundary
+# first. The clamp is the same 1e-9 yardstick uses, which is what makes the
+# two agree on the points either can evaluate.
+#
+.calc_sedi <- function(sn, fpr) {
+  eps <- 1e-9
+  clamp <- function(x) pmin(pmax(x, eps), 1 - eps)
+  h <- clamp(sn)
+  f <- clamp(fpr)
+
+  num <- log(f) - log(h) - log(1 - f) + log(1 - h)
+  den <- log(f) + log(h) + log(1 - f) + log(1 - h)
+  num / den
 }
 
 #

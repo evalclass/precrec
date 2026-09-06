@@ -125,10 +125,10 @@
 # apart when a measure is added.
 #
 # `default` is what an object holds when `evalmod()` is not told otherwise.
-# The measures added for ROCR parity are FALSE: turning them on by default
-# would take an existing caller from fourteen panels to twenty-two, and make
-# every `evalmod(mode = "basic")` call carry eight more vectors it was not
-# asked for. `evalmod(metrics = )` is how they are turned on.
+# The measures added for ROCR and yardstick parity are FALSE: turning them on
+# by default would take an existing caller from twelve panels to twenty-six,
+# and make every `evalmod(mode = "basic")` call carry fourteen more vectors it
+# was not asked for. `evalmod(metrics = )` is how they are turned on.
 #
 # `range` is the y axis a measure needs: "unit" for [0, 1], "signed" for
 # [-1, 1], and "free" for one that is unbounded above and has to be read off
@@ -142,12 +142,13 @@
       "informedness", "markedness", "kappa", "fpr", "fnr",
       "false_discovery_rate", "false_omission_rate",
       "predicted_positive_rate", "predicted_negative_rate", "lift", "odds",
-      "mi", "chisq", "cost", "sar"
+      "mi", "chisq", "cost", "sar", "roc_dist", "sedi"
     ),
     short = c(
       "score", "label", "err", "acc", "sp", "sn", "prec", "mcc", "fscore",
       "bacc", "npv", "infm", "mkd", "kappa", "fpr", "fnr", "fdr", "for",
-      "ppr", "pnr", "lift", "odds", "mi", "chisq", "cost", "sar"
+      "ppr", "pnr", "lift", "odds", "mi", "chisq", "cost", "sar",
+      "rocdist", "sedi"
     ),
     desc = c(
       "score", "label", "error rate", "accuracy", "specificity",
@@ -159,14 +160,16 @@
       "rate of negative predictions", "lift", "odds ratio",
       "mutual information (bits)", "chi-square statistic",
       "misclassification cost",
-      "mean of accuracy, AUC(ROC) and 1 - RMSE"
+      "mean of accuracy, AUC(ROC) and 1 - RMSE",
+      "distance to the perfect point in ROC space",
+      "symmetric extremal dependence index"
     ),
-    default = c(rep(TRUE, 14), rep(FALSE, 12)),
+    default = c(rep(TRUE, 14), rep(FALSE, 14)),
     range = c(
       "free", "signed", "unit", "unit", "unit", "unit", "unit", "signed",
       "unit", "unit", "unit", "signed", "signed", "signed", "unit", "unit",
       "unit", "unit", "unit", "unit", "free", "free", "unit", "free",
-      "free", "unit"
+      "free", "unit", "free", "signed"
     ),
     stringsAsFactors = FALSE
   )
@@ -298,7 +301,8 @@
   titles <- c(
     label = "Label (1:pos, -1:neg)", mcc = "MCC", npv = "NPV",
     fpr = "FPR", fnr = "FNR", odds = "Odds ratio",
-    mi = "Mutual information", chisq = "Chi-square", sar = "SAR"
+    mi = "Mutual information", chisq = "Chi-square", sar = "SAR",
+    roc_dist = "ROC distance", rocdist = "ROC distance", sedi = "SEDI"
   )
   if (curvetype %in% names(titles)) {
     return(unname(titles[curvetype]))

@@ -75,6 +75,40 @@ create_prc <- function(pevals, scores = NULL, labels = NULL, x_bins = 1000,
 }
 
 #
+# Average precision of a precision-recall curve
+#
+# AP = sum over i of (r_i - r_{i-1}) * p_i, the step estimator: the precision
+# at each cutoff weighted by the recall it gained over the one before. The
+# sum starts at the second point, so the precision of the empty prediction
+# set - which is 0/0, and which every tool defines differently - never enters
+# it. That is the whole reason the measure is defined this way.
+#
+# It is deliberately not the area under the curve. `create_prc_curve()`
+# interpolates between the raw points the way Davis and Goadrich showed is
+# correct, and `calc_auc()` integrates that; AP joins the raw points with
+# horizontal steps instead and so reads high wherever the two differ. It is
+# reported because other packages report it, and because the gap between the
+# two numbers is worth being able to see.
+#
+# Returns NA for a ROC curve: the measure is defined on precision against
+# recall, and `.create_curve()` builds both from the same code path.
+#
+.calc_average_precision <- function(pb, x_name, y_name) {
+  if (x_name != "sensitivity" || y_name != "precision") {
+    return(NA_real_)
+  }
+
+  rec <- pb[[x_name]]
+  prec <- pb[[y_name]]
+  n <- length(rec)
+  if (n < 2L) {
+    return(NA_real_)
+  }
+
+  sum((rec[2:n] - rec[1:(n - 1)]) * prec[2:n])
+}
+
+#
 # Create ROC or Precision-Recall curve
 #
 .create_curve <- function(x_name, y_name, func, func_name, class_name,
@@ -98,6 +132,11 @@ create_prc <- function(pevals, scores = NULL, labels = NULL, x_bins = 1000,
   )
   .check_cpp_func_error(crv, func_name)
 
+  # Average precision, on the raw per-cutoff points rather than on the
+  # interpolated curve below - that is what makes it a different estimator
+  # from the area under the curve, not just a different way of adding it up.
+  ap <- .calc_average_precision(pb, x_name, y_name)
+
   # Calculate AUC
   auc <- calc_auc(crv[["curve"]][["x"]], crv[["curve"]][["y"]])
   if (auc[["errmsg"]] == "invalid-x-vals") {
@@ -119,6 +158,7 @@ create_prc <- function(pevals, scores = NULL, labels = NULL, x_bins = 1000,
   attr(s3obj, "nn") <- attr(pevals, "nn")
   attr(s3obj, "np") <- attr(pevals, "np")
   attr(s3obj, "auc") <- auc[["auc"]]
+  attr(s3obj, "ap") <- ap
   attr(s3obj, "xlim") <- c(0, 1)
   attr(s3obj, "ylim") <- c(0, 1)
   attr(s3obj, "pauc") <- NA
@@ -170,6 +210,7 @@ create_prc <- function(pevals, scores = NULL, labels = NULL, x_bins = 1000,
     attr(s3obj, "nn") <- attr(fmdat, "nn")
     attr(s3obj, "np") <- attr(fmdat, "np")
     attr(s3obj, "auc") <- NA_real_
+    attr(s3obj, "ap") <- NA_real_
     attr(s3obj, "xlim") <- c(0, 1)
     attr(s3obj, "ylim") <- c(0, 1)
     attr(s3obj, "pauc") <- NA
@@ -240,7 +281,7 @@ create_prc <- function(pevals, scores = NULL, labels = NULL, x_bins = 1000,
   # Validate class items and attributes
   item_names <- c("x", "y", "orig_points")
   attr_names <- c(
-    "modname", "dsid", "nn", "np", "auc", "args",
+    "modname", "dsid", "nn", "np", "auc", "ap", "args",
     "cpp_errmsg1", "cpp_errmsg2", "src", "validated"
   )
   arg_names <- c(

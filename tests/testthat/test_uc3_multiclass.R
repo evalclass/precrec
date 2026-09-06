@@ -165,3 +165,75 @@ test_that("three classes without a score matrix are still an error", {
     "invalid-labels"
   )
 })
+
+# An unbalanced three-class dataset, so that the uniform and the
+# prevalence-weighted macro-averages are actually different numbers
+uc3_unbalanced <- function() {
+  set.seed(42)
+  labels <- c(rep("a", 10), rep("b", 30), rep("c", 60))
+  scores <- cbind(a = runif(100), b = runif(100), c = runif(100))
+  mmdata(scores, labels, multiclass = "ovr")
+}
+
+test_that("macro_weight = 'prevalence' weights the classes by their size", {
+  curves <- evalmod(uc3_unbalanced())
+
+  aucs <- auc(curves, macro_weight = "prevalence")
+  per_class <- aucs[aucs[["modnames"]] %in% c("a", "b", "c"), ]
+  weighted <- aucs[aucs[["modnames"]] == "macro-average-weighted", ]
+
+  for (ct in c("ROC", "PRC")) {
+    vals <- per_class[per_class[["curvetypes"]] == ct, "aucs"]
+    expect_equal(
+      weighted[weighted[["curvetypes"]] == ct, "aucs"],
+      sum(vals * c(10, 30, 60)) / 100
+    )
+  }
+})
+
+test_that("the two macro-averages differ when the classes are unbalanced", {
+  curves <- evalmod(uc3_unbalanced())
+
+  uniform <- auc(curves)
+  weighted <- auc(curves, macro_weight = "prevalence")
+
+  u <- uniform[uniform[["modnames"]] == "macro-average", "aucs"]
+  w <- weighted[weighted[["modnames"]] == "macro-average-weighted", "aucs"]
+
+  expect_equal(length(u), 2)
+  expect_equal(length(w), 2)
+  expect_false(isTRUE(all.equal(u, w)))
+})
+
+test_that("the two macro-averages agree when the classes are balanced", {
+  curves <- evalmod(uc3_mdat())
+
+  uniform <- auc(curves)
+  weighted <- auc(curves, macro_weight = "prevalence")
+
+  expect_equal(
+    uniform[uniform[["modnames"]] == "macro-average", "aucs"],
+    weighted[weighted[["modnames"]] == "macro-average-weighted", "aucs"]
+  )
+
+  # Only the label of the added rows changes
+  expect_equal(
+    uniform[uniform[["modnames"]] != "macro-average", ],
+    weighted[weighted[["modnames"]] != "macro-average-weighted", ]
+  )
+})
+
+test_that("macro_weight is left alone when macro = FALSE", {
+  curves <- evalmod(uc3_unbalanced())
+
+  expect_equal(
+    auc(curves, macro = FALSE),
+    auc(curves, macro = FALSE, macro_weight = "prevalence")
+  )
+})
+
+test_that("auc() rejects an unknown macro_weight", {
+  curves <- evalmod(uc3_mdat())
+
+  expect_error(auc(curves, macro_weight = "median"))
+})

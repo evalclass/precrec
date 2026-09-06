@@ -751,3 +751,91 @@ test_that("the AUC of a dataset with one class is NA inside sar", {
     .roc_auc_from_counts(cmats[["tp"]], cmats[["fp"]], cmats)
   ))
 })
+
+test_that("roc_dist is the distance to the perfect point in ROC space", {
+  scores <- c(0.9, 0.8, 0.7, 0.6, 0.5, 0.4)
+  labels <- c(1, 1, 0, 1, 0, 0)
+  pb <- calc_measures(
+    scores = scores, labels = labels,
+    metrics = .resolve_metrics("roc_dist")
+  )[["basic"]]
+
+  expect_equal(
+    pb[["roc_dist"]],
+    sqrt((1 - pb[["sensitivity"]])^2 + (1 - pb[["specificity"]])^2)
+  )
+})
+
+test_that("roc_dist is 0 at a perfect cutoff and sqrt(2) at the worst", {
+  # A perfectly separable dataset passes through sensitivity 1 and
+  # specificity 1, and both of its ends predict one class for everything
+  pb <- calc_measures(
+    scores = c(0.9, 0.8, 0.2, 0.1), labels = c(1, 1, 0, 0),
+    metrics = .resolve_metrics("roc_dist")
+  )[["basic"]]
+
+  expect_equal(min(pb[["roc_dist"]]), 0)
+  expect_equal(pb[["roc_dist"]][1], 1)
+  expect_equal(pb[["roc_dist"]][length(pb[["roc_dist"]])], 1)
+
+  # The worst point of ROC space is every negative ranked above every
+  # positive, where sensitivity and specificity are both 0
+  rev_pb <- calc_measures(
+    scores = c(0.9, 0.8, 0.2, 0.1), labels = c(0, 0, 1, 1),
+    metrics = .resolve_metrics("roc_dist")
+  )[["basic"]]
+
+  expect_equal(max(rev_pb[["roc_dist"]]), sqrt(2))
+})
+
+test_that("sedi matches its definition", {
+  scores <- c(0.9, 0.8, 0.7, 0.6, 0.5, 0.4)
+  labels <- c(1, 1, 0, 1, 0, 0)
+  pb <- calc_measures(
+    scores = scores, labels = labels,
+    metrics = .resolve_metrics("sedi")
+  )[["basic"]]
+
+  eps <- 1e-9
+  clamp <- function(x) pmin(pmax(x, eps), 1 - eps)
+  h <- clamp(pb[["sensitivity"]])
+  f <- clamp(1 - pb[["specificity"]])
+  expected <- (log(f) - log(h) - log(1 - f) + log(1 - h)) /
+    (log(f) + log(h) + log(1 - f) + log(1 - h))
+
+  expect_equal(pb[["sedi"]], expected)
+})
+
+test_that("sedi is 0 where the hit rate equals the false alarm rate", {
+  pb <- calc_measures(
+    scores = c(0.9, 0.8, 0.7, 0.6), labels = c(1, 0, 1, 0),
+    metrics = .resolve_metrics("sedi")
+  )[["basic"]]
+
+  chance <- abs(pb[["sensitivity"]] - (1 - pb[["specificity"]])) < 1e-12
+  expect_true(any(chance))
+  expect_equal(pb[["sedi"]][chance], rep(0, sum(chance)))
+})
+
+test_that("sedi stays finite at both ends of every dataset", {
+  # Both ends predict one class for everything, so all four logs in the
+  # definition are taken at 0 or 1 and only the clamp keeps them finite
+  pb <- calc_measures(
+    scores = c(0.9, 0.8, 0.7, 0.6, 0.5), labels = c(1, 1, 0, 1, 0),
+    metrics = .resolve_metrics("sedi")
+  )[["basic"]]
+
+  expect_true(all(is.finite(pb[["sedi"]])))
+  expect_true(all(pb[["sedi"]] >= -1 & pb[["sedi"]] <= 1))
+})
+
+test_that("a perfect classifier reaches sedi 1 and roc_dist 0 together", {
+  pb <- calc_measures(
+    scores = c(0.9, 0.8, 0.2, 0.1), labels = c(1, 1, 0, 0),
+    metrics = .resolve_metrics(c("sedi", "roc_dist"))
+  )[["basic"]]
+
+  best <- which.min(pb[["roc_dist"]])
+  expect_equal(pb[["roc_dist"]][best], 0)
+  expect_equal(pb[["sedi"]][best], 1, tolerance = 1e-6)
+})
