@@ -18,11 +18,11 @@ the same lengths.}
 }
 \value{
 The \code{join_scores} function returns a list that
-  contains all combined score data.
+contains all combined score data.
 }
 \description{
 The \code{join_scores} function takes predicted scores from multiple models
-  and converts them to a list.
+and converts them to a list.
 }
 \examples{
 
@@ -70,7 +70,7 @@ str(scores4)
 
 }
 \seealso{
-\code{\link{evalmod}} for calculation evaluation measures.
-  \code{\link{mmdata}} for formatting input data.
-  \code{\link{join_labels}} for formatting labels with multiple datasets.
+\code{\link[=evalmod]{evalmod()}} for calculation evaluation measures.
+\code{\link[=mmdata]{mmdata()}} for formatting input data.
+\code{\link[=join_labels]{join_labels()}} for formatting labels with multiple datasets.
 }

@@ -10,15 +10,18 @@ print.mdat <- function(x, ...) {
   cat("\n")
   cat("    === Input data ===\n\n")
 
-  data_info <- attr(x, "data_info")
+  data_info <- .as_plain_df(attr(x, "data_info"), copy = TRUE)
   rownames(data_info) <- format(rownames(data_info),
     width = 4,
     justify = "right"
   )
-  colnames(data_info) <- c(
-    "Model name", "Dataset ID", "# of negatives",
-    "# of positives"
+  # By lookup rather than by position: a multiclass object carries a class
+  # column that binary input does not have
+  col_labels <- c(
+    modnames = "Model name", dsids = "Dataset ID", classes = "Class",
+    nn = "# of negatives", np = "# of positives"
   )
+  colnames(data_info) <- unname(col_labels[colnames(data_info)])
 
   print.data.frame(data_info, print.gap = 1)
 
@@ -38,7 +41,7 @@ print.curve_info <- function(x, ...) {
   cat("    === AUCs ===\n")
   cat("\n")
 
-  aucs <- attr(x, "aucs")
+  aucs <- .as_plain_df(attr(x, "aucs"), copy = TRUE)
   rownames(aucs) <- format(rownames(aucs), width = 4, justify = "right")
   colnames(aucs) <- c("Model name", "Dataset ID", "Curve type", "AUC")
 
@@ -48,7 +51,7 @@ print.curve_info <- function(x, ...) {
   if (attr(x, "partial")) {
     cat("\n")
 
-    paucs <- attr(x, "paucs")
+    paucs <- .as_plain_df(attr(x, "paucs"), copy = TRUE)
     rownames(paucs) <- format(rownames(paucs), width = 4, justify = "right")
     if (ncol(paucs) == 4) {
       cat("    === partial AUCs (average curves only) ===\n")
@@ -70,6 +73,20 @@ print.curve_info <- function(x, ...) {
 }
 
 #
+# The short name and the description of each measure, one line each
+#
+# The normalized rank is not a measure and has no row in the table, but it is
+# a row of the summary below, so it heads the list.
+#
+.metric_legend <- function(metrics) {
+  tab <- .basic_metric_table()
+  tab <- tab[match(metrics, tab$name), ]
+  short <- c("rank", tab$short)
+  desc <- c("normalized rank", tab$desc)
+  paste0("      ", formatC(paste0(short, ":"), width = -7), " ", desc, "\n")
+}
+
+#
 # Print the summary of basic performance evaluation measures
 #
 #' @export
@@ -81,19 +98,11 @@ print.beval_info <- function(x, ...) {
   cat("\n")
   cat("    === Basic performance evaluation measures ===\n\n")
   cat("     ## Performance measures (Meas.)\n")
-  cat("      rank:   normalized rank\n")
-  cat("      score:  score\n")
-  cat("      label:  label\n")
-  cat("      err:    error rate\n")
-  cat("      acc:    accuracy\n")
-  cat("      sp:     specificity\n")
-  cat("      sn:     sensitivity\n")
-  cat("      prec:   precision\n")
-  cat("      mcc:    Matthews correlation coefficient\n")
-  cat("      fscore: F-score\n")
+  # Only the measures this object holds - `evalmod(metrics = )` decides that
+  cat(.metric_legend(.get_obj_metrics(x)), sep = "")
   cat("\n\n")
 
-  eval_summary <- attr(x, "eval_summary")
+  eval_summary <- .as_plain_df(attr(x, "eval_summary"), copy = TRUE)
   rownames(eval_summary) <- format(rownames(eval_summary),
     width = 4,
     justify = "right"
@@ -102,10 +111,7 @@ print.beval_info <- function(x, ...) {
     "Model", "ID", "Meas.", "Min.",
     "1st Qu.", "Median", "Mean", "3rd Qu.", "Max."
   )
-  evaltypes <- c(
-    "rank", "score", "label", "err", "acc", "sp", "sn", "prec",
-    "mcc", "fscore"
-  )
+  evaltypes <- c("rank", unname(.basic_metric_names(.get_obj_metrics(x))))
   eval_summary[, "Meas."] <- evaltypes
 
   print.data.frame(eval_summary, print.gap = 1)
@@ -126,7 +132,7 @@ print.aucroc <- function(x, ...) {
   cat("\n")
   cat("    === Input data ===\n\n")
 
-  data_info <- attr(x, "data_info")
+  data_info <- .as_plain_df(attr(x, "data_info"), copy = TRUE)
   rownames(data_info) <- format(rownames(data_info),
     width = 4,
     justify = "right"
@@ -148,4 +154,44 @@ print.aucroc <- function(x, ...) {
 
   print.data.frame(aucs, print.gap = 1)
   cat("\n")
+}
+
+#
+# Print the summary of an object of metric_curve()
+#
+#' @export
+print.xycurve_info <- function(x, ...) {
+  # === Validate input arguments ===
+  .validate(x)
+
+  # === print ===
+  cat("\n")
+  cat("    === ", .xycurve_title_label(x), " ===\n\n", sep = "")
+
+  curve <- attr(x, "curve")
+  if (is.na(curve)) {
+    cat("     The points of this pair are not joined by a line.\n")
+    cat("     No interpolation is defined between them; see\n")
+    cat("     ?metric_curve for the pairs that have one.\n")
+  } else {
+    cat("     A registered pair: this is the ", curve, " curve, and is\n",
+      sep = ""
+    )
+    cat("     calculated by the same code as evalmod(mode = \"rocprc\").\n")
+  }
+  cat("\n")
+
+  npoints <- .map_int(x[["xy"]], function(cv) length(cv[["x"]]))
+  summ <- data.frame(
+    modnames = attr(x, "data_info")[["modnames"]],
+    dsids = attr(x, "data_info")[["dsids"]],
+    npoints = npoints
+  )
+  rownames(summ) <- format(rownames(summ), width = 4, justify = "right")
+  colnames(summ) <- c("Model name", "Dataset ID", "# of points")
+
+  print.data.frame(summ, print.gap = 1)
+  cat("\n")
+
+  print.mdat(x)
 }

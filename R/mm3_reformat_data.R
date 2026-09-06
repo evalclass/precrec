@@ -176,21 +176,21 @@ reformat_data <- function(scores, labels,
   }
 
   # Labels
-  assertthat::assert_that(
+  .assert_internal(
     is.atomic(x[["labels"]]),
     is.vector(x[["labels"]]),
     is.numeric(x[["labels"]])
   )
 
   # Ranks
-  assertthat::assert_that(
+  .assert_internal(
     is.atomic(x[["ranks"]]),
     is.vector(x[["ranks"]]),
     is.numeric(x[["ranks"]])
   )
 
   # Rank index
-  assertthat::assert_that(
+  .assert_internal(
     is.atomic(x[["rank_idx"]]),
     is.vector(x[["rank_idx"]]),
     is.integer(x[["rank_idx"]])
@@ -225,7 +225,7 @@ reformat_data <- function(scores, labels,
   }
 
   # Labels
-  assertthat::assert_that(
+  .assert_internal(
     is.atomic(x[["labels"]]),
     is.vector(x[["labels"]]),
     is.numeric(x[["labels"]])

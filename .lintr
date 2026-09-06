@@ -1,0 +1,24 @@
+# Formatting is owned by styler (tidyverse style), so indentation_linter is
+# off: it disagrees with styler on multi-line calls.
+# object_name_linter is off because the S3 method scheme is `.validate.<class>`
+# and the exported datasets are upper case (B500, M2N50F5, ...).
+linters: linters_with_defaults(
+    line_length_linter(80),
+    indentation_linter = NULL,
+    object_name_linter = NULL,
+    object_length_linter = NULL
+  )
+exclusions: list(
+    "R/RcppExports.R",
+    "R/precrec.R" = list(line_length_linter = Inf),
+    "tests/testthat.R",
+    "tests/spelling.R",
+    "tests/testthat" = list(
+      commented_code_linter = Inf,
+      object_usage_linter = Inf
+    ),
+    "bench" = list(
+      object_usage_linter = Inf
+    )
+  )
+encoding: "UTF-8"

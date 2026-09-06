@@ -1,0 +1,8 @@
+plot: 1 panel(s)
+  panel 1
+    title: Precision
+    x: normalized rank
+    y: precision
+    layer 1: GeomLine  n=15  groups=3  n_na_y=0
+      x: min=0 max=1 mean=0.5 | 0 0.5 0.75 0 0.5 1 0.25 0.5 1
+      y: min=0.5 max=1 mean=0.8722 | 1 1 0.6667 1 1 0.75 1 0.5 0.75

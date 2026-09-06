@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("PA 1: Calculate partial AUC")
+# PA 1: Calculate partial AUC
 # Test part(x, xlim = c(0, 1), ylim = c(0, 1), curvetype, ...)
 
 pa_create_msdat <- function() {
@@ -68,11 +66,24 @@ test_that("xlim", {
   expect_silent(part(curves, xlim = c(0.25, 1)))
   expect_silent(part(curves, xlim = c(0, 0.75)))
   expect_silent(part(curves, xlim = c(0.25, 0.75)))
-  expect_error(part(curves, xlim = 0.25), "not equal to 2L")
-  expect_error(part(curves, xlim = c("0.25", "0.75")), "numeric or integer")
-  expect_error(part(curves, xlim = c(0.75, 0.25)), "not less than")
-  expect_error(part(curves, xlim = c(-0.75, 0.25)), "greater than or equal")
-  expect_error(part(curves, xlim = c(0.75, 1.25)), "less than or equal")
+  err_cls <- "precrec_error_invalid_xlim"
+  expect_error(part(curves, xlim = 0.25), "length 2", class = err_cls)
+  expect_error(
+    part(curves, xlim = c("0.25", "0.75")), "numeric vector",
+    class = err_cls
+  )
+  expect_error(
+    part(curves, xlim = c(0.75, 0.25)), "increasing",
+    class = err_cls
+  )
+  expect_error(
+    part(curves, xlim = c(-0.75, 0.25)), "between 0 and 1",
+    class = err_cls
+  )
+  expect_error(
+    part(curves, xlim = c(0.75, 1.25)), "between 0 and 1",
+    class = err_cls
+  )
 })
 
 test_that("ylim", {
@@ -83,11 +94,24 @@ test_that("ylim", {
   expect_silent(part(curves, ylim = c(0.25, 1)))
   expect_silent(part(curves, ylim = c(0, 0.75)))
   expect_silent(part(curves, ylim = c(0.25, 0.75)))
-  expect_error(part(curves, ylim = 0.25), "not equal to 2L")
-  expect_error(part(curves, ylim = c("0.25", "0.75")), "numeric or integer")
-  expect_error(part(curves, ylim = c(0.75, 0.25)), "not less than")
-  expect_error(part(curves, ylim = c(-0.75, 0.25)), "greater than or equal")
-  expect_error(part(curves, ylim = c(0.75, 1.25)), "less than or equal")
+  err_cls <- "precrec_error_invalid_ylim"
+  expect_error(part(curves, ylim = 0.25), "length 2", class = err_cls)
+  expect_error(
+    part(curves, ylim = c("0.25", "0.75")), "numeric vector",
+    class = err_cls
+  )
+  expect_error(
+    part(curves, ylim = c(0.75, 0.25)), "increasing",
+    class = err_cls
+  )
+  expect_error(
+    part(curves, ylim = c(-0.75, 0.25)), "between 0 and 1",
+    class = err_cls
+  )
+  expect_error(
+    part(curves, ylim = c(0.75, 1.25)), "between 0 and 1",
+    class = err_cls
+  )
 })
 
 pa_test_curves_basic <- function(curves) {

@@ -1,33 +1,34 @@
-## Version 0.14.5
+## Version 0.16.0
 
-This is a submission for updating the already published package - precrec. In this version I have:
+An update of the published package `precrec` (0.14.5 -> 0.16.0). 0.15.0 was
+prepared but not submitted, so this release carries both sets of changes.
 
-- Restructured unit tests for svg comparisons with vdiff
+- Support datasets with more than two classes by one-vs-rest decomposition
+- Add the evaluation measures `ROCR` provides, opt-in through
+  `evalmod(metrics = )`, plus confusion-matrix measures, F-beta, and
+  probability-based metrics
+- Add one new dependency, `checkmate`, for the argument checks
+- Add `metric_curve()`, which draws one evaluation measure against another
+- Add `prbe()`, the precision-recall break-even point
+- Handle single-class datasets with a warning instead of an error
+- Fix the ranking of `NA` scores, the panel titles of `autoplot()`, and the
+  y axis of `plot()` for the measures that can go negative
+- Raise the R dependency to >= 4.1, and modernize the tests and internals
 
-- Reformatted signatures of S3 methods, and
-
-- Updated the version.
-
-    -   0.14.4 -> 0.14.5
+`NEWS.md` has the full list.
 
 ## Test environments
 
--   local Ubuntu 22.04.1, R 4.5.0
-
--   local MacBook Pro Ventura 13.7.6, R 4.5.0
-
--   win-builder, R Under development (unstable) (2025-05-13 r88200 ucrt)
-
--   GitHub Actions
-
-    -   macOS-latest (release)
-    -   windows-latest (release)
-    -   ubuntu-latest (devel)
-    -   ubuntu-latest (release)
-    -   ubuntu-latest (oldrel-1)
+- local Ubuntu 22.04 and macOS, R release
+- win-builder, R devel
+- GitHub Actions
+    - macOS-latest (release)
+    - windows-latest (release)
+    - ubuntu-latest (devel, release, oldrel-1)
 
 ## R CMD check results
 
--   **NOTE** from **all Ubuntu** test environments.
+0 errors | 0 warnings | 1 note
 
-    -   sub-directories of 1Mb or more (it occurs because the size of `precrec.so` is over 4 MB)
+- **NOTE** on Linux: sub-directories of 1Mb or more, because `precrec.so` is
+  over 4 MB.

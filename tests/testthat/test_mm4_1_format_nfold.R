@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("MM 4: Format n-fold cross validation data frame")
+# MM 4: Format n-fold cross validation data frame
 # Test format_nfold(nfold_df, score_cols, lab_col, fold_col)
 
 test_that("format_nfold() converts a data frame to a list", {
@@ -43,31 +41,36 @@ test_that("'nfold_df' should be a data frame", {
 test_that("'score_cols' should be valid column names", {
   data(M2N50F5)
   expect_err_msg <- function(err_msg, score_cols) {
-    expect_error(format_nfold(M2N50F5, score_cols, 3, 4), err_msg)
+    expect_error(
+      format_nfold(M2N50F5, score_cols, 3, 4), err_msg,
+      class = "precrec_error_invalid_score_cols"
+    )
   }
 
-  err_msg <- "score_cols is not a numeric or integer vector"
+  err_msg <- "numeric or character vector"
   expect_err_msg(err_msg, NA)
   expect_err_msg(err_msg, TRUE)
 
-  err_msg <- "Invalid score_cols"
-  expect_err_msg(err_msg, "c")
-  expect_err_msg(err_msg, 5)
+  expect_err_msg("must name columns", "c")
+  expect_err_msg("must index columns", 5)
 
-  expect_err_msg(err_msg, c("score1", "score3"))
-  expect_err_msg(err_msg, c(1, 5))
+  expect_err_msg("must name columns", c("score1", "score3"))
+  expect_err_msg("must index columns", c(1, 5))
 
-  expect_err_msg(err_msg, c("score1", "score2", "score3"))
-  expect_err_msg(err_msg, c(1, 2, 5))
+  expect_err_msg("must name columns", c("score1", "score2", "score3"))
+  expect_err_msg("must index columns", c(1, 2, 5))
 })
 
 test_that("'lab_col' should be a valid column name", {
   data(M2N50F5)
   expect_err_msg <- function(err_msg, lab_col) {
-    expect_error(format_nfold(M2N50F5, 1, lab_col, 4), err_msg)
+    expect_error(
+      format_nfold(M2N50F5, 1, lab_col, 4), err_msg,
+      class = "precrec_error_invalid_lab_col"
+    )
   }
 
-  err_msg <- "lab_col is not a number"
+  err_msg <- "single column position or name"
   expect_err_msg(err_msg, NA)
   expect_err_msg(err_msg, TRUE)
   expect_err_msg(err_msg, c("label", "label2"))
@@ -75,18 +78,20 @@ test_that("'lab_col' should be a valid column name", {
   expect_err_msg(err_msg, c("label", "label", "label2"))
   expect_err_msg(err_msg, c(1, 2, 5))
 
-  err_msg <- "Invalid lab_col"
-  expect_err_msg(err_msg, "c")
-  expect_err_msg(err_msg, 5)
+  expect_err_msg("must name a column", "c")
+  expect_err_msg("must index a column", 5)
 })
 
 test_that("'fold_col' should be a valid column name", {
   data(M2N50F5)
   expect_err_msg <- function(err_msg, fold_col) {
-    expect_error(format_nfold(M2N50F5, 1, 3, fold_col), err_msg)
+    expect_error(
+      format_nfold(M2N50F5, 1, 3, fold_col), err_msg,
+      class = "precrec_error_invalid_fold_col"
+    )
   }
 
-  err_msg <- "fold_col is not a number"
+  err_msg <- "single column position or name"
   expect_err_msg(err_msg, NA)
   expect_err_msg(err_msg, TRUE)
   expect_err_msg(err_msg, c("fold", "fold2"))
@@ -94,9 +99,8 @@ test_that("'fold_col' should be a valid column name", {
   expect_err_msg(err_msg, c("fold", "fold", "fold2"))
   expect_err_msg(err_msg, c(1, 2, 5))
 
-  err_msg <- "Invalid fold_col"
-  expect_err_msg(err_msg, "c")
-  expect_err_msg(err_msg, 5)
+  expect_err_msg("must name a column", "c")
+  expect_err_msg("must index a column", 5)
 })
 
 test_that("format_nfold() correctly converts M2N50F5", {

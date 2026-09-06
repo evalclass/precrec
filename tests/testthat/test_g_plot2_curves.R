@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("PT 1: Plot curves")
+# PT 1: Plot curves
 # Test plot(x, y, ...)
 
 pt2_create_mscurves <- function() {

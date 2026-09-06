@@ -39,7 +39,7 @@ calc_avg_basic <- function(epoints, modnames, uniq_modnames, cb_alpha) {
   ffunc <- function(mname) {
     obj[modnames == mname]
   }
-  obj_by_model <- lapply(uniq_modnames, ffunc)
+  obj_by_model <- .map(uniq_modnames, ffunc)
 
   # Calculate averages and confidence bounds
   vfunc <- function(i) {
@@ -52,7 +52,7 @@ calc_avg_basic <- function(epoints, modnames, uniq_modnames, cb_alpha) {
     }
     avgs[["avg"]]
   }
-  lavgs <- lapply(seq_along(obj_by_model), vfunc)
+  lavgs <- .map_idx(obj_by_model, vfunc)
 
   # === Create an S3 object ===
   s3obj <- structure(lavgs, class = class_name)

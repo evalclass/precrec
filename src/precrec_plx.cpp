@@ -3,6 +3,8 @@
 #include <vector>
 #include <cmath>
 #include <string>
+#include <limits>
+#include <algorithm>
 #include "precrec_misc.h"
 
 /*
@@ -151,11 +153,14 @@ Rcpp::List calc_uauc(unsigned np, unsigned nn,
   const double nn_dbl = static_cast<const double>(nn);
 
   // Determin NA values
+  // The sentinel must sort below (na_worst) or above (!na_worst) every real
+  // score. DBL_MIN is the smallest *positive* double, so it would rank NAs
+  // above every negative score; lowest() is the most negative one.
   double na_val;
   if (na_worst) {
-    na_val = DBL_MIN;
+    na_val = std::numeric_limits<double>::lowest();
   } else {
-    na_val = DBL_MAX;
+    na_val = std::numeric_limits<double>::max();
   }
 
   // Create pos and neg vectors
@@ -283,7 +288,9 @@ Rcpp::List calc_basic_measures(int np,
                                const Rcpp::NumericVector& tps,
                                const Rcpp::NumericVector& fps,
                                const Rcpp::NumericVector& tns,
-                               const Rcpp::NumericVector& fns) {
+                               const Rcpp::NumericVector& fns,
+                               double beta = 1.0,
+                               bool extra_measures = true) {
   // Variables
   Rcpp::List ret_val;
   Rcpp::DataFrame df;
@@ -297,7 +304,17 @@ Rcpp::List calc_basic_measures(int np,
   std::vector<double> prec(n);      // Precision
   std::vector<double> mcc(n);       // Matthews correlation coefficient
   double tpfp, tpfn, tnfp, tnfn;    // For mcc calculation
-  std::vector<double> fscore(n);    // F1Score
+  std::vector<double> fscore(n);    // F-score
+
+  // The curve pipeline reads specificity, sensitivity and precision and
+  // nothing else, so it asks for the measures below to be left out rather
+  // than filling five more vectors the length of the input for nobody
+  const unsigned n_extra = extra_measures ? n : 0;
+  std::vector<double> bacc(n_extra);   // Balanced accuracy
+  std::vector<double> npv(n_extra);    // Negative predictive value
+  std::vector<double> infm(n_extra);   // Informedness (Youden's J)
+  std::vector<double> mkd(n_extra);    // Markedness
+  std::vector<double> kappa(n_extra);  // Cohen's kappa
 
   // Vector size must be >1
   if (n < 2) {
@@ -306,24 +323,46 @@ Rcpp::List calc_basic_measures(int np,
     return ret_val;
   }
 
+  // Loop-invariant, so lifted out. These stay divisions on purpose:
+  // multiplying by a precomputed reciprocal would move every published
+  // measure by an ulp, and the loop is dominated by a sqrt and eight
+  // stores rather than by three divides.
+  const double d_ranks = static_cast<double>(n - 1);
+  const double d_all = static_cast<double>(np) + static_cast<double>(nn);
+  const double d_nn = static_cast<double>(nn);
+  const double d_np = static_cast<double>(np);
+  const bool no_nn = (nn == 0);
+  const bool no_np = (np == 0);
+
+  // F-beta weights recall beta^2 times as heavily as precision; beta == 1
+  // gives back the F1 score this used to compute unconditionally.
+  const double beta2 = beta * beta;
+  const double beta2_1 = 1.0 + beta2;
+
   // Calculate evaluation measures for ranks
   // n should be >1
   for (unsigned i = 0; i < n; ++i) {
-    rank[i] = i / static_cast<double>(n - 1);
-    errrate[i] = (fps[i] + fns[i]) / (np + nn);
+    rank[i] = i / d_ranks;
+    errrate[i] = (fps[i] + fns[i]) / d_all;
     acc[i] = 1 - errrate[i];
-    if (nn == 0) {
+    if (no_nn) {
       sp[i] = ::NA_REAL;
     } else {
-      sp[i] = tns[i] / nn;
+      sp[i] = tns[i] / d_nn;
     }
-    if (np == 0) {
+    if (no_np) {
       sn[i] = ::NA_REAL;
     } else {
-      sn[i] = tps[i] / np;
+      sn[i] = tps[i] / d_np;
     }
-    if (i > 0) {
-      prec[i] = tps[i] / (tps[i] + fps[i]);
+    if (extra_measures) {
+      if (no_nn || no_np) {
+        bacc[i] = ::NA_REAL;
+        infm[i] = ::NA_REAL;
+      } else {
+        bacc[i] = (sn[i] + sp[i]) / 2;
+        infm[i] = sn[i] + sp[i] - 1;
+      }
     }
 
     tpfp = tps[i] + fps[i];
@@ -331,17 +370,48 @@ Rcpp::List calc_basic_measures(int np,
     tnfp = tns[i] + fps[i];
     tnfn = tns[i] + fns[i];
 
+    // Nothing is predicted positive at the first rank and nothing is
+    // predicted negative at the last one, so precision and NPV each have one
+    // undefined end. Both are filled in from their neighbour below.
+    if (i > 0) {
+      prec[i] = tps[i] / tpfp;
+    }
+    if (extra_measures && i + 1 < n) {
+      npv[i] = tns[i] / tnfn;
+    }
+
     if (tpfp == 0 || tpfn == 0 || tnfp == 0 || tnfn == 0) {
       mcc[i] = ::NA_REAL;
     } else {
       mcc[i] = ((tps[i] * tns[i]) - (fps[i] * fns[i]))
       / ::sqrt(tpfp * tpfn * tnfp * tnfn);
     }
-    fscore[i] = (2 * tps[i]) / (2 * tps[i] + fps[i] + fns[i]);
+    fscore[i] = (beta2_1 * tps[i])
+      / (beta2_1 * tps[i] + beta2 * fns[i] + fps[i]);
+
+    if (extra_measures) {
+      // Cohen's kappa: observed agreement against the agreement two raters
+      // with these margins would reach by chance
+      const double pe = ((tpfp * tpfn) + (tnfn * tnfp)) / (d_all * d_all);
+      if (pe == 1) {
+        kappa[i] = ::NA_REAL;
+      } else {
+        kappa[i] = (acc[i] - pe) / (1 - pe);
+      }
+
+      mkd[i] = prec[i] + npv[i] - 1;
+    }
   }
 
   // Update the precision value of the highest rank
   prec[0] = prec[1];
+  if (extra_measures) {
+    // The NPV of the lowest rank is undefined in the same way, and the two
+    // markedness values built from the two patched cells follow
+    npv[n - 1] = npv[n - 2];
+    mkd[0] = prec[0] + npv[0] - 1;
+    mkd[n - 1] = prec[n - 1] + npv[n - 1] - 1;
+  }
 
   // Return a list with P, N, and basic evaluation measures
   df["rank"] = rank;
@@ -352,6 +422,13 @@ Rcpp::List calc_basic_measures(int np,
   df["precision"] = prec;
   df["mcc"] = mcc;
   df["fscore"] = fscore;
+  if (extra_measures) {
+    df["balanced_accuracy"] = bacc;
+    df["npv"] = npv;
+    df["informedness"] = infm;
+    df["markedness"] = mkd;
+    df["kappa"] = kappa;
+  }
 
   ret_val["basic"] = df;
   ret_val["errmsg"] = errmsg;
@@ -678,26 +755,26 @@ Rcpp::List calc_avg_curve(const Rcpp::List& curves,
   std::vector<double> se_y(vec_size);          // SE
   std::vector<double> ci_h_y(vec_size);        // CI upper bound
   std::vector<double> ci_l_y(vec_size);        // CI lower bound
-  std::vector<double> tot_y(vec_size, 0.0);    // Total of ys
-  std::vector<double> stot_y(vec_size, 0.0);   // Total of squared ys
+  std::vector<double> mean_y(vec_size, 0.0);   // Running mean of ys
+  std::vector<double> m2_y(vec_size, 0.0);     // Running sum of squared devs
   std::vector<double> s_y_val(vec_size, 0.0);  // x values of a single curve
 
-  // Calculate total
+  // Accumulate mean and variance with Welford's online algorithm
   for (unsigned i = 0; i < n; ++i) {
     Rcpp::List c = Rcpp::as<Rcpp::List>(curves[i]);
 
     get_yval_single(c["x"], c["y"], x_interval, x_bins, vec_size, s_y_val);
 
     for (unsigned j = 0; j < vec_size; ++j) {
-      tot_y[j] += s_y_val[j];
-      stot_y[j] += (s_y_val[j] * s_y_val[j]);
+      const double delta = s_y_val[j] - mean_y[j];
+      mean_y[j] += delta / static_cast<double>(i + 1);
+      m2_y[j] += delta * (s_y_val[j] - mean_y[j]);
     }
     s_y_val.clear();
     s_y_val.resize(vec_size, 0.0);
   }
 
   // Calculate average & CI
-  double exp2;
   double sd;
   for (unsigned i = 0; i < vec_size; ++i) {
     // x
@@ -710,14 +787,10 @@ Rcpp::List calc_avg_curve(const Rcpp::List& curves,
     }
 
     // y
-    avg_y[i] = tot_y[i] / double(n);
+    avg_y[i] = mean_y[i];
 
     // se
-    exp2 = (stot_y[i] / double(n)) - (avg_y[i] * avg_y[i]);
-    if (exp2 < 0){
-      exp2 = 0;
-    }
-    sd =  ::sqrt(double(n) / double(n - 1)) * ::sqrt(exp2);
+    sd = ::sqrt(m2_y[i] / (double(n) - 1.0));
     se_y[i] = sd / ::sqrt(double(n));
 
     // ci upper bound
@@ -747,7 +820,6 @@ void get_yval_single(const Rcpp::NumericVector& xs,
                      std::vector<double>& s_y_val) {
   std::vector<double> y_tot(vec_size, 0.0); // Total of ys
   std::vector<int> n_y(vec_size, 0);        // Number of each point
-  std::set<double> x_set;
   unsigned idx;
   double rounded_xval;
 
@@ -807,13 +879,6 @@ void get_yval_single(const Rcpp::NumericVector& xs,
   }
 }
 
-#include <Rcpp.h>
-#include <cmath>
-#include <vector>
-#include <set>
-#include <map>
-#include <string>
-
 /*
 ##############################################
  Name: calc_avg_points
@@ -832,81 +897,76 @@ Rcpp::List calc_avg_points(const Rcpp::List& points, double ci_q) {
   Rcpp::DataFrame df;
   std::string errmsg = "";
 
-  std::set<double> all_x_vals;       // all x values
-  std::map<double, int> x_vals_idx;  // map x values to indices
+  const unsigned n_curves = static_cast<unsigned>(points.size());
 
-  std::vector<double> x_val;         // x values
-  std::vector<double> avg_y;         // Average
-  std::vector<double> se_y;          // SE
-  std::vector<double> ci_h_y;        // CI upper bound
-  std::vector<double> ci_l_y;        // CI lower bound
-
-  std::vector<double> tot_y;         // Total of ys
-  std::vector<int> count_y;          // Count of ys
-  std::vector<double> stot_y;        // Total of squared ys
-
-  // Create all unique x values
-  for (unsigned i = 0; i < static_cast<unsigned>(points.size()); ++i) {
+  // Collect every x value of every dataset
+  unsigned n_all_x = 0;
+  for (unsigned i = 0; i < n_curves; ++i) {
     Rcpp::List c = Rcpp::as<Rcpp::List>(points[i]);
     Rcpp::NumericVector xs = c["x"];
-
-    for (unsigned j = 0; j < static_cast<unsigned>(xs.size()); ++j) {
-      all_x_vals.insert(xs[j]);
-    }
+    n_all_x += static_cast<unsigned>(xs.size());
   }
 
-  // Resize vectors
-  const unsigned vec_size = static_cast<const unsigned>(all_x_vals.size());
-  x_val.resize(vec_size, 0.0);
-  avg_y.resize(vec_size, 0.0);
-  se_y.resize(vec_size, 0.0);
-  ci_h_y.resize(vec_size, 0.0);
-  ci_l_y.resize(vec_size, 0.0);
-  tot_y.resize(vec_size, 0.0);
-  count_y.resize(vec_size, 0);
-  stot_y.resize(vec_size, 0.0);
-
-  // Make maps x vals to indices
-  std::set<double>::iterator set_it;
-  int idx = 0;
-  for (set_it = all_x_vals.begin(); set_it != all_x_vals.end(); ++set_it) {
-    x_val[idx] = *set_it;
-    x_vals_idx.insert(std::pair<double, int>(*set_it, idx));
-    ++idx;
+  std::vector<double> x_val;
+  x_val.reserve(n_all_x);
+  for (unsigned i = 0; i < n_curves; ++i) {
+    Rcpp::List c = Rcpp::as<Rcpp::List>(points[i]);
+    Rcpp::NumericVector xs = c["x"];
+    x_val.insert(x_val.end(), xs.begin(), xs.end());
   }
 
-  // Calculate total
-  idx = 0;
-  for (unsigned i = 0; i < static_cast<unsigned>(points.size()); ++i) {
+  // Reduce to the unique values, in ascending order. A sorted vector plus a
+  // binary search replaces the std::set and std::map this used to build:
+  // both allocated a node per value and chased a pointer per comparison,
+  // and the lookup below runs once for every point of every dataset.
+  std::sort(x_val.begin(), x_val.end());
+  x_val.erase(std::unique(x_val.begin(), x_val.end()), x_val.end());
+  std::vector<double>(x_val).swap(x_val);  // Release the collection slack
+
+  const unsigned vec_size = static_cast<const unsigned>(x_val.size());
+  const std::vector<double>::const_iterator x_beg = x_val.begin();
+  const std::vector<double>::const_iterator x_end = x_val.end();
+
+  std::vector<double> mean_y(vec_size, 0.0);  // Running mean of ys
+  std::vector<int> count_y(vec_size, 0);      // Count of ys
+  std::vector<double> m2_y(vec_size, 0.0);    // Running sum of squared devs
+
+  // Accumulate mean and variance with Welford's online algorithm
+  for (unsigned i = 0; i < n_curves; ++i) {
     Rcpp::List c = Rcpp::as<Rcpp::List>(points[i]);
     Rcpp::NumericVector xs = c["x"];
     Rcpp::NumericVector ys = c["y"];
 
     for (unsigned j = 0; j < static_cast<unsigned>(ys.size()); ++j) {
-      idx = x_vals_idx[xs[j]];
+      const unsigned idx = static_cast<unsigned>(
+        std::lower_bound(x_beg, x_end, xs[j]) - x_beg);
 
-      tot_y[idx] += ys[j];
-      stot_y[idx] += (ys[j] * ys[j]);
       ++count_y[idx];
+      const double delta = ys[j] - mean_y[idx];
+      mean_y[idx] += delta / static_cast<double>(count_y[idx]);
+      m2_y[idx] += delta * (ys[j] - mean_y[idx]);
     }
   }
 
-  // Calculate average & CI
-  double exp2;
-  double sd;
-  double n;
+  // Calculate average & CI. Filled in place so that the results are never
+  // held twice, once in a std::vector and once in the wrapped copy.
+  Rcpp::NumericVector out_x(Rcpp::no_init(vec_size));
+  Rcpp::NumericVector avg_y(Rcpp::no_init(vec_size));
+  Rcpp::NumericVector se_y(Rcpp::no_init(vec_size));
+  Rcpp::NumericVector ci_h_y(Rcpp::no_init(vec_size));
+  Rcpp::NumericVector ci_l_y(Rcpp::no_init(vec_size));
+
   for (unsigned i = 0; i < vec_size; ++i) {
-    n = static_cast<double>(count_y[i]);
+    const double n = static_cast<double>(count_y[i]);
+
+    // x
+    out_x[i] = x_val[i];
 
     // y
-    avg_y[i] = tot_y[i] / n;
+    avg_y[i] = mean_y[i];
 
     // se
-    exp2 = (stot_y[i] / n) - (avg_y[i] * avg_y[i]);
-    if (exp2 < 0){
-      exp2 = 0;
-    }
-    sd =  ::sqrt(n / (n - 1)) * ::sqrt(exp2);
+    const double sd = ::sqrt(m2_y[i] / (n - 1.0));
     se_y[i] = sd / ::sqrt(n);
 
     // ci upper bound
@@ -917,7 +977,7 @@ Rcpp::List calc_avg_points(const Rcpp::List& points, double ci_q) {
   }
 
   // Return a list
-  df["x"] = x_val;
+  df["x"] = out_x;
   df["y_avg"] = avg_y;
   df["y_se"] = se_y;
   df["y_ci_h"] = ci_h_y;
@@ -928,3 +988,63 @@ Rcpp::List calc_avg_points(const Rcpp::List& points, double ci_q) {
   return ret_val;
 }
 
+
+/*
+##############################################
+ Name: calc_prob_metrics
+ R file: g_prob_metrics.R
+ R func: prob_metrics
+##############################################
+*/
+
+//
+// Calculate the Brier score and the log loss of predicted probabilities
+//
+// [[Rcpp::export]]
+Rcpp::List calc_prob_metrics(const Rcpp::NumericVector& scores,
+                             const Rcpp::IntegerVector& labels,
+                             double eps) {
+  // Variables
+  Rcpp::List ret_val;
+  std::string errmsg = "";
+  const unsigned n = static_cast<unsigned>(scores.size());
+
+  // Vector size must be >0 and the two vectors must agree
+  if (n == 0 || static_cast<unsigned>(labels.size()) != n) {
+    errmsg = "invalid-vecsize";
+    ret_val["errmsg"] = errmsg;
+    return ret_val;
+  }
+
+  // One pass, and no intermediate vector: both metrics are a mean over the
+  // same two values, so there is nothing to hold on to between elements.
+  double sum_sq = 0.0;
+  double sum_ll = 0.0;
+  const double hi = 1.0 - eps;
+
+  for (unsigned i = 0; i < n; ++i) {
+    const double p = scores[i];
+    const double y = static_cast<double>(labels[i]);
+    const double d = p - y;
+    sum_sq += d * d;
+
+    // A probability of exactly 0 or 1 that turns out to be wrong makes the
+    // log loss infinite. Clamping keeps a single such prediction from
+    // swallowing the whole sample, which is what every other implementation
+    // of this measure does too.
+    double q = p;
+    if (q < eps) {
+      q = eps;
+    } else if (q > hi) {
+      q = hi;
+    }
+    sum_ll += y * ::log(q) + (1.0 - y) * ::log(1.0 - q);
+  }
+
+  const double d_n = static_cast<double>(n);
+  ret_val["brier"] = sum_sq / d_n;
+  ret_val["logloss"] = -sum_ll / d_n;
+  ret_val["errmsg"] = errmsg;
+
+  return ret_val;
+}

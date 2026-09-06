@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("MM 3: Reformat labels for evaluation")
+# MM 3: Reformat labels for evaluation
 # Test .factor_labels(labels, posclass)
 
 test_that(".factor_labels() reterns a numeric vector", {
@@ -23,18 +21,18 @@ test_that(".factor_labels() returns a vector with two values", {
 })
 
 test_that("'labels' takes a vector", {
-  expect_err_msg <- function(err_msg, labels) {
-    expect_error(.factor_labels(labels, NULL), err_msg)
+  expect_err_cls <- function(labels) {
+    expect_error(
+      .factor_labels(labels, NULL),
+      class = "precrec_error_invalid_labels"
+    )
   }
 
-  err_msg <- "labels is not an atomic vector"
-  expect_err_msg(err_msg, list(1))
-  expect_err_msg(err_msg, data.frame(1))
-  expect_err_msg(err_msg, NULL)
-
-  err_msg <- "is not TRUE"
-  expect_err_msg(err_msg, array(1))
-  expect_err_msg(err_msg, matrix(1))
+  expect_err_cls(list(1))
+  expect_err_cls(data.frame(1))
+  expect_err_cls(NULL)
+  expect_err_cls(array(1))
+  expect_err_cls(matrix(1))
 
   expect_error(.factor_labels(NULL, NULL))
 })

@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 #include <ctime>
-#include <cfloat>       // DBL_MIN, DBL_MAX
+#include <limits>       // std::numeric_limits
 
 /*
 ##############################################
@@ -37,8 +37,13 @@ unsigned calc_vec_size(const Rcpp::List& obj,
 //
 // Copy vector
 //
+// Templated on the destination so that the converters below can fill an
+// Rcpp vector in place instead of a std::vector that is then wrapped into
+// a second copy of the same data.
+//
+template <typename T>
 void copy_xy_vec(const Rcpp::NumericVector& from_vec,
-                 std::vector<double>& to_vec,
+                 T& to_vec,
                  const unsigned start_idx) {
   for (unsigned i = 0; i < from_vec.size(); i++) {
     to_vec[start_idx+i] = from_vec[i];
@@ -48,7 +53,8 @@ void copy_xy_vec(const Rcpp::NumericVector& from_vec,
 //
 // Add to vector
 //
-void add_to_vec(std::vector<int>& vec,
+template <typename T>
+void add_to_vec(T& vec,
                 const unsigned size,
                 int value,
                 const unsigned start_idx) {
@@ -86,8 +92,9 @@ unsigned set_reduced_points(const Rcpp::NumericVector& from_vec,
 //
 // Copy reduced points
 //
+template <typename T>
 void copy_reduced_xy_vec(const Rcpp::NumericVector& from_vec,
-                         std::vector<double>& to_vec,
+                         T& to_vec,
                          const unsigned start_idx,
                          const std::vector<bool>& points) {
   unsigned idx = 0;
@@ -101,18 +108,39 @@ void copy_reduced_xy_vec(const Rcpp::NumericVector& from_vec,
 }
 
 //
+// Trim a vector to its first `n` elements
+//
+// Returns the vector itself when it is already the right length, which is
+// the case whenever the points are not reduced.
+//
+template <typename T>
+T trim_vec(const T& vec, const unsigned n) {
+  if (static_cast<unsigned>(vec.size()) == n) {
+    return vec;
+  }
+  return T(vec.begin(), vec.begin() + n);
+}
+
+//
 // Comp functions
 //
 
-bool comp_asc(const std::pair<unsigned, double > &a,
-              const std::pair<unsigned, double > &b) {
-  return a.second < b.second;
-}
+// Function objects rather than free functions: passed to std::sort as a
+// template argument the comparison inlines into the inner loop, where a
+// function pointer forces an indirect call per comparison.
+struct CompAsc {
+  bool operator()(const std::pair<unsigned, double > &a,
+                  const std::pair<unsigned, double > &b) const {
+    return a.second < b.second;
+  }
+};
 
-bool comp_desc(const std::pair<unsigned, double > &a,
-               const std::pair<unsigned, double > &b) {
-  return a.second > b.second;
-}
+struct CompDesc {
+  bool operator()(const std::pair<unsigned, double > &a,
+                  const std::pair<unsigned, double > &b) const {
+    return a.second > b.second;
+  }
+};
 
 //
 // Make pairs
@@ -121,11 +149,14 @@ void make_index_pairs(std::vector<std::pair<unsigned, double > >& indices,
                       const Rcpp::NumericVector& scores,
                       const bool na_worst) {
   // Determine NA values
+  // The sentinel must sort below (na_worst) or above (!na_worst) every real
+  // score. DBL_MIN is the smallest *positive* double, so it would rank NAs
+  // above every negative score; lowest() is the most negative one.
   double na_val;
   if (na_worst) {
-    na_val = DBL_MIN;
+    na_val = std::numeric_limits<double>::lowest();
   } else {
-    na_val = DBL_MAX;
+    na_val = std::numeric_limits<double>::max();
   }
 
   // Update NAs
@@ -144,19 +175,21 @@ void make_index_pairs(std::vector<std::pair<unsigned, double > >& indices,
 void sort_indices(std::vector<std::pair<unsigned, double > >& indices,
                   const std::string& ties_method,
                   const bool desc) {
-  bool (*comp_func)(const std::pair<unsigned, double > &,
-        const std::pair<unsigned, double > &);
-  if (desc) {
-    comp_func = &comp_desc;
-  } else {
-    comp_func = &comp_asc;
-  }
-
-  // Sort scores
+  // Sort scores. Both comparators order by score alone, so the sequence of
+  // comparisons - and therefore the resulting permutation - is the same as
+  // the function-pointer version this replaces.
   if (ties_method == "first") {
-    std::stable_sort(indices.begin(), indices.end(), comp_func);
+    if (desc) {
+      std::stable_sort(indices.begin(), indices.end(), CompDesc());
+    } else {
+      std::stable_sort(indices.begin(), indices.end(), CompAsc());
+    }
   } else {
-    std::sort(indices.begin(), indices.end(), comp_func);
+    if (desc) {
+      std::sort(indices.begin(), indices.end(), CompDesc());
+    } else {
+      std::sort(indices.begin(), indices.end(), CompAsc());
+    }
   }
 }
 
@@ -193,12 +226,16 @@ Rcpp::List convert_curve_df(const Rcpp::List& obj,
   }
   const unsigned vec_size = calc_vec_size(obj, curvetype_names);
 
-  std::vector<double> vec_xs(vec_size);
-  std::vector<double> vec_ys(vec_size);
-  std::vector<int> vec_modname(vec_size);
-  std::vector<int> vec_dsid(vec_size);
-  std::vector<int> vec_dsid_modname(vec_size);
-  std::vector<int> vec_curvetype(vec_size);
+  // Filled in place. `vec_size` is exact unless the points are reduced, in
+  // which case the tail is trimmed off once the real length is known - so
+  // the common path never holds the columns twice, once in a std::vector
+  // and once in the wrapped copy.
+  Rcpp::NumericVector vec_xs(Rcpp::no_init(vec_size));
+  Rcpp::NumericVector vec_ys(Rcpp::no_init(vec_size));
+  Rcpp::IntegerVector vec_modname(Rcpp::no_init(vec_size));
+  Rcpp::IntegerVector vec_dsid(Rcpp::no_init(vec_size));
+  Rcpp::IntegerVector vec_dsid_modname(Rcpp::no_init(vec_size));
+  Rcpp::IntegerVector vec_curvetype(Rcpp::no_init(vec_size));
   std::vector<bool> vec_points(vec_size);
 
   Rcpp::CharacterVector curvetypes = curvetype_names.names();
@@ -235,21 +272,12 @@ Rcpp::List convert_curve_df(const Rcpp::List& obj,
     }
   }
 
-  if (reduce_points){
-    vec_xs.resize(start_idx);
-    vec_ys.resize(start_idx);
-    vec_modname.resize(start_idx);
-    vec_dsid.resize(start_idx);
-    vec_dsid_modname.resize(start_idx);
-    vec_curvetype.resize(start_idx);
-  }
-
-  Rcpp::NumericVector xs = Rcpp::wrap(vec_xs);
-  Rcpp::NumericVector ys = Rcpp::wrap(vec_ys);
-  Rcpp::IntegerVector modname = Rcpp::wrap(vec_modname);
-  Rcpp::IntegerVector dsid = Rcpp::wrap(vec_dsid);
-  Rcpp::IntegerVector dsid_modname = Rcpp::wrap(vec_dsid_modname);
-  Rcpp::IntegerVector curvetype = Rcpp::wrap(vec_curvetype);
+  Rcpp::NumericVector xs = trim_vec(vec_xs, start_idx);
+  Rcpp::NumericVector ys = trim_vec(vec_ys, start_idx);
+  Rcpp::IntegerVector modname = trim_vec(vec_modname, start_idx);
+  Rcpp::IntegerVector dsid = trim_vec(vec_dsid, start_idx);
+  Rcpp::IntegerVector dsid_modname = trim_vec(vec_dsid_modname, start_idx);
+  Rcpp::IntegerVector curvetype = trim_vec(vec_curvetype, start_idx);
 
   modname.attr("levels") = uniq_modnames;
   modname.attr("class") = "factor";
@@ -301,12 +329,13 @@ Rcpp::List convert_curve_avg_df(const Rcpp::List& obj,
   }
   const unsigned vec_size = calc_vec_size(obj, curvetype_names);
 
-  std::vector<double> vec_xs(vec_size);
-  std::vector<double> vec_ys(vec_size);
-  std::vector<double> vec_ymin(vec_size);
-  std::vector<double> vec_ymax(vec_size);
-  std::vector<int> vec_modname(vec_size);
-  std::vector<int> vec_curvetype(vec_size);
+  // Filled in place - see convert_curve_df above
+  Rcpp::NumericVector vec_xs(Rcpp::no_init(vec_size));
+  Rcpp::NumericVector vec_ys(Rcpp::no_init(vec_size));
+  Rcpp::NumericVector vec_ymin(Rcpp::no_init(vec_size));
+  Rcpp::NumericVector vec_ymax(Rcpp::no_init(vec_size));
+  Rcpp::IntegerVector vec_modname(Rcpp::no_init(vec_size));
+  Rcpp::IntegerVector vec_curvetype(Rcpp::no_init(vec_size));
   std::vector<bool> vec_points(vec_size);
 
   Rcpp::CharacterVector curvetypes = curvetype_names.names();
@@ -348,21 +377,12 @@ Rcpp::List convert_curve_avg_df(const Rcpp::List& obj,
     }
   }
 
-  if (reduce_points){
-    vec_xs.resize(start_idx);
-    vec_ys.resize(start_idx);
-    vec_ymin.resize(start_idx);
-    vec_ymax.resize(start_idx);
-    vec_modname.resize(start_idx);
-    vec_curvetype.resize(start_idx);
-  }
-
-  Rcpp::NumericVector xs = Rcpp::wrap(vec_xs);
-  Rcpp::NumericVector ys = Rcpp::wrap(vec_ys);
-  Rcpp::NumericVector ymin = Rcpp::wrap(vec_ymin);
-  Rcpp::NumericVector ymax = Rcpp::wrap(vec_ymax);
-  Rcpp::IntegerVector modname = Rcpp::wrap(vec_modname);
-  Rcpp::IntegerVector curvetype = Rcpp::wrap(vec_curvetype);
+  Rcpp::NumericVector xs = trim_vec(vec_xs, start_idx);
+  Rcpp::NumericVector ys = trim_vec(vec_ys, start_idx);
+  Rcpp::NumericVector ymin = trim_vec(vec_ymin, start_idx);
+  Rcpp::NumericVector ymax = trim_vec(vec_ymax, start_idx);
+  Rcpp::IntegerVector modname = trim_vec(vec_modname, start_idx);
+  Rcpp::IntegerVector curvetype = trim_vec(vec_curvetype, start_idx);
 
   modname.attr("levels") = uniq_modnames;
   modname.attr("class") = "factor";

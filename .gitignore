@@ -7,4 +7,6 @@ docs
 .idea/
 .vscode/
 tests/testthat/Rplots.pdf
-tests/testthat/_snaps/*/*.svg
+
+# Benchmark build-mode stamp (bench/ is .Rbuildignored)
+bench/.build-mode

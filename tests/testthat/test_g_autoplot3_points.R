@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("AP 3: Autoplot for points")
+# AP 3: Autoplot for points
 # Test autoplot(object, ...)
 
 skip_on_cran()
@@ -8,12 +6,7 @@ skip_on_cran()
 test_extra_ap3 <- FALSE
 
 ap3_check_libs1 <- function() {
-  if (requireNamespace("ggplot2", quietly = TRUE) &&
-    requireNamespace("vdiffr", quietly = TRUE)) {
-    TRUE
-  } else {
-    FALSE
-  }
+  requireNamespace("ggplot2", quietly = TRUE)
 }
 
 ap3_check_libs2 <- function() {

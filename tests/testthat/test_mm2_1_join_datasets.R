@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("MM 2: Join datasets")
+# MM 2: Join datasets
 # Test .join_datasets(..., efunc_vtype, efunc_nrow, byrow, chklen)
 
 test_that(".join_datasets() returns a list", {
@@ -42,38 +40,38 @@ test_that("'byrow' should be TRUE or FALSE", {
   expect_silent(.join_datasets(0, byrow = TRUE))
   expect_silent(.join_datasets(0, byrow = FALSE))
 
-  expect_err_msg <- function(err_msg, byrow) {
-    expect_error(.join_datasets(0, byrow = byrow), err_msg)
+  expect_err_cls <- function(byrow) {
+    expect_error(
+      .join_datasets(0, byrow = byrow),
+      class = "precrec_error_invalid_byrow"
+    )
   }
 
-  err_msg <- "byrow contains 1 missing values"
-  expect_err_msg(err_msg, NA)
-
-  err_msg <- "byrow is not a flag"
-  expect_err_msg(err_msg, "T")
-  expect_err_msg(err_msg, list(c(TRUE, FALSE)))
-  expect_err_msg(err_msg, data.frame(c(TRUE, FALSE)))
-  expect_err_msg(err_msg, array(c(TRUE, FALSE)))
-  expect_err_msg(err_msg, matrix(c(TRUE, FALSE)))
+  expect_err_cls(NA)
+  expect_err_cls("T")
+  expect_err_cls(list(c(TRUE, FALSE)))
+  expect_err_cls(data.frame(c(TRUE, FALSE)))
+  expect_err_cls(array(c(TRUE, FALSE)))
+  expect_err_cls(matrix(c(TRUE, FALSE)))
 })
 
 test_that("'chklen' should be TRUE or FALSE", {
   expect_silent(.join_datasets(0, chklen = TRUE))
   expect_silent(.join_datasets(0, chklen = FALSE))
 
-  expect_err_msg <- function(err_msg, chklen) {
-    expect_error(.join_datasets(0, chklen = chklen), err_msg)
+  expect_err_cls <- function(chklen) {
+    expect_error(
+      .join_datasets(0, chklen = chklen),
+      class = "precrec_error_invalid_chklen"
+    )
   }
 
-  err_msg <- "chklen contains 1 missing values"
-  expect_err_msg(err_msg, NA)
-
-  err_msg <- "chklen is not a flag"
-  expect_err_msg(err_msg, "T")
-  expect_err_msg(err_msg, list(c(TRUE, FALSE)))
-  expect_err_msg(err_msg, data.frame(c(TRUE, FALSE)))
-  expect_err_msg(err_msg, array(c(TRUE, FALSE)))
-  expect_err_msg(err_msg, matrix(c(TRUE, FALSE)))
+  expect_err_cls(NA)
+  expect_err_cls("T")
+  expect_err_cls(list(c(TRUE, FALSE)))
+  expect_err_cls(data.frame(c(TRUE, FALSE)))
+  expect_err_cls(array(c(TRUE, FALSE)))
+  expect_err_cls(matrix(c(TRUE, FALSE)))
 })
 
 test_that(".join_datasets() only accepts basic data types", {

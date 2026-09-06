@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("DF 2: as.data.frame points")
+# DF 2: as.data.frame points
 # Test as.data.frame(x, ...)
 
 df2_create_mspoints <- function() {

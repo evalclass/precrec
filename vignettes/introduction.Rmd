@@ -431,15 +431,20 @@ autoplot(cvcurves3)
 The `evalmod` function also calculates basic evaluation measures - error, 
 accuracy, specificity, sensitivity, and precision.
 
-Measure     Description 
------------ --------------------------
-      error Error rate
-   accuracy Accuracy
-specificity Specificity, TNR, 1 - FPR
-sensitivity Sensitivity, TPR, Recall
-  precision Precision, PPV
-        mcc Matthews correlation coefficient
-     fscore F-score
+Measure           Description 
+----------------- ----------------------------------
+            error Error rate
+         accuracy Accuracy
+      specificity Specificity, TNR, 1 - FPR
+      sensitivity Sensitivity, TPR, Recall
+        precision Precision, PPV
+              mcc Matthews correlation coefficient
+           fscore F-score, F-beta with `beta`
+balanced_accuracy Balanced accuracy
+              npv Negative predictive value
+     informedness Informedness, Youden's J
+       markedness Markedness
+            kappa Cohen's kappa
 
 ### Basic measure calculations
 The `mode = "basic"` option makes the `evalmod` function calculate the basic 
@@ -461,7 +466,79 @@ autoplot(mmpoins, c("specificity", "sensitivity", "precision"))
 
 # Show normalized ranks vs. Matthews correlation coefficient and F-score
 autoplot(mmpoins, c("mcc", "fscore"))
+
+# Show normalized ranks vs. balanced accuracy, informedness, and kappa
+autoplot(mmpoins, c("balanced_accuracy", "informedness", "kappa"))
 ```
+
+The `fscore` measure is the F-beta score. It defaults to the F1 score, and
+the `beta` argument weights recall more or less heavily than precision.
+```{r}
+# F2 weights recall twice as heavily as precision
+mmpoins.f2 <- evalmod(mmmdat2, mode = "basic", beta = 2)
+```
+
+### Additional measures
+Eleven more measures are available on request. They are the ones `ROCR`
+provides that `precrec` did not, and they are left out of the default set
+because each is another vector the size of the dataset and another panel in
+the default plot.
+
+Measure                 Alternative names   Description
+----------------------- ------------------- ------------------------------
+                    fpr                fall False positive rate, FP/N
+                    fnr                miss False negative rate, FN/P
+   false_discovery_rate      fdr, pcfall     False discovery rate
+    false_omission_rate      for, pcmiss     False omission rate
+predicted_positive_rate      ppr, rpp        Rate of positive predictions
+predicted_negative_rate      pnr, rnp        Rate of negative predictions
+                   lift                      Sensitivity over ppr
+                   odds         odds_ratio    Odds ratio, TP*TN/(FN*FP)
+                     mi  mutual_information   Mutual information, in bits
+                  chisq                       Pearson chi-square of the table
+                   cost                       Weighted misclassification cost
+                    sar                       Mean of accuracy, AUC and 1-RMSE
+
+The `metrics` argument names the ones to add, or `"all"` for every measure.
+The default set is always kept, so nothing that worked before stops working.
+```{r, fig.width=7, fig.show='hold'}
+# Add the false positive rate and the lift to the default measures
+mmpoins.extra <- evalmod(mmmdat2, mode = "basic", metrics = c("fpr", "lift"))
+
+# Show normalized ranks vs. false positive rate and lift
+autoplot(mmpoins.extra, c("fpr", "lift"))
+```
+
+The `cost` measure weights the two kinds of error separately. It is not
+normalized, following `ROCR`: it is
+`cost_fp * FP / n + cost_fn * FN / n`, so with the default weights of 1 it
+is the error rate.
+```{r, fig.width=7, fig.show='hold'}
+# A false positive costs six times what a false negative costs
+mmpoins.cost <- evalmod(mmmdat2,
+  mode = "basic", metrics = "cost",
+  cost_fp = 3, cost_fn = 0.5
+)
+autoplot(mmpoins.cost, "cost")
+```
+
+Three of these are undefined somewhere, and `precrec` says so differently
+from `ROCR` in two of the three cases:
+
+- The odds ratio and the chi-square statistic are `NA` at the top and the
+  bottom of every dataset, where the 2x2 table has an empty cell. `ROCR`
+  reports an infinity or a `NaN` there; `precrec` reports `NA`, as it
+  already does for the undefined end of precision and of the negative
+  predictive value.
+- The mutual information is `0` at those two points rather than `NA`. A
+  cutoff that predicts one class for everything carries no information about
+  the labels, so that value is defined and it is zero.
+
+The `sar` measure averages accuracy, the AUC of the ROC curve, and one minus
+the root mean squared error. The last of those reads the values of the scores
+rather than their ranks, so `sar` warns and returns `NA` when the scores are
+not probabilities between 0 and 1. Every other measure asked for in the same
+call is still returned.
 
 #### Normalized ranks and predicted scores
 In addition to the basic measures, the `autoplot` function can plot normalized 
@@ -608,7 +685,177 @@ autoplot(simcurves1)
 autoplot(simcurves2)
 ```
 
-## 13. Citation
+## 13. Probability-based metrics
+The Brier score, its square root the root mean squared error, and the log loss
+measure how close predicted probabilities are to the observed labels. Unlike
+ROC and precision-recall curves, they read the values of the scores rather
+than their ranks, so the scores must be probabilities between 0 and 1.
+
+### Brier score, RMSE and log loss
+The `prob_metrics` function takes the same input as `evalmod` and returns a
+data frame with one row per model, dataset, and metric.
+
+```{r}
+# The "poor_er" and "good_er" samples are drawn from beta distributions
+psamps <- create_sim_samples(4, 100, 100, c("poor_er", "good_er"))
+pmdat <- mmdata(psamps[["scores"]], psamps[["labels"]],
+  modnames = psamps[["modnames"]], dsids = psamps[["dsids"]]
+)
+
+# Calculate the Brier score, the RMSE and the log loss
+pmetrics.df <- prob_metrics(pmdat)
+
+# Use knitr::kable to display the result in a table format
+knitr::kable(head(pmetrics.df))
+```
+
+### Confidence intervals
+The `prob_metrics_ci` function summarizes those per-dataset values into a
+confidence interval for each model and metric.
+
+```{r}
+# Calculate the confidence intervals
+pmetrics.ci <- prob_metrics_ci(pmdat)
+
+# Use knitr::kable to display the result in a table format
+knitr::kable(pmetrics.ci)
+```
+
+## 14. Precision-recall break-even point
+The break-even point of a precision-recall curve is where precision and
+recall are equal. The `prbe` function finds it, and returns a data frame with
+one row per break-even point in the manner of `auc`.
+
+```{r}
+prsamps <- create_sim_samples(2, 100, 100, c("poor_er", "good_er"))
+prmdat <- mmdata(prsamps[["scores"]], prsamps[["labels"]],
+  modnames = prsamps[["modnames"]], dsids = prsamps[["dsids"]]
+)
+prcurves <- evalmod(prmdat, raw_curves = TRUE)
+
+# Use knitr::kable to display the result in a table format
+knitr::kable(prbe(prcurves))
+```
+
+A curve can cross the diagonal more than once, and then the data frame holds
+one row per crossing. A curve that never reaches equal precision and recall
+gets a single row of `NA`.
+
+`ROCR::performance(pred, "prbe")` interpolates linearly between adjacent raw
+precision-recall points to find the crossing. Linear interpolation between
+precision-recall points is not correct, which is the reason this package
+exists, so `prbe` reads the crossing off the curve `evalmod` has already
+interpolated properly.
+
+## 15. One measure against another
+The `metric_curve` function takes the name of a measure for the x axis and
+the name of a measure for the y axis and draws one against the other, in the
+manner of `ROCR::performance`. Every measure `evalmod` can calculate is
+available on both axes, under its own name or under the identifier `ROCR`
+uses for it.
+
+```{r, fig.width=7, fig.show='hold'}
+xysamps <- create_sim_samples(1, 100, 100, "good_er")
+
+# The default pair is ROCR's most common call
+xy1 <- metric_curve(
+  scores = xysamps[["scores"]], labels = xysamps[["labels"]],
+  x_metric = "fpr", y_metric = "sensitivity"
+)
+autoplot(xy1)
+```
+
+### Which pairs are joined by a line
+`precrec` exists because the points of a precision-recall curve must not be
+joined by straight lines. The measures this function reads are raw
+per-cutoff values with no interpolation, so joining an arbitrary pair of them
+would be the very error the package was written to avoid.
+
+Two pairs have a defined interpolation, and only those two are drawn as
+curves: false positive rate against sensitivity, which is the ROC curve, and
+sensitivity against precision, which is the precision-recall curve. For those
+two, `metric_curve` hands the work to the same code `evalmod(mode = "rocprc")`
+uses, so the two cannot disagree.
+
+Every other pair is drawn as points.
+
+```{r, fig.width=7, fig.show='hold'}
+# No interpolation is defined between these two, so they are drawn as points
+xy2 <- metric_curve(
+  scores = xysamps[["scores"]], labels = xysamps[["labels"]],
+  x_metric = "predicted_positive_rate", y_metric = "lift"
+)
+autoplot(xy2)
+```
+
+Pass `type = "l"` to `plot` or `autoplot` to join them anyway, having decided
+that the straight lines mean something for the pair at hand.
+
+### Multiple models and test datasets
+`metric_curve` draws one curve per test dataset. It does not average over
+them - an average needs a rule for interpolating between the points of each
+curve, which is exactly what an unregistered pair does not have. Use
+`evalmod(calc_avg = TRUE)` for averaged ROC and precision-recall curves.
+
+```{r, fig.width=7, fig.show='hold'}
+xysamps2 <- create_sim_samples(3, 100, 100, c("poor_er", "good_er"))
+xymdat <- mmdata(xysamps2[["scores"]], xysamps2[["labels"]],
+  modnames = xysamps2[["modnames"]], dsids = xysamps2[["dsids"]]
+)
+
+# Normalized score against precision, one curve per dataset
+xy3 <- metric_curve(xymdat, x_metric = "score", y_metric = "precision")
+autoplot(xy3)
+```
+
+## 16. Multiclass evaluation
+A dataset with more than two classes is evaluated by one-vs-rest
+decomposition: each class becomes its own binary problem - that class against
+all the others - so the accurate precision-recall calculations apply to it
+unchanged.
+
+### One-vs-rest curves
+Pass a matrix with one score column per class together with the class labels.
+The `mmdata` function detects the decomposition, and the classes are carried
+on the model axis, so everything downstream treats them as it would several
+models on one test set.
+```{r}
+# Load a 3-class dataset with one score column per class
+data(C3N150)
+
+# The decomposition is detected from the input
+mcmdat <- mmdata(C3N150$scores, C3N150$labels)
+mcmdat
+
+# One curve per class
+mccurves <- evalmod(mcmdat)
+```
+
+`multiclass = "ovr"` asks for the decomposition explicitly, which is worth
+doing when the score columns are not named after the classes - they are then
+taken in the order of the class names.
+
+### Per-class and macro-averaged AUCs
+The `auc` function reports one row per class and curve type, followed by the
+macro-average of the per-class scores.
+```{r}
+# Use knitr::kable to display the result in a table format
+knitr::kable(auc(mccurves))
+```
+
+### S3 generics
+All the S3 generics work as they do for several models.
+```{r, fig.width=7, fig.show='hold'}
+# Show ROC and Precision-Recall curves, one line per class
+autoplot(mccurves)
+```
+
+Note that each one-vs-rest decomposition has its own class balance, so the
+baseline of a precision-recall curve differs from class to class. The plots
+leave the baseline out for that reason - which matters here more than
+anywhere else, because a precision-recall curve is read against its baseline.
+
+## 17. Citation
 *Precrec: fast and accurate precision-recall and ROC curve calculations in R*
 
 Takaya Saito; Marc Rehmsmeier
@@ -617,7 +864,7 @@ Bioinformatics 2017; 33 (1): 145-147.
 
 doi: [10.1093/bioinformatics/btw570](https://doi.org/10.1093/bioinformatics/btw570)
 
-## 14. External links
+## 18. External links
 - [Classifier evaluation with imbalanced datasets](https://classeval.wordpress.com/) - our web site that contains several pages with useful tips for performance evaluation on binary classifiers.
 
 - [The Precision-Recall Plot Is More Informative than the ROC Plot When Evaluating Binary Classifiers on Imbalanced Datasets](https://doi.org/10.1371/journal.pone.0118432) - our paper that summarized potential pitfalls of ROC plots with imbalanced datasets and advantages of using precision-recall plots instead.

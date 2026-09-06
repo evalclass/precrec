@@ -19,24 +19,29 @@ evalmod(
   raw_curves = FALSE,
   x_bins = 1000,
   interpolate = TRUE,
+  beta = 1,
+  on_single_class = "error",
+  metrics = NULL,
+  cost_fp = 1,
+  cost_fn = 1,
   ...
 )
 }
 \arguments{
-\item{mdat}{An \code{S3} object created by the \code{\link{mmdata}}
+\item{mdat}{An \code{S3} object created by the \code{\link[=mmdata]{mmdata()}}
 function. It contains formatted scores and labels.
 The \code{evalmod} function ignores the following arguments
 when \code{mdat} is specified.
 \itemize{
-  \item \code{scores}
-  \item \code{labels}
-  \item \code{modnames}
-  \item \code{dsids}
-  \item \code{posclass}
-  \item \code{na_worst}
-  \item \code{ties_method}
+\item \code{scores}
+\item \code{labels}
+\item \code{modnames}
+\item \code{dsids}
+\item \code{posclass}
+\item \code{na_worst}
+\item \code{ties_method}
 }
-These arguments are internally passed to the \code{\link{mmdata}} function
+These arguments are internally passed to the \code{\link[=mmdata]{mmdata()}} function
 when \code{mdat} is unspecified.
 In that case, both \code{scores} and \code{labels} must be
 at least specified.}
@@ -44,21 +49,22 @@ at least specified.}
 \item{mode}{A string that specifies the types of evaluation measures
 that the \code{evalmod} function calculates.
 \describe{
-  \item{"rocprc"}{ROC and Precision-Recall curves}
-  \item{"prcroc"}{Same as above}
-  \item{"basic"}{Normalized ranks vs. accuracy, error rate, specificity,
-                 sensitivity, precision, Matthews correlation coefficient,
-                 and F-score. }
-  \item{"aucroc"}{Fast AUC(ROC) calculation with the U statistic}
+\item{"rocprc"}{ROC and Precision-Recall curves}
+\item{"prcroc"}{Same as above}
+\item{"basic"}{Normalized ranks vs. accuracy, error rate, specificity,
+sensitivity, precision, Matthews correlation coefficient,
+F-score, balanced accuracy, negative predictive value,
+informedness, markedness, and Cohen's kappa. }
+\item{"aucroc"}{Fast AUC(ROC) calculation with the U statistic}
 }}
 
 \item{scores}{A numeric dataset of predicted scores. It can be a vector,
-a matrix, an array, a data frame, or a list. The \code{\link{join_scores}}
+a matrix, an array, a data frame, or a list. The \code{\link[=join_scores]{join_scores()}}
 function can be useful to make scores with multiple datasets.}
 
 \item{labels}{A numeric, character, logical, or factor dataset
 of observed labels. It can be a vector, a matrix, an array,
-a data frame, or a list. The \code{\link{join_labels}}
+a data frame, or a list. The \code{\link[=join_labels]{join_labels()}}
 function can be useful to make labels with multiple datasets.}
 
 \item{modnames}{A character vector for the names of the models.
@@ -79,15 +85,15 @@ detected when \code{posclass} is \code{NULL}.}
 \item{na_worst}{A Boolean value for controlling the treatment of NAs
 in \code{scores}.
 \describe{
-  \item{TRUE}{All NAs are treated as the worst scores}
-  \item{FALSE}{All NAs are treated as the best scores}
+\item{TRUE}{All NAs are treated as the worst scores}
+\item{FALSE}{All NAs are treated as the best scores}
 }}
 
 \item{ties_method}{A string for controlling ties in \code{scores}.
 \describe{
-  \item{"equiv"}{Ties are equivalently ranked}
-  \item{"first"}{Ties are ranked in an increasing order as appeared}
-  \item{"random"}{ Ties are ranked in random order}
+\item{"equiv"}{Ties are equivalently ranked}
+\item{"first"}{Ties are ranked in an increasing order as appeared}
+\item{"random"}{ Ties are ranked in random order}
 }}
 
 \item{calc_avg}{A logical value to specify whether average curves should
@@ -122,65 +128,112 @@ ignored and  when \code{x_bins} is set to \code{FALSE}.
 \code{interpolate} is effective only when \code{mode} is set
 to \code{rocprc} or \code{prcroc}.}
 
-\item{...}{These additional arguments are passed to \code{\link{mmdata}}
-for data preparation.}
+\item{beta}{A numeric value to specify the beta of the F-beta score,
+which weights recall \code{beta} times as heavily as precision.
+The default \code{1} gives the F1 score. \code{beta} is effective only
+when \code{mode} is set to \code{basic}.}
+
+\item{on_single_class}{A string that specifies what the \code{evalmod}
+function does with a dataset in which every label belongs to the same
+class.
+\describe{
+\item{"error"}{Raise an error (default)}
+\item{"na"}{Warn, and return \code{NA} for the measures that
+are undefined}
+}
+ROC and precision-recall curves are undefined for such a dataset, so
+\code{on_single_class} is effective only when \code{mode} is set to
+\code{rocprc}, \code{prcroc}, or \code{aucroc}. \code{mode = "basic"} always
+warns and calculates what it can, because accuracy and error rate are
+still defined.}
+
+\item{metrics}{A character vector that names the basic evaluation
+measures to calculate in addition to the default set, or the string
+\code{"all"} for every measure \code{precrec} knows. The default \code{NULL} is
+the fourteen measures \code{evalmod} has always returned: \code{score},
+\code{label}, \code{error}, \code{accuracy}, \code{specificity},
+\code{sensitivity}, \code{precision}, \code{mcc}, \code{fscore},
+\code{balanced_accuracy}, \code{npv}, \code{informedness},
+\code{markedness} and \code{kappa}.
+
+The measures that can be added are \code{fpr}, \code{fnr},
+\code{false_discovery_rate}, \code{false_omission_rate},
+\code{predicted_positive_rate}, \code{predicted_negative_rate},
+\code{lift}, \code{odds}, \code{mi}, \code{chisq} and \code{cost}. They
+are the measures \code{ROCR} provides that \code{precrec} did not, and
+each of them also answers to the identifier \code{ROCR} uses for it -
+\code{fall}, \code{miss}, \code{pcfall}, \code{pcmiss}, \code{rpp},
+\code{rnp} and \code{mutual_information} - and to its standard
+abbreviation where it has one.
+
+They are not calculated by default because each is another vector the
+size of the dataset, and because \code{plot} and \code{autoplot} draw
+one panel per measure the object holds. A measure that was not asked
+for cannot be plotted; \code{metrics} is effective only when \code{mode}
+is set to \code{basic}.}
+
+\item{cost_fp}{A numeric value for the cost of a false positive, used
+by the \code{cost} measure. \code{cost} is not normalized, following
+\code{ROCR}: it is
+\code{cost_fp * FP / n + cost_fn * FN / n}, which with the default
+weights of \code{1} is the error rate. \code{cost_fp} is effective only
+when \code{mode} is set to \code{basic} and \code{metrics} asks for
+\code{cost}.}
+
+\item{cost_fn}{A numeric value for the cost of a false negative.}
+
+\item{...}{These additional arguments are passed to \code{\link[=mmdata]{mmdata()}}
+for data preparation. \code{multiclass = "ovr"} asks for a one-vs-rest
+evaluation of a dataset with more than two classes; see \code{\link[=mmdata]{mmdata()}}.}
 }
 \value{
 The \code{evalmod} function returns an \code{S3} object
-  that contains performance evaluation measures. The number of models and
-  the number of datasets can be controlled by \code{modnames} and
-  \code{dsids}. For example, the number of models is "single" and the number
-  of test datasets is "multiple" when \code{modnames = c("m1", "m1", "m1")}
-  and \code{dsids = c(1, 2, 3)} are specified.
+that contains performance evaluation measures. The number of models and
+the number of datasets can be controlled by \code{modnames} and
+\code{dsids}. For example, the number of models is "single" and the number
+of test datasets is "multiple" when \code{modnames = c("m1", "m1", "m1")}
+and \code{dsids = c(1, 2, 3)} are specified.
 
 Different \code{S3} objects have different default behaviors of \code{S3}
-  generics, such as \code{\link{plot}}, \code{\link{autoplot}}, and
-  \code{\link{fortify}}.
-
+generics, such as \code{\link[=plot]{plot()}}, \code{\link[=autoplot]{autoplot()}}, and
+\code{\link[=fortify]{fortify()}}.
 \enumerate{
+\item The \code{evalmod} function returns one of the following \code{S3}
 
-  \item  The \code{evalmod} function returns one of the following \code{S3}
-  objects when \code{mode} is "prcroc".
-  The objects contain ROC and Precision-Recall curves.
+objects when \code{mode} is "prcroc".
+The objects contain ROC and Precision-Recall curves.\tabular{lll}{
+   \strong{\code{S3} object} \tab \strong{# of models} \tab \strong{# of test datasets} \cr
+   sscurves \tab single \tab single \cr
+   mscurves \tab multiple \tab single \cr
+   smcurves \tab single \tab multiple \cr
+   mmcurves \tab multiple \tab multiple \cr
+}
 
-  \tabular{lll}{
-    \strong{\code{S3} object}
-    \tab \strong{# of models}
-    \tab \strong{# of test datasets} \cr
+\item The \code{evalmod} function returns one of the following \code{S3}
 
-    sscurves \tab single   \tab single   \cr
-    mscurves \tab multiple \tab single   \cr
-    smcurves \tab single   \tab multiple \cr
-    mmcurves \tab multiple \tab multiple
-  }
+objects when \code{mode} is "basic".
+They contain the per-rank basic evaluation measures; error rate,
+accuracy, specificity, sensitivity, precision, Matthews correlation
+coefficient, F-score, balanced accuracy, negative predictive value,
+informedness, markedness, and Cohen's kappa.\tabular{lll}{
+   \strong{\code{S3} object} \tab \strong{# of models} \tab \strong{# of test datasets} \cr
+   sspoints \tab single \tab single \cr
+   mspoints \tab multiple \tab single \cr
+   smpoints \tab single \tab multiple \cr
+   mmpoints \tab multiple \tab multiple \cr
+}
 
-  \item The \code{evalmod} function returns one of the following \code{S3}
-  objects when \code{mode} is "basic".
-  They contain five different basic evaluation measures; error rate,
-  accuracy, specificity, sensitivity, and precision.
+\item The \code{evalmod} function returns the \code{aucroc} S3 object
 
-  \tabular{lll}{
-    \strong{\code{S3} object}
-    \tab \strong{# of models}
-    \tab \strong{# of test datasets} \cr
-
-    sspoints \tab single   \tab single   \cr
-    mspoints \tab multiple \tab single   \cr
-    smpoints \tab single   \tab multiple \cr
-    mmpoints \tab multiple \tab multiple
-  }
-
-  \item The \code{evalmod} function returns the \code{aucroc} S3 object
-  when \code{mode} is "aucroc", which can be used with 'print'
-  and 'as.data.frame'.
-
+when \code{mode} is "aucroc", which can be used with 'print'
+and 'as.data.frame'.
 }
 }
 \description{
 The \code{evalmod} function calculates ROC and Precision-Recall curves for
-  specified prediction scores and binary labels. It also calculate several
-  basic performance evaluation measures, such as accuracy, error rate, and
-  precision, by specifying \code{mode} as "basic".
+specified prediction scores and binary labels. It also calculate several
+basic performance evaluation measures, such as accuracy, error rate, and
+precision, by specifying \code{mode} as "basic".
 }
 \examples{
 
@@ -339,15 +392,30 @@ system.time(res2 <- func_evalmod_aucroc(samp1))
 res1
 res2
 
+
+##################################################
+### Multiclass evaluation
+###
+
+## Load a 3-class dataset with one score column per class
+data(C3N150)
+
+## Each class is evaluated against the rest
+mccurves <- evalmod(scores = C3N150$scores, labels = C3N150$labels)
+mccurves
+
+## Per-class AUCs, plus their macro-average
+auc(mccurves)
+
 }
 \seealso{
-\code{\link{plot}} for plotting curves with the general R plot.
-  \code{\link{autoplot}} and \code{\link{fortify}} for plotting curves
-  with \pkg{ggplot2}. \code{\link{mmdata}} for formatting input data.
-  \code{\link{join_scores}} and \code{\link{join_labels}} for formatting
-  scores and labels with multiple datasets.
-  \code{\link{format_nfold}} for creating n-fold cross validation dataset
-  from data frame.
-  \code{\link{create_sim_samples}} for generating random samples
-  for simulations.
+\code{\link[=plot]{plot()}} for plotting curves with the general R plot.
+\code{\link[=autoplot]{autoplot()}} and \code{\link[=fortify]{fortify()}} for plotting curves
+with \pkg{ggplot2}. \code{\link[=mmdata]{mmdata()}} for formatting input data.
+\code{\link[=join_scores]{join_scores()}} and \code{\link[=join_labels]{join_labels()}} for formatting
+scores and labels with multiple datasets.
+\code{\link[=format_nfold]{format_nfold()}} for creating n-fold cross validation dataset
+from data frame.
+\code{\link[=create_sim_samples]{create_sim_samples()}} for generating random samples
+for simulations.
 }

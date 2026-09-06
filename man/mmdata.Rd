@@ -14,6 +14,7 @@ mmdata(
   ties_method = "equiv",
   expd_first = NULL,
   mode = "rocprc",
+  multiclass = NULL,
   nfold_df = NULL,
   score_cols = NULL,
   lab_col = NULL,
@@ -23,12 +24,12 @@ mmdata(
 }
 \arguments{
 \item{scores}{A numeric dataset of predicted scores. It can be a vector,
-a matrix, an array, a data frame, or a list. The \code{\link{join_scores}}
+a matrix, an array, a data frame, or a list. The \code{\link[=join_scores]{join_scores()}}
 function can be useful to make scores with multiple datasets.}
 
 \item{labels}{A numeric, character, logical, or factor dataset
 of observed labels. It can be a vector, a matrix, an array,
-a data frame, or a list. The \code{\link{join_labels}}
+a data frame, or a list. The \code{\link[=join_labels]{join_labels()}}
 function can be useful to make labels with multiple datasets.}
 
 \item{modnames}{A character vector for the names of the models.
@@ -49,44 +50,67 @@ detected when \code{posclass} is \code{NULL}.}
 \item{na_worst}{A Boolean value for controlling the treatment of NAs
 in \code{scores}.
 \describe{
-  \item{TRUE}{All NAs are treated as the worst scores}
-  \item{FALSE}{All NAs are treated as the best scores}
+\item{TRUE}{All NAs are treated as the worst scores}
+\item{FALSE}{All NAs are treated as the best scores}
 }}
 
 \item{ties_method}{A string for controlling ties in \code{scores}.
 \describe{
-  \item{"equiv"}{Ties are equivalently ranked}
-  \item{"first"}{Ties are ranked in an increasing order as appeared}
-  \item{"random"}{ Ties are ranked in random order}
+\item{"equiv"}{Ties are equivalently ranked}
+\item{"first"}{Ties are ranked in an increasing order as appeared}
+\item{"random"}{ Ties are ranked in random order}
 }}
 
-\item{expd_first}{A string to indicate which of the two variables
-  - model names or test dataset IDs
-  should be expanded first when they are automatically generated.
+\item{expd_first}{A string to indicate which of the two variables - model
+names or test dataset IDs should be expanded first when they are
+automatically generated.
 
-  \describe{
-    \item{"modnames"}{Model names are expanded first. For example,
-           The \code{mmdata} function generates \code{modnames} as
-           \code{c("m1", "m2")} and \code{dsids} as \code{c(1, 1)}
-           when two vectors are passed as input,
-           and \code{modnames} and \code{dsids} are unspecified.}
-    \item{"dsids"}{Test dataset IDs are expanded first. For example,
-           The \code{mmdata} function generates \code{modnames} as
-           \code{c("m1", "m1")} and \code{dsids} as \code{c(1, 2)}
-           when two vectors are passed as input,
-           and \code{modnames} and \code{dsids} are unspecified.}
-  }}
+\describe{
+\item{"modnames"}{Model names are expanded first. For example,
+The \code{mmdata} function generates \code{modnames} as
+\code{c("m1", "m2")} and \code{dsids} as \code{c(1, 1)}
+when two vectors are passed as input,
+and \code{modnames} and \code{dsids} are unspecified.}
+\item{"dsids"}{Test dataset IDs are expanded first. For example,
+The \code{mmdata} function generates \code{modnames} as
+\code{c("m1", "m1")} and \code{dsids} as \code{c(1, 2)}
+when two vectors are passed as input,
+and \code{modnames} and \code{dsids} are unspecified.}
+}}
 
 \item{mode}{A string that specifies the types of evaluation measures
 that the \code{evalmod} function calculates.
 \describe{
-  \item{"rocprc"}{ROC and Precision-Recall curves}
-  \item{"prcroc"}{Same as above}
-  \item{"basic"}{Normalized ranks vs. accuracy, error rate, specificity,
-                 sensitivity, precision, Matthews correlation coefficient,
-                 and F-score. }
-  \item{"aucroc"}{Fast AUC(ROC) calculation with the U statistic}
+\item{"rocprc"}{ROC and Precision-Recall curves}
+\item{"prcroc"}{Same as above}
+\item{"basic"}{Normalized ranks vs. accuracy, error rate, specificity,
+sensitivity, precision, Matthews correlation coefficient,
+and F-score. }
+\item{"aucroc"}{Fast AUC(ROC) calculation with the U statistic}
 }}
+
+\item{multiclass}{A string that specifies how a dataset with more than
+two classes is evaluated.
+\describe{
+\item{"none"}{Binary evaluation. Labels with more than two classes
+are an error, as they have always been.}
+\item{"ovr"}{One-vs-rest. Each class becomes its own binary problem -
+that class against all the others - and the \code{K}
+decompositions are carried on the model axis, so that
+they behave like \code{K} models evaluated on one dataset.}
+}
+\code{multiclass} is detected from the input when it is \code{NULL}:
+"ovr" when \code{labels} hold more than two classes and \code{scores}
+is a matrix or a data frame with one column per class, "none"
+otherwise. \code{scores} columns are matched to classes by their column
+names when those name the classes, and by position otherwise.
+
+\code{posclass} is ignored in one-vs-rest mode, and \code{multiclass}
+cannot be combined with \code{nfold_df}.
+
+Note that each one-vs-rest decomposition has its own class balance, so
+the baseline of a precision-recall curve differs from class to class.
+The plots leave the baseline out for that reason.}
 
 \item{nfold_df}{A data frame that contains at least one score column,
 label and fold columns.}
@@ -104,13 +128,13 @@ of \code{nfold_df}.}
 }
 \value{
 The \code{mmdata} function returns an \code{mdat} object
-  that contains formatted labels and score ranks. The object can
-  be used as input data for the \code{\link{evalmod}} function.
+that contains formatted labels and score ranks. The object can
+be used as input data for the \code{\link[=evalmod]{evalmod()}} function.
 }
 \description{
 The \code{mmdata} function takes predicted scores and labels
-  and returns an \code{mdat} object. The \code{\link{evalmod}} function
-  takes an \code{mdat} object as input data to calculate evaluation measures.
+and returns an \code{mdat} object. The \code{\link[=evalmod]{evalmod()}} function
+takes an \code{mdat} object as input data to calculate evaluation measures.
 }
 \examples{
 
@@ -208,11 +232,23 @@ cvdat2 <- mmdata(
 )
 cvdat2
 
+
+##################################################
+### Multiclass dataset
+###
+
+## Load a 3-class dataset with one score column per class
+data(C3N150)
+
+## One-vs-rest decomposition, detected from the input
+mcmdat <- mmdata(C3N150$scores, C3N150$labels)
+mcmdat
+
 }
 \seealso{
-\code{\link{evalmod}} for calculation evaluation measures.
-  \code{\link{join_scores}} and \code{\link{join_labels}} for formatting
-  scores and labels with multiple datasets.
-  \code{\link{format_nfold}} for creating n-fold cross validation dataset
-  from data frame.
+\code{\link[=evalmod]{evalmod()}} for calculation evaluation measures.
+\code{\link[=join_scores]{join_scores()}} and \code{\link[=join_labels]{join_labels()}} for formatting
+scores and labels with multiple datasets.
+\code{\link[=format_nfold]{format_nfold()}} for creating n-fold cross validation dataset
+from data frame.
 }

@@ -66,7 +66,7 @@ plot.mmcurves <- function(x, y = NULL, ...) {
 #' @export
 plot.sspoints <- function(x, y = NULL, ...) {
   arglist <- .get_plot_arglist(attr(x, "args"), y,
-    def_curvetype = .get_metric_names("basic"),
+    def_curvetype = .get_obj_metrics(x),
     def_type = "p",
     def_show_cb = FALSE, def_raw_curves = TRUE,
     def_add_np_nn = TRUE, def_show_legend = FALSE,
@@ -83,7 +83,7 @@ plot.sspoints <- function(x, y = NULL, ...) {
 #' @export
 plot.mspoints <- function(x, y = NULL, ...) {
   arglist <- .get_plot_arglist(attr(x, "args"), y,
-    def_curvetype = .get_metric_names("basic"),
+    def_curvetype = .get_obj_metrics(x),
     def_type = "p",
     def_show_cb = FALSE, def_raw_curves = TRUE,
     def_add_np_nn = TRUE, def_show_legend = TRUE,
@@ -100,7 +100,7 @@ plot.mspoints <- function(x, y = NULL, ...) {
 #' @export
 plot.smpoints <- function(x, y = NULL, ...) {
   arglist <- .get_plot_arglist(attr(x, "args"), y,
-    def_curvetype = .get_metric_names("basic"),
+    def_curvetype = .get_obj_metrics(x),
     def_type = "p",
     def_show_cb = TRUE, def_raw_curves = NULL,
     def_add_np_nn = TRUE, def_show_legend = FALSE,
@@ -116,7 +116,7 @@ plot.smpoints <- function(x, y = NULL, ...) {
 #' @export
 plot.mmpoints <- function(x, y = NULL, ...) {
   arglist <- .get_plot_arglist(attr(x, "args"), y,
-    def_curvetype = .get_metric_names("basic"),
+    def_curvetype = .get_obj_metrics(x),
     def_type = "p",
     def_show_cb = FALSE, def_raw_curves = NULL,
     def_add_np_nn = TRUE, def_show_legend = TRUE,
@@ -126,4 +126,28 @@ plot.mmpoints <- function(x, y = NULL, ...) {
   arglist[["curvetype"]] <- .pmatch_curvetype_basic(arglist[["curvetype"]])
 
   .plot_multi(x, arglist)
+}
+
+#' @rdname plot
+#' @export
+plot.ssxycurves <- function(x, y = NULL, ...) {
+  .plot_xycurves(x, ...)
+}
+
+#' @rdname plot
+#' @export
+plot.msxycurves <- function(x, y = NULL, ...) {
+  .plot_xycurves(x, show_legend = TRUE, ...)
+}
+
+#' @rdname plot
+#' @export
+plot.smxycurves <- function(x, y = NULL, ...) {
+  .plot_xycurves(x, ...)
+}
+
+#' @rdname plot
+#' @export
+plot.mmxycurves <- function(x, y = NULL, ...) {
+  .plot_xycurves(x, show_legend = TRUE, ...)
 }

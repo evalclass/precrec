@@ -1,0 +1,20 @@
+plot: 2 panel(s)
+  panel 1
+    title: ROC - P: 3, N: 1
+    x: 1 - Specificity
+    y: Sensitivity
+    layer 1: GeomLine  n=3012  groups=3  n_na_y=0
+      x: min=0 max=1 mean=0.4995 | 0 0.374 0.751 0.122 0.498 0.875 0.249 0.626 1
+      y: min=0 max=1 mean=0.666 | 0 0.6667 0.6667 1 1 1 0.3333 0.3333 1
+    layer 2: GeomAbline  n=1  groups=1  n_na_y=0
+      slope: min=1 max=1 mean=1 | 1
+      intercept: min=0 max=0 mean=0 | 0
+  panel 2
+    title: Precision-Recall - P: 3, N: 1
+    x: Recall
+    y: Precision
+    layer 1: GeomLine  n=3004  groups=3  n_na_y=0
+      x: min=0 max=1 mean=0.5002 | 0 0.375 0.751 0.125 0.5 0.876 0.249 0.625 1
+      y: min=0.5005 max=1 mean=0.891 | 1 1 0.6926 1 1 1 1 0.6522 0.75
+    layer 2: GeomHline  n=1  groups=1  n_na_y=0
+      yintercept: min=0.75 max=0.75 mean=0.75 | 0.75

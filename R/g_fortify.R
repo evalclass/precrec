@@ -27,7 +27,7 @@ fortify.cmats <- function(model, ...) {
   # === Prepare a data frame for ggplot2 ===
   n <- length(model[["ranks"]])
   data.frame(
-    x = rep(seq_len(length(model[["ranks"]])), 4),
+    x = rep(seq_along(model[["ranks"]]), 4),
     y = c(
       model[["tp"]], model[["fn"]],
       model[["fp"]], model[["tn"]]
@@ -59,134 +59,186 @@ fortify.pevals <- function(model, ...) {
   # === Prepare a data frame for ggplot2 ===
   pb <- model[["basic"]]
   n <- length(pb[["error"]])
+
+  # The measures the object holds, plus the one derived column that has no
+  # place of its own in the table
+  mnames <- intersect(.get_metric_names("basic_all"), names(pb))
+  vals <- .map(mnames, function(m) pb[[m]])
+  names(vals) <- mnames
+  vals[["1 - specificity"]] <- 1 - pb[["specificity"]]
+
+  # Kept where it has always sat, between specificity and precision
+  gnames <- append(mnames, "1 - specificity",
+    after = match("sensitivity", mnames)
+  )
+
   data.frame(
-    x = rep(1:n, 10),
-    y = c(
-      pb[["score"]], pb[["label"]],
-      pb[["error"]], pb[["accuracy"]],
-      pb[["specificity"]], pb[["sensitivity"]],
-      1 - pb[["specificity"]], pb[["precision"]],
-      pb[["mcc"]], pb[["fscore"]]
-    ),
-    group = factor(
-      c(
-        rep("score", n),
-        rep("label", n),
-        rep("error", n),
-        rep("accuracy", n),
-        rep("specificity", n),
-        rep("sensitivity", n),
-        rep("1 - specificity", n),
-        rep("precision", n),
-        rep("mcc", n),
-        rep("fscore", n)
-      ),
-      levels = c(
-        "score", "label",
-        "error", "accuracy",
-        "specificity",
-        "sensitivity",
-        "1 - specificity",
-        "precision",
-        "mcc",
-        "fscore"
-      )
+    x = rep(1:n, length(gnames)),
+    y = unlist(vals[gnames], use.names = FALSE),
+    group = factor(rep(gnames, each = n), levels = gnames)
+  )
+}
+
+#' @rdname fortify
+#' @export
+fortify.sscurves <- function(model, data, raw_curves = NULL,
+                             reduce_points = FALSE,
+                             ...) {
+  # One dataset has no average to contrast a raw curve with.
+  .ignore_unused_args(raw_curves)
+
+  .as_plain_df(
+    .dataframe_common(model,
+      raw_curves = TRUE, reduce_points = reduce_points,
+      check_ggplot = TRUE, ...
     )
   )
 }
 
 #' @rdname fortify
 #' @export
-fortify.sscurves <- function(model, data, raw_curves = NULL, reduce_points = FALSE,
+fortify.mscurves <- function(model, data, raw_curves = NULL,
+                             reduce_points = FALSE,
                              ...) {
-  .dataframe_common(model,
-    raw_curves = TRUE, reduce_points = reduce_points,
-    check_ggplot = TRUE, ...
+  # One dataset has no average to contrast a raw curve with.
+  .ignore_unused_args(raw_curves)
+
+  .as_plain_df(
+    .dataframe_common(model,
+      raw_curves = TRUE, reduce_points = reduce_points,
+      check_ggplot = TRUE, ...
+    )
   )
 }
 
 #' @rdname fortify
 #' @export
-fortify.mscurves <- function(model, data, raw_curves = NULL, reduce_points = FALSE,
-                             ...) {
-  .dataframe_common(model,
-    raw_curves = TRUE, reduce_points = reduce_points,
-    check_ggplot = TRUE, ...
-  )
-}
-
-#' @rdname fortify
-#' @export
-fortify.smcurves <- function(model, data, raw_curves = NULL, reduce_points = FALSE,
+fortify.smcurves <- function(model, data, raw_curves = NULL,
+                             reduce_points = FALSE,
                              ...) {
   arglist <- .get_fortify_arglist(attr(model, "args"),
     def_raw_curves = raw_curves, ...
   )
 
-  .dataframe_common(model,
-    raw_curves = arglist[["raw_curves"]],
-    reduce_points = reduce_points, check_ggplot = TRUE, ...
+  .as_plain_df(
+    .dataframe_common(model,
+      raw_curves = arglist[["raw_curves"]],
+      reduce_points = reduce_points, check_ggplot = TRUE, ...
+    )
   )
 }
 
 #' @rdname fortify
 #' @export
-fortify.mmcurves <- function(model, data, raw_curves = NULL, reduce_points = FALSE,
+fortify.mmcurves <- function(model, data, raw_curves = NULL,
+                             reduce_points = FALSE,
                              ...) {
   arglist <- .get_fortify_arglist(attr(model, "args"),
     def_raw_curves = raw_curves, ...
   )
 
-  .dataframe_common(model,
-    raw_curves = arglist[["raw_curves"]],
-    reduce_points = reduce_points, check_ggplot = TRUE, ...
+  .as_plain_df(
+    .dataframe_common(model,
+      raw_curves = arglist[["raw_curves"]],
+      reduce_points = reduce_points, check_ggplot = TRUE, ...
+    )
   )
 }
 
 #' @rdname fortify
 #' @export
-fortify.sspoints <- function(model, data, raw_curves = NULL, reduce_points = FALSE,
+fortify.sspoints <- function(model, data, raw_curves = NULL,
+                             reduce_points = FALSE,
                              ...) {
-  .dataframe_common(model,
-    mode = "basic", raw_curves = TRUE,
-    check_ggplot = TRUE, reduce_points = FALSE, ...
+  # One dataset has no average to contrast a raw curve with, and the basic
+  # measures have no point reduction.
+  .ignore_unused_args(raw_curves, reduce_points)
+
+  .as_plain_df(
+    .dataframe_common(model,
+      mode = "basic", raw_curves = TRUE,
+      check_ggplot = TRUE, reduce_points = FALSE, ...
+    )
   )
 }
 
 #' @rdname fortify
 #' @export
-fortify.mspoints <- function(model, data, raw_curves = NULL, reduce_points = FALSE,
+fortify.mspoints <- function(model, data, raw_curves = NULL,
+                             reduce_points = FALSE,
                              ...) {
-  .dataframe_common(model,
-    mode = "basic", raw_curves = TRUE,
-    check_ggplot = TRUE, reduce_points = FALSE, ...
+  # One dataset has no average to contrast a raw curve with, and the basic
+  # measures have no point reduction.
+  .ignore_unused_args(raw_curves, reduce_points)
+
+  .as_plain_df(
+    .dataframe_common(model,
+      mode = "basic", raw_curves = TRUE,
+      check_ggplot = TRUE, reduce_points = FALSE, ...
+    )
   )
 }
 
 #' @rdname fortify
 #' @export
-fortify.smpoints <- function(model, data, raw_curves = NULL, reduce_points = FALSE,
+fortify.smpoints <- function(model, data, raw_curves = NULL,
+                             reduce_points = FALSE,
                              ...) {
+  # The basic measures have no point reduction.
+  .ignore_unused_args(reduce_points)
+
   arglist <- .get_fortify_arglist(attr(model, "args"),
     def_raw_curves = raw_curves, ...
   )
 
-  .dataframe_common(model,
-    mode = "basic", raw_curves = arglist[["raw_curves"]],
-    check_ggplot = TRUE, reduce_points = FALSE, ...
+  .as_plain_df(
+    .dataframe_common(model,
+      mode = "basic", raw_curves = arglist[["raw_curves"]],
+      check_ggplot = TRUE, reduce_points = FALSE, ...
+    )
   )
 }
 
 #' @rdname fortify
 #' @export
-fortify.mmpoints <- function(model, data, raw_curves = NULL, reduce_points = FALSE,
+fortify.mmpoints <- function(model, data, raw_curves = NULL,
+                             reduce_points = FALSE,
                              ...) {
+  # The basic measures have no point reduction.
+  .ignore_unused_args(reduce_points)
+
   arglist <- .get_fortify_arglist(attr(model, "args"),
     def_raw_curves = raw_curves, ...
   )
 
-  .dataframe_common(model,
-    mode = "basic", raw_curves = arglist[["raw_curves"]],
-    check_ggplot = TRUE, reduce_points = FALSE, ...
+  .as_plain_df(
+    .dataframe_common(model,
+      mode = "basic", raw_curves = arglist[["raw_curves"]],
+      check_ggplot = TRUE, reduce_points = FALSE, ...
+    )
   )
+}
+
+#' @rdname fortify
+#' @export
+fortify.ssxycurves <- function(model, data, ...) {
+  .as_plain_df(.dataframe_xycurves(model, check_ggplot = TRUE, ...))
+}
+
+#' @rdname fortify
+#' @export
+fortify.msxycurves <- function(model, data, ...) {
+  .as_plain_df(.dataframe_xycurves(model, check_ggplot = TRUE, ...))
+}
+
+#' @rdname fortify
+#' @export
+fortify.smxycurves <- function(model, data, ...) {
+  .as_plain_df(.dataframe_xycurves(model, check_ggplot = TRUE, ...))
+}
+
+#' @rdname fortify
+#' @export
+fortify.mmxycurves <- function(model, data, ...) {
+  .as_plain_df(.dataframe_xycurves(model, check_ggplot = TRUE, ...))
 }

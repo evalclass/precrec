@@ -33,7 +33,7 @@ C++/[Rcpp](https://cran.r-project.org/package=Rcpp).
   `help(package = "precrec")` in R. The HTML version is also available
   on the [GitHub Pages](https://evalclass.github.io/precrec/reference/).
 
-## Six key features of precrec
+## Seven key features of precrec
 
 ### 1. Accurate curve calculations
 
@@ -62,7 +62,18 @@ evaluation measures.
 - Sensitivity, true positive rate (TPR), recall
 - Precision, positive predictive value (PPV)
 - Matthews correlation coefficient
-- F-score
+- F-score, and the F-beta score it generalizes
+- Balanced accuracy
+- Negative predictive value (NPV)
+- Informedness (Youden’s J) and markedness
+- Cohen’s kappa
+- Brier score, RMSE and log loss, for scores that are probabilities
+- False positive rate, false negative rate, false discovery rate, false
+  omission rate, rate of positive predictions, rate of negative
+  predictions, lift, odds ratio, mutual information, chi-square,
+  weighted misclassification cost and SAR, on request through
+  `evalmod(metrics = )`
+- Precision-recall break-even point
 
 ### 4. Confidence interval band
 
@@ -76,7 +87,14 @@ in the corresponding plot.
 also draw partial ROC and precision-recall curves for the specified
 ranges.
 
-### 6. Supporting functions
+### 6. Multiclass evaluation
+
+`precrec` evaluates a dataset with more than two classes by one-vs-rest
+decomposition. Each class becomes its own binary problem, so the
+accurate precision-recall calculations apply to it unchanged, and `auc`
+reports the per-class scores together with their macro-average.
+
+### 7. Supporting functions
 
 `precrec` provides several useful functions that lack in most other
 evaluation tools.
@@ -109,33 +127,38 @@ evaluation tools.
 
 ## Functions
 
-The `precrec` package provides the following six functions.
+The `precrec` package provides the following ten functions.
 
-| Function | Description |
-|:---|:---|
-| evalmod | Main function to calculate evaluation measures |
-| mmdata | Reformat input data for performance evaluation calculation |
-| join_scores | Join scores of multiple models into a list |
-| join_labels | Join observed labels of multiple test datasets into a list |
-| create_sim_samples | Create random samples for simulations |
-| format_nfold | Create n-fold cross validation dataset from data frame |
+| Function           | Description                                                 |
+|:-------------------|:------------------------------------------------------------|
+| evalmod            | Main function to calculate evaluation measures              |
+| mmdata             | Reformat input data for performance evaluation calculation  |
+| join_scores        | Join scores of multiple models into a list                  |
+| join_labels        | Join observed labels of multiple test datasets into a list  |
+| create_sim_samples | Create random samples for simulations                       |
+| format_nfold       | Create n-fold cross validation dataset from data frame      |
+| prob_metrics       | Calculate the Brier score, the RMSE and the log loss        |
+| prob_metrics_ci    | Calculate CIs of the Brier score, the RMSE and the log loss |
+| metric_curve       | Draw one evaluation measure against another                 |
+| prbe               | Find the precision-recall break-even point                  |
 
-Moreover, the `precrec` package provides nine S3 generics for the S3
-object created by the `evalmod` function. **N.B.** The R language
-specifies S3 objects and S3 generic functions as part of the most basic
-object-oriented system in R.
+Moreover, the `precrec` package provides ten S3 generics for the S3
+objects created by the `evalmod` and `metric_curve` functions. **N.B.**
+The R language specifies S3 objects and S3 generic functions as part of
+the most basic object-oriented system in R.
 
-| S3 generic | Package | Description |
-|:---|:---|:---|
-| print | base | Print the calculation results and the summary of the test data |
-| as.data.frame | base | Convert a precrec object to a data frame |
-| plot | graphics | Plot performance evaluation measures |
-| autoplot | ggplot2 | Plot performance evaluation measures with ggplot2 |
-| fortify | ggplot2 | Prepare a data frame for ggplot2 |
-| auc | precrec | Make a data frame with AUC scores |
-| part | precrec | Calculate partial curves and partial AUC scores |
-| pauc | precrec | Make a data frame with pAUC scores |
-| auc_ci | precrec | Calculate confidence intervals of AUC scores |
+| S3 generic    | Package    | Description                                                    |
+|:--------------|:-----------|:---------------------------------------------------------------|
+| print         | base       | Print the calculation results and the summary of the test data |
+| as.data.frame | base       | Convert a precrec object to a data frame                       |
+| plot          | graphics   | Plot performance evaluation measures                           |
+| autoplot      | ggplot2    | Plot performance evaluation measures with ggplot2              |
+| fortify       | ggplot2    | Prepare a data frame for ggplot2                               |
+| auc           | precrec    | Make a data frame with AUC scores                              |
+| part          | precrec    | Calculate partial curves and partial AUC scores                |
+| pauc          | precrec    | Make a data frame with pAUC scores                             |
+| auc_ci        | precrec    | Calculate confidence intervals of AUC scores                   |
+| as.data.table | data.table | Convert a precrec object to a data.table                       |
 
 ## Examples
 
@@ -169,7 +192,13 @@ library(ggplot2)
 autoplot(sscurves)
 ```
 
-![](https://raw.githubusercontent.com/evalclass/precrec/main/README_files/figure-gfm/unnamed-chunk-2-1.png)
+<figure>
+<img
+src="https://raw.githubusercontent.com/evalclass/precrec/main/README_files/figure-gfm/unnamed-chunk-2-1.png"
+alt="ROC and precision-recall curves of the P10N10 test dataset, drawn side by side" />
+<figcaption aria-hidden="true">ROC and precision-recall curves of the
+P10N10 test dataset, drawn side by side</figcaption>
+</figure>
 
 ## Citation
 

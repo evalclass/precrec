@@ -18,7 +18,7 @@ the same lengths.}
 }
 \value{
 The \code{join_labels} function returns a list that
-  contains all combined label data.
+contains all combined label data.
 }
 \description{
 \code{join_labels} takes observed labels and converts them to a list.
@@ -69,7 +69,7 @@ str(labels4)
 
 }
 \seealso{
-\code{\link{evalmod}} for calculation evaluation measures.
-  \code{\link{mmdata}} for formatting input data.
-  \code{\link{join_scores}} for formatting scores with multiple datasets.
+\code{\link[=evalmod]{evalmod()}} for calculation evaluation measures.
+\code{\link[=mmdata]{mmdata()}} for formatting input data.
+\code{\link[=join_scores]{join_scores()}} for formatting scores with multiple datasets.
 }

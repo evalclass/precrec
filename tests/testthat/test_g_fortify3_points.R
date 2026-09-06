@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("FT 3: Fortify points")
+# FT 3: Fortify points
 # Test fortify(model, ...)
 
 ft3_check_libs <- function() {

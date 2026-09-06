@@ -18,3 +18,7 @@
 ^CRAN-SUBMISSION$
 ^.idea$
 ^.vscode$
+^CLAUDE\.md$
+^\.claude$
+^\.lintr$
+^bench$

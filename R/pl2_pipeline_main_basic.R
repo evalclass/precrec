@@ -3,7 +3,13 @@
 #
 .pl_main_basic <- function(mdat, model_type, dataset_type, class_name_pf,
                            calc_avg = TRUE, cb_alpha = 0.05,
-                           raw_curves = FALSE) {
+                           raw_curves = FALSE, beta = 1, metrics = NULL,
+                           cost_fp = 1, cost_fn = 1) {
+  metric_names <- .basic_metric_names(.resolve_metrics(metrics))
+  # Only the measures derived in R reach calc_measures(); the C++ layer has
+  # always produced the rest, and handing it the whole list once per dataset
+  # would make it look the table up for nothing
+  derived <- setdiff(names(metric_names), .get_metric_names("basic"))
   if (dataset_type == "single") {
     calc_avg <- FALSE
     raw_curves <- TRUE
@@ -13,24 +19,24 @@
   # Create points
   plfunc <- function(s) {
     if (attr(mdat[[s]], "nn") == 0 || attr(mdat[[s]], "np") == 0) {
-      if (attr(mdat[[s]], "np") > 0) {
-        cl <- "positive"
-      } else {
-        cl <- "negative"
-      }
-      err_msg <- paste0(
-        "Basic measures cannot be calculated. ",
-        "Only a single class (", cl, ") ",
-        "found in dataset (modname: ",
-        attr(mdat[[s]], "modname"),
-        ", dsid: ", attr(mdat[[s]], "dsid"), ")."
+      # Accuracy and error rate are still defined here, and the measures that
+      # are not - specificity without negatives, sensitivity without
+      # positives - come back as NA, so this is a warning rather than the
+      # error the curve pipelines raise
+      warning(
+        .single_class_msg(
+          mdat[[s]], "Some basic measures cannot be calculated."
+        ),
+        call. = FALSE
       )
-      stop(err_msg, call. = FALSE)
     }
     cdat <- create_confmats(mdat[[s]], keep_fmdat = TRUE)
-    calc_measures(cdat)
+    calc_measures(cdat,
+      beta = beta, metrics = derived,
+      cost_fp = cost_fp, cost_fn = cost_fn
+    )
   }
-  lpoints <- lapply(seq_along(mdat), plfunc)
+  lpoints <- .map_idx(mdat, plfunc)
 
   # Summarize points by evaluation measure
   grpfunc <- function(m) {
@@ -39,25 +45,19 @@
       calc_avg, cb_alpha
     )
   }
-  eval_names <- c(
-    "score", "label", "error", "accuracy", "specificity",
-    "sensitivity", "precision", "mcc", "fscore"
-  )
-  grp_row_names <- c(
-    "score", "label", "err", "acc", "sp", "sn", "prec", "mcc",
-    "fscore"
-  )
-  grp_points <- lapply(eval_names, grpfunc)
+  eval_names <- names(metric_names)
+  grp_row_names <- unname(metric_names)
+  grp_points <- .map(eval_names, grpfunc)
   names(grp_points) <- grp_row_names
 
   # Summarize basic evaluation measures
-  eval_summary <- .summarize_basic(lpoints, mdat)
+  eval_summary <- .summarize_basic(lpoints, mdat, eval_names)
 
   # Summarize average
   grpfunc2 <- function(et) {
     attr(grp_points[[et]], "avgcurves")
   }
-  grp_avg <- lapply(names(grp_points), grpfunc2)
+  grp_avg <- .map(names(grp_points), grpfunc2)
   names(grp_avg) <- names(grp_points)
 
   # === Create an S3 object ===
@@ -65,7 +65,7 @@
     grpfunc3 <- function(m) {
       .summarize_points(NULL, m, "pointgrp", mdat, NULL, NULL, NULL)
     }
-    grp_points <- lapply(eval_names, grpfunc3)
+    grp_points <- .map(eval_names, grpfunc3)
     names(grp_points) <- grp_row_names
   }
   s3obj <- structure(grp_points, class = c(
@@ -74,6 +74,7 @@
   ))
 
   # Set attributes
+  attr(s3obj, "metrics") <- eval_names
   attr(s3obj, "eval_summary") <- eval_summary
   attr(s3obj, "grp_avg") <- grp_avg
   attr(s3obj, "data_info") <- attr(mdat, "data_info")
@@ -85,7 +86,11 @@
     mode = "basic",
     calc_avg = calc_avg,
     cb_alpha = cb_alpha,
-    raw_curves = raw_curves
+    raw_curves = raw_curves,
+    beta = beta,
+    metrics = metrics,
+    cost_fp = cost_fp,
+    cost_fn = cost_fn
   )
   attr(s3obj, "validated") <- FALSE
 
@@ -100,13 +105,13 @@
                               dataset_type, calc_avg, cb_alpha) {
   if (!is.null(lpoints)) {
     # Summarize basic evaluation measures
-    grp_func <- function(s) {
+    grp_func <- function(pt) {
       list(
-        x = lpoints[[s]][["basic"]][["rank"]],
-        y = lpoints[[s]][["basic"]][[eval_type]]
+        x = pt[["basic"]][["rank"]],
+        y = pt[["basic"]][[eval_type]]
       )
     }
-    pevals <- lapply(seq_along(lpoints), grp_func)
+    pevals <- .map(lpoints, grp_func)
 
     # Calculate the average curves
     if (dataset_type == "multiple" && calc_avg) {
@@ -142,37 +147,34 @@
 #
 # Summarize basic evaluation measures
 #
-.summarize_basic <- function(lpoints, mdat) {
+.summarize_basic <- function(lpoints, mdat, eval_names) {
   # Summarize AUC of ROC or PRC curves
   modnames <- attr(mdat, "data_info")[["modnames"]]
   dsids <- attr(mdat, "data_info")[["dsids"]]
-  evaltypes <- c(
-    "rank", "score", "label", "error", "accuracy",
-    "specificity", "sensitivity", "precision", "mcc", "fscore"
-  )
+  evaltypes <- c("rank", eval_names)
   elen <- length(evaltypes)
 
-  sbasic <- data.frame(
-    modnames = rep(modnames, each = elen),
-    dsids = rep(dsids, each = elen),
-    evaltypes = rep(evaltypes, length(modnames)),
-    minvals = rep(NA, length(modnames) * elen),
-    q25vals = rep(NA, length(modnames) * elen),
-    medianvals = rep(NA, length(modnames) * elen),
-    meanvals = rep(NA, length(modnames) * elen),
-    q75vals = rep(NA, length(modnames) * elen),
-    maxvals = rep(NA, length(modnames) * elen),
-    stringsAsFactors = FALSE
-  )
-
+  # Filled as a matrix first: assigning a row into a data frame inside the
+  # loop copied the whole frame on every pass
+  quantiles <- matrix(NA_real_, nrow = length(modnames) * elen, ncol = 6)
   for (i in seq_along(lpoints)) {
     for (j in seq_along(evaltypes)) {
       vals <- lpoints[[i]][["basic"]][[evaltypes[j]]]
-      sbasic[(i - 1) * length(evaltypes) + j, 4:9] <- summary(vals)[1:6]
+      quantiles[(i - 1) * elen + j, ] <- summary(vals)[1:6]
     }
   }
 
-  sbasic
+  data.table::data.table(
+    modnames = rep(modnames, each = elen),
+    dsids = rep(dsids, each = elen),
+    evaltypes = rep(evaltypes, length(modnames)),
+    minvals = quantiles[, 1],
+    q25vals = quantiles[, 2],
+    medianvals = quantiles[, 3],
+    meanvals = quantiles[, 4],
+    q75vals = quantiles[, 5],
+    maxvals = quantiles[, 6]
+  )
 }
 
 #
@@ -185,16 +187,16 @@
   }
 
   # Validate class items and attributes
-  item_names <- c(
-    "score", "label", "err", "acc", "sp", "sn", "prec", "mcc",
-    "fscore"
-  )
+  item_names <- unname(.basic_metric_names(.get_obj_metrics(points)))
   attr_names <- c(
-    "eval_summary", "grp_avg", "data_info", "uniq_modnames",
+    "metrics", "eval_summary", "grp_avg", "data_info", "uniq_modnames",
     "uniq_dsids", "model_type", "dataset_type", "args",
     "validated"
   )
-  arg_names <- c("mode", "calc_avg", "cb_alpha", "raw_curves")
+  arg_names <- c(
+    "mode", "calc_avg", "cb_alpha", "raw_curves", "beta", "metrics",
+    "cost_fp", "cost_fn"
+  )
   .validate_basic(
     points, class_name, ".pl_main_basic", item_names, attr_names,
     arg_names

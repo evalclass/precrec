@@ -1,6 +1,6 @@
 #' Join scores of multiple models into a list
 #'
-#' The \code{join_scores} function takes predicted scores from multiple models
+#' The `join_scores` function takes predicted scores from multiple models
 #'   and converts them to a list.
 #'
 #' @param ... Multiple datasets. They can be vectors, arrays, matrices,
@@ -12,12 +12,12 @@
 #' @param chklen A Boolean value to specify whether all list items must be
 #'   the same lengths.
 #'
-#' @return The \code{join_scores} function returns a list that
+#' @return The `join_scores` function returns a list that
 #'   contains all combined score data.
 #'
-#' @seealso \code{\link{evalmod}} for calculation evaluation measures.
-#'   \code{\link{mmdata}} for formatting input data.
-#'   \code{\link{join_labels}} for formatting labels with multiple datasets.
+#' @seealso [evalmod()] for calculation evaluation measures.
+#'   [mmdata()] for formatting input data.
+#'   [join_labels()] for formatting labels with multiple datasets.
 #'
 #' @examples
 #'
@@ -74,7 +74,7 @@ join_scores <- function(..., byrow = FALSE, chklen = TRUE) {
 
 #' Join observed labels of multiple test datasets into a list
 #'
-#' \code{join_labels} takes observed labels and converts them to a list.
+#' `join_labels` takes observed labels and converts them to a list.
 #'
 #' @param ... Multiple datasets. They can be vectors, arrays, matrices,
 #'   data frames, and lists.
@@ -85,12 +85,12 @@ join_scores <- function(..., byrow = FALSE, chklen = TRUE) {
 #' @param chklen A Boolean value to specify whether all list items must be
 #'   the same lengths.
 #'
-#' @return The \code{join_labels} function returns a list that
+#' @return The `join_labels` function returns a list that
 #'   contains all combined label data.
 #'
-#' @seealso \code{\link{evalmod}} for calculation evaluation measures.
-#'   \code{\link{mmdata}} for formatting input data.
-#'   \code{\link{join_scores}} for formatting scores with multiple datasets.
+#' @seealso [evalmod()] for calculation evaluation measures.
+#'   [mmdata()] for formatting input data.
+#'   [join_scores()] for formatting scores with multiple datasets.
 #'
 #' @examples
 #'
@@ -187,27 +187,27 @@ join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
       cdat <- c(cdat, list(ds))
     } else if (is.matrix(ds) || is.data.frame(ds)) {
       if (byrow) {
-        cdat <- c(cdat, lapply(seq_len(nrow(ds)), function(i) ds[i, ]))
+        cdat <- c(cdat, .map(seq_len(nrow(ds)), function(i) ds[i, ]))
       } else {
-        cdat <- c(cdat, lapply(seq_len(ncol(ds)), function(j) ds[, j]))
+        cdat <- c(cdat, .map(seq_len(ncol(ds)), function(j) ds[, j]))
       }
     } else if (is.array(ds)) {
       if (length(dim(ds)) == 1) {
         cdat <- c(cdat, list(as.vector(ds)))
       } else if (length(dim(ds)) == 2) {
         if (byrow) {
-          cdat <- c(cdat, lapply(seq(dim(ds)[1]), function(i) ds[i, ]))
+          cdat <- c(cdat, .map(seq(dim(ds)[1]), function(i) ds[i, ]))
         } else {
-          cdat <- c(cdat, lapply(seq(dim(ds)[2]), function(j) ds[, j]))
+          cdat <- c(cdat, .map(seq(dim(ds)[2]), function(j) ds[, j]))
         }
       } else {
         stop("Array must be 1 or 2 dimensions", call. = FALSE)
       }
     } else if (is.list(ds)) {
-      if (any(unlist(lapply(ds, is.list)))) {
+      if (any(.map_lgl(ds, is.list))) {
         f_unlist <- function(ds2) {
           new_list <- list()
-          for (i in seq_len(length(ds2))) {
+          for (i in seq_along(ds2)) {
             if (is.list(ds2[[i]])) {
               new_list <- c(new_list, f_unlist(ds2[[i]]))
             } else {
@@ -227,7 +227,7 @@ join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
 
   # Validate cdat with efunc_vtype and efunc_nrow
   m <- length(cdat[[1]])
-  for (i in seq_len(length(cdat))) {
+  for (i in seq_along(cdat)) {
     efunc_vtype(cdat[[i]])
     efunc_nrow(m, length(cdat[[i]]))
   }
@@ -261,14 +261,8 @@ join_labels <- function(..., byrow = FALSE, chklen = TRUE) {
   }
 
   # Check byrow
-  assertthat::assert_that(
-    assertthat::is.flag(byrow),
-    assertthat::noNA(byrow)
-  )
+  .assert_flag(byrow, "byrow")
 
   # Check chklen
-  assertthat::assert_that(
-    assertthat::is.flag(chklen),
-    assertthat::noNA(chklen)
-  )
+  .assert_flag(chklen, "chklen")
 }

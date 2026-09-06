@@ -3,9 +3,9 @@ url: https://evalclass.github.io/precrec
 repo:
   branch: main
 
-templates:
-  params:
-    bootswatch: cerulean
+template:
+  bootstrap: 5
+  bootswatch: cerulean
 
 reference:
   - title: Package
@@ -14,6 +14,7 @@ reference:
   - title: Main
     contents:
     - evalmod
+    - metric_curve
   - title: Data preparation
     contents:
     - mmdata
@@ -29,16 +30,24 @@ reference:
   - title: Data retrieval
     contents:
     - as.data.frame
+    - as.data.table
     - auc
     - pauc
-  - title: Partical AUC and partial curve
+  - title: Partial AUC and partial curve
     contents:
     - part
   - title: Confidence interval of AUC scores
     contents:
     - auc_ci
+  - title: Precision-recall break-even point
+    contents:
+    - prbe
+  - title: Probability-based metrics
+    contents:
+    - prob_metrics
+    - prob_metrics_ci
   - title: Datasets
-    desc: P10N10, B500, B1000, IB500, IB1000 and M2N50F5
+    desc: P10N10, B500, B1000, IB500, IB1000, M2N50F5 and C3N150
     contents:
     - P10N10
     - B500
@@ -46,6 +55,7 @@ reference:
     - IB500
     - IB1000
     - M2N50F5
+    - C3N150
 
 navbar:
   left:

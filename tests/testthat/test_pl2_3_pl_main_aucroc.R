@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("PL 2: Pipeline main for AUC (ROC)")
+# PL 2: Pipeline main for AUC (ROC)
 # Test .pl_main_aucroc(mdat, model_type, dataset_type, class_name_pf,
 #                      cald_avg, cb_alpha, raw_curves, na_worst, ties_method)
 

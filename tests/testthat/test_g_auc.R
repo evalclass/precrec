@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("AC 1: Retrieve AUCs")
+# AC 1: Retrieve AUCs
 # Test auc(curves)
 
 auc_create_mscurves <- function() {
@@ -92,4 +90,16 @@ test_that("aucs for mmcurves", {
   expect_equal(nrow(aucs), 8)
   expect_equal(nrow(subset(aucs, curvetypes == "PRC")), 4)
   expect_equal(nrow(subset(aucs, curvetypes == "ROC")), 4)
+})
+
+test_that("auc() returns a plain data frame that does not alias the object", {
+  data(P10N10)
+  curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
+
+  aucs <- auc(curves)
+  expect_identical(class(aucs), "data.frame")
+
+  before <- auc(curves)[["aucs"]]
+  aucs[["aucs"]] <- -1
+  expect_equal(auc(curves)[["aucs"]], before)
 })

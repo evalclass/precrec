@@ -4,7 +4,8 @@
 .pl_main_rocprc <- function(mdat, model_type, dataset_type, class_name_pf,
                             calc_avg = TRUE, cb_alpha = 0.05,
                             raw_curves = FALSE, x_bins = 1000,
-                            interpolate = TRUE) {
+                            interpolate = TRUE,
+                            on_single_class = "error") {
   if (!missing(dataset_type) && dataset_type == "single") {
     calc_avg <- FALSE
     raw_curves <- TRUE
@@ -19,25 +20,23 @@
   # Create curves
   plfunc <- function(s) {
     if (attr(mdat[[s]], "nn") == 0 || attr(mdat[[s]], "np") == 0) {
-      if (attr(mdat[[s]], "np") > 0) {
-        cl <- "positive"
-      } else {
-        cl <- "negative"
-      }
-      err_msg <- paste0(
-        "Curves cannot be calculated. ",
-        "Only a single class (", cl, ") ",
-        "found in dataset (modname: ",
-        attr(mdat[[s]], "modname"),
-        ", dsid: ", attr(mdat[[s]], "dsid"), ")."
+      msg <- .single_class_msg(
+        mdat[[s]], "Curves cannot be calculated."
       )
-      stop(err_msg, call. = FALSE)
+      if (on_single_class == "error") {
+        stop(msg, call. = FALSE)
+      }
+      warning(msg, call. = FALSE)
+      return(.create_na_curves(mdat[[s]], x_bins = x_bins))
     }
     cdat <- create_confmats(mdat[[s]])
-    pevals <- calc_measures(cdat)
+
+    # The curves are drawn from specificity, sensitivity and precision, so
+    # there is no reason to build the rest of the table here
+    pevals <- calc_measures(cdat, extra_measures = FALSE)
     create_curves(pevals, x_bins = x_bins)
   }
-  lcurves <- lapply(seq_along(mdat), plfunc)
+  lcurves <- .map_idx(mdat, plfunc)
 
   # Summarize curves by line type
   grpfunc <- function(lt) {
@@ -46,7 +45,7 @@
       calc_avg, cb_alpha, x_bins
     )
   }
-  grp_curves <- lapply(c("roc", "prc"), grpfunc)
+  grp_curves <- .map(c("roc", "prc"), grpfunc)
   names(grp_curves) <- c("rocs", "prcs")
 
   # Summarize AUCs
@@ -56,7 +55,7 @@
   grpfunc2 <- function(lt) {
     attr(grp_curves[[lt]], "avgcurves")
   }
-  grp_avg <- lapply(names(grp_curves), grpfunc2)
+  grp_avg <- .map(names(grp_curves), grpfunc2)
   names(grp_avg) <- names(grp_curves)
 
   # === Create an S3 object ===
@@ -64,7 +63,7 @@
     grpfunc3 <- function(lt) {
       .summarize_curves(NULL, lt, "crvgrp", mdat, NULL, NULL, NULL, NULL)
     }
-    grp_curves <- lapply(c("roc", "prc"), grpfunc3)
+    grp_curves <- .map(c("roc", "prc"), grpfunc3)
     names(grp_curves) <- c("rocs", "prcs")
   }
   s3obj <- structure(grp_curves, class = c(
@@ -103,7 +102,7 @@
                               dataset_type, calc_avg, cb_alpha, x_bins) {
   if (!is.null(lcurves)) {
     # Summarize ROC or PRC curves
-    mc <- lapply(seq_along(lcurves), function(s) lcurves[[s]][[curve_type]])
+    mc <- .map(lcurves, function(cv) cv[[curve_type]])
 
     # Calculate the average curves
     if (dataset_type == "multiple" && calc_avg) {
@@ -148,23 +147,21 @@
   ct_len <- 2
   modnames <- attr(mdat, "data_info")[["modnames"]]
   dsids <- attr(mdat, "data_info")[["dsids"]]
-  aucs <- data.frame(
-    modnames = rep(modnames, each = ct_len),
-    dsids = rep(dsids, each = ct_len),
-    curvetypes = rep(c("ROC", "PRC"), length(modnames)),
-    aucs = rep(NA, length(modnames) * ct_len),
-    stringsAsFactors = FALSE
-  )
-
+  auc_vals <- rep(NA_real_, length(modnames) * ct_len)
   for (i in seq_along(lcurves)) {
     idx <- ct_len * i - 1
-    aucs[["aucs"]][idx:(idx + 1)] <- c(
+    auc_vals[idx:(idx + 1)] <- c(
       attr(lcurves[[i]][["roc"]], "auc"),
       attr(lcurves[[i]][["prc"]], "auc")
     )
   }
 
-  aucs
+  data.table::data.table(
+    modnames = rep(modnames, each = ct_len),
+    dsids = rep(dsids, each = ct_len),
+    curvetypes = rep(c("ROC", "PRC"), length(modnames)),
+    aucs = auc_vals
+  )
 }
 
 #

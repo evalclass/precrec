@@ -140,7 +140,7 @@ autoplot.mmcurves <- function(object, curvetype = c("ROC", "PRC"), ...) {
 
 #' @rdname autoplot
 #' @export
-autoplot.sspoints <- function(object, curvetype = .get_metric_names("basic"),
+autoplot.sspoints <- function(object, curvetype = .get_obj_metrics(object),
                               ...) {
   arglist <- .get_autoplot_arglist(attr(object, "args"),
     def_curvetype = curvetype, def_type = "p",
@@ -160,7 +160,7 @@ autoplot.sspoints <- function(object, curvetype = .get_metric_names("basic"),
 
 #' @rdname autoplot
 #' @export
-autoplot.mspoints <- function(object, curvetype = .get_metric_names("basic"),
+autoplot.mspoints <- function(object, curvetype = .get_obj_metrics(object),
                               ...) {
   arglist <- .get_autoplot_arglist(attr(object, "args"),
     def_curvetype = curvetype, def_type = "p",
@@ -180,7 +180,7 @@ autoplot.mspoints <- function(object, curvetype = .get_metric_names("basic"),
 
 #' @rdname autoplot
 #' @export
-autoplot.smpoints <- function(object, curvetype = .get_metric_names("basic"),
+autoplot.smpoints <- function(object, curvetype = .get_obj_metrics(object),
                               ...) {
   arglist <- .get_autoplot_arglist(attr(object, "args"),
     def_curvetype = curvetype, def_type = "p",
@@ -199,7 +199,7 @@ autoplot.smpoints <- function(object, curvetype = .get_metric_names("basic"),
 
 #' @rdname autoplot
 #' @export
-autoplot.mmpoints <- function(object, curvetype = .get_metric_names("basic"),
+autoplot.mmpoints <- function(object, curvetype = .get_obj_metrics(object),
                               ...) {
   arglist <- .get_autoplot_arglist(attr(object, "args"),
     def_curvetype = curvetype, def_type = "p",
@@ -214,4 +214,28 @@ autoplot.mmpoints <- function(object, curvetype = .get_metric_names("basic"),
   arglist[["curvetype"]] <- .pmatch_curvetype_basic(arglist[["curvetype"]])
 
   .autoplot_multi(object, arglist)
+}
+
+#' @rdname autoplot
+#' @export
+autoplot.ssxycurves <- function(object, ...) {
+  .autoplot_xycurves(object, ...)
+}
+
+#' @rdname autoplot
+#' @export
+autoplot.msxycurves <- function(object, ...) {
+  .autoplot_xycurves(object, show_legend = TRUE, ...)
+}
+
+#' @rdname autoplot
+#' @export
+autoplot.smxycurves <- function(object, ...) {
+  .autoplot_xycurves(object, ...)
+}
+
+#' @rdname autoplot
+#' @export
+autoplot.mmxycurves <- function(object, ...) {
+  .autoplot_xycurves(object, show_legend = TRUE, ...)
 }

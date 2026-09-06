@@ -1,66 +1,66 @@
 #' Reformat input data for performance evaluation calculation
 #'
-#' The \code{mmdata} function takes predicted scores and labels
-#'   and returns an \code{mdat} object. The \code{\link{evalmod}} function
-#'   takes an \code{mdat} object as input data to calculate evaluation measures.
+#' The `mmdata` function takes predicted scores and labels
+#'   and returns an `mdat` object. The [evalmod()] function
+#'   takes an `mdat` object as input data to calculate evaluation measures.
 #'
 #' @param scores A numeric dataset of predicted scores. It can be a vector,
-#'   a matrix, an array, a data frame, or a list. The \code{\link{join_scores}}
+#'   a matrix, an array, a data frame, or a list. The [join_scores()]
 #'   function can be useful to make scores with multiple datasets.
 #'
 #' @param labels A numeric, character, logical, or factor dataset
 #'   of observed labels. It can be a vector, a matrix, an array,
-#'   a data frame, or a list. The \code{\link{join_labels}}
+#'   a data frame, or a list. The [join_labels()]
 #'   function can be useful to make labels with multiple datasets.
 #'
 #' @param modnames A character vector for the names of the models.
-#'   The \code{evalmod} function automatically generates default names
-#'   as "m1", "m2", "m3", and so on when it is \code{NULL}.
+#'   The `evalmod` function automatically generates default names
+#'   as "m1", "m2", "m3", and so on when it is `NULL`.
 #'
 #' @param dsids A numeric vector for test dataset IDs.
-#' The \code{evalmod} function automatically generates the default ID
-#' as \code{1} when it is \code{NULL}.
+#' The `evalmod` function automatically generates the default ID
+#' as `1` when it is `NULL`.
 #'
 #' @param posclass A scalar value to specify the label of positives
-#'   in \code{labels}. It must be the same data type as \code{labels}.
-#'   For example, \code{posclass = -1} changes the positive label
-#'   from \code{1} to \code{-1} when \code{labels} contains
-#'   \code{1} and \code{-1}. The positive label will be automatically
-#'   detected when \code{posclass} is \code{NULL}.
+#'   in `labels`. It must be the same data type as `labels`.
+#'   For example, `posclass = -1` changes the positive label
+#'   from `1` to `-1` when `labels` contains
+#'   `1` and `-1`. The positive label will be automatically
+#'   detected when `posclass` is `NULL`.
 #'
 #' @param na_worst A Boolean value for controlling the treatment of NAs
-#'   in \code{scores}.
+#'   in `scores`.
 #'   \describe{
 #'     \item{TRUE}{All NAs are treated as the worst scores}
 #'     \item{FALSE}{All NAs are treated as the best scores}
 #'   }
 #'
-#' @param ties_method A string for controlling ties in \code{scores}.
+#' @param ties_method A string for controlling ties in `scores`.
 #'   \describe{
 #'     \item{"equiv"}{Ties are equivalently ranked}
 #'     \item{"first"}{Ties are ranked in an increasing order as appeared}
 #'     \item{"random"}{ Ties are ranked in random order}
 #'   }
 #'
-#' @param expd_first A string to indicate which of the two variables
-#'   - model names or test dataset IDs
-#'   should be expanded first when they are automatically generated.
+#' @param expd_first A string to indicate which of the two variables - model
+#'   names or test dataset IDs should be expanded first when they are
+#'   automatically generated.
 #'
 #'   \describe{
 #'     \item{"modnames"}{Model names are expanded first. For example,
-#'            The \code{mmdata} function generates \code{modnames} as
-#'            \code{c("m1", "m2")} and \code{dsids} as \code{c(1, 1)}
+#'            The `mmdata` function generates `modnames` as
+#'            `c("m1", "m2")` and `dsids` as `c(1, 1)`
 #'            when two vectors are passed as input,
-#'            and \code{modnames} and \code{dsids} are unspecified.}
+#'            and `modnames` and `dsids` are unspecified.}
 #'     \item{"dsids"}{Test dataset IDs are expanded first. For example,
-#'            The \code{mmdata} function generates \code{modnames} as
-#'            \code{c("m1", "m1")} and \code{dsids} as \code{c(1, 2)}
+#'            The `mmdata` function generates `modnames` as
+#'            `c("m1", "m1")` and `dsids` as `c(1, 2)`
 #'            when two vectors are passed as input,
-#'            and \code{modnames} and \code{dsids} are unspecified.}
+#'            and `modnames` and `dsids` are unspecified.}
 #'   }
 #'
 #' @param mode A string that specifies the types of evaluation measures
-#'   that the \code{evalmod} function calculates.
+#'   that the `evalmod` function calculates.
 #'   \describe{
 #'     \item{"rocprc"}{ROC and Precision-Recall curves}
 #'     \item{"prcroc"}{Same as above}
@@ -70,28 +70,51 @@
 #'     \item{"aucroc"}{Fast AUC(ROC) calculation with the U statistic}
 #'   }
 #'
+#' @param multiclass A string that specifies how a dataset with more than
+#'   two classes is evaluated.
+#'   \describe{
+#'     \item{"none"}{Binary evaluation. Labels with more than two classes
+#'                   are an error, as they have always been.}
+#'     \item{"ovr"}{One-vs-rest. Each class becomes its own binary problem -
+#'                  that class against all the others - and the `K`
+#'                  decompositions are carried on the model axis, so that
+#'                  they behave like `K` models evaluated on one dataset.}
+#'   }
+#'   `multiclass` is detected from the input when it is `NULL`:
+#'   "ovr" when `labels` hold more than two classes and `scores`
+#'   is a matrix or a data frame with one column per class, "none"
+#'   otherwise. `scores` columns are matched to classes by their column
+#'   names when those name the classes, and by position otherwise.
+#'
+#'   `posclass` is ignored in one-vs-rest mode, and `multiclass`
+#'   cannot be combined with `nfold_df`.
+#'
+#'   Note that each one-vs-rest decomposition has its own class balance, so
+#'   the baseline of a precision-recall curve differs from class to class.
+#'   The plots leave the baseline out for that reason.
+#'
 #' @param nfold_df A data frame that contains at least one score column,
 #'   label and fold columns.
 #'
 #' @param score_cols A character/numeric vector that specifies score columns
-#'   of \code{nfold_df}.
+#'   of `nfold_df`.
 #'
 #' @param lab_col A number/string that specifies the label column
-#'   of \code{nfold_df}.
+#'   of `nfold_df`.
 #'
 #' @param fold_col A number/string that specifies the fold column
-#'   of \code{nfold_df}.
+#'   of `nfold_df`.
 #'
 #' @param ... Not used by this method.
 #'
-#' @return The \code{mmdata} function returns an \code{mdat} object
+#' @return The `mmdata` function returns an `mdat` object
 #'   that contains formatted labels and score ranks. The object can
-#'   be used as input data for the \code{\link{evalmod}} function.
+#'   be used as input data for the [evalmod()] function.
 #'
-#' @seealso \code{\link{evalmod}} for calculation evaluation measures.
-#'   \code{\link{join_scores}} and \code{\link{join_labels}} for formatting
+#' @seealso [evalmod()] for calculation evaluation measures.
+#'   [join_scores()] and [join_labels()] for formatting
 #'   scores and labels with multiple datasets.
-#'   \code{\link{format_nfold}} for creating n-fold cross validation dataset
+#'   [format_nfold()] for creating n-fold cross validation dataset
 #'   from data frame.
 #'
 #' @examples
@@ -190,15 +213,42 @@
 #' )
 #' cvdat2
 #'
+#'
+#' ##################################################
+#' ### Multiclass dataset
+#' ###
+#'
+#' ## Load a 3-class dataset with one score column per class
+#' data(C3N150)
+#'
+#' ## One-vs-rest decomposition, detected from the input
+#' mcmdat <- mmdata(C3N150$scores, C3N150$labels)
+#' mcmdat
+#'
 #' @export
 mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
                    posclass = NULL, na_worst = TRUE, ties_method = "equiv",
-                   expd_first = NULL, mode = "rocprc",
+                   expd_first = NULL, mode = "rocprc", multiclass = NULL,
                    nfold_df = NULL, score_cols = NULL, lab_col = NULL,
                    fold_col = NULL, ...) {
   # === Join datasets ===
+  new_multiclass <- "none"
+  classes <- NULL
+
+  # NA rather than NULL: assigning NULL would drop the attribute, and every
+  # mdat object carries the same set
+  classnames <- NA
   if (!is.null(nfold_df) && !is.null(score_cols) && !is.null(lab_col) &&
     !is.null(fold_col)) {
+    if (!is.null(multiclass) && .pmatch_multiclass(multiclass) == "ovr") {
+      .stop_invalid_arg(
+        paste(
+          "{.arg multiclass} cannot be used with {.arg nfold_df}.",
+          "Expand the folds into a list of score matrices instead."
+        ),
+        arg = "multiclass"
+      )
+    }
     nfold_list <- format_nfold(nfold_df, score_cols, lab_col, fold_col)
     lscores <- nfold_list$scores
     llabels <- nfold_list$labels
@@ -209,8 +259,24 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
     if (missing(scores) || missing(labels)) {
       stop("'scores' and/or 'lables' are missing", call. = FALSE)
     }
-    lscores <- join_scores(scores, chklen = FALSE)
-    llabels <- join_labels(labels, chklen = FALSE)
+    new_multiclass <- .get_new_multiclass(multiclass, scores, labels)
+    if (new_multiclass == "ovr") {
+      # One binary dataset per class, carried on the model axis
+      if (!is.null(posclass)) {
+        warning("posclass is ignored when multiclass = 'ovr'", call. = FALSE)
+        posclass <- NULL
+      }
+      mc <- .expand_multiclass(scores, labels, modnames, dsids)
+      lscores <- mc[["scores"]]
+      llabels <- mc[["labels"]]
+      modnames <- mc[["modnames"]]
+      dsids <- mc[["dsids"]]
+      classes <- mc[["classes"]]
+      classnames <- mc[["classnames"]]
+    } else {
+      lscores <- join_scores(scores, chklen = FALSE)
+      llabels <- join_labels(labels, chklen = FALSE)
+    }
     if (is.null(expd_first)) {
       expd_first <- "modnames"
     }
@@ -221,12 +287,6 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   mnames <- .create_modnames(length(lscores), modnames, dsids, new_expd_first)
   new_modnames <- mnames[["mn"]]
   new_dsids <- mnames[["ds"]]
-  data_info <- data.frame(
-    modnames = new_modnames, dsids = new_dsids,
-    nn = rep(NA, length(new_modnames)),
-    np = rep(NA, length(new_modnames)),
-    stringsAsFactors = FALSE
-  )
 
   # === Validate arguments and variables ===
   new_mode <- .pmatch_mode(mode)
@@ -252,11 +312,21 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
       mode = new_mode, ...
     )
   }
-  mmdat <- lapply(seq_along(lscores), func_fmdat)
+  mmdat <- .map_idx(lscores, func_fmdat)
 
-  for (i in seq_along(mmdat)) {
-    data_info[["nn"]][i] <- attr(mmdat[[i]], "nn")
-    data_info[["np"]][i] <- attr(mmdat[[i]], "np")
+  # Built once the counts are known, rather than filled in cell by cell
+  data_info <- data.table::data.table(
+    modnames = new_modnames,
+    dsids = new_dsids,
+    nn = .map_dbl(mmdat, function(m) attr(m, "nn")),
+    np = .map_dbl(mmdat, function(m) attr(m, "np"))
+  )
+  if (!is.null(classes)) {
+    # Third column, so that it reads next to the model name it stands in for
+    data.table::set(data_info, j = "classes", value = classes)
+    data.table::setcolorder(
+      data_info, c("modnames", "dsids", "classes", "nn", "np")
+    )
   }
 
   # === Create an S3 object ===
@@ -266,12 +336,14 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   attr(s3obj, "data_info") <- data_info
   attr(s3obj, "uniq_modnames") <- unique(new_modnames)
   attr(s3obj, "uniq_dsids") <- unique(new_dsids)
+  attr(s3obj, "classnames") <- classnames
   attr(s3obj, "args") <- list(
     posclass = posclass,
     na_worst = new_na_worst,
     ties_method = new_ties_method,
     expd_first = new_expd_first,
-    mode = new_mode
+    mode = new_mode,
+    multiclass = new_multiclass
   )
   attr(s3obj, "validated") <- FALSE
 
@@ -283,7 +355,7 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
 # Check partial match - expd_first
 #
 .pmatch_expd_first <- function(val) {
-  if (assertthat::is.string(val)) {
+  if (.is_string(val)) {
     if (val == "dsids" || val == "modnames") {
       return(val)
     }
@@ -309,7 +381,7 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
     val <- arglist[["ties.method"]]
   }
 
-  if (assertthat::is.string(val)) {
+  if (.is_string(val)) {
     choices <- c("equiv", "random", "first")
     if (val %in% choices) {
       return(val)
@@ -342,8 +414,7 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
     set_na_last <- TRUE
   }
 
-  assertthat::is.flag(val)
-
+  # The value itself is validated by .validate_na_worst() in the caller.
   if (set_na_last) {
     val <- !val
   }
@@ -468,10 +539,13 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
   # Validate class items and attributes
   item_names <- NULL
   attr_names <- c(
-    "data_info", "uniq_modnames", "uniq_dsids", "args",
+    "data_info", "uniq_modnames", "uniq_dsids", "classnames", "args",
     "validated"
   )
-  arg_names <- c("posclass", "na_worst", "ties_method", "expd_first", "mode")
+  arg_names <- c(
+    "posclass", "na_worst", "ties_method", "expd_first", "mode",
+    "multiclass"
+  )
   .validate_basic(
     x, "mdat", "mmdata", item_names, attr_names,
     arg_names
@@ -482,7 +556,13 @@ mmdata <- function(scores, labels, modnames = NULL, dsids = NULL,
     stop("Invalid modnames and dsids", call. = FALSE)
   }
 
-  # Chekc data consistency among the same dsids
+  # Chekc data consistency among the same dsids. One-vs-rest decompositions
+  # of the same dataset differ in their class balance by construction, so
+  # the check would fire on every multiclass object.
+  if (identical(attr(x, "args")[["multiclass"]], "ovr")) {
+    attr(x, "validated") <- TRUE
+    return(x)
+  }
   dsid_nn <- list()
   dsid_np <- list()
   for (i in seq_along(x)) {

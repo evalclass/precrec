@@ -1,6 +1,4 @@
-#' @importFrom precrec
-
-context("MM 3: Reformat labels for single class datasets")
+# MM 3: Reformat labels for single class datasets
 # Test .factor_labels(labels, posclass)
 
 test_that(".factor_labels() reterns positive label when pos vec is given", {

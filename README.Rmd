@@ -20,7 +20,7 @@ The aim of the `precrec` package is to provide an integrated platform that enabl
 
 - [Help pages](https://evalclass.github.io/precrec/reference/)  -- all the functions including the S3 generics except for `print` have their own help pages with plenty of examples. View the main help page with `help(package = "precrec")` in R. The HTML version is also available on the [GitHub Pages](https://evalclass.github.io/precrec/reference/).
 
-## Six key features of precrec
+## Seven key features of precrec
 
 ### 1. Accurate curve calculations
 `precrec` provides accurate precision-recall curves.
@@ -43,7 +43,17 @@ In addition to precision-recall and ROC curves, `precrec` offers basic evaluatio
 - Sensitivity, true positive rate (TPR), recall
 - Precision, positive predictive value (PPV)
 - Matthews correlation coefficient
-- F\-score
+- F\-score, and the F\-beta score it generalizes
+- Balanced accuracy
+- Negative predictive value (NPV)
+- Informedness (Youden's J) and markedness
+- Cohen's kappa
+- Brier score, RMSE and log loss, for scores that are probabilities
+- False positive rate, false negative rate, false discovery rate, false
+  omission rate, rate of positive predictions, rate of negative predictions,
+  lift, odds ratio, mutual information, chi-square, weighted
+  misclassification cost and SAR, on request through `evalmod(metrics = )`
+- Precision-recall break-even point
 
 ### 4. Confidence interval band
 `precrec` calculates confidence intervals when multiple test sets are given. It automatically shows confidence bands about the averaged curve in the 
@@ -53,7 +63,10 @@ corresponding plot.
 `precrec` calculates partial AUCs for specified x and y ranges. It can also
 draw partial ROC and precision-recall curves for the specified ranges.
 
-### 6. Supporting functions
+### 6. Multiclass evaluation
+`precrec` evaluates a dataset with more than two classes by one\-vs\-rest decomposition. Each class becomes its own binary problem, so the accurate precision-recall calculations apply to it unchanged, and `auc` reports the per-class scores together with their macro-average.
+
+### 7. Supporting functions
 `precrec` provides several useful functions that lack in most other evaluation tools. 
 
 - Handling multiple models and multiple test sets
@@ -76,7 +89,7 @@ draw partial ROC and precision-recall curves for the specified ranges.
     3. Install `precrec` from the GitHub repository with `devtools::install_github("evalclass/precrec")`.
 
 ## Functions
-The `precrec` package provides the following six functions.
+The `precrec` package provides the following ten functions.
 
 Function           Description 
 ------------------ -----------------------------------------------------------
@@ -86,8 +99,12 @@ Function           Description
        join_labels Join observed labels of multiple test datasets into a list     
 create_sim_samples Create random samples for simulations
       format_nfold Create n-fold cross validation dataset from data frame
+      prob_metrics Calculate the Brier score, the RMSE and the log loss
+   prob_metrics_ci Calculate CIs of the Brier score, the RMSE and the log loss
+      metric_curve Draw one evaluation measure against another
+              prbe Find the precision-recall break-even point
     
-Moreover, the `precrec` package provides nine S3 generics for the S3 object created by the `evalmod` function. **N.B.** The R language specifies S3 objects and S3 generic functions as part of the most basic object-oriented system in R.
+Moreover, the `precrec` package provides ten S3 generics for the S3 objects created by the `evalmod` and `metric_curve` functions. **N.B.** The R language specifies S3 objects and S3 generic functions as part of the most basic object-oriented system in R.
 
 S3 generic       Package   Description 
 ---------------  --------  ------------------------------------------------------------------
@@ -100,6 +117,7 @@ S3 generic       Package   Description
           part   precrec   Calculate partial curves and partial AUC scores
           pauc   precrec   Make a data frame with pAUC scores
         auc_ci   precrec   Calculate confidence intervals of AUC scores
+ as.data.table   data.table  Convert a precrec object to a data.table
 
 ## Examples
 
@@ -130,7 +148,7 @@ library(ggplot2)
 autoplot(sscurves)
 ```
 
-![](https://raw.githubusercontent.com/evalclass/precrec/main/README_files/figure-gfm/unnamed-chunk-2-1.png)
+![ROC and precision-recall curves of the P10N10 test dataset, drawn side by side](https://raw.githubusercontent.com/evalclass/precrec/main/README_files/figure-gfm/unnamed-chunk-2-1.png)
 
 ## Citation
 *Precrec: fast and accurate precision-recall and ROC curve calculations in R*
