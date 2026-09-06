@@ -18,7 +18,6 @@ void make_index_pairs(std::vector<std::pair<unsigned, double > >& indices,
 // Sort indices by scores
 //
 void sort_indices(std::vector<std::pair<unsigned, double > >& indices,
-                  const std::string& ties_method,
                   const bool desc);
 
 //

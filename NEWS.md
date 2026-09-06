@@ -1,3 +1,13 @@
+# precrec 0.16.1
+
+* Fix the order in which instances with tied scores are returned. The sort
+  left the order of equal scores to the C++ standard library, which meant
+  the `label` column of `as.data.frame(evalmod(mode = "basic"))`, and the
+  label panel `plot()` and `autoplot()` draw from it, could come out in a
+  different order on macOS than on Linux for the same data. Tied scores now
+  keep the order they were given in, on every platform. No evaluation
+  measure changes; only the order of the tied instances themselves.
+
 # precrec 0.16.0
 
 * Add `metric_curve()`, which takes the name of a measure for the x axis and

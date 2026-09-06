@@ -12,7 +12,7 @@ plot: 14 panel(s)
     y: label
     layer 1: GeomPoint  n=21  groups=1  n_na_y=1
       x: min=0 max=1 mean=0.5 | 0 0.15 0.25 0.35 0.5 0.65 0.75 0.85 1
-      y: min=-1 max=1 mean=0 | NA -1 1 -1 -1 1 1 1 -1
+      y: min=-1 max=1 mean=0 | NA -1 1 1 -1 1 1 1 -1
   panel 3
     title: Error
     x: normalized rank
