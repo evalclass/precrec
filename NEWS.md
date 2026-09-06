@@ -10,6 +10,11 @@
 * Update `README.md` to match, and to describe the measures added in 0.15.0
   and 0.16.0.
 
+* Shrink the logo. `man/figures/logo.png` was 3392 x 3392 pixels and 430 KB,
+  and ships inside the package; it is now 240 x 240 and 13 KB, which is the
+  size the `README` and the website actually display. The favicons are
+  regenerated from it.
+
 # precrec 0.16.1
 
 * Fix the order in which instances with tied scores are returned. The sort
