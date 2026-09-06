@@ -78,7 +78,7 @@ The website has three sets of short pages.
 | Section | What is in it |
 |---|---|
 | [How-to](https://evalclass.github.io/precrec/articles/) | One page per task: several models, several test sets, cross-validation, more than two classes, large datasets |
-| [Measures](https://evalclass.github.io/precrec/articles/measures-overview.html) | What each of the 24 available measures means and when it misleads |
+| [Measures](https://evalclass.github.io/precrec/articles/measures-overview.html) | What each of the 26 available measures means and when it misleads |
 | [Plots](https://evalclass.github.io/precrec/articles/plots-overview.html) | Every plot the package draws, and how to change it |
 
 ## Citation

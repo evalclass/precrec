@@ -18,6 +18,8 @@ dsids
 dtype
 evalclass
 evalmod
+extremal
+favicons
 fdr
 FN
 fnr
@@ -27,6 +29,7 @@ FPR
 fscore
 ggplot
 gridExtra
+Goadrich
 informedness
 Informedness
 io

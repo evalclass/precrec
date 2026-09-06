@@ -42,6 +42,9 @@ reference:
   - title: Precision-recall break-even point
     contents:
     - prbe
+  - title: Average precision
+    contents:
+    - average_precision
   - title: Probability-based metrics
     contents:
     - prob_metrics

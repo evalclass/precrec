@@ -115,12 +115,19 @@
 #'   The measures that can be added are `fpr`, `fnr`,
 #'   `false_discovery_rate`, `false_omission_rate`,
 #'   `predicted_positive_rate`, `predicted_negative_rate`,
-#'   `lift`, `odds`, `mi`, `chisq` and `cost`. They
-#'   are the measures `ROCR` provides that `precrec` did not, and
-#'   each of them also answers to the identifier `ROCR` uses for it -
-#'   `fall`, `miss`, `pcfall`, `pcmiss`, `rpp`,
-#'   `rnp` and `mutual_information` - and to its standard
-#'   abbreviation where it has one.
+#'   `lift`, `odds`, `mi`, `chisq`, `cost` and
+#'   `sar`. They are the measures `ROCR` provides that `precrec`
+#'   did not, and each of them also answers to the identifier `ROCR`
+#'   uses for it - `fall`, `miss`, `pcfall`, `pcmiss`,
+#'   `rpp`, `rnp` and `mutual_information` - and to its
+#'   standard abbreviation where it has one.
+#'
+#'   `roc_dist` and `sedi` can be added on the same footing.
+#'   `roc_dist` is the distance from `(1 - specificity, sensitivity)`
+#'   to the perfect corner of ROC space, and is the one measure here that
+#'   is better when it is smaller. `sedi` is the symmetric extremal
+#'   dependence index, a skill score built to stay informative when the
+#'   positive class is rare.
 #'
 #'   They are not calculated by default because each is another vector the
 #'   size of the dataset, and because `plot` and `autoplot` draw

@@ -43,7 +43,7 @@ panel in the default plot.
 | `informedness` | `infm` | [Agreement and balance](measures-agreement.html) |
 | `markedness` | `mkd` | [Agreement and balance](measures-agreement.html) |
 
-## The ten you ask for
+## The fourteen you ask for
 
 Each of these is another vector the size of your dataset and another panel in
 the plot, so they are left out unless named.
@@ -62,6 +62,8 @@ the plot, so they are left out unless named.
 | `chisq` | | [Ranking and cost](measures-ranking-cost.html) |
 | `cost` | | [Ranking and cost](measures-ranking-cost.html) |
 | `sar` | | [Ranking and cost](measures-ranking-cost.html) |
+| `roc_dist` | | [Agreement and balance](measures-agreement.html) |
+| `sedi` | | [Agreement and balance](measures-agreement.html) |
 
 ## Asking for them
 
@@ -89,6 +91,6 @@ Three summaries describe a whole curve or a whole set of predictions rather
 than one cutoff, and have their own functions:
 
 - [AUC and other curve summaries](measures-auc.html) - `auc()`, `pauc()`,
-  `auc_ci()`, `prbe()`
+  `auc_ci()`, `prbe()`, `average_precision()`
 - [Probability-based metrics](measures-probability.html) - `prob_metrics()`,
   for scores that are genuine probabilities
