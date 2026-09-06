@@ -174,7 +174,7 @@ Rcpp::List get_score_ranks(const Rcpp::NumericVector& scores,
   // Sort scores
   std::vector<std::pair<unsigned, double > > sorted_idx(scores.size());
   make_index_pairs(sorted_idx, scores, na_worst);
-  sort_indices(sorted_idx, ties_method, true);
+  sort_indices(sorted_idx, true);
 
   // Set ranks
   for (int i = 0; i < static_cast<int>(sorted_idx.size()); ++i) {

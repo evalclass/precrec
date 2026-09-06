@@ -128,17 +128,29 @@ T trim_vec(const T& vec, const unsigned n) {
 // Function objects rather than free functions: passed to std::sort as a
 // template argument the comparison inlines into the inner loop, where a
 // function pointer forces an indirect call per comparison.
+//
+// Tied scores are broken by the input index, which makes each comparator a
+// total order. std::sort is free to permute equal elements however its
+// introsort happens to fall out, and libstdc++ and libc++ fall out
+// differently; with the index in the comparison the permutation is fixed by
+// the data alone, and it is the input order std::stable_sort would give.
 struct CompAsc {
   bool operator()(const std::pair<unsigned, double > &a,
                   const std::pair<unsigned, double > &b) const {
-    return a.second < b.second;
+    if (a.second != b.second) {
+      return a.second < b.second;
+    }
+    return a.first < b.first;
   }
 };
 
 struct CompDesc {
   bool operator()(const std::pair<unsigned, double > &a,
                   const std::pair<unsigned, double > &b) const {
-    return a.second > b.second;
+    if (a.second != b.second) {
+      return a.second > b.second;
+    }
+    return a.first < b.first;
   }
 };
 
@@ -173,23 +185,13 @@ void make_index_pairs(std::vector<std::pair<unsigned, double > >& indices,
 // Sort indices by scores
 //
 void sort_indices(std::vector<std::pair<unsigned, double > >& indices,
-                  const std::string& ties_method,
                   const bool desc) {
-  // Sort scores. Both comparators order by score alone, so the sequence of
-  // comparisons - and therefore the resulting permutation - is the same as
-  // the function-pointer version this replaces.
-  if (ties_method == "first") {
-    if (desc) {
-      std::stable_sort(indices.begin(), indices.end(), CompDesc());
-    } else {
-      std::stable_sort(indices.begin(), indices.end(), CompAsc());
-    }
+  // Both comparators order tied scores by their input index, so the sort is
+  // deterministic on its own and needs no stable counterpart.
+  if (desc) {
+    std::sort(indices.begin(), indices.end(), CompDesc());
   } else {
-    if (desc) {
-      std::sort(indices.begin(), indices.end(), CompDesc());
-    } else {
-      std::sort(indices.begin(), indices.end(), CompAsc());
-    }
+    std::sort(indices.begin(), indices.end(), CompAsc());
   }
 }
 

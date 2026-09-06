@@ -98,6 +98,21 @@ test_that("reformat_data() accepts 'ties_method'", {
   expect_equal_ranks("first", c(5, 2, 3, 4, 1))
 })
 
+test_that("reformat_data() orders tied scores by input position", {
+  # std::sort leaves the order of equal elements to the implementation, and
+  # libstdc++ and libc++ chose differently on the six-way tie in P10N10. The
+  # comparator breaks ties by input index, so every platform returns the
+  # permutation R's stable order() returns.
+  data(P10N10)
+
+  equiv <- reformat_data(P10N10$scores, P10N10$labels, ties_method = "equiv")
+  first <- reformat_data(P10N10$scores, P10N10$labels, ties_method = "first")
+  expected <- order(P10N10$scores, decreasing = TRUE)
+
+  expect_equal(equiv[["rank_idx"]], expected)
+  expect_equal(first[["rank_idx"]], expected)
+})
+
 test_that("'fmdat' contains a list with 4 items", {
   fmdat <- reformat_data(c(0.1, 0.2, 0), c(1, 0, 1))
 
