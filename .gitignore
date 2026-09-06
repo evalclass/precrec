@@ -10,3 +10,6 @@ tests/testthat/Rplots.pdf
 
 # Benchmark build-mode stamp (bench/ is .Rbuildignored)
 bench/.build-mode
+
+# rmarkdown::render("README.Rmd") byproduct
+README.html

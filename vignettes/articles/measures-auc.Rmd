@@ -1,0 +1,111 @@
+---
+title: "AUC and other curve summaries"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE, comment = "#>", fig.width = 7, fig.height = 4
+)
+```
+
+These summarize a whole curve in one number, so they do not depend on picking
+a cutoff.
+
+```{r}
+library(precrec)
+library(ggplot2)
+
+curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
+```
+
+## Area under the curve
+
+```{r}
+knitr::kable(auc(curves))
+```
+
+| Curve | What the area means | Baseline |
+|---|---|---|
+| ROC | Probability a random positive outranks a random negative | 0.5 |
+| PRC | Average precision over all recall levels | The proportion of positives |
+
+The ROC baseline is always 0.5. The precision-recall baseline is not - it
+moves with the class balance, so a PRC area of 0.4 is poor on balanced data
+and good when positives are 5% of the total.
+
+`precrec` computes the precision-recall area from the properly interpolated
+curve. Tools that join raw points with straight lines overestimate it.
+
+## Partial areas
+
+When only part of the curve matters - the low-false-positive end, say -
+`part()` restricts the range and `pauc()` reports the area over it.
+
+```{r}
+partial <- part(curves, xlim = c(0, 0.25))
+
+knitr::kable(pauc(partial))
+```
+
+`spaucs` in that table are standardized partial AUCs, rescaled to 0 to 1 so
+that ranges of different widths can be compared. Plotting the restricted
+object draws the partial curve; see [partial
+curves](plots-partial-curves.html).
+
+## Confidence intervals
+
+With several test sets, `auc_ci()` puts an interval around the mean area.
+
+```{r}
+samps <- create_sim_samples(10, 100, 100, "good_er")
+mdat <- mmdata(samps[["scores"]], samps[["labels"]], dsids = samps[["dsids"]])
+mcurves <- evalmod(mdat)
+
+knitr::kable(auc_ci(mcurves))
+```
+
+`alpha` sets the level - `alpha = 0.01` for 99% - and `dtype = "t"` uses the
+t distribution instead of the normal, which is the better choice for a small
+number of folds.
+
+```{r}
+knitr::kable(auc_ci(mcurves, alpha = 0.01, dtype = "t"))
+```
+
+## Break-even point
+
+The break-even point is where precision and recall are equal - the one point
+on the precision-recall curve where the two are in balance.
+
+`prbe()` reads the individual curves, so ask `evalmod()` to keep them.
+
+```{r}
+raw <- evalmod(mdat, raw_curves = TRUE)
+
+knitr::kable(prbe(raw))
+```
+
+A curve can cross the diagonal more than once, and then the result holds one
+row per crossing. A curve that never reaches equal precision and recall gets
+a single row of `NA`.
+
+`prbe()` reads the crossing off the interpolated curve. Finding it by linear
+interpolation between raw precision-recall points, as some tools do, is the
+error this package exists to avoid.
+
+## The fast path
+
+If the ROC area is all you need, `mode = "aucroc"` computes it from the U
+statistic of the Mann-Whitney test without building the curve at all. See
+[working with large datasets](howto-large-datasets.html).
+
+```{r}
+knitr::kable(as.data.frame(
+  evalmod(scores = P10N10$scores, labels = P10N10$labels, mode = "aucroc")
+))
+```
+
+## Next
+
+- [Probability-based metrics](measures-probability.html)
+- [Partial curves](plots-partial-curves.html)

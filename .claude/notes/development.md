@@ -24,6 +24,26 @@ disagree.
 Regenerate `README.md` from `README.Rmd` with
 `rmarkdown::render("README.Rmd")` — never edit `README.md` directly.
 
+### The website
+
+`vignettes/introduction.Rmd` is the only shipped vignette — the short
+`Get started` page. Everything else lives in `vignettes/articles/`, which
+`pkgdown` builds for the site and `R CMD build` ignores (the directory is in
+`.Rbuildignore`), so the tarball and the check time do not grow with the
+documentation.
+
+Adding a page means three edits: the `.Rmd` in `vignettes/articles/`, an
+entry under the right `articles:` section of `_pkgdown.yml`, and an entry in
+the matching `navbar:` menu. **Article entries in `articles:` are quoted and
+carry the directory — `"articles/howto-prepare-data"`.** Unquoted, `pkgdown`
+parses the hyphens as arithmetic and fails with "failed to evaluate"; without
+the prefix, it does not find the file.
+
+`pkgdown::build_site()` runs every page and takes several minutes. To find a
+broken chunk faster, `knitr::knit()` each `.Rmd` in a subprocess first — same
+errors, no HTML. It leaves a `figure/` directory behind in
+`vignettes/articles/`; delete it.
+
 After changing anything in `src/`, run `devtools::document()` too: it
 refreshes `src/RcppExports.cpp` and `R/RcppExports.R` (it runs
 `Rcpp::compileAttributes()`; call that directly if you skip roxygen).

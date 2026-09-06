@@ -22,3 +22,4 @@
 ^\.claude$
 ^\.lintr$
 ^bench$
+^vignettes/articles$

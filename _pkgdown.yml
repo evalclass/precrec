@@ -57,11 +57,102 @@ reference:
     - M2N50F5
     - C3N150
 
+articles:
+  - title: Get started
+    navbar: ~
+    contents:
+    - "introduction"
+  - title: How-to
+    navbar: ~
+    contents:
+    - "articles/howto-prepare-data"
+    - "articles/howto-multiple-models"
+    - "articles/howto-multiple-test-sets"
+    - "articles/howto-cross-validation"
+    - "articles/howto-multiclass"
+    - "articles/howto-large-datasets"
+    - "articles/howto-results-as-data"
+    - "articles/howto-imbalanced-data"
+  - title: Measures
+    navbar: ~
+    contents:
+    - "articles/measures-overview"
+    - "articles/measures-confusion-matrix"
+    - "articles/measures-agreement"
+    - "articles/measures-ranking-cost"
+    - "articles/measures-auc"
+    - "articles/measures-probability"
+  - title: Plots
+    navbar: ~
+    contents:
+    - "articles/plots-overview"
+    - "articles/plots-roc-prc"
+    - "articles/plots-basic-measures"
+    - "articles/plots-metric-curve"
+    - "articles/plots-confidence-bands"
+    - "articles/plots-partial-curves"
+    - "articles/plots-customizing"
+
 navbar:
-  left:
-  - text: Introduction
-    href: articles/introduction.html
-  - text: Reference
-    href: reference/index.html
-  - text: Change log
-    href: news/index.html
+  structure:
+    left: [intro, howto, measures, plots, reference, news]
+    right: [search, github]
+  components:
+    intro:
+      text: Get started
+      href: articles/introduction.html
+    howto:
+      text: How-to
+      menu:
+      - text: Prepare your data
+        href: articles/howto-prepare-data.html
+      - text: Compare several models
+        href: articles/howto-multiple-models.html
+      - text: Average over several test sets
+        href: articles/howto-multiple-test-sets.html
+      - text: Evaluate cross-validation folds
+        href: articles/howto-cross-validation.html
+      - text: Evaluate more than two classes
+        href: articles/howto-multiclass.html
+      - text: Work with large datasets
+        href: articles/howto-large-datasets.html
+      - text: Get the numbers out
+        href: articles/howto-results-as-data.html
+      - text: Balanced and imbalanced data
+        href: articles/howto-imbalanced-data.html
+    measures:
+      text: Measures
+      menu:
+      - text: Measures overview
+        href: articles/measures-overview.html
+      - text: -------
+      - text: Confusion-matrix rates
+        href: articles/measures-confusion-matrix.html
+      - text: Agreement and balance
+        href: articles/measures-agreement.html
+      - text: Ranking and cost
+        href: articles/measures-ranking-cost.html
+      - text: -------
+      - text: AUC and other curve summaries
+        href: articles/measures-auc.html
+      - text: Probability-based metrics
+        href: articles/measures-probability.html
+    plots:
+      text: Plots
+      menu:
+      - text: Plots overview
+        href: articles/plots-overview.html
+      - text: -------
+      - text: ROC and precision-recall curves
+        href: articles/plots-roc-prc.html
+      - text: Basic measure plots
+        href: articles/plots-basic-measures.html
+      - text: One measure against another
+        href: articles/plots-metric-curve.html
+      - text: -------
+      - text: Confidence bands
+        href: articles/plots-confidence-bands.html
+      - text: Partial curves
+        href: articles/plots-partial-curves.html
+      - text: Customizing plots
+        href: articles/plots-customizing.html

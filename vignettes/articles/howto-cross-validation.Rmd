@@ -1,0 +1,86 @@
+---
+title: "Evaluate cross-validation folds"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE, comment = "#>", fig.width = 7, fig.height = 4
+)
+```
+
+Cross-validation folds are just several test sets, so everything on
+[averaging over test sets](howto-multiple-test-sets.html) applies. The only
+extra step is getting your data out of a data frame.
+
+```{r}
+library(precrec)
+library(ggplot2)
+```
+
+## The usual shape of the data
+
+`M2N50F5` holds two models scored on 5 folds - one column per model, one
+label column and one fold column.
+
+```{r}
+data(M2N50F5)
+
+knitr::kable(head(M2N50F5))
+```
+
+## Straight into evalmod
+
+`evalmod()` and `mmdata()` both take the fold columns directly. This is the
+short way.
+
+```{r}
+curves <- evalmod(
+  nfold_df = M2N50F5, score_cols = c(1, 2),
+  lab_col = 3, fold_col = 4,
+  modnames = c("m1", "m2"), dsids = 1:5
+)
+
+autoplot(curves)
+```
+
+Column names work as well as positions.
+
+```{r}
+curves2 <- evalmod(
+  nfold_df = M2N50F5,
+  score_cols = c("score1", "score2"),
+  lab_col = "label", fold_col = "fold",
+  modnames = c("m1", "m2"), dsids = 1:5
+)
+```
+
+## Converting first
+
+`format_nfold()` does the conversion on its own if you want the lists for
+something else.
+
+```{r}
+folds <- format_nfold(
+  nfold_df = M2N50F5, score_cols = c(1, 2),
+  lab_col = 3, fold_col = 4
+)
+
+curves3 <- evalmod(
+  scores = folds$scores, labels = folds$labels,
+  modnames = rep(c("m1", "m2"), each = 5),
+  dsids = rep(1:5, 2)
+)
+```
+
+## Reading the result
+
+Each model gets one averaged curve with a confidence band across the folds.
+
+```{r}
+knitr::kable(auc_ci(curves))
+```
+
+## Next
+
+- [Average over several test sets](howto-multiple-test-sets.html)
+- [Get the numbers out](howto-results-as-data.html)

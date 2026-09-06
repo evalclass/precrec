@@ -1,0 +1,83 @@
+---
+title: "Get the numbers out"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE, comment = "#>", fig.width = 7, fig.height = 4
+)
+```
+
+Every `precrec` object converts to a data frame, and every summary is a data
+frame too. Nothing is locked inside the plotting code.
+
+```{r}
+library(precrec)
+
+curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
+```
+
+## What is in the object
+
+`print()` summarizes the input and the results.
+
+```{r}
+curves
+```
+
+## The curve points
+
+```{r}
+df <- as.data.frame(curves)
+head(df)
+```
+
+One row per supporting point, with the curve type and the model in their own
+columns - the shape `ggplot2` and `dplyr` expect. `as.data.table()` returns
+the same thing as a `data.table` when that package is installed.
+
+## The summaries
+
+| Function | Returns |
+|---|---|
+| `auc()` | Area under each curve |
+| `pauc()` | Partial area, after `part()` |
+| `auc_ci()` | Confidence interval of the area, over several test sets |
+| `prbe()` | Precision-recall break-even point |
+| `prob_metrics()` | Brier score, RMSE and log loss |
+
+```{r}
+knitr::kable(auc(curves))
+```
+
+Each returns a plain data frame, so subsetting is ordinary R.
+
+```{r}
+aucs <- auc(curves)
+knitr::kable(subset(aucs, curvetypes == "PRC"))
+```
+
+## Basic measures per cutoff
+
+`mode = "basic"` gives the per-cutoff measures rather than the curves.
+
+```{r}
+points <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
+  mode = "basic"
+)
+
+head(as.data.frame(points))
+```
+
+The `x` column is the normalized rank and `y` the value of the measure named
+in `type`.
+
+## Feeding ggplot2 directly
+
+`fortify()` is the `ggplot2` hook, so a `precrec` object can go straight into
+`ggplot()`. See [customizing plots](plots-customizing.html).
+
+## Next
+
+- [Measures overview](measures-overview.html)
+- [Plots overview](plots-overview.html)
