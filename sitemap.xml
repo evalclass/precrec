@@ -1,5 +1,6 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://evalclass.github.io/precrec/404.html</loc></url>
+<url><loc>https://evalclass.github.io/precrec/CLAUDE.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/LICENSE-text.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/articles/index.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/articles/introduction.html</loc></url>
@@ -8,11 +9,13 @@
 <url><loc>https://evalclass.github.io/precrec/news/index.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/reference/B1000.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/reference/B500.html</loc></url>
+<url><loc>https://evalclass.github.io/precrec/reference/C3N150.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/reference/IB1000.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/reference/IB500.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/reference/M2N50F5.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/reference/P10N10.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/reference/as.data.frame.html</loc></url>
+<url><loc>https://evalclass.github.io/precrec/reference/as.data.table.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/reference/auc.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/reference/auc_ci.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/reference/autoplot.html</loc></url>
@@ -23,10 +26,14 @@
 <url><loc>https://evalclass.github.io/precrec/reference/index.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/reference/join_labels.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/reference/join_scores.html</loc></url>
+<url><loc>https://evalclass.github.io/precrec/reference/metric_curve.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/reference/mmdata.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/reference/part.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/reference/pauc.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/reference/plot.html</loc></url>
+<url><loc>https://evalclass.github.io/precrec/reference/prbe.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/reference/precrec.html</loc></url>
+<url><loc>https://evalclass.github.io/precrec/reference/prob_metrics.html</loc></url>
+<url><loc>https://evalclass.github.io/precrec/reference/prob_metrics_ci.html</loc></url>
 </urlset>
 
