@@ -839,3 +839,122 @@ test_that("a perfect classifier reaches sedi 1 and roc_dist 0 together", {
   expect_equal(pb[["roc_dist"]][best], 0)
   expect_equal(pb[["sedi"]][best], 1, tolerance = 1e-6)
 })
+
+test_that("jaccard matches its definition", {
+  cmats <- create_confmats(
+    scores = c(0.9, 0.8, 0.7, 0.6, 0.5, 0.4),
+    labels = c(1, 0, 1, 1, 0, 0)
+  )
+  pb <- calc_measures(cmats,
+    metrics = .resolve_metrics("jaccard")
+  )[["basic"]]
+
+  expected <- cmats[["tp"]] /
+    (cmats[["tp"]] + cmats[["fp"]] + cmats[["fn"]])
+
+  expect_equal(pb[["jaccard"]], expected)
+})
+
+test_that("jaccard is the confusion matrix without its true negatives", {
+  # Padding a dataset with negatives that every cutoff gets right adds only
+  # true negatives, which accuracy notices and the Jaccard index does not
+  scores <- c(0.9, 0.8, 0.7, 0.6)
+  labels <- c(1, 1, 0, 0)
+  padded_scores <- c(scores, rep(0.01, 20))
+  padded_labels <- c(labels, rep(0, 20))
+
+  jac <- function(s, l) {
+    pb <- calc_measures(
+      scores = s, labels = l,
+      metrics = .resolve_metrics("jaccard")
+    )[["basic"]]
+    max(pb[["jaccard"]], na.rm = TRUE)
+  }
+
+  expect_equal(jac(scores, labels), jac(padded_scores, padded_labels))
+})
+
+test_that("jaccard is 1 only where the classifier is perfect", {
+  pb <- calc_measures(
+    scores = c(0.9, 0.8, 0.2, 0.1), labels = c(1, 1, 0, 0),
+    metrics = .resolve_metrics("jaccard")
+  )[["basic"]]
+
+  expect_equal(max(pb[["jaccard"]], na.rm = TRUE), 1)
+  expect_true(all(pb[["jaccard"]] >= 0 & pb[["jaccard"]] <= 1, na.rm = TRUE))
+})
+
+test_that("the likelihood ratios match their definitions", {
+  pb <- calc_measures(
+    scores = c(0.9, 0.8, 0.7, 0.6, 0.5, 0.4),
+    labels = c(1, 0, 1, 1, 0, 0),
+    metrics = .resolve_metrics(
+      c("positive_likelihood_ratio", "negative_likelihood_ratio")
+    )
+  )[["basic"]]
+
+  fpr <- 1 - pb[["specificity"]]
+  fnr <- 1 - pb[["sensitivity"]]
+  na_out <- function(x) {
+    x[!is.finite(x)] <- NA_real_
+    x
+  }
+
+  expect_equal(
+    pb[["positive_likelihood_ratio"]], na_out(pb[["sensitivity"]] / fpr)
+  )
+  expect_equal(
+    pb[["negative_likelihood_ratio"]], na_out(fnr / pb[["specificity"]])
+  )
+})
+
+test_that("the odds ratio is the ratio of the two likelihood ratios", {
+  # The odds ratio is calculated from the four counts and the likelihood
+  # ratios from the rate columns, so this is an independent check of both
+  pb <- calc_measures(
+    scores = c(0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3),
+    labels = c(1, 0, 1, 1, 0, 0, 1),
+    metrics = .resolve_metrics(
+      c("odds", "positive_likelihood_ratio", "negative_likelihood_ratio")
+    )
+  )[["basic"]]
+
+  ratio <- pb[["positive_likelihood_ratio"]] /
+    pb[["negative_likelihood_ratio"]]
+
+  # Where the specificity is 0 the negative ratio is infinite and is stored
+  # as NA, so the quotient is unavailable at a cutoff where the odds ratio
+  # itself is a perfectly good 0. The identity is checked where both sides
+  # exist, which is every cutoff the two ratios are defined at.
+  both <- !is.na(ratio)
+  expect_true(sum(both) > 0)
+  expect_equal(pb[["odds"]][both], ratio[both])
+})
+
+test_that("the likelihood ratios are NA where their denominator vanishes", {
+  # LR+ divides by the false positive rate, which is 0 for every cutoff
+  # above the highest-scoring negative; LR- divides by the specificity,
+  # which is 0 once every negative has been called positive
+  pb <- calc_measures(
+    scores = c(0.9, 0.8, 0.7, 0.6), labels = c(1, 1, 0, 0),
+    metrics = .resolve_metrics(
+      c("positive_likelihood_ratio", "negative_likelihood_ratio")
+    )
+  )[["basic"]]
+
+  fpr <- 1 - pb[["specificity"]]
+  expect_equal(
+    is.na(pb[["positive_likelihood_ratio"]]), fpr == 0
+  )
+  expect_equal(
+    is.na(pb[["negative_likelihood_ratio"]]), pb[["specificity"]] == 0
+  )
+
+  # And nothing infinite survives on either one
+  expect_true(all(is.finite(stats::na.omit(
+    pb[["positive_likelihood_ratio"]]
+  ))))
+  expect_true(all(is.finite(stats::na.omit(
+    pb[["negative_likelihood_ratio"]]
+  ))))
+})

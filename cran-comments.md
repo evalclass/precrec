@@ -1,8 +1,8 @@
-## Version 0.17.0
+## Version 0.18.0
 
-An update of the published package `precrec` (0.14.5 -> 0.17.0). 0.15.0,
-0.16.0, 0.16.1 and 0.16.2 were prepared but not submitted, so this release
-carries all five sets of changes.
+An update of the published package `precrec` (0.14.5 -> 0.18.0). 0.15.0,
+0.16.0, 0.16.1, 0.16.2 and 0.17.0 were prepared but not submitted, so this
+release carries all six sets of changes.
 
 - Support datasets with more than two classes by one-vs-rest decomposition
 - Add the evaluation measures `ROCR` provides, opt-in through
@@ -15,6 +15,8 @@ carries all five sets of changes.
   precision-recall curve
 - Add the `roc_dist` and `sedi` measures, and the `macro_weight` argument of
   `auc()` for weighting the per-class average by the class distribution
+- Add the `jaccard` and likelihood-ratio measures, and the D2 scores of
+  `prob_metrics()`, for parity with `scikit-learn`
 - Handle single-class datasets with a warning instead of an error
 - Fix the ranking of `NA` scores, the panel titles of `autoplot()`, the
   y axis of `plot()` for the measures that can go negative, and the order of

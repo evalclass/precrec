@@ -97,11 +97,59 @@ ppr <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
 autoplot(ppr, "predicted_positive_rate")
 ```
 
+## Leaving out the true negatives
+
+| Measure | Formula | Also known as |
+|---|---|---|
+| `jaccard` | TP / (TP + FP + FN) | Jaccard index, critical success index, threat score |
+
+The Jaccard index is the 2x2 table with one corner deleted. Three of the four
+cells count toward it and the true negatives do not, which is the same
+omission precision and sensitivity make, and it is why the three move
+together on imbalanced data while accuracy does not.
+
+That is easiest to see by padding a dataset with negatives the classifier
+gets right. Nothing about its handling of the positives has changed, and the
+Jaccard index does not move; accuracy climbs, because on the padded dataset
+most of what it is counting is the padding.
+
+```{r}
+best_of <- function(scores, labels, metric) {
+  points <- evalmod(scores = scores, labels = labels,
+    mode = "basic", metrics = metric
+  )
+  df <- as.data.frame(points)
+  max(df$y[df$type == metric], na.rm = TRUE)
+}
+
+# The shipped labels are 1 and -1, and the scores run from 5 to 20, so the
+# padding is negatives the classifier scores below all of them
+padded_scores <- c(P10N10$scores, rep(0, 200))
+padded_labels <- c(P10N10$labels, rep(-1, 200))
+
+knitr::kable(data.frame(
+  dataset = c("P10N10", "P10N10 + 200 easy negatives"),
+  jaccard = c(
+    best_of(P10N10$scores, P10N10$labels, "jaccard"),
+    best_of(padded_scores, padded_labels, "jaccard")
+  ),
+  accuracy = c(
+    best_of(P10N10$scores, P10N10$labels, "accuracy"),
+    best_of(padded_scores, padded_labels, "accuracy")
+  )
+))
+```
+
+Forecast verification calls the same quantity the critical success index or
+threat score, for the same reason: a rare event has so many true negatives
+that any measure counting them reports mostly the rarity.
+
 ## Undefined ends
 
 Precision has no value at the cutoff where nothing is predicted positive, and
 NPV none where nothing is predicted negative. `precrec` fills each in from
-its neighbor rather than dropping the point.
+its neighbor rather than dropping the point. `jaccard` needs no such
+treatment: its denominator is 0 only for a dataset with no positives at all.
 
 ## Next
 

@@ -148,6 +148,22 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, beta = 1,
 
   vals[["sedi"]] <- .calc_sedi(pb[["sensitivity"]], vals[["fpr"]])
 
+  # The Jaccard index is the confusion matrix with its true negative corner
+  # deleted: TP / (TP + FP + FN). That is the same corner precision and
+  # recall leave out, which is why it tracks them on imbalanced data while
+  # accuracy, which is mostly TN there, does not.
+  vals[["jaccard"]] <- tp / (tp + fp + fn)
+
+  # The two likelihood ratios, of which precrec already carries the ratio:
+  # the odds ratio above is LR+ / LR-. Kept apart because they answer
+  # different questions - LR+ how much a positive prediction raises the
+  # odds, LR- how much a negative one lowers them - and because a
+  # classifier can be worth using on one of them alone.
+  vals[["positive_likelihood_ratio"]] <-
+    pb[["sensitivity"]] / vals[["fpr"]]
+  vals[["negative_likelihood_ratio"]] <-
+    vals[["fnr"]] / pb[["specificity"]]
+
   if ("sar" %in% derived) {
     vals[["sar"]] <- .calc_sar(pb, cmats, tp, fp, tn, fn)
   }
@@ -157,7 +173,15 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, beta = 1,
   # accident; the lift is 0/0 at the top rank for the same reason. ROCR
   # reports Inf and NaN. NA is what `precision` and `npv` already do with
   # their own undefined end, and it keeps an infinity off a shared axis.
-  for (m in c("lift", "odds")) {
+  #
+  # The likelihood ratios divide by the false positive rate and by the
+  # specificity, each of which is 0 at one end, so they need the same
+  # treatment. The Jaccard index is 0/0 only for a dataset with no
+  # positives, where every other measure is NA already.
+  for (m in c(
+    "lift", "odds", "jaccard",
+    "positive_likelihood_ratio", "negative_likelihood_ratio"
+  )) {
     vals[[m]][!is.finite(vals[[m]])] <- NA_real_
   }
 
@@ -191,7 +215,7 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, beta = 1,
   outcomes <- as.integer(src[["labels"]]) - 1L
 
   # A warning and NA rather than the error `prob_metrics()` raises for the
-  # same input: this is one opt-in column among twenty-six, and
+  # same input: this is one opt-in column among twenty-nine, and
   # `metrics = "all"` should not stop on a dataset whose scores happen not
   # to be probabilities. Every other measure it asked for is still returned.
   if (anyNA(scores) || min(scores) < 0 || max(scores) > 1) {

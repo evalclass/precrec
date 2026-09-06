@@ -101,7 +101,8 @@ test_that(".get_metric_names('basic_all') adds the optional measures", {
     c(
       "fpr", "fnr", "false_discovery_rate", "false_omission_rate",
       "predicted_positive_rate", "predicted_negative_rate", "lift", "odds",
-      "mi", "chisq", "cost", "sar", "roc_dist", "sedi"
+      "mi", "chisq", "cost", "sar", "roc_dist", "sedi", "jaccard",
+      "positive_likelihood_ratio", "negative_likelihood_ratio"
     )
   )
 })

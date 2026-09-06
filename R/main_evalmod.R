@@ -129,6 +129,15 @@
 #'   dependence index, a skill score built to stay informative when the
 #'   positive class is rare.
 #'
+#'   `jaccard`, `positive_likelihood_ratio` and
+#'   `negative_likelihood_ratio` come from `scikit-learn`.
+#'   `jaccard` is the Jaccard index, also called the critical success
+#'   index: `TP / (TP + FP + FN)`, the confusion matrix with its true
+#'   negative corner left out, which is the same omission `precision`
+#'   and `sensitivity` make. The two likelihood ratios are
+#'   `sensitivity / fpr` and `fnr / specificity`; `odds`,
+#'   the diagnostic odds ratio, is their quotient.
+#'
 #'   They are not calculated by default because each is another vector the
 #'   size of the dataset, and because `plot` and `autoplot` draw
 #'   one panel per measure the object holds. A measure that was not asked
