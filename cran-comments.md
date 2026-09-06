@@ -1,7 +1,8 @@
-## Version 0.16.0
+## Version 0.16.1
 
-An update of the published package `precrec` (0.14.5 -> 0.16.0). 0.15.0 was
-prepared but not submitted, so this release carries both sets of changes.
+An update of the published package `precrec` (0.14.5 -> 0.16.1). 0.15.0 and
+0.16.0 were prepared but not submitted, so this release carries all three
+sets of changes.
 
 - Support datasets with more than two classes by one-vs-rest decomposition
 - Add the evaluation measures `ROCR` provides, opt-in through
@@ -11,8 +12,10 @@ prepared but not submitted, so this release carries both sets of changes.
 - Add `metric_curve()`, which draws one evaluation measure against another
 - Add `prbe()`, the precision-recall break-even point
 - Handle single-class datasets with a warning instead of an error
-- Fix the ranking of `NA` scores, the panel titles of `autoplot()`, and the
-  y axis of `plot()` for the measures that can go negative
+- Fix the ranking of `NA` scores, the panel titles of `autoplot()`, the
+  y axis of `plot()` for the measures that can go negative, and the order of
+  instances with tied scores, which was left to the C++ standard library and
+  so differed between platforms
 - Raise the R dependency to >= 4.1, and modernize the tests and internals
 
 `NEWS.md` has the full list.
