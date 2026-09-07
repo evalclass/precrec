@@ -24,6 +24,14 @@
   `zero_division` sets what an empty denominator reports, `0` as in
   `scikit-learn` or `NA` as in the per-cutoff metrics of `evalmod()`.
 
+* Add a website page for it, and trim the metric pages back towards the
+  length the site was built at. Each release since had appended a section to
+  them, taking the article average from the 88 lines the site was built at to
+  99. It is now 93 over 22 articles, one more article than before. Nothing a
+  page needed was dropped: the cuts are restated prose, a duplicated `auc()`
+  chunk on the AUC page, and an unused `beta = 2` example on the agreement
+  page.
+
 # precrec 0.19.0
 
 * Settle on "metric" as the word for the quantities `evalmod(metrics = )`,
