@@ -30,7 +30,7 @@ test_that("average_precision() returns one row per model and dataset", {
 test_that("average_precision() sums the recall gains times the precision", {
   data(P10N10)
   curves <- evalmod(scores = P10N10[["scores"]], labels = P10N10[["labels"]])
-  pb <- calc_measures(
+  pb <- calc_metrics(
     scores = P10N10[["scores"]], labels = P10N10[["labels"]]
   )[["basic"]]
 
@@ -93,7 +93,7 @@ test_that("average precision differs from the interpolated PRC AUC", {
 })
 
 test_that(".calc_average_precision() is NA for a ROC curve", {
-  pb <- calc_measures(
+  pb <- calc_metrics(
     scores = c(0.9, 0.8, 0.7, 0.6), labels = c(1, 1, 0, 0)
   )[["basic"]]
 

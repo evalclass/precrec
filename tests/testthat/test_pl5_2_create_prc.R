@@ -7,7 +7,7 @@ test_that("create_prc() reterns a 'prc_curve' object", {
   data(P10N10)
   fmdat <- reformat_data(P10N10$scores, P10N10$labels)
   cdat <- create_confmats(fmdat)
-  pevals <- calc_measures(cdat)
+  pevals <- calc_metrics(cdat)
   prc_curve2 <- create_prc(pevals)
   prc_curve3 <- create_prc(scores = P10N10$scores, labels = P10N10$labels)
 
@@ -27,7 +27,7 @@ test_that("'pevals' must be an 'pevals' object", {
 })
 
 test_that("create_prc() directly takes scores and labels", {
-  pevals <- calc_measures(
+  pevals <- calc_metrics(
     scores = c(0.1, 0.2, 0.2, 0),
     labels = c(1, 0, 1, 1)
   )

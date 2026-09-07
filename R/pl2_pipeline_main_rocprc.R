@@ -33,7 +33,7 @@
 
     # The curves are drawn from specificity, sensitivity and precision, so
     # there is no reason to build the rest of the table here
-    pevals <- calc_measures(cdat, extra_measures = FALSE)
+    pevals <- calc_metrics(cdat, extra_metrics = FALSE)
     create_curves(pevals, x_bins = x_bins)
   }
   lcurves <- .map_idx(mdat, plfunc)

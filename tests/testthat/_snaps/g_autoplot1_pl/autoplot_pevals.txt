@@ -1,6 +1,6 @@
 plot: 1 panel(s)
   panel 1
-    title: Evaluation measures by ranks
+    title: Evaluation metrics by ranks
     x: normalized rank
     y: evaluation value
     layer 1: GeomLine  n=15015  groups=1  n_na_y=2004

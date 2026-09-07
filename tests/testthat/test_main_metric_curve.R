@@ -77,7 +77,7 @@ test_that("a registered pair honors x_bins and interpolate", {
 
 # --- The unregistered path --------------------------------------------------
 
-test_that("an unregistered pair reads the basic measures", {
+test_that("an unregistered pair reads the basic metrics", {
   samps <- mc_samps()
   xy <- mc_single(
     x_metric = "predicted_positive_rate", y_metric = "lift"
@@ -102,7 +102,7 @@ test_that("the score is available as an axis, the way ROCR uses cutoff", {
   expect_equal(attr(xy, "x_metric"), "score")
 })
 
-test_that("the same measure on both axes is accepted", {
+test_that("the same metric on both axes is accepted", {
   xy <- mc_single(x_metric = "accuracy", y_metric = "accuracy")
 
   df <- as.data.frame(xy)
@@ -145,7 +145,7 @@ test_that("both axis arguments accept the ROCR identifiers", {
   expect_equal(attr(mc_single(x_metric = "tpr"), "x_metric"), "sensitivity")
 })
 
-test_that("an axis argument must name a measure that exists", {
+test_that("an axis argument must name a metric that exists", {
   expect_error(mc_single(x_metric = "nonesuch"),
     class = "precrec_error_invalid_x_metric"
   )
@@ -160,7 +160,7 @@ test_that("an axis argument must name a measure that exists", {
   )
 })
 
-test_that("a near miss on an axis argument suggests the measure meant", {
+test_that("a near miss on an axis argument suggests the metric meant", {
   err <- expect_error(mc_single(y_metric = "sensitivty"),
     class = "precrec_error_invalid_y_metric"
   )

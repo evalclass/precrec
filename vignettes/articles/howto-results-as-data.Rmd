@@ -57,9 +57,9 @@ aucs <- auc(curves)
 knitr::kable(subset(aucs, curvetypes == "PRC"))
 ```
 
-## Basic measures per cutoff
+## Basic metrics per cutoff
 
-`mode = "basic"` gives the per-cutoff measures rather than the curves.
+`mode = "basic"` gives the per-cutoff metrics rather than the curves.
 
 ```{r}
 points <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
@@ -69,7 +69,7 @@ points <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
 head(as.data.frame(points))
 ```
 
-The `x` column is the normalized rank and `y` the value of the measure named
+The `x` column is the normalized rank and `y` the value of the metric named
 in `type`.
 
 ## Feeding ggplot2 directly
@@ -79,5 +79,5 @@ in `type`.
 
 ## Next
 
-- [Measures overview](measures-overview.html)
+- [Metrics overview](metrics-overview.html)
 - [Plots overview](plots-overview.html)

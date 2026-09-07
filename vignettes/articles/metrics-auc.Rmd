@@ -155,5 +155,5 @@ knitr::kable(as.data.frame(
 
 ## Next
 
-- [Probability-based metrics](measures-probability.html)
+- [Probability-based metrics](metrics-probability.html)
 - [Partial curves](plots-partial-curves.html)

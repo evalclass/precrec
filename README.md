@@ -57,8 +57,8 @@ website](https://evalclass.github.io/precrec/), in short pages:
 - [How-to](https://evalclass.github.io/precrec/articles/howto-prepare-data.html)
   – one page per task: several models, several test sets,
   cross-validation, more than two classes, large datasets.
-- [Measures](https://evalclass.github.io/precrec/articles/measures-overview.html)
-  – what each of the 29 available measures means and when it misleads.
+- [Metrics](https://evalclass.github.io/precrec/articles/metrics-overview.html)
+  – what each available metric means and when it misleads.
 - [Plots](https://evalclass.github.io/precrec/articles/plots-overview.html)
   – every plot the package draws, and how to change it.
 - [Reference](https://evalclass.github.io/precrec/reference/) – the help
@@ -76,11 +76,11 @@ what most tools do – overestimates the area.
 computes the ROC area from the U statistic without building the curve at
 all.
 
-**Many measures.** Fourteen per-cutoff measures by default and ten more
-on request, plus AUC, partial AUC, the precision-recall break-even
+**Many metrics.** Fourteen per-cutoff metrics by default and seventeen
+more on request, plus AUC, partial AUC, the precision-recall break-even
 point, and the probability-based Brier score, RMSE and log loss. See the
-[measures
-overview](https://evalclass.github.io/precrec/articles/measures-overview.html).
+[metrics
+overview](https://evalclass.github.io/precrec/articles/metrics-overview.html).
 
 **Several models and several test sets.** Averaged curves with
 confidence bands, cross-validation folds, and confidence intervals of
@@ -112,7 +112,7 @@ devtools::install_github("evalclass/precrec")
 
 | Function             | Description                                                 |
 |----------------------|-------------------------------------------------------------|
-| `evalmod`            | Main function to calculate evaluation measures              |
+| `evalmod`            | Main function to calculate evaluation metrics               |
 | `mmdata`             | Reformat input data for performance evaluation calculation  |
 | `join_scores`        | Join scores of multiple models into a list                  |
 | `join_labels`        | Join observed labels of multiple test datasets into a list  |
@@ -120,7 +120,7 @@ devtools::install_github("evalclass/precrec")
 | `format_nfold`       | Create n-fold cross validation dataset from data frame      |
 | `prob_metrics`       | Calculate the Brier score, the RMSE and the log loss        |
 | `prob_metrics_ci`    | Calculate CIs of the Brier score, the RMSE and the log loss |
-| `metric_curve`       | Draw one evaluation measure against another                 |
+| `metric_curve`       | Draw one evaluation metric against another                  |
 | `prbe`               | Find the precision-recall break-even point                  |
 | `average_precision`  | Calculate the step estimator of the PRC area                |
 
@@ -131,8 +131,8 @@ Ten S3 generics work on the objects `evalmod` and `metric_curve` return.
 | `print`         | base       | Print the calculation results and the summary of the test data |
 | `as.data.frame` | base       | Convert a precrec object to a data frame                       |
 | `as.data.table` | data.table | Convert a precrec object to a data.table                       |
-| `plot`          | graphics   | Plot performance evaluation measures                           |
-| `autoplot`      | ggplot2    | Plot performance evaluation measures with ggplot2              |
+| `plot`          | graphics   | Plot performance evaluation metrics                            |
+| `autoplot`      | ggplot2    | Plot performance evaluation metrics with ggplot2               |
 | `fortify`       | ggplot2    | Prepare a data frame for ggplot2                               |
 | `auc`           | precrec    | Make a data frame with AUC scores                              |
 | `part`          | precrec    | Calculate partial curves and partial AUC scores                |

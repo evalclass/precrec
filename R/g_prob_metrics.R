@@ -54,7 +54,7 @@
 #'
 #' @seealso [prob_metrics_ci()] for the CIs of these metrics over multiple
 #'   datasets. [evalmod()] for generating `S3` objects with
-#'   performance evaluation measures. [mmdata()] for formatting input data.
+#'   performance evaluation metrics. [mmdata()] for formatting input data.
 #'
 #' @examples
 #'
@@ -144,7 +144,7 @@ prob_metrics <- function(mdat, scores = NULL, labels = NULL, eps = 1e-15,
 #
 # The three it has always returned are the default set, and the two D2
 # scores are opt-in. This is the same choice `evalmod()` makes for the
-# measures added after the fact: a caller that reshapes the result should
+# metrics added after the fact: a caller that reshapes the result should
 # keep getting three rows per dataset until it asks for more.
 #
 .prob_metric_names <- function(metrics) {
@@ -179,7 +179,7 @@ prob_metrics <- function(mdat, scores = NULL, labels = NULL, eps = 1e-15,
 #
 # 1 is a perfect model and 0 is one that does no better than the prevalence.
 # Negative values are left as they are: a model can be worse than the null,
-# and saying so is what the measure is for.
+# and saying so is what the metric is for.
 #
 # A dataset with only one class has a null loss of 0 - there is nothing to
 # explain - so the ratio is undefined and the answer is NA.

@@ -74,7 +74,7 @@ if (requireNamespace("data.table", quietly = TRUE)) {
 }
 \seealso{
 \code{\link[=evalmod]{evalmod()}} for generating \code{S3} objects with performance
-evaluation measures. \code{\link[=as.data.frame]{as.data.frame()}} for the plain data frame
+evaluation metrics. \code{\link[=as.data.frame]{as.data.frame()}} for the plain data frame
 equivalent. \code{\link[=fortify]{fortify()}} for converting the same objects for
 \code{ggplot2}.
 }

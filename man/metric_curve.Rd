@@ -2,7 +2,7 @@
 % Please edit documentation in R/main_metric_curve.R
 \name{metric_curve}
 \alias{metric_curve}
-\title{Draw one evaluation measure against another}
+\title{Draw one evaluation metric against another}
 \usage{
 metric_curve(
   mdat,
@@ -37,12 +37,12 @@ a matrix, an array, a data frame, or a list.}
 of observed labels. It can be a vector, a matrix, an array,
 a data frame, or a list.}
 
-\item{x_metric}{A string that specifies the measure of the x axis. It
+\item{x_metric}{A string that specifies the metric of the x axis. It
 accepts every name \code{\link[=evalmod]{evalmod()}} accepts for \code{metrics}, together
 with the identifiers \code{ROCR} uses. The default \code{"fpr"} with
 the default \code{y_metric} reproduces \code{ROCR}'s most common call.}
 
-\item{y_metric}{A string that specifies the measure of the y axis.}
+\item{y_metric}{A string that specifies the metric of the y axis.}
 
 \item{modnames}{A character vector for the names of the models.}
 
@@ -63,7 +63,7 @@ interpolation to place supporting points on.}
 interpolation of a registered pair is performed.}
 
 \item{cost_fp}{A numeric value for the cost of a false positive, used
-when one of the two axes is the \code{cost} measure. See \code{\link[=evalmod]{evalmod()}}.}
+when one of the two axes is the \code{cost} metric. See \code{\link[=evalmod]{evalmod()}}.}
 
 \item{cost_fn}{A numeric value for the cost of a false negative.}
 
@@ -79,16 +79,16 @@ test dataset, and works with \code{print}, \code{as.data.frame},
 \code{fortify}, \code{plot} and \code{autoplot}.
 }
 \description{
-The \code{metric_curve} function takes the name of a measure for the x axis
-and the name of a measure for the y axis and calculates one curve per
-test dataset, in the manner of \code{ROCR::performance}. Every measure
+The \code{metric_curve} function takes the name of a metric for the x axis
+and the name of a metric for the y axis and calculates one curve per
+test dataset, in the manner of \code{ROCR::performance}. Every metric
 \code{\link[=evalmod]{evalmod()}} can calculate is available on both axes.
 }
 \section{Which pairs are joined by a line}{
 
 
 \code{precrec} exists because the points of a precision-recall curve must not
-be joined by straight lines. The measures this function reads are raw
+be joined by straight lines. The metrics this function reads are raw
 per-cutoff values with no interpolation, so joining an arbitrary pair
 of them would be the very error the package was written to avoid.
 
@@ -147,7 +147,7 @@ xy3
 
 }
 \seealso{
-\code{\link[=evalmod]{evalmod()}} for the measures themselves and for averaged
+\code{\link[=evalmod]{evalmod()}} for the metrics themselves and for averaged
 ROC and precision-recall curves. \code{\link[=mmdata]{mmdata()}} for formatting input
 data. \code{\link[=autoplot]{autoplot()}} and \code{\link[=plot]{plot()}} for the plots.
 }

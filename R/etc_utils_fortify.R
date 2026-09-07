@@ -15,7 +15,7 @@
 #'    | smcurves        | single          | multiple               |
 #'    | mmcurves        | multiple        | multiple               |
 #'
-#' 2. Basic evaluation measures (mode = "basic")
+#' 2. Basic evaluation metrics (mode = "basic")
 #'
 #'    | **`S3` object** | **# of models** | **# of test datasets** |
 #'    |-----------------|-----------------|------------------------|
@@ -38,7 +38,7 @@
 #' @param reduce_points A Boolean value to decide whether the points should
 #'   be reduced when `mode = "rocprc"`. The points are reduced according to
 #'   `x_bins` of the [evalmod()] function. The default values is `FALSE`.
-#'   The basic evaluation measures are not reduced, so the argument has no
+#'   The basic evaluation metrics are not reduced, so the argument has no
 #'   effect for `sspoints`, `mspoints`, `smpoints` and `mmpoints`.
 #'
 #' @param ... Not used by this method.
@@ -47,7 +47,7 @@
 #'   \pkg{ggplot2}.
 #'
 #' @seealso [evalmod()] for generating `S3` objects with
-#'   performance evaluation measures.
+#'   performance evaluation metrics.
 #'   [autoplot()] for plotting with \pkg{ggplot2}.
 #'
 #' @examples
@@ -85,7 +85,7 @@
 #' p_prc <- p_prc + geom_line()
 #' p_prc
 #'
-#' ## Generate an sspoints object that contains basic evaluation measures
+#' ## Generate an sspoints object that contains basic evaluation metrics
 #' sspoints <- evalmod(
 #'   mode = "basic", scores = P10N10$scores,
 #'   labels = P10N10$labels
@@ -133,7 +133,7 @@
 #' p_prc <- p_prc + geom_line()
 #' p_prc
 #'
-#' ## Generate an mspoints object that contains basic evaluation measures
+#' ## Generate an mspoints object that contains basic evaluation metrics
 #' mspoints <- evalmod(mdat, mode = "basic")
 #'
 #' ## Fortify mspoints
@@ -181,7 +181,7 @@
 #' p_prc <- p_prc + geom_smooth(stat = "identity")
 #' p_prc
 #'
-#' ## Generate an smpoints object that contains basic evaluation measures
+#' ## Generate an smpoints object that contains basic evaluation metrics
 #' smpoints <- evalmod(mdat, mode = "basic")
 #'
 #' ## Fortify smpoints
@@ -233,7 +233,7 @@
 #' p_prc <- p_prc + geom_smooth(aes(color = modname), stat = "identity")
 #' p_prc
 #'
-#' ## Generate an mmpoints object that contains basic evaluation measures
+#' ## Generate an mmpoints object that contains basic evaluation metrics
 #' mmpoints <- evalmod(mdat, mode = "basic")
 #'
 #' ## Fortify mmpoints

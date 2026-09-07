@@ -47,7 +47,7 @@ pl6_calc_avg_basic <- function(mdat, eval_type = "err", cb_alpha = 0.05) {
 
   plfunc <- function(s) {
     cdat <- create_confmats(mdat[[s]])
-    calc_measures(cdat)
+    calc_metrics(cdat)
   }
   lpoints <- lapply(seq_along(mdat), plfunc)
 

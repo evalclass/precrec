@@ -1,5 +1,5 @@
 ---
-title: "Basic measure plots"
+title: "Basic metric plots"
 ---
 
 ```{r, include = FALSE}
@@ -8,7 +8,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-`mode = "basic"` plots evaluation measures against the normalized rank of the
+`mode = "basic"` plots evaluation metrics against the normalized rank of the
 scores - that is, against how far down the ranked list the cutoff sits.
 
 ```{r}
@@ -22,7 +22,7 @@ points <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
 
 ## Pick the panels
 
-Name the measures you want. Each becomes a panel.
+Name the metrics you want. Each becomes a panel.
 
 ```{r}
 autoplot(points, c("sensitivity", "specificity", "precision"))
@@ -32,7 +32,7 @@ autoplot(points, c("sensitivity", "specificity", "precision"))
 autoplot(points, c("mcc", "fscore"))
 ```
 
-Called with no measures, you get all fourteen default panels at once, which
+Called with no metrics, you get all fourteen default panels at once, which
 is useful for a first look and too dense for a report.
 
 ## Reading the x axis
@@ -45,7 +45,7 @@ This is what makes the panels comparable across datasets of different sizes.
 
 ## Scores and labels
 
-Two extra panels show the data behind the measures rather than a measure: the
+Two extra panels show the data behind the metrics rather than a metric: the
 score at each rank, and the observed label.
 
 ```{r}
@@ -55,7 +55,7 @@ autoplot(points, c("score", "label"))
 The label panel is the quickest way to see whether the positives really are
 concentrated at the top of the ranking.
 
-## Extra measures
+## Extra metrics
 
 Anything beyond the default fourteen is requested with `metrics =` and then
 plotted the same way.
@@ -68,17 +68,17 @@ extra <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
 autoplot(extra, c("fpr", "lift"))
 ```
 
-Asking to plot a measure that was not calculated is an error that names the
-argument to add. See the [measures overview](measures-overview.html).
+Asking to plot a metric that was not calculated is an error that names the
+argument to add. See the [metrics overview](metrics-overview.html).
 
 ## Axis ranges
 
-Measures that can go negative - `mcc`, `kappa`, `informedness`, `markedness`
+Metrics that can go negative - `mcc`, `kappa`, `informedness`, `markedness`
 and `label` - are drawn on a -1 to 1 axis. The rest use 0 to 1, and the few
 with no natural bound (`lift`, `odds`, `chisq`, `cost`, `score`) are scaled
 to the data.
 
 ## Next
 
-- [One measure against another](plots-metric-curve.html)
-- [Measures overview](measures-overview.html)
+- [One metric against another](plots-metric-curve.html)
+- [Metrics overview](metrics-overview.html)
