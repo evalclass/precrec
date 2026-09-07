@@ -70,5 +70,5 @@ knitr::kable(pauc(mpartial))
 
 ## Next
 
-- [AUC and other curve summaries](measures-auc.html)
+- [AUC and other curve summaries](metrics-auc.html)
 - [Customizing plots](plots-customizing.html)

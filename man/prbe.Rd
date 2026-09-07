@@ -61,5 +61,5 @@ prbe(mmcurves)
 }
 \seealso{
 \code{\link[=evalmod]{evalmod()}} for generating \code{S3} objects with performance
-evaluation measures. \code{\link[=auc]{auc()}} for the areas under the curves.
+evaluation metrics. \code{\link[=auc]{auc()}} for the areas under the curves.
 }

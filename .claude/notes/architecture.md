@@ -33,7 +33,7 @@ scores/labels
 pl_main(mdat, mode=)     pl1_pipeline_main.R
   ├─ mode "rocprc" ─ .pl_main_rocprc           pl2_pipeline_main_rocprc.R
   │     per dataset:  create_confmats()        pl3_create_confmats.R  -> "cmats"
-  │                   calc_measures()          pl4_calc_measures.R    -> "pevals"
+  │                   calc_metrics()          pl4_calc_metrics.R    -> "pevals"
   │                   create_curves()          pl5_create_curves.R    -> "curves"
   │     then:         .calc_avg_common()       pl6_calc_average.R     (avg + CI band)
   │     result class: <pf>curves
@@ -52,17 +52,17 @@ partial AUCs and `xlim`/`ylim` attributes and flipping `attr(x, "partial")`.
 already-interpolated PR curve of such an object.
 
 `metric_curve()` (`main_metric_curve.R`) is a second entry point that
-projects two basic measures against each other. It does not add a pipeline
+projects two basic metrics against each other. It does not add a pipeline
 stage: it calls `evalmod()` and takes two columns. See **The joinable-pair
 registry** below, which is the load-bearing part.
 
 ### Modes
 
 - `"rocprc"` (default, alias `"prcroc"`) — ROC + precision-recall curves.
-- `"basic"` — per-rank basic measures. `.get_metric_names("basic")` is the
+- `"basic"` — per-rank basic metrics. `.get_metric_names("basic")` is the
   fourteen an object holds by default; `.get_metric_names("basic_all")` is
-  every measure `.basic_metric_table()` knows, and `evalmod(metrics = )`
-  chooses between them per object. See **The measure table** below.
+  every metric `.basic_metric_table()` knows, and `evalmod(metrics = )`
+  chooses between them per object. See **The metric table** below.
 - `"aucroc"` — ROC AUC only, the fast path. Note `mmdata(mode = "aucroc")`
   produces `sdat` rather than `fmdat`, and the other modes reject it.
 
@@ -119,7 +119,7 @@ All heavy computation is in `src/`, exposed with `// [[Rcpp::export]]`:
 | File | Contents |
 | --- | --- |
 | `precrec_mmx.cpp` | input prep: `format_labels`, `get_score_ranks` |
-| `precrec_plx.cpp` | the pipeline: `create_confusion_matrices`, `calc_basic_measures`, `create_roc_curve`, `create_prc_curve` (with non-linear interpolation), `calc_auc`, `calc_uauc`, `calc_uauc_frank`, `calc_avg_curve`, `calc_avg_points` |
+| `precrec_plx.cpp` | the pipeline: `create_confusion_matrices`, `calc_basic_metrics`, `create_roc_curve`, `create_prc_curve` (with non-linear interpolation), `calc_auc`, `calc_uauc`, `calc_uauc_frank`, `calc_avg_curve`, `calc_avg_points` |
 | `precrec_misc.cpp/.h` | sorting/tie handling, point reduction, `convert_curve_df` / `convert_curve_avg_df` for `as.data.frame` |
 | `RcppExports.*` | **generated** |
 
@@ -135,18 +135,18 @@ Conventions in this layer:
 - Each C++ block is commented with the R file and R function that calls it;
   keep those headers accurate when moving code.
 
-## The measure table
+## The metric table
 
 `.basic_metric_table()` in `etc_utils.R` is the single list of basic
-evaluation measures. One row per measure, with:
+evaluation metrics. One row per metric, with:
 
 | Column | Used by |
 | --- | --- |
-| `name` | everything the user names a measure by |
+| `name` | everything the user names a metric by |
 | `short` | the class-item names of a `points` object, and the `Meas.` column `print` shows |
 | `desc` | the legend `print.beval_info()` writes |
 | `default` | whether an object holds it when `evalmod(metrics = )` is not given |
-| `range` | `"unit"`, `"signed"` or `"free"` — the y axis the measure needs |
+| `range` | `"unit"`, `"signed"` or `"free"` — the y axis the metric needs |
 
 **Two bugs in two consecutive releases came from a lookup keyed on one of
 the two naming schemes and missing the other**: the 0.15.0 panel-title bug
@@ -155,23 +155,23 @@ names while the base-R plotting path holds the short ones, so informedness
 and markedness were drawn on the wrong axis. `.metric_range()` accepts both.
 Prefer the table over a fresh list of names.
 
-Fourteen measures are `default = TRUE`; the rest are the ROCR-parity
-measures, off unless asked for. They are derived in R in
-`.add_derived_measures()` (`pl4_calc_measures.R`) from columns the C++ layer
+Fourteen metrics are `default = TRUE`; the rest are the ROCR-parity
+metrics, off unless asked for. They are derived in R in
+`.add_derived_metrics()` (`pl4_calc_metrics.R`) from columns the C++ layer
 already produced or from the confusion-matrix counts behind them — no C++
-change, and nothing computed for a measure nobody asked for. The length
+change, and nothing computed for a metric nobody asked for. The length
 check in `.validate.pevals()` is what pins a derived column to the same rank
 grid as its siblings.
 
-`.basic_metric_aliases()` holds the other names a measure answers to, ROCR's
+`.basic_metric_aliases()` holds the other names a metric answers to, ROCR's
 identifiers included. `.pmatch_added_metric()` is tried **last** in
 `.pmatch_curvetype_basic()`, so a prefix that used to reach one of the
-original measures still does: `"f"` is the F-score, `"l"` is the label.
+original metrics still does: `"f"` is the F-score, `"l"` is the label.
 
 ## The joinable-pair registry
 
 `.joinable_pairs()` in `main_metric_curve.R` lists the ordered metric pairs
-that may be joined by a line. It exists because the basic-measure table
+that may be joined by a line. It exists because the basic-metric table
 holds raw per-cutoff points with no interpolation, so joining an arbitrary
 pair of them with straight lines is the error this package exists to
 prevent.

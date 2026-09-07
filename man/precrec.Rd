@@ -13,7 +13,7 @@ provide a robust platform for performance evaluation of binary classifiers.
 
 The precrec package provides the following six functions.\tabular{ll}{
    \strong{Function} \tab \strong{Description} \cr
-   \code{\link[=evalmod]{evalmod()}} \tab Main function to calculate evaluation measures \cr
+   \code{\link[=evalmod]{evalmod()}} \tab Main function to calculate evaluation metrics \cr
    \code{\link[=mmdata]{mmdata()}} \tab Reformat input data for performance evaluation calculation \cr
    \code{\link[=join_scores]{join_scores()}} \tab Join scores of multiple models into a list \cr
    \code{\link[=join_labels]{join_labels()}} \tab Join observed labels of multiple test datasets into a list \cr
@@ -29,8 +29,8 @@ The precrec package provides nine different \code{S3} generics for the
    \strong{S3 generic} \tab \strong{Library} \tab \strong{Description} \cr
    \code{print} \tab base \tab Print the calculation results and the summary of the test data \cr
    \code{\link[=as.data.frame]{as.data.frame()}} \tab base \tab Convert a precrec object to a data frame \cr
-   \code{\link[=plot]{plot()}} \tab graphics \tab Plot performance evaluation measures \cr
-   \code{\link[=autoplot]{autoplot()}} \tab ggplot2 \tab Plot performance evaluation measures with ggplot2 \cr
+   \code{\link[=plot]{plot()}} \tab graphics \tab Plot performance evaluation metrics \cr
+   \code{\link[=autoplot]{autoplot()}} \tab ggplot2 \tab Plot performance evaluation metrics with ggplot2 \cr
    \code{\link[=fortify]{fortify()}} \tab ggplot2 \tab Prepare a data frame for ggplot2 \cr
    \code{\link[=auc]{auc()}} \tab precrec \tab Make a data frame with AUC scores \cr
    \code{\link[=part]{part()}} \tab precrec \tab Calculate partial curves and partial AUC scores \cr
@@ -39,13 +39,13 @@ The precrec package provides nine different \code{S3} generics for the
 }
 }
 
-\section{Performance measure calculations}{
+\section{Performance metric calculations}{
 
 The \code{\link[=evalmod]{evalmod()}} function calculates ROC and Precision-Recall
 curves and returns an \code{S3} object. The generated \code{S3} object can
 be used with several different \code{S3} generics, such as \code{print} and
 \code{\link[=plot]{plot()}}. The \code{\link[=evalmod]{evalmod()}} function can also
-calculate basic evaluation measures - error rate, accuracy, specificity,
+calculate basic evaluation metrics - error rate, accuracy, specificity,
 sensitivity, precision, Matthews correlation coefficient, F-score,
 balanced accuracy, negative predictive value, informedness, markedness,
 and Cohen's kappa.
@@ -88,7 +88,7 @@ precision-recall curve, and \code{\link[=prbe]{prbe()}} the precision-recall bre
 point.
 }
 
-\section{Probability-based measures}{
+\section{Probability-based metrics}{
 
 \code{\link[=prob_metrics]{prob_metrics()}} calculates the Brier score and the log loss of
 prediction scores that are probabilities, and \code{\link[=prob_metrics_ci]{prob_metrics_ci()}}

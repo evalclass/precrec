@@ -25,7 +25,7 @@
 #'   same columns as [as.data.frame()] returns for the same object.
 #'
 #' @seealso [evalmod()] for generating `S3` objects with performance
-#'   evaluation measures. [as.data.frame()] for the plain data frame
+#'   evaluation metrics. [as.data.frame()] for the plain data frame
 #'   equivalent. [fortify()] for converting the same objects for
 #'   `ggplot2`.
 #'

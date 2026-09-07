@@ -62,7 +62,7 @@ plot_layer_digest <- function(panel) {
   }, character(1))
 }
 
-# Eight significant digits is far more than any of these measures resolve,
+# Eight significant digits is far more than any of these metrics resolve,
 # and it keeps the text clear of last-bit noise.
 fmt_num <- function(x) {
   ifelse(is.na(x), "NA", formatC(signif(x, 8), format = "g", width = 1))

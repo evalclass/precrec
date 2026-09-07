@@ -115,23 +115,23 @@
 }
 
 #
-# The basic evaluation measures, with everything that is known about each
+# The basic evaluation metrics, with everything that is known about each
 #
-# One ordered table, used everywhere a measure is named: the columns the C++
+# One ordered table, used everywhere a metric is named: the columns the C++
 # layer returns and the ones derived from them in R, the slots of the points
 # object, the rows of the summary `print` shows, the panel titles, the axis
-# range each measure needs, and the default panels of `plot()` and
+# range each metric needs, and the default panels of `plot()` and
 # `autoplot()`. Keeping it in one place is what stops those from drifting
-# apart when a measure is added.
+# apart when a metric is added.
 #
 # `default` is what an object holds when `evalmod()` is not told otherwise.
-# The measures added for ROCR, yardstick and scikit-learn parity are FALSE:
+# The metrics added for ROCR, yardstick and scikit-learn parity are FALSE:
 # turning them on by default would take an existing caller from twelve panels
 # to twenty-nine, and make every `evalmod(mode = "basic")` call carry
 # seventeen more vectors it was not asked for. `evalmod(metrics = )` is
 # how they are turned on.
 #
-# `range` is the y axis a measure needs: "unit" for [0, 1], "signed" for
+# `range` is the y axis a metric needs: "unit" for [0, 1], "signed" for
 # [-1, 1], and "free" for one that is unbounded above and has to be read off
 # the data.
 #
@@ -180,11 +180,11 @@
 }
 
 #
-# Other names a measure answers to
+# Other names a metric answers to
 #
 # ROCR ships its own identifier for most of these, and several have a standard
 # abbreviation that is shorter than the name this package settled on. Both are
-# accepted wherever a measure is named, so a call written against ROCR keeps
+# accepted wherever a metric is named, so a call written against ROCR keeps
 # working and nobody has to spell out `false_discovery_rate` to plot it.
 #
 .basic_metric_aliases <- function() {
@@ -205,7 +205,7 @@
 }
 
 #
-# Map the basic evaluation measures to their internal short names
+# Map the basic evaluation metrics to their internal short names
 #
 # With no argument this is the default set, which is what every caller that
 # does not know about `evalmod(metrics = )` wants.
@@ -221,11 +221,11 @@
 }
 
 #
-# Resolve a `metrics` argument to the measures an object should hold
+# Resolve a `metrics` argument to the metrics an object should hold
 #
-# The default measures are always included: an object that dropped them would
+# The default metrics are always included: an object that dropped them would
 # break every plot, summary and data frame that names one, and the point of
-# the argument is to add the measures ROCR has, not to take the existing ones
+# the argument is to add the metrics ROCR has, not to take the existing ones
 # away. `"all"` is the whole table.
 #
 .resolve_metrics <- function(metrics) {
@@ -248,7 +248,7 @@
 }
 
 #
-# Resolve measure aliases to the name this package uses
+# Resolve metric aliases to the name this package uses
 #
 .pmatch_metric_names <- function(metrics) {
   aliases <- .basic_metric_aliases()
@@ -258,7 +258,7 @@
 }
 
 #
-# The basic measures an object actually holds
+# The basic metrics an object actually holds
 #
 # `evalmod(metrics = )` decides this per object, so the plot and summary code
 # has to ask the object rather than the table. An object built before the
@@ -273,7 +273,7 @@
 }
 
 #
-# The axis range a measure needs
+# The axis range a metric needs
 #
 # "unit" runs from 0 to 1, "signed" from -1 to 1, and "free" is unbounded -
 # the score, the lift and the odds ratio, which have to be read off the data.
@@ -292,7 +292,7 @@
 }
 
 #
-# Get the plot title of a basic evaluation measure
+# Get the plot title of a basic evaluation metric
 #
 # Capitalising the name covers most of them; the rest are acronyms.
 #
@@ -322,7 +322,7 @@
 # Get names of evaluation metrics
 #
 # "basic" is the default set, which is what the plot and validation code has
-# always meant by it; "basic_all" is every measure the table knows.
+# always meant by it; "basic_all" is every metric the table knows.
 #
 .get_metric_names <- function(mode) {
   if (mode == "rocprc" || mode == "prcroc") {
@@ -398,7 +398,7 @@
 # Calculate a confidence interval of per-dataset values
 #
 # Shared by `auc_ci()` and `prob_metrics_ci()`: same normal or t interval,
-# differing only in where the measure is allowed to sit. A single dataset has
+# differing only in where the metric is allowed to sit. A single dataset has
 # no spread to estimate, so the interval collapses onto the value itself.
 # `n` is the number of datasets the interval was built from, which is not the
 # number supplied when some of them could not be evaluated.
@@ -488,7 +488,7 @@
 #
 # Number of columns of a multi-panel figure
 #
-# Shared by the base-R and the ggplot2 sides so that a set of measures is
+# Shared by the base-R and the ggplot2 sides so that a set of metrics is
 # laid out the same way whichever one draws it.
 #
 .get_plot_ncol <- function(nplots) {

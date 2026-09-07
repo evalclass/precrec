@@ -114,9 +114,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// calc_basic_measures
-Rcpp::List calc_basic_measures(int np, int nn, const Rcpp::NumericVector& tps, const Rcpp::NumericVector& fps, const Rcpp::NumericVector& tns, const Rcpp::NumericVector& fns, double beta, bool extra_measures);
-RcppExport SEXP _precrec_calc_basic_measures(SEXP npSEXP, SEXP nnSEXP, SEXP tpsSEXP, SEXP fpsSEXP, SEXP tnsSEXP, SEXP fnsSEXP, SEXP betaSEXP, SEXP extra_measuresSEXP) {
+// calc_basic_metrics
+Rcpp::List calc_basic_metrics(int np, int nn, const Rcpp::NumericVector& tps, const Rcpp::NumericVector& fps, const Rcpp::NumericVector& tns, const Rcpp::NumericVector& fns, double beta, bool extra_metrics);
+RcppExport SEXP _precrec_calc_basic_metrics(SEXP npSEXP, SEXP nnSEXP, SEXP tpsSEXP, SEXP fpsSEXP, SEXP tnsSEXP, SEXP fnsSEXP, SEXP betaSEXP, SEXP extra_metricsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -127,8 +127,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type tns(tnsSEXP);
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type fns(fnsSEXP);
     Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
-    Rcpp::traits::input_parameter< bool >::type extra_measures(extra_measuresSEXP);
-    rcpp_result_gen = Rcpp::wrap(calc_basic_measures(np, nn, tps, fps, tns, fns, beta, extra_measures));
+    Rcpp::traits::input_parameter< bool >::type extra_metrics(extra_metricsSEXP);
+    rcpp_result_gen = Rcpp::wrap(calc_basic_metrics(np, nn, tps, fps, tns, fns, beta, extra_metrics));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -221,7 +221,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_precrec_create_confusion_matrices", (DL_FUNC) &_precrec_create_confusion_matrices, 3},
     {"_precrec_calc_uauc", (DL_FUNC) &_precrec_calc_uauc, 6},
     {"_precrec_calc_uauc_frank", (DL_FUNC) &_precrec_calc_uauc_frank, 7},
-    {"_precrec_calc_basic_measures", (DL_FUNC) &_precrec_calc_basic_measures, 8},
+    {"_precrec_calc_basic_metrics", (DL_FUNC) &_precrec_calc_basic_metrics, 8},
     {"_precrec_create_roc_curve", (DL_FUNC) &_precrec_create_roc_curve, 5},
     {"_precrec_create_prc_curve", (DL_FUNC) &_precrec_create_prc_curve, 5},
     {"_precrec_calc_auc", (DL_FUNC) &_precrec_calc_auc, 2},

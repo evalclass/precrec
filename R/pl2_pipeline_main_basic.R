@@ -1,12 +1,12 @@
 #
-# Control the main pipeline iterations for basic evaluation measures
+# Control the main pipeline iterations for basic evaluation metrics
 #
 .pl_main_basic <- function(mdat, model_type, dataset_type, class_name_pf,
                            calc_avg = TRUE, cb_alpha = 0.05,
                            raw_curves = FALSE, beta = 1, metrics = NULL,
                            cost_fp = 1, cost_fn = 1) {
   metric_names <- .basic_metric_names(.resolve_metrics(metrics))
-  # Only the measures derived in R reach calc_measures(); the C++ layer has
+  # Only the metrics derived in R reach calc_metrics(); the C++ layer has
   # always produced the rest, and handing it the whole list once per dataset
   # would make it look the table up for nothing
   derived <- setdiff(names(metric_names), .get_metric_names("basic"))
@@ -15,30 +15,30 @@
     raw_curves <- TRUE
   }
 
-  # === Calculate evaluation measure ===
+  # === Calculate evaluation metric ===
   # Create points
   plfunc <- function(s) {
     if (attr(mdat[[s]], "nn") == 0 || attr(mdat[[s]], "np") == 0) {
-      # Accuracy and error rate are still defined here, and the measures that
+      # Accuracy and error rate are still defined here, and the metrics that
       # are not - specificity without negatives, sensitivity without
       # positives - come back as NA, so this is a warning rather than the
       # error the curve pipelines raise
       warning(
         .single_class_msg(
-          mdat[[s]], "Some basic measures cannot be calculated."
+          mdat[[s]], "Some basic metrics cannot be calculated."
         ),
         call. = FALSE
       )
     }
     cdat <- create_confmats(mdat[[s]], keep_fmdat = TRUE)
-    calc_measures(cdat,
+    calc_metrics(cdat,
       beta = beta, metrics = derived,
       cost_fp = cost_fp, cost_fn = cost_fn
     )
   }
   lpoints <- .map_idx(mdat, plfunc)
 
-  # Summarize points by evaluation measure
+  # Summarize points by evaluation metric
   grpfunc <- function(m) {
     .summarize_points(
       lpoints, m, "pointgrp", mdat, dataset_type,
@@ -50,7 +50,7 @@
   grp_points <- .map(eval_names, grpfunc)
   names(grp_points) <- grp_row_names
 
-  # Summarize basic evaluation measures
+  # Summarize basic evaluation metrics
   eval_summary <- .summarize_basic(lpoints, mdat, eval_names)
 
   # Summarize average
@@ -99,12 +99,12 @@
 }
 
 #
-# Get evaluation measures at all ranks by models
+# Get evaluation metrics at all ranks by models
 #
 .summarize_points <- function(lpoints, eval_type, class_name, mdat,
                               dataset_type, calc_avg, cb_alpha) {
   if (!is.null(lpoints)) {
-    # Summarize basic evaluation measures
+    # Summarize basic evaluation metrics
     grp_func <- function(pt) {
       list(
         x = pt[["basic"]][["rank"]],
@@ -145,7 +145,7 @@
 }
 
 #
-# Summarize basic evaluation measures
+# Summarize basic evaluation metrics
 #
 .summarize_basic <- function(lpoints, mdat, eval_names) {
   # Summarize AUC of ROC or PRC curves

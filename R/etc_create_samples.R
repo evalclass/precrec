@@ -30,7 +30,7 @@
 #'   }
 #'
 #' @seealso [mmdata()] for formatting input data.
-#'   [evalmod()] for calculation evaluation measures.
+#'   [evalmod()] for calculation evaluation metrics.
 #'
 #' @examples
 #'

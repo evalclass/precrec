@@ -16,7 +16,7 @@
 #'    | smcurves        | single          | multiple               |
 #'    | mmcurves        | multiple        | multiple               |
 #'
-#' 2. Basic evaluation measures (mode = "basic")
+#' 2. Basic evaluation metrics (mode = "basic")
 #'
 #'    | **`S3` object** | **# of models** | **# of test datasets** |
 #'    |-----------------|-----------------|------------------------|
@@ -47,7 +47,7 @@
 #' @return The `as.data.frame` function returns a data frame.
 #'
 #' @seealso [evalmod()] for generating `S3` objects with
-#'   performance evaluation measures.
+#'   performance evaluation metrics.
 #'
 #' @examples
 #' \dontrun{
@@ -67,7 +67,7 @@
 #' ## Show data frame
 #' head(sscurves.df)
 #'
-#' ## Generate an sspoints object that contains basic evaluation measures
+#' ## Generate an sspoints object that contains basic evaluation metrics
 #' sspoints <- evalmod(
 #'   mode = "basic", scores = P10N10$scores,
 #'   labels = P10N10$labels
@@ -98,7 +98,7 @@
 #' ## Show data frame
 #' head(mscurves.df)
 #'
-#' ## Generate an mspoints object that contains basic evaluation measures
+#' ## Generate an mspoints object that contains basic evaluation metrics
 #' mspoints <- evalmod(mdat, mode = "basic")
 #'
 #' ## Convert mspoints to a data frame
@@ -128,7 +128,7 @@
 #' ## Show data frame
 #' head(smcurves.df)
 #'
-#' ## Generate an smpoints object that contains basic evaluation measures
+#' ## Generate an smpoints object that contains basic evaluation metrics
 #' smpoints <- evalmod(mdat, mode = "basic")
 #'
 #' ## Convert smpoints to a data frame
@@ -158,7 +158,7 @@
 #' ## Show data frame
 #' head(mmcurves.df)
 #'
-#' ## Generate an mmpoints object that contains basic evaluation measures
+#' ## Generate an mmpoints object that contains basic evaluation metrics
 #' mmpoints <- evalmod(mdat, mode = "basic")
 #'
 #' ## Convert mmpoints to a data frame
@@ -191,7 +191,7 @@
 #' ## Show data frame
 #' head(cvcurves.df)
 #'
-#' ## Generate an mmpoints object that contains basic evaluation measures
+#' ## Generate an mmpoints object that contains basic evaluation metrics
 #' cvpoints <- evalmod(cvdat, mode = "basic")
 #'
 #' ## Convert mmpoints to a data frame

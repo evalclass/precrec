@@ -81,5 +81,5 @@ autoplot(curves, "PRC", type = "p")
 
 ## Next
 
-- [Basic measure plots](plots-basic-measures.html)
+- [Basic metric plots](plots-basic-metrics.html)
 - [Partial curves](plots-partial-curves.html)

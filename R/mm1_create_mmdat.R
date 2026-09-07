@@ -2,7 +2,7 @@
 #'
 #' The `mmdata` function takes predicted scores and labels
 #'   and returns an `mdat` object. The [evalmod()] function
-#'   takes an `mdat` object as input data to calculate evaluation measures.
+#'   takes an `mdat` object as input data to calculate evaluation metrics.
 #'
 #' @param scores A numeric dataset of predicted scores. It can be a vector,
 #'   a matrix, an array, a data frame, or a list. The [join_scores()]
@@ -59,7 +59,7 @@
 #'            and `modnames` and `dsids` are unspecified.}
 #'   }
 #'
-#' @param mode A string that specifies the types of evaluation measures
+#' @param mode A string that specifies the types of evaluation metrics
 #'   that the `evalmod` function calculates.
 #'   \describe{
 #'     \item{"rocprc"}{ROC and Precision-Recall curves}
@@ -111,7 +111,7 @@
 #'   that contains formatted labels and score ranks. The object can
 #'   be used as input data for the [evalmod()] function.
 #'
-#' @seealso [evalmod()] for calculation evaluation measures.
+#' @seealso [evalmod()] for calculation evaluation metrics.
 #'   [join_scores()] and [join_labels()] for formatting
 #'   scores and labels with multiple datasets.
 #'   [format_nfold()] for creating n-fold cross validation dataset

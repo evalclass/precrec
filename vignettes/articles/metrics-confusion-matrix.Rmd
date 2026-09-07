@@ -27,12 +27,12 @@ points <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
 
 ## Overall
 
-| Measure | Formula | Range |
+| Metric | Formula | Range |
 |---|---|---|
 | `accuracy` | (TP + TN) / all | 0 to 1 |
 | `error` | (FP + FN) / all | 0 to 1 |
 
-Accuracy is the measure to distrust first. On data with 1% positives, calling
+Accuracy is the metric to distrust first. On data with 1% positives, calling
 everything negative scores 0.99.
 
 ```{r}
@@ -44,7 +44,7 @@ autoplot(points, c("accuracy", "error"))
 These divide by a row of the table, so they do not move when the class
 balance changes.
 
-| Measure | Formula | Also known as |
+| Metric | Formula | Also known as |
 |---|---|---|
 | `sensitivity` | TP / (TP + FN) | recall, TPR, hit rate |
 | `specificity` | TN / (TN + FP) | TNR, selectivity |
@@ -64,7 +64,7 @@ These divide by a column, so they *do* move with the class balance. That is
 what makes them informative on imbalanced data, and what makes them
 impossible to transfer between datasets.
 
-| Measure | Formula | Also known as |
+| Metric | Formula | Also known as |
 |---|---|---|
 | `precision` | TP / (TP + FP) | PPV |
 | `npv` | TN / (TN + FN) | negative predictive value |
@@ -81,7 +81,7 @@ data](howto-imbalanced-data.html).
 
 ## How much gets flagged
 
-| Measure | Formula | Also known as |
+| Metric | Formula | Also known as |
 |---|---|---|
 | `predicted_positive_rate` | (TP + FP) / all | rate of positive predictions |
 | `predicted_negative_rate` | (TN + FN) / all | rate of negative predictions |
@@ -99,7 +99,7 @@ autoplot(ppr, "predicted_positive_rate")
 
 ## Leaving out the true negatives
 
-| Measure | Formula | Also known as |
+| Metric | Formula | Also known as |
 |---|---|---|
 | `jaccard` | TP / (TP + FP + FN) | Jaccard index, critical success index, threat score |
 
@@ -142,7 +142,7 @@ knitr::kable(data.frame(
 
 Forecast verification calls the same quantity the critical success index or
 threat score, for the same reason: a rare event has so many true negatives
-that any measure counting them reports mostly the rarity.
+that any metric counting them reports mostly the rarity.
 
 ## Undefined ends
 
@@ -153,5 +153,5 @@ treatment: its denominator is 0 only for a dataset with no positives at all.
 
 ## Next
 
-- [Agreement and balance](measures-agreement.html)
-- [Ranking and cost](measures-ranking-cost.html)
+- [Agreement and balance](metrics-agreement.html)
+- [Ranking and cost](metrics-ranking-cost.html)

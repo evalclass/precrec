@@ -1,3 +1,23 @@
+# precrec 0.19.0
+
+* Settle on "metric" as the word for the quantities `evalmod(metrics = )`,
+  `metric_curve(x_metric = , y_metric = )` and `prob_metrics()` name. The
+  documentation had called them "measures" throughout while the arguments
+  that select them had always been called `metrics`, so a reader had to work
+  out that the two words meant one thing. Nothing about what `precrec`
+  computes has changed.
+
+  The website articles that describe them moved from `measures-*.html` to
+  `metrics-*.html`, and `plots-basic-measures.html` to
+  `plots-basic-metrics.html`. The old addresses redirect to the new ones.
+
+  `print()` on a basic-mode object now heads its summary column `Metric`
+  rather than `Meas.`, and its banner reads
+  `=== Basic performance evaluation metrics ===`.
+
+* Correct the count in `README.md`, which said ten opt-in metrics when there
+  have been seventeen since 0.18.0.
+
 # precrec 0.18.0
 
 * Add the `jaccard`, `positive_likelihood_ratio` and

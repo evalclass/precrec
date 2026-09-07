@@ -19,7 +19,7 @@
 #' @return The `format_nfold` function returns a list that
 #'   contains multiple scores and labels.
 #'
-#' @seealso [evalmod()] for calculation evaluation measures.
+#' @seealso [evalmod()] for calculation evaluation metrics.
 #'   [mmdata()] for formatting input data.
 #'   [join_scores()] and [join_labels()] for formatting
 #'   scores and labels with multiple datasets.

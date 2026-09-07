@@ -111,6 +111,6 @@ pauc(mmcurves.part)
 }
 \seealso{
 \code{\link[=evalmod]{evalmod()}} for generating \code{S3} objects with
-performance evaluation measures. \code{\link[=part]{part()}} for calculation of
+performance evaluation metrics. \code{\link[=part]{part()}} for calculation of
 pAUCs. \code{\link[=auc]{auc()}} for retrieving a dataset of AUCs.
 }

@@ -1,8 +1,8 @@
 #
-# Calculate basic evaluation measures from confusion matrices
+# Calculate basic evaluation metrics from confusion matrices
 #
-calc_measures <- function(cmats, scores = NULL, labels = NULL, beta = 1,
-                          extra_measures = TRUE, metrics = NULL,
+calc_metrics <- function(cmats, scores = NULL, labels = NULL, beta = 1,
+                          extra_metrics = TRUE, metrics = NULL,
                           cost_fp = 1, cost_fn = 1, ...) {
   # === Validate input arguments ===
   # Create cmats from scores and labels if cmats is missing
@@ -29,16 +29,16 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, beta = 1,
   # === Create confusion matrices for all ranks ===
   # Call a cpp function via Rcpp interface
   .validate_beta(beta)
-  .assert_flag(extra_measures, "extra_measures")
-  pevals <- calc_basic_measures(
+  .assert_flag(extra_metrics, "extra_metrics")
+  pevals <- calc_basic_metrics(
     attr(cmats, "np"), attr(cmats, "nn"),
     cmats[["tp"]], cmats[["fp"]],
-    cmats[["tn"]], cmats[["fn"]], beta, extra_measures
+    cmats[["tn"]], cmats[["fn"]], beta, extra_metrics
   )
-  .check_cpp_func_error(pevals, "calc_basic_measures")
+  .check_cpp_func_error(pevals, "calc_basic_metrics")
 
-  # === Derive the measures that are algebra on the ones just calculated ===
-  pevals[["basic"]] <- .add_derived_measures(
+  # === Derive the metrics that are algebra on the ones just calculated ===
+  pevals[["basic"]] <- .add_derived_metrics(
     pevals[["basic"]], cmats, metrics,
     cost_fp = cost_fp, cost_fn = cost_fn
   )
@@ -79,19 +79,19 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, beta = 1,
 }
 
 #
-# Add the measures that are algebra on the confusion matrices
+# Add the metrics that are algebra on the confusion matrices
 #
 # Every one of these is a vectorized transform of columns the C++ layer has
 # already produced, or of the counts behind them, so there is nothing to gain
 # by computing them next to the loop: doing it here means an unrequested
-# measure costs no time and no memory, and `mode = "rocprc"` - which asks for
-# three measures and never for these - is untouched.
+# metric costs no time and no memory, and `mode = "rocprc"` - which asks for
+# three metrics and never for these - is untouched.
 #
-# They are derived on the same rank grid as the measures they come from, and
+# They are derived on the same rank grid as the metrics they come from, and
 # before any x_bins reduction, so a derived column lines up with its siblings.
 # `.validate.pevals()` checks that.
 #
-.add_derived_measures <- function(pb, cmats, metrics, cost_fp = 1,
+.add_derived_metrics <- function(pb, cmats, metrics, cost_fp = 1,
                                   cost_fn = 1) {
   # Checked before the table is read, so that the common call - the curve
   # pipelines and every `evalmod()` that does not pass `metrics` - does no
@@ -139,7 +139,7 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, beta = 1,
   vals[["cost"]] <- (fn * cost_fn + fp * cost_fp) / n_all
 
   # The distance from the point (1 - specificity, sensitivity) to the perfect
-  # corner of ROC space. It is the one measure in the table that is better
+  # corner of ROC space. It is the one metric in the table that is better
   # when it is smaller, and the one whose maximum is sqrt(2) rather than 1,
   # which is why its range is "free".
   vals[["roc_dist"]] <- sqrt(
@@ -177,7 +177,7 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, beta = 1,
   # The likelihood ratios divide by the false positive rate and by the
   # specificity, each of which is 0 at one end, so they need the same
   # treatment. The Jaccard index is 0/0 only for a dataset with no
-  # positives, where every other measure is NA already.
+  # positives, where every other metric is NA already.
   for (m in c(
     "lift", "odds", "jaccard",
     "positive_likelihood_ratio", "negative_likelihood_ratio"
@@ -193,7 +193,7 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, beta = 1,
 # SAR: the mean of accuracy, AUC(ROC) and 1 - RMSE
 #
 # Three quantities on three different scales, averaged with equal weight -
-# a per-cutoff measure, a curve-level scalar and a score-level scalar. Only
+# a per-cutoff metric, a curve-level scalar and a score-level scalar. Only
 # the first varies along the curve; the other two are constants added to
 # every point, which is what ROCR does too.
 #
@@ -205,7 +205,7 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, beta = 1,
   src <- attr(cmats, "src")
   if (all(is.na(src))) {
     stop(paste(
-      "The 'sar' measure needs the prediction scores.",
+      "The 'sar' metric needs the prediction scores.",
       "Use create_confmats(keep_fmdat = TRUE)."
     ), call. = FALSE)
   }
@@ -217,11 +217,11 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, beta = 1,
   # A warning and NA rather than the error `prob_metrics()` raises for the
   # same input: this is one opt-in column among twenty-nine, and
   # `metrics = "all"` should not stop on a dataset whose scores happen not
-  # to be probabilities. Every other measure it asked for is still returned.
+  # to be probabilities. Every other metric it asked for is still returned.
   if (anyNA(scores) || min(scores) < 0 || max(scores) > 1) {
     warning(
       paste0(
-        "The 'sar' measure needs scores that are probabilities between 0",
+        "The 'sar' metric needs scores that are probabilities between 0",
         " and 1, and returns NA otherwise (modname: ",
         attr(cmats, "modname"), ", dsid: ", attr(cmats, "dsid"), ")."
       ),
@@ -319,7 +319,7 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, beta = 1,
 }
 
 #
-# Validate 'pevals' object generated by calc_measures()
+# Validate 'pevals' object generated by calc_metrics()
 #
 .validate.pevals <- function(x) {
   # Need to validate only once
@@ -338,14 +338,14 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, beta = 1,
     "modname", "dsid", "keep_fmdat"
   )
   .validate_basic(
-    x, "pevals", "calc_measures", item_names, attr_names,
+    x, "pevals", "calc_metrics", item_names, attr_names,
     arg_names
   )
 
   pb <- x[["basic"]]
 
-  # Check values of class items. The curve pipeline asks calc_measures() for
-  # the reduced table, so an object either holds every measure or only the
+  # Check values of class items. The curve pipeline asks calc_metrics() for
+  # the reduced table, so an object either holds every metric or only the
   # ones the curves are drawn from.
   n <- length(pb[["error"]])
   extra <- c(
@@ -390,7 +390,7 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, beta = 1,
   )
 
   # SP. A dataset with no negatives has no specificity to report, and
-  # calc_basic_measures() fills the column with NA rather than 0/0.
+  # calc_basic_metrics() fills the column with NA rather than 0/0.
   .assert_internal(
     is.atomic(pb[["specificity"]]),
     is.vector(pb[["specificity"]]),
@@ -457,7 +457,7 @@ calc_measures <- function(cmats, scores = NULL, labels = NULL, beta = 1,
     .assert_internal(pb[["npv"]][n] == pb[["npv"]][n - 1])
   }
 
-  # The measures derived in R, whichever of them were asked for
+  # The metrics derived in R, whichever of them were asked for
   for (m in setdiff(mnames, names(.basic_metric_names()))) {
     .assert_internal(
       is.atomic(pb[[m]]),

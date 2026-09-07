@@ -78,7 +78,7 @@ when two vectors are passed as input,
 and \code{modnames} and \code{dsids} are unspecified.}
 }}
 
-\item{mode}{A string that specifies the types of evaluation measures
+\item{mode}{A string that specifies the types of evaluation metrics
 that the \code{evalmod} function calculates.
 \describe{
 \item{"rocprc"}{ROC and Precision-Recall curves}
@@ -134,7 +134,7 @@ be used as input data for the \code{\link[=evalmod]{evalmod()}} function.
 \description{
 The \code{mmdata} function takes predicted scores and labels
 and returns an \code{mdat} object. The \code{\link[=evalmod]{evalmod()}} function
-takes an \code{mdat} object as input data to calculate evaluation measures.
+takes an \code{mdat} object as input data to calculate evaluation metrics.
 }
 \examples{
 
@@ -246,7 +246,7 @@ mcmdat
 
 }
 \seealso{
-\code{\link[=evalmod]{evalmod()}} for calculation evaluation measures.
+\code{\link[=evalmod]{evalmod()}} for calculation evaluation metrics.
 \code{\link[=join_scores]{join_scores()}} and \code{\link[=join_labels]{join_labels()}} for formatting
 scores and labels with multiple datasets.
 \code{\link[=format_nfold]{format_nfold()}} for creating n-fold cross validation dataset

@@ -84,7 +84,7 @@ str(nfold_list3$labels)
 
 }
 \seealso{
-\code{\link[=evalmod]{evalmod()}} for calculation evaluation measures.
+\code{\link[=evalmod]{evalmod()}} for calculation evaluation metrics.
 \code{\link[=mmdata]{mmdata()}} for formatting input data.
 \code{\link[=join_scores]{join_scores()}} and \code{\link[=join_labels]{join_labels()}} for formatting
 scores and labels with multiple datasets.

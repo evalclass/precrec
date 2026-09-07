@@ -60,7 +60,7 @@ fortify.pevals <- function(model, ...) {
   pb <- model[["basic"]]
   n <- length(pb[["error"]])
 
-  # The measures the object holds, plus the one derived column that has no
+  # The metrics the object holds, plus the one derived column that has no
   # place of its own in the table
   mnames <- intersect(.get_metric_names("basic_all"), names(pb))
   vals <- .map(mnames, function(m) pb[[m]])
@@ -151,7 +151,7 @@ fortify.sspoints <- function(model, data, raw_curves = NULL,
                              reduce_points = FALSE,
                              ...) {
   # One dataset has no average to contrast a raw curve with, and the basic
-  # measures have no point reduction.
+  # metrics have no point reduction.
   .ignore_unused_args(raw_curves, reduce_points)
 
   .as_plain_df(
@@ -168,7 +168,7 @@ fortify.mspoints <- function(model, data, raw_curves = NULL,
                              reduce_points = FALSE,
                              ...) {
   # One dataset has no average to contrast a raw curve with, and the basic
-  # measures have no point reduction.
+  # metrics have no point reduction.
   .ignore_unused_args(raw_curves, reduce_points)
 
   .as_plain_df(
@@ -184,7 +184,7 @@ fortify.mspoints <- function(model, data, raw_curves = NULL,
 fortify.smpoints <- function(model, data, raw_curves = NULL,
                              reduce_points = FALSE,
                              ...) {
-  # The basic measures have no point reduction.
+  # The basic metrics have no point reduction.
   .ignore_unused_args(reduce_points)
 
   arglist <- .get_fortify_arglist(attr(model, "args"),
@@ -204,7 +204,7 @@ fortify.smpoints <- function(model, data, raw_curves = NULL,
 fortify.mmpoints <- function(model, data, raw_curves = NULL,
                              reduce_points = FALSE,
                              ...) {
-  # The basic measures have no point reduction.
+  # The basic metrics have no point reduction.
   .ignore_unused_args(reduce_points)
 
   arglist <- .get_fortify_arglist(attr(model, "args"),

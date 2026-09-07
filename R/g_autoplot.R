@@ -42,7 +42,7 @@ autoplot.cmats <- function(object, ...) {
 }
 
 #
-# Plot basic evaluation measures by rank
+# Plot basic evaluation metrics by rank
 #
 #' @exportS3Method
 autoplot.pevals <- function(object, ...) {
@@ -58,7 +58,7 @@ autoplot.pevals <- function(object, ...) {
   p <- p + ggplot2::geom_line()
   p <- p + ggplot2::facet_wrap(~group, ncol = 2)
 
-  p <- .geom_basic(p, "Evaluation measures by ranks",
+  p <- .geom_basic(p, "Evaluation metrics by ranks",
     "normalized rank", "evaluation value",
     show_legend = FALSE
   )

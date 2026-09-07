@@ -74,14 +74,14 @@ test_that("single class - positive (mode='basic')", {
   # mode = "basic" warns and calculates rather than stopping
   expect_warning(
     points1 <- evalmod(ssmdat1, mode = "basic"),
-    "Some basic measures cannot be calculated. Only a single class"
+    "Some basic metrics cannot be calculated. Only a single class"
   )
   # Every one of the five datasets is single-class, so all five warn.
   # expect_warning() would take the first and let the rest escape the test.
   warns <- capture_warnings(evalmod(smmdat1, mode = "basic"))
   expect_length(warns, 5)
   expect_true(all(grepl(
-    "Some basic measures cannot be calculated. Only a single class",
+    "Some basic metrics cannot be calculated. Only a single class",
     warns,
     fixed = TRUE
   )))
@@ -112,14 +112,14 @@ test_that("single class - negative (mode='basic')", {
   # mode = "basic" warns and calculates rather than stopping
   expect_warning(
     points1 <- evalmod(ssmdat1, mode = "basic"),
-    "Some basic measures cannot be calculated. Only a single class"
+    "Some basic metrics cannot be calculated. Only a single class"
   )
   # Every one of the five datasets is single-class, so all five warn.
   # expect_warning() would take the first and let the rest escape the test.
   warns <- capture_warnings(evalmod(smmdat1, mode = "basic"))
   expect_length(warns, 5)
   expect_true(all(grepl(
-    "Some basic measures cannot be calculated. Only a single class",
+    "Some basic metrics cannot be calculated. Only a single class",
     warns,
     fixed = TRUE
   )))

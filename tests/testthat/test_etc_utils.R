@@ -87,10 +87,10 @@ test_that(".basic_metric_names() still returns the fourteen defaults", {
   expect_equal(.get_metric_names("basic"), names(.basic_metric_names()))
 })
 
-test_that(".get_metric_names('basic_all') adds the optional measures", {
+test_that(".get_metric_names('basic_all') adds the optional metrics", {
   all_names <- .get_metric_names("basic_all")
 
-  # The defaults come first and in their own order, so an added measure
+  # The defaults come first and in their own order, so an added metric
   # cannot displace one
   expect_equal(
     all_names[seq_along(.get_metric_names("basic"))],
@@ -116,7 +116,7 @@ test_that(".resolve_metrics() keeps the default set whatever it is given", {
   expect_equal(.resolve_metrics("accuracy"), defaults)
 })
 
-test_that(".resolve_metrics() returns the measures in table order", {
+test_that(".resolve_metrics() returns the metrics in table order", {
   expect_equal(
     .resolve_metrics(c("odds", "fpr")),
     c(.get_metric_names("basic"), "fpr", "odds")

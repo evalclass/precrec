@@ -23,7 +23,7 @@ points <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
 
 ## Balanced accuracy and F-score
 
-| Measure | Formula | Range |
+| Metric | Formula | Range |
 |---|---|---|
 | `balanced_accuracy` | (sensitivity + specificity) / 2 | 0 to 1 |
 | `fscore` | harmonic mean of precision and recall | 0 to 1 |
@@ -45,9 +45,9 @@ f2 <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
 )
 ```
 
-## Correlation-like measures
+## Correlation-like metrics
 
-| Measure | Formula | Range |
+| Metric | Formula | Range |
 |---|---|---|
 | `mcc` | correlation of prediction and truth | -1 to 1 |
 | `kappa` | agreement above chance | -1 to 1 |
@@ -66,7 +66,7 @@ Both can go negative, meaning worse than chance. Their plots are drawn on a
 
 ## Informedness and markedness
 
-| Measure | Formula | Range |
+| Metric | Formula | Range |
 |---|---|---|
 | `informedness` | sensitivity + specificity - 1 | -1 to 1 |
 | `markedness` | precision + NPV - 1 | -1 to 1 |
@@ -81,7 +81,7 @@ autoplot(points, c("informedness", "markedness"))
 
 ## Skill scores
 
-| Measure | Formula | Range |
+| Metric | Formula | Range |
 |---|---|---|
 | `roc_dist` | distance to the perfect point in ROC space | 0 to sqrt(2) |
 | `sedi` | symmetric extremal dependence index | -1 to 1 |
@@ -98,7 +98,7 @@ autoplot(skill, c("roc_dist", "sedi"))
 
 `roc_dist` is the straight-line distance from the point
 `(1 - specificity, sensitivity)` to the top-left corner of ROC space, where
-both are 1. It is the only measure on this page that is **better when it is
+both are 1. It is the only metric on this page that is **better when it is
 smaller**, and the only one whose maximum is `sqrt(2)` rather than 1. Picking
 the cutoff that minimizes it is one of the standard ways of choosing an
 operating point off a ROC curve.
@@ -113,7 +113,7 @@ better than chance and 1 for a perfect one.
 head(subset(as.data.frame(skill), type == "sedi"), 4)
 ```
 
-Both measures are undefined at the two ends of the ranking, where every
+Both metrics are undefined at the two ends of the ranking, where every
 prediction is one class: `roc_dist` is still finite there, and the four
 logarithms `sedi` needs are clamped away from 0 and 1 so that it is too.
 
@@ -127,7 +127,7 @@ answer, since minimizing it is the question you are actually asking.
 
 None of them replaces a curve: each still describes one cutoff, and the
 cutoff is a choice you have to justify. See [AUC and other curve
-summaries](measures-auc.html).
+summaries](metrics-auc.html).
 
 ## Undefined values
 
@@ -137,5 +137,5 @@ bottom of the ranking.
 
 ## Next
 
-- [Ranking and cost](measures-ranking-cost.html)
-- [AUC and other curve summaries](measures-auc.html)
+- [Ranking and cost](metrics-ranking-cost.html)
+- [AUC and other curve summaries](metrics-auc.html)

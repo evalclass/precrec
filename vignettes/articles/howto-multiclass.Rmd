@@ -81,4 +81,4 @@ because a precision-recall curve is read against its baseline.
 ## Next
 
 - [Balanced and imbalanced data](howto-imbalanced-data.html)
-- [AUC and other curve summaries](measures-auc.html)
+- [AUC and other curve summaries](metrics-auc.html)

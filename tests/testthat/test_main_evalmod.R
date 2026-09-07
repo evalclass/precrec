@@ -178,7 +178,7 @@ test_that("evalmod() passes 'beta' through to the F-beta score", {
   )))
 })
 
-test_that("evalmod() returns the new confusion-matrix measures", {
+test_that("evalmod() returns the new confusion-matrix metrics", {
   data(P10N10)
   points <- evalmod(
     mode = "basic", scores = P10N10$scores,
@@ -221,16 +221,16 @@ em_metrics_mdat <- function() {
   )
 }
 
-test_that("evalmod() holds fourteen measures when 'metrics' is not given", {
-  # An existing caller's default plot has one panel per measure, so this is
-  # what keeps the new measures from changing it
+test_that("evalmod() holds fourteen metrics when 'metrics' is not given", {
+  # An existing caller's default plot has one panel per metric, so this is
+  # what keeps the new metrics from changing it
   mp <- evalmod(em_metrics_mdat(), mode = "basic")
 
   expect_length(mp, 14)
   expect_equal(attr(mp, "metrics"), .get_metric_names("basic"))
 })
 
-test_that("evalmod(metrics = ) adds the measures it is given", {
+test_that("evalmod(metrics = ) adds the metrics it is given", {
   mp <- evalmod(em_metrics_mdat(), mode = "basic", metrics = c("lift", "fpr"))
 
   expect_length(mp, 16)
@@ -240,14 +240,14 @@ test_that("evalmod(metrics = ) adds the measures it is given", {
   )
 })
 
-test_that("evalmod(metrics = 'all') holds every measure", {
+test_that("evalmod(metrics = 'all') holds every metric", {
   mp <- evalmod(em_metrics_mdat(), mode = "basic", metrics = "all")
 
   expect_length(mp, length(.get_metric_names("basic_all")))
   expect_equal(attr(mp, "metrics"), .get_metric_names("basic_all"))
 })
 
-test_that("evalmod() accepts the ROCR identifiers for the new measures", {
+test_that("evalmod() accepts the ROCR identifiers for the new metrics", {
   mp <- evalmod(em_metrics_mdat(), mode = "basic", metrics = c("fall", "rpp"))
 
   expect_true(
@@ -255,14 +255,14 @@ test_that("evalmod() accepts the ROCR identifiers for the new measures", {
   )
 })
 
-test_that("evalmod() rejects a measure it does not know", {
+test_that("evalmod() rejects a metric it does not know", {
   expect_error(
     evalmod(em_metrics_mdat(), mode = "basic", metrics = "nonesuch"),
     class = "precrec_error_invalid_metrics"
   )
 })
 
-test_that("the added measures survive averaging over datasets", {
+test_that("the added metrics survive averaging over datasets", {
   mp <- evalmod(em_metrics_mdat(), mode = "basic", metrics = "all")
   avg <- attr(mp, "grp_avg")
 
@@ -270,7 +270,7 @@ test_that("the added measures survive averaging over datasets", {
   expect_false(all(is.na(avg[["lift"]])))
 })
 
-test_that("as.data.frame() carries only the measures the object holds", {
+test_that("as.data.frame() carries only the metrics the object holds", {
   df1 <- as.data.frame(evalmod(em_metrics_mdat(), mode = "basic"))
   df2 <- as.data.frame(
     evalmod(em_metrics_mdat(), mode = "basic", metrics = "fpr")
@@ -280,7 +280,7 @@ test_that("as.data.frame() carries only the measures the object holds", {
   expect_true("fpr" %in% levels(factor(df2[["type"]])))
 })
 
-test_that("a measure that was not calculated cannot be plotted", {
+test_that("a metric that was not calculated cannot be plotted", {
   mp <- evalmod(em_metrics_mdat(), mode = "basic")
 
   expect_error(autoplot(mp, curvetype = "lift"),
@@ -293,7 +293,7 @@ test_that("a measure that was not calculated cannot be plotted", {
 
 # Test evalmod(cost_fp = , cost_fn = )
 
-test_that("the cost weights reach the measure", {
+test_that("the cost weights reach the metric", {
   mdat <- em_metrics_mdat()
   mp1 <- evalmod(mdat, mode = "basic", metrics = "cost")
   mp2 <- evalmod(mdat,

@@ -81,7 +81,7 @@ test_that("an unbounded axis is left for ggplot2 to scale", {
   expect_equal(p2[["coordinates"]][["limits"]][["y"]], c(0, 1))
 })
 
-test_that("the axis labels name the two measures", {
+test_that("the axis labels name the two metrics", {
   skip_if_not(ap4_check_libs())
 
   p <- autoplot(ap4_create_ssxycurves(

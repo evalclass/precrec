@@ -168,7 +168,7 @@ test_that(".pl_main_basic() accepts 'raw_curves'", {
   f_check_raw_curves(mdat4, "multiple", "multiple", "mm", "logical")
 })
 
-test_that("point object contains basic measure objects", {
+test_that("point object contains basic metric objects", {
   f_check_object <- function(mdat, mt, dt, pf, list_len) {
     pl <- .pl_main_basic(mdat, mt, dt, pf, raw_curves = TRUE)
 
@@ -194,7 +194,7 @@ test_that("point object contains basic measure objects", {
 })
 
 
-test_that("scores and labels are stored as basic measures", {
+test_that("scores and labels are stored as basic metrics", {
   sspoints <- evalmod(
     mode = "basic", scores = c(0.1, 0.2, 0, 0.3),
     labels = c(1, 0, 0, 1)

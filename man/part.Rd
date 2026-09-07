@@ -169,6 +169,6 @@ autoplot(mmcurves.part)
 }
 \seealso{
 \code{\link[=evalmod]{evalmod()}} for generating \code{S3} objects with
-performance evaluation measures. \code{\link[=pauc]{pauc()}} for retrieving
+performance evaluation metrics. \code{\link[=pauc]{pauc()}} for retrieving
 a dataset of pAUCs.
 }

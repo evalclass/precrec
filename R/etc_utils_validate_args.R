@@ -152,7 +152,7 @@
 #
 # Find the allowed value closest to a rejected one
 #
-# A typo in a measure name should not send the reader back to the help page to
+# A typo in a metric name should not send the reader back to the help page to
 # scan two dozen alternatives. The threshold scales with the length of what was
 # typed, so a short wrong word offers nothing rather than a coincidence: "xx"
 # is within 3 edits of plenty of names without resembling any of them.
@@ -687,11 +687,11 @@
 }
 
 #
-# Check that the object holds the measures being asked for
+# Check that the object holds the metrics being asked for
 #
-# A measure this package knows but that was not calculated is a different
-# mistake from a measure that does not exist, and it has a different fix:
-# `evalmod(metrics = )` decides which measures an object carries, so the
+# A metric this package knows but that was not calculated is a different
+# mistake from a metric that does not exist, and it has a different fix:
+# `evalmod(metrics = )` decides which metrics an object carries, so the
 # error says so rather than repeating the list of valid names.
 #
 .check_curvetype_held <- function(curvetype, obj) {
@@ -705,7 +705,7 @@
     c(
       paste(
         "{.arg curvetype} names {.val {missing_types}}, which",
-        "{?is/are} not among the measures this object holds."
+        "{?is/are} not among the metrics this object holds."
       ),
       "i" = paste(
         "Ask for {?it/them} with",

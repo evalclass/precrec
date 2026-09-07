@@ -1,8 +1,8 @@
-#' Draw one evaluation measure against another
+#' Draw one evaluation metric against another
 #'
-#' The `metric_curve` function takes the name of a measure for the x axis
-#'   and the name of a measure for the y axis and calculates one curve per
-#'   test dataset, in the manner of `ROCR::performance`. Every measure
+#' The `metric_curve` function takes the name of a metric for the x axis
+#'   and the name of a metric for the y axis and calculates one curve per
+#'   test dataset, in the manner of `ROCR::performance`. Every metric
 #'   [evalmod()] can calculate is available on both axes.
 #'
 #' @param mdat An `S3` object created by the [mmdata()] function.
@@ -19,12 +19,12 @@
 #'   of observed labels. It can be a vector, a matrix, an array,
 #'   a data frame, or a list.
 #'
-#' @param x_metric A string that specifies the measure of the x axis. It
+#' @param x_metric A string that specifies the metric of the x axis. It
 #'   accepts every name [evalmod()] accepts for `metrics`, together
 #'   with the identifiers `ROCR` uses. The default `"fpr"` with
 #'   the default `y_metric` reproduces `ROCR`'s most common call.
 #'
-#' @param y_metric A string that specifies the measure of the y axis.
+#' @param y_metric A string that specifies the metric of the y axis.
 #'
 #' @param modnames A character vector for the names of the models.
 #'
@@ -45,7 +45,7 @@
 #'   interpolation of a registered pair is performed.
 #'
 #' @param cost_fp A numeric value for the cost of a false positive, used
-#'   when one of the two axes is the `cost` measure. See [evalmod()].
+#'   when one of the two axes is the `cost` metric. See [evalmod()].
 #'
 #' @param cost_fn A numeric value for the cost of a false negative.
 #'
@@ -62,7 +62,7 @@
 #' @section Which pairs are joined by a line:
 #'
 #' `precrec` exists because the points of a precision-recall curve must not
-#'   be joined by straight lines. The measures this function reads are raw
+#'   be joined by straight lines. The metrics this function reads are raw
 #'   per-cutoff values with no interpolation, so joining an arbitrary pair
 #'   of them would be the very error the package was written to avoid.
 #'
@@ -85,7 +85,7 @@
 #'   not have. Use `evalmod(calc_avg = TRUE)` for averaged ROC and
 #'   precision-recall curves.
 #'
-#' @seealso [evalmod()] for the measures themselves and for averaged
+#' @seealso [evalmod()] for the metrics themselves and for averaged
 #'   ROC and precision-recall curves. [mmdata()] for formatting input
 #'   data. [autoplot()] and [plot()] for the plots.
 #'
@@ -152,7 +152,7 @@ metric_curve <- function(mdat, scores = NULL, labels = NULL,
   }
   .validate(mdat)
 
-  # === Project the two measures ===
+  # === Project the two metrics ===
   curve <- .joinable_curve(x_metric, y_metric)
   if (is.na(curve)) {
     xy <- .xy_from_points(mdat, x_metric, y_metric, cost_fp, cost_fn)
@@ -235,7 +235,7 @@ metric_curve <- function(mdat, scores = NULL, labels = NULL,
 }
 
 #
-# Project two basic measures against each other, one curve per dataset
+# Project two basic metrics against each other, one curve per dataset
 #
 .xy_from_points <- function(mdat, x_metric, y_metric, cost_fp = 1,
                             cost_fn = 1) {
@@ -378,7 +378,7 @@ metric_curve <- function(mdat, scores = NULL, labels = NULL,
 #
 # How a pair names itself in the `type` column of a data frame
 #
-# The canonical measure names, so that a caller can match on them.
+# The canonical metric names, so that a caller can match on them.
 #
 .xycurve_label <- function(obj) {
   paste(attr(obj, "y_metric"), "vs", attr(obj, "x_metric"))
@@ -388,7 +388,7 @@ metric_curve <- function(mdat, scores = NULL, labels = NULL,
 # How a pair names itself in a plot title
 #
 # The titles the axes are labelled with, so the three read as one sentence
-# rather than as two spellings of the same measure.
+# rather than as two spellings of the same metric.
 #
 .xycurve_title_label <- function(obj) {
   paste(

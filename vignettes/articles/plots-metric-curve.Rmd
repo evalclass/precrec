@@ -1,5 +1,5 @@
 ---
-title: "One measure against another"
+title: "One metric against another"
 ---
 
 ```{r, include = FALSE}
@@ -8,8 +8,8 @@ knitr::opts_chunk$set(
 )
 ```
 
-`metric_curve()` takes the name of a measure for the x axis and the name of a
-measure for the y axis and draws one against the other. Every measure
+`metric_curve()` takes the name of a metric for the x axis and the name of a
+metric for the y axis and draws one against the other. Every metric
 `evalmod()` can calculate is available on both axes.
 
 ```{r}
@@ -49,7 +49,7 @@ understanding about this function.
 ## Which pairs are joined by a line
 
 `precrec` exists because the points of a precision-recall curve must not be
-joined by straight lines. The measures this function reads are raw per-cutoff
+joined by straight lines. The metrics this function reads are raw per-cutoff
 values with no interpolation, so joining an arbitrary pair of them would be
 the very error the package was written to avoid.
 
@@ -85,13 +85,13 @@ xy3 <- metric_curve(mdat, x_metric = "score", y_metric = "precision")
 autoplot(xy3)
 ```
 
-## Naming the measures
+## Naming the metrics
 
 Both axes accept the long name, the short name, and the name other tools use
 - `fall` for `fpr`, `rpp` for `predicted_positive_rate`, and so on. The
-[measures overview](measures-overview.html) lists them all.
+[metrics overview](metrics-overview.html) lists them all.
 
 ## Next
 
-- [Basic measure plots](plots-basic-measures.html)
+- [Basic metric plots](plots-basic-metrics.html)
 - [Customizing plots](plots-customizing.html)

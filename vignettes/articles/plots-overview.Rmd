@@ -37,14 +37,14 @@ autoplot(curves)
 
 ## Choosing what to draw
 
-The second argument picks the curve or the measure.
+The second argument picks the curve or the metric.
 
 ```{r}
 autoplot(curves, "PRC")
 ```
 
-For `mode = "basic"` objects it names measures instead, one panel each. See
-[basic measure plots](plots-basic-measures.html).
+For `mode = "basic"` objects it names metrics instead, one panel each. See
+[basic metric plots](plots-basic-metrics.html).
 
 ## Arguments both functions share
 
@@ -63,9 +63,9 @@ autoplot(curves, "PRC", type = "b")
 ## The four pages
 
 - [ROC and precision-recall curves](plots-roc-prc.html) - the main plot
-- [Basic measure plots](plots-basic-measures.html) - measures against
+- [Basic metric plots](plots-basic-metrics.html) - metrics against
   normalized rank
-- [One measure against another](plots-metric-curve.html) - free-form pairs
+- [One metric against another](plots-metric-curve.html) - free-form pairs
 - [Confidence bands](plots-confidence-bands.html) and [partial
   curves](plots-partial-curves.html) - the two variations
 

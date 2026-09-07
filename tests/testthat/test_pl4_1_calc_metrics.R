@@ -1,14 +1,14 @@
-# PL 4: Calculate evaluation measures
-# Test calc_measures(cmats, scores, labels)
+# PL 4: Calculate evaluation metrics
+# Test calc_metrics(cmats, scores, labels)
 
-test_that("calc_measures() reterns an 'pevals' object", {
-  pevals1 <- calc_measures(scores = c(0.1, 0.2, 0), labels = c(1, 0, 1))
+test_that("calc_metrics() reterns an 'pevals' object", {
+  pevals1 <- calc_metrics(scores = c(0.1, 0.2, 0), labels = c(1, 0, 1))
 
   data(P10N10)
   fmdat <- reformat_data(P10N10$scores, P10N10$labels)
   cmats <- create_confmats(fmdat)
-  pevals2 <- calc_measures(cmats)
-  pevals3 <- calc_measures(scores = P10N10$scores, labels = P10N10$labels)
+  pevals2 <- calc_metrics(cmats)
+  pevals3 <- calc_metrics(scores = P10N10$scores, labels = P10N10$labels)
 
   expect_true(is(pevals1, "pevals"))
   expect_true(is(pevals2, "pevals"))
@@ -18,20 +18,20 @@ test_that("calc_measures() reterns an 'pevals' object", {
 test_that("'cmats' must be a 'cmats' object", {
   expect_err_msg <- function(cmats) {
     err_msg <- "Unrecognized class for .validate()"
-    expect_error(calc_measures(cmats), err_msg)
+    expect_error(calc_metrics(cmats), err_msg)
   }
 
   expect_err_msg(list())
   expect_err_msg(data.frame())
 })
 
-test_that("calc_measures() can directly take scores and labels", {
+test_that("calc_metrics() can directly take scores and labels", {
   cmats <- create_confmats(
     scores = c(0.1, 0.2, 0.2, 0),
     labels = c(1, 0, 1, 1)
   )
-  pevals1 <- calc_measures(cmats)
-  pevals2 <- calc_measures(
+  pevals1 <- calc_metrics(cmats)
+  pevals2 <- calc_metrics(
     scores = c(0.1, 0.2, 0.2, 0),
     labels = c(1, 0, 1, 1)
   )
@@ -39,17 +39,17 @@ test_that("calc_measures() can directly take scores and labels", {
   expect_equal(pevals1, pevals2)
 })
 
-test_that("calc_measures() accepts arguments for reformat_data()", {
+test_that("calc_metrics() accepts arguments for reformat_data()", {
   err_msg <- "Invalid arguments: na.rm"
   expect_error(
-    calc_measures(
+    calc_metrics(
       scores = c(0.1, 0.2, 0.2, 0),
       labels = c(1, 0, 1, 1), na.rm = TRUE
     ),
     err_msg
   )
 
-  pevals <- calc_measures(
+  pevals <- calc_metrics(
     scores = c(0.1, 0.2, 0),
     labels = c(1, 0, 1),
     na_worst = TRUE,
@@ -62,9 +62,9 @@ test_that("calc_measures() accepts arguments for reformat_data()", {
 })
 
 
-test_that("calc_measures() accepts na_worst argument", {
+test_that("calc_metrics() accepts na_worst argument", {
   expect_equal_ranks <- function(scores, na_worst, ranks) {
-    pevals <- calc_measures(
+    pevals <- calc_metrics(
       scores = scores,
       labels = c(1, 0, 1),
       na_worst = na_worst,
@@ -95,9 +95,9 @@ test_that("calc_measures() accepts na_worst argument", {
   expect_equal_ranks(na3_scores, FALSE, c(2, 3, 1))
 })
 
-test_that("calc_measures() accepts ties_method argument", {
+test_that("calc_metrics() accepts ties_method argument", {
   expect_equal_ranks <- function(ties_method, ranks) {
-    pevals <- calc_measures(
+    pevals <- calc_metrics(
       scores = c(0.1, 0.2, 0.2, 0.2, 0.3),
       labels = c(1, 0, 1, 1, 1),
       ties_method = ties_method,
@@ -116,14 +116,14 @@ test_that("calc_measures() accepts ties_method argument", {
 })
 
 test_that("'pevals' contains a list with 1 item", {
-  pevals <- calc_measures(scores = c(0.1, 0.2, 0), labels = c(1, 0, 1))
+  pevals <- calc_metrics(scores = c(0.1, 0.2, 0), labels = c(1, 0, 1))
 
   expect_true(is.list(pevals))
   expect_equal(length(pevals), 1)
 })
 
-test_that("calc_measures() reterns correct evaluation values", {
-  pevals <- calc_measures(
+test_that("calc_metrics() reterns correct evaluation values", {
+  pevals <- calc_metrics(
     scores = c(0.1, 0.2, 0, 0.3),
     labels = c(1, 0, 0, 1)
   )
@@ -144,8 +144,8 @@ test_that("calc_measures() reterns correct evaluation values", {
   expect_equal(pb[["fscore"]], c(0, 2 / 3, 0.5, 0.8, 2 / 3), tolerance = 1e-4)
 })
 
-test_that("calc_measures() returns correct confusion-matrix measures", {
-  pevals <- calc_measures(
+test_that("calc_metrics() returns correct confusion-matrix metrics", {
+  pevals <- calc_metrics(
     scores = c(0.1, 0.2, 0, 0.3),
     labels = c(1, 0, 0, 1)
   )
@@ -167,8 +167,8 @@ test_that("calc_measures() returns correct confusion-matrix measures", {
   expect_equal(pb[["kappa"]], c(0, 0.5, 0, 0.5, 0))
 })
 
-test_that("calc_measures() handles imbalanced labels", {
-  pevals <- calc_measures(
+test_that("calc_metrics() handles imbalanced labels", {
+  pevals <- calc_metrics(
     scores = c(0.1, 0.2, 0, 0.3, 0.5),
     labels = c(1, 0, 0, 0, 0)
   )
@@ -192,12 +192,12 @@ test_that("calc_measures() handles imbalanced labels", {
   )
 })
 
-test_that("calc_measures() takes the beta of the F-beta score", {
+test_that("calc_metrics() takes the beta of the F-beta score", {
   sc <- c(0.1, 0.2, 0, 0.3)
   lb <- c(1, 0, 0, 1)
-  pb1 <- calc_measures(scores = sc, labels = lb)[["basic"]]
-  pb2 <- calc_measures(scores = sc, labels = lb, beta = 1)[["basic"]]
-  pb3 <- calc_measures(scores = sc, labels = lb, beta = 2)[["basic"]]
+  pb1 <- calc_metrics(scores = sc, labels = lb)[["basic"]]
+  pb2 <- calc_metrics(scores = sc, labels = lb, beta = 1)[["basic"]]
+  pb3 <- calc_metrics(scores = sc, labels = lb, beta = 2)[["basic"]]
 
   # beta = 1 is the F1 score the function has always returned
   expect_equal(pb1[["fscore"]], pb2[["fscore"]])
@@ -214,16 +214,16 @@ test_that("calc_measures() takes the beta of the F-beta score", {
 test_that("'beta' must be a single non-negative finite number", {
   sc <- c(0.1, 0.2, 0, 0.3)
   lb <- c(1, 0, 0, 1)
-  expect_error(calc_measures(scores = sc, labels = lb, beta = -1),
+  expect_error(calc_metrics(scores = sc, labels = lb, beta = -1),
     class = "precrec_error_invalid_beta"
   )
-  expect_error(calc_measures(scores = sc, labels = lb, beta = "1"),
+  expect_error(calc_metrics(scores = sc, labels = lb, beta = "1"),
     class = "precrec_error_invalid_beta"
   )
-  expect_error(calc_measures(scores = sc, labels = lb, beta = c(1, 2)),
+  expect_error(calc_metrics(scores = sc, labels = lb, beta = c(1, 2)),
     class = "precrec_error_invalid_beta"
   )
-  expect_error(calc_measures(scores = sc, labels = lb, beta = Inf),
+  expect_error(calc_metrics(scores = sc, labels = lb, beta = Inf),
     class = "precrec_error_invalid_beta"
   )
 })
@@ -273,7 +273,7 @@ pl4_create_mm_dat <- function() {
 }
 
 test_that("ss test data", {
-  pevals <- calc_measures(
+  pevals <- calc_metrics(
     scores = c(1, 2, 3, 4),
     labels = c(1, 0, 1, 0)
   )
@@ -293,7 +293,7 @@ test_that("ss test data", {
 test_that("ms test data", {
   msdat <- pl4_create_ms_dat()
 
-  pevals1 <- calc_measures(
+  pevals1 <- calc_metrics(
     scores = msdat[["scores"]][[1]],
     labels = msdat[["labels"]][[1]]
   )
@@ -310,7 +310,7 @@ test_that("ms test data", {
     tolerance = 1e-4
   )
 
-  pevals2 <- calc_measures(
+  pevals2 <- calc_metrics(
     scores = msdat[["scores"]][[2]],
     labels = msdat[["labels"]][[2]]
   )
@@ -325,7 +325,7 @@ test_that("ms test data", {
   )
   expect_equal(pb2[["fscore"]], c(0, 0.5, 0.8, 1, 0.8571429), tolerance = 1e-4)
 
-  pevals3 <- calc_measures(
+  pevals3 <- calc_metrics(
     scores = msdat[["scores"]][[3]],
     labels = msdat[["labels"]][[3]]
   )
@@ -346,7 +346,7 @@ test_that("ms test data", {
 test_that("sm test data", {
   smdat <- pl4_create_sm_dat()
 
-  pevals1 <- calc_measures(
+  pevals1 <- calc_metrics(
     scores = smdat[["scores"]][[1]],
     labels = smdat[["labels"]][[1]]
   )
@@ -363,7 +363,7 @@ test_that("sm test data", {
     tolerance = 1e-4
   )
 
-  pevals2 <- calc_measures(
+  pevals2 <- calc_metrics(
     scores = smdat[["scores"]][[2]],
     labels = smdat[["labels"]][[2]]
   )
@@ -378,7 +378,7 @@ test_that("sm test data", {
   )
   expect_equal(pb2[["fscore"]], c(0, 0.5, 0.8, 1, 0.8571429), tolerance = 1e-4)
 
-  pevals3 <- calc_measures(
+  pevals3 <- calc_metrics(
     scores = smdat[["scores"]][[3]],
     labels = smdat[["labels"]][[3]]
   )
@@ -399,7 +399,7 @@ test_that("sm test data", {
 test_that("mm test data", {
   mmdat <- pl4_create_mm_dat()
 
-  pevals1 <- calc_measures(
+  pevals1 <- calc_metrics(
     scores = mmdat[["scores"]][[1]],
     labels = mmdat[["labels"]][[1]]
   )
@@ -416,7 +416,7 @@ test_that("mm test data", {
     tolerance = 1e-4
   )
 
-  pevals2 <- calc_measures(
+  pevals2 <- calc_metrics(
     scores = mmdat[["scores"]][[2]],
     labels = mmdat[["labels"]][[2]]
   )
@@ -431,7 +431,7 @@ test_that("mm test data", {
   )
   expect_equal(pb2[["fscore"]], c(0, 0.5, 0.8, 1, 0.8571429), tolerance = 1e-4)
 
-  pevals3 <- calc_measures(
+  pevals3 <- calc_metrics(
     scores = mmdat[["scores"]][[3]],
     labels = mmdat[["labels"]][[3]]
   )
@@ -448,7 +448,7 @@ test_that("mm test data", {
     tolerance = 1e-4
   )
 
-  pevals4 <- calc_measures(
+  pevals4 <- calc_metrics(
     scores = mmdat[["scores"]][[3]],
     labels = mmdat[["labels"]][[3]]
   )
@@ -466,10 +466,10 @@ test_that("mm test data", {
   )
 })
 
-# Test calc_measures(cmats, ..., metrics)
+# Test calc_metrics(cmats, ..., metrics)
 
-test_that("calc_measures() calculates nothing extra by default", {
-  pevals <- calc_measures(scores = c(0.1, 0.2, 0), labels = c(1, 0, 1))
+test_that("calc_metrics() calculates nothing extra by default", {
+  pevals <- calc_metrics(scores = c(0.1, 0.2, 0), labels = c(1, 0, 1))
 
   expect_setequal(
     intersect(names(pevals[["basic"]]), .get_metric_names("basic_all")),
@@ -477,8 +477,8 @@ test_that("calc_measures() calculates nothing extra by default", {
   )
 })
 
-test_that("calc_measures() adds only the measures it is asked for", {
-  pevals <- calc_measures(
+test_that("calc_metrics() adds only the metrics it is asked for", {
+  pevals <- calc_metrics(
     scores = c(0.1, 0.2, 0), labels = c(1, 0, 1),
     metrics = .resolve_metrics(c("fpr", "odds"))
   )
@@ -488,13 +488,13 @@ test_that("calc_measures() adds only the measures it is asked for", {
   expect_false("lift" %in% names(pb))
 })
 
-test_that("the derived measures match their definitions", {
+test_that("the derived metrics match their definitions", {
   scores <- c(0.9, 0.8, 0.7, 0.6, 0.5, 0.4)
   labels <- c(1, 1, 0, 1, 0, 0)
   cmats <- create_confmats(
     scores = scores, labels = labels, keep_fmdat = TRUE
   )
-  pb <- calc_measures(cmats, metrics = .resolve_metrics("all"))[["basic"]]
+  pb <- calc_metrics(cmats, metrics = .resolve_metrics("all"))[["basic"]]
 
   tp <- cmats[["tp"]]
   fp <- cmats[["fp"]]
@@ -519,7 +519,7 @@ test_that("the odds ratio is NA wherever it is undefined, never infinite", {
   # has an empty cell under it there by construction
   scores <- c(0.9, 0.8, 0.7, 0.6, 0.5, 0.4)
   labels <- c(1, 1, 0, 1, 0, 0)
-  pb <- calc_measures(
+  pb <- calc_metrics(
     scores = scores, labels = labels,
     metrics = .resolve_metrics("all")
   )[["basic"]]
@@ -532,8 +532,8 @@ test_that("the odds ratio is NA wherever it is undefined, never infinite", {
   expect_false(any(is.infinite(pb[["lift"]])))
 })
 
-test_that("the derived measures line up with the ones they come from", {
-  pb <- calc_measures(
+test_that("the derived metrics line up with the ones they come from", {
+  pb <- calc_metrics(
     scores = c(0.1, 0.2, 0, 0.4), labels = c(1, 0, 1, 0),
     metrics = .resolve_metrics("all")
   )[["basic"]]
@@ -545,9 +545,9 @@ test_that("the derived measures line up with the ones they come from", {
   )
 })
 
-test_that("a dataset with one class leaves the derived measures NA", {
+test_that("a dataset with one class leaves the derived metrics NA", {
   # Specificity is NA without negatives, and the FPR that comes off it too
-  pb <- suppressWarnings(calc_measures(
+  pb <- suppressWarnings(calc_metrics(
     scores = c(0.1, 0.2, 0.3), labels = c(1, 1, 1),
     metrics = .resolve_metrics("all")
   ))[["basic"]]
@@ -556,16 +556,16 @@ test_that("a dataset with one class leaves the derived measures NA", {
   expect_false(any(is.na(pb[["fnr"]])))
 })
 
-test_that("nothing is derived when no measure was asked for", {
+test_that("nothing is derived when no metric was asked for", {
   # The curve pipelines and every default `evalmod()` call take this path, so
   # it has to cost nothing: the table is not even read
   cmats <- create_confmats(scores = c(0.1, 0.2, 0), labels = c(1, 0, 1))
-  pb <- calc_measures(cmats)[["basic"]]
+  pb <- calc_metrics(cmats)[["basic"]]
 
-  expect_identical(.add_derived_measures(pb, cmats, NULL), pb)
-  expect_identical(.add_derived_measures(pb, cmats, character(0)), pb)
+  expect_identical(.add_derived_metrics(pb, cmats, NULL), pb)
+  expect_identical(.add_derived_metrics(pb, cmats, character(0)), pb)
   expect_identical(
-    .add_derived_measures(pb, cmats, .get_metric_names("basic")), pb
+    .add_derived_metrics(pb, cmats, .get_metric_names("basic")), pb
   )
 })
 
@@ -573,7 +573,7 @@ test_that("mutual information matches its definition", {
   scores <- c(0.9, 0.8, 0.7, 0.6, 0.5, 0.4)
   labels <- c(1, 1, 0, 1, 0, 0)
   cmats <- create_confmats(scores = scores, labels = labels)
-  pb <- calc_measures(cmats, metrics = .resolve_metrics("mi"))[["basic"]]
+  pb <- calc_metrics(cmats, metrics = .resolve_metrics("mi"))[["basic"]]
 
   # I(Y-hat; Y) over the four cells, in bits, calculated the long way
   n <- cmats[["pos_num"]] + cmats[["neg_num"]]
@@ -605,7 +605,7 @@ test_that("mutual information matches its definition", {
 test_that("mutual information is zero, not NA, where it is defined to be", {
   # A cutoff that predicts one class for everything carries no information
   # about the labels. ROCR reports NaN at those two points
-  pb <- calc_measures(
+  pb <- calc_metrics(
     scores = c(0.9, 0.8, 0.7, 0.6), labels = c(1, 0, 1, 0),
     metrics = .resolve_metrics("mi")
   )[["basic"]]
@@ -620,7 +620,7 @@ test_that("chi-square is n times the squared MCC", {
   scores <- c(0.9, 0.8, 0.7, 0.6, 0.5, 0.4)
   labels <- c(1, 1, 0, 1, 0, 0)
   cmats <- create_confmats(scores = scores, labels = labels)
-  pb <- calc_measures(cmats, metrics = .resolve_metrics("chisq"))[["basic"]]
+  pb <- calc_metrics(cmats, metrics = .resolve_metrics("chisq"))[["basic"]]
   n <- cmats[["pos_num"]] + cmats[["neg_num"]]
 
   expect_equal(pb[["chisq"]], n * pb[["mcc"]]^2)
@@ -634,7 +634,7 @@ test_that("chi-square matches Pearson's statistic", {
   scores <- c(0.9, 0.8, 0.7, 0.6, 0.5, 0.4)
   labels <- c(1, 1, 0, 1, 0, 0)
   cmats <- create_confmats(scores = scores, labels = labels)
-  pb <- calc_measures(cmats, metrics = .resolve_metrics("chisq"))[["basic"]]
+  pb <- calc_metrics(cmats, metrics = .resolve_metrics("chisq"))[["basic"]]
 
   i <- 3
   tab <- matrix(
@@ -652,7 +652,7 @@ test_that("chi-square matches Pearson's statistic", {
 })
 
 test_that("cost with the default weights is the error rate", {
-  pb <- calc_measures(
+  pb <- calc_metrics(
     scores = c(0.9, 0.8, 0.7, 0.6), labels = c(1, 0, 1, 0),
     metrics = .resolve_metrics("cost")
   )[["basic"]]
@@ -664,7 +664,7 @@ test_that("cost weights the two error counts", {
   scores <- c(0.9, 0.8, 0.7, 0.6, 0.5, 0.4)
   labels <- c(1, 1, 0, 1, 0, 0)
   cmats <- create_confmats(scores = scores, labels = labels)
-  pb <- calc_measures(cmats,
+  pb <- calc_metrics(cmats,
     metrics = .resolve_metrics("cost"),
     cost_fp = 3, cost_fn = 0.5
   )[["basic"]]
@@ -682,7 +682,7 @@ test_that("sar is the mean of accuracy, AUC(ROC) and 1 - RMSE", {
   cmats <- create_confmats(
     scores = scores, labels = labels, keep_fmdat = TRUE
   )
-  pb <- calc_measures(cmats, metrics = .resolve_metrics("sar"))[["basic"]]
+  pb <- calc_metrics(cmats, metrics = .resolve_metrics("sar"))[["basic"]]
 
   roc_auc <- auc(evalmod(scores = scores, labels = labels))
   roc_auc <- roc_auc[roc_auc$curvetypes == "ROC", "aucs"]
@@ -713,28 +713,28 @@ test_that("sar warns and returns NA when the scores are not probabilities", {
   )
 
   expect_warning(
-    pb <- calc_measures(cmats, metrics = .resolve_metrics("sar"))[["basic"]],
+    pb <- calc_metrics(cmats, metrics = .resolve_metrics("sar"))[["basic"]],
     "probabilities"
   )
   expect_true(all(is.na(pb[["sar"]])))
 
-  # The measures that do not need the score values are still returned
+  # The metrics that do not need the score values are still returned
   expect_false(any(is.na(pb[["accuracy"]])))
 })
 
 test_that("sar says so when it is handed matrices without the scores", {
-  # calc_measures() asks for them when it builds the matrices itself, so this
+  # calc_metrics() asks for them when it builds the matrices itself, so this
   # is only reachable by handing it a cmats object built elsewhere
   cmats <- create_confmats(scores = c(0.9, 0.8), labels = c(1, 0))
 
   expect_error(
-    calc_measures(cmats, metrics = .resolve_metrics("sar")),
+    calc_metrics(cmats, metrics = .resolve_metrics("sar")),
     "keep_fmdat"
   )
 })
 
-test_that("calc_measures() keeps the scores when sar is asked for", {
-  pb <- calc_measures(
+test_that("calc_metrics() keeps the scores when sar is asked for", {
+  pb <- calc_metrics(
     scores = c(0.9, 0.8, 0.7, 0.6), labels = c(1, 0, 1, 0),
     metrics = .resolve_metrics("sar")
   )[["basic"]]
@@ -755,7 +755,7 @@ test_that("the AUC of a dataset with one class is NA inside sar", {
 test_that("roc_dist is the distance to the perfect point in ROC space", {
   scores <- c(0.9, 0.8, 0.7, 0.6, 0.5, 0.4)
   labels <- c(1, 1, 0, 1, 0, 0)
-  pb <- calc_measures(
+  pb <- calc_metrics(
     scores = scores, labels = labels,
     metrics = .resolve_metrics("roc_dist")
   )[["basic"]]
@@ -769,7 +769,7 @@ test_that("roc_dist is the distance to the perfect point in ROC space", {
 test_that("roc_dist is 0 at a perfect cutoff and sqrt(2) at the worst", {
   # A perfectly separable dataset passes through sensitivity 1 and
   # specificity 1, and both of its ends predict one class for everything
-  pb <- calc_measures(
+  pb <- calc_metrics(
     scores = c(0.9, 0.8, 0.2, 0.1), labels = c(1, 1, 0, 0),
     metrics = .resolve_metrics("roc_dist")
   )[["basic"]]
@@ -780,7 +780,7 @@ test_that("roc_dist is 0 at a perfect cutoff and sqrt(2) at the worst", {
 
   # The worst point of ROC space is every negative ranked above every
   # positive, where sensitivity and specificity are both 0
-  rev_pb <- calc_measures(
+  rev_pb <- calc_metrics(
     scores = c(0.9, 0.8, 0.2, 0.1), labels = c(0, 0, 1, 1),
     metrics = .resolve_metrics("roc_dist")
   )[["basic"]]
@@ -791,7 +791,7 @@ test_that("roc_dist is 0 at a perfect cutoff and sqrt(2) at the worst", {
 test_that("sedi matches its definition", {
   scores <- c(0.9, 0.8, 0.7, 0.6, 0.5, 0.4)
   labels <- c(1, 1, 0, 1, 0, 0)
-  pb <- calc_measures(
+  pb <- calc_metrics(
     scores = scores, labels = labels,
     metrics = .resolve_metrics("sedi")
   )[["basic"]]
@@ -807,7 +807,7 @@ test_that("sedi matches its definition", {
 })
 
 test_that("sedi is 0 where the hit rate equals the false alarm rate", {
-  pb <- calc_measures(
+  pb <- calc_metrics(
     scores = c(0.9, 0.8, 0.7, 0.6), labels = c(1, 0, 1, 0),
     metrics = .resolve_metrics("sedi")
   )[["basic"]]
@@ -820,7 +820,7 @@ test_that("sedi is 0 where the hit rate equals the false alarm rate", {
 test_that("sedi stays finite at both ends of every dataset", {
   # Both ends predict one class for everything, so all four logs in the
   # definition are taken at 0 or 1 and only the clamp keeps them finite
-  pb <- calc_measures(
+  pb <- calc_metrics(
     scores = c(0.9, 0.8, 0.7, 0.6, 0.5), labels = c(1, 1, 0, 1, 0),
     metrics = .resolve_metrics("sedi")
   )[["basic"]]
@@ -830,7 +830,7 @@ test_that("sedi stays finite at both ends of every dataset", {
 })
 
 test_that("a perfect classifier reaches sedi 1 and roc_dist 0 together", {
-  pb <- calc_measures(
+  pb <- calc_metrics(
     scores = c(0.9, 0.8, 0.2, 0.1), labels = c(1, 1, 0, 0),
     metrics = .resolve_metrics(c("sedi", "roc_dist"))
   )[["basic"]]
@@ -845,7 +845,7 @@ test_that("jaccard matches its definition", {
     scores = c(0.9, 0.8, 0.7, 0.6, 0.5, 0.4),
     labels = c(1, 0, 1, 1, 0, 0)
   )
-  pb <- calc_measures(cmats,
+  pb <- calc_metrics(cmats,
     metrics = .resolve_metrics("jaccard")
   )[["basic"]]
 
@@ -864,7 +864,7 @@ test_that("jaccard is the confusion matrix without its true negatives", {
   padded_labels <- c(labels, rep(0, 20))
 
   jac <- function(s, l) {
-    pb <- calc_measures(
+    pb <- calc_metrics(
       scores = s, labels = l,
       metrics = .resolve_metrics("jaccard")
     )[["basic"]]
@@ -875,7 +875,7 @@ test_that("jaccard is the confusion matrix without its true negatives", {
 })
 
 test_that("jaccard is 1 only where the classifier is perfect", {
-  pb <- calc_measures(
+  pb <- calc_metrics(
     scores = c(0.9, 0.8, 0.2, 0.1), labels = c(1, 1, 0, 0),
     metrics = .resolve_metrics("jaccard")
   )[["basic"]]
@@ -885,7 +885,7 @@ test_that("jaccard is 1 only where the classifier is perfect", {
 })
 
 test_that("the likelihood ratios match their definitions", {
-  pb <- calc_measures(
+  pb <- calc_metrics(
     scores = c(0.9, 0.8, 0.7, 0.6, 0.5, 0.4),
     labels = c(1, 0, 1, 1, 0, 0),
     metrics = .resolve_metrics(
@@ -911,7 +911,7 @@ test_that("the likelihood ratios match their definitions", {
 test_that("the odds ratio is the ratio of the two likelihood ratios", {
   # The odds ratio is calculated from the four counts and the likelihood
   # ratios from the rate columns, so this is an independent check of both
-  pb <- calc_measures(
+  pb <- calc_metrics(
     scores = c(0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3),
     labels = c(1, 0, 1, 1, 0, 0, 1),
     metrics = .resolve_metrics(
@@ -935,7 +935,7 @@ test_that("the likelihood ratios are NA where their denominator vanishes", {
   # LR+ divides by the false positive rate, which is 0 for every cutoff
   # above the highest-scoring negative; LR- divides by the specificity,
   # which is 0 once every negative has been called positive
-  pb <- calc_measures(
+  pb <- calc_metrics(
     scores = c(0.9, 0.8, 0.7, 0.6), labels = c(1, 1, 0, 0),
     metrics = .resolve_metrics(
       c("positive_likelihood_ratio", "negative_likelihood_ratio")

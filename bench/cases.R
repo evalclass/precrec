@@ -20,7 +20,7 @@ bench_cases <- function(d) {
     # create_roc_curve, create_prc_curve, interpolate_prc
     evalmod_rocprc = function() evalmod(mdat),
 
-    # calc_basic_measures
+    # calc_basic_metrics
     evalmod_basic = function() evalmod(mdat, mode = "basic"),
 
     # calc_uauc_frank

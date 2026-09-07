@@ -43,7 +43,7 @@ test_that("autoplot pevals", {
   }
 
   data(B500)
-  pevals <- calc_measures(
+  pevals <- calc_metrics(
     scores = B500$good_er_scores,
     labels = B500$labels
   )

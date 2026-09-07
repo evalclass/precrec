@@ -69,7 +69,7 @@ str(labels4)
 
 }
 \seealso{
-\code{\link[=evalmod]{evalmod()}} for calculation evaluation measures.
+\code{\link[=evalmod]{evalmod()}} for calculation evaluation metrics.
 \code{\link[=mmdata]{mmdata()}} for formatting input data.
 \code{\link[=join_scores]{join_scores()}} for formatting scores with multiple datasets.
 }

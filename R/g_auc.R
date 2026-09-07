@@ -30,13 +30,13 @@
 #'   `macro-average-weighted` to keep the two apart. The two agree on a
 #'   balanced dataset.
 #'
-#'   For a ROC evaluation the two are the measures other packages call
+#'   For a ROC evaluation the two are the metrics other packages call
 #'   `roc_aunu` and `roc_aunp` respectively.
 #'
 #' @return The `auc` function returns a data frame with AUC scores.
 #'
 #' @seealso [evalmod()] for generating `S3` objects with
-#'   performance evaluation measures. [pauc()] for retrieving
+#'   performance evaluation metrics. [pauc()] for retrieving
 #'   a dataset of pAUCs. [average_precision()] for the step estimator of
 #'   the area under the precision-recall curve.
 #'
