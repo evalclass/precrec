@@ -1,8 +1,8 @@
-## Version 0.20.0
+## Version 0.21.0
 
-An update of the published package `precrec` (0.14.5 -> 0.20.0). 0.15.0,
-0.16.0, 0.16.1, 0.16.2, 0.17.0, 0.18.0 and 0.19.0 were prepared but not
-submitted, so this release carries all eight sets of changes.
+An update of the published package `precrec` (0.14.5 -> 0.21.0). 0.15.0,
+0.16.0, 0.16.1, 0.16.2, 0.17.0, 0.18.0, 0.19.0 and 0.20.0 were prepared but
+not submitted, so this release carries all nine sets of changes.
 
 - Support datasets with more than two classes by one-vs-rest decomposition
 - Add the evaluation metrics `ROCR` provides, opt-in through
@@ -22,6 +22,9 @@ submitted, so this release carries all eight sets of changes.
   arguments that have always selected them
 - Add `classification_report()`, the per-class precision, recall and
   F-score table of `scikit-learn`'s function of that name
+- Add `auc_boot()` and `auc_diff()`, which resample a single test set so
+  that an AUC can carry a confidence interval, and two models can be
+  compared, without several test sets
 - Handle single-class datasets with a warning instead of an error
 - Fix the ranking of `NA` scores, the panel titles of `autoplot()`, the
   y axis of `plot()` for the metrics that can go negative, and the order of

@@ -12,6 +12,7 @@ CMD
 codecov
 CodeFactor
 curvetype
+DeLong
 doi
 dsid
 dsids
@@ -28,8 +29,8 @@ fpr
 FPR
 fscore
 ggplot
-gridExtra
 Goadrich
+gridExtra
 informedness
 Informedness
 io
@@ -94,6 +95,7 @@ TN
 TNR
 TP
 TPR
+unstratified
 unstripped
 vdiff
 vdiffr

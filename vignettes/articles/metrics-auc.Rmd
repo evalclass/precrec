@@ -116,5 +116,5 @@ knitr::kable(as.data.frame(
 
 ## Next
 
+- [Uncertainty from one test set](metrics-uncertainty.html)
 - [Probability-based metrics](metrics-probability.html)
-- [Partial curves](plots-partial-curves.html)

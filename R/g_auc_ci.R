@@ -92,7 +92,12 @@ auc_ci.aucs <- function(curves, alpha = 0.05, dtype = "normal") {
   .validate(curves)
   if (attr(curves, "dataset_type") != "multiple") {
     .stop_invalid_arg(
-      "{.arg curves} must contain multiple datasets.",
+      paste(
+        "{.arg curves} must contain multiple datasets, since this",
+        "interval is built from the variation between them. For a single",
+        "test set, {.fn auc_boot} resamples it and {.fn auc_ci} reads a",
+        "percentile interval off the resamples."
+      ),
       arg = "curves"
     )
   }
@@ -133,4 +138,65 @@ auc_ci.aucs <- function(curves, alpha = 0.05, dtype = "normal") {
 
   # Freshly built, so setDF needs no copy
   .as_plain_df(.rbind_parts(ci_parts))
+}
+
+
+#' @rdname auc_ci
+#' @export
+auc_ci.aucboot <- function(curves, alpha = 0.05, dtype = NULL) {
+  # === Validate input arguments ===
+  .assert_number(alpha, "alpha", min = 0, max = 1)
+  if (!is.null(dtype)) {
+    .stop_invalid_arg(
+      paste(
+        "{.arg dtype} does not apply to a bootstrap interval, which is",
+        "read off the resampled values rather than from a distribution",
+        "assumed for them."
+      ),
+      arg = "dtype"
+    )
+  }
+
+  observed <- attr(curves, "observed")
+
+  parts <- list()
+  for (modname in unique(curves[["modnames"]])) {
+    for (curvetype in unique(curves[["curvetypes"]])) {
+      vals <- curves[["aucs"]][
+        curves[["modnames"]] == modname & curves[["curvetypes"]] == curvetype
+      ]
+      vals <- vals[!is.na(vals)]
+      point <- observed[["aucs"]][
+        observed[["modnames"]] == modname &
+          observed[["curvetypes"]] == curvetype
+      ]
+
+      if (length(vals) == 0L) {
+        bounds <- c(NA_real_, NA_real_)
+        spread <- NA_real_
+      } else {
+        # The percentile interval: the interval is where the resampled
+        # values actually fell, so it cannot leave [0, 1] and needs no
+        # clipping, unlike the normal interval `auc_ci.aucs()` builds
+        bounds <- unname(quantile(
+          vals, c(alpha / 2, 1 - alpha / 2),
+          names = FALSE
+        ))
+        spread <- sd(vals)
+      }
+
+      parts[[length(parts) + 1L]] <- data.table::data.table(
+        modnames = modname,
+        curvetypes = curvetype,
+        aucs = point,
+        mean = mean(vals),
+        error = spread,
+        lower_bound = bounds[1],
+        upper_bound = bounds[2],
+        n = length(vals)
+      )
+    }
+  }
+
+  .as_plain_df(.rbind_parts(parts))
 }
