@@ -62,7 +62,7 @@ fortify(model, data, ...)
       | smcurves        | single           | multiple                |
       | mmcurves        | multiple         | multiple                |
 
-  2.  Basic evaluation measures (mode = "basic")
+  2.  Basic evaluation metrics (mode = "basic")
 
       |                 |                  |                         |
       |-----------------|------------------|-------------------------|
@@ -95,7 +95,7 @@ fortify(model, data, ...)
   A Boolean value to decide whether the points should be reduced when
   `mode = "rocprc"`. The points are reduced according to `x_bins` of the
   [`evalmod()`](https://evalclass.github.io/precrec/reference/evalmod.md)
-  function. The default values is `FALSE`. The basic evaluation measures
+  function. The default values is `FALSE`. The basic evaluation metrics
   are not reduced, so the argument has no effect for `sspoints`,
   `mspoints`, `smpoints` and `mmpoints`.
 
@@ -110,7 +110,7 @@ The `fortify` function returns a data frame for ggplot2.
 ## See also
 
 [`evalmod()`](https://evalclass.github.io/precrec/reference/evalmod.md)
-for generating `S3` objects with performance evaluation measures.
+for generating `S3` objects with performance evaluation metrics.
 [`autoplot()`](https://evalclass.github.io/precrec/reference/autoplot.md)
 for plotting with ggplot2.
 
@@ -151,7 +151,7 @@ p_prc <- ggplot(subset(ssdf, curvetype == "PRC"), aes(x = x, y = y))
 p_prc <- p_prc + geom_line()
 p_prc
 
-## Generate an sspoints object that contains basic evaluation measures
+## Generate an sspoints object that contains basic evaluation metrics
 sspoints <- evalmod(
   mode = "basic", scores = P10N10$scores,
   labels = P10N10$labels
@@ -199,7 +199,7 @@ p_prc <- ggplot(df_prc, aes(x = x, y = y, color = modname))
 p_prc <- p_prc + geom_line()
 p_prc
 
-## Generate an mspoints object that contains basic evaluation measures
+## Generate an mspoints object that contains basic evaluation metrics
 mspoints <- evalmod(mdat, mode = "basic")
 
 ## Fortify mspoints
@@ -247,7 +247,7 @@ p_prc <- ggplot(df_prc, aes(x = x, y = y, ymin = ymin, ymax = ymax))
 p_prc <- p_prc + geom_smooth(stat = "identity")
 p_prc
 
-## Generate an smpoints object that contains basic evaluation measures
+## Generate an smpoints object that contains basic evaluation metrics
 smpoints <- evalmod(mdat, mode = "basic")
 
 ## Fortify smpoints
@@ -299,7 +299,7 @@ p_prc <- ggplot(df_prc, aes(x = x, y = y, ymin = ymin, ymax = ymax))
 p_prc <- p_prc + geom_smooth(aes(color = modname), stat = "identity")
 p_prc
 
-## Generate an mmpoints object that contains basic evaluation measures
+## Generate an mmpoints object that contains basic evaluation metrics
 mmpoints <- evalmod(mdat, mode = "basic")
 
 ## Fortify mmpoints

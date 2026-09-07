@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,23 +28,23 @@
     <li><a class="dropdown-item" href="../articles/howto-imbalanced-data.html">Balanced and imbalanced data</a></li>
   </ul></li>
 <li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-measures" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Measures</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-measures"><li><a class="dropdown-item" href="../articles/measures-overview.html">Measures overview</a></li>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-metrics" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Metrics</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-metrics"><li><a class="dropdown-item" href="../articles/metrics-overview.html">Metrics overview</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><a class="dropdown-item" href="../articles/measures-confusion-matrix.html">Confusion-matrix rates</a></li>
-    <li><a class="dropdown-item" href="../articles/measures-agreement.html">Agreement and balance</a></li>
-    <li><a class="dropdown-item" href="../articles/measures-ranking-cost.html">Ranking and cost</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-confusion-matrix.html">Confusion-matrix rates</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-agreement.html">Agreement and balance</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-ranking-cost.html">Ranking and cost</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><a class="dropdown-item" href="../articles/measures-auc.html">AUC and other curve summaries</a></li>
-    <li><a class="dropdown-item" href="../articles/measures-probability.html">Probability-based metrics</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-auc.html">AUC and other curve summaries</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-probability.html">Probability-based metrics</a></li>
   </ul></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-plots" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Plots</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-plots"><li><a class="dropdown-item" href="../articles/plots-overview.html">Plots overview</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/plots-roc-prc.html">ROC and precision-recall curves</a></li>
-    <li><a class="dropdown-item" href="../articles/plots-basic-measures.html">Basic measure plots</a></li>
-    <li><a class="dropdown-item" href="../articles/plots-metric-curve.html">One measure against another</a></li>
+    <li><a class="dropdown-item" href="../articles/plots-basic-metrics.html">Basic metric plots</a></li>
+    <li><a class="dropdown-item" href="../articles/plots-metric-curve.html">One metric against another</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/plots-confidence-bands.html">Confidence bands</a></li>
     <li><a class="dropdown-item" href="../articles/plots-partial-curves.html">Partial curves</a></li>
@@ -96,14 +96,14 @@
           <code><a href="evalmod.html">evalmod()</a></code>
 
         </dt>
-        <dd>Evaluate models and calculate performance evaluation measures</dd>
+        <dd>Evaluate models and calculate performance evaluation metrics</dd>
 
         <dt>
 
           <code><a href="metric_curve.html">metric_curve()</a></code>
 
         </dt>
-        <dd>Draw one evaluation measure against another</dd>
+        <dd>Draw one evaluation metric against another</dd>
       </dl></div><div class="section level2">
       <h2 id="data-preparation">Data preparation<a class="anchor" aria-label="anchor" href="#data-preparation"></a></h2>
 
@@ -163,14 +163,14 @@
           <code><a href="plot.html">plot(<i>&lt;sscurves&gt;</i>)</a></code> <code><a href="plot.html">plot(<i>&lt;mscurves&gt;</i>)</a></code> <code><a href="plot.html">plot(<i>&lt;smcurves&gt;</i>)</a></code> <code><a href="plot.html">plot(<i>&lt;mmcurves&gt;</i>)</a></code> <code><a href="plot.html">plot(<i>&lt;sspoints&gt;</i>)</a></code> <code><a href="plot.html">plot(<i>&lt;mspoints&gt;</i>)</a></code> <code><a href="plot.html">plot(<i>&lt;smpoints&gt;</i>)</a></code> <code><a href="plot.html">plot(<i>&lt;mmpoints&gt;</i>)</a></code> <code><a href="plot.html">plot(<i>&lt;ssxycurves&gt;</i>)</a></code> <code><a href="plot.html">plot(<i>&lt;msxycurves&gt;</i>)</a></code> <code><a href="plot.html">plot(<i>&lt;smxycurves&gt;</i>)</a></code> <code><a href="plot.html">plot(<i>&lt;mmxycurves&gt;</i>)</a></code>
 
         </dt>
-        <dd>Plot performance evaluation measures</dd>
+        <dd>Plot performance evaluation metrics</dd>
 
         <dt>
 
           <code><a href="autoplot.html">autoplot(<i>&lt;sscurves&gt;</i>)</a></code> <code><a href="autoplot.html">autoplot(<i>&lt;mscurves&gt;</i>)</a></code> <code><a href="autoplot.html">autoplot(<i>&lt;smcurves&gt;</i>)</a></code> <code><a href="autoplot.html">autoplot(<i>&lt;mmcurves&gt;</i>)</a></code> <code><a href="autoplot.html">autoplot(<i>&lt;sspoints&gt;</i>)</a></code> <code><a href="autoplot.html">autoplot(<i>&lt;mspoints&gt;</i>)</a></code> <code><a href="autoplot.html">autoplot(<i>&lt;smpoints&gt;</i>)</a></code> <code><a href="autoplot.html">autoplot(<i>&lt;mmpoints&gt;</i>)</a></code> <code><a href="autoplot.html">autoplot(<i>&lt;ssxycurves&gt;</i>)</a></code> <code><a href="autoplot.html">autoplot(<i>&lt;msxycurves&gt;</i>)</a></code> <code><a href="autoplot.html">autoplot(<i>&lt;smxycurves&gt;</i>)</a></code> <code><a href="autoplot.html">autoplot(<i>&lt;mmxycurves&gt;</i>)</a></code>
 
         </dt>
-        <dd>Plot performance evaluation measures with ggplot2</dd>
+        <dd>Plot performance evaluation metrics with ggplot2</dd>
 
         <dt>
 

@@ -90,7 +90,7 @@ source.
 For an interval on the area rather than the curve, use
 [`auc_ci()`](https://evalclass.github.io/precrec/reference/auc_ci.md);
 see [AUC and other curve
-summaries](https://evalclass.github.io/precrec/articles/measures-auc.md).
+summaries](https://evalclass.github.io/precrec/articles/metrics-auc.md).
 
 ## Next
 

@@ -24,20 +24,20 @@
 - [Balanced and imbalanced
   data](https://evalclass.github.io/precrec/articles/howto-imbalanced-data.md):
 
-### Measures
+### Metrics
 
-- [Measures
-  overview](https://evalclass.github.io/precrec/articles/measures-overview.md):
+- [Metrics
+  overview](https://evalclass.github.io/precrec/articles/metrics-overview.md):
 - [Confusion-matrix
-  rates](https://evalclass.github.io/precrec/articles/measures-confusion-matrix.md):
+  rates](https://evalclass.github.io/precrec/articles/metrics-confusion-matrix.md):
 - [Agreement and
-  balance](https://evalclass.github.io/precrec/articles/measures-agreement.md):
+  balance](https://evalclass.github.io/precrec/articles/metrics-agreement.md):
 - [Ranking and
-  cost](https://evalclass.github.io/precrec/articles/measures-ranking-cost.md):
+  cost](https://evalclass.github.io/precrec/articles/metrics-ranking-cost.md):
 - [AUC and other curve
-  summaries](https://evalclass.github.io/precrec/articles/measures-auc.md):
+  summaries](https://evalclass.github.io/precrec/articles/metrics-auc.md):
 - [Probability-based
-  metrics](https://evalclass.github.io/precrec/articles/measures-probability.md):
+  metrics](https://evalclass.github.io/precrec/articles/metrics-probability.md):
 
 ### Plots
 
@@ -45,9 +45,9 @@
   overview](https://evalclass.github.io/precrec/articles/plots-overview.md):
 - [ROC and precision-recall
   curves](https://evalclass.github.io/precrec/articles/plots-roc-prc.md):
-- [Basic measure
-  plots](https://evalclass.github.io/precrec/articles/plots-basic-measures.md):
-- [One measure against
+- [Basic metric
+  plots](https://evalclass.github.io/precrec/articles/plots-basic-metrics.md):
+- [One metric against
   another](https://evalclass.github.io/precrec/articles/plots-metric-curve.md):
 - [Confidence
   bands](https://evalclass.github.io/precrec/articles/plots-confidence-bands.md):

@@ -1,8 +1,8 @@
 # Work with large datasets
 
 The calculations are C++ and handle large datasets without special
-measures. Plotting is where the time goes, and there are two switches
-for it.
+metrics. Plotting is where the time goes, and there are two switches for
+it.
 
 ``` r
 
@@ -29,9 +29,9 @@ system.time(autoplot(curves))
 # Every point
 system.time(autoplot(curves, reduce_points = FALSE))
 #>    user  system elapsed 
-#>   0.122   0.011   0.133 
+#>   0.127   0.012   0.139 
 #>    user  system elapsed 
-#>   0.092   0.007   0.099
+#>   0.098   0.008   0.106
 ```
 
 The curve is calculated at full resolution either way - `reduce_points`
@@ -73,12 +73,12 @@ mdat <- mmdata(samps[["scores"]], samps[["labels"]], dsids = samps[["dsids"]])
 curves_coarse <- evalmod(mdat, x_bins = 100)
 ```
 
-## Only the measures you need
+## Only the metrics you need
 
-In `mode = "basic"`, each extra measure is another vector the length of
+In `mode = "basic"`, each extra metric is another vector the length of
 the dataset. The default set is fourteen; anything beyond it is opt-in
-through `metrics =`. See the [measures
-overview](https://evalclass.github.io/precrec/articles/measures-overview.md).
+through `metrics =`. See the [metrics
+overview](https://evalclass.github.io/precrec/articles/metrics-overview.md).
 
 ## Next
 

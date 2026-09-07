@@ -1,8 +1,8 @@
-# Draw one evaluation measure against another
+# Draw one evaluation metric against another
 
-The `metric_curve` function takes the name of a measure for the x axis
-and the name of a measure for the y axis and calculates one curve per
-test dataset, in the manner of `ROCR::performance`. Every measure
+The `metric_curve` function takes the name of a metric for the x axis
+and the name of a metric for the y axis and calculates one curve per
+test dataset, in the manner of `ROCR::performance`. Every metric
 [`evalmod()`](https://evalclass.github.io/precrec/reference/evalmod.md)
 can calculate is available on both axes.
 
@@ -53,7 +53,7 @@ metric_curve(
 
 - x_metric:
 
-  A string that specifies the measure of the x axis. It accepts every
+  A string that specifies the metric of the x axis. It accepts every
   name
   [`evalmod()`](https://evalclass.github.io/precrec/reference/evalmod.md)
   accepts for `metrics`, together with the identifiers `ROCR` uses. The
@@ -62,7 +62,7 @@ metric_curve(
 
 - y_metric:
 
-  A string that specifies the measure of the y axis.
+  A string that specifies the metric of the y axis.
 
 - modnames:
 
@@ -98,7 +98,7 @@ metric_curve(
 - cost_fp:
 
   A numeric value for the cost of a false positive, used when one of the
-  two axes is the `cost` measure. See
+  two axes is the `cost` metric. See
   [`evalmod()`](https://evalclass.github.io/precrec/reference/evalmod.md).
 
 - cost_fn:
@@ -123,7 +123,7 @@ with `print`, `as.data.frame`, `fortify`, `plot` and `autoplot`.
 ## Which pairs are joined by a line
 
 `precrec` exists because the points of a precision-recall curve must not
-be joined by straight lines. The measures this function reads are raw
+be joined by straight lines. The metrics this function reads are raw
 per-cutoff values with no interpolation, so joining an arbitrary pair of
 them would be the very error the package was written to avoid.
 
@@ -149,7 +149,7 @@ curves.
 ## See also
 
 [`evalmod()`](https://evalclass.github.io/precrec/reference/evalmod.md)
-for the measures themselves and for averaged ROC and precision-recall
+for the metrics themselves and for averaged ROC and precision-recall
 curves.
 [`mmdata()`](https://evalclass.github.io/precrec/reference/mmdata.md)
 for formatting input data.

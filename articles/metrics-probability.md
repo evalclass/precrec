@@ -130,13 +130,13 @@ Reporting both is reasonable, and they answer different questions.
 ## Also available per cutoff
 
 `sar` averages accuracy, the ROC area and one minus the RMSE into a
-single per-cutoff measure. It is on the [ranking and
-cost](https://evalclass.github.io/precrec/articles/measures-ranking-cost.md)
+single per-cutoff metric. It is on the [ranking and
+cost](https://evalclass.github.io/precrec/articles/metrics-ranking-cost.md)
 page, and it needs probabilities for the same reason these do.
 
 ## Next
 
 - [AUC and other curve
-  summaries](https://evalclass.github.io/precrec/articles/measures-auc.md)
-- [Measures
-  overview](https://evalclass.github.io/precrec/articles/measures-overview.md)
+  summaries](https://evalclass.github.io/precrec/articles/metrics-auc.md)
+- [Metrics
+  overview](https://evalclass.github.io/precrec/articles/metrics-overview.md)

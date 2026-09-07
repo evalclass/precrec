@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,16 +49,16 @@
   </ul>
 </li>
 <li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-measures" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Measures</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-measures">
-<li><a class="dropdown-item" href="../articles/measures-overview.html">Measures overview</a></li>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-metrics" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Metrics</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-metrics">
+<li><a class="dropdown-item" href="../articles/metrics-overview.html">Metrics overview</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><a class="dropdown-item" href="../articles/measures-confusion-matrix.html">Confusion-matrix rates</a></li>
-    <li><a class="dropdown-item" href="../articles/measures-agreement.html">Agreement and balance</a></li>
-    <li><a class="dropdown-item" href="../articles/measures-ranking-cost.html">Ranking and cost</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-confusion-matrix.html">Confusion-matrix rates</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-agreement.html">Agreement and balance</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-ranking-cost.html">Ranking and cost</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><a class="dropdown-item" href="../articles/measures-auc.html">AUC and other curve summaries</a></li>
-    <li><a class="dropdown-item" href="../articles/measures-probability.html">Probability-based metrics</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-auc.html">AUC and other curve summaries</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-probability.html">Probability-based metrics</a></li>
   </ul>
 </li>
 <li class="nav-item dropdown">
@@ -67,8 +67,8 @@
 <li><a class="dropdown-item" href="../articles/plots-overview.html">Plots overview</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/plots-roc-prc.html">ROC and precision-recall curves</a></li>
-    <li><a class="dropdown-item" href="../articles/plots-basic-measures.html">Basic measure plots</a></li>
-    <li><a class="dropdown-item" href="../articles/plots-metric-curve.html">One measure against another</a></li>
+    <li><a class="dropdown-item" href="../articles/plots-basic-metrics.html">Basic metric plots</a></li>
+    <li><a class="dropdown-item" href="../articles/plots-metric-curve.html">One metric against another</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/plots-confidence-bands.html">Confidence bands</a></li>
     <li><a class="dropdown-item" href="../articles/plots-partial-curves.html">Partial curves</a></li>
@@ -226,9 +226,9 @@ thing as a <code>data.table</code> when that package is installed.</p>
 </table>
 </div>
 <div class="section level2">
-<h2 id="basic-measures-per-cutoff">Basic measures per cutoff<a class="anchor" aria-label="anchor" href="#basic-measures-per-cutoff"></a>
+<h2 id="basic-metrics-per-cutoff">Basic metrics per cutoff<a class="anchor" aria-label="anchor" href="#basic-metrics-per-cutoff"></a>
 </h2>
-<p><code>mode = "basic"</code> gives the per-cutoff measures rather than
+<p><code>mode = "basic"</code> gives the per-cutoff metrics rather than
 the curves.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">points</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span>,</span>
@@ -244,7 +244,7 @@ the curves.</p>
 <span><span class="co">#&gt; 5 0.20 17      m1    1 score</span></span>
 <span><span class="co">#&gt; 6 0.25 16      m1    1 score</span></span></code></pre></div>
 <p>The <code>x</code> column is the normalized rank and <code>y</code>
-the value of the measure named in <code>type</code>.</p>
+the value of the metric named in <code>type</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="feeding-ggplot2-directly">Feeding ggplot2 directly<a class="anchor" aria-label="anchor" href="#feeding-ggplot2-directly"></a>
@@ -257,7 +257,7 @@ See <a href="plots-customizing.html">customizing plots</a>.</p>
 <h2 id="next">Next<a class="anchor" aria-label="anchor" href="#next"></a>
 </h2>
 <ul>
-<li><a href="measures-overview.html">Measures overview</a></li>
+<li><a href="metrics-overview.html">Metrics overview</a></li>
 <li><a href="plots-overview.html">Plots overview</a></li>
 </ul>
 </div>

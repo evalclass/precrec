@@ -11,7 +11,7 @@ The precrec package provides the following six functions.
 |  |  |
 |----|----|
 | **Function** | **Description** |
-| [`evalmod()`](https://evalclass.github.io/precrec/reference/evalmod.md) | Main function to calculate evaluation measures |
+| [`evalmod()`](https://evalclass.github.io/precrec/reference/evalmod.md) | Main function to calculate evaluation metrics |
 | [`mmdata()`](https://evalclass.github.io/precrec/reference/mmdata.md) | Reformat input data for performance evaluation calculation |
 | [`join_scores()`](https://evalclass.github.io/precrec/reference/join_scores.md) | Join scores of multiple models into a list |
 | [`join_labels()`](https://evalclass.github.io/precrec/reference/join_labels.md) | Join observed labels of multiple test datasets into a list |
@@ -30,15 +30,15 @@ function.
 | **S3 generic** | **Library** | **Description** |
 | `print` | base | Print the calculation results and the summary of the test data |
 | [`as.data.frame()`](https://evalclass.github.io/precrec/reference/as.data.frame.md) | base | Convert a precrec object to a data frame |
-| [`plot()`](https://evalclass.github.io/precrec/reference/plot.md) | graphics | Plot performance evaluation measures |
-| [`autoplot()`](https://evalclass.github.io/precrec/reference/autoplot.md) | ggplot2 | Plot performance evaluation measures with ggplot2 |
+| [`plot()`](https://evalclass.github.io/precrec/reference/plot.md) | graphics | Plot performance evaluation metrics |
+| [`autoplot()`](https://evalclass.github.io/precrec/reference/autoplot.md) | ggplot2 | Plot performance evaluation metrics with ggplot2 |
 | [`fortify()`](https://evalclass.github.io/precrec/reference/fortify.md) | ggplot2 | Prepare a data frame for ggplot2 |
 | [`auc()`](https://evalclass.github.io/precrec/reference/auc.md) | precrec | Make a data frame with AUC scores |
 | [`part()`](https://evalclass.github.io/precrec/reference/part.md) | precrec | Calculate partial curves and partial AUC scores |
 | [`pauc()`](https://evalclass.github.io/precrec/reference/pauc.md) | precrec | Make a data frame with pAUC scores |
 | [`auc_ci()`](https://evalclass.github.io/precrec/reference/auc_ci.md) | precrec | Calculate confidence intervals of AUC scores |
 
-## Performance measure calculations
+## Performance metric calculations
 
 The
 [`evalmod()`](https://evalclass.github.io/precrec/reference/evalmod.md)
@@ -47,7 +47,7 @@ object. The generated `S3` object can be used with several different
 `S3` generics, such as `print` and
 [`plot()`](https://evalclass.github.io/precrec/reference/plot.md). The
 [`evalmod()`](https://evalclass.github.io/precrec/reference/evalmod.md)
-function can also calculate basic evaluation measures - error rate,
+function can also calculate basic evaluation metrics - error rate,
 accuracy, specificity, sensitivity, precision, Matthews correlation
 coefficient, F-score, balanced accuracy, negative predictive value,
 informedness, markedness, and Cohen's kappa.
@@ -99,7 +99,7 @@ returns the step estimator of the area under the precision-recall curve,
 and [`prbe()`](https://evalclass.github.io/precrec/reference/prbe.md)
 the precision-recall break-even point.
 
-## Probability-based measures
+## Probability-based metrics
 
 [`prob_metrics()`](https://evalclass.github.io/precrec/reference/prob_metrics.md)
 calculates the Brier score and the log loss of prediction scores that

@@ -1,6 +1,6 @@
-# Plot performance evaluation measures with ggplot2
+# Plot performance evaluation metrics with ggplot2
 
-The `autoplot` function plots performance evaluation measures by using
+The `autoplot` function plots performance evaluation metrics by using
 ggplot2 instead of the general R plot.
 
 ## Usage
@@ -62,7 +62,7 @@ autoplot(object, ...)
       | smcurves        | single           | multiple                |
       | mmcurves        | multiple         | multiple                |
 
-  2.  Basic evaluation measures (`mode = "basic"`)
+  2.  Basic evaluation metrics (`mode = "basic"`)
 
       |                 |                  |                         |
       |-----------------|------------------|-------------------------|
@@ -90,7 +90,7 @@ autoplot(object, ...)
 
       Multiple `curvetype` can be combined, such as `c("ROC", "PRC")`.
 
-  2.  Basic evaluation measures (mode = "basic")
+  2.  Basic evaluation metrics (mode = "basic")
 
       |                   |                                                       |
       |-------------------|-------------------------------------------------------|
@@ -224,13 +224,13 @@ autoplot(sscurves, curvetype = "ROC")
 ## A Precision-Recall curve
 autoplot(sscurves, curvetype = "PRC")
 
-## Generate an sspoints object that contains basic evaluation measures
+## Generate an sspoints object that contains basic evaluation metrics
 sspoints <- evalmod(
   mode = "basic", scores = P10N10$scores,
   labels = P10N10$labels
 )
 
-## Normalized ranks vs. basic evaluation measures
+## Normalized ranks vs. basic evaluation metrics
 autoplot(sspoints)
 
 ## Normalized ranks vs. precision
@@ -266,10 +266,10 @@ system.time(autoplot(evalms, reduce_points = FALSE))
 ## Hide the legend
 autoplot(mscurves, show_legend = FALSE)
 
-## Generate an mspoints object that contains basic evaluation measures
+## Generate an mspoints object that contains basic evaluation metrics
 mspoints <- evalmod(mdat, mode = "basic")
 
-## Normalized ranks vs. basic evaluation measures
+## Normalized ranks vs. basic evaluation metrics
 autoplot(mspoints)
 
 ## Hide the legend
@@ -310,10 +310,10 @@ system.time(autoplot(evalsm, raw_curves = TRUE))
 # Full supporting points
 system.time(autoplot(evalsm, raw_curves = TRUE, reduce_points = FALSE))
 
-## Generate an smpoints object that contains basic evaluation measures
+## Generate an smpoints object that contains basic evaluation metrics
 smpoints <- evalmod(mdat, mode = "basic")
 
-## Normalized ranks vs. average basic evaluation measures
+## Normalized ranks vs. average basic evaluation metrics
 autoplot(smpoints)
 
 
@@ -354,10 +354,10 @@ system.time(autoplot(evalmm, raw_curves = TRUE))
 # Full supporting points
 system.time(autoplot(evalmm, raw_curves = TRUE, reduce_points = FALSE))
 
-## Generate an mmpoints object that contains basic evaluation measures
+## Generate an mmpoints object that contains basic evaluation metrics
 mmpoints <- evalmod(mdat, mode = "basic")
 
-## Normalized ranks vs. average basic evaluation measures
+## Normalized ranks vs. average basic evaluation metrics
 autoplot(mmpoints)
 
 
@@ -384,10 +384,10 @@ autoplot(cvcurves)
 ## Show confidence bounds
 autoplot(cvcurves, show_cb = TRUE)
 
-## Generate an mmpoints object that contains basic evaluation measures
+## Generate an mmpoints object that contains basic evaluation metrics
 cvpoints <- evalmod(cvdat, mode = "basic")
 
-## Normalized ranks vs. average basic evaluation measures
+## Normalized ranks vs. average basic evaluation metrics
 autoplot(cvpoints)
 } # }
 ```

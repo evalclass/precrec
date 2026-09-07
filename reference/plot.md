@@ -1,6 +1,6 @@
-# Plot performance evaluation measures
+# Plot performance evaluation metrics
 
-The `plot` function creates a plot of performance evaluation measures.
+The `plot` function creates a plot of performance evaluation metrics.
 
 ## Usage
 
@@ -60,7 +60,7 @@ plot(x, y = NULL, ...)
       | smcurves        | single           | multiple                |
       | mmcurves        | multiple         | multiple                |
 
-  2.  Basic evaluation measures (mode = "basic")
+  2.  Basic evaluation metrics (mode = "basic")
 
       |                 |                  |                         |
       |-----------------|------------------|-------------------------|
@@ -95,7 +95,7 @@ plot(x, y = NULL, ...)
           Multiple `curvetype` can be combined, such as
           `c("ROC", "PRC")`.
 
-      2.  Basic evaluation measures (mode = "basic")
+      2.  Basic evaluation metrics (mode = "basic")
 
           |                   |                                                       |
           |-------------------|-------------------------------------------------------|
@@ -184,13 +184,13 @@ plot(sscurves, curvetype = "ROC")
 ## Plot a Precision-Recall curve
 plot(sscurves, curvetype = "PRC")
 
-## Generate an sspoints object that contains basic evaluation measures
+## Generate an sspoints object that contains basic evaluation metrics
 sspoints <- evalmod(
   mode = "basic", scores = P10N10$scores,
   labels = P10N10$labels
 )
 
-## Plot normalized ranks vs. basic evaluation measures
+## Plot normalized ranks vs. basic evaluation metrics
 plot(sspoints)
 
 ## Plot normalized ranks vs. precision
@@ -216,10 +216,10 @@ plot(mscurves)
 ## Hide the legend
 plot(mscurves, show_legend = FALSE)
 
-## Generate an mspoints object that contains basic evaluation measures
+## Generate an mspoints object that contains basic evaluation metrics
 mspoints <- evalmod(mdat, mode = "basic")
 
-## Plot normalized ranks vs. basic evaluation measures
+## Plot normalized ranks vs. basic evaluation metrics
 plot(mspoints)
 
 ## Hide the legend
@@ -249,10 +249,10 @@ plot(smcurves, raw_curves = FALSE, show_cb = FALSE)
 ## Plot raw ROC and Precision-Recall curves
 plot(smcurves, raw_curves = TRUE, show_cb = FALSE)
 
-## Generate an smpoints object that contains basic evaluation measures
+## Generate an smpoints object that contains basic evaluation metrics
 smpoints <- evalmod(mdat, mode = "basic")
 
-## Plot normalized ranks vs. average basic evaluation measures
+## Plot normalized ranks vs. average basic evaluation metrics
 plot(smpoints)
 
 
@@ -279,10 +279,10 @@ plot(mmcurves, raw_curves = FALSE, show_cb = TRUE)
 ## Plot raw ROC and Precision-Recall curves
 plot(mmcurves, raw_curves = TRUE)
 
-## Generate an mmpoints object that contains basic evaluation measures
+## Generate an mmpoints object that contains basic evaluation metrics
 mmpoints <- evalmod(mdat, mode = "basic")
 
-## Plot normalized ranks vs. average basic evaluation measures
+## Plot normalized ranks vs. average basic evaluation metrics
 plot(mmpoints)
 
 
@@ -309,10 +309,10 @@ plot(cvcurves)
 ## Show confidence bounds
 plot(cvcurves, show_cb = TRUE)
 
-## Generate an mmpoints object that contains basic evaluation measures
+## Generate an mmpoints object that contains basic evaluation metrics
 cvpoints <- evalmod(cvdat, mode = "basic")
 
-## Normalized ranks vs. average basic evaluation measures
+## Normalized ranks vs. average basic evaluation metrics
 plot(cvpoints)
 } # }
 ```

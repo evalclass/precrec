@@ -60,7 +60,7 @@ areas under the ROC and precision-recall curves.
 [`prbe()`](https://evalclass.github.io/precrec/reference/prbe.md) for
 the precision-recall break-even point.
 [`evalmod()`](https://evalclass.github.io/precrec/reference/evalmod.md)
-for generating `S3` objects with performance evaluation measures.
+for generating `S3` objects with performance evaluation metrics.
 
 ## Examples
 

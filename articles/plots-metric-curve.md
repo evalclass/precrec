@@ -1,8 +1,8 @@
-# One measure against another
+# One metric against another
 
 [`metric_curve()`](https://evalclass.github.io/precrec/reference/metric_curve.md)
-takes the name of a measure for the x axis and the name of a measure for
-the y axis and draws one against the other. Every measure
+takes the name of a metric for the x axis and the name of a metric for
+the y axis and draws one against the other. Every metric
 [`evalmod()`](https://evalclass.github.io/precrec/reference/evalmod.md)
 can calculate is available on both axes.
 
@@ -50,7 +50,7 @@ understanding about this function.
 ## Which pairs are joined by a line
 
 `precrec` exists because the points of a precision-recall curve must not
-be joined by straight lines. The measures this function reads are raw
+be joined by straight lines. The metrics this function reads are raw
 per-cutoff values with no interpolation, so joining an arbitrary pair of
 them would be the very error the package was written to avoid.
 
@@ -94,17 +94,17 @@ autoplot(xy3)
 
 ![](plots-metric-curve_files/figure-html/unnamed-chunk-5-1.png)
 
-## Naming the measures
+## Naming the metrics
 
 Both axes accept the long name, the short name, and the name other tools
 use - `fall` for `fpr`, `rpp` for `predicted_positive_rate`, and so on.
-The [measures
-overview](https://evalclass.github.io/precrec/articles/measures-overview.md)
+The [metrics
+overview](https://evalclass.github.io/precrec/articles/metrics-overview.md)
 lists them all.
 
 ## Next
 
-- [Basic measure
-  plots](https://evalclass.github.io/precrec/articles/plots-basic-measures.md)
+- [Basic metric
+  plots](https://evalclass.github.io/precrec/articles/plots-basic-metrics.md)
 - [Customizing
   plots](https://evalclass.github.io/precrec/articles/plots-customizing.md)

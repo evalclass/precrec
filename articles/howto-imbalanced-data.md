@@ -79,4 +79,4 @@ why the two plots above cannot be compared by eye alone.
 - [Evaluate more than two
   classes](https://evalclass.github.io/precrec/articles/howto-multiclass.md)
 - [AUC and other curve
-  summaries](https://evalclass.github.io/precrec/articles/measures-auc.md)
+  summaries](https://evalclass.github.io/precrec/articles/metrics-auc.md)

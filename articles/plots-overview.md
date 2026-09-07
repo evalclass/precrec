@@ -37,7 +37,7 @@ autoplot(curves)
 
 ## Choosing what to draw
 
-The second argument picks the curve or the measure.
+The second argument picks the curve or the metric.
 
 ``` r
 
@@ -46,9 +46,9 @@ autoplot(curves, "PRC")
 
 ![](plots-overview_files/figure-html/unnamed-chunk-5-1.png)
 
-For `mode = "basic"` objects it names measures instead, one panel each.
-See [basic measure
-plots](https://evalclass.github.io/precrec/articles/plots-basic-measures.md).
+For `mode = "basic"` objects it names metrics instead, one panel each.
+See [basic metric
+plots](https://evalclass.github.io/precrec/articles/plots-basic-metrics.md).
 
 ## Arguments both functions share
 
@@ -72,10 +72,10 @@ autoplot(curves, "PRC", type = "b")
 - [ROC and precision-recall
   curves](https://evalclass.github.io/precrec/articles/plots-roc-prc.md) -
   the main plot
-- [Basic measure
-  plots](https://evalclass.github.io/precrec/articles/plots-basic-measures.md) -
-  measures against normalized rank
-- [One measure against
+- [Basic metric
+  plots](https://evalclass.github.io/precrec/articles/plots-basic-metrics.md) -
+  metrics against normalized rank
+- [One metric against
   another](https://evalclass.github.io/precrec/articles/plots-metric-curve.md) -
   free-form pairs
 - [Confidence

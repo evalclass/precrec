@@ -242,6 +242,6 @@ knitr::kable(as.data.frame(
 ## Next
 
 - [Probability-based
-  metrics](https://evalclass.github.io/precrec/articles/measures-probability.md)
+  metrics](https://evalclass.github.io/precrec/articles/metrics-probability.md)
 - [Partial
   curves](https://evalclass.github.io/precrec/articles/plots-partial-curves.md)

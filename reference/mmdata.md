@@ -4,7 +4,7 @@ The `mmdata` function takes predicted scores and labels and returns an
 `mdat` object. The
 [`evalmod()`](https://evalclass.github.io/precrec/reference/evalmod.md)
 function takes an `mdat` object as input data to calculate evaluation
-measures.
+metrics.
 
 ## Usage
 
@@ -113,7 +113,7 @@ mmdata(
 
 - mode:
 
-  A string that specifies the types of evaluation measures that the
+  A string that specifies the types of evaluation metrics that the
   `evalmod` function calculates.
 
   "rocprc"
@@ -195,7 +195,7 @@ function.
 ## See also
 
 [`evalmod()`](https://evalclass.github.io/precrec/reference/evalmod.md)
-for calculation evaluation measures.
+for calculation evaluation metrics.
 [`join_scores()`](https://evalclass.github.io/precrec/reference/join_scores.md)
 and
 [`join_labels()`](https://evalclass.github.io/precrec/reference/join_labels.md)

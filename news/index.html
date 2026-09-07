@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,23 +28,23 @@
     <li><a class="dropdown-item" href="../articles/howto-imbalanced-data.html">Balanced and imbalanced data</a></li>
   </ul></li>
 <li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-measures" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Measures</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-measures"><li><a class="dropdown-item" href="../articles/measures-overview.html">Measures overview</a></li>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-metrics" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Metrics</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-metrics"><li><a class="dropdown-item" href="../articles/metrics-overview.html">Metrics overview</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><a class="dropdown-item" href="../articles/measures-confusion-matrix.html">Confusion-matrix rates</a></li>
-    <li><a class="dropdown-item" href="../articles/measures-agreement.html">Agreement and balance</a></li>
-    <li><a class="dropdown-item" href="../articles/measures-ranking-cost.html">Ranking and cost</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-confusion-matrix.html">Confusion-matrix rates</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-agreement.html">Agreement and balance</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-ranking-cost.html">Ranking and cost</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><a class="dropdown-item" href="../articles/measures-auc.html">AUC and other curve summaries</a></li>
-    <li><a class="dropdown-item" href="../articles/measures-probability.html">Probability-based metrics</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-auc.html">AUC and other curve summaries</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-probability.html">Probability-based metrics</a></li>
   </ul></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-plots" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Plots</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-plots"><li><a class="dropdown-item" href="../articles/plots-overview.html">Plots overview</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/plots-roc-prc.html">ROC and precision-recall curves</a></li>
-    <li><a class="dropdown-item" href="../articles/plots-basic-measures.html">Basic measure plots</a></li>
-    <li><a class="dropdown-item" href="../articles/plots-metric-curve.html">One measure against another</a></li>
+    <li><a class="dropdown-item" href="../articles/plots-basic-metrics.html">Basic metric plots</a></li>
+    <li><a class="dropdown-item" href="../articles/plots-metric-curve.html">One metric against another</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/plots-confidence-bands.html">Confidence bands</a></li>
     <li><a class="dropdown-item" href="../articles/plots-partial-curves.html">Partial curves</a></li>
@@ -66,6 +66,15 @@
       <small>Source: <a href="https://github.com/evalclass/precrec/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.19.0" id="precrec-0190">precrec 0.19.0<a class="anchor" aria-label="anchor" href="#precrec-0190"></a></h2>
+<ul><li>
+<p>Settle on “metric” as the word for the quantities <code>evalmod(metrics = )</code>, <code>metric_curve(x_metric = , y_metric = )</code> and <code><a href="../reference/prob_metrics.html">prob_metrics()</a></code> name. The documentation had called them “measures” throughout while the arguments that select them had always been called <code>metrics</code>, so a reader had to work out that the two words meant one thing. Nothing about what <code>precrec</code> computes has changed.</p>
+<p>The website articles that describe them moved from <code>measures-*.html</code> to <code>metrics-*.html</code>, and <code>plots-basic-measures.html</code> to <code>plots-basic-metrics.html</code>. The old addresses redirect to the new ones.</p>
+<p><code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> on a basic-mode object now heads its summary column <code>Metric</code> rather than <code>Meas.</code>, and its banner reads <code>=== Basic performance evaluation metrics ===</code>.</p>
+</li>
+<li><p>Correct the count in <code>README.md</code>, which said ten opt-in metrics when there have been seventeen since 0.18.0.</p></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.18.0" id="precrec-0180">precrec 0.18.0<a class="anchor" aria-label="anchor" href="#precrec-0180"></a></h2>
 <ul><li>

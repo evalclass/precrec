@@ -1,8 +1,8 @@
-# Evaluate models and calculate performance evaluation measures
+# Evaluate models and calculate performance evaluation metrics
 
 The `evalmod` function calculates ROC and Precision-Recall curves for
 specified prediction scores and binary labels. It also calculate several
-basic performance evaluation measures, such as accuracy, error rate, and
+basic performance evaluation metrics, such as accuracy, error rate, and
 precision, by specifying `mode` as "basic".
 
 ## Usage
@@ -62,7 +62,7 @@ evalmod(
 
 - mode:
 
-  A string that specifies the types of evaluation measures that the
+  A string that specifies the types of evaluation metrics that the
   `evalmod` function calculates.
 
   "rocprc"
@@ -200,7 +200,7 @@ evalmod(
 
   "na"
 
-  :   Warn, and return `NA` for the measures that are undefined
+  :   Warn, and return `NA` for the metrics that are undefined
 
   ROC and precision-recall curves are undefined for such a dataset, so
   `on_single_class` is effective only when `mode` is set to `rocprc`,
@@ -209,18 +209,18 @@ evalmod(
 
 - metrics:
 
-  A character vector that names the basic evaluation measures to
+  A character vector that names the basic evaluation metrics to
   calculate in addition to the default set, or the string `"all"` for
-  every measure `precrec` knows. The default `NULL` is the fourteen
-  measures `evalmod` has always returned: `score`, `label`, `error`,
+  every metric `precrec` knows. The default `NULL` is the fourteen
+  metrics `evalmod` has always returned: `score`, `label`, `error`,
   `accuracy`, `specificity`, `sensitivity`, `precision`, `mcc`,
   `fscore`, `balanced_accuracy`, `npv`, `informedness`, `markedness` and
   `kappa`.
 
-  The measures that can be added are `fpr`, `fnr`,
+  The metrics that can be added are `fpr`, `fnr`,
   `false_discovery_rate`, `false_omission_rate`,
   `predicted_positive_rate`, `predicted_negative_rate`, `lift`, `odds`,
-  `mi`, `chisq`, `cost` and `sar`. They are the measures `ROCR` provides
+  `mi`, `chisq`, `cost` and `sar`. They are the metrics `ROCR` provides
   that `precrec` did not, and each of them also answers to the
   identifier `ROCR` uses for it - `fall`, `miss`, `pcfall`, `pcmiss`,
   `rpp`, `rnp` and `mutual_information` - and to its standard
@@ -228,9 +228,9 @@ evalmod(
 
   `roc_dist` and `sedi` can be added on the same footing. `roc_dist` is
   the distance from `(1 - specificity, sensitivity)` to the perfect
-  corner of ROC space, and is the one measure here that is better when
-  it is smaller. `sedi` is the symmetric extremal dependence index, a
-  skill score built to stay informative when the positive class is rare.
+  corner of ROC space, and is the one metric here that is better when it
+  is smaller. `sedi` is the symmetric extremal dependence index, a skill
+  score built to stay informative when the positive class is rare.
 
   `jaccard`, `positive_likelihood_ratio` and `negative_likelihood_ratio`
   come from `scikit-learn`. `jaccard` is the Jaccard index, also called
@@ -242,13 +242,13 @@ evalmod(
 
   They are not calculated by default because each is another vector the
   size of the dataset, and because `plot` and `autoplot` draw one panel
-  per measure the object holds. A measure that was not asked for cannot
-  be plotted; `metrics` is effective only when `mode` is set to `basic`.
+  per metric the object holds. A metric that was not asked for cannot be
+  plotted; `metrics` is effective only when `mode` is set to `basic`.
 
 - cost_fp:
 
   A numeric value for the cost of a false positive, used by the `cost`
-  measure. `cost` is not normalized, following `ROCR`: it is
+  metric. `cost` is not normalized, following `ROCR`: it is
   `cost_fp * FP / n + cost_fn * FN / n`, which with the default weights
   of `1` is the error rate. `cost_fp` is effective only when `mode` is
   set to `basic` and `metrics` asks for `cost`.
@@ -268,7 +268,7 @@ evalmod(
 ## Value
 
 The `evalmod` function returns an `S3` object that contains performance
-evaluation measures. The number of models and the number of datasets can
+evaluation metrics. The number of models and the number of datasets can
 be controlled by `modnames` and `dsids`. For example, the number of
 models is "single" and the number of test datasets is "multiple" when
 `modnames = c("m1", "m1", "m1")` and `dsids = c(1, 2, 3)` are specified.
@@ -296,7 +296,7 @@ and
 2.  The `evalmod` function returns one of the following `S3`
 
     objects when `mode` is "basic". They contain the per-rank basic
-    evaluation measures; error rate, accuracy, specificity, sensitivity,
+    evaluation metrics; error rate, accuracy, specificity, sensitivity,
     precision, Matthews correlation coefficient, F-score, balanced
     accuracy, negative predictive value, informedness, markedness, and
     Cohen's kappa.
@@ -361,16 +361,16 @@ sscurves
 #>    1         m1          1             10             10
 #> 
 
-## Generate an sspoints object that contains basic evaluation measures
+## Generate an sspoints object that contains basic evaluation metrics
 sspoints <- evalmod(
   mode = "basic", scores = P10N10$scores,
   labels = P10N10$labels
 )
 sspoints
 #> 
-#>     === Basic performance evaluation measures ===
+#>     === Basic performance evaluation metrics ===
 #> 
-#>      ## Performance measures (Meas.)
+#>      ## Performance metrics
 #>       rank:   normalized rank
 #>       score:  score
 #>       label:  label
@@ -388,7 +388,7 @@ sspoints
 #>       kappa:  Cohen's kappa
 #> 
 #> 
-#>      Model ID  Meas.       Min.    1st Qu.     Median       Mean    3rd Qu.
+#>      Model ID Metric       Min.    1st Qu.     Median       Mean    3rd Qu.
 #>    1    m1  1   rank  0.0000000  0.2500000  0.5000000  0.5000000  0.7500000
 #>    2    m1  1  score  5.0000000  5.7500000 14.0000000 11.7500000 15.2500000
 #>    3    m1  1  label -1.0000000 -1.0000000  0.0000000  0.0000000  1.0000000
@@ -468,13 +468,13 @@ mscurves
 #>    5       perf          1            100            100
 #> 
 
-## Generate an mspoints object that contains basic evaluation measures
+## Generate an mspoints object that contains basic evaluation metrics
 mspoints <- evalmod(mdat, mode = "basic")
 mspoints
 #> 
-#>     === Basic performance evaluation measures ===
+#>     === Basic performance evaluation metrics ===
 #> 
-#>      ## Performance measures (Meas.)
+#>      ## Performance metrics
 #>       rank:   normalized rank
 #>       score:  score
 #>       label:  label
@@ -492,7 +492,7 @@ mspoints
 #>       kappa:  Cohen's kappa
 #> 
 #> 
-#>        Model ID  Meas.          Min.     1st Qu.     Median        Mean
+#>        Model ID Metric          Min.     1st Qu.     Median        Mean
 #>    1  random  1   rank  0.0000000000  0.25000000  0.5000000  0.50000000
 #>    2  random  1  score -2.8200342587 -0.55073147  0.1039170  0.03265130
 #>    3  random  1  label -1.0000000000 -1.00000000  0.0000000  0.00000000
@@ -694,13 +694,13 @@ smcurves
 #>    4    good_er          4            100            100
 #> 
 
-## Generate an smpoints object that contains basic evaluation measures
+## Generate an smpoints object that contains basic evaluation metrics
 smpoints <- evalmod(mdat, mode = "basic")
 smpoints
 #> 
-#>     === Basic performance evaluation measures ===
+#>     === Basic performance evaluation metrics ===
 #> 
-#>      ## Performance measures (Meas.)
+#>      ## Performance metrics
 #>       rank:   normalized rank
 #>       score:  score
 #>       label:  label
@@ -718,7 +718,7 @@ smpoints
 #>       kappa:  Cohen's kappa
 #> 
 #> 
-#>        Model ID  Meas.          Min.    1st Qu.    Median      Mean   3rd Qu.
+#>        Model ID Metric          Min.    1st Qu.    Median      Mean   3rd Qu.
 #>    1 good_er  1   rank  0.0000000000  0.2500000 0.5000000 0.5000000 0.7500000
 #>    2 good_er  1  score  0.0005527905  0.1254571 0.2897201 0.3575120 0.5451061
 #>    3 good_er  1  label -1.0000000000 -1.0000000 0.0000000 0.0000000 1.0000000
@@ -937,13 +937,13 @@ mmcurves
 #>   20       perf          4            100            100
 #> 
 
-## Generate an mmpoints object that contains basic evaluation measures
+## Generate an mmpoints object that contains basic evaluation metrics
 mmpoints <- evalmod(mdat, mode = "basic")
 mmpoints
 #> 
-#>     === Basic performance evaluation measures ===
+#>     === Basic performance evaluation metrics ===
 #> 
-#>      ## Performance measures (Meas.)
+#>      ## Performance metrics
 #>       rank:   normalized rank
 #>       score:  score
 #>       label:  label
@@ -961,7 +961,7 @@ mmpoints
 #>       kappa:  Cohen's kappa
 #> 
 #> 
-#>        Model ID  Meas.          Min.     1st Qu.       Median          Mean
+#>        Model ID Metric          Min.     1st Qu.       Median          Mean
 #>    1  random  1   rank  0.0000000000  0.25000000  0.500000000  0.5000000000
 #>    2  random  1  score -3.1654053854 -0.58975462  0.008348982  0.0078300686
 #>    3  random  1  label -1.0000000000 -1.00000000  0.000000000  0.0000000000
@@ -1649,13 +1649,13 @@ cvcurves
 #>   10         m2          5              5              5
 #> 
 
-## Generate an mmpoints object that contains basic evaluation measures
+## Generate an mmpoints object that contains basic evaluation metrics
 cvpoints <- evalmod(cvdat, mode = "basic")
 cvpoints
 #> 
-#>     === Basic performance evaluation measures ===
+#>     === Basic performance evaluation metrics ===
 #> 
-#>      ## Performance measures (Meas.)
+#>      ## Performance metrics
 #>       rank:   normalized rank
 #>       score:  score
 #>       label:  label
@@ -1673,7 +1673,7 @@ cvpoints
 #>       kappa:  Cohen's kappa
 #> 
 #> 
-#>      Model ID  Meas.        Min.     1st Qu.       Median         Mean
+#>      Model ID Metric        Min.     1st Qu.       Median         Mean
 #>    1    m1  1   rank  0.00000000  0.25000000  0.500000000  0.500000000
 #>    2    m1  1  score -1.57617327 -0.92376396 -0.002327284  0.113500523
 #>    3    m1  1  label -1.00000000 -1.00000000  0.000000000  0.000000000
@@ -2094,10 +2094,10 @@ func_evalmod_aucroc <- function(samp) {
 # Process time
 system.time(res1 <- func_evalmod_rocprc(samp1))
 #>    user  system elapsed 
-#>   0.031   0.006   0.038 
+#>   0.030   0.006   0.036 
 system.time(res2 <- func_evalmod_aucroc(samp1))
 #>    user  system elapsed 
-#>   0.020   0.001   0.013 
+#>   0.022   0.000   0.013 
 
 # AUCs
 res1

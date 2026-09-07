@@ -10,9 +10,9 @@
 ## Main
 
 - [`evalmod()`](https://evalclass.github.io/precrec/reference/evalmod.md)
-  : Evaluate models and calculate performance evaluation measures
+  : Evaluate models and calculate performance evaluation metrics
 - [`metric_curve()`](https://evalclass.github.io/precrec/reference/metric_curve.md)
-  : Draw one evaluation measure against another
+  : Draw one evaluation metric against another
 
 ## Data preparation
 
@@ -41,7 +41,7 @@
   [`plot(`*`<msxycurves>`*`)`](https://evalclass.github.io/precrec/reference/plot.md)
   [`plot(`*`<smxycurves>`*`)`](https://evalclass.github.io/precrec/reference/plot.md)
   [`plot(`*`<mmxycurves>`*`)`](https://evalclass.github.io/precrec/reference/plot.md)
-  : Plot performance evaluation measures
+  : Plot performance evaluation metrics
 - [`autoplot(`*`<sscurves>`*`)`](https://evalclass.github.io/precrec/reference/autoplot.md)
   [`autoplot(`*`<mscurves>`*`)`](https://evalclass.github.io/precrec/reference/autoplot.md)
   [`autoplot(`*`<smcurves>`*`)`](https://evalclass.github.io/precrec/reference/autoplot.md)
@@ -54,7 +54,7 @@
   [`autoplot(`*`<msxycurves>`*`)`](https://evalclass.github.io/precrec/reference/autoplot.md)
   [`autoplot(`*`<smxycurves>`*`)`](https://evalclass.github.io/precrec/reference/autoplot.md)
   [`autoplot(`*`<mmxycurves>`*`)`](https://evalclass.github.io/precrec/reference/autoplot.md)
-  : Plot performance evaluation measures with ggplot2
+  : Plot performance evaluation metrics with ggplot2
 - [`fortify(`*`<sscurves>`*`)`](https://evalclass.github.io/precrec/reference/fortify.md)
   [`fortify(`*`<mscurves>`*`)`](https://evalclass.github.io/precrec/reference/fortify.md)
   [`fortify(`*`<smcurves>`*`)`](https://evalclass.github.io/precrec/reference/fortify.md)

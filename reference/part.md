@@ -74,7 +74,7 @@ calculated pAUCs and standardized pAUCs.
 ## See also
 
 [`evalmod()`](https://evalclass.github.io/precrec/reference/evalmod.md)
-for generating `S3` objects with performance evaluation measures.
+for generating `S3` objects with performance evaluation metrics.
 [`pauc()`](https://evalclass.github.io/precrec/reference/pauc.md) for
 retrieving a dataset of pAUCs.
 

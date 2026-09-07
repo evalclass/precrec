@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,16 +52,16 @@
   </ul>
 </li>
 <li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-measures" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Measures</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-measures">
-<li><a class="dropdown-item" href="articles/measures-overview.html">Measures overview</a></li>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-metrics" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Metrics</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-metrics">
+<li><a class="dropdown-item" href="articles/metrics-overview.html">Metrics overview</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><a class="dropdown-item" href="articles/measures-confusion-matrix.html">Confusion-matrix rates</a></li>
-    <li><a class="dropdown-item" href="articles/measures-agreement.html">Agreement and balance</a></li>
-    <li><a class="dropdown-item" href="articles/measures-ranking-cost.html">Ranking and cost</a></li>
+    <li><a class="dropdown-item" href="articles/metrics-confusion-matrix.html">Confusion-matrix rates</a></li>
+    <li><a class="dropdown-item" href="articles/metrics-agreement.html">Agreement and balance</a></li>
+    <li><a class="dropdown-item" href="articles/metrics-ranking-cost.html">Ranking and cost</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><a class="dropdown-item" href="articles/measures-auc.html">AUC and other curve summaries</a></li>
-    <li><a class="dropdown-item" href="articles/measures-probability.html">Probability-based metrics</a></li>
+    <li><a class="dropdown-item" href="articles/metrics-auc.html">AUC and other curve summaries</a></li>
+    <li><a class="dropdown-item" href="articles/metrics-probability.html">Probability-based metrics</a></li>
   </ul>
 </li>
 <li class="nav-item dropdown">
@@ -70,8 +70,8 @@
 <li><a class="dropdown-item" href="articles/plots-overview.html">Plots overview</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="articles/plots-roc-prc.html">ROC and precision-recall curves</a></li>
-    <li><a class="dropdown-item" href="articles/plots-basic-measures.html">Basic measure plots</a></li>
-    <li><a class="dropdown-item" href="articles/plots-metric-curve.html">One measure against another</a></li>
+    <li><a class="dropdown-item" href="articles/plots-basic-metrics.html">Basic metric plots</a></li>
+    <li><a class="dropdown-item" href="articles/plots-metric-curve.html">One metric against another</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="articles/plots-confidence-bands.html">Confidence bands</a></li>
     <li><a class="dropdown-item" href="articles/plots-partial-curves.html">Partial curves</a></li>
@@ -131,7 +131,7 @@ ROC and precision-recall curves of the P10N10 test dataset, drawn side by side
 <li>
 <a href="https://evalclass.github.io/precrec/articles/howto-prepare-data.html">How-to</a> – one page per task: several models, several test sets, cross-validation, more than two classes, large datasets.</li>
 <li>
-<a href="https://evalclass.github.io/precrec/articles/measures-overview.html">Measures</a> – what each of the 29 available measures means and when it misleads.</li>
+<a href="https://evalclass.github.io/precrec/articles/metrics-overview.html">Metrics</a> – what each available metric means and when it misleads.</li>
 <li>
 <a href="https://evalclass.github.io/precrec/articles/plots-overview.html">Plots</a> – every plot the package draws, and how to change it.</li>
 <li>
@@ -143,7 +143,7 @@ ROC and precision-recall curves of the P10N10 test dataset, drawn side by side
 </h2>
 <p><strong>Accurate curves.</strong> Non-linear interpolation, elongation to the y axis where the first point is undefined, and score-wise thresholds instead of fixed bins. Joining raw precision-recall points with straight lines – what most tools do – overestimates the area.</p>
 <p><strong>Fast.</strong> Curves over a large dataset take seconds. <code>mode = "aucroc"</code> computes the ROC area from the U statistic without building the curve at all.</p>
-<p><strong>Many measures.</strong> Fourteen per-cutoff measures by default and ten more on request, plus AUC, partial AUC, the precision-recall break-even point, and the probability-based Brier score, RMSE and log loss. See the <a href="https://evalclass.github.io/precrec/articles/measures-overview.html">measures overview</a>.</p>
+<p><strong>Many metrics.</strong> Fourteen per-cutoff metrics by default and seventeen more on request, plus AUC, partial AUC, the precision-recall break-even point, and the probability-based Brier score, RMSE and log loss. See the <a href="https://evalclass.github.io/precrec/articles/metrics-overview.html">metrics overview</a>.</p>
 <p><strong>Several models and several test sets.</strong> Averaged curves with confidence bands, cross-validation folds, and confidence intervals of the AUC.</p>
 <p><strong>More than two classes.</strong> One-vs-rest decomposition, with per-class and macro-averaged areas.</p>
 <p><strong>Partial curves.</strong> Partial AUCs for any x or y range, standardized so ranges of different widths can be compared.</p>
@@ -174,7 +174,7 @@ ROC and precision-recall curves of the P10N10 test dataset, drawn side by side
 <tbody>
 <tr>
 <td><code>evalmod</code></td>
-<td>Main function to calculate evaluation measures</td>
+<td>Main function to calculate evaluation metrics</td>
 </tr>
 <tr>
 <td><code>mmdata</code></td>
@@ -206,7 +206,7 @@ ROC and precision-recall curves of the P10N10 test dataset, drawn side by side
 </tr>
 <tr>
 <td><code>metric_curve</code></td>
-<td>Draw one evaluation measure against another</td>
+<td>Draw one evaluation metric against another</td>
 </tr>
 <tr>
 <td><code>prbe</code></td>
@@ -249,12 +249,12 @@ ROC and precision-recall curves of the P10N10 test dataset, drawn side by side
 <tr>
 <td><code>plot</code></td>
 <td>graphics</td>
-<td>Plot performance evaluation measures</td>
+<td>Plot performance evaluation metrics</td>
 </tr>
 <tr>
 <td><code>autoplot</code></td>
 <td>ggplot2</td>
-<td>Plot performance evaluation measures with ggplot2</td>
+<td>Plot performance evaluation metrics with ggplot2</td>
 </tr>
 <tr>
 <td><code>fortify</code></td>

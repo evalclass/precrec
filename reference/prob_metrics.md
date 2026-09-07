@@ -86,7 +86,7 @@ takes up three rows - plus one row for each metric named in `metrics`.
 [`prob_metrics_ci()`](https://evalclass.github.io/precrec/reference/prob_metrics_ci.md)
 for the CIs of these metrics over multiple datasets.
 [`evalmod()`](https://evalclass.github.io/precrec/reference/evalmod.md)
-for generating `S3` objects with performance evaluation measures.
+for generating `S3` objects with performance evaluation metrics.
 [`mmdata()`](https://evalclass.github.io/precrec/reference/mmdata.md)
 for formatting input data.
 

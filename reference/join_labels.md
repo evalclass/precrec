@@ -33,7 +33,7 @@ label data.
 ## See also
 
 [`evalmod()`](https://evalclass.github.io/precrec/reference/evalmod.md)
-for calculation evaluation measures.
+for calculation evaluation metrics.
 [`mmdata()`](https://evalclass.github.io/precrec/reference/mmdata.md)
 for formatting input data.
 [`join_scores()`](https://evalclass.github.io/precrec/reference/join_scores.md)

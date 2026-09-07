@@ -112,4 +112,4 @@ else, because a precision-recall curve is read against its baseline.
 - [Balanced and imbalanced
   data](https://evalclass.github.io/precrec/articles/howto-imbalanced-data.md)
 - [AUC and other curve
-  summaries](https://evalclass.github.io/precrec/articles/measures-auc.md)
+  summaries](https://evalclass.github.io/precrec/articles/metrics-auc.md)

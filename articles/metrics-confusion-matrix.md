@@ -20,12 +20,12 @@ points <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
 
 ## Overall
 
-| Measure    | Formula         | Range  |
+| Metric     | Formula         | Range  |
 |------------|-----------------|--------|
 | `accuracy` | (TP + TN) / all | 0 to 1 |
 | `error`    | (FP + FN) / all | 0 to 1 |
 
-Accuracy is the measure to distrust first. On data with 1% positives,
+Accuracy is the metric to distrust first. On data with 1% positives,
 calling everything negative scores 0.99.
 
 ``` r
@@ -33,14 +33,14 @@ calling everything negative scores 0.99.
 autoplot(points, c("accuracy", "error"))
 ```
 
-![](measures-confusion-matrix_files/figure-html/unnamed-chunk-3-1.png)
+![](metrics-confusion-matrix_files/figure-html/unnamed-chunk-3-1.png)
 
 ## Rates over the actual classes
 
 These divide by a row of the table, so they do not move when the class
 balance changes.
 
-| Measure       | Formula        | Also known as              |
+| Metric        | Formula        | Also known as              |
 |---------------|----------------|----------------------------|
 | `sensitivity` | TP / (TP + FN) | recall, TPR, hit rate      |
 | `specificity` | TN / (TN + FP) | TNR, selectivity           |
@@ -52,7 +52,7 @@ balance changes.
 autoplot(points, c("sensitivity", "specificity"))
 ```
 
-![](measures-confusion-matrix_files/figure-html/unnamed-chunk-4-1.png)
+![](metrics-confusion-matrix_files/figure-html/unnamed-chunk-4-1.png)
 
 The ROC curve is `sensitivity` against `fpr`, which is why it is blind
 to class balance - both axes are row-wise rates.
@@ -63,7 +63,7 @@ These divide by a column, so they *do* move with the class balance. That
 is what makes them informative on imbalanced data, and what makes them
 impossible to transfer between datasets.
 
-| Measure                | Formula        | Also known as             |
+| Metric                 | Formula        | Also known as             |
 |------------------------|----------------|---------------------------|
 | `precision`            | TP / (TP + FP) | PPV                       |
 | `npv`                  | TN / (TN + FN) | negative predictive value |
@@ -75,7 +75,7 @@ impossible to transfer between datasets.
 autoplot(points, c("precision", "npv"))
 ```
 
-![](measures-confusion-matrix_files/figure-html/unnamed-chunk-5-1.png)
+![](metrics-confusion-matrix_files/figure-html/unnamed-chunk-5-1.png)
 
 The precision-recall curve is `precision` against `sensitivity` - one
 column-wise rate against one row-wise rate. See [balanced and imbalanced
@@ -83,7 +83,7 @@ data](https://evalclass.github.io/precrec/articles/howto-imbalanced-data.md).
 
 ## How much gets flagged
 
-| Measure                   | Formula         | Also known as                |
+| Metric                    | Formula         | Also known as                |
 |---------------------------|-----------------|------------------------------|
 | `predicted_positive_rate` | (TP + FP) / all | rate of positive predictions |
 | `predicted_negative_rate` | (TN + FN) / all | rate of negative predictions |
@@ -100,11 +100,11 @@ ppr <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
 autoplot(ppr, "predicted_positive_rate")
 ```
 
-![](measures-confusion-matrix_files/figure-html/unnamed-chunk-6-1.png)
+![](metrics-confusion-matrix_files/figure-html/unnamed-chunk-6-1.png)
 
 ## Leaving out the true negatives
 
-| Measure | Formula | Also known as |
+| Metric | Formula | Also known as |
 |----|----|----|
 | `jaccard` | TP / (TP + FP + FN) | Jaccard index, critical success index, threat score |
 
@@ -153,7 +153,7 @@ knitr::kable(data.frame(
 
 Forecast verification calls the same quantity the critical success index
 or threat score, for the same reason: a rare event has so many true
-negatives that any measure counting them reports mostly the rarity.
+negatives that any metric counting them reports mostly the rarity.
 
 ## Undefined ends
 
@@ -166,6 +166,6 @@ dataset with no positives at all.
 ## Next
 
 - [Agreement and
-  balance](https://evalclass.github.io/precrec/articles/measures-agreement.md)
+  balance](https://evalclass.github.io/precrec/articles/metrics-agreement.md)
 - [Ranking and
-  cost](https://evalclass.github.io/precrec/articles/measures-ranking-cost.md)
+  cost](https://evalclass.github.io/precrec/articles/metrics-ranking-cost.md)

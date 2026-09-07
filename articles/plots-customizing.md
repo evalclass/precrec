@@ -90,7 +90,7 @@ ggplot(subset(mdf, curvetype == "PRC"), aes(x = x, y = y, color = modname)) +
 
 ## Getting the grob
 
-Multi-panel output - both curve types at once, or several measures - is
+Multi-panel output - both curve types at once, or several metrics - is
 assembled from separate plots. `ret_grob = TRUE` returns that assembled
 object instead of drawing it, for placing in a larger layout.
 

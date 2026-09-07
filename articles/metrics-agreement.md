@@ -16,7 +16,7 @@ points <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
 
 ## Balanced accuracy and F-score
 
-| Measure             | Formula                               | Range  |
+| Metric              | Formula                               | Range  |
 |---------------------|---------------------------------------|--------|
 | `balanced_accuracy` | (sensitivity + specificity) / 2       | 0 to 1 |
 | `fscore`            | harmonic mean of precision and recall | 0 to 1 |
@@ -29,7 +29,7 @@ majority class cannot carry it on its own.
 autoplot(points, c("balanced_accuracy", "fscore"))
 ```
 
-![](measures-agreement_files/figure-html/unnamed-chunk-3-1.png)
+![](metrics-agreement_files/figure-html/unnamed-chunk-3-1.png)
 
 `fscore` is the F-beta score and defaults to F1. `beta` weights recall
 against precision: `beta = 2` counts recall twice as heavily,
@@ -42,9 +42,9 @@ f2 <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
 )
 ```
 
-## Correlation-like measures
+## Correlation-like metrics
 
-| Measure | Formula                             | Range   |
+| Metric  | Formula                             | Range   |
 |---------|-------------------------------------|---------|
 | `mcc`   | correlation of prediction and truth | -1 to 1 |
 | `kappa` | agreement above chance              | -1 to 1 |
@@ -59,14 +59,14 @@ these margins would reach by chance.
 autoplot(points, c("mcc", "kappa"))
 ```
 
-![](measures-agreement_files/figure-html/unnamed-chunk-5-1.png)
+![](metrics-agreement_files/figure-html/unnamed-chunk-5-1.png)
 
 Both can go negative, meaning worse than chance. Their plots are drawn
 on a -1 to 1 axis for that reason.
 
 ## Informedness and markedness
 
-| Measure        | Formula                       | Range   |
+| Metric         | Formula                       | Range   |
 |----------------|-------------------------------|---------|
 | `informedness` | sensitivity + specificity - 1 | -1 to 1 |
 | `markedness`   | precision + NPV - 1           | -1 to 1 |
@@ -80,11 +80,11 @@ over the predicted classes. Their geometric mean is the MCC.
 autoplot(points, c("informedness", "markedness"))
 ```
 
-![](measures-agreement_files/figure-html/unnamed-chunk-6-1.png)
+![](metrics-agreement_files/figure-html/unnamed-chunk-6-1.png)
 
 ## Skill scores
 
-| Measure    | Formula                                    | Range        |
+| Metric     | Formula                                    | Range        |
 |------------|--------------------------------------------|--------------|
 | `roc_dist` | distance to the perfect point in ROC space | 0 to sqrt(2) |
 | `sedi`     | symmetric extremal dependence index        | -1 to 1      |
@@ -100,11 +100,11 @@ skill <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
 autoplot(skill, c("roc_dist", "sedi"))
 ```
 
-![](measures-agreement_files/figure-html/unnamed-chunk-7-1.png)
+![](metrics-agreement_files/figure-html/unnamed-chunk-7-1.png)
 
 `roc_dist` is the straight-line distance from the point
 `(1 - specificity, sensitivity)` to the top-left corner of ROC space,
-where both are 1. It is the only measure on this page that is **better
+where both are 1. It is the only metric on this page that is **better
 when it is smaller**, and the only one whose maximum is `sqrt(2)` rather
 than 1. Picking the cutoff that minimizes it is one of the standard ways
 of choosing an operating point off a ROC curve.
@@ -125,7 +125,7 @@ head(subset(as.data.frame(skill), type == "sedi"), 4)
 #> 319 0.15 0.1912334      m1    1 sedi
 ```
 
-Both measures are undefined at the two ends of the ranking, where every
+Both metrics are undefined at the two ends of the ranking, where every
 prediction is one class: `roc_dist` is still finite there, and the four
 logarithms `sedi` needs are clamped away from 0 and 1 so that it is too.
 
@@ -140,7 +140,7 @@ asking.
 
 None of them replaces a curve: each still describes one cutoff, and the
 cutoff is a choice you have to justify. See [AUC and other curve
-summaries](https://evalclass.github.io/precrec/articles/measures-auc.md).
+summaries](https://evalclass.github.io/precrec/articles/metrics-auc.md).
 
 ## Undefined values
 
@@ -151,6 +151,6 @@ top and bottom of the ranking.
 ## Next
 
 - [Ranking and
-  cost](https://evalclass.github.io/precrec/articles/measures-ranking-cost.md)
+  cost](https://evalclass.github.io/precrec/articles/metrics-ranking-cost.md)
 - [AUC and other curve
-  summaries](https://evalclass.github.io/precrec/articles/measures-auc.md)
+  summaries](https://evalclass.github.io/precrec/articles/metrics-auc.md)

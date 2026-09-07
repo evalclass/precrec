@@ -92,7 +92,7 @@ autoplot(curves, "PRC", type = "p")
 
 ## Next
 
-- [Basic measure
-  plots](https://evalclass.github.io/precrec/articles/plots-basic-measures.md)
+- [Basic metric
+  plots](https://evalclass.github.io/precrec/articles/plots-basic-metrics.md)
 - [Partial
   curves](https://evalclass.github.io/precrec/articles/plots-partial-curves.md)

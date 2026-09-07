@@ -84,9 +84,9 @@ knitr::kable(subset(aucs, curvetypes == "PRC"))
 |:----|:---------|------:|:-----------|----------:|
 | 2   | m1       |     1 | PRC        | 0.7397716 |
 
-## Basic measures per cutoff
+## Basic metrics per cutoff
 
-`mode = "basic"` gives the per-cutoff measures rather than the curves.
+`mode = "basic"` gives the per-cutoff metrics rather than the curves.
 
 ``` r
 
@@ -104,7 +104,7 @@ head(as.data.frame(points))
 #> 6 0.25 16      m1    1 score
 ```
 
-The `x` column is the normalized rank and `y` the value of the measure
+The `x` column is the normalized rank and `y` the value of the metric
 named in `type`.
 
 ## Feeding ggplot2 directly
@@ -117,7 +117,7 @@ plots](https://evalclass.github.io/precrec/articles/plots-customizing.md).
 
 ## Next
 
-- [Measures
-  overview](https://evalclass.github.io/precrec/articles/measures-overview.md)
+- [Metrics
+  overview](https://evalclass.github.io/precrec/articles/metrics-overview.md)
 - [Plots
   overview](https://evalclass.github.io/precrec/articles/plots-overview.md)

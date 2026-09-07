@@ -69,7 +69,7 @@ items.
 [`mmdata()`](https://evalclass.github.io/precrec/reference/mmdata.md)
 for formatting input data.
 [`evalmod()`](https://evalclass.github.io/precrec/reference/evalmod.md)
-for calculation evaluation measures.
+for calculation evaluation metrics.
 
 ## Examples
 

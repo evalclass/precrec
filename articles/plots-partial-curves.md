@@ -98,6 +98,6 @@ knitr::kable(pauc(mpartial))
 ## Next
 
 - [AUC and other curve
-  summaries](https://evalclass.github.io/precrec/articles/measures-auc.md)
+  summaries](https://evalclass.github.io/precrec/articles/metrics-auc.md)
 - [Customizing
   plots](https://evalclass.github.io/precrec/articles/plots-customizing.md)

@@ -52,7 +52,7 @@ auc(curves, macro = TRUE, macro_weight = c("uniform", "prevalence"))
   of the data. The weighted rows are named `macro-average-weighted` to
   keep the two apart. The two agree on a balanced dataset.
 
-  For a ROC evaluation the two are the measures other packages call
+  For a ROC evaluation the two are the metrics other packages call
   `roc_aunu` and `roc_aunp` respectively.
 
 ## Value
@@ -62,7 +62,7 @@ The `auc` function returns a data frame with AUC scores.
 ## See also
 
 [`evalmod()`](https://evalclass.github.io/precrec/reference/evalmod.md)
-for generating `S3` objects with performance evaluation measures.
+for generating `S3` objects with performance evaluation metrics.
 [`pauc()`](https://evalclass.github.io/precrec/reference/pauc.md) for
 retrieving a dataset of pAUCs.
 [`average_precision()`](https://evalclass.github.io/precrec/reference/average_precision.md)

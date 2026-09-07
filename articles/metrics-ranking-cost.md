@@ -1,8 +1,8 @@
 # Ranking and cost
 
-Six measures that answer questions the confusion-matrix rates do not:
-how much better than random is this cutoff, how much does it cost, how
-much does it tell us. All six are opt-in through `metrics =`.
+Six metrics that answer questions the confusion-matrix rates do not: how
+much better than random is this cutoff, how much does it cost, how much
+does it tell us. All six are opt-in through `metrics =`.
 
 ``` r
 
@@ -14,16 +14,16 @@ samps <- create_sim_samples(1, 100, 100, "good_er")
 
 ## Lift and odds
 
-| Measure | Formula                                    | Range    |
-|---------|--------------------------------------------|----------|
-| `lift`  | sensitivity / rate of positive predictions | 0 upward |
-| `odds`  | (TP x TN) / (FN x FP)                      | 0 upward |
+| Metric | Formula                                    | Range    |
+|--------|--------------------------------------------|----------|
+| `lift` | sensitivity / rate of positive predictions | 0 upward |
+| `odds` | (TP x TN) / (FN x FP)                      | 0 upward |
 
 Lift is how many times better than random selection the cutoff is: a
 lift of 3 means the flagged group holds three times the share of
-positives the whole dataset does. It is the standard measure in
-marketing and screening, where the question is what to do with a limited
-review budget.
+positives the whole dataset does. It is the standard metric in marketing
+and screening, where the question is what to do with a limited review
+budget.
 
 The odds ratio is the odds of being positive among the flagged against
 the odds among the rest.
@@ -38,11 +38,11 @@ points <- evalmod(
 autoplot(points, "lift")
 ```
 
-![](measures-ranking-cost_files/figure-html/unnamed-chunk-3-1.png)
+![](metrics-ranking-cost_files/figure-html/unnamed-chunk-3-1.png)
 
 ## Likelihood ratios
 
-| Measure                     | Formula           | Range    |
+| Metric                      | Formula           | Range    |
 |-----------------------------|-------------------|----------|
 | `positive_likelihood_ratio` | sensitivity / FPR | 0 upward |
 | `negative_likelihood_ratio` | FNR / specificity | 0 upward |
@@ -60,9 +60,9 @@ Both are ratios of rates rather than of counts, so neither moves when
 the prevalence does. That is what lets a value measured on one
 population be carried to another, and it is also the catch: a cutoff
 with an excellent LR+ still flags mostly false positives if positives
-are rare enough. The measure that answers *that* question is precision,
+are rare enough. The metric that answers *that* question is precision,
 on the [confusion-matrix
-page](https://evalclass.github.io/precrec/articles/measures-confusion-matrix.md).
+page](https://evalclass.github.io/precrec/articles/metrics-confusion-matrix.md).
 
 ``` r
 
@@ -75,7 +75,7 @@ lrs <- evalmod(
 autoplot(lrs, "positive_likelihood_ratio")
 ```
 
-![](measures-ranking-cost_files/figure-html/unnamed-chunk-4-1.png)
+![](metrics-ranking-cost_files/figure-html/unnamed-chunk-4-1.png)
 
 ## Cost
 
@@ -98,14 +98,14 @@ costs <- evalmod(
 autoplot(costs, "cost")
 ```
 
-![](measures-ranking-cost_files/figure-html/unnamed-chunk-5-1.png)
+![](metrics-ranking-cost_files/figure-html/unnamed-chunk-5-1.png)
 
-The measure is not normalized, following `ROCR`, so its scale is the
+The metric is not normalized, following `ROCR`, so its scale is the
 scale of the weights you gave.
 
 ## Information
 
-| Measure | What it is                                               | Range    |
+| Metric  | What it is                                               | Range    |
 |---------|----------------------------------------------------------|----------|
 | `mi`    | Mutual information between prediction and truth, in bits | 0 to 1   |
 | `chisq` | Pearson chi-square of the 2x2 table, `n x mcc^2`         | 0 upward |
@@ -122,7 +122,7 @@ summary that is harder to game than any one of them.
 
 The RMSE part reads the values of the scores rather than their ranks, so
 `sar` needs scores that are probabilities between 0 and 1. Given
-anything else it warns and returns `NA`, and every other measure asked
+anything else it warns and returns `NA`, and every other metric asked
 for in the same call is still returned.
 
 ## Where values are undefined
@@ -146,6 +146,6 @@ ranking, where the 2x2 table has an empty cell.
 ## Next
 
 - [AUC and other curve
-  summaries](https://evalclass.github.io/precrec/articles/measures-auc.md)
-- [One measure against
+  summaries](https://evalclass.github.io/precrec/articles/metrics-auc.md)
+- [One metric against
   another](https://evalclass.github.io/precrec/articles/plots-metric-curve.md)

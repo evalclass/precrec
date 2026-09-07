@@ -46,7 +46,7 @@ two of them.
 ## See also
 
 [`evalmod()`](https://evalclass.github.io/precrec/reference/evalmod.md)
-for generating `S3` objects with performance evaluation measures.
+for generating `S3` objects with performance evaluation metrics.
 [`auc()`](https://evalclass.github.io/precrec/reference/auc.md) for the
 areas under the curves.
 

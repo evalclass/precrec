@@ -1,7 +1,7 @@
-# Basic measure plots
+# Basic metric plots
 
-`mode = "basic"` plots evaluation measures against the normalized rank
-of the scores - that is, against how far down the ranked list the cutoff
+`mode = "basic"` plots evaluation metrics against the normalized rank of
+the scores - that is, against how far down the ranked list the cutoff
 sits.
 
 ``` r
@@ -16,23 +16,23 @@ points <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
 
 ## Pick the panels
 
-Name the measures you want. Each becomes a panel.
+Name the metrics you want. Each becomes a panel.
 
 ``` r
 
 autoplot(points, c("sensitivity", "specificity", "precision"))
 ```
 
-![](plots-basic-measures_files/figure-html/unnamed-chunk-3-1.png)
+![](plots-basic-metrics_files/figure-html/unnamed-chunk-3-1.png)
 
 ``` r
 
 autoplot(points, c("mcc", "fscore"))
 ```
 
-![](plots-basic-measures_files/figure-html/unnamed-chunk-4-1.png)
+![](plots-basic-metrics_files/figure-html/unnamed-chunk-4-1.png)
 
-Called with no measures, you get all fourteen default panels at once,
+Called with no metrics, you get all fourteen default panels at once,
 which is useful for a first look and too dense for a report.
 
 ## Reading the x axis
@@ -47,20 +47,20 @@ sizes.
 
 ## Scores and labels
 
-Two extra panels show the data behind the measures rather than a
-measure: the score at each rank, and the observed label.
+Two extra panels show the data behind the metrics rather than a metric:
+the score at each rank, and the observed label.
 
 ``` r
 
 autoplot(points, c("score", "label"))
 ```
 
-![](plots-basic-measures_files/figure-html/unnamed-chunk-5-1.png)
+![](plots-basic-metrics_files/figure-html/unnamed-chunk-5-1.png)
 
 The label panel is the quickest way to see whether the positives really
 are concentrated at the top of the ranking.
 
-## Extra measures
+## Extra metrics
 
 Anything beyond the default fourteen is requested with `metrics =` and
 then plotted the same way.
@@ -74,22 +74,22 @@ extra <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
 autoplot(extra, c("fpr", "lift"))
 ```
 
-![](plots-basic-measures_files/figure-html/unnamed-chunk-6-1.png)
+![](plots-basic-metrics_files/figure-html/unnamed-chunk-6-1.png)
 
-Asking to plot a measure that was not calculated is an error that names
-the argument to add. See the [measures
-overview](https://evalclass.github.io/precrec/articles/measures-overview.md).
+Asking to plot a metric that was not calculated is an error that names
+the argument to add. See the [metrics
+overview](https://evalclass.github.io/precrec/articles/metrics-overview.md).
 
 ## Axis ranges
 
-Measures that can go negative - `mcc`, `kappa`, `informedness`,
+Metrics that can go negative - `mcc`, `kappa`, `informedness`,
 `markedness` and `label` - are drawn on a -1 to 1 axis. The rest use 0
 to 1, and the few with no natural bound (`lift`, `odds`, `chisq`,
 `cost`, `score`) are scaled to the data.
 
 ## Next
 
-- [One measure against
+- [One metric against
   another](https://evalclass.github.io/precrec/articles/plots-metric-curve.md)
-- [Measures
-  overview](https://evalclass.github.io/precrec/articles/measures-overview.md)
+- [Metrics
+  overview](https://evalclass.github.io/precrec/articles/metrics-overview.md)

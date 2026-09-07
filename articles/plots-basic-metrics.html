@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Plots overview • precrec</title>
+<title>Basic metric plots • precrec</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
 <link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
@@ -15,7 +15,7 @@
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Plots overview">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Basic metric plots">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -95,126 +95,92 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.svg" class="logo" alt=""><h1>Plots overview</h1>
+      <img src="../logo.svg" class="logo" alt=""><h1>Basic metric plots</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/evalclass/precrec/blob/main/vignettes/articles/plots-overview.Rmd" class="external-link"><code>vignettes/articles/plots-overview.Rmd</code></a></small>
-      <div class="d-none name"><code>plots-overview.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/evalclass/precrec/blob/main/vignettes/articles/plots-basic-metrics.Rmd" class="external-link"><code>vignettes/articles/plots-basic-metrics.Rmd</code></a></small>
+      <div class="d-none name"><code>plots-basic-metrics.Rmd</code></div>
     </div>
 
     
     
-<p>Every <code>precrec</code> object knows how to draw itself two
-ways.</p>
+<p><code>mode = "basic"</code> plots evaluation metrics against the
+normalized rank of the scores - that is, against how far down the ranked
+list the cutoff sits.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/evalclass/precrec" class="external-link">precrec</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">curves</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">points</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span>,</span>
+<span>  mode <span class="op">=</span> <span class="st">"basic"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
-<h2 id="plot-or-autoplot">plot or autoplot<a class="anchor" aria-label="anchor" href="#plot-or-autoplot"></a>
+<h2 id="pick-the-panels">Pick the panels<a class="anchor" aria-label="anchor" href="#pick-the-panels"></a>
 </h2>
-<table class="table">
-<colgroup>
-<col width="33%">
-<col width="33%">
-<col width="33%">
-</colgroup>
-<thead><tr class="header">
-<th>Function</th>
-<th>Draws with</th>
-<th>Use it when</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td><code><a href="../reference/plot.html">plot()</a></code></td>
-<td>base graphics</td>
-<td>You want a picture with no dependencies</td>
-</tr>
-<tr class="even">
-<td><code><a href="../reference/autoplot.html">autoplot()</a></code></td>
-<td><code>ggplot2</code></td>
-<td>You want to restyle, relabel or combine the result</td>
-</tr>
-</tbody>
-</table>
+<p>Name the metrics you want. Each becomes a panel.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">curves</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plots-overview_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="" width="672"></p>
-<p><code><a href="../reference/autoplot.html">autoplot()</a></code> returns a <code>ggplot</code> object, so
-anything you can do to a plot from <code>ggplot2</code> you can do to
-this one.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">points</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sensitivity"</span>, <span class="st">"specificity"</span>, <span class="st">"precision"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="plots-basic-metrics_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="" width="672"></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">curves</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plots-overview_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="672"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">points</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mcc"</span>, <span class="st">"fscore"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="plots-basic-metrics_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="672"></p>
+<p>Called with no metrics, you get all fourteen default panels at once,
+which is useful for a first look and too dense for a report.</p>
 </div>
 <div class="section level2">
-<h2 id="choosing-what-to-draw">Choosing what to draw<a class="anchor" aria-label="anchor" href="#choosing-what-to-draw"></a>
+<h2 id="reading-the-x-axis">Reading the x axis<a class="anchor" aria-label="anchor" href="#reading-the-x-axis"></a>
 </h2>
-<p>The second argument picks the curve or the metric.</p>
+<p>The x axis runs from 0 to 1 and is the fraction of the dataset above
+the cutoff. At x = 0 nothing is predicted positive; at x = 1 everything
+is. So the left edge is the strictest cutoff and the right edge the most
+permissive.</p>
+<p>This is what makes the panels comparable across datasets of different
+sizes.</p>
+</div>
+<div class="section level2">
+<h2 id="scores-and-labels">Scores and labels<a class="anchor" aria-label="anchor" href="#scores-and-labels"></a>
+</h2>
+<p>Two extra panels show the data behind the metrics rather than a
+metric: the score at each rank, and the observed label.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">curves</span>, <span class="st">"PRC"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plots-overview_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="672"></p>
-<p>For <code>mode = "basic"</code> objects it names metrics instead, one
-panel each. See <a href="plots-basic-metrics.html">basic metric
-plots</a>.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">points</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"score"</span>, <span class="st">"label"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="plots-basic-metrics_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="672"></p>
+<p>The label panel is the quickest way to see whether the positives
+really are concentrated at the top of the ranking.</p>
 </div>
 <div class="section level2">
-<h2 id="arguments-both-functions-share">Arguments both functions share<a class="anchor" aria-label="anchor" href="#arguments-both-functions-share"></a>
+<h2 id="extra-metrics">Extra metrics<a class="anchor" aria-label="anchor" href="#extra-metrics"></a>
 </h2>
-<table class="table">
-<thead><tr class="header">
-<th>Argument</th>
-<th>Effect</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td><code>type</code></td>
-<td>
-<code>"l"</code> lines, <code>"p"</code> points, <code>"b"</code>
-both</td>
-</tr>
-<tr class="even">
-<td><code>show_cb</code></td>
-<td>Draw the confidence band around an average curve</td>
-</tr>
-<tr class="odd">
-<td><code>raw_curves</code></td>
-<td>Draw every test set instead of the average</td>
-</tr>
-<tr class="even">
-<td><code>show_legend</code></td>
-<td>Show or hide the legend</td>
-</tr>
-<tr class="odd">
-<td><code>reduce_points</code></td>
-<td>Thin the points before drawing; on by default</td>
-</tr>
-</tbody>
-</table>
+<p>Anything beyond the default fourteen is requested with
+<code>metrics =</code> and then plotted the same way.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">curves</span>, <span class="st">"PRC"</span>, type <span class="op">=</span> <span class="st">"b"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plots-overview_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="" width="672"></p>
+<code class="sourceCode R"><span><span class="va">extra</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span>,</span>
+<span>  mode <span class="op">=</span> <span class="st">"basic"</span>, metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fpr"</span>, <span class="st">"lift"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">extra</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fpr"</span>, <span class="st">"lift"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="plots-basic-metrics_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="" width="672"></p>
+<p>Asking to plot a metric that was not calculated is an error that
+names the argument to add. See the <a href="metrics-overview.html">metrics overview</a>.</p>
 </div>
 <div class="section level2">
-<h2 id="the-four-pages">The four pages<a class="anchor" aria-label="anchor" href="#the-four-pages"></a>
+<h2 id="axis-ranges">Axis ranges<a class="anchor" aria-label="anchor" href="#axis-ranges"></a>
+</h2>
+<p>Metrics that can go negative - <code>mcc</code>, <code>kappa</code>,
+<code>informedness</code>, <code>markedness</code> and
+<code>label</code> - are drawn on a -1 to 1 axis. The rest use 0 to 1,
+and the few with no natural bound (<code>lift</code>, <code>odds</code>,
+<code>chisq</code>, <code>cost</code>, <code>score</code>) are scaled to
+the data.</p>
+</div>
+<div class="section level2">
+<h2 id="next">Next<a class="anchor" aria-label="anchor" href="#next"></a>
 </h2>
 <ul>
-<li>
-<a href="plots-roc-prc.html">ROC and precision-recall curves</a> -
-the main plot</li>
-<li>
-<a href="plots-basic-metrics.html">Basic metric plots</a> - metrics
-against normalized rank</li>
-<li>
-<a href="plots-metric-curve.html">One metric against another</a> -
-free-form pairs</li>
-<li>
-<a href="plots-confidence-bands.html">Confidence bands</a> and <a href="plots-partial-curves.html">partial curves</a> - the two
-variations</li>
+<li><a href="plots-metric-curve.html">One metric against
+another</a></li>
+<li><a href="metrics-overview.html">Metrics overview</a></li>
 </ul>
-<p>And <a href="plots-customizing.html">customizing plots</a> for
-changing what comes out.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
