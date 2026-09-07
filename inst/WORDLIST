@@ -91,6 +91,7 @@ sspoints
 svg
 sym
 testthat
+tibble
 TN
 TNR
 TP

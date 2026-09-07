@@ -33,6 +33,14 @@
   simulations. Both checks are in the test suite, the first as an
   independent implementation of the DeLong formula.
 
+* Add a website page comparing `precrec` with `ROCR`, `pROC`, `PRROC`,
+  `yardstick`, `scikit-learn` and `imbalanced-learn`: which to reach for,
+  what `precrec` does not do that they do, and the one place the numbers
+  disagree rather than the interfaces. The step estimator of the
+  precision-recall area, which most of them report, reads more than a tenth
+  high at two percent positives against the interpolated area `auc()`
+  returns, and the page computes that rather than claiming it.
+
 # precrec 0.20.0
 
 * Add `classification_report()`, the per-class table of precision, recall

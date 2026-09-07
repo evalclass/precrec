@@ -92,6 +92,7 @@ articles:
     - "articles/metrics-probability"
     - "articles/metrics-classification-report"
     - "articles/metrics-uncertainty"
+    - "articles/metrics-other-tools"
   - title: Plots
     navbar: ~
     contents:
@@ -151,6 +152,9 @@ navbar:
         href: articles/metrics-classification-report.html
       - text: Uncertainty from one test set
         href: articles/metrics-uncertainty.html
+      - text: -------
+      - text: Comparison with other tools
+        href: articles/metrics-other-tools.html
     plots:
       text: Plots
       menu:

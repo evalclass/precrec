@@ -102,3 +102,7 @@ These have their own functions rather than a column in the table above:
 - [Classification report](metrics-classification-report.html) -
   `classification_report()`, precision, recall and F-score per class at one
   operating point you choose
+
+Coming from another package? [Comparison with other
+tools](metrics-other-tools.html) maps the names across and shows where the
+numbers differ.
