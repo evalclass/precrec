@@ -36,7 +36,7 @@ distribution of the data. The weighted rows are named
 \code{macro-average-weighted} to keep the two apart. The two agree on a
 balanced dataset.
 
-For a ROC evaluation the two are the measures other packages call
+For a ROC evaluation the two are the metrics other packages call
 \code{roc_aunu} and \code{roc_aunp} respectively.}
 }
 \value{
@@ -155,7 +155,7 @@ auc(mccurves, macro_weight = "prevalence")
 }
 \seealso{
 \code{\link[=evalmod]{evalmod()}} for generating \code{S3} objects with
-performance evaluation measures. \code{\link[=pauc]{pauc()}} for retrieving
+performance evaluation metrics. \code{\link[=pauc]{pauc()}} for retrieving
 a dataset of pAUCs. \code{\link[=average_precision]{average_precision()}} for the step estimator of
 the area under the precision-recall curve.
 }

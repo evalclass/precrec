@@ -110,5 +110,5 @@ subset(
 \seealso{
 \code{\link[=prob_metrics_ci]{prob_metrics_ci()}} for the CIs of these metrics over multiple
 datasets. \code{\link[=evalmod]{evalmod()}} for generating \code{S3} objects with
-performance evaluation measures. \code{\link[=mmdata]{mmdata()}} for formatting input data.
+performance evaluation metrics. \code{\link[=mmdata]{mmdata()}} for formatting input data.
 }

@@ -26,7 +26,7 @@
 #'   falls between two of them.
 #'
 #' @seealso [evalmod()] for generating `S3` objects with performance
-#'   evaluation measures. [auc()] for the areas under the curves.
+#'   evaluation metrics. [auc()] for the areas under the curves.
 #'
 #' @examples
 #'

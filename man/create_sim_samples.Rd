@@ -72,5 +72,5 @@ str(samps3)
 }
 \seealso{
 \code{\link[=mmdata]{mmdata()}} for formatting input data.
-\code{\link[=evalmod]{evalmod()}} for calculation evaluation measures.
+\code{\link[=evalmod]{evalmod()}} for calculation evaluation metrics.
 }

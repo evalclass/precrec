@@ -8,7 +8,7 @@
 #'
 #'   | **Function**           | **Description**                                            |
 #'   |------------------------|------------------------------------------------------------|
-#'   | [evalmod()]            | Main function to calculate evaluation measures             |
+#'   | [evalmod()]            | Main function to calculate evaluation metrics             |
 #'   | [mmdata()]             | Reformat input data for performance evaluation calculation |
 #'   | [join_scores()]        | Join scores of multiple models into a list                 |
 #'   | [join_labels()]        | Join observed labels of multiple test datasets into a list |
@@ -23,20 +23,20 @@
 #'   |-------------------|-------------|----------------------------------------------------------------|
 #'   | `print`           | base        | Print the calculation results and the summary of the test data |
 #'   | [as.data.frame()] | base        | Convert a precrec object to a data frame                       |
-#'   | [plot()]          | graphics    | Plot performance evaluation measures                           |
-#'   | [autoplot()]      | ggplot2     | Plot performance evaluation measures with ggplot2              |
+#'   | [plot()]          | graphics    | Plot performance evaluation metrics                           |
+#'   | [autoplot()]      | ggplot2     | Plot performance evaluation metrics with ggplot2              |
 #'   | [fortify()]       | ggplot2     | Prepare a data frame for ggplot2                               |
 #'   | [auc()]           | precrec     | Make a data frame with AUC scores                              |
 #'   | [part()]          | precrec     | Calculate partial curves and partial AUC scores                |
 #'   | [pauc()]          | precrec     | Make a data frame with pAUC scores                             |
 #'   | [auc_ci()]        | precrec     | Calculate confidence intervals of AUC scores                   |
 #'
-#' @section Performance measure calculations:
+#' @section Performance metric calculations:
 #' The [evalmod()] function calculates ROC and Precision-Recall
 #'   curves and returns an `S3` object. The generated `S3` object can
 #'   be used with several different `S3` generics, such as `print` and
 #'   [plot()]. The [evalmod()] function can also
-#'   calculate basic evaluation measures - error rate, accuracy, specificity,
+#'   calculate basic evaluation metrics - error rate, accuracy, specificity,
 #'   sensitivity, precision, Matthews correlation coefficient, F-score,
 #'   balanced accuracy, negative predictive value, informedness, markedness,
 #'   and Cohen's kappa.
@@ -72,7 +72,7 @@
 #' precision-recall curve, and [prbe()] the precision-recall break-even
 #' point.
 #'
-#' @section Probability-based measures:
+#' @section Probability-based metrics:
 #' [prob_metrics()] calculates the Brier score and the log loss of
 #' prediction scores that are probabilities, and [prob_metrics_ci()]
 #' returns their confidence intervals over multiple test datasets.

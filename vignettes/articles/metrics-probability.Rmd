@@ -101,11 +101,11 @@ Reporting both is reasonable, and they answer different questions.
 ## Also available per cutoff
 
 `sar` averages accuracy, the ROC area and one minus the RMSE into a single
-per-cutoff measure. It is on the [ranking and
-cost](measures-ranking-cost.html) page, and it needs probabilities for the
+per-cutoff metric. It is on the [ranking and
+cost](metrics-ranking-cost.html) page, and it needs probabilities for the
 same reason these do.
 
 ## Next
 
-- [AUC and other curve summaries](measures-auc.html)
-- [Measures overview](measures-overview.html)
+- [AUC and other curve summaries](metrics-auc.html)
+- [Metrics overview](metrics-overview.html)

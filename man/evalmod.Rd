@@ -2,7 +2,7 @@
 % Please edit documentation in R/main_evalmod.R
 \name{evalmod}
 \alias{evalmod}
-\title{Evaluate models and calculate performance evaluation measures}
+\title{Evaluate models and calculate performance evaluation metrics}
 \usage{
 evalmod(
   mdat,
@@ -46,7 +46,7 @@ when \code{mdat} is unspecified.
 In that case, both \code{scores} and \code{labels} must be
 at least specified.}
 
-\item{mode}{A string that specifies the types of evaluation measures
+\item{mode}{A string that specifies the types of evaluation metrics
 that the \code{evalmod} function calculates.
 \describe{
 \item{"rocprc"}{ROC and Precision-Recall curves}
@@ -138,7 +138,7 @@ function does with a dataset in which every label belongs to the same
 class.
 \describe{
 \item{"error"}{Raise an error (default)}
-\item{"na"}{Warn, and return \code{NA} for the measures that
+\item{"na"}{Warn, and return \code{NA} for the metrics that
 are undefined}
 }
 ROC and precision-recall curves are undefined for such a dataset, so
@@ -148,19 +148,19 @@ warns and calculates what it can, because accuracy and error rate are
 still defined.}
 
 \item{metrics}{A character vector that names the basic evaluation
-measures to calculate in addition to the default set, or the string
-\code{"all"} for every measure \code{precrec} knows. The default \code{NULL} is
-the fourteen measures \code{evalmod} has always returned: \code{score},
+metrics to calculate in addition to the default set, or the string
+\code{"all"} for every metric \code{precrec} knows. The default \code{NULL} is
+the fourteen metrics \code{evalmod} has always returned: \code{score},
 \code{label}, \code{error}, \code{accuracy}, \code{specificity},
 \code{sensitivity}, \code{precision}, \code{mcc}, \code{fscore},
 \code{balanced_accuracy}, \code{npv}, \code{informedness},
 \code{markedness} and \code{kappa}.
 
-The measures that can be added are \code{fpr}, \code{fnr},
+The metrics that can be added are \code{fpr}, \code{fnr},
 \code{false_discovery_rate}, \code{false_omission_rate},
 \code{predicted_positive_rate}, \code{predicted_negative_rate},
 \code{lift}, \code{odds}, \code{mi}, \code{chisq}, \code{cost} and
-\code{sar}. They are the measures \code{ROCR} provides that \code{precrec}
+\code{sar}. They are the metrics \code{ROCR} provides that \code{precrec}
 did not, and each of them also answers to the identifier \code{ROCR}
 uses for it - \code{fall}, \code{miss}, \code{pcfall}, \code{pcmiss},
 \code{rpp}, \code{rnp} and \code{mutual_information} - and to its
@@ -168,7 +168,7 @@ standard abbreviation where it has one.
 
 \code{roc_dist} and \code{sedi} can be added on the same footing.
 \code{roc_dist} is the distance from \verb{(1 - specificity, sensitivity)}
-to the perfect corner of ROC space, and is the one measure here that
+to the perfect corner of ROC space, and is the one metric here that
 is better when it is smaller. \code{sedi} is the symmetric extremal
 dependence index, a skill score built to stay informative when the
 positive class is rare.
@@ -184,12 +184,12 @@ the diagnostic odds ratio, is their quotient.
 
 They are not calculated by default because each is another vector the
 size of the dataset, and because \code{plot} and \code{autoplot} draw
-one panel per measure the object holds. A measure that was not asked
+one panel per metric the object holds. A metric that was not asked
 for cannot be plotted; \code{metrics} is effective only when \code{mode}
 is set to \code{basic}.}
 
 \item{cost_fp}{A numeric value for the cost of a false positive, used
-by the \code{cost} measure. \code{cost} is not normalized, following
+by the \code{cost} metric. \code{cost} is not normalized, following
 \code{ROCR}: it is
 \code{cost_fp * FP / n + cost_fn * FN / n}, which with the default
 weights of \code{1} is the error rate. \code{cost_fp} is effective only
@@ -204,7 +204,7 @@ evaluation of a dataset with more than two classes; see \code{\link[=mmdata]{mmd
 }
 \value{
 The \code{evalmod} function returns an \code{S3} object
-that contains performance evaluation measures. The number of models and
+that contains performance evaluation metrics. The number of models and
 the number of datasets can be controlled by \code{modnames} and
 \code{dsids}. For example, the number of models is "single" and the number
 of test datasets is "multiple" when \code{modnames = c("m1", "m1", "m1")}
@@ -228,7 +228,7 @@ The objects contain ROC and Precision-Recall curves.\tabular{lll}{
 \item The \code{evalmod} function returns one of the following \code{S3}
 
 objects when \code{mode} is "basic".
-They contain the per-rank basic evaluation measures; error rate,
+They contain the per-rank basic evaluation metrics; error rate,
 accuracy, specificity, sensitivity, precision, Matthews correlation
 coefficient, F-score, balanced accuracy, negative predictive value,
 informedness, markedness, and Cohen's kappa.\tabular{lll}{
@@ -248,7 +248,7 @@ and 'as.data.frame'.
 \description{
 The \code{evalmod} function calculates ROC and Precision-Recall curves for
 specified prediction scores and binary labels. It also calculate several
-basic performance evaluation measures, such as accuracy, error rate, and
+basic performance evaluation metrics, such as accuracy, error rate, and
 precision, by specifying \code{mode} as "basic".
 }
 \examples{
@@ -264,7 +264,7 @@ data(P10N10)
 sscurves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 sscurves
 
-## Generate an sspoints object that contains basic evaluation measures
+## Generate an sspoints object that contains basic evaluation metrics
 sspoints <- evalmod(
   mode = "basic", scores = P10N10$scores,
   labels = P10N10$labels
@@ -286,7 +286,7 @@ mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 mscurves <- evalmod(mdat)
 mscurves
 
-## Generate an mspoints object that contains basic evaluation measures
+## Generate an mspoints object that contains basic evaluation metrics
 mspoints <- evalmod(mdat, mode = "basic")
 mspoints
 
@@ -306,7 +306,7 @@ mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 smcurves <- evalmod(mdat)
 smcurves
 
-## Generate an smpoints object that contains basic evaluation measures
+## Generate an smpoints object that contains basic evaluation metrics
 smpoints <- evalmod(mdat, mode = "basic")
 smpoints
 
@@ -326,7 +326,7 @@ mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 mmcurves <- evalmod(mdat)
 mmcurves
 
-## Generate an mmpoints object that contains basic evaluation measures
+## Generate an mmpoints object that contains basic evaluation metrics
 mmpoints <- evalmod(mdat, mode = "basic")
 mmpoints
 
@@ -349,7 +349,7 @@ cvdat <- mmdata(
 cvcurves <- evalmod(cvdat)
 cvcurves
 
-## Generate an mmpoints object that contains basic evaluation measures
+## Generate an mmpoints object that contains basic evaluation metrics
 cvpoints <- evalmod(cvdat, mode = "basic")
 cvpoints
 

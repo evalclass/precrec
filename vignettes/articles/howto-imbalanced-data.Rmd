@@ -76,4 +76,4 @@ the two plots above cannot be compared by eye alone.
 ## Next
 
 - [Evaluate more than two classes](howto-multiclass.html)
-- [AUC and other curve summaries](measures-auc.html)
+- [AUC and other curve summaries](metrics-auc.html)

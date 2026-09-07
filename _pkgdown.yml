@@ -76,21 +76,21 @@ articles:
     - "articles/howto-large-datasets"
     - "articles/howto-results-as-data"
     - "articles/howto-imbalanced-data"
-  - title: Measures
+  - title: Metrics
     navbar: ~
     contents:
-    - "articles/measures-overview"
-    - "articles/measures-confusion-matrix"
-    - "articles/measures-agreement"
-    - "articles/measures-ranking-cost"
-    - "articles/measures-auc"
-    - "articles/measures-probability"
+    - "articles/metrics-overview"
+    - "articles/metrics-confusion-matrix"
+    - "articles/metrics-agreement"
+    - "articles/metrics-ranking-cost"
+    - "articles/metrics-auc"
+    - "articles/metrics-probability"
   - title: Plots
     navbar: ~
     contents:
     - "articles/plots-overview"
     - "articles/plots-roc-prc"
-    - "articles/plots-basic-measures"
+    - "articles/plots-basic-metrics"
     - "articles/plots-metric-curve"
     - "articles/plots-confidence-bands"
     - "articles/plots-partial-curves"
@@ -98,7 +98,7 @@ articles:
 
 navbar:
   structure:
-    left: [intro, howto, measures, plots, reference, news]
+    left: [intro, howto, metrics, plots, reference, news]
     right: [search, github]
   components:
     intro:
@@ -123,23 +123,23 @@ navbar:
         href: articles/howto-results-as-data.html
       - text: Balanced and imbalanced data
         href: articles/howto-imbalanced-data.html
-    measures:
-      text: Measures
+    metrics:
+      text: Metrics
       menu:
-      - text: Measures overview
-        href: articles/measures-overview.html
+      - text: Metrics overview
+        href: articles/metrics-overview.html
       - text: -------
       - text: Confusion-matrix rates
-        href: articles/measures-confusion-matrix.html
+        href: articles/metrics-confusion-matrix.html
       - text: Agreement and balance
-        href: articles/measures-agreement.html
+        href: articles/metrics-agreement.html
       - text: Ranking and cost
-        href: articles/measures-ranking-cost.html
+        href: articles/metrics-ranking-cost.html
       - text: -------
       - text: AUC and other curve summaries
-        href: articles/measures-auc.html
+        href: articles/metrics-auc.html
       - text: Probability-based metrics
-        href: articles/measures-probability.html
+        href: articles/metrics-probability.html
     plots:
       text: Plots
       menu:
@@ -148,9 +148,9 @@ navbar:
       - text: -------
       - text: ROC and precision-recall curves
         href: articles/plots-roc-prc.html
-      - text: Basic measure plots
-        href: articles/plots-basic-measures.html
-      - text: One measure against another
+      - text: Basic metric plots
+        href: articles/plots-basic-metrics.html
+      - text: One metric against another
         href: articles/plots-metric-curve.html
       - text: -------
       - text: Confidence bands
@@ -159,3 +159,12 @@ navbar:
         href: articles/plots-partial-curves.html
       - text: Customizing plots
         href: articles/plots-customizing.html
+
+redirects:
+  - ["articles/measures-overview.html", "articles/metrics-overview.html"]
+  - ["articles/measures-confusion-matrix.html", "articles/metrics-confusion-matrix.html"]
+  - ["articles/measures-agreement.html", "articles/metrics-agreement.html"]
+  - ["articles/measures-ranking-cost.html", "articles/metrics-ranking-cost.html"]
+  - ["articles/measures-auc.html", "articles/metrics-auc.html"]
+  - ["articles/measures-probability.html", "articles/metrics-probability.html"]
+  - ["articles/plots-basic-measures.html", "articles/plots-basic-metrics.html"]

@@ -82,6 +82,6 @@ mm_auc_ci
 }
 \seealso{
 \code{\link[=evalmod]{evalmod()}} for generating \code{S3} objects with
-performance evaluation measures. \code{\link[=auc]{auc()}} for retrieving a dataset
+performance evaluation metrics. \code{\link[=auc]{auc()}} for retrieving a dataset
 of AUCs.
 }

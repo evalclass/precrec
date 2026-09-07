@@ -119,7 +119,7 @@ test_that("print sspoints", {
     labels = P10N10$labels
   )
 
-  expect_output(print(points), "=== Basic performance evaluation measures ===")
+  expect_output(print(points), "=== Basic performance evaluation metrics ===")
   expect_output(print(points), "=== Input data ===")
 })
 
@@ -127,7 +127,7 @@ test_that("print mspoints", {
   mdat <- pr_create_msdat()
   points <- evalmod(mdat, mode = "basic")
 
-  expect_output(print(points), "=== Basic performance evaluation measures ===")
+  expect_output(print(points), "=== Basic performance evaluation metrics ===")
   expect_output(print(points), "=== Input data ===")
 })
 
@@ -135,7 +135,7 @@ test_that("print smpoints", {
   mdat <- pr_create_smdat()
   points <- evalmod(mdat, mode = "basic")
 
-  expect_output(print(points), "=== Basic performance evaluation measures ===")
+  expect_output(print(points), "=== Basic performance evaluation metrics ===")
   expect_output(print(points), "=== Input data ===")
 })
 
@@ -143,7 +143,7 @@ test_that("print mmpoints", {
   mdat <- pr_create_mmdat()
   points <- evalmod(mdat, mode = "basic")
 
-  expect_output(print(points), "=== Basic performance evaluation measures ===")
+  expect_output(print(points), "=== Basic performance evaluation metrics ===")
   expect_output(print(points), "=== Input data ===")
 })
 

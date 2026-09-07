@@ -273,9 +273,9 @@ Rcpp::List calc_uauc_frank(unsigned np, unsigned nn,
 
 /*
 ##############################################
- Name: calc_basic_measures
- R file: pl4_calc_measures.R
- R func: calc_measures
+ Name: calc_basic_metrics
+ R file: pl4_calc_metrics.R
+ R func: calc_metrics
 ##############################################
 */
 
@@ -283,14 +283,14 @@ Rcpp::List calc_uauc_frank(unsigned np, unsigned nn,
 // Calculate confusion matrices for all ranks
 //
 // [[Rcpp::export]]
-Rcpp::List calc_basic_measures(int np,
+Rcpp::List calc_basic_metrics(int np,
                                int nn,
                                const Rcpp::NumericVector& tps,
                                const Rcpp::NumericVector& fps,
                                const Rcpp::NumericVector& tns,
                                const Rcpp::NumericVector& fns,
                                double beta = 1.0,
-                               bool extra_measures = true) {
+                               bool extra_metrics = true) {
   // Variables
   Rcpp::List ret_val;
   Rcpp::DataFrame df;
@@ -309,7 +309,7 @@ Rcpp::List calc_basic_measures(int np,
   // The curve pipeline reads specificity, sensitivity and precision and
   // nothing else, so it asks for the measures below to be left out rather
   // than filling five more vectors the length of the input for nobody
-  const unsigned n_extra = extra_measures ? n : 0;
+  const unsigned n_extra = extra_metrics ? n : 0;
   std::vector<double> bacc(n_extra);   // Balanced accuracy
   std::vector<double> npv(n_extra);    // Negative predictive value
   std::vector<double> infm(n_extra);   // Informedness (Youden's J)
@@ -355,7 +355,7 @@ Rcpp::List calc_basic_measures(int np,
     } else {
       sn[i] = tps[i] / d_np;
     }
-    if (extra_measures) {
+    if (extra_metrics) {
       if (no_nn || no_np) {
         bacc[i] = ::NA_REAL;
         infm[i] = ::NA_REAL;
@@ -376,7 +376,7 @@ Rcpp::List calc_basic_measures(int np,
     if (i > 0) {
       prec[i] = tps[i] / tpfp;
     }
-    if (extra_measures && i + 1 < n) {
+    if (extra_metrics && i + 1 < n) {
       npv[i] = tns[i] / tnfn;
     }
 
@@ -389,7 +389,7 @@ Rcpp::List calc_basic_measures(int np,
     fscore[i] = (beta2_1 * tps[i])
       / (beta2_1 * tps[i] + beta2 * fns[i] + fps[i]);
 
-    if (extra_measures) {
+    if (extra_metrics) {
       // Cohen's kappa: observed agreement against the agreement two raters
       // with these margins would reach by chance
       const double pe = ((tpfp * tpfn) + (tnfn * tnfp)) / (d_all * d_all);
@@ -405,7 +405,7 @@ Rcpp::List calc_basic_measures(int np,
 
   // Update the precision value of the highest rank
   prec[0] = prec[1];
-  if (extra_measures) {
+  if (extra_metrics) {
     // The NPV of the lowest rank is undefined in the same way, and the two
     // markedness values built from the two patched cells follow
     npv[n - 1] = npv[n - 2];
@@ -422,7 +422,7 @@ Rcpp::List calc_basic_measures(int np,
   df["precision"] = prec;
   df["mcc"] = mcc;
   df["fscore"] = fscore;
-  if (extra_measures) {
+  if (extra_metrics) {
     df["balanced_accuracy"] = bacc;
     df["npv"] = npv;
     df["informedness"] = infm;

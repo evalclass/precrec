@@ -8,7 +8,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-The calculations are C++ and handle large datasets without special measures.
+The calculations are C++ and handle large datasets without special metrics.
 Plotting is where the time goes, and there are two switches for it.
 
 ```{r}
@@ -66,11 +66,11 @@ mdat <- mmdata(samps[["scores"]], samps[["labels"]], dsids = samps[["dsids"]])
 curves_coarse <- evalmod(mdat, x_bins = 100)
 ```
 
-## Only the measures you need
+## Only the metrics you need
 
-In `mode = "basic"`, each extra measure is another vector the length of the
+In `mode = "basic"`, each extra metric is another vector the length of the
 dataset. The default set is fourteen; anything beyond it is opt-in through
-`metrics =`. See the [measures overview](measures-overview.html).
+`metrics =`. See the [metrics overview](metrics-overview.html).
 
 ## Next
 

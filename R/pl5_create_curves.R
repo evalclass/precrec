@@ -6,7 +6,7 @@ create_curves <- function(pevals, scores = NULL, labels = NULL,
   # === Validate input arguments ===
   # Create pevals from scores and labels if pevals is missing
   pevals <- .create_src_obj(
-    pevals, "pevals", calc_measures, scores, labels,
+    pevals, "pevals", calc_metrics, scores, labels,
     ...
   )
 
@@ -81,7 +81,7 @@ create_prc <- function(pevals, scores = NULL, labels = NULL, x_bins = 1000,
 # at each cutoff weighted by the recall it gained over the one before. The
 # sum starts at the second point, so the precision of the empty prediction
 # set - which is 0/0, and which every tool defines differently - never enters
-# it. That is the whole reason the measure is defined this way.
+# it. That is the whole reason the metric is defined this way.
 #
 # It is deliberately not the area under the curve. `create_prc_curve()`
 # interpolates between the raw points the way Davis and Goadrich showed is
@@ -90,7 +90,7 @@ create_prc <- function(pevals, scores = NULL, labels = NULL, x_bins = 1000,
 # reported because other packages report it, and because the gap between the
 # two numbers is worth being able to see.
 #
-# Returns NA for a ROC curve: the measure is defined on precision against
+# Returns NA for a ROC curve: the metric is defined on precision against
 # recall, and `.create_curve()` builds both from the same code path.
 #
 .calc_average_precision <- function(pb, x_name, y_name) {
@@ -117,7 +117,7 @@ create_prc <- function(pevals, scores = NULL, labels = NULL, x_bins = 1000,
   # === Validate input arguments ===
   # Create pevals from scores and labels if pevals is missing
   pevals <- .create_src_obj(
-    pevals, "pevals", calc_measures, scores, labels,
+    pevals, "pevals", calc_metrics, scores, labels,
     ...
   )
   .validate_x_bins(x_bins, allow_zero = TRUE)
@@ -329,7 +329,7 @@ create_prc <- function(pevals, scores = NULL, labels = NULL, x_bins = 1000,
     "modname", "dsid", "keep_fmdat", "keep_cmats"
   )
   .validate_basic(
-    x, "curves", "calc_measures", item_names, attr_names,
+    x, "curves", "calc_metrics", item_names, attr_names,
     arg_names
   )
 

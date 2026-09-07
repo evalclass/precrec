@@ -37,7 +37,7 @@
 #'   input with calculated pAUCs and standardized pAUCs.
 #'
 #' @seealso [evalmod()] for generating `S3` objects with
-#'   performance evaluation measures. [pauc()] for retrieving
+#'   performance evaluation metrics. [pauc()] for retrieving
 #'   a dataset of pAUCs.
 #'
 #' @examples

@@ -29,8 +29,8 @@ calc_uauc_frank <- function(np, nn, scores, olabs, na_last, ties_method, frank) 
     .Call(`_precrec_calc_uauc_frank`, np, nn, scores, olabs, na_last, ties_method, frank)
 }
 
-calc_basic_measures <- function(np, nn, tps, fps, tns, fns, beta = 1.0, extra_measures = TRUE) {
-    .Call(`_precrec_calc_basic_measures`, np, nn, tps, fps, tns, fns, beta, extra_measures)
+calc_basic_metrics <- function(np, nn, tps, fps, tns, fns, beta = 1.0, extra_metrics = TRUE) {
+    .Call(`_precrec_calc_basic_metrics`, np, nn, tps, fps, tns, fns, beta, extra_metrics)
 }
 
 create_roc_curve <- function(tps, fps, sp, sn, x_bins) {

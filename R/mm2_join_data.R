@@ -15,7 +15,7 @@
 #' @return The `join_scores` function returns a list that
 #'   contains all combined score data.
 #'
-#' @seealso [evalmod()] for calculation evaluation measures.
+#' @seealso [evalmod()] for calculation evaluation metrics.
 #'   [mmdata()] for formatting input data.
 #'   [join_labels()] for formatting labels with multiple datasets.
 #'
@@ -88,7 +88,7 @@ join_scores <- function(..., byrow = FALSE, chklen = TRUE) {
 #' @return The `join_labels` function returns a list that
 #'   contains all combined label data.
 #'
-#' @seealso [evalmod()] for calculation evaluation measures.
+#' @seealso [evalmod()] for calculation evaluation metrics.
 #'   [mmdata()] for formatting input data.
 #'   [join_scores()] for formatting scores with multiple datasets.
 #'

@@ -27,7 +27,7 @@
 #' @return The `auc_ci` function returns a dataframe of AUC CIs.
 #'
 #' @seealso [evalmod()] for generating `S3` objects with
-#'   performance evaluation measures. [auc()] for retrieving a dataset
+#'   performance evaluation metrics. [auc()] for retrieving a dataset
 #'   of AUCs.
 #'
 #' @examples

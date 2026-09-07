@@ -69,7 +69,7 @@ ap3_create_mmpoints <- function(raw_curves = FALSE) {
   evalmod(mdat, mode = "basic", raw_curves = raw_curves)
 }
 
-ap3_test_basic_measures <- function(curves, ptitle, check_def_matrix = FALSE,
+ap3_test_basic_metrics <- function(curves, ptitle, check_def_matrix = FALSE,
                                     raw_curves = FALSE, ...) {
   if (check_def_matrix) {
     p <- ggplot2::autoplot(curves,
@@ -137,9 +137,9 @@ test_that("autoplot sspoints", {
     mode = "basic", scores = P10N10$scores,
     labels = P10N10$labels
   )
-  ap3_test_basic_measures(points, "sspoints", check_def_matrix = TRUE)
-  ap3_test_basic_measures(points, "sspoints_l", type = "l")
-  ap3_test_basic_measures(points, "sspoints_b", type = "b")
+  ap3_test_basic_metrics(points, "sspoints", check_def_matrix = TRUE)
+  ap3_test_basic_metrics(points, "sspoints_l", type = "l")
+  ap3_test_basic_metrics(points, "sspoints_b", type = "b")
 })
 
 test_that("autoplot for multiple sspoints returns grob", {
@@ -164,10 +164,10 @@ test_that("autoplot mspoints", {
 
   points <- ap3_create_mspoints()
 
-  ap3_test_basic_measures(points, "mspoints", check_def_matrix = TRUE)
-  ap3_test_basic_measures(points, "mspoints_l", type = "l")
-  ap3_test_basic_measures(points, "mspoints_b", type = "b")
-  ap3_test_basic_measures(points, "mspoints_legend", show_legend = TRUE)
+  ap3_test_basic_metrics(points, "mspoints", check_def_matrix = TRUE)
+  ap3_test_basic_metrics(points, "mspoints_l", type = "l")
+  ap3_test_basic_metrics(points, "mspoints_b", type = "b")
+  ap3_test_basic_metrics(points, "mspoints_legend", show_legend = TRUE)
 })
 
 test_that("autoplot for multiple mspoints returns grob", {
@@ -191,13 +191,13 @@ test_that("autoplot smpoints", {
 
   points <- ap3_create_smpoints()
 
-  ap3_test_basic_measures(points, "smpoints", check_def_matrix = TRUE)
-  ap3_test_basic_measures(points, "smpoints_l", type = "l")
-  ap3_test_basic_measures(points, "smpoints_b", type = "b")
-  ap3_test_basic_measures(points, "smpoints_cb", show_cb = FALSE)
+  ap3_test_basic_metrics(points, "smpoints", check_def_matrix = TRUE)
+  ap3_test_basic_metrics(points, "smpoints_l", type = "l")
+  ap3_test_basic_metrics(points, "smpoints_b", type = "b")
+  ap3_test_basic_metrics(points, "smpoints_cb", show_cb = FALSE)
 
   points2 <- ap3_create_mmpoints(raw_curves = TRUE)
-  ap3_test_basic_measures(points2, "smpoints_raw_curves", raw_curves = TRUE)
+  ap3_test_basic_metrics(points2, "smpoints_raw_curves", raw_curves = TRUE)
 })
 
 test_that("autoplot for multiple smpoints returns grob", {
@@ -221,14 +221,14 @@ test_that("autoplot mmpoints", {
 
   points <- ap3_create_mmpoints()
 
-  ap3_test_basic_measures(points, "mmpoints", check_def_matrix = TRUE)
-  ap3_test_basic_measures(points, "mmpoints_l", ctype = "l")
-  ap3_test_basic_measures(points, "mmpoints_b", ctype = "b")
-  ap3_test_basic_measures(points, "mmpoints_cb", cshow_cb = TRUE)
-  ap3_test_basic_measures(points, "mmpoints_legend", cshow_legend = FALSE)
+  ap3_test_basic_metrics(points, "mmpoints", check_def_matrix = TRUE)
+  ap3_test_basic_metrics(points, "mmpoints_l", ctype = "l")
+  ap3_test_basic_metrics(points, "mmpoints_b", ctype = "b")
+  ap3_test_basic_metrics(points, "mmpoints_cb", cshow_cb = TRUE)
+  ap3_test_basic_metrics(points, "mmpoints_legend", cshow_legend = FALSE)
 
   points2 <- ap3_create_mmpoints(raw_curves = TRUE)
-  ap3_test_basic_measures(points2, "mmpoints_raw_curves", raw_curves = TRUE)
+  ap3_test_basic_metrics(points2, "mmpoints_raw_curves", raw_curves = TRUE)
 })
 
 

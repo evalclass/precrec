@@ -74,5 +74,5 @@ average_precision(mmcurves)
 \seealso{
 \code{\link[=auc]{auc()}} for the areas under the ROC and precision-recall curves.
 \code{\link[=prbe]{prbe()}} for the precision-recall break-even point. \code{\link[=evalmod]{evalmod()}} for
-generating \code{S3} objects with performance evaluation measures.
+generating \code{S3} objects with performance evaluation metrics.
 }

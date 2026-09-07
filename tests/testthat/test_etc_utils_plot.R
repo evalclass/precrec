@@ -1,7 +1,7 @@
 # ETC utils: plot helpers
 # Test .pmatch_curvetype_basic(vals)
 
-test_that(".pmatch_curvetype_basic() resolves the measure names", {
+test_that(".pmatch_curvetype_basic() resolves the metric names", {
   expect_equal(.pmatch_curvetype_basic("error"), "error")
   expect_equal(.pmatch_curvetype_basic("accuracy"), "accuracy")
   expect_equal(
@@ -78,7 +78,7 @@ test_that(".get_metric_title() reads a factor by its label, not its code", {
 
 # Test .metric_range(curvetype)
 
-test_that(".metric_range() picks out the measures that can go negative", {
+test_that(".metric_range() picks out the metrics that can go negative", {
   expect_equal(
     .metric_range(c("mcc", "informedness", "markedness", "kappa", "label")),
     rep("signed", 5)
@@ -91,7 +91,7 @@ test_that(".metric_range() picks out the measures that can go negative", {
   )
 })
 
-test_that(".metric_range() marks the unbounded measures as free", {
+test_that(".metric_range() marks the unbounded metrics as free", {
   expect_equal(.metric_range(c("score", "lift", "odds")), rep("free", 3))
 })
 

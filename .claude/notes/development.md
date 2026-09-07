@@ -93,7 +93,7 @@ inspection is still just `plot(x)` at the console.
 `tests/testthat/Rplots.pdf` is base-graphics test output, and is gitignored.
 
 Machine-independent assertions about plot structure also live in
-`test_etc_utils_autoplot.R` - panel counts, which measure each panel draws,
+`test_etc_utils_autoplot.R` - panel counts, which metric each panel draws,
 titles and axis labels. Prefer those for anything you can state directly;
 the snapshots are for catching what you did not think to assert.
 
@@ -109,9 +109,9 @@ README. Two things about it that have bitten:
   number, and never compare a `--quick` run against a full baseline.
 - **Regenerate `bench/baseline/develop.json` whenever a change alters what
   the package computes.** A stale baseline reports the documented cost of a
-  new measure as a regression, which looks exactly like a real one.
+  new metric as a regression, which looks exactly like a real one.
 
-`bench/run_rocr_parity.R` cross-checks the basic evaluation measures against
+`bench/run_rocr_parity.R` cross-checks the basic evaluation metrics against
 ROCR, which is the reference implementation for the ones added in 0.16.0.
 **ROCR is deliberately not a dependency, not even in `Suggests`** - install
 it yourself and the script runs, or it exits quietly. Where the two packages

@@ -36,7 +36,7 @@
 #'
 #' @seealso [auc()] for the areas under the ROC and precision-recall curves.
 #'   [prbe()] for the precision-recall break-even point. [evalmod()] for
-#'   generating `S3` objects with performance evaluation measures.
+#'   generating `S3` objects with performance evaluation metrics.
 #'
 #' @examples
 #'

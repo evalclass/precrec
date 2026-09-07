@@ -52,7 +52,7 @@ The \code{fortify} function takes one of the following \code{S3} objects.
    mmcurves \tab multiple \tab multiple \cr
 }
 
-\item Basic evaluation measures (mode = "basic")\tabular{lll}{
+\item Basic evaluation metrics (mode = "basic")\tabular{lll}{
    \strong{\code{S3} object} \tab \strong{# of models} \tab \strong{# of test datasets} \cr
    sspoints \tab single \tab single \cr
    mspoints \tab multiple \tab single \cr
@@ -76,7 +76,7 @@ contrast the raw curves with, so \code{sscurves} and \code{sspoints}, and likewi
 \item{reduce_points}{A Boolean value to decide whether the points should
 be reduced when \code{mode = "rocprc"}. The points are reduced according to
 \code{x_bins} of the \code{\link[=evalmod]{evalmod()}} function. The default values is \code{FALSE}.
-The basic evaluation measures are not reduced, so the argument has no
+The basic evaluation metrics are not reduced, so the argument has no
 effect for \code{sspoints}, \code{mspoints}, \code{smpoints} and \code{mmpoints}.}
 
 \item{...}{Not used by this method.}
@@ -124,7 +124,7 @@ p_prc <- ggplot(subset(ssdf, curvetype == "PRC"), aes(x = x, y = y))
 p_prc <- p_prc + geom_line()
 p_prc
 
-## Generate an sspoints object that contains basic evaluation measures
+## Generate an sspoints object that contains basic evaluation metrics
 sspoints <- evalmod(
   mode = "basic", scores = P10N10$scores,
   labels = P10N10$labels
@@ -172,7 +172,7 @@ p_prc <- ggplot(df_prc, aes(x = x, y = y, color = modname))
 p_prc <- p_prc + geom_line()
 p_prc
 
-## Generate an mspoints object that contains basic evaluation measures
+## Generate an mspoints object that contains basic evaluation metrics
 mspoints <- evalmod(mdat, mode = "basic")
 
 ## Fortify mspoints
@@ -220,7 +220,7 @@ p_prc <- ggplot(df_prc, aes(x = x, y = y, ymin = ymin, ymax = ymax))
 p_prc <- p_prc + geom_smooth(stat = "identity")
 p_prc
 
-## Generate an smpoints object that contains basic evaluation measures
+## Generate an smpoints object that contains basic evaluation metrics
 smpoints <- evalmod(mdat, mode = "basic")
 
 ## Fortify smpoints
@@ -272,7 +272,7 @@ p_prc <- ggplot(df_prc, aes(x = x, y = y, ymin = ymin, ymax = ymax))
 p_prc <- p_prc + geom_smooth(aes(color = modname), stat = "identity")
 p_prc
 
-## Generate an mmpoints object that contains basic evaluation measures
+## Generate an mmpoints object that contains basic evaluation metrics
 mmpoints <- evalmod(mdat, mode = "basic")
 
 ## Fortify mmpoints
@@ -292,6 +292,6 @@ p_prec
 }
 \seealso{
 \code{\link[=evalmod]{evalmod()}} for generating \code{S3} objects with
-performance evaluation measures.
+performance evaluation metrics.
 \code{\link[=autoplot]{autoplot()}} for plotting with \pkg{ggplot2}.
 }

@@ -76,7 +76,7 @@ test sets. It is not a simultaneous band for the whole curve, and it says
 nothing about how the model would do on data from a different source.
 
 For an interval on the area rather than the curve, use `auc_ci()`; see [AUC
-and other curve summaries](measures-auc.html).
+and other curve summaries](metrics-auc.html).
 
 ## Next
 

@@ -14,7 +14,7 @@
 \alias{autoplot.msxycurves}
 \alias{autoplot.smxycurves}
 \alias{autoplot.mmxycurves}
-\title{Plot performance evaluation measures with ggplot2}
+\title{Plot performance evaluation metrics with ggplot2}
 \usage{
 \method{autoplot}{sscurves}(object, curvetype = c("ROC", "PRC"), ...)
 
@@ -53,7 +53,7 @@ different modes, "rocprc" and "basic".
    mmcurves \tab multiple \tab multiple \cr
 }
 
-\item Basic evaluation measures (\code{mode = "basic"})\tabular{lll}{
+\item Basic evaluation metrics (\code{mode = "basic"})\tabular{lll}{
    \strong{\code{S3} object} \tab \strong{# of models} \tab \strong{# of test datasets} \cr
    sspoints \tab single \tab single \cr
    mspoints \tab multiple \tab single \cr
@@ -76,7 +76,7 @@ See the \strong{Value} section of \code{\link[=evalmod]{evalmod()}} for more det
 
 Multiple \code{curvetype} can be combined, such as
 \code{c("ROC", "PRC")}.
-\item Basic evaluation measures (mode = "basic")\tabular{ll}{
+\item Basic evaluation metrics (mode = "basic")\tabular{ll}{
    \strong{curvetype} \tab \strong{description} \cr
    error \tab Normalized ranks vs. error rate \cr
    accuracy \tab Normalized ranks vs. accuracy \cr
@@ -143,7 +143,7 @@ The \code{autoplot} function returns a \code{ggplot} object
 for a single-panel plot and a frame-grob object for a multiple-panel plot.
 }
 \description{
-The \code{autoplot} function plots performance evaluation measures
+The \code{autoplot} function plots performance evaluation metrics
 by using \pkg{ggplot2} instead of the general R plot.
 }
 \examples{
@@ -187,13 +187,13 @@ autoplot(sscurves, curvetype = "ROC")
 ## A Precision-Recall curve
 autoplot(sscurves, curvetype = "PRC")
 
-## Generate an sspoints object that contains basic evaluation measures
+## Generate an sspoints object that contains basic evaluation metrics
 sspoints <- evalmod(
   mode = "basic", scores = P10N10$scores,
   labels = P10N10$labels
 )
 
-## Normalized ranks vs. basic evaluation measures
+## Normalized ranks vs. basic evaluation metrics
 autoplot(sspoints)
 
 ## Normalized ranks vs. precision
@@ -229,10 +229,10 @@ system.time(autoplot(evalms, reduce_points = FALSE))
 ## Hide the legend
 autoplot(mscurves, show_legend = FALSE)
 
-## Generate an mspoints object that contains basic evaluation measures
+## Generate an mspoints object that contains basic evaluation metrics
 mspoints <- evalmod(mdat, mode = "basic")
 
-## Normalized ranks vs. basic evaluation measures
+## Normalized ranks vs. basic evaluation metrics
 autoplot(mspoints)
 
 ## Hide the legend
@@ -273,10 +273,10 @@ system.time(autoplot(evalsm, raw_curves = TRUE))
 # Full supporting points
 system.time(autoplot(evalsm, raw_curves = TRUE, reduce_points = FALSE))
 
-## Generate an smpoints object that contains basic evaluation measures
+## Generate an smpoints object that contains basic evaluation metrics
 smpoints <- evalmod(mdat, mode = "basic")
 
-## Normalized ranks vs. average basic evaluation measures
+## Normalized ranks vs. average basic evaluation metrics
 autoplot(smpoints)
 
 
@@ -317,10 +317,10 @@ system.time(autoplot(evalmm, raw_curves = TRUE))
 # Full supporting points
 system.time(autoplot(evalmm, raw_curves = TRUE, reduce_points = FALSE))
 
-## Generate an mmpoints object that contains basic evaluation measures
+## Generate an mmpoints object that contains basic evaluation metrics
 mmpoints <- evalmod(mdat, mode = "basic")
 
-## Normalized ranks vs. average basic evaluation measures
+## Normalized ranks vs. average basic evaluation metrics
 autoplot(mmpoints)
 
 
@@ -347,10 +347,10 @@ autoplot(cvcurves)
 ## Show confidence bounds
 autoplot(cvcurves, show_cb = TRUE)
 
-## Generate an mmpoints object that contains basic evaluation measures
+## Generate an mmpoints object that contains basic evaluation metrics
 cvpoints <- evalmod(cvdat, mode = "basic")
 
-## Normalized ranks vs. average basic evaluation measures
+## Normalized ranks vs. average basic evaluation metrics
 autoplot(cvpoints)
 }
 

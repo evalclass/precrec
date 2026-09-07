@@ -1,8 +1,8 @@
-#' Evaluate models and calculate performance evaluation measures
+#' Evaluate models and calculate performance evaluation metrics
 #'
 #' The `evalmod` function calculates ROC and Precision-Recall curves for
 #'   specified prediction scores and binary labels. It also calculate several
-#'   basic performance evaluation measures, such as accuracy, error rate, and
+#'   basic performance evaluation metrics, such as accuracy, error rate, and
 #'   precision, by specifying `mode` as "basic".
 #'
 #' @param mdat An `S3` object created by the [mmdata()]
@@ -23,7 +23,7 @@
 #'   In that case, both `scores` and `labels` must be
 #'   at least specified.
 #'
-#' @param mode A string that specifies the types of evaluation measures
+#' @param mode A string that specifies the types of evaluation metrics
 #'   that the `evalmod` function calculates.
 #'   \describe{
 #'     \item{"rocprc"}{ROC and Precision-Recall curves}
@@ -104,19 +104,19 @@
 #'   when `mode` is set to `basic`.
 #'
 #' @param metrics A character vector that names the basic evaluation
-#'   measures to calculate in addition to the default set, or the string
-#'   `"all"` for every measure `precrec` knows. The default `NULL` is
-#'   the fourteen measures `evalmod` has always returned: `score`,
+#'   metrics to calculate in addition to the default set, or the string
+#'   `"all"` for every metric `precrec` knows. The default `NULL` is
+#'   the fourteen metrics `evalmod` has always returned: `score`,
 #'   `label`, `error`, `accuracy`, `specificity`,
 #'   `sensitivity`, `precision`, `mcc`, `fscore`,
 #'   `balanced_accuracy`, `npv`, `informedness`,
 #'   `markedness` and `kappa`.
 #'
-#'   The measures that can be added are `fpr`, `fnr`,
+#'   The metrics that can be added are `fpr`, `fnr`,
 #'   `false_discovery_rate`, `false_omission_rate`,
 #'   `predicted_positive_rate`, `predicted_negative_rate`,
 #'   `lift`, `odds`, `mi`, `chisq`, `cost` and
-#'   `sar`. They are the measures `ROCR` provides that `precrec`
+#'   `sar`. They are the metrics `ROCR` provides that `precrec`
 #'   did not, and each of them also answers to the identifier `ROCR`
 #'   uses for it - `fall`, `miss`, `pcfall`, `pcmiss`,
 #'   `rpp`, `rnp` and `mutual_information` - and to its
@@ -124,7 +124,7 @@
 #'
 #'   `roc_dist` and `sedi` can be added on the same footing.
 #'   `roc_dist` is the distance from `(1 - specificity, sensitivity)`
-#'   to the perfect corner of ROC space, and is the one measure here that
+#'   to the perfect corner of ROC space, and is the one metric here that
 #'   is better when it is smaller. `sedi` is the symmetric extremal
 #'   dependence index, a skill score built to stay informative when the
 #'   positive class is rare.
@@ -140,12 +140,12 @@
 #'
 #'   They are not calculated by default because each is another vector the
 #'   size of the dataset, and because `plot` and `autoplot` draw
-#'   one panel per measure the object holds. A measure that was not asked
+#'   one panel per metric the object holds. A metric that was not asked
 #'   for cannot be plotted; `metrics` is effective only when `mode`
 #'   is set to `basic`.
 #'
 #' @param cost_fp A numeric value for the cost of a false positive, used
-#'   by the `cost` measure. `cost` is not normalized, following
+#'   by the `cost` metric. `cost` is not normalized, following
 #'   `ROCR`: it is
 #'   `cost_fp * FP / n + cost_fn * FN / n`, which with the default
 #'   weights of `1` is the error rate. `cost_fp` is effective only
@@ -159,7 +159,7 @@
 #'   class.
 #'   \describe{
 #'     \item{"error"}{Raise an error (default)}
-#'     \item{"na"}{Warn, and return `NA` for the measures that
+#'     \item{"na"}{Warn, and return `NA` for the metrics that
 #'                 are undefined}
 #'   }
 #'   ROC and precision-recall curves are undefined for such a dataset, so
@@ -180,7 +180,7 @@
 #'   evaluation of a dataset with more than two classes; see [mmdata()].
 #'
 #' @return The `evalmod` function returns an `S3` object
-#'   that contains performance evaluation measures. The number of models and
+#'   that contains performance evaluation metrics. The number of models and
 #'   the number of datasets can be controlled by `modnames` and
 #'   `dsids`. For example, the number of models is "single" and the number
 #'   of test datasets is "multiple" when `modnames = c("m1", "m1", "m1")`
@@ -205,7 +205,7 @@
 #' 2. The `evalmod` function returns one of the following `S3`
 #'
 #'    objects when `mode` is "basic".
-#'    They contain the per-rank basic evaluation measures; error rate,
+#'    They contain the per-rank basic evaluation metrics; error rate,
 #'    accuracy, specificity, sensitivity, precision, Matthews correlation
 #'    coefficient, F-score, balanced accuracy, negative predictive value,
 #'    informedness, markedness, and Cohen's kappa.
@@ -245,7 +245,7 @@
 #' sscurves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 #' sscurves
 #'
-#' ## Generate an sspoints object that contains basic evaluation measures
+#' ## Generate an sspoints object that contains basic evaluation metrics
 #' sspoints <- evalmod(
 #'   mode = "basic", scores = P10N10$scores,
 #'   labels = P10N10$labels
@@ -267,7 +267,7 @@
 #' mscurves <- evalmod(mdat)
 #' mscurves
 #'
-#' ## Generate an mspoints object that contains basic evaluation measures
+#' ## Generate an mspoints object that contains basic evaluation metrics
 #' mspoints <- evalmod(mdat, mode = "basic")
 #' mspoints
 #'
@@ -287,7 +287,7 @@
 #' smcurves <- evalmod(mdat)
 #' smcurves
 #'
-#' ## Generate an smpoints object that contains basic evaluation measures
+#' ## Generate an smpoints object that contains basic evaluation metrics
 #' smpoints <- evalmod(mdat, mode = "basic")
 #' smpoints
 #'
@@ -307,7 +307,7 @@
 #' mmcurves <- evalmod(mdat)
 #' mmcurves
 #'
-#' ## Generate an mmpoints object that contains basic evaluation measures
+#' ## Generate an mmpoints object that contains basic evaluation metrics
 #' mmpoints <- evalmod(mdat, mode = "basic")
 #' mmpoints
 #'
@@ -330,7 +330,7 @@
 #' cvcurves <- evalmod(cvdat)
 #' cvcurves
 #'
-#' ## Generate an mmpoints object that contains basic evaluation measures
+#' ## Generate an mmpoints object that contains basic evaluation metrics
 #' cvpoints <- evalmod(cvdat, mode = "basic")
 #' cvpoints
 #'

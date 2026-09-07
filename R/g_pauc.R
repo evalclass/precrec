@@ -20,7 +20,7 @@
 #' @return The `auc` function returns a data frame with pAUC scores.
 #'
 #' @seealso [evalmod()] for generating `S3` objects with
-#'   performance evaluation measures. [part()] for calculation of
+#'   performance evaluation metrics. [part()] for calculation of
 #'   pAUCs. [auc()] for retrieving a dataset of AUCs.
 #'
 #' @examples
