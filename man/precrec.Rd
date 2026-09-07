@@ -95,6 +95,13 @@ prediction scores that are probabilities, and \code{\link[=prob_metrics_ci]{prob
 returns their confidence intervals over multiple test datasets.
 }
 
+\section{Classification report}{
+
+\code{\link[=classification_report]{classification_report()}} reports precision, recall and the F-score of
+every class at one operating point, in the layout \code{scikit-learn}'s
+function of that name prints.
+}
+
 \seealso{
 Useful links:
 \itemize{

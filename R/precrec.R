@@ -77,6 +77,11 @@
 #' prediction scores that are probabilities, and [prob_metrics_ci()]
 #' returns their confidence intervals over multiple test datasets.
 #'
+#' @section Classification report:
+#' [classification_report()] reports precision, recall and the F-score of
+#' every class at one operating point, in the layout `scikit-learn`'s
+#' function of that name prints.
+#'
 #'
 #' @name precrec
 #'

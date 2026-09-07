@@ -843,3 +843,97 @@
 
   invisible(TRUE)
 }
+
+
+#
+# Validate the `at` argument of `classification_report()`
+#
+# `at` has no default because `precrec` holds scores rather than
+# predictions, so there is no operating point to fall back on and no
+# threshold that is meaningful on every score scale. It is either one
+# number for every class, or one per class, named after the classes or
+# given in their order.
+#
+.validate_report_at <- function(at, info, multiclass) {
+  keys <- unique(if (multiclass) info[["class"]] else info[["group"]])
+  what <- if (multiclass) "class" else "model"
+  whats <- if (length(keys) == 1L) {
+    what
+  } else if (multiclass) {
+    "classes"
+  } else {
+    "models"
+  }
+
+  if (is.null(at)) {
+    .stop_invalid_arg(
+      paste0(
+        "{.arg at} must name an operating point: a score threshold, ",
+        "either one number or one per ", what, " ({.val {keys}}). It has ",
+        "no default because {.pkg precrec} holds scores rather than ",
+        "predictions."
+      ),
+      arg = "at", .envir = environment()
+    )
+  }
+
+  .assert_vector(at, "at", "numeric")
+  if (anyNA(at) || any(!is.finite(at))) {
+    .stop_invalid_arg(
+      "{.arg at} must be finite.",
+      arg = "at", .envir = environment()
+    )
+  }
+
+  if (length(at) == 1L) {
+    at <- rep(at, length(keys))
+    names(at) <- keys
+  } else if (length(at) != length(keys)) {
+    .stop_invalid_arg(
+      paste0(
+        "{.arg at} must be one number or one per ", what,
+        ", not {length(at)} for {length(keys)} ", whats, "."
+      ),
+      arg = "at", .envir = environment()
+    )
+  } else if (is.null(names(at))) {
+    names(at) <- keys
+  } else if (!setequal(names(at), keys)) {
+    .stop_invalid_arg(
+      "{.arg at} is named {.val {names(at)}}, not {.val {keys}}.",
+      arg = "at", .envir = environment()
+    )
+  }
+
+  # Back to one threshold per split, which repeats the per-class thresholds
+  # across models when a multi-class dataset carries several
+  unname(at[as.character(if (multiclass) {
+    info[["class"]]
+  } else {
+    info[["group"]]
+  })])
+}
+
+
+#
+# Validate the `zero_division` argument of `classification_report()`
+#
+.validate_zero_division <- function(zero_division) {
+  # A bare `NA` is logical, and reads as the obvious way to ask for the
+  # missing-value convention, so it is taken rather than rejected on type
+  if (is.logical(zero_division) && length(zero_division) == 1L &&
+    is.na(zero_division)) {
+    return(NA_real_)
+  }
+
+  .assert_number(zero_division, "zero_division", allow_na = TRUE)
+
+  if (!is.na(zero_division) && !zero_division %in% c(0, 1)) {
+    .stop_invalid_arg(
+      "{.arg zero_division} must be {.code 0}, {.code 1} or {.code NA}.",
+      arg = "zero_division", .envir = environment()
+    )
+  }
+
+  zero_division
+}

@@ -110,19 +110,20 @@ devtools::install_github("evalclass/precrec")
 
 ## Functions
 
-| Function             | Description                                                 |
-|----------------------|-------------------------------------------------------------|
-| `evalmod`            | Main function to calculate evaluation metrics               |
-| `mmdata`             | Reformat input data for performance evaluation calculation  |
-| `join_scores`        | Join scores of multiple models into a list                  |
-| `join_labels`        | Join observed labels of multiple test datasets into a list  |
-| `create_sim_samples` | Create random samples for simulations                       |
-| `format_nfold`       | Create n-fold cross validation dataset from data frame      |
-| `prob_metrics`       | Calculate the Brier score, the RMSE and the log loss        |
-| `prob_metrics_ci`    | Calculate CIs of the Brier score, the RMSE and the log loss |
-| `metric_curve`       | Draw one evaluation metric against another                  |
-| `prbe`               | Find the precision-recall break-even point                  |
-| `average_precision`  | Calculate the step estimator of the PRC area                |
+| Function                | Description                                                   |
+|-------------------------|---------------------------------------------------------------|
+| `evalmod`               | Main function to calculate evaluation metrics                 |
+| `mmdata`                | Reformat input data for performance evaluation calculation    |
+| `join_scores`           | Join scores of multiple models into a list                    |
+| `join_labels`           | Join observed labels of multiple test datasets into a list    |
+| `create_sim_samples`    | Create random samples for simulations                         |
+| `format_nfold`          | Create n-fold cross validation dataset from data frame        |
+| `prob_metrics`          | Calculate the Brier score, the RMSE and the log loss          |
+| `prob_metrics_ci`       | Calculate CIs of the Brier score, the RMSE and the log loss   |
+| `metric_curve`          | Draw one evaluation metric against another                    |
+| `prbe`                  | Find the precision-recall break-even point                    |
+| `average_precision`     | Calculate the step estimator of the PRC area                  |
+| `classification_report` | Report precision, recall and F-score per class at a threshold |
 
 Ten S3 generics work on the objects `evalmod` and `metric_curve` return.
 

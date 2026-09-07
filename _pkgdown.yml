@@ -49,6 +49,9 @@ reference:
     contents:
     - prob_metrics
     - prob_metrics_ci
+  - title: Classification report
+    contents:
+    - classification_report
   - title: Datasets
     desc: P10N10, B500, B1000, IB500, IB1000, M2N50F5 and C3N150
     contents:
@@ -85,6 +88,7 @@ articles:
     - "articles/metrics-ranking-cost"
     - "articles/metrics-auc"
     - "articles/metrics-probability"
+    - "articles/metrics-classification-report"
   - title: Plots
     navbar: ~
     contents:
@@ -140,6 +144,8 @@ navbar:
         href: articles/metrics-auc.html
       - text: Probability-based metrics
         href: articles/metrics-probability.html
+      - text: Classification report
+        href: articles/metrics-classification-report.html
     plots:
       text: Plots
       menu:

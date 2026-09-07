@@ -1,3 +1,29 @@
+# precrec 0.20.0
+
+* Add `classification_report()`, the per-class table of precision, recall
+  and F-score that `scikit-learn`'s `classification_report` prints, with the
+  `macro avg` and `weighted avg` rows under it. It reproduces
+  `scikit-learn`'s documented examples number for number.
+
+  The third summary row follows the rule `scikit-learn` documents. A binary
+  problem cut at a threshold puts every observation in exactly one of the
+  two classes, so the row is `accuracy`. A multi-class problem is evaluated
+  one-vs-rest and each class is thresholded on its own, so an observation
+  can fall into no class or into several; there is then no single-label
+  accuracy, and the row is `micro avg`, computed from the true positives,
+  false positives and false negatives pooled over the classes. Where the
+  predictions do happen to be single-label the two coincide, which is the
+  identity `scikit-learn` gives for printing one and not the other.
+
+  `at` names the operating point and has no default. `scikit-learn` reports
+  on `y_pred`, so its caller has already chosen one; `precrec` holds scores
+  and evaluates every cutoff, and no threshold is meaningful on every score
+  scale, so the choice stays with the caller. It takes one number for all
+  classes or one per class.
+
+  `zero_division` sets what an empty denominator reports, `0` as in
+  `scikit-learn` or `NA` as in the per-cutoff metrics of `evalmod()`.
+
 # precrec 0.19.0
 
 * Settle on "metric" as the word for the quantities `evalmod(metrics = )`,
