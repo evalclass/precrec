@@ -1,3 +1,37 @@
+# precrec 0.20.0
+
+* Add `classification_report()`, the per-class table of precision, recall
+  and F-score that `scikit-learn`'s `classification_report` prints, with the
+  `macro avg` and `weighted avg` rows under it. It reproduces
+  `scikit-learn`'s documented examples number for number.
+
+  The third summary row follows the rule `scikit-learn` documents. A binary
+  problem cut at a threshold puts every observation in exactly one of the
+  two classes, so the row is `accuracy`. A multi-class problem is evaluated
+  one-vs-rest and each class is thresholded on its own, so an observation
+  can fall into no class or into several; there is then no single-label
+  accuracy, and the row is `micro avg`, computed from the true positives,
+  false positives and false negatives pooled over the classes. Where the
+  predictions do happen to be single-label the two coincide, which is the
+  identity `scikit-learn` gives for printing one and not the other.
+
+  `at` names the operating point and has no default. `scikit-learn` reports
+  on `y_pred`, so its caller has already chosen one; `precrec` holds scores
+  and evaluates every cutoff, and no threshold is meaningful on every score
+  scale, so the choice stays with the caller. It takes one number for all
+  classes or one per class.
+
+  `zero_division` sets what an empty denominator reports, `0` as in
+  `scikit-learn` or `NA` as in the per-cutoff metrics of `evalmod()`.
+
+* Add a website page for it, and trim the metric pages back towards the
+  length the site was built at. Each release since had appended a section to
+  them, taking the article average from the 88 lines the site was built at to
+  99. It is now 93 over 22 articles, one more article than before. Nothing a
+  page needed was dropped: the cuts are restated prose, a duplicated `auc()`
+  chunk on the AUC page, and an unused `beta = 2` example on the agreement
+  page.
+
 # precrec 0.19.0
 
 * Settle on "metric" as the word for the quantities `evalmod(metrics = )`,
