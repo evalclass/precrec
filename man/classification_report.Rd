@@ -113,7 +113,8 @@ classification_report(mdat, at = c(c1 = 0.4, c2 = 0.5, c3 = 0.6))
 
 ## Binary: both classes, and an accuracy row rather than a micro average
 data(P10N10)
-classification_report(scores = P10N10$scores, labels = P10N10$labels,
+classification_report(
+  scores = P10N10$scores, labels = P10N10$labels,
   at = 12
 )
 

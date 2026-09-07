@@ -937,3 +937,55 @@
 
   zero_division
 }
+
+
+#
+# Validate the `mdat` argument of `auc_boot()`
+#
+# The bootstrap stands in for repeated sampling, so it needs the one sample
+# it is given whole: a single dataset, both classes present, and the same
+# observations under every model so that the resample can be shared and the
+# comparison paired.
+#
+.validate_boot_mdat <- function(mdat) {
+  info <- .as_plain_df(attr(mdat, "data_info"), copy = TRUE)
+
+  if (length(unique(info[["dsids"]])) > 1L) {
+    .stop_invalid_arg(
+      paste(
+        "{.arg mdat} must hold one dataset, not",
+        "{length(unique(info$dsids))}. With several test sets the",
+        "variation between them is the better estimate, and",
+        "{.fn auc_ci} on an {.fn evalmod} result uses it."
+      ),
+      arg = "mdat", .envir = environment()
+    )
+  }
+
+  outcomes <- as.integer(mdat[[1]][["labels"]])
+  np <- sum(outcomes == 2L)
+  nn <- sum(outcomes == 1L)
+  if (np < 2L || nn < 2L) {
+    .stop_invalid_arg(
+      paste(
+        "{.arg mdat} must hold at least two positives and two negatives",
+        "to resample, not {np} and {nn}."
+      ),
+      arg = "mdat", .envir = environment()
+    )
+  }
+
+  for (m in seq_along(mdat)) {
+    if (!identical(as.integer(mdat[[m]][["labels"]]), outcomes)) {
+      .stop_invalid_arg(
+        paste(
+          "{.arg mdat} must give every model the same observations, so",
+          "that they can be resampled together and compared as a pair."
+        ),
+        arg = "mdat", .envir = environment()
+      )
+    }
+  }
+
+  invisible(TRUE)
+}
