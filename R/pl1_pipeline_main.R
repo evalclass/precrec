@@ -32,7 +32,7 @@ pl_main <- function(mdat, mode = "rocprc", calc_avg = TRUE, cb_alpha = 0.05,
     .pl_main_basic(mdat, model_type, dataset_type, class_name_pf,
       calc_avg = calc_avg, cb_alpha = cb_alpha,
       raw_curves = raw_curves, beta = beta, metrics = metrics,
-      cost_fp = cost_fp, cost_fn = cost_fn
+      cost_fp = cost_fp, cost_fn = cost_fn, x_bins = x_bins
     )
   } else if (new_mode == "aucroc") {
     .pl_main_aucroc(mdat, model_type, dataset_type, class_name_pf,

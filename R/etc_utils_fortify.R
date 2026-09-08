@@ -36,10 +36,11 @@
 #'   `mscurves` and `mspoints`, always show the raw curves.
 #'
 #' @param reduce_points A Boolean value to decide whether the points should
-#'   be reduced when `mode = "rocprc"`. The points are reduced according to
-#'   `x_bins` of the [evalmod()] function. The default values is `FALSE`.
-#'   The basic evaluation metrics are not reduced, so the argument has no
-#'   effect for `sspoints`, `mspoints`, `smpoints` and `mmpoints`.
+#'   be reduced. The number kept is `x_bins` of the [evalmod()] function,
+#'   per curve for `mode = "rocprc"` and per metric for `mode = "basic"`.
+#'   The default value is `FALSE`. Reduction changes only which points are
+#'   returned, never how they were calculated, and nothing is dropped from
+#'   an object that already holds `x_bins` points or fewer.
 #'
 #' @param ... Not used by this method.
 #'

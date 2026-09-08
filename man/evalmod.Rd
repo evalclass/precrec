@@ -118,10 +118,13 @@ on the x-axis. It is then used to define supporting points For instance,
 the x-values of the supporting points will be \code{c(0, 0.5, 1)} and
 \code{c(0, 0.25, 0.5, 0.75, 1)} when \code{x_bins = 2}
 and \code{x_bins = 4}, respectively. All corresponding y-values of
-the supporting points are calculated. \code{x_bins} is effective only
-when \code{mode} is set to \code{rocprc} or \code{prcroc}. It must be \code{1e6} or
-smaller; every stage sized by it allocates a vector of that length per
-curve, and a million supporting points is already finer than a plot
+the supporting points are calculated. \code{x_bins} places supporting points
+only when \code{mode} is set to \code{rocprc} or \code{prcroc}; with
+\code{mode = "basic"} there is no interpolation to place them on, and the
+value is instead the number of points kept per metric when a plot or a
+data frame is asked for with \code{reduce_points = TRUE}. It must be \code{1e6}
+or smaller; every stage sized by it allocates a vector of that length
+per curve, and a million supporting points is already finer than a plot
 resolves.}
 
 \item{interpolate}{A Boolean value to specify whether or not
