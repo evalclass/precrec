@@ -1,5 +1,40 @@
 # Changelog
 
+## precrec 0.21.1
+
+- Fix a buffer overrun in `create_roc()` and `create_prc()`. Both built
+  the interpolated points from a grid snapped to each gap’s own start,
+  so neighboring gaps disagreed about where the grid lines fell and
+  together emitted more points than the `x_bins` the output buffers are
+  sized for. The write ran past the end of the vectors, which aborted
+  the session from `x_bins = 5000` up - `evalmod(..., x_bins = 10000)`
+  on 200 points was enough to do it. Both now walk one grid shared
+  across the curve, so each line belongs to exactly one gap and the
+  count cannot exceed `x_bins`.
+
+  The curves move slightly as a result: the spurious extra points are
+  gone, so a curve carries a few points more or fewer than it did, and
+  the ones it carries sit on the grid. AUC, partial AUC and average
+  precision are unchanged - they agree with 0.21.0 to within 2.2e-16,
+  which is the rounding of the arithmetic rather than a change in what
+  is computed.
+
+- Cap `x_bins` at `1e6`. Every stage sized by it - the interpolation
+  buffers, the point reduction and the averaging grid - allocates a
+  vector of that length per curve, so `x_bins = 1e9` asked for tens of
+  gigabytes and failed on the allocation rather than at the argument. A
+  million supporting points is finer than a plot resolves and finer than
+  the data behind it, so the ceiling is well clear of real use.
+
+- Skip the interpolation of a gap that spans no grid line at all, which
+  is almost every gap once the input is large. That was costing a
+  division per input point to add at most `x_bins` points to the whole
+  curve, so it grew with the data while what it produced did not.
+  `create_roc()` is about 1.8x faster at 1e6 points and `create_prc()`
+  about 1.3x;
+  [`evalmod()`](https://evalclass.github.io/precrec/reference/evalmod.md)
+  itself gains about 4%, the curves being a small part of its work.
+
 ## precrec 0.21.0
 
 - Add

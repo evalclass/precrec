@@ -174,7 +174,9 @@ evalmod(
   `c(0, 0.25, 0.5, 0.75, 1)` when `x_bins = 2` and `x_bins = 4`,
   respectively. All corresponding y-values of the supporting points are
   calculated. `x_bins` is effective only when `mode` is set to `rocprc`
-  or `prcroc`.
+  or `prcroc`. It must be `1e6` or smaller; every stage sized by it
+  allocates a vector of that length per curve, and a million supporting
+  points is already finer than a plot resolves.
 
 - interpolate:
 
@@ -2094,10 +2096,10 @@ func_evalmod_aucroc <- function(samp) {
 # Process time
 system.time(res1 <- func_evalmod_rocprc(samp1))
 #>    user  system elapsed 
-#>   0.029   0.005   0.034 
+#>   0.029   0.007   0.036 
 system.time(res2 <- func_evalmod_aucroc(samp1))
 #>    user  system elapsed 
-#>   0.019   0.000   0.012 
+#>   0.024   0.000   0.014 
 
 # AUCs
 res1

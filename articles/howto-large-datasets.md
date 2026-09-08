@@ -29,9 +29,9 @@ system.time(autoplot(curves))
 # Every point
 system.time(autoplot(curves, reduce_points = FALSE))
 #>    user  system elapsed 
-#>   0.095   0.013   0.108 
+#>   0.135   0.015   0.149 
 #>    user  system elapsed 
-#>   0.081   0.006   0.087
+#>   0.104   0.008   0.111
 ```
 
 The curve is calculated at full resolution either way - `reduce_points`

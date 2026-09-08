@@ -13,7 +13,7 @@ precision, by specifying mode as "basic".'><meta property="og:image" content="ht
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.21.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.21.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -243,7 +243,10 @@ the x-values of the supporting points will be <code>c(0, 0.5, 1)</code> and
 <code>c(0, 0.25, 0.5, 0.75, 1)</code> when <code>x_bins = 2</code>
 and <code>x_bins = 4</code>, respectively. All corresponding y-values of
 the supporting points are calculated. <code>x_bins</code> is effective only
-when <code>mode</code> is set to <code>rocprc</code> or <code>prcroc</code>.</p></dd>
+when <code>mode</code> is set to <code>rocprc</code> or <code>prcroc</code>. It must be <code>1e6</code> or
+smaller; every stage sized by it allocates a vector of that length per
+curve, and a million supporting points is already finer than a plot
+resolves.</p></dd>
 
 
 <dt id="arg-interpolate">interpolate<a class="anchor" aria-label="anchor" href="#arg-interpolate"></a></dt>
@@ -2135,10 +2138,10 @@ for simulations.</p></div>
 <span class="r-in"><span><span class="co"># Process time</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="va">res1</span> <span class="op">&lt;-</span> <span class="fu">func_evalmod_rocprc</span><span class="op">(</span><span class="va">samp1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    user  system elapsed </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   0.029   0.005   0.034 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   0.029   0.007   0.036 </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="va">res2</span> <span class="op">&lt;-</span> <span class="fu">func_evalmod_aucroc</span><span class="op">(</span><span class="va">samp1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    user  system elapsed </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   0.019   0.000   0.012 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   0.024   0.000   0.014 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># AUCs</span></span></span>
 <span class="r-in"><span><span class="va">res1</span></span></span>

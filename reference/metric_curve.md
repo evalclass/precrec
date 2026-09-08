@@ -86,9 +86,9 @@ metric_curve(
 
 - x_bins:
 
-  An integer for the number of supporting points of a registered pair.
-  It is ignored for every other pair, which has no interpolation to
-  place supporting points on.
+  An integer for the number of supporting points of a registered pair,
+  `1e6` or smaller. It is ignored for every other pair, which has no
+  interpolation to place supporting points on.
 
 - interpolate:
 
@@ -177,7 +177,7 @@ xy1
 #>      calculated by the same code as evalmod(mode = "rocprc").
 #> 
 #>      Model name Dataset ID # of points
-#>    1         m1          1        1067
+#>    1         m1          1        1071
 #> 
 #> 
 #>     === Input data ===
