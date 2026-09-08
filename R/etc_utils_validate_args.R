@@ -527,6 +527,15 @@
 }
 
 #
+# Validate basic_ties of the basic evaluation metrics
+#
+.validate_basic_ties <- function(basic_ties) {
+  .assert_string(basic_ties, "basic_ties", c("split", "hold"))
+
+  invisible(TRUE)
+}
+
+#
 # Validate eps of the log loss
 #
 .validate_eps <- function(eps) {

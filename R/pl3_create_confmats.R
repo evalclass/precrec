@@ -2,7 +2,7 @@
 # Calculate confusion matrices for all ranks
 #
 create_confmats <- function(fmdat, scores = NULL, labels = NULL,
-                            keep_fmdat = FALSE, ...) {
+                            keep_fmdat = FALSE, hold_ties = FALSE, ...) {
   # === Validate input arguments ===
   # Create fmdat from scores and labels if fmdat is missing
   fmdat <- .create_src_obj(fmdat, "fmdat", reformat_data, scores, labels, ...)
@@ -10,9 +10,10 @@ create_confmats <- function(fmdat, scores = NULL, labels = NULL,
 
   # === Create confusion matrices for all ranks ===
   # Call a cpp function via Rcpp interface
+  .assert_flag(hold_ties, "hold_ties")
   cmats <- create_confusion_matrices(
     fmdat[["labels"]], fmdat[["ranks"]],
-    fmdat[["rank_idx"]]
+    fmdat[["rank_idx"]], hold_ties
   )
   .check_cpp_func_error(cmats, "create_confusion_matrices")
 
@@ -26,7 +27,7 @@ create_confmats <- function(fmdat, scores = NULL, labels = NULL,
   attr(s3obj, "dsid") <- attr(fmdat, "dsid")
   attr(s3obj, "nn") <- attr(fmdat, "nn")
   attr(s3obj, "np") <- attr(fmdat, "np")
-  attr(s3obj, "args") <- list(...)
+  attr(s3obj, "args") <- c(list(...), list(hold_ties = hold_ties))
   attr(s3obj, "cpp_errmsg") <- cpp_errmsg
   if (keep_fmdat) {
     attr(s3obj, "src") <- fmdat
@@ -56,7 +57,7 @@ create_confmats <- function(fmdat, scores = NULL, labels = NULL,
   )
   arg_names <- c(
     "na_worst", "na.last", "ties_method", "ties.method",
-    "modname", "dsid", "keep_fmdat"
+    "modname", "dsid", "keep_fmdat", "hold_ties"
   )
   .validate_basic(
     x, "cmats", "create_confmats", item_names, attr_names,

@@ -177,6 +177,65 @@ test_that("create_confmats() handles tied scores 2", {
   expect_equal(cmats[["fp"]], c(0, 1, 1.5, 2, 2.5, 3))
 })
 
+test_that("create_confmats(hold_ties = TRUE) holds a run at its end", {
+  # The same input as "tied scores 1": the run of four 0.2s ends with 2 TPs
+  # and 2 FPs counted, and every cutoff inside it now says so
+  cmats <- create_confmats(
+    scores = c(0.3, 0.2, 0.2, 0.2, 0.2, 0.1),
+    labels = c(0, 1, 0, 1, 0, 1),
+    hold_ties = TRUE
+  )
+  expect_equal(cmats[["tp"]], c(0, 0, 2, 2, 2, 2, 3))
+  expect_equal(cmats[["fp"]], c(0, 1, 3, 3, 3, 3, 3))
+})
+
+test_that("create_confmats(hold_ties = TRUE) holds a run that ends last", {
+  cmats <- create_confmats(
+    scores = c(0.3, 0.2, 0.2, 0.2, 0.2),
+    labels = c(0, 1, 0, 1, 0),
+    hold_ties = TRUE
+  )
+  expect_equal(cmats[["tp"]], c(0, 0, 2, 2, 2, 2))
+  expect_equal(cmats[["fp"]], c(0, 1, 3, 3, 3, 3))
+})
+
+test_that("hold_ties makes no difference when the scores are distinct", {
+  scores <- c(0.5, 0.1, 0.4, 0.2, 0.3)
+  labels <- c(1, 0, 1, 0, 1)
+  cmats1 <- create_confmats(scores = scores, labels = labels)
+  cmats2 <- create_confmats(
+    scores = scores, labels = labels, hold_ties = TRUE
+  )
+
+  expect_equal(cmats1[["tp"]], cmats2[["tp"]])
+  expect_equal(cmats1[["fp"]], cmats2[["fp"]])
+})
+
+test_that("hold_ties leaves the ends of the confusion matrices alone", {
+  # Every score tied, so the single run covers every cutoff but the first
+  cmats <- create_confmats(
+    scores = rep(0.5, 6),
+    labels = c(1, 0, 1, 0, 1, 0),
+    hold_ties = TRUE
+  )
+  n <- length(cmats[["tp"]])
+
+  expect_equal(cmats[["tp"]][1], 0)
+  expect_equal(cmats[["fp"]][1], 0)
+  expect_equal(cmats[["tp"]][n], cmats[["pos_num"]])
+  expect_equal(cmats[["fp"]][n], cmats[["neg_num"]])
+  expect_equal(cmats[["tp"]], c(0, rep(3, 6)))
+})
+
+test_that("hold_ties must be a single Boolean value", {
+  expect_error(
+    create_confmats(
+      scores = c(0.1, 0.2, 0), labels = c(1, 0, 1), hold_ties = "yes"
+    ),
+    class = "precrec_error_invalid_hold_ties"
+  )
+})
+
 pl3_create_ms_dat <- function() {
   s1 <- c(1, 2, 3, 4)
   s2 <- c(5, 6, 7, 8)

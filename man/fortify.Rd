@@ -74,10 +74,11 @@ contrast the raw curves with, so \code{sscurves} and \code{sspoints}, and likewi
 \code{mscurves} and \code{mspoints}, always show the raw curves.}
 
 \item{reduce_points}{A Boolean value to decide whether the points should
-be reduced when \code{mode = "rocprc"}. The points are reduced according to
-\code{x_bins} of the \code{\link[=evalmod]{evalmod()}} function. The default values is \code{FALSE}.
-The basic evaluation metrics are not reduced, so the argument has no
-effect for \code{sspoints}, \code{mspoints}, \code{smpoints} and \code{mmpoints}.}
+be reduced. The number kept is \code{x_bins} of the \code{\link[=evalmod]{evalmod()}} function,
+per curve for \code{mode = "rocprc"} and per metric for \code{mode = "basic"}.
+The default value is \code{FALSE}. Reduction changes only which points are
+returned, never how they were calculated, and nothing is dropped from
+an object that already holds \code{x_bins} points or fewer.}
 
 \item{...}{Not used by this method.}
 }

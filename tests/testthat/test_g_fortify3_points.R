@@ -232,3 +232,89 @@ test_that("fortify raw_curve option mmpoints", {
   args2c <- .get_fortify_arglist(attr(points2, "args"), def_raw_curves = NULL)
   expect_true(args2c[["raw_curves"]])
 })
+
+ft3_create_big_sspoints <- function(n = 4000, ...) {
+  set.seed(1)
+  evalmod(
+    scores = runif(n), labels = rbinom(n, 1, 0.5), mode = "basic", ...
+  )
+}
+
+test_that("fortify reduce_points thins the basic metrics", {
+  if (!ft3_check_libs()) {
+    skip("Libraries cannot be loaded")
+  }
+
+  points1 <- ft3_create_big_sspoints()
+  nmetrics <- length(attr(points1, "metrics"))
+
+  full <- ggplot2::fortify(points1, reduce_points = FALSE)
+  reduced <- ggplot2::fortify(points1, reduce_points = TRUE)
+
+  # One point per cutoff without reduction, x_bins per metric with it
+  expect_equal(nrow(full), nmetrics * 4001)
+  expect_equal(nrow(reduced), nmetrics * 1000)
+
+  # FALSE is the default, so an unasked-for call is unchanged
+  expect_equal(ggplot2::fortify(points1), full)
+})
+
+test_that("Reduced basic metrics keep both ends of the x axis", {
+  if (!ft3_check_libs()) {
+    skip("Libraries cannot be loaded")
+  }
+
+  points1 <- ft3_create_big_sspoints()
+  reduced <- ggplot2::fortify(points1, reduce_points = TRUE)
+
+  for (metric in c("sensitivity", "specificity", "precision")) {
+    xs <- reduced[reduced[["curvetype"]] == metric, "x"]
+    expect_equal(xs[1], 0)
+    expect_equal(xs[length(xs)], 1)
+    # A thinned axis is still an axis: strictly increasing, no repeats
+    expect_true(all(diff(xs) > 0))
+  }
+})
+
+test_that("x_bins sets how many basic points are kept", {
+  if (!ft3_check_libs()) {
+    skip("Libraries cannot be loaded")
+  }
+
+  points1 <- ft3_create_big_sspoints(x_bins = 100)
+  expect_equal(attr(points1, "args")[["x_bins"]], 100)
+
+  reduced <- ggplot2::fortify(points1, reduce_points = TRUE)
+  nmetrics <- length(attr(points1, "metrics"))
+  expect_equal(nrow(reduced), nmetrics * 100)
+})
+
+test_that("Reduction drops nothing when there is little to drop", {
+  if (!ft3_check_libs()) {
+    skip("Libraries cannot be loaded")
+  }
+
+  # 51 cutoffs against x_bins of 1000, so every point is kept and asking for
+  # the reduction has to be a no-op rather than a resampling
+  points1 <- ft3_create_big_sspoints(n = 50)
+
+  expect_equal(
+    ggplot2::fortify(points1, reduce_points = TRUE),
+    ggplot2::fortify(points1, reduce_points = FALSE)
+  )
+})
+
+test_that("Reduced values are the calculated ones, not new ones", {
+  if (!ft3_check_libs()) {
+    skip("Libraries cannot be loaded")
+  }
+
+  points1 <- ft3_create_big_sspoints()
+  full <- ggplot2::fortify(points1, reduce_points = FALSE)
+  reduced <- ggplot2::fortify(points1, reduce_points = TRUE)
+
+  # Every kept row must appear untouched in the unreduced frame: thinning
+  # selects points, it does not interpolate between them
+  keys <- function(d) paste(d[["curvetype"]], d[["x"]], d[["y"]])
+  expect_true(all(keys(reduced) %in% keys(full)))
+})

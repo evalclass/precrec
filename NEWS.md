@@ -1,3 +1,45 @@
+# precrec 0.22.0
+
+* `evalmod(mode = "basic")` takes a new `basic_ties` argument for what the
+  basic metrics report at the cutoffs inside a run of tied scores. Such a
+  cutoff separates instances that share a score, so no threshold produces
+  it. The default `"split"` spreads the true and false positives of the run
+  evenly over its cutoffs, which is what `precrec` has always done and is
+  the interpolation the ROC and precision-recall curves need. `"hold"`
+  gives every cutoff in the run the counts it has once the whole run is
+  taken, so tied instances share one value of every metric and each metric
+  becomes a step function that changes only where the score does.
+
+  A classifier that is exactly right but scores in a single bit reported
+  sensitivity climbing across the positives rather than reaching 1 at once,
+  which is the even spread and not the classifier. `basic_ties = "hold"`
+  is the reading that case wants.
+
+  The two settings agree whenever the scores are all distinct, `"split"` is
+  the default because it is what every published result was computed with,
+  and the curves are not affected either way.
+
+* `reduce_points` now works for `mode = "basic"`. The basic metrics carry one
+  point per cutoff, so plotting a large dataset drew a mark per instance: at
+  a million rows `autoplot()` spent 6.7 seconds against 0.5 for the
+  calculation behind it. `fortify()`, `as.data.frame()` and `autoplot()`
+  accept `reduce_points = TRUE` for these objects now and keep `x_bins`
+  points per metric, which brings that plot to 1.9 seconds.
+
+  The default stays `FALSE`, so no existing output moves unless the
+  reduction is asked for, and the points kept are the calculated ones - the
+  reduction selects among them and never interpolates. Nothing is dropped
+  from an object that already holds `x_bins` points or fewer.
+
+  The argument was accepted and silently discarded before, so a call that
+  passed it was not an error; it simply had no effect.
+
+* `evalmod(mode = "basic")` records `x_bins` on the object it returns. It
+  places no supporting points there - the basic metrics have no
+  interpolation to place them on - but it is the number of points kept when
+  `reduce_points` thins them, so the resolution of the drawn output is set
+  the same way for both modes.
+
 # precrec 0.21.2
 
 * Speed up the C++ hot paths. `evalmod()` runs about 1.5x faster on a

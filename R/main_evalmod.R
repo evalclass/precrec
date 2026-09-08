@@ -95,10 +95,13 @@
 #'   the x-values of the supporting points will be `c(0, 0.5, 1)` and
 #'   `c(0, 0.25, 0.5, 0.75, 1)` when `x_bins = 2`
 #'   and `x_bins = 4`, respectively. All corresponding y-values of
-#'   the supporting points are calculated. `x_bins` is effective only
-#'   when `mode` is set to `rocprc` or `prcroc`. It must be `1e6` or
-#'   smaller; every stage sized by it allocates a vector of that length per
-#'   curve, and a million supporting points is already finer than a plot
+#'   the supporting points are calculated. `x_bins` places supporting points
+#'   only when `mode` is set to `rocprc` or `prcroc`; with
+#'   `mode = "basic"` there is no interpolation to place them on, and the
+#'   value is instead the number of points kept per metric when a plot or a
+#'   data frame is asked for with `reduce_points = TRUE`. It must be `1e6`
+#'   or smaller; every stage sized by it allocates a vector of that length
+#'   per curve, and a million supporting points is already finer than a plot
 #'   resolves.
 #'
 #' @param beta A numeric value to specify the beta of the F-beta score,
@@ -156,6 +159,29 @@
 #'   `cost`.
 #'
 #' @param cost_fn A numeric value for the cost of a false negative.
+#'
+#' @param basic_ties A string that specifies what the basic evaluation
+#'   metrics report at the cutoffs inside a run of tied scores.
+#'   `basic_ties` is effective only when `mode` is set to
+#'   `basic`.
+#'   \describe{
+#'     \item{"split"}{Spread the true and false positives of the run
+#'                    evenly over its cutoffs (default). This is the
+#'                    interpolation the ROC and precision-recall curves
+#'                    need, and is what `precrec` has always done.}
+#'     \item{"hold"}{Give every cutoff in the run the counts it has once
+#'                   the whole run is taken, so tied instances share one
+#'                   value of every metric.}
+#'   }
+#'
+#'   A cutoff inside a tied run splits instances that share a score, so no
+#'   threshold produces it. With `"split"` a perfect classifier whose
+#'   scores are all `0` or `1` reports sensitivity climbing from
+#'   `0` to `1` across the positives rather than reaching `1`
+#'   at once. `"hold"` makes each metric a step function that changes
+#'   only where the score does. The two agree whenever the scores are all
+#'   distinct, and `"split"` is kept as the default because it is what
+#'   every published `precrec` result was computed with.
 #'
 #' @param on_single_class A string that specifies what the `evalmod`
 #'   function does with a dataset in which every label belongs to the same
@@ -254,6 +280,13 @@
 #'   labels = P10N10$labels
 #' )
 #' sspoints
+#'
+#' ## Let tied scores share one value of every basic metric
+#' tiedpoints <- evalmod(
+#'   mode = "basic", scores = round(P10N10$scores, 1),
+#'   labels = P10N10$labels, basic_ties = "hold"
+#' )
+#' tiedpoints
 #'
 #'
 #' ##################################################
@@ -414,7 +447,7 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
                     calc_avg = TRUE, cb_alpha = 0.05, raw_curves = FALSE,
                     x_bins = 1000, interpolate = TRUE, beta = 1,
                     on_single_class = "error", metrics = NULL,
-                    cost_fp = 1, cost_fn = 1, ...) {
+                    cost_fp = 1, cost_fn = 1, basic_ties = "split", ...) {
   # Validation
   new_mode <- .get_new_mode(mode, mdat, "rocprc")
   new_on_single_class <- .pmatch_on_single_class(on_single_class)
@@ -427,7 +460,7 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
     new_mode, modnames, dsids, posclass, new_na_worst,
     new_ties_method, calc_avg, cb_alpha, raw_curves,
     x_bins, interpolate, beta, new_on_single_class, metrics,
-    cost_fp, cost_fn
+    cost_fp, cost_fn, basic_ties
   )
 
   # Create mdat if not provided
@@ -446,7 +479,8 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
     raw_curves = raw_curves, x_bins = x_bins, interpolate = interpolate,
     na_worst = new_na_worst, ties_method = new_ties_method, beta = beta,
     on_single_class = new_on_single_class, metrics = metrics,
-    cost_fp = cost_fp, cost_fn = cost_fn, validate = FALSE
+    cost_fp = cost_fp, cost_fn = cost_fn, basic_ties = basic_ties,
+    validate = FALSE
   )
 }
 
@@ -492,7 +526,7 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
                                    x_bins, interpolate, beta = 1,
                                    on_single_class = "error",
                                    metrics = NULL, cost_fp = 1,
-                                   cost_fn = 1) {
+                                   cost_fn = 1, basic_ties = "split") {
   # Check mode
   .validate_mode(mode)
 
@@ -527,4 +561,7 @@ evalmod <- function(mdat, mode = NULL, scores = NULL, labels = NULL,
 
   # Check the misclassification costs
   .validate_costs(cost_fp, cost_fn)
+
+  # Check basic_ties
+  .validate_basic_ties(basic_ties)
 }

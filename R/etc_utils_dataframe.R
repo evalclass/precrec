@@ -260,6 +260,11 @@ NULL
   modnames <- attr(obj, "data_info")[["modnames"]]
   dsids <- attr(obj, "data_info")[["dsids"]]
 
+  # The basic metrics carry one point per cutoff, so a large dataset draws
+  # as many points as it has instances - the plot, not the calculation, is
+  # what takes the time there. They are thinned by index rather than onto
+  # the x_bins grid the curves use; see set_thinned_points() for why.
+  thin_by_index <- FALSE
   if (new_mode == "rocprc") {
     curvetype_names <- list(ROC = "rocs", PRC = "prcs")
     if (reduce_points) {
@@ -269,7 +274,17 @@ NULL
     }
   } else if (new_mode == "basic") {
     curvetype_names <- as.list(.basic_metric_names(.get_obj_metrics(obj)))
-    x_bins <- 0
+    if (reduce_points) {
+      # An object built before x_bins was carried on the basic args, or by
+      # a path that does not set it, still thins at the default resolution
+      x_bins <- attr(obj, "args")$x_bins
+      if (is.null(x_bins)) {
+        x_bins <- 1000
+      }
+      thin_by_index <- TRUE
+    } else {
+      x_bins <- 0
+    }
   }
 
   # Make dsis-modname pairs
@@ -285,7 +300,7 @@ NULL
         obj, uniq_modnames, as.character(uniq_dsids),
         match(modnames, uniq_modnames),
         match(dsids, uniq_dsids),
-        dsid_modnames, curvetype_names, x_bins
+        dsid_modnames, curvetype_names, x_bins, thin_by_index
       )
       .check_cpp_func_error(list_df, "convert_curve_df")
       # setDT is by reference, and the frame is fresh out of C++
@@ -302,7 +317,7 @@ NULL
       list_df <- convert_curve_avg_df(
         attr(obj, "grp_avg"), uniq_modnames,
         match(modnames, uniq_modnames),
-        curvetype_names, x_bins
+        curvetype_names, x_bins, thin_by_index
       )
       .check_cpp_func_error(list_df, "convert_curve_avg_df")
       curve_df <- data.table::setDT(list_df[["df"]])
