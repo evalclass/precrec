@@ -79,35 +79,52 @@ void calc_tp_fp(const Rcpp::IntegerVector& olabs,
   unsigned ties = 0;
   double prev_rank = 0;
 
+  // The loop below reads its inputs through raw pointers rather than through
+  // Rcpp's operator[]. That operator goes through a proxy whose bounds check
+  // is a call to warning(), and in a translation unit this size gcc leaves
+  // the call out of line instead of inlining it away, so every element access
+  // becomes a compare, a branch and a barrier to optimizing the loop around
+  // it. Taking the pointer once costs nothing and is worth 1.3x here, and up
+  // to 1.8x in calc_basic_metrics() below, which reads four vectors per
+  // iteration.
+  //
+  // What the proxy was checking is not lost. `i` runs to `n`, which is the
+  // length of all three vectors - .validate.fmdat() rejects an fmdat whose
+  // labels, ranks and rank_idx are not the same length - and `idx` comes from
+  // rank_idx, which get_score_ranks() builds as a permutation of 1..n.
+  const int* olabs_p = olabs.begin();
+  const double* ranks_p = ranks.begin();
+  const int* rank_idx_p = rank_idx.begin();
+
   // Initialize
   np = 0;
   nn = 0;
   tp[0] = 0;
   fp[0] = 0;
-  sorted_ranks[0] = ranks[rank_idx[0] - 1] - 1;
+  sorted_ranks[0] = ranks_p[rank_idx_p[0] - 1] - 1;
 
   // Iterate all ranks
   for (unsigned i = 0; i < n; ++i) {
-    const unsigned idx = rank_idx[i] - 1;
+    const unsigned idx = rank_idx_p[i] - 1;
 
     // olabs is an ordered factor - positive: 2, negative: 1
-    if (olabs[idx] == 2) {
+    if (olabs_p[idx] == 2) {
       ++np;
     } else {
       ++nn;
     }
     tp[i+1] = np;
     fp[i+1] = nn;
-    sorted_ranks[i+1] = ranks[idx];
+    sorted_ranks[i+1] = ranks_p[idx];
 
     // Solve ties
-    if (ranks[idx] == prev_rank) {
+    if (ranks_p[idx] == prev_rank) {
       ++ties;
     } else if (ties != 0) {
       solve_ties(tp, fp, i, ties);
       ties = 0;
     }
-    prev_rank = ranks[idx];
+    prev_rank = ranks_p[idx];
   }
 
   // Solve ties when the lowest scores are tied
@@ -323,6 +340,12 @@ Rcpp::List calc_basic_metrics(int np,
     return ret_val;
   }
 
+  // Read through raw pointers - see calc_tp_fp() above for why
+  const double* tps_p = tps.begin();
+  const double* fps_p = fps.begin();
+  const double* tns_p = tns.begin();
+  const double* fns_p = fns.begin();
+
   // Loop-invariant, so lifted out. These stay divisions on purpose:
   // multiplying by a precomputed reciprocal would move every published
   // measure by an ulp, and the loop is dominated by a sqrt and eight
@@ -343,17 +366,17 @@ Rcpp::List calc_basic_metrics(int np,
   // n should be >1
   for (unsigned i = 0; i < n; ++i) {
     rank[i] = i / d_ranks;
-    errrate[i] = (fps[i] + fns[i]) / d_all;
+    errrate[i] = (fps_p[i] + fns_p[i]) / d_all;
     acc[i] = 1 - errrate[i];
     if (no_nn) {
       sp[i] = ::NA_REAL;
     } else {
-      sp[i] = tns[i] / d_nn;
+      sp[i] = tns_p[i] / d_nn;
     }
     if (no_np) {
       sn[i] = ::NA_REAL;
     } else {
-      sn[i] = tps[i] / d_np;
+      sn[i] = tps_p[i] / d_np;
     }
     if (extra_metrics) {
       if (no_nn || no_np) {
@@ -365,29 +388,29 @@ Rcpp::List calc_basic_metrics(int np,
       }
     }
 
-    tpfp = tps[i] + fps[i];
-    tpfn = tps[i] + fns[i];
-    tnfp = tns[i] + fps[i];
-    tnfn = tns[i] + fns[i];
+    tpfp = tps_p[i] + fps_p[i];
+    tpfn = tps_p[i] + fns_p[i];
+    tnfp = tns_p[i] + fps_p[i];
+    tnfn = tns_p[i] + fns_p[i];
 
     // Nothing is predicted positive at the first rank and nothing is
     // predicted negative at the last one, so precision and NPV each have one
-    // undefined end. Both are filled in from their neighbour below.
+    // undefined end. Both are filled in from their neighbor below.
     if (i > 0) {
-      prec[i] = tps[i] / tpfp;
+      prec[i] = tps_p[i] / tpfp;
     }
     if (extra_metrics && i + 1 < n) {
-      npv[i] = tns[i] / tnfn;
+      npv[i] = tns_p[i] / tnfn;
     }
 
     if (tpfp == 0 || tpfn == 0 || tnfp == 0 || tnfn == 0) {
       mcc[i] = ::NA_REAL;
     } else {
-      mcc[i] = ((tps[i] * tns[i]) - (fps[i] * fns[i]))
+      mcc[i] = ((tps_p[i] * tns_p[i]) - (fps_p[i] * fns_p[i]))
       / ::sqrt(tpfp * tpfn * tnfp * tnfn);
     }
-    fscore[i] = (beta2_1 * tps[i])
-      / (beta2_1 * tps[i] + beta2 * fns[i] + fps[i]);
+    fscore[i] = (beta2_1 * tps_p[i])
+      / (beta2_1 * tps_p[i] + beta2 * fns_p[i] + fps_p[i]);
 
     if (extra_metrics) {
       // Cohen's kappa: observed agreement against the agreement two raters
@@ -501,13 +524,17 @@ Rcpp::List create_roc_curve(const Rcpp::NumericVector& tps,
     return ret_val;
   }
 
+  // Read through raw pointers - see calc_tp_fp() above for why
+  const double* sp_p = sp.begin();
+  const double* sn_p = sn.begin();
+
   // Calculate ROC points
   for (unsigned i = 0; i < sp.size(); ++i) {
-    if ((i != 0) && (sp[i] == sp[i-1])  && (sn[i] == sn[i-1])) {
+    if ((i != 0) && (sp_p[i] == sp_p[i-1])  && (sn_p[i] == sn_p[i-1])) {
       continue;
     }
 
-    const double cur_fpr = 1 - sp[i];
+    const double cur_fpr = 1 - sp_p[i];
 
     // Interpolate two points
     if ((x_interval > 0) && (i > 0)
@@ -516,12 +543,12 @@ Rcpp::List create_roc_curve(const Rcpp::NumericVector& tps,
     }
 
     fpr[n] = cur_fpr;
-    tpr[n] = sn[i];
+    tpr[n] = sn_p[i];
     roc_orig[n] = true;
     ++n;
 
     // Step the grid past this point, so the next gap starts above it.
-    // Amortised O(1): this advances x_bins times over the whole scan.
+    // Amortized O(1): this advances x_bins times over the whole scan.
     if (x_interval > 0) {
       while (grid_i * x_interval <= cur_fpr) {
         ++grid_i;
@@ -558,13 +585,16 @@ int interpolate_roc(const Rcpp::NumericVector& sp,
                     std::vector<double>& fpr,
                     std::vector<double>& tpr,
                     unsigned n) {
-  const double cur_fpr = 1 - sp[idx];
-  const double prev_fpr = 1 - sp[idx-1];
-  const double slope = (sn[idx] - sn[idx-1]) / (cur_fpr - prev_fpr);
+  // Read through raw pointers - see calc_tp_fp() for why
+  const double* sp_p = sp.begin();
+  const double* sn_p = sn.begin();
+  const double cur_fpr = 1 - sp_p[idx];
+  const double prev_fpr = 1 - sp_p[idx-1];
+  const double slope = (sn_p[idx] - sn_p[idx-1]) / (cur_fpr - prev_fpr);
 
   double tmp_fpr = grid_i * x_interval;
   while (tmp_fpr < cur_fpr) {
-    const double tmp_tpr = sn[idx-1] + (tmp_fpr - prev_fpr) * slope;
+    const double tmp_tpr = sn_p[idx-1] + (tmp_fpr - prev_fpr) * slope;
     if ((n == 0) || (fpr[n-1] != tmp_fpr) || (tpr[n-1] != tmp_tpr)) {
       fpr[n] = tmp_fpr;
       tpr[n] = tmp_tpr;
@@ -637,28 +667,32 @@ Rcpp::List create_prc_curve(const Rcpp::NumericVector& tps,
     return ret_val;
   }
 
+  // Read through raw pointers - see calc_tp_fp() above for why
+  const double* sn_p = sn.begin();
+  const double* pr_p = pr.begin();
+
   // Calculate Precision-Recall points
   for (unsigned i = 0; i < sn.size(); ++i) {
-    if ((i != 0) && (sn[i] == sn[i-1])  && (pr[i] == pr[i-1])) {
+    if ((i != 0) && (sn_p[i] == sn_p[i-1])  && (pr_p[i] == pr_p[i-1])) {
       continue;
     }
 
     // Interpolate two points
     if ((x_interval > 0) && (i > 0)
-          && (grid_i * x_interval < sn[i])) {
+          && (grid_i * x_interval < sn_p[i])) {
       n = interpolate_prc(tps, fps, sn, pr, i, x_interval, grid_i, rec,
                           prec, n);
     }
 
-    rec[n] = sn[i];
-    prec[n] = pr[i];
+    rec[n] = sn_p[i];
+    prec[n] = pr_p[i];
     prc_orig[n] = true;
 
     ++n;
 
-    // Step the grid past this point. Amortised O(1) over the scan.
+    // Step the grid past this point. Amortized O(1) over the scan.
     if (x_interval > 0) {
-      while (grid_i * x_interval <= sn[i]) {
+      while (grid_i * x_interval <= sn_p[i]) {
         ++grid_i;
       }
     }
@@ -692,19 +726,24 @@ int interpolate_prc(const Rcpp::NumericVector& tps,
                     std::vector<double>& rec,
                     std::vector<double>& prec,
                     unsigned n) {
+  // Read through raw pointers - see calc_tp_fp() for why
+  const double* tps_p = tps.begin();
+  const double* fps_p = fps.begin();
+  const double* sn_p = sn.begin();
+  const double* pr_p = pr.begin();
   double tmp_rec = grid_i * x_interval;
   double tmp_prec;
   double x;
 
-  while (tmp_rec < sn[idx]) {
-    if (pr[idx] == pr[idx-1]) {
-      tmp_prec = pr[idx];
+  while (tmp_rec < sn_p[idx]) {
+    if (pr_p[idx] == pr_p[idx-1]) {
+      tmp_prec = pr_p[idx];
     } else {
-      x = (tmp_rec - sn[idx-1]) * tps[idx] / sn[idx];
-      tmp_prec = (tps[idx-1] + x) / (tps[idx-1] + x
-                                       + fps[idx-1]
-                                       + (((fps[idx] - fps[idx-1]) * x)
-                                       / (tps[idx] - tps[idx-1])));
+      x = (tmp_rec - sn_p[idx-1]) * tps_p[idx] / sn_p[idx];
+      tmp_prec = (tps_p[idx-1] + x) / (tps_p[idx-1] + x
+                                       + fps_p[idx-1]
+                                       + (((fps_p[idx] - fps_p[idx-1]) * x)
+                                       / (tps_p[idx] - tps_p[idx-1])));
     }
 
     if ((n == 0) || (rec[n-1] != tmp_rec) || (prec[n-1] != tmp_prec)) {

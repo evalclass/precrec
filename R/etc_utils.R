@@ -294,7 +294,7 @@
 #
 # Get the plot title of a basic evaluation metric
 #
-# Capitalising the name covers most of them; the rest are acronyms.
+# Capitalizing the name covers most of them; the rest are acronyms.
 #
 .get_metric_title <- function(curvetype) {
   # The plot code reads the curve type out of a data frame column, where it is

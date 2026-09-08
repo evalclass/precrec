@@ -387,7 +387,7 @@ metric_curve <- function(mdat, scores = NULL, labels = NULL,
 #
 # How a pair names itself in a plot title
 #
-# The titles the axes are labelled with, so the three read as one sentence
+# The titles the axes are labeled with, so the three read as one sentence
 # rather than as two spellings of the same metric.
 #
 .xycurve_title_label <- function(obj) {

@@ -205,7 +205,7 @@
 #
 # Decide whether the input is a multiclass dataset
 #
-# An explicit choice is honoured. Otherwise the input is multiclass when the
+# An explicit choice is honored. Otherwise the input is multiclass when the
 # labels hold more than two classes and the scores hold one column per class
 # - which is input the package used to reject outright, so nothing that
 # worked before is read differently now.

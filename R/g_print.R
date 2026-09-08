@@ -205,7 +205,7 @@ print.classification_report <- function(x, digits = 2, ...) {
 
   summaries <- c("accuracy", "micro avg", "macro avg", "weighted avg")
   blocks <- unique(as.data.frame(x)[c("modnames", "dsids")])
-  labelled <- nrow(blocks) > 1L
+  labeled <- nrow(blocks) > 1L
 
   # A blank cell rather than a repeated value: `accuracy` is a single number
   # over the whole block, not something precision and recall each have
@@ -227,7 +227,7 @@ print.classification_report <- function(x, digits = 2, ...) {
     ]
 
     cat("\n")
-    if (labelled) {
+    if (labeled) {
       cat(sprintf(
         "    === %s, dataset %s ===\n\n", blocks[["modnames"]][b],
         blocks[["dsids"]][b]

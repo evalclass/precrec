@@ -85,7 +85,7 @@ datasets, `s` = single, `m` = multiple:
 
 `curves` objects also carry `curve_info` and `aucs`; `points` objects carry
 `beval_info`; `xycurves` objects carry `xycurve_info`. This is why generics come in sets of eight (`g_plot.R`,
-`g_autoplot.R`, `g_fortify.R`, `g_dataframe.R`) — **adding behaviour usually
+`g_autoplot.R`, `g_fortify.R`, `g_dataframe.R`) — **adding behavior usually
 means editing all eight methods, or better, the shared helper they delegate
 to in `etc_utils_plot.R` / `etc_utils_autoplot.R` / `etc_utils_dataframe.R` /
 `etc_utils_fortify.R`.**
@@ -118,9 +118,9 @@ All heavy computation is in `src/`, exposed with `// [[Rcpp::export]]`:
 
 | File | Contents |
 | --- | --- |
-| `precrec_mmx.cpp` | input prep: `format_labels`, `get_score_ranks` |
+| `precrec_mmx.cpp` | input prep: `format_labels`, `get_score_ranks` (radix sort on an order-preserving `double`→`uint64_t` key) |
 | `precrec_plx.cpp` | the pipeline: `create_confusion_matrices`, `calc_basic_metrics`, `create_roc_curve`, `create_prc_curve` (with non-linear interpolation), `calc_auc`, `calc_uauc`, `calc_uauc_frank`, `calc_avg_curve`, `calc_avg_points` |
-| `precrec_misc.cpp/.h` | sorting/tie handling, point reduction, `convert_curve_df` / `convert_curve_avg_df` for `as.data.frame` |
+| `precrec_misc.cpp/.h` | tie shuffling, point reduction, `convert_curve_df` / `convert_curve_avg_df` for `as.data.frame` |
 | `RcppExports.*` | **generated** |
 
 Conventions in this layer:
@@ -134,6 +134,12 @@ Conventions in this layer:
   or `std::rand` — reproducibility under `set.seed()` and CRAN policy.
 - Each C++ block is commented with the R file and R function that calls it;
   keep those headers accurate when moving code.
+- A loop that scans a whole `Rcpp` vector reads it through a raw pointer
+  (`const double* p = v.begin()`), not through `operator[]`. That operator
+  goes through a proxy whose bounds check is a call to `warning()`, and in a
+  translation unit the size of `precrec_plx.cpp` the compiler leaves the call
+  out of line — worth up to 1.8x on the loops that read several vectors. Say
+  in a comment what makes the index safe; `precrec_plx.cpp` has the pattern.
 
 ## The metric table
 
@@ -185,7 +191,7 @@ code reads this table and nothing else.
 ## Curve accuracy notes
 
 The package's reason for existing is that naive PR-curve code is wrong. The
-behaviours below are load-bearing — changing them changes published results:
+behaviors below are load-bearing — changing them changes published results:
 
 - Non-linear interpolation between supporting points for PR curves
   (`interpolate_prc` in `precrec_plx.cpp`), linear for ROC.

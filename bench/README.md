@@ -1,6 +1,6 @@
 # Benchmarks
 
-Development scripts for the E4 optimisation work in
+Development scripts for the E4 optimization work in
 `.claude/plans/enhancements-2026.md`. This directory is `.Rbuildignore`d and
 is not part of the package — nothing here is a dependency of `precrec`
 itself.
@@ -21,7 +21,7 @@ installed copy.
 `pkgload::load_all()` compiles `src/` through `pkgbuild`, which by default
 adds its development flags — `-UNDEBUG -Wall -pedantic -g -O0`. Those
 *override* R's own `-O2`, so the obvious `load_all()` benchmarks an
-unoptimised build in which the C++ runs roughly an order of magnitude
+unoptimized build in which the C++ runs roughly an order of magnitude
 slower than the copy a user installs. `bench_load_precrec()` therefore sets
 `options(pkg.build_extra_flags = FALSE)` and rebuilds `src/` from clean
 unless `bench/.build-mode` (gitignored) says the objects on disk were
@@ -61,7 +61,7 @@ iterations do not settle enough for the 10% threshold to mean anything.
 objects with a row per observation, so 1e7 needs several GB; it is opt-in
 for that reason.
 
-## The workflow for an optimisation
+## The workflow for an optimization
 
 ```sh
 Rscript bench/run_correctness.R                              # before
@@ -103,17 +103,29 @@ every run of every batch.
 **Compare like with like.** A baseline saved with `--quick` and one saved
 without are not comparable: `--quick` runs 3 iterations at 0.05 s where the
 full run does 20 at 0.5 s, so the quick numbers carry warm-up that the full
-ones amortise away. Comparing across the two reads as a uniform regression
+ones amortize away. Comparing across the two reads as a uniform regression
 of 1.5x or more on the heavier cases.
 
 `bench/baseline/develop.json` is the committed reference, recorded on
 `develop` at full settings. **Regenerate it whenever a phase changes what
-the package computes** — the copy that predated the five basic measures
-added in 0.15.0 reported their documented cost as a 1.8x regression in
-every later comparison, which looks exactly like a real one. Timings are machine-specific,
-so the ratios are what carry across machines, not the absolute numbers —
-record your own baseline with `--save` if you want a like-for-like
-comparison on your hardware.
+the package computes, or how fast it computes it.** Both directions of
+staleness hide a real result:
+
+- A baseline older than a feature reports that feature's documented cost as
+  a regression. The copy that predated the five basic measures added in
+  0.15.0 did exactly that, at 1.8x, in every later comparison.
+- A baseline older than an optimization is slow by the size of the win, so
+  every later comparison starts with that much credit in hand and the next
+  real regression can sit inside it unnoticed.
+
+The `meta` block records the version and commit the baseline was taken
+from. Read it before trusting a comparison: the copy replaced after the
+0.21.2 C++ work had been recorded at 0.15.0 and was carrying six versions
+of unrelated change.
+
+Timings are machine-specific, so the ratios are what carry across machines,
+not the absolute numbers — record your own baseline with `--save` if you
+want a like-for-like comparison on your hardware.
 
 ## Parity with ROCR
 
@@ -196,7 +208,7 @@ high-water mark never comes back down within a process.
 Rscript bench/run_correctness.R
 ```
 
-The E4 optimisations rewrite how the C++ code allocates and fills its
+The E4 optimizations rewrite how the C++ code allocates and fills its
 results, which is exactly the kind of change that stays silent when it goes
 wrong. The harness pins three properties and exits non-zero if any fails:
 
@@ -216,7 +228,7 @@ wrong. The harness pins three properties and exits non-zero if any fails:
 | File | What it holds |
 | --- | --- |
 | `datasets.R` | seeded generators and the dataset catalogue |
-| `cases.R` | the benchmark cases, each labelled with the C++ entry point it exercises |
+| `cases.R` | the benchmark cases, each labeled with the C++ entry point it exercises |
 | `harness.R` | timing, JSON baselines, baseline comparison |
 | `run_bench.R` | timing entry point |
 | `run_memory.R` | peak-RSS entry point |

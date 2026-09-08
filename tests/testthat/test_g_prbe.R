@@ -98,7 +98,7 @@ test_that(".find_break_even() returns NA when there is no crossing", {
 
 test_that(".find_break_even() counts a touch at the end as a crossing", {
   # A perfect classifier reaches precision 1 at recall 1, which is a genuine
-  # break-even point rather than an artefact
+  # break-even point rather than an artifact
   expect_equal(.find_break_even(c(0, 0.5, 1), c(1, 1, 1)), 1)
 })
 

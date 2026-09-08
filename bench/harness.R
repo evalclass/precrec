@@ -17,7 +17,7 @@
 #
 # `pkgload::load_all()` compiles the C++ through pkgbuild, which by default
 # adds its development flags - `-UNDEBUG -Wall -pedantic -g -O0`. Those
-# override R's own `-O2`, so a plain `load_all()` benchmarks an unoptimised
+# override R's own `-O2`, so a plain `load_all()` benchmarks an unoptimized
 # build: the C++ runs roughly an order of magnitude slower than the copy a
 # user installs from CRAN, which makes the C++ look far more dominant than
 # it is. Turn the extra flags off, and rebuild from clean unless the objects

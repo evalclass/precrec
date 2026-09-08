@@ -368,7 +368,7 @@ and `is.numeric()` still ride alongside it to keep a logical `NA` out of a
 name argument and a character `NA` out of a numeric one. Every message and
 every condition class is unchanged.
 
-**Gate.** A 429-line behavioural probe recorded the exact class and message of
+**Gate.** A 429-line behavioral probe recorded the exact class and message of
 all eight assert entry points across 33 inputs before the change, and was
 diffed against the same probe afterwards. Two lines moved, both the intended
 bug fix. Full suite `FAIL 0 | WARN 0 | PASS 2989 + 21 new`; `R CMD check`
@@ -425,7 +425,7 @@ a phase changes what the package computes, which phases 3, 5 and 6 all will.
 and `.pmatch_curvetype_basic()` return their input unchanged when it is not a
 string, so `evalmod(curvetype = 1)` has to survive them to reach the validator
 that names the argument. A `.map_chr()` there would have thrown a type error
-from the wrong place. `unlist(.map(...))` keeps the existing behaviour.
+from the wrong place. `unlist(.map(...))` keeps the existing behavior.
 
 ### Phase 3 outcome (2026-09-01)
 
