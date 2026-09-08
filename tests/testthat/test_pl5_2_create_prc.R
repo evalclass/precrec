@@ -476,3 +476,19 @@ test_that("mm test data with x_bins=0, 1", {
     expect_true(all(prc_curve4[["orig_points"]]))
   }
 })
+
+test_that("create_prc stays inside its buffer for large x_bins", {
+  # See the matching test in test_pl5_1_create_roc.R - create_prc shared the
+  # per-gap grid, and the overrun with it.
+  set.seed(101)
+  n <- 200
+  scores <- runif(n)
+  labels <- rep(c(0L, 1L), c(n / 2, n / 2))
+
+  for (x_bins in c(5000, 10000, 1e5)) {
+    prc_curve <- create_prc(scores = scores, labels = labels, x_bins = x_bins)
+    expect_lte(length(prc_curve[["x"]]), n + 1 + x_bins)
+    expect_false(any(is.na(prc_curve[["x"]])))
+    expect_false(any(is.na(prc_curve[["y"]])))
+  }
+})

@@ -96,7 +96,10 @@
 #'   `c(0, 0.25, 0.5, 0.75, 1)` when `x_bins = 2`
 #'   and `x_bins = 4`, respectively. All corresponding y-values of
 #'   the supporting points are calculated. `x_bins` is effective only
-#'   when `mode` is set to `rocprc` or `prcroc`.
+#'   when `mode` is set to `rocprc` or `prcroc`. It must be `1e6` or
+#'   smaller; every stage sized by it allocates a vector of that length per
+#'   curve, and a million supporting points is already finer than a plot
+#'   resolves.
 #'
 #' @param beta A numeric value to specify the beta of the F-beta score,
 #'   which weights recall `beta` times as heavily as precision.
