@@ -11,6 +11,7 @@ ci
 CMD
 codecov
 CodeFactor
+comparator
 curvetype
 DeLong
 doi
@@ -33,6 +34,8 @@ Goadrich
 gridExtra
 informedness
 Informedness
+inlining
+introsort
 io
 Jaccard
 lintr
@@ -71,7 +74,9 @@ prbe
 prcroc
 Pre
 purrr
+radix
 Rcpp
+Rcpp's
 README
 rmse
 RMSE

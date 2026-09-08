@@ -145,3 +145,33 @@ test_that("Ties should be controlled by 'ties_method'", {
 
   expect_true(any(r0[["ranks"]] == r1, r0[["ranks"]] == r2))
 })
+
+test_that("Negative and positive zero rank as one tied score", {
+  # -0.0 and 0.0 are equal as numbers but differ in their sign bit, so a
+  # ranking that keys on the bits splits a tie that is not there.
+  scores <- c(0.0, -0.0, 0.5, -0.0, 0.0)
+
+  expect_equal(
+    .rank_scores(scores, ties_method = "equiv")[["ranks"]],
+    c(2, 2, 1, 2, 2)
+  )
+  expect_equal(
+    .rank_scores(scores, ties_method = "first")[["ranks"]],
+    c(2, 3, 1, 4, 5)
+  )
+})
+
+test_that("Ranks are invariant under a shift of every score", {
+  # Adding a constant to every score moves no score past another, so the
+  # ranks must not move either. Rounded scores are the case that matters:
+  # they carry the ties, and rounding a small negative gives -0.0.
+  set.seed(1)
+  scores <- round(rnorm(200), 1)
+
+  for (ties_method in c("equiv", "first")) {
+    expect_equal(
+      .rank_scores(scores, ties_method = ties_method)[["ranks"]],
+      .rank_scores(scores + 1000, ties_method = ties_method)[["ranks"]]
+    )
+  }
+})
