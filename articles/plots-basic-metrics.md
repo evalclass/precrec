@@ -45,6 +45,30 @@ permissive.
 This is what makes the panels comparable across datasets of different
 sizes.
 
+The value plotted is the *normalized rank*. There is one cutoff above
+every instance and one below all of them, so `n` instances give `n + 1`
+points, and the cutoff with `k` instances above it sits at `k / n`.
+
+``` r
+
+n <- 5 # five instances, so six cutoffs
+
+(0:n) / n
+#> [1] 0.0 0.2 0.4 0.6 0.8 1.0
+```
+
+Counting those points from 1 rather than from 0, the same thing is
+`(rank - 1) / (points - 1)`. Ranks count down from the best score, so
+the highest-scoring instance is rank 1 and sits at the left edge - the
+opposite direction to R’s [`rank()`](https://rdrr.io/r/base/rank.html),
+which counts up from the lowest score.
+
+`ties_method` in
+[`evalmod()`](https://evalclass.github.io/precrec/reference/evalmod.md)
+sets the rank that tied instances receive, but the cutoffs still step
+one instance at a time, so a run of tied scores spreads across
+consecutive x values rather than sharing one.
+
 ## Scores and labels
 
 Two extra panels show the data behind the metrics rather than a metric:
@@ -55,7 +79,7 @@ the score at each rank, and the observed label.
 autoplot(points, c("score", "label"))
 ```
 
-![](plots-basic-metrics_files/figure-html/unnamed-chunk-5-1.png)
+![](plots-basic-metrics_files/figure-html/unnamed-chunk-6-1.png)
 
 The label panel is the quickest way to see whether the positives really
 are concentrated at the top of the ranking.
@@ -74,7 +98,7 @@ extra <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
 autoplot(extra, c("fpr", "lift"))
 ```
 
-![](plots-basic-metrics_files/figure-html/unnamed-chunk-6-1.png)
+![](plots-basic-metrics_files/figure-html/unnamed-chunk-7-1.png)
 
 Asking to plot a metric that was not calculated is an error that names
 the argument to add. See the [metrics

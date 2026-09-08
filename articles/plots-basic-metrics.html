@@ -141,15 +141,33 @@ is. So the left edge is the strictest cutoff and the right edge the most
 permissive.</p>
 <p>This is what makes the panels comparable across datasets of different
 sizes.</p>
+<p>The value plotted is the <em>normalized rank</em>. There is one
+cutoff above every instance and one below all of them, so <code>n</code>
+instances give <code>n + 1</code> points, and the cutoff with
+<code>k</code> instances above it sits at <code>k / n</code>.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">5</span> <span class="co"># five instances, so six cutoffs</span></span>
+<span></span>
+<span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="va">n</span><span class="op">)</span> <span class="op">/</span> <span class="va">n</span></span>
+<span><span class="co">#&gt; [1] 0.0 0.2 0.4 0.6 0.8 1.0</span></span></code></pre></div>
+<p>Counting those points from 1 rather than from 0, the same thing is
+<code>(rank - 1) / (points - 1)</code>. Ranks count down from the best
+score, so the highest-scoring instance is rank 1 and sits at the left
+edge - the opposite direction to R’s <code><a href="https://rdrr.io/r/base/rank.html" class="external-link">rank()</a></code>, which counts
+up from the lowest score.</p>
+<p><code>ties_method</code> in <code><a href="../reference/evalmod.html">evalmod()</a></code> sets the rank that
+tied instances receive, but the cutoffs still step one instance at a
+time, so a run of tied scores spreads across consecutive x values rather
+than sharing one.</p>
 </div>
 <div class="section level2">
 <h2 id="scores-and-labels">Scores and labels<a class="anchor" aria-label="anchor" href="#scores-and-labels"></a>
 </h2>
 <p>Two extra panels show the data behind the metrics rather than a
 metric: the score at each rank, and the observed label.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">points</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"score"</span>, <span class="st">"label"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plots-basic-metrics_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="672"></p>
+<p><img src="plots-basic-metrics_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="" width="672"></p>
 <p>The label panel is the quickest way to see whether the positives
 really are concentrated at the top of the ranking.</p>
 </div>
@@ -158,13 +176,13 @@ really are concentrated at the top of the ranking.</p>
 </h2>
 <p>Anything beyond the default fourteen is requested with
 <code>metrics =</code> and then plotted the same way.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">extra</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span>,</span>
 <span>  mode <span class="op">=</span> <span class="st">"basic"</span>, metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fpr"</span>, <span class="st">"lift"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">extra</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fpr"</span>, <span class="st">"lift"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plots-basic-metrics_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="" width="672"></p>
+<p><img src="plots-basic-metrics_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="672"></p>
 <p>Asking to plot a metric that was not calculated is an error that
 names the argument to add. See the <a href="metrics-overview.html">metrics overview</a>.</p>
 </div>
