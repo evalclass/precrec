@@ -395,7 +395,7 @@ Rcpp::List calc_basic_metrics(int np,
 
     // Nothing is predicted positive at the first rank and nothing is
     // predicted negative at the last one, so precision and NPV each have one
-    // undefined end. Both are filled in from their neighbour below.
+    // undefined end. Both are filled in from their neighbor below.
     if (i > 0) {
       prec[i] = tps_p[i] / tpfp;
     }
@@ -548,7 +548,7 @@ Rcpp::List create_roc_curve(const Rcpp::NumericVector& tps,
     ++n;
 
     // Step the grid past this point, so the next gap starts above it.
-    // Amortised O(1): this advances x_bins times over the whole scan.
+    // Amortized O(1): this advances x_bins times over the whole scan.
     if (x_interval > 0) {
       while (grid_i * x_interval <= cur_fpr) {
         ++grid_i;
@@ -690,7 +690,7 @@ Rcpp::List create_prc_curve(const Rcpp::NumericVector& tps,
 
     ++n;
 
-    // Step the grid past this point. Amortised O(1) over the scan.
+    // Step the grid past this point. Amortized O(1) over the scan.
     if (x_interval > 0) {
       while (grid_i * x_interval <= sn_p[i]) {
         ++grid_i;

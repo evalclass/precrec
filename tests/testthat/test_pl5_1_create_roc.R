@@ -466,7 +466,7 @@ test_that("mm test data with x_bins=0, 1", {
 
 test_that("create_roc stays inside its buffer for large x_bins", {
   # The interpolated points used to come off a grid snapped to each gap's
-  # own start, so neighbouring gaps disagreed about where the grid lines
+  # own start, so neighboring gaps disagreed about where the grid lines
   # were and together emitted more points than the x_bins the buffer is
   # sized for - a heap overrun from x_bins >= 5000 up. One shared grid
   # bounds the count by construction; assert the bound directly.

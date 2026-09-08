@@ -70,7 +70,7 @@ a plain data frame view at the top of the function.
 
 `as.data.frame()` is a base generic with a strong contract. A `data.table`
 *is* a `data.frame`, but printing, `[`-semantics, and copy-on-modify
-behaviour differ, and reverse dependencies / user scripts may rely on base
+behavior differ, and reverse dependencies / user scripts may rely on base
 semantics.
 
 **Recommendation:** internal representation `data.table`, external contract
@@ -90,7 +90,7 @@ unchanged by default:
 
 1. Replace the two `rbind`-in-loop sites (`etc_utils_dataframe.R`,
    `g_auc_ci.R`) with build-list-then-`rbindlist()`. This alone removes the
-   worst quadratic behaviour and the R fallback's performance penalty.
+   worst quadratic behavior and the R fallback's performance penalty.
 2. Convert table constructors stage by stage (mm1 → pl2 → g_) to
    `data.table`; use `setattr()` where attribute copies matter.
 3. C++ boundary: `Rcpp::DataFrame` results get `setDT()` applied in the
@@ -103,7 +103,7 @@ unchanged by default:
 
 ### Risks
 
-- Silent behaviour changes from data.table's reference semantics — audit any
+- Silent behavior changes from data.table's reference semantics — audit any
   site that mutates a table after creation (e.g. `data_info[["nn"]][i] <- ...`
   in `mmdata`).
 - `.validate.*` methods check item/attribute names; class changes on internal
@@ -116,7 +116,7 @@ unchanged by default:
 ### Outcome
 
 Implemented on `feature/Multiclass`. One-vs-rest, classes on the model axis,
-exactly as decided below. Binary behaviour is unchanged: the whole existing
+exactly as decided below. Binary behavior is unchanged: the whole existing
 suite passes untouched, and `mmdata()` reads binary input by the same path it
 always did.
 
@@ -181,7 +181,7 @@ in R rather than by relaxing the guard and letting `create_curves()` run.
   list of score matrices instead. `format_nfold()` is built around one score
   column per model, and widening it is its own change.
 - **Faceting by class.** Classes are models, so the existing multi-model
-  rendering colours them already; a class-aware legend title would be
+  rendering colors them already; a class-aware legend title would be
   cosmetic.
 
 ### Cost
@@ -265,7 +265,7 @@ decompositions — implementable as one extra concatenated dataset).
 
 ### Risks
 
-- Biggest user-facing change in the package's history; keep binary behaviour
+- Biggest user-facing change in the package's history; keep binary behavior
   byte-identical (full snapshot suite must pass untouched).
 - Averaging across datasets × classes interacts with `calc_avg` — v1 should
   average within class across datasets only, and document that.
@@ -345,7 +345,7 @@ decompositions — implementable as one extra concatenated dataset).
    **The original assessment that this was dormant was wrong.** The same
    sentinel appears twice, and only one of the two sites is unreachable:
 
-   - `calc_uauc` (`precrec_plx.cpp`) — genuinely dormant, as analysed:
+   - `calc_uauc` (`precrec_plx.cpp`) — genuinely dormant, as analyzed:
      reachable only via `ustat_method = "sort"`, which `.pl_main_aucroc`
      cannot select, and the default `calc_uauc_frank` path is correct.
    - `make_index_pairs` (`precrec_misc.cpp`) — **on the main pipeline
@@ -380,7 +380,7 @@ decompositions — implementable as one extra concatenated dataset).
 0. **Infrastructure first** — **DONE (2026-08-30).** `bench/`
    (Rbuildignored, `bench/README.md` documents it): seeded datasets over a
    1e4–1e7 size sweep plus a shape sweep (imbalanced, ties, NAs, all three),
-   `bench::mark()` cases labelled with the C++ entry point each exercises,
+   `bench::mark()` cases labeled with the C++ entry point each exercises,
    JSON baselines with a `--compare` mode that flags regressions past 10%
    above a 1 ms noise floor, and `run_correctness.R` covering the
    `use_rcpp = FALSE` fallback, ALTREP inputs, and the ranking invariants.
@@ -602,7 +602,7 @@ Cohen's kappa are calculated in the same C++ loop as the existing measures,
 and `fscore` became F-beta through a new `beta` argument on `evalmod()`
 (default 1, so existing results are byte-identical). NPV needed the mirror of
 the trick precision already used: nothing is predicted negative at the last
-rank, so that cell is undefined and is taken from its neighbour, and the two
+rank, so that cell is undefined and is taken from its neighbor, and the two
 markedness values built from the patched cells are recomputed after the loop.
 
 **The touch list was the work, as predicted — so it got shorter.** Rather
@@ -623,7 +623,7 @@ computes the grid, and shares its column count with the ggplot2 side through
 draws it.
 
 **Tier 2.** `prob_metrics()` returns the Brier score and the log loss per
-model and dataset; `prob_metrics_ci()` summarises them over multiple
+model and dataset; `prob_metrics_ci()` summarizes them over multiple
 datasets. Both take the same input as `evalmod()` — an `mmdata()` object or
 raw scores and labels — because that is where the raw scores live; the curve
 objects do not keep them. Scores outside [0, 1] are rejected with a
@@ -656,7 +656,7 @@ curve pipeline calls `calc_measures()` too and was paying for five measures
 no curve is drawn from. `calc_measures()` and `calc_basic_measures()` grew an
 `extra_measures` flag, and `.pl_main_rocprc()` passes `FALSE`. Isolated at
 1e6: 179 ms for the full table, 86.6 ms for the reduced one. The rocprc
-numbers above are the phase-6 optimisations showing through, not an E5 gain.
+numbers above are the phase-6 optimizations showing through, not an E5 gain.
 
 ### Not done
 

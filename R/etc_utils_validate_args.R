@@ -193,7 +193,7 @@
 # Assert that an argument is a vector of one type, optionally of a given length
 #
 # `is.vector()` rather than a checkmate predicate on purpose: it rejects
-# anything carrying an attribute other than names, which is the behaviour the
+# anything carrying an attribute other than names, which is the behavior the
 # callers below have always had, and which `test_atomic_vector()` would relax.
 #
 .assert_vector <- function(x, arg, type = c("character", "numeric"),

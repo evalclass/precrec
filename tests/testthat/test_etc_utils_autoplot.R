@@ -1,7 +1,7 @@
 # ETC utils: autoplot structure
 #
 # These tests state directly what a plot should be - how many panels it has,
-# which metric each one draws, how it is titled and labelled. The snapshots
+# which metric each one draws, how it is titled and labeled. The snapshots
 # in _snaps/ catch anything that changes without being asked to; these say
 # what is supposed to be true, so a failure reads as a broken expectation
 # rather than as a diff to go and interpret. Prefer adding to these for

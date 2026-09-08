@@ -37,7 +37,7 @@ test_that(".get_new_multiclass() leaves binary input alone", {
   )
 })
 
-test_that(".get_new_multiclass() honours an explicit choice", {
+test_that(".get_new_multiclass() honors an explicit choice", {
   expect_equal(
     .get_new_multiclass("none", mm5_test_scores(), mm5_test_labels()),
     "none"

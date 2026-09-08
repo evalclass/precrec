@@ -92,7 +92,7 @@ prbe.curve_info <- function(curves) {
 # The curve arrives as supporting points that `create_curves()` has already
 # interpolated, so the crossing is read off those rather than off the raw
 # per-cutoff points - which is the whole difference from ROCR. Between two
-# neighbouring supporting points a linear step is what the curve itself does,
+# neighboring supporting points a linear step is what the curve itself does,
 # so a straight root-find on `precision - recall` is exact to the resolution
 # of `x_bins`.
 #

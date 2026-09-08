@@ -79,7 +79,7 @@ bench_datasets <- function(sizes = c(1e4, 1e5, 1e6), shape_n = 1e5) {
   out
 }
 
-# Materialise one catalogue entry
+# Materialize one catalogue entry
 bench_load_dataset <- function(entry) {
   do.call(.bench_make_data, entry[["args"]])
 }

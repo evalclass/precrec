@@ -1,7 +1,7 @@
 # The benchmark cases.
 #
 # Each case names the C++ entry point it is meant to exercise, so that the
-# E4 optimisation work has an obvious before/after target. See
+# E4 optimization work has an obvious before/after target. See
 # .claude/plans/enhancements-2026.md.
 
 # Cases that run over every dataset in the catalogue.

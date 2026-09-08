@@ -85,7 +85,7 @@ datasets, `s` = single, `m` = multiple:
 
 `curves` objects also carry `curve_info` and `aucs`; `points` objects carry
 `beval_info`; `xycurves` objects carry `xycurve_info`. This is why generics come in sets of eight (`g_plot.R`,
-`g_autoplot.R`, `g_fortify.R`, `g_dataframe.R`) — **adding behaviour usually
+`g_autoplot.R`, `g_fortify.R`, `g_dataframe.R`) — **adding behavior usually
 means editing all eight methods, or better, the shared helper they delegate
 to in `etc_utils_plot.R` / `etc_utils_autoplot.R` / `etc_utils_dataframe.R` /
 `etc_utils_fortify.R`.**
@@ -191,7 +191,7 @@ code reads this table and nothing else.
 ## Curve accuracy notes
 
 The package's reason for existing is that naive PR-curve code is wrong. The
-behaviours below are load-bearing — changing them changes published results:
+behaviors below are load-bearing — changing them changes published results:
 
 - Non-linear interpolation between supporting points for PR curves
   (`interpolate_prc` in `precrec_plx.cpp`), linear for ROC.
