@@ -16,7 +16,8 @@ its own short page.
 library(precrec)
 library(ggplot2)
 
-points <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
+points <- evalmod(
+  scores = P10N10$scores, labels = P10N10$labels,
   mode = "basic"
 )
 ```
@@ -74,7 +75,8 @@ the plot, so they are left out unless named.
 so nothing that worked before changes.
 
 ```{r}
-extra <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
+extra <- evalmod(
+  scores = P10N10$scores, labels = P10N10$labels,
   mode = "basic", metrics = c("fpr", "lift")
 )
 
@@ -90,11 +92,17 @@ other tools are accepted too, so a call written against `ROCR` keeps working.
 
 ## Not on this page
 
-Three summaries describe a whole curve or a whole set of predictions rather
-than one cutoff, and have their own functions:
+These have their own functions rather than a column in the table above:
 
 - [AUC and other curve summaries](metrics-auc.html) - `auc()`, `pauc()`,
   `auc_ci()`, `prbe()`, `average_precision()`
 - [Probability-based metrics](metrics-probability.html) - `prob_metrics()`,
   for scores that are genuine probabilities, and the D2 scores that rescale
   its losses against a null model
+- [Classification report](metrics-classification-report.html) -
+  `classification_report()`, precision, recall and F-score per class at one
+  operating point you choose
+
+Coming from another package? [Comparison with other
+tools](metrics-other-tools.html) maps the names across and shows where the
+numbers differ.

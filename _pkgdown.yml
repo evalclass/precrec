@@ -39,6 +39,8 @@ reference:
   - title: Confidence interval of AUC scores
     contents:
     - auc_ci
+    - auc_boot
+    - auc_diff
   - title: Precision-recall break-even point
     contents:
     - prbe
@@ -49,6 +51,9 @@ reference:
     contents:
     - prob_metrics
     - prob_metrics_ci
+  - title: Classification report
+    contents:
+    - classification_report
   - title: Datasets
     desc: P10N10, B500, B1000, IB500, IB1000, M2N50F5 and C3N150
     contents:
@@ -76,6 +81,7 @@ articles:
     - "articles/howto-large-datasets"
     - "articles/howto-results-as-data"
     - "articles/howto-imbalanced-data"
+    - "articles/howto-tidymodels"
   - title: Metrics
     navbar: ~
     contents:
@@ -85,6 +91,9 @@ articles:
     - "articles/metrics-ranking-cost"
     - "articles/metrics-auc"
     - "articles/metrics-probability"
+    - "articles/metrics-classification-report"
+    - "articles/metrics-uncertainty"
+    - "articles/metrics-other-tools"
   - title: Plots
     navbar: ~
     contents:
@@ -123,6 +132,8 @@ navbar:
         href: articles/howto-results-as-data.html
       - text: Balanced and imbalanced data
         href: articles/howto-imbalanced-data.html
+      - text: Use precrec with tidymodels
+        href: articles/howto-tidymodels.html
     metrics:
       text: Metrics
       menu:
@@ -140,6 +151,13 @@ navbar:
         href: articles/metrics-auc.html
       - text: Probability-based metrics
         href: articles/metrics-probability.html
+      - text: Classification report
+        href: articles/metrics-classification-report.html
+      - text: Uncertainty from one test set
+        href: articles/metrics-uncertainty.html
+      - text: -------
+      - text: Comparison with other tools
+        href: articles/metrics-other-tools.html
     plots:
       text: Plots
       menu:

@@ -195,3 +195,60 @@ print.xycurve_info <- function(x, ...) {
 
   print.mdat(x)
 }
+
+
+#' @rdname print
+#' @export
+print.classification_report <- function(x, digits = 2, ...) {
+  # === Validate input arguments ===
+  .assert_number(digits, "digits", min = 0, max = 20, whole = TRUE)
+
+  summaries <- c("accuracy", "micro avg", "macro avg", "weighted avg")
+  blocks <- unique(as.data.frame(x)[c("modnames", "dsids")])
+  labelled <- nrow(blocks) > 1L
+
+  # A blank cell rather than a repeated value: `accuracy` is a single number
+  # over the whole block, not something precision and recall each have
+  num <- function(v) {
+    ifelse(is.na(v), "", formatC(v, format = "f", digits = digits))
+  }
+
+  width <- max(nchar(c(x[["class"]], "weighted avg"))) + 1L
+  header <- sprintf(
+    "%*s %9s %9s %9s %9s", width, "", "precision", "recall", "f1-score",
+    "support"
+  )
+
+  for (b in seq_len(nrow(blocks))) {
+    rows <- as.data.frame(x)[
+      x[["modnames"]] == blocks[["modnames"]][b] &
+        x[["dsids"]] == blocks[["dsids"]][b], ,
+      drop = FALSE
+    ]
+
+    cat("\n")
+    if (labelled) {
+      cat(sprintf(
+        "    === %s, dataset %s ===\n\n", blocks[["modnames"]][b],
+        blocks[["dsids"]][b]
+      ))
+    }
+    cat(header, "\n\n", sep = "")
+
+    is_summary <- rows[["class"]] %in% summaries
+    for (i in seq_len(nrow(rows))) {
+      # sklearn sets the summary rows off from the per-class ones
+      if (is_summary[i] && (i == 1L || !is_summary[i - 1L])) {
+        cat("\n")
+      }
+      cat(sprintf(
+        "%*s %9s %9s %9s %9d\n", width, rows[["class"]][i],
+        num(rows[["precision"]][i]), num(rows[["recall"]][i]),
+        num(rows[["fscore"]][i]), as.integer(rows[["support"]][i])
+      ))
+    }
+  }
+
+  cat("\n")
+  invisible(x)
+}

@@ -95,6 +95,20 @@ prediction scores that are probabilities, and \code{\link[=prob_metrics_ci]{prob
 returns their confidence intervals over multiple test datasets.
 }
 
+\section{Uncertainty from one test set}{
+
+\code{\link[=auc_boot]{auc_boot()}} resamples a single test set so that \code{\link[=auc_ci]{auc_ci()}} can put a
+percentile interval around its AUC, and \code{\link[=auc_diff]{auc_diff()}} can compare two
+models on the same resamples.
+}
+
+\section{Classification report}{
+
+\code{\link[=classification_report]{classification_report()}} reports precision, recall and the F-score of
+every class at one operating point, in the layout \code{scikit-learn}'s
+function of that name prints.
+}
+
 \seealso{
 Useful links:
 \itemize{

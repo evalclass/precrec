@@ -77,6 +77,16 @@
 #' prediction scores that are probabilities, and [prob_metrics_ci()]
 #' returns their confidence intervals over multiple test datasets.
 #'
+#' @section Uncertainty from one test set:
+#' [auc_boot()] resamples a single test set so that [auc_ci()] can put a
+#' percentile interval around its AUC, and [auc_diff()] can compare two
+#' models on the same resamples.
+#'
+#' @section Classification report:
+#' [classification_report()] reports precision, recall and the F-score of
+#' every class at one operating point, in the layout `scikit-learn`'s
+#' function of that name prints.
+#'
 #'
 #' @name precrec
 #'
@@ -89,7 +99,7 @@
 #' @importFrom graphics matplot plot plot.new polygon
 #' @importFrom methods is
 #' @importFrom rlang sym
-#' @importFrom stats qnorm rbeta rnorm sd qt
+#' @importFrom stats qnorm rbeta rnorm sd qt quantile
 #' @importFrom data.table frank
 #'
 "_PACKAGE"

@@ -1,3 +1,97 @@
+# precrec 0.21.0
+
+* Add `auc_boot()`, which resamples a single test set, so that `auc_ci()`
+  can put an interval around an AUC without several test sets to compare.
+  Every interval in `precrec` until now was built from the variation
+  *between* test sets, and `auc_ci()` on one dataset raised an error; that
+  error now names this function.
+
+  The resampling is stratified - positives drawn from the positives,
+  negatives from the negatives - so every resample keeps the class balance
+  of the original. An unstratified bootstrap of imbalanced data varies the
+  balance from resample to resample, which moves the precision-recall
+  baseline underneath the quantity being estimated.
+
+  `auc_ci()` on the result gives a percentile interval, read off the
+  resampled values rather than assumed from a distribution over them, so it
+  cannot leave `[0, 1]` and needs none of the clipping the multi-dataset
+  interval does. `dtype` is refused there for the same reason.
+
+* Add `auc_diff()`, which compares two models on the *same* resamples. The
+  difference is calculated within a resample, so the interval describes the
+  difference itself. Two separate intervals from `auc_ci()` cannot be read
+  that way: they can overlap while the difference is clearly on one side of
+  zero, because they say nothing about how the two models move together.
+
+  It reports a percentile interval and a p-value, floored at `2 / (n + 1)`
+  so that a resample count cannot manufacture significance it does not
+  support.
+
+  Verified rather than asserted: the bootstrap standard error matches
+  the analytic variance of DeLong for the ROC AUC to within 2% at n = 100 to
+  1000, and the 95% interval covered a known true AUC in 142 of 150
+  simulations. Both checks are in the test suite, the first as an
+  independent implementation of the DeLong formula.
+
+* Add a website page comparing `precrec` with `ROCR`, `pROC`, `PRROC`,
+  `yardstick`, `scikit-learn` and `imbalanced-learn`: which to reach for,
+  what `precrec` does not do that they do, and the one place the numbers
+  disagree rather than the interfaces. The step estimator of the
+  precision-recall area, which most of them report, reads more than a tenth
+  high at two percent positives against the interpolated area `auc()`
+  returns, and the page computes that rather than claiming it.
+
+* Add a website page on using `precrec` from `tidymodels`. No adapter is
+  needed: `collect_predictions()` returns a fold column, a truth column and
+  one `.pred_<class>` column per class, which is the shape `mmdata()`
+  already takes through `nfold_df`, and factor labels have always been
+  accepted.
+
+  The page leads with the one difference that is silent when it bites.
+  `yardstick` treats the first factor level as the event; `precrec` treats
+  the last as the positive class. Pairing `yardstick`'s default score
+  column with `precrec`'s default inverts the AUC without a warning, and
+  the page shows a case that comes out 1 one way and 0 the other.
+
+  `tidymodels` stays out of the package entirely, `Suggests` included, so
+  the chunks that need it are shown rather than run and the website builds
+  without it. `bench/run_tidymodels_parity.R` checks the page against a real
+  fit instead, and found two of its recipes wrong before it shipped.
+
+# precrec 0.20.0
+
+* Add `classification_report()`, the per-class table of precision, recall
+  and F-score that `scikit-learn`'s `classification_report` prints, with the
+  `macro avg` and `weighted avg` rows under it. It reproduces
+  `scikit-learn`'s documented examples number for number.
+
+  The third summary row follows the rule `scikit-learn` documents. A binary
+  problem cut at a threshold puts every observation in exactly one of the
+  two classes, so the row is `accuracy`. A multi-class problem is evaluated
+  one-vs-rest and each class is thresholded on its own, so an observation
+  can fall into no class or into several; there is then no single-label
+  accuracy, and the row is `micro avg`, computed from the true positives,
+  false positives and false negatives pooled over the classes. Where the
+  predictions do happen to be single-label the two coincide, which is the
+  identity `scikit-learn` gives for printing one and not the other.
+
+  `at` names the operating point and has no default. `scikit-learn` reports
+  on `y_pred`, so its caller has already chosen one; `precrec` holds scores
+  and evaluates every cutoff, and no threshold is meaningful on every score
+  scale, so the choice stays with the caller. It takes one number for all
+  classes or one per class.
+
+  `zero_division` sets what an empty denominator reports, `0` as in
+  `scikit-learn` or `NA` as in the per-cutoff metrics of `evalmod()`.
+
+* Add a website page for it, and trim the metric pages back towards the
+  length the site was built at. Each release since had appended a section to
+  them, taking the article average from the 88 lines the site was built at to
+  99. It is now 93 over 22 articles, one more article than before. Nothing a
+  page needed was dropped: the cuts are restated prose, a duplicated `auc()`
+  chunk on the AUC page, and an unused `beta = 2` example on the agreement
+  page.
+
 # precrec 0.19.0
 
 * Settle on "metric" as the word for the quantities `evalmod(metrics = )`,

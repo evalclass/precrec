@@ -16,7 +16,8 @@ default set; the last two are asked for by name.
 library(precrec)
 library(ggplot2)
 
-points <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
+points <- evalmod(
+  scores = P10N10$scores, labels = P10N10$labels,
   mode = "basic"
 )
 ```
@@ -29,20 +30,12 @@ points <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
 | `fscore` | harmonic mean of precision and recall | 0 to 1 |
 
 Balanced accuracy is accuracy with both classes weighted equally, so the
-majority class cannot carry it on its own.
+majority class cannot carry it on its own. `fscore` is the F-beta score and
+defaults to F1; `evalmod(beta = 2)` counts recall twice as heavily as
+precision, `beta = 0.5` half as heavily.
 
 ```{r}
 autoplot(points, c("balanced_accuracy", "fscore"))
-```
-
-`fscore` is the F-beta score and defaults to F1. `beta` weights recall
-against precision: `beta = 2` counts recall twice as heavily, `beta = 0.5`
-half as heavily.
-
-```{r}
-f2 <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
-  mode = "basic", beta = 2
-)
 ```
 
 ## Correlation-like metrics
@@ -52,17 +45,15 @@ f2 <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
 | `mcc` | correlation of prediction and truth | -1 to 1 |
 | `kappa` | agreement above chance | -1 to 1 |
 
-Matthews correlation coefficient uses all four cells of the table, so it is
-high only when the classifier does well on both classes. Cohen's kappa
-compares observed agreement against the agreement two raters with these
-margins would reach by chance.
+Matthews correlation coefficient uses all four cells, so it is high only when
+the classifier does well on both classes. Cohen's kappa compares observed
+agreement against what two raters with these margins would reach by chance.
+Both can go negative, meaning worse than chance, which is why their plots are
+drawn on a -1 to 1 axis.
 
 ```{r}
 autoplot(points, c("mcc", "kappa"))
 ```
-
-Both can go negative, meaning worse than chance. Their plots are drawn on a
--1 to 1 axis for that reason.
 
 ## Informedness and markedness
 
@@ -75,10 +66,6 @@ Informedness, also called Youden's J, is how much better than guessing the
 classifier is over the actual classes; markedness is the same idea over the
 predicted classes. Their geometric mean is the MCC.
 
-```{r}
-autoplot(points, c("informedness", "markedness"))
-```
-
 ## Skill scores
 
 | Metric | Formula | Range |
@@ -86,54 +73,42 @@ autoplot(points, c("informedness", "markedness"))
 | `roc_dist` | distance to the perfect point in ROC space | 0 to sqrt(2) |
 | `sedi` | symmetric extremal dependence index | -1 to 1 |
 
-These two are not in the default set, so name them in `metrics =`.
+Not in the default set, so name them in `metrics =`.
 
 ```{r}
-skill <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
+skill <- evalmod(
+  scores = P10N10$scores, labels = P10N10$labels,
   mode = "basic", metrics = c("roc_dist", "sedi")
 )
 
 autoplot(skill, c("roc_dist", "sedi"))
 ```
 
-`roc_dist` is the straight-line distance from the point
-`(1 - specificity, sensitivity)` to the top-left corner of ROC space, where
-both are 1. It is the only metric on this page that is **better when it is
-smaller**, and the only one whose maximum is `sqrt(2)` rather than 1. Picking
-the cutoff that minimizes it is one of the standard ways of choosing an
-operating point off a ROC curve.
+`roc_dist` is the straight-line distance from `(1 - specificity,
+sensitivity)` to the top-left corner where both are 1 - the only metric here
+that is **better when smaller**, and the only one whose maximum is `sqrt(2)`.
+Minimizing it is a standard way to choose an operating point off a ROC curve.
 
-`sedi` comes from forecast verification, where the event being predicted is
-often rare. It is built so that it does not drift towards a fixed value as
-the positive class gets rarer, which is the failure mode that makes several
-other skill scores useless for rare events. It is 0 for a classifier no
-better than chance and 1 for a perfect one.
+`sedi` comes from forecast verification, where the event is often rare, and
+is built not to drift towards a fixed value as the positive class gets rarer
+- the failure mode that makes several other skill scores useless for rare
+events. It is 0 for chance and 1 for perfect.
 
-```{r}
-head(subset(as.data.frame(skill), type == "sedi"), 4)
-```
-
-Both metrics are undefined at the two ends of the ranking, where every
-prediction is one class: `roc_dist` is still finite there, and the four
-logarithms `sedi` needs are clamped away from 0 and 1 so that it is too.
+Both are undefined at the ends of the ranking, where every prediction is one
+class, but stay finite: `sedi`'s four logarithms are clamped away from 0
+and 1.
 
 ## Which to report
 
-For a single number on imbalanced data, `mcc` is the safest of these - it has
-no blind spot in any cell of the table. `fscore` ignores the true negatives
-entirely, which is usually deliberate but worth knowing. For choosing an
-operating point rather than scoring one, `roc_dist` is the more direct
-answer, since minimizing it is the question you are actually asking.
+For a single number on imbalanced data, `mcc` is the safest here - no blind
+spot in any cell. `fscore` ignores the true negatives entirely, usually
+deliberate but worth knowing. For *choosing* an operating point rather than
+scoring one, `roc_dist` is the more direct answer. None of them replaces a
+curve: each describes one cutoff, and the cutoff is a choice you have to
+justify. See [AUC and other curve summaries](metrics-auc.html).
 
-None of them replaces a curve: each still describes one cutoff, and the
-cutoff is a choice you have to justify. See [AUC and other curve
-summaries](metrics-auc.html).
-
-## Undefined values
-
-`mcc` is `NA` where a row or a column of the table is empty, and `kappa` is
-`NA` where chance agreement is exactly 1. Those points are the very top and
-bottom of the ranking.
+`mcc` is `NA` where a row or column of the table is empty, and `kappa` where
+chance agreement is exactly 1 - the top and bottom of the ranking.
 
 ## Next
 
