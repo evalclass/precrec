@@ -28,6 +28,7 @@ evalmod(
   metrics = NULL,
   cost_fp = 1,
   cost_fn = 1,
+  basic_ties = "split",
   ...
 )
 ```
@@ -173,10 +174,13 @@ evalmod(
   of the supporting points will be `c(0, 0.5, 1)` and
   `c(0, 0.25, 0.5, 0.75, 1)` when `x_bins = 2` and `x_bins = 4`,
   respectively. All corresponding y-values of the supporting points are
-  calculated. `x_bins` is effective only when `mode` is set to `rocprc`
-  or `prcroc`. It must be `1e6` or smaller; every stage sized by it
-  allocates a vector of that length per curve, and a million supporting
-  points is already finer than a plot resolves.
+  calculated. `x_bins` places supporting points only when `mode` is set
+  to `rocprc` or `prcroc`; with `mode = "basic"` there is no
+  interpolation to place them on, and the value is instead the number of
+  points kept per metric when a plot or a data frame is asked for with
+  `reduce_points = TRUE`. It must be `1e6` or smaller; every stage sized
+  by it allocates a vector of that length per curve, and a million
+  supporting points is already finer than a plot resolves.
 
 - interpolate:
 
@@ -258,6 +262,33 @@ evalmod(
 - cost_fn:
 
   A numeric value for the cost of a false negative.
+
+- basic_ties:
+
+  A string that specifies what the basic evaluation metrics report at
+  the cutoffs inside a run of tied scores. `basic_ties` is effective
+  only when `mode` is set to `basic`.
+
+  "split"
+
+  :   Spread the true and false positives of the run evenly over its
+      cutoffs (default). This is the interpolation the ROC and
+      precision-recall curves need, and is what `precrec` has always
+      done.
+
+  "hold"
+
+  :   Give every cutoff in the run the counts it has once the whole run
+      is taken, so tied instances share one value of every metric.
+
+  A cutoff inside a tied run splits instances that share a score, so no
+  threshold produces it. With `"split"` a perfect classifier whose
+  scores are all `0` or `1` reports sensitivity climbing from `0` to `1`
+  across the positives rather than reaching `1` at once. `"hold"` makes
+  each metric a step function that changes only where the score does.
+  The two agree whenever the scores are all distinct, and `"split"` is
+  kept as the default because it is what every published `precrec`
+  result was computed with.
 
 - ...:
 
@@ -406,6 +437,73 @@ sspoints
 #>   13    m1  1   infm  0.0000000  0.1200000  0.2000000  0.2095238  0.3000000
 #>   14    m1  1    mkd  0.1960784  0.3000000  0.3333333  0.3512068  0.4000000
 #>   15    m1  1  kappa  0.0000000  0.1200000  0.2000000  0.2095238  0.3000000
+#>            Max.
+#>    1  1.0000000
+#>    2 20.0000000
+#>    3  1.0000000
+#>    4  0.5000000
+#>    5  0.7000000
+#>    6  1.0000000
+#>    7  1.0000000
+#>    8  1.0000000
+#>    9  0.4364358
+#>   10  0.7200000
+#>   11  0.7000000
+#>   12  0.8000000
+#>   13  0.4000000
+#>   14  0.5555556
+#>   15  0.4000000
+#> 
+#> 
+#>     === Input data ===
+#> 
+#>      Model name Dataset ID # of negatives # of positives
+#>    1         m1          1             10             10
+#> 
+
+## Let tied scores share one value of every basic metric
+tiedpoints <- evalmod(
+  mode = "basic", scores = round(P10N10$scores, 1),
+  labels = P10N10$labels, basic_ties = "hold"
+)
+tiedpoints
+#> 
+#>     === Basic performance evaluation metrics ===
+#> 
+#>      ## Performance metrics
+#>       rank:   normalized rank
+#>       score:  score
+#>       label:  label
+#>       err:    error rate
+#>       acc:    accuracy
+#>       sp:     specificity
+#>       sn:     sensitivity
+#>       prec:   precision
+#>       mcc:    Matthews correlation coefficient
+#>       fscore: F-score
+#>       bacc:   balanced accuracy
+#>       npv:    negative predictive value
+#>       infm:   informedness (Youden's J)
+#>       mkd:    markedness
+#>       kappa:  Cohen's kappa
+#> 
+#> 
+#>      Model ID Metric       Min.    1st Qu.     Median       Mean    3rd Qu.
+#>    1    m1  1   rank  0.0000000  0.2500000  0.5000000  0.5000000  0.7500000
+#>    2    m1  1  score  5.0000000  5.7500000 14.0000000 11.7500000 15.2500000
+#>    3    m1  1  label -1.0000000 -1.0000000  0.0000000  0.0000000  1.0000000
+#>    4    m1  1    err  0.3000000  0.4000000  0.4000000  0.4214286  0.5000000
+#>    5    m1  1    acc  0.5000000  0.5000000  0.6000000  0.5785714  0.6000000
+#>    6    m1  1     sp  0.0000000  0.4000000  0.5000000  0.5190476  0.9000000
+#>    7    m1  1     sn  0.0000000  0.4000000  0.7000000  0.6380952  0.9000000
+#>    8    m1  1   prec  0.5000000  0.5714286  0.5833333  0.6588959  0.7500000
+#>    9    m1  1    mcc  0.1400280  0.2041241  0.2182179  0.2559654  0.3239094
+#>   10    m1  1 fscore  0.0000000  0.5333333  0.6363636  0.5544563  0.6666667
+#>   11    m1  1   bacc  0.5000000  0.5000000  0.6000000  0.5785714  0.6000000
+#>   12    m1  1    npv  0.5000000  0.6000000  0.6250000  0.6594092  0.8000000
+#>   13    m1  1   infm  0.0000000  0.0000000  0.2000000  0.1571429  0.2000000
+#>   14    m1  1    mkd  0.1960784  0.2083333  0.3000000  0.3183050  0.4000000
+#>   15    m1  1  kappa  0.0000000  0.0000000  0.2000000  0.1571429  0.2000000
 #>            Max.
 #>    1  1.0000000
 #>    2 20.0000000
@@ -2096,10 +2194,10 @@ func_evalmod_aucroc <- function(samp) {
 # Process time
 system.time(res1 <- func_evalmod_rocprc(samp1))
 #>    user  system elapsed 
-#>   0.021   0.004   0.025 
+#>   0.021   0.004   0.026 
 system.time(res2 <- func_evalmod_aucroc(samp1))
 #>    user  system elapsed 
-#>   0.020   0.001   0.013 
+#>   0.020   0.000   0.012 
 
 # AUCs
 res1

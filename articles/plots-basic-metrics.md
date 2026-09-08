@@ -69,6 +69,62 @@ sets the rank that tied instances receive, but the cutoffs still step
 one instance at a time, so a run of tied scores spreads across
 consecutive x values rather than sharing one.
 
+## Tied scores
+
+A cutoff that falls inside a run of tied scores separates instances that
+share a score, so no threshold produces it. `precrec` has always filled
+those cutoffs by spreading the true and false positives of the run
+evenly over them, which is the interpolation the ROC and
+precision-recall curves need. For the basic metrics, which are not
+interpolated, it can read strangely.
+
+The clearest case is a classifier that is exactly right and says so with
+a single bit, so that every instance is tied with every other of its
+class:
+
+``` r
+
+set.seed(42)
+perfect <- rbinom(100, 1, 0.5)
+
+autoplot(
+  evalmod(scores = perfect, labels = perfect, mode = "basic"),
+  c("specificity", "sensitivity")
+)
+```
+
+![](plots-basic-metrics_files/figure-html/unnamed-chunk-6-1.png)
+
+Sensitivity climbs across the positives instead of reaching 1 at once,
+which is the even spread rather than anything about the classifier.
+
+`basic_ties = "hold"` gives every cutoff in a run the counts it has once
+the whole run is taken, so tied instances share one value of every
+metric:
+
+``` r
+
+autoplot(
+  evalmod(
+    scores = perfect, labels = perfect, mode = "basic",
+    basic_ties = "hold"
+  ),
+  c("specificity", "sensitivity")
+)
+```
+
+![](plots-basic-metrics_files/figure-html/unnamed-chunk-7-1.png)
+
+Each metric is now a step function that changes only where the score
+does. Note that specificity still falls to 0 at the right edge: at x = 1
+every instance is predicted positive, so there are no true negatives
+left whatever the classifier is worth.
+
+The two settings agree whenever the scores are all distinct, and
+`"split"` is the default because it is what every published `precrec`
+result was computed with. `basic_ties` is read only by
+`mode = "basic"` - the curves keep their interpolation.
+
 ## Scores and labels
 
 Two extra panels show the data behind the metrics rather than a metric:
@@ -79,7 +135,7 @@ the score at each rank, and the observed label.
 autoplot(points, c("score", "label"))
 ```
 
-![](plots-basic-metrics_files/figure-html/unnamed-chunk-6-1.png)
+![](plots-basic-metrics_files/figure-html/unnamed-chunk-8-1.png)
 
 The label panel is the quickest way to see whether the positives really
 are concentrated at the top of the ranking.
@@ -98,7 +154,7 @@ extra <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
 autoplot(extra, c("fpr", "lift"))
 ```
 
-![](plots-basic-metrics_files/figure-html/unnamed-chunk-7-1.png)
+![](plots-basic-metrics_files/figure-html/unnamed-chunk-9-1.png)
 
 Asking to plot a metric that was not calculated is an error that names
 the argument to add. See the [metrics

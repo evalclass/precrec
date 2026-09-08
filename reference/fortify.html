@@ -9,7 +9,7 @@ evalmod() to a data frame for ggplot2."><meta property="og:image" content="https
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.21.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -144,10 +144,11 @@ contrast the raw curves with, so <code>sscurves</code> and <code>sspoints</code>
 
 <dt id="arg-reduce-points">reduce_points<a class="anchor" aria-label="anchor" href="#arg-reduce-points"></a></dt>
 <dd><p>A Boolean value to decide whether the points should
-be reduced when <code>mode = "rocprc"</code>. The points are reduced according to
-<code>x_bins</code> of the <code><a href="evalmod.html">evalmod()</a></code> function. The default values is <code>FALSE</code>.
-The basic evaluation metrics are not reduced, so the argument has no
-effect for <code>sspoints</code>, <code>mspoints</code>, <code>smpoints</code> and <code>mmpoints</code>.</p></dd>
+be reduced. The number kept is <code>x_bins</code> of the <code><a href="evalmod.html">evalmod()</a></code> function,
+per curve for <code>mode = "rocprc"</code> and per metric for <code>mode = "basic"</code>.
+The default value is <code>FALSE</code>. Reduction changes only which points are
+returned, never how they were calculated, and nothing is dropped from
+an object that already holds <code>x_bins</code> points or fewer.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>

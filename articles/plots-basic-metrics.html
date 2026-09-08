@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.21.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -161,13 +161,59 @@ time, so a run of tied scores spreads across consecutive x values rather
 than sharing one.</p>
 </div>
 <div class="section level2">
+<h2 id="tied-scores">Tied scores<a class="anchor" aria-label="anchor" href="#tied-scores"></a>
+</h2>
+<p>A cutoff that falls inside a run of tied scores separates instances
+that share a score, so no threshold produces it. <code>precrec</code>
+has always filled those cutoffs by spreading the true and false
+positives of the run evenly over them, which is the interpolation the
+ROC and precision-recall curves need. For the basic metrics, which are
+not interpolated, it can read strangely.</p>
+<p>The clearest case is a classifier that is exactly right and says so
+with a single bit, so that every instance is tied with every other of
+its class:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
+<span><span class="va">perfect</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">1</span>, <span class="fl">0.5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">perfect</span>, labels <span class="op">=</span> <span class="va">perfect</span>, mode <span class="op">=</span> <span class="st">"basic"</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"specificity"</span>, <span class="st">"sensitivity"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p><img src="plots-basic-metrics_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="" width="672"></p>
+<p>Sensitivity climbs across the positives instead of reaching 1 at
+once, which is the even spread rather than anything about the
+classifier.</p>
+<p><code>basic_ties = "hold"</code> gives every cutoff in a run the
+counts it has once the whole run is taken, so tied instances share one
+value of every metric:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span></span>
+<span>    scores <span class="op">=</span> <span class="va">perfect</span>, labels <span class="op">=</span> <span class="va">perfect</span>, mode <span class="op">=</span> <span class="st">"basic"</span>,</span>
+<span>    basic_ties <span class="op">=</span> <span class="st">"hold"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"specificity"</span>, <span class="st">"sensitivity"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p><img src="plots-basic-metrics_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="672"></p>
+<p>Each metric is now a step function that changes only where the score
+does. Note that specificity still falls to 0 at the right edge: at x = 1
+every instance is predicted positive, so there are no true negatives
+left whatever the classifier is worth.</p>
+<p>The two settings agree whenever the scores are all distinct, and
+<code>"split"</code> is the default because it is what every published
+<code>precrec</code> result was computed with. <code>basic_ties</code>
+is read only by <code>mode = "basic"</code> - the curves keep their
+interpolation.</p>
+</div>
+<div class="section level2">
 <h2 id="scores-and-labels">Scores and labels<a class="anchor" aria-label="anchor" href="#scores-and-labels"></a>
 </h2>
 <p>Two extra panels show the data behind the metrics rather than a
 metric: the score at each rank, and the observed label.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">points</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"score"</span>, <span class="st">"label"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plots-basic-metrics_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="" width="672"></p>
+<p><img src="plots-basic-metrics_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="672"></p>
 <p>The label panel is the quickest way to see whether the positives
 really are concentrated at the top of the ranking.</p>
 </div>
@@ -176,13 +222,13 @@ really are concentrated at the top of the ranking.</p>
 </h2>
 <p>Anything beyond the default fourteen is requested with
 <code>metrics =</code> and then plotted the same way.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">extra</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span>,</span>
 <span>  mode <span class="op">=</span> <span class="st">"basic"</span>, metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fpr"</span>, <span class="st">"lift"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">extra</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fpr"</span>, <span class="st">"lift"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plots-basic-metrics_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="672"></p>
+<p><img src="plots-basic-metrics_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="" width="672"></p>
 <p>Asking to plot a metric that was not calculated is an error that
 names the argument to add. See the <a href="metrics-overview.html">metrics overview</a>.</p>
 </div>

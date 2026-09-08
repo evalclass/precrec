@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.21.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,6 +71,20 @@
       <small>Source: <a href="https://github.com/evalclass/precrec/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.22.0" id="precrec-0220">precrec 0.22.0<a class="anchor" aria-label="anchor" href="#precrec-0220"></a></h2>
+<ul><li>
+<p><code>evalmod(mode = "basic")</code> takes a new <code>basic_ties</code> argument for what the basic metrics report at the cutoffs inside a run of tied scores. Such a cutoff separates instances that share a score, so no threshold produces it. The default <code>"split"</code> spreads the true and false positives of the run evenly over its cutoffs, which is what <code>precrec</code> has always done and is the interpolation the ROC and precision-recall curves need. <code>"hold"</code> gives every cutoff in the run the counts it has once the whole run is taken, so tied instances share one value of every metric and each metric becomes a step function that changes only where the score does.</p>
+<p>A classifier that is exactly right but scores in a single bit reported sensitivity climbing across the positives rather than reaching 1 at once, which is the even spread and not the classifier. <code>basic_ties = "hold"</code> is the reading that case wants.</p>
+<p>The two settings agree whenever the scores are all distinct, <code>"split"</code> is the default because it is what every published result was computed with, and the curves are not affected either way.</p>
+</li>
+<li>
+<p><code>reduce_points</code> now works for <code>mode = "basic"</code>. The basic metrics carry one point per cutoff, so plotting a large dataset drew a mark per instance: at a million rows <code><a href="../reference/autoplot.html">autoplot()</a></code> spent 6.7 seconds against 0.5 for the calculation behind it. <code><a href="../reference/fortify.html">fortify()</a></code>, <code><a href="../reference/as.data.frame.html">as.data.frame()</a></code> and <code><a href="../reference/autoplot.html">autoplot()</a></code> accept <code>reduce_points = TRUE</code> for these objects now and keep <code>x_bins</code> points per metric, which brings that plot to 1.9 seconds.</p>
+<p>The default stays <code>FALSE</code>, so no existing output moves unless the reduction is asked for, and the points kept are the calculated ones - the reduction selects among them and never interpolates. Nothing is dropped from an object that already holds <code>x_bins</code> points or fewer.</p>
+<p>The argument was accepted and silently discarded before, so a call that passed it was not an error; it simply had no effect.</p>
+</li>
+<li><p><code>evalmod(mode = "basic")</code> records <code>x_bins</code> on the object it returns. It places no supporting points there - the basic metrics have no interpolation to place them on - but it is the number of points kept when <code>reduce_points</code> thins them, so the resolution of the drawn output is set the same way for both modes.</p></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.21.2" id="precrec-0212">precrec 0.21.2<a class="anchor" aria-label="anchor" href="#precrec-0212"></a></h2>
 <ul><li>
