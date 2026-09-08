@@ -15,6 +15,13 @@
   unchanged - they agree with 0.21.0 to within 2.2e-16, which is the
   rounding of the arithmetic rather than a change in what is computed.
 
+* Cap `x_bins` at `1e6`. Every stage sized by it - the interpolation
+  buffers, the point reduction and the averaging grid - allocates a vector
+  of that length per curve, so `x_bins = 1e9` asked for tens of gigabytes
+  and failed on the allocation rather than at the argument. A million
+  supporting points is finer than a plot resolves and finer than the data
+  behind it, so the ceiling is well clear of real use.
+
 * Skip the interpolation of a gap that spans no grid line at all, which is
   almost every gap once the input is large. That was costing a division per
   input point to add at most `x_bins` points to the whole curve, so it grew
