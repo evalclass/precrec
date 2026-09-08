@@ -1,3 +1,26 @@
+# precrec 0.21.3
+
+* `reduce_points` now works for `mode = "basic"`. The basic metrics carry one
+  point per cutoff, so plotting a large dataset drew a mark per instance: at
+  a million rows `autoplot()` spent 6.7 seconds against 0.5 for the
+  calculation behind it. `fortify()`, `as.data.frame()` and `autoplot()`
+  accept `reduce_points = TRUE` for these objects now and keep `x_bins`
+  points per metric, which brings that plot to 1.9 seconds.
+
+  The default stays `FALSE`, so no existing output moves unless the
+  reduction is asked for, and the points kept are the calculated ones - the
+  reduction selects among them and never interpolates. Nothing is dropped
+  from an object that already holds `x_bins` points or fewer.
+
+  The argument was accepted and silently discarded before, so a call that
+  passed it was not an error; it simply had no effect.
+
+* `evalmod(mode = "basic")` records `x_bins` on the object it returns. It
+  places no supporting points there - the basic metrics have no
+  interpolation to place them on - but it is the number of points kept when
+  `reduce_points` thins them, so the resolution of the drawn output is set
+  the same way for both modes.
+
 # precrec 0.21.2
 
 * Speed up the C++ hot paths. `evalmod()` runs about 1.5x faster on a

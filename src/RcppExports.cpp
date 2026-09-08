@@ -11,8 +11,8 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // convert_curve_df
-Rcpp::List convert_curve_df(const Rcpp::List& obj, const Rcpp::CharacterVector& uniq_modnames, const Rcpp::CharacterVector& uniq_dsids, const Rcpp::IntegerVector& modnames, const Rcpp::IntegerVector& dsids, const Rcpp::CharacterVector& dsid_modnames, const Rcpp::List& curvetype_names, const int x_bins);
-RcppExport SEXP _precrec_convert_curve_df(SEXP objSEXP, SEXP uniq_modnamesSEXP, SEXP uniq_dsidsSEXP, SEXP modnamesSEXP, SEXP dsidsSEXP, SEXP dsid_modnamesSEXP, SEXP curvetype_namesSEXP, SEXP x_binsSEXP) {
+Rcpp::List convert_curve_df(const Rcpp::List& obj, const Rcpp::CharacterVector& uniq_modnames, const Rcpp::CharacterVector& uniq_dsids, const Rcpp::IntegerVector& modnames, const Rcpp::IntegerVector& dsids, const Rcpp::CharacterVector& dsid_modnames, const Rcpp::List& curvetype_names, const int x_bins, const bool thin_by_index);
+RcppExport SEXP _precrec_convert_curve_df(SEXP objSEXP, SEXP uniq_modnamesSEXP, SEXP uniq_dsidsSEXP, SEXP modnamesSEXP, SEXP dsidsSEXP, SEXP dsid_modnamesSEXP, SEXP curvetype_namesSEXP, SEXP x_binsSEXP, SEXP thin_by_indexSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -24,13 +24,14 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const Rcpp::CharacterVector& >::type dsid_modnames(dsid_modnamesSEXP);
     Rcpp::traits::input_parameter< const Rcpp::List& >::type curvetype_names(curvetype_namesSEXP);
     Rcpp::traits::input_parameter< const int >::type x_bins(x_binsSEXP);
-    rcpp_result_gen = Rcpp::wrap(convert_curve_df(obj, uniq_modnames, uniq_dsids, modnames, dsids, dsid_modnames, curvetype_names, x_bins));
+    Rcpp::traits::input_parameter< const bool >::type thin_by_index(thin_by_indexSEXP);
+    rcpp_result_gen = Rcpp::wrap(convert_curve_df(obj, uniq_modnames, uniq_dsids, modnames, dsids, dsid_modnames, curvetype_names, x_bins, thin_by_index));
     return rcpp_result_gen;
 END_RCPP
 }
 // convert_curve_avg_df
-Rcpp::List convert_curve_avg_df(const Rcpp::List& obj, const Rcpp::CharacterVector& uniq_modnames, const Rcpp::IntegerVector& modnames, const Rcpp::List& curvetype_names, const int x_bins);
-RcppExport SEXP _precrec_convert_curve_avg_df(SEXP objSEXP, SEXP uniq_modnamesSEXP, SEXP modnamesSEXP, SEXP curvetype_namesSEXP, SEXP x_binsSEXP) {
+Rcpp::List convert_curve_avg_df(const Rcpp::List& obj, const Rcpp::CharacterVector& uniq_modnames, const Rcpp::IntegerVector& modnames, const Rcpp::List& curvetype_names, const int x_bins, const bool thin_by_index);
+RcppExport SEXP _precrec_convert_curve_avg_df(SEXP objSEXP, SEXP uniq_modnamesSEXP, SEXP modnamesSEXP, SEXP curvetype_namesSEXP, SEXP x_binsSEXP, SEXP thin_by_indexSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -39,7 +40,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type modnames(modnamesSEXP);
     Rcpp::traits::input_parameter< const Rcpp::List& >::type curvetype_names(curvetype_namesSEXP);
     Rcpp::traits::input_parameter< const int >::type x_bins(x_binsSEXP);
-    rcpp_result_gen = Rcpp::wrap(convert_curve_avg_df(obj, uniq_modnames, modnames, curvetype_names, x_bins));
+    Rcpp::traits::input_parameter< const bool >::type thin_by_index(thin_by_indexSEXP);
+    rcpp_result_gen = Rcpp::wrap(convert_curve_avg_df(obj, uniq_modnames, modnames, curvetype_names, x_bins, thin_by_index));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -214,8 +216,8 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_precrec_convert_curve_df", (DL_FUNC) &_precrec_convert_curve_df, 8},
-    {"_precrec_convert_curve_avg_df", (DL_FUNC) &_precrec_convert_curve_avg_df, 5},
+    {"_precrec_convert_curve_df", (DL_FUNC) &_precrec_convert_curve_df, 9},
+    {"_precrec_convert_curve_avg_df", (DL_FUNC) &_precrec_convert_curve_avg_df, 6},
     {"_precrec_format_labels", (DL_FUNC) &_precrec_format_labels, 2},
     {"_precrec_get_score_ranks", (DL_FUNC) &_precrec_get_score_ranks, 3},
     {"_precrec_create_confusion_matrices", (DL_FUNC) &_precrec_create_confusion_matrices, 3},

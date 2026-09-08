@@ -4,7 +4,7 @@
 .pl_main_basic <- function(mdat, model_type, dataset_type, class_name_pf,
                            calc_avg = TRUE, cb_alpha = 0.05,
                            raw_curves = FALSE, beta = 1, metrics = NULL,
-                           cost_fp = 1, cost_fn = 1) {
+                           cost_fp = 1, cost_fn = 1, x_bins = 1000) {
   metric_names <- .basic_metric_names(.resolve_metrics(metrics))
   # Only the metrics derived in R reach calc_metrics(); the C++ layer has
   # always produced the rest, and handing it the whole list once per dataset
@@ -90,7 +90,11 @@
     beta = beta,
     metrics = metrics,
     cost_fp = cost_fp,
-    cost_fn = cost_fn
+    cost_fn = cost_fn,
+    # Carried for the plots, not for the calculation: the basic metrics have
+    # one point per cutoff whatever x_bins says, and it is the number kept
+    # when `reduce_points` thins them for drawing.
+    x_bins = x_bins
   )
   attr(s3obj, "validated") <- FALSE
 
@@ -195,7 +199,7 @@
   )
   arg_names <- c(
     "mode", "calc_avg", "cb_alpha", "raw_curves", "beta", "metrics",
-    "cost_fp", "cost_fn"
+    "cost_fp", "cost_fn", "x_bins"
   )
   .validate_basic(
     points, class_name, ".pl_main_basic", item_names, attr_names,

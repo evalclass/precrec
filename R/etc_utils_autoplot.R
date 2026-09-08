@@ -92,10 +92,12 @@
 #'     generated, for example, when `curvetype` is `c("ROC", "PRC")`.
 #'   }
 #'   \item{reduce_points}{
-#'     A Boolean value to decide whether the points should be reduced
-#'     when `mode = "rocprc"`. The points are reduced according to
-#'     `x_bins` of the [evalmod()] function.
-#'     The default values is `TRUE`.
+#'     A Boolean value to decide whether the points should be reduced. The
+#'     number kept is `x_bins` of the [evalmod()] function, per curve for
+#'     `mode = "rocprc"` and per metric for `mode = "basic"`. The default
+#'     is `TRUE` for the curves and `FALSE` for the basic metrics, whose
+#'     points are the data rather than an interpolation. Reduction changes
+#'     only what is drawn, never how it was calculated.
 #'   }
 #' }
 #'

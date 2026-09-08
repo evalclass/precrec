@@ -131,10 +131,12 @@ shows a plot. It is effective only when a multiple-panel plot is
 generated, for example, when \code{curvetype} is \code{c("ROC", "PRC")}.
 }
 \item{reduce_points}{
-A Boolean value to decide whether the points should be reduced
-when \code{mode = "rocprc"}. The points are reduced according to
-\code{x_bins} of the \code{\link[=evalmod]{evalmod()}} function.
-The default values is \code{TRUE}.
+A Boolean value to decide whether the points should be reduced. The
+number kept is \code{x_bins} of the \code{\link[=evalmod]{evalmod()}} function, per curve for
+\code{mode = "rocprc"} and per metric for \code{mode = "basic"}. The default
+is \code{TRUE} for the curves and \code{FALSE} for the basic metrics, whose
+points are the data rather than an interpolation. Reduction changes
+only what is drawn, never how it was calculated.
 }
 }}
 }

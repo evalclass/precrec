@@ -88,6 +88,47 @@ unsigned set_reduced_points(const Rcpp::NumericVector& from_vec,
   return n;
 }
 
+//
+// Mark evenly spaced positions, keeping at most `max_points` of them
+//
+// set_reduced_points() above keeps a point when its x lands on a multiple of
+// 1 / x_bins. That works for the curves, whose x values come from that same
+// grid, but the basic metrics are sampled at k / n for n instances, and
+// unless x_bins divides n those values miss the grid lines and almost
+// nothing is kept. Choosing the positions by index instead is exact for any
+// n, and both ends are always kept so the axis still runs 0 to 1.
+//
+unsigned set_thinned_points(const unsigned size,
+                            std::vector<bool>& points,
+                            const int max_points) {
+  points.assign(size, false);
+  if (size == 0) {
+    return 0;
+  }
+
+  const unsigned m = static_cast<unsigned>(max_points);
+  if (max_points <= 1 || m >= size) {
+    points.assign(size, true);
+    return size;
+  }
+
+  const double span = static_cast<double>(size - 1);
+  const double steps = static_cast<double>(m - 1);
+  unsigned n = 0;
+  for (unsigned i = 0; i < m; ++i) {
+    // Rounded rather than truncated so the positions stay centered on the
+    // ideal spacing; i == m - 1 lands exactly on size - 1.
+    const unsigned pos =
+      static_cast<unsigned>((static_cast<double>(i) * span) / steps + 0.5);
+    if (!points[pos]) {
+      points[pos] = true;
+      ++n;
+    }
+  }
+
+  return n;
+}
+
 
 //
 // Copy reduced points
@@ -140,7 +181,8 @@ Rcpp::List convert_curve_df(const Rcpp::List& obj,
                             const Rcpp::IntegerVector& dsids,
                             const Rcpp::CharacterVector& dsid_modnames,
                             const Rcpp::List& curvetype_names,
-                            const int x_bins) {
+                            const int x_bins,
+                            const bool thin_by_index = false) {
   // Variables
   Rcpp::List ret_val;
   Rcpp::DataFrame df;
@@ -179,8 +221,12 @@ Rcpp::List convert_curve_df(const Rcpp::List& obj,
       const Rcpp::NumericVector& y = static_cast<const Rcpp::NumericVector&>(xys["y"]);
 
       if (reduce_points){
-        vec_points.resize(x.size(), false);
-        n = set_reduced_points(x, vec_points, x_bins);
+        if (thin_by_index) {
+          n = set_thinned_points(x.size(), vec_points, x_bins);
+        } else {
+          vec_points.resize(x.size(), false);
+          n = set_reduced_points(x, vec_points, x_bins);
+        }
 
         copy_reduced_xy_vec(x, vec_xs, start_idx, vec_points);
         copy_reduced_xy_vec(y, vec_ys, start_idx, vec_points);
@@ -243,7 +289,8 @@ Rcpp::List convert_curve_avg_df(const Rcpp::List& obj,
                                 const Rcpp::CharacterVector& uniq_modnames,
                                 const Rcpp::IntegerVector& modnames,
                                 const Rcpp::List& curvetype_names,
-                                const int x_bins) {
+                                const int x_bins,
+                                const bool thin_by_index = false) {
   // Variables
   Rcpp::List ret_val;
   Rcpp::DataFrame df;
@@ -281,8 +328,12 @@ Rcpp::List convert_curve_avg_df(const Rcpp::List& obj,
       const Rcpp::NumericVector& yma = static_cast<const Rcpp::NumericVector&>(xys["y_ci_h"]);
 
       if (reduce_points){
-        vec_points.resize(x.size(), false);
-        n = set_reduced_points(x, vec_points, x_bins);
+        if (thin_by_index) {
+          n = set_thinned_points(x.size(), vec_points, x_bins);
+        } else {
+          vec_points.resize(x.size(), false);
+          n = set_reduced_points(x, vec_points, x_bins);
+        }
 
         copy_reduced_xy_vec(x, vec_xs, start_idx, vec_points);
         copy_reduced_xy_vec(y, vec_ys, start_idx, vec_points);
