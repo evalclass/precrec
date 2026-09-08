@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.21.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,6 +46,7 @@
     <li><a class="dropdown-item" href="../articles/howto-large-datasets.html">Work with large datasets</a></li>
     <li><a class="dropdown-item" href="../articles/howto-results-as-data.html">Get the numbers out</a></li>
     <li><a class="dropdown-item" href="../articles/howto-imbalanced-data.html">Balanced and imbalanced data</a></li>
+    <li><a class="dropdown-item" href="../articles/howto-tidymodels.html">Use precrec with tidymodels</a></li>
   </ul>
 </li>
 <li class="active nav-item dropdown">
@@ -59,6 +60,10 @@
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/metrics-auc.html">AUC and other curve summaries</a></li>
     <li><a class="dropdown-item" href="../articles/metrics-probability.html">Probability-based metrics</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-classification-report.html">Classification report</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-uncertainty.html">Uncertainty from one test set</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/metrics-other-tools.html">Comparison with other tools</a></li>
   </ul>
 </li>
 <li class="nav-item dropdown">
@@ -129,7 +134,8 @@ at every cutoff.</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/evalclass/precrec" class="external-link">precrec</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">points</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span>,</span>
+<span><span class="va">points</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span></span>
+<span>  scores <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span>,</span>
 <span>  mode <span class="op">=</span> <span class="st">"basic"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
@@ -163,8 +169,8 @@ calling everything negative scores 0.99.</p>
 <div class="section level2">
 <h2 id="rates-over-the-actual-classes">Rates over the actual classes<a class="anchor" aria-label="anchor" href="#rates-over-the-actual-classes"></a>
 </h2>
-<p>These divide by a row of the table, so they do not move when the
-class balance changes.</p>
+<p>These divide by a row, so they do not move when the class balance
+changes.</p>
 <table class="table">
 <thead><tr class="header">
 <th>Metric</th>
@@ -194,9 +200,6 @@ class balance changes.</p>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">points</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sensitivity"</span>, <span class="st">"specificity"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="metrics-confusion-matrix_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="672"></p>
 <p>The ROC curve is <code>sensitivity</code> against <code>fpr</code>,
 which is why it is blind to class balance - both axes are row-wise
 rates.</p>
@@ -205,8 +208,8 @@ rates.</p>
 <h2 id="rates-over-the-predicted-classes">Rates over the predicted classes<a class="anchor" aria-label="anchor" href="#rates-over-the-predicted-classes"></a>
 </h2>
 <p>These divide by a column, so they <em>do</em> move with the class
-balance. That is what makes them informative on imbalanced data, and
-what makes them impossible to transfer between datasets.</p>
+balance - what makes them informative on imbalanced data, and impossible
+to transfer between datasets.</p>
 <table class="table">
 <thead><tr class="header">
 <th>Metric</th>
@@ -236,13 +239,12 @@ what makes them impossible to transfer between datasets.</p>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">points</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"precision"</span>, <span class="st">"npv"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="metrics-confusion-matrix_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="672"></p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">points</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sensitivity"</span>, <span class="st">"precision"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="metrics-confusion-matrix_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="672"></p>
 <p>The precision-recall curve is <code>precision</code> against
 <code>sensitivity</code> - one column-wise rate against one row-wise
-rate. See <a href="howto-imbalanced-data.html">balanced and imbalanced
-data</a>.</p>
+rate. See <a href="howto-imbalanced-data.html">imbalanced data</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="how-much-gets-flagged">How much gets flagged<a class="anchor" aria-label="anchor" href="#how-much-gets-flagged"></a>
@@ -271,16 +273,8 @@ data</a>.</p>
 </tr>
 </tbody>
 </table>
-<p>Useful when the cost of review is what constrains you: they say how
-much work a cutoff creates, regardless of whether the work is well
-spent.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">ppr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span>,</span>
-<span>  mode <span class="op">=</span> <span class="st">"basic"</span>, metrics <span class="op">=</span> <span class="st">"predicted_positive_rate"</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">ppr</span>, <span class="st">"predicted_positive_rate"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="metrics-confusion-matrix_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="" width="672"></p>
+<p>Useful when review cost is the constraint: they say how much work a
+cutoff creates, regardless of whether the work is well spent.</p>
 </div>
 <div class="section level2">
 <h2 id="leaving-out-the-true-negatives">Leaving out the true negatives<a class="anchor" aria-label="anchor" href="#leaving-out-the-true-negatives"></a>
@@ -299,74 +293,47 @@ spent.</p>
 <tbody><tr class="odd">
 <td><code>jaccard</code></td>
 <td>TP / (TP + FP + FN)</td>
-<td>Jaccard index, critical success index, threat score</td>
+<td>critical success index, threat score</td>
 </tr></tbody>
 </table>
-<p>The Jaccard index is the 2x2 table with one corner deleted. Three of
-the four cells count toward it and the true negatives do not, which is
-the same omission precision and sensitivity make, and it is why the
-three move together on imbalanced data while accuracy does not.</p>
-<p>That is easiest to see by padding a dataset with negatives the
-classifier gets right. Nothing about its handling of the positives has
-changed, and the Jaccard index does not move; accuracy climbs, because
-on the padded dataset most of what it is counting is the padding.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">best_of</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">scores</span>, <span class="va">labels</span>, <span class="va">metric</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">points</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">scores</span>, labels <span class="op">=</span> <span class="va">labels</span>,</span>
-<span>    mode <span class="op">=</span> <span class="st">"basic"</span>, metrics <span class="op">=</span> <span class="va">metric</span></span>
-<span>  <span class="op">)</span></span>
-<span>  <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">points</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">y</span><span class="op">[</span><span class="va">df</span><span class="op">$</span><span class="va">type</span> <span class="op">==</span> <span class="va">metric</span><span class="op">]</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<p>The 2x2 table with one corner deleted. The true negatives do not
+count, the same omission <code>precision</code> and
+<code>sensitivity</code> make, which is why the three move together on
+imbalanced data while accuracy does not.</p>
+<p>Pad the dataset with 200 negatives that score below everything real,
+and nothing about its handling of the positives has changed:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">best</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">s</span>, <span class="va">l</span>, <span class="va">m</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span></span>
+<span>    scores <span class="op">=</span> <span class="va">s</span>, labels <span class="op">=</span> <span class="va">l</span>, mode <span class="op">=</span> <span class="st">"basic"</span>,</span>
+<span>    metrics <span class="op">=</span> <span class="va">m</span></span>
+<span>  <span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">y</span><span class="op">[</span><span class="va">df</span><span class="op">$</span><span class="va">type</span> <span class="op">==</span> <span class="va">m</span><span class="op">]</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="co"># The shipped labels are 1 and -1, and the scores run from 5 to 20, so the</span></span>
-<span><span class="co"># padding is negatives the classifier scores below all of them</span></span>
-<span><span class="va">padded_scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">200</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">padded_labels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">200</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">pad_s</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">200</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">pad_l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">200</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  dataset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P10N10"</span>, <span class="st">"P10N10 + 200 easy negatives"</span><span class="op">)</span>,</span>
-<span>  jaccard <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>    <span class="fu">best_of</span><span class="op">(</span><span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, <span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span>, <span class="st">"jaccard"</span><span class="op">)</span>,</span>
-<span>    <span class="fu">best_of</span><span class="op">(</span><span class="va">padded_scores</span>, <span class="va">padded_labels</span>, <span class="st">"jaccard"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  accuracy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>    <span class="fu">best_of</span><span class="op">(</span><span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, <span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span>, <span class="st">"accuracy"</span><span class="op">)</span>,</span>
-<span>    <span class="fu">best_of</span><span class="op">(</span><span class="va">padded_scores</span>, <span class="va">padded_labels</span>, <span class="st">"accuracy"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
-<thead><tr class="header">
-<th align="left">dataset</th>
-<th align="right">jaccard</th>
-<th align="right">accuracy</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">P10N10</td>
-<td align="right">0.5625</td>
-<td align="right">0.7000000</td>
-</tr>
-<tr class="even">
-<td align="left">P10N10 + 200 easy negatives</td>
-<td align="right">0.5625</td>
-<td align="right">0.9727273</td>
-</tr>
-</tbody>
-</table>
-<p>Forecast verification calls the same quantity the critical success
-index or threat score, for the same reason: a rare event has so many
-true negatives that any metric counting them reports mostly the
-rarity.</p>
+<span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  jaccard <span class="op">=</span> <span class="fu">best</span><span class="op">(</span><span class="va">pad_s</span>, <span class="va">pad_l</span>, <span class="st">"jaccard"</span><span class="op">)</span>,</span>
+<span>  accuracy <span class="op">=</span> <span class="fu">best</span><span class="op">(</span><span class="va">pad_s</span>, <span class="va">pad_l</span>, <span class="st">"accuracy"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt;   jaccard  accuracy </span></span>
+<span><span class="co">#&gt; 0.5625000 0.9727273</span></span></code></pre></div>
+<p><code>jaccard</code> holds at 0.5625; accuracy climbs from 0.70,
+because most of what it now counts is the padding. Forecast verification
+calls this the critical success index for the same reason: a rare event
+has so many true negatives that any metric counting them reports mostly
+the rarity.</p>
 </div>
 <div class="section level2">
 <h2 id="undefined-ends">Undefined ends<a class="anchor" aria-label="anchor" href="#undefined-ends"></a>
 </h2>
-<p>Precision has no value at the cutoff where nothing is predicted
-positive, and NPV none where nothing is predicted negative.
-<code>precrec</code> fills each in from its neighbor rather than
-dropping the point. <code>jaccard</code> needs no such treatment: its
-denominator is 0 only for a dataset with no positives at all.</p>
+<p>Precision has no value where nothing is predicted positive, and NPV
+none where nothing is predicted negative; <code>precrec</code> fills
+each in from its neighbor rather than dropping the point.
+<code>jaccard</code> needs no such treatment - its denominator is 0 only
+for a dataset with no positives at all.</p>
 </div>
 <div class="section level2">
 <h2 id="next">Next<a class="anchor" aria-label="anchor" href="#next"></a>

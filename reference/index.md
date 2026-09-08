@@ -109,6 +109,10 @@
 
 - [`auc_ci()`](https://evalclass.github.io/precrec/reference/auc_ci.md)
   : Calculate CIs of ROC and precision-recall AUCs
+- [`auc_boot()`](https://evalclass.github.io/precrec/reference/auc_boot.md)
+  : Bootstrap AUCs from one test set
+- [`auc_diff()`](https://evalclass.github.io/precrec/reference/auc_diff.md)
+  : Compare bootstrapped AUCs between models
 
 ## Precision-recall break-even point
 
@@ -127,6 +131,11 @@
   probabilities
 - [`prob_metrics_ci()`](https://evalclass.github.io/precrec/reference/prob_metrics_ci.md)
   : Calculate CIs of the Brier score and the log loss
+
+## Classification report
+
+- [`classification_report()`](https://evalclass.github.io/precrec/reference/classification_report.md)
+  : Classification report
 
 ## Datasets
 

@@ -68,9 +68,11 @@ the scores:
 where p is the observed prevalence, so the denominator in each row is
 what the null model itself scores.
 
-It reads like R-squared. `1` is a perfect model, `0` is one that does no
-better than knowing the prevalence, and a negative value is a model that
-does worse than that - which happens, and is not clipped away.
+It reads like R-squared: `1` is perfect, `0` does no better than knowing
+the prevalence, and a negative value is worse than that - which happens,
+and is not clipped away. `metrics =` asks for them by name or with
+`"all"`; the three above are always returned, so a call that did not ask
+for the D2 scores gets what it always got.
 
 ``` r
 
@@ -84,10 +86,6 @@ knitr::kable(head(prob_metrics(mdat, metrics = "all"), 5))
 | poor_er  |     1 | logloss    | 0.5835319 |
 | poor_er  |     1 | d2_brier   | 0.2469701 |
 | poor_er  |     1 | d2_logloss | 0.1581414 |
-
-`metrics =` is how they are asked for, either by name or with `"all"`.
-The three metrics above are always returned, so a call that did not ask
-for the D2 scores gets exactly what it always got.
 
 ## Confidence intervals
 
@@ -118,25 +116,19 @@ distribution.
 
 Use them when a downstream decision consumes the probability itself - an
 expected-cost calculation, a threshold set from a risk budget, a model
-whose output feeds another model. Then calibration matters as much as
-ranking.
-
+whose output feeds another. Then calibration matters as much as ranking.
 Use ROC and precision-recall curves when the decision is a ranking or a
-cutoff. A well-ranked, badly calibrated model is fine for those, and
-these metrics will tell you it is bad.
+cutoff: a well-ranked, badly calibrated model is fine for those, and
+these metrics will tell you it is bad. Reporting both is reasonable.
 
-Reporting both is reasonable, and they answer different questions.
-
-## Also available per cutoff
-
-`sar` averages accuracy, the ROC area and one minus the RMSE into a
-single per-cutoff metric. It is on the [ranking and
+`sar`, on the [ranking and
 cost](https://evalclass.github.io/precrec/articles/metrics-ranking-cost.md)
-page, and it needs probabilities for the same reason these do.
+page, folds the RMSE into a per-cutoff metric and needs probabilities
+for the same reason.
 
 ## Next
 
-- [AUC and other curve
-  summaries](https://evalclass.github.io/precrec/articles/metrics-auc.md)
+- [Classification
+  report](https://evalclass.github.io/precrec/articles/metrics-classification-report.md)
 - [Metrics
   overview](https://evalclass.github.io/precrec/articles/metrics-overview.md)

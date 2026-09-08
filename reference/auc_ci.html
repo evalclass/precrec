@@ -11,7 +11,7 @@ are specified."><meta property="og:image" content="https://evalclass.github.io/p
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.21.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,6 +30,7 @@ are specified."><meta property="og:image" content="https://evalclass.github.io/p
     <li><a class="dropdown-item" href="../articles/howto-large-datasets.html">Work with large datasets</a></li>
     <li><a class="dropdown-item" href="../articles/howto-results-as-data.html">Get the numbers out</a></li>
     <li><a class="dropdown-item" href="../articles/howto-imbalanced-data.html">Balanced and imbalanced data</a></li>
+    <li><a class="dropdown-item" href="../articles/howto-tidymodels.html">Use precrec with tidymodels</a></li>
   </ul></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-metrics" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Metrics</button>
@@ -41,6 +42,10 @@ are specified."><meta property="og:image" content="https://evalclass.github.io/p
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/metrics-auc.html">AUC and other curve summaries</a></li>
     <li><a class="dropdown-item" href="../articles/metrics-probability.html">Probability-based metrics</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-classification-report.html">Classification report</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-uncertainty.html">Uncertainty from one test set</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/metrics-other-tools.html">Comparison with other tools</a></li>
   </ul></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-plots" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Plots</button>
@@ -82,7 +87,10 @@ are specified.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">auc_ci</span><span class="op">(</span><span class="va">curves</span>, alpha <span class="op">=</span> <span class="cn">NULL</span>, dtype <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'aucs'</span></span>
-<span><span class="fu">auc_ci</span><span class="op">(</span><span class="va">curves</span>, alpha <span class="op">=</span> <span class="fl">0.05</span>, dtype <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">auc_ci</span><span class="op">(</span><span class="va">curves</span>, alpha <span class="op">=</span> <span class="fl">0.05</span>, dtype <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'aucboot'</span></span>
+<span><span class="fu">auc_ci</span><span class="op">(</span><span class="va">curves</span>, alpha <span class="op">=</span> <span class="fl">0.05</span>, dtype <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -135,9 +143,9 @@ of AUCs.</p></div>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Shows the result</span></span></span>
 <span class="r-in"><span><span class="va">sm_auc_cis</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   modnames curvetypes     mean      error lower_bound upper_bound n</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  good_er        ROC 0.789975 0.02019134   0.7697837   0.8101663 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  good_er        PRC 0.834768 0.02176032   0.8130076   0.8565283 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   modnames curvetypes      mean      error lower_bound upper_bound n</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  good_er        ROC 0.7950250 0.02369793   0.7713271   0.8187229 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  good_er        PRC 0.8343834 0.02143124   0.8129522   0.8558146 4</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">##################################################</span></span></span>
 <span class="r-in"><span><span class="co">### Multiple models &amp; multiple test datasets</span></span></span>
@@ -159,14 +167,14 @@ of AUCs.</p></div>
 <span class="r-in"><span><span class="co">## Shows the result</span></span></span>
 <span class="r-in"><span><span class="va">mm_auc_ci</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    modnames curvetypes      mean       error lower_bound upper_bound n</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    random        ROC 0.4785750 0.025405848   0.4531692   0.5039808 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2    random        PRC 0.4927332 0.022360158   0.4703731   0.5150934 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   poor_er        ROC 0.7893750 0.043471334   0.7459037   0.8328463 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   poor_er        PRC 0.7458060 0.037821227   0.7079848   0.7836272 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   good_er        ROC 0.7734750 0.041057727   0.7324173   0.8145327 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   good_er        PRC 0.8099094 0.033761476   0.7761479   0.8436708 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7     excel        ROC 0.9810500 0.006008337   0.9750417   0.9870583 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8     excel        PRC 0.9813123 0.004354320   0.9769579   0.9856666 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    random        ROC 0.4925000 0.043150452   0.4493495   0.5356505 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    random        PRC 0.5105290 0.042359589   0.4681694   0.5528886 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   poor_er        ROC 0.7600750 0.027130623   0.7329444   0.7872056 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   poor_er        PRC 0.7132584 0.050140420   0.6631180   0.7633988 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   good_er        ROC 0.7716000 0.038758835   0.7328412   0.8103588 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   good_er        PRC 0.8094505 0.033099896   0.7763506   0.8425504 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7     excel        ROC 0.9839500 0.009145040   0.9748050   0.9930950 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8     excel        PRC 0.9844909 0.008032773   0.9764581   0.9925237 4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 9      perf        ROC 1.0000000 0.000000000   1.0000000   1.0000000 4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 10     perf        PRC 1.0000000 0.000000000   1.0000000   1.0000000 4</span>
 <span class="r-in"><span></span></span>

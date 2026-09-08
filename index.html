@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.21.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,6 +49,7 @@
     <li><a class="dropdown-item" href="articles/howto-large-datasets.html">Work with large datasets</a></li>
     <li><a class="dropdown-item" href="articles/howto-results-as-data.html">Get the numbers out</a></li>
     <li><a class="dropdown-item" href="articles/howto-imbalanced-data.html">Balanced and imbalanced data</a></li>
+    <li><a class="dropdown-item" href="articles/howto-tidymodels.html">Use precrec with tidymodels</a></li>
   </ul>
 </li>
 <li class="nav-item dropdown">
@@ -62,6 +63,10 @@
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="articles/metrics-auc.html">AUC and other curve summaries</a></li>
     <li><a class="dropdown-item" href="articles/metrics-probability.html">Probability-based metrics</a></li>
+    <li><a class="dropdown-item" href="articles/metrics-classification-report.html">Classification report</a></li>
+    <li><a class="dropdown-item" href="articles/metrics-uncertainty.html">Uncertainty from one test set</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="articles/metrics-other-tools.html">Comparison with other tools</a></li>
   </ul>
 </li>
 <li class="nav-item dropdown">
@@ -164,8 +169,8 @@ ROC and precision-recall curves of the P10N10 test dataset, drawn side by side
 </h2>
 <table class="table">
 <colgroup>
-<col width="26%">
-<col width="73%">
+<col width="28%">
+<col width="71%">
 </colgroup>
 <thead><tr>
 <th>Function</th>
@@ -215,6 +220,18 @@ ROC and precision-recall curves of the P10N10 test dataset, drawn side by side
 <tr>
 <td><code>average_precision</code></td>
 <td>Calculate the step estimator of the PRC area</td>
+</tr>
+<tr>
+<td><code>classification_report</code></td>
+<td>Report precision, recall and F-score per class at a threshold</td>
+</tr>
+<tr>
+<td><code>auc_boot</code></td>
+<td>Bootstrap the AUC of a single test set</td>
+</tr>
+<tr>
+<td><code>auc_diff</code></td>
+<td>Compare the AUCs of two models on the same resamples</td>
 </tr>
 </tbody>
 </table>

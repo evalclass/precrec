@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.21.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,6 +46,7 @@
     <li><a class="dropdown-item" href="../articles/howto-large-datasets.html">Work with large datasets</a></li>
     <li><a class="dropdown-item" href="../articles/howto-results-as-data.html">Get the numbers out</a></li>
     <li><a class="dropdown-item" href="../articles/howto-imbalanced-data.html">Balanced and imbalanced data</a></li>
+    <li><a class="dropdown-item" href="../articles/howto-tidymodels.html">Use precrec with tidymodels</a></li>
   </ul>
 </li>
 <li class="active nav-item dropdown">
@@ -59,6 +60,10 @@
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/metrics-auc.html">AUC and other curve summaries</a></li>
     <li><a class="dropdown-item" href="../articles/metrics-probability.html">Probability-based metrics</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-classification-report.html">Classification report</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-uncertainty.html">Uncertainty from one test set</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/metrics-other-tools.html">Comparison with other tools</a></li>
   </ul>
 </li>
 <li class="nav-item dropdown">
@@ -104,9 +109,9 @@
 
     
     
-<p>Six metrics that answer questions the confusion-matrix rates do not:
-how much better than random is this cutoff, how much does it cost, how
-much does it tell us. All six are opt-in through
+<p>Metrics that answer questions the confusion-matrix rates do not: how
+much better than random is this cutoff, how much does it cost, how much
+does it tell us. All of them are opt-in through
 <code>metrics =</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/evalclass/precrec" class="external-link">precrec</a></span><span class="op">)</span></span>
@@ -139,8 +144,7 @@ much does it tell us. All six are opt-in through
 lift of 3 means the flagged group holds three times the share of
 positives the whole dataset does. It is the standard metric in marketing
 and screening, where the question is what to do with a limited review
-budget.</p>
-<p>The odds ratio is the odds of being positive among the flagged
+budget. The odds ratio is the odds of being positive among the flagged
 against the odds among the rest.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">points</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span></span>
@@ -173,47 +177,35 @@ against the odds among the rest.</p>
 </tr>
 </tbody>
 </table>
-<p>These are the two halves of the odds ratio above - LR+ divided by LR-
-is exactly <code>odds</code> - and they are worth keeping apart because
-they answer different questions. LR+ is how much a positive prediction
-multiplies the odds that a case really is positive; LR- is how much a
-negative prediction multiplies them. A test can be worth using on the
-strength of one alone, a large LR+ to confirm or a small LR- to rule
-out, and the odds ratio, being the quotient, hides which of the two is
-doing the work.</p>
-<p>Both are ratios of rates rather than of counts, so neither moves when
-the prevalence does. That is what lets a value measured on one
-population be carried to another, and it is also the catch: a cutoff
-with an excellent LR+ still flags mostly false positives if positives
-are rare enough. The metric that answers <em>that</em> question is
-precision, on the <a href="metrics-confusion-matrix.html">confusion-matrix page</a>.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">lrs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span></span>
-<span>  scores <span class="op">=</span> <span class="va">samps</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">samps</span><span class="op">$</span><span class="va">labels</span>,</span>
-<span>  mode <span class="op">=</span> <span class="st">"basic"</span>,</span>
-<span>  metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"positive_likelihood_ratio"</span>, <span class="st">"negative_likelihood_ratio"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">lrs</span>, <span class="st">"positive_likelihood_ratio"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="metrics-ranking-cost_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="672"></p>
+<p>The two halves of the odds ratio - LR+ divided by LR- is exactly
+<code>odds</code> - kept apart because they answer different questions.
+LR+ is how much a positive prediction multiplies the odds that a case
+really is positive, LR- how much a negative one does. A test can be
+worth using on one alone, and the odds ratio, being the quotient, hides
+which is doing the work.</p>
+<p>Both are ratios of rates rather than counts, so neither moves with
+the prevalence. That is what lets a value carry from one population to
+another, and also the catch: a cutoff with an excellent LR+ still flags
+mostly false positives if positives are rare enough. Precision, on the
+<a href="metrics-confusion-matrix.html">confusion-matrix page</a>,
+answers <em>that</em>.</p>
 </div>
 <div class="section level2">
 <h2 id="cost">Cost<a class="anchor" aria-label="anchor" href="#cost"></a>
 </h2>
-<p><code>cost</code> weights the two kinds of error separately:</p>
-<p><code>(cost_fp x FP + cost_fn x FN) / all</code></p>
-<p>With the default weights of 1 it is the error rate. Set the weights
-to what the two mistakes actually cost you, and the minimum of the curve
-is the cutoff to use.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<p><code>cost</code> weights the two kinds of error separately, as
+<code>(cost_fp x FP + cost_fn x FN) / all</code>. With the default
+weights of 1 it is the error rate. Set them to what the two mistakes
+actually cost you, and the minimum of the curve is the cutoff to
+use.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">costs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span></span>
 <span>  scores <span class="op">=</span> <span class="va">samps</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">samps</span><span class="op">$</span><span class="va">labels</span>,</span>
-<span>  mode <span class="op">=</span> <span class="st">"basic"</span>, metrics <span class="op">=</span> <span class="st">"cost"</span>,</span>
-<span>  cost_fp <span class="op">=</span> <span class="fl">3</span>, cost_fn <span class="op">=</span> <span class="fl">0.5</span></span>
+<span>  mode <span class="op">=</span> <span class="st">"basic"</span>, metrics <span class="op">=</span> <span class="st">"cost"</span>, cost_fp <span class="op">=</span> <span class="fl">3</span>, cost_fn <span class="op">=</span> <span class="fl">0.5</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">costs</span>, <span class="st">"cost"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="metrics-ranking-cost_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="672"></p>
+<p><img src="metrics-ranking-cost_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="672"></p>
 <p>The metric is not normalized, following <code>ROCR</code>, so its
 scale is the scale of the weights you gave.</p>
 </div>
@@ -252,32 +244,28 @@ scores as high as a perfectly right one.</p>
 <div class="section level2">
 <h2 id="sar">SAR<a class="anchor" aria-label="anchor" href="#sar"></a>
 </h2>
-<p><code>sar</code> is the mean of three things - accuracy, the area
-under the ROC curve, and one minus the root mean squared error -
-proposed as a single summary that is harder to game than any one of
-them.</p>
-<p>The RMSE part reads the values of the scores rather than their ranks,
-so <code>sar</code> needs scores that are probabilities between 0 and 1.
-Given anything else it warns and returns <code>NA</code>, and every
-other metric asked for in the same call is still returned.</p>
+<p><code>sar</code> is the mean of accuracy, the ROC area, and one minus
+the root mean squared error - a single summary harder to game than any
+one of them. The RMSE part reads score values rather than ranks, so it
+needs probabilities between 0 and 1; given anything else it warns and
+returns <code>NA</code>, and every other metric in the same call is
+still returned.</p>
 </div>
 <div class="section level2">
 <h2 id="where-values-are-undefined">Where values are undefined<a class="anchor" aria-label="anchor" href="#where-values-are-undefined"></a>
 </h2>
-<p>Several of these are undefined at the very top and bottom of the
-ranking, where the 2x2 table has an empty cell.</p>
+<p>Several of these are undefined at the top and bottom of the ranking,
+where the 2x2 table has an empty cell.</p>
 <ul>
 <li>
 <code>odds</code> and <code>chisq</code> are <code>NA</code> there.
-Some other tools report an infinity or a <code>NaN</code>;
-<code>precrec</code> reports <code>NA</code>, as it already does for the
+Some tools report an infinity or a <code>NaN</code>;
+<code>precrec</code> reports <code>NA</code>, as it does for the
 undefined end of precision and NPV.</li>
-<li>The likelihood ratios are <code>NA</code> over a longer stretch than
-the others, and not only at the ends.
-<code>positive_likelihood_ratio</code> divides by the false positive
-rate, which is 0 for every cutoff above the highest-scoring negative,
-and <code>negative_likelihood_ratio</code> divides by the specificity,
-which is 0 from the point where every negative has been flagged
+<li>The likelihood ratios are <code>NA</code> over a longer stretch, not
+only at the ends. LR+ divides by the false positive rate, 0 for every
+cutoff above the highest-scoring negative; LR- divides by the
+specificity, 0 from the point where every negative has been flagged
 onward.</li>
 <li>
 <code>mi</code> is <code>0</code> there rather than <code>NA</code>.

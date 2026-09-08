@@ -76,8 +76,8 @@ average_precision(sscurves)
 ## The area under the properly interpolated curve, for comparison
 auc(sscurves)
 #>   modnames dsids curvetypes      aucs
-#> 1       m1     1        ROC 0.8648000
-#> 2       m1     1        PRC 0.8978258
+#> 1       m1     1        ROC 0.7568000
+#> 2       m1     1        PRC 0.7835087
 
 ##################################################
 ### Multiple models & multiple test datasets

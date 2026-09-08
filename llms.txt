@@ -125,6 +125,9 @@ devtools::install_github("evalclass/precrec")
 | `metric_curve` | Draw one evaluation metric against another |
 | `prbe` | Find the precision-recall break-even point |
 | `average_precision` | Calculate the step estimator of the PRC area |
+| `classification_report` | Report precision, recall and F-score per class at a threshold |
+| `auc_boot` | Bootstrap the AUC of a single test set |
+| `auc_diff` | Compare the AUCs of two models on the same resamples |
 
 Ten S3 generics work on the objects `evalmod` and `metric_curve` return.
 
@@ -277,6 +280,10 @@ doi:
 
 - [`auc_ci()`](https://evalclass.github.io/precrec/reference/auc_ci.md)
   : Calculate CIs of ROC and precision-recall AUCs
+- [`auc_boot()`](https://evalclass.github.io/precrec/reference/auc_boot.md)
+  : Bootstrap AUCs from one test set
+- [`auc_diff()`](https://evalclass.github.io/precrec/reference/auc_diff.md)
+  : Compare bootstrapped AUCs between models
 
 ## Precision-recall break-even point
 
@@ -295,6 +302,11 @@ doi:
   probabilities
 - [`prob_metrics_ci()`](https://evalclass.github.io/precrec/reference/prob_metrics_ci.md)
   : Calculate CIs of the Brier score and the log loss
+
+## Classification report
+
+- [`classification_report()`](https://evalclass.github.io/precrec/reference/classification_report.md)
+  : Classification report
 
 ## Datasets
 
@@ -340,6 +352,8 @@ P10N10, B500, B1000, IB500, IB1000, M2N50F5 and C3N150
   out](https://evalclass.github.io/precrec/articles/howto-results-as-data.md):
 - [Balanced and imbalanced
   data](https://evalclass.github.io/precrec/articles/howto-imbalanced-data.md):
+- [Use precrec with
+  tidymodels](https://evalclass.github.io/precrec/articles/howto-tidymodels.md):
 
 ### Metrics
 
@@ -355,6 +369,12 @@ P10N10, B500, B1000, IB500, IB1000, M2N50F5 and C3N150
   summaries](https://evalclass.github.io/precrec/articles/metrics-auc.md):
 - [Probability-based
   metrics](https://evalclass.github.io/precrec/articles/metrics-probability.md):
+- [Classification
+  report](https://evalclass.github.io/precrec/articles/metrics-classification-report.md):
+- [Uncertainty from one test
+  set](https://evalclass.github.io/precrec/articles/metrics-uncertainty.md):
+- [Comparison with other
+  tools](https://evalclass.github.io/precrec/articles/metrics-other-tools.md):
 
 ### Plots
 

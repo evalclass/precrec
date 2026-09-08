@@ -10,13 +10,17 @@ articles:
   articles/howto-multiple-test-sets: howto-multiple-test-sets.html
   articles/howto-prepare-data: howto-prepare-data.html
   articles/howto-results-as-data: howto-results-as-data.html
+  articles/howto-tidymodels: howto-tidymodels.html
   introduction: introduction.html
   articles/metrics-agreement: metrics-agreement.html
   articles/metrics-auc: metrics-auc.html
+  articles/metrics-classification-report: metrics-classification-report.html
   articles/metrics-confusion-matrix: metrics-confusion-matrix.html
+  articles/metrics-other-tools: metrics-other-tools.html
   articles/metrics-overview: metrics-overview.html
   articles/metrics-probability: metrics-probability.html
   articles/metrics-ranking-cost: metrics-ranking-cost.html
+  articles/metrics-uncertainty: metrics-uncertainty.html
   articles/plots-basic-metrics: plots-basic-metrics.html
   articles/plots-confidence-bands: plots-confidence-bands.html
   articles/plots-customizing: plots-customizing.html
@@ -24,7 +28,7 @@ articles:
   articles/plots-overview: plots-overview.html
   articles/plots-partial-curves: plots-partial-curves.html
   articles/plots-roc-prc: plots-roc-prc.html
-last_built: 2026-09-07T18:35Z
+last_built: 2026-09-08T14:04Z
 urls:
   reference: https://evalclass.github.io/precrec/reference
   article: https://evalclass.github.io/precrec/articles

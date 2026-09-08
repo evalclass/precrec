@@ -13,7 +13,8 @@ every cutoff.
 library(precrec)
 library(ggplot2)
 
-points <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
+points <- evalmod(
+  scores = P10N10$scores, labels = P10N10$labels,
   mode = "basic"
 )
 ```
@@ -37,8 +38,8 @@ autoplot(points, c("accuracy", "error"))
 
 ## Rates over the actual classes
 
-These divide by a row of the table, so they do not move when the class
-balance changes.
+These divide by a row, so they do not move when the class balance
+changes.
 
 | Metric        | Formula        | Also known as              |
 |---------------|----------------|----------------------------|
@@ -47,21 +48,14 @@ balance changes.
 | `fpr`         | FP / (FP + TN) | fall-out, 1 - specificity  |
 | `fnr`         | FN / (TP + FN) | miss rate, 1 - sensitivity |
 
-``` r
-
-autoplot(points, c("sensitivity", "specificity"))
-```
-
-![](metrics-confusion-matrix_files/figure-html/unnamed-chunk-4-1.png)
-
 The ROC curve is `sensitivity` against `fpr`, which is why it is blind
 to class balance - both axes are row-wise rates.
 
 ## Rates over the predicted classes
 
-These divide by a column, so they *do* move with the class balance. That
-is what makes them informative on imbalanced data, and what makes them
-impossible to transfer between datasets.
+These divide by a column, so they *do* move with the class balance -
+what makes them informative on imbalanced data, and impossible to
+transfer between datasets.
 
 | Metric                 | Formula        | Also known as             |
 |------------------------|----------------|---------------------------|
@@ -72,13 +66,13 @@ impossible to transfer between datasets.
 
 ``` r
 
-autoplot(points, c("precision", "npv"))
+autoplot(points, c("sensitivity", "precision"))
 ```
 
-![](metrics-confusion-matrix_files/figure-html/unnamed-chunk-5-1.png)
+![](metrics-confusion-matrix_files/figure-html/unnamed-chunk-4-1.png)
 
 The precision-recall curve is `precision` against `sensitivity` - one
-column-wise rate against one row-wise rate. See [balanced and imbalanced
+column-wise rate against one row-wise rate. See [imbalanced
 data](https://evalclass.github.io/precrec/articles/howto-imbalanced-data.md).
 
 ## How much gets flagged
@@ -88,80 +82,55 @@ data](https://evalclass.github.io/precrec/articles/howto-imbalanced-data.md).
 | `predicted_positive_rate` | (TP + FP) / all | rate of positive predictions |
 | `predicted_negative_rate` | (TN + FN) / all | rate of negative predictions |
 
-Useful when the cost of review is what constrains you: they say how much
-work a cutoff creates, regardless of whether the work is well spent.
-
-``` r
-
-ppr <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
-  mode = "basic", metrics = "predicted_positive_rate"
-)
-
-autoplot(ppr, "predicted_positive_rate")
-```
-
-![](metrics-confusion-matrix_files/figure-html/unnamed-chunk-6-1.png)
+Useful when review cost is the constraint: they say how much work a
+cutoff creates, regardless of whether the work is well spent.
 
 ## Leaving out the true negatives
 
-| Metric | Formula | Also known as |
-|----|----|----|
-| `jaccard` | TP / (TP + FP + FN) | Jaccard index, critical success index, threat score |
+| Metric    | Formula             | Also known as                        |
+|-----------|---------------------|--------------------------------------|
+| `jaccard` | TP / (TP + FP + FN) | critical success index, threat score |
 
-The Jaccard index is the 2x2 table with one corner deleted. Three of the
-four cells count toward it and the true negatives do not, which is the
-same omission precision and sensitivity make, and it is why the three
-move together on imbalanced data while accuracy does not.
+The 2x2 table with one corner deleted. The true negatives do not count,
+the same omission `precision` and `sensitivity` make, which is why the
+three move together on imbalanced data while accuracy does not.
 
-That is easiest to see by padding a dataset with negatives the
-classifier gets right. Nothing about its handling of the positives has
-changed, and the Jaccard index does not move; accuracy climbs, because
-on the padded dataset most of what it is counting is the padding.
+Pad the dataset with 200 negatives that score below everything real, and
+nothing about its handling of the positives has changed:
 
 ``` r
 
-best_of <- function(scores, labels, metric) {
-  points <- evalmod(scores = scores, labels = labels,
-    mode = "basic", metrics = metric
-  )
-  df <- as.data.frame(points)
-  max(df$y[df$type == metric], na.rm = TRUE)
+best <- function(s, l, m) {
+  df <- as.data.frame(evalmod(
+    scores = s, labels = l, mode = "basic",
+    metrics = m
+  ))
+  max(df$y[df$type == m], na.rm = TRUE)
 }
 
-# The shipped labels are 1 and -1, and the scores run from 5 to 20, so the
-# padding is negatives the classifier scores below all of them
-padded_scores <- c(P10N10$scores, rep(0, 200))
-padded_labels <- c(P10N10$labels, rep(-1, 200))
+pad_s <- c(P10N10$scores, rep(0, 200))
+pad_l <- c(P10N10$labels, rep(-1, 200))
 
-knitr::kable(data.frame(
-  dataset = c("P10N10", "P10N10 + 200 easy negatives"),
-  jaccard = c(
-    best_of(P10N10$scores, P10N10$labels, "jaccard"),
-    best_of(padded_scores, padded_labels, "jaccard")
-  ),
-  accuracy = c(
-    best_of(P10N10$scores, P10N10$labels, "accuracy"),
-    best_of(padded_scores, padded_labels, "accuracy")
-  )
-))
+c(
+  jaccard = best(pad_s, pad_l, "jaccard"),
+  accuracy = best(pad_s, pad_l, "accuracy")
+)
+#>   jaccard  accuracy 
+#> 0.5625000 0.9727273
 ```
 
-| dataset                     | jaccard |  accuracy |
-|:----------------------------|--------:|----------:|
-| P10N10                      |  0.5625 | 0.7000000 |
-| P10N10 + 200 easy negatives |  0.5625 | 0.9727273 |
-
-Forecast verification calls the same quantity the critical success index
-or threat score, for the same reason: a rare event has so many true
-negatives that any metric counting them reports mostly the rarity.
+`jaccard` holds at 0.5625; accuracy climbs from 0.70, because most of
+what it now counts is the padding. Forecast verification calls this the
+critical success index for the same reason: a rare event has so many
+true negatives that any metric counting them reports mostly the rarity.
 
 ## Undefined ends
 
-Precision has no value at the cutoff where nothing is predicted
-positive, and NPV none where nothing is predicted negative. `precrec`
-fills each in from its neighbor rather than dropping the point.
-`jaccard` needs no such treatment: its denominator is 0 only for a
-dataset with no positives at all.
+Precision has no value where nothing is predicted positive, and NPV none
+where nothing is predicted negative; `precrec` fills each in from its
+neighbor rather than dropping the point. `jaccard` needs no such
+treatment - its denominator is 0 only for a dataset with no positives at
+all.
 
 ## Next
 

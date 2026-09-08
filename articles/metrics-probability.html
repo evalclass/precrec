@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.21.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,6 +46,7 @@
     <li><a class="dropdown-item" href="../articles/howto-large-datasets.html">Work with large datasets</a></li>
     <li><a class="dropdown-item" href="../articles/howto-results-as-data.html">Get the numbers out</a></li>
     <li><a class="dropdown-item" href="../articles/howto-imbalanced-data.html">Balanced and imbalanced data</a></li>
+    <li><a class="dropdown-item" href="../articles/howto-tidymodels.html">Use precrec with tidymodels</a></li>
   </ul>
 </li>
 <li class="active nav-item dropdown">
@@ -59,6 +60,10 @@
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/metrics-auc.html">AUC and other curve summaries</a></li>
     <li><a class="dropdown-item" href="../articles/metrics-probability.html">Probability-based metrics</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-classification-report.html">Classification report</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-uncertainty.html">Uncertainty from one test set</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/metrics-other-tools.html">Comparison with other tools</a></li>
   </ul>
 </li>
 <li class="nav-item dropdown">
@@ -245,10 +250,12 @@ ignores the scores:</p>
 </table>
 <p>where p is the observed prevalence, so the denominator in each row is
 what the null model itself scores.</p>
-<p>It reads like R-squared. <code>1</code> is a perfect model,
-<code>0</code> is one that does no better than knowing the prevalence,
-and a negative value is a model that does worse than that - which
-happens, and is not clipped away.</p>
+<p>It reads like R-squared: <code>1</code> is perfect, <code>0</code>
+does no better than knowing the prevalence, and a negative value is
+worse than that - which happens, and is not clipped away.
+<code>metrics =</code> asks for them by name or with <code>"all"</code>;
+the three above are always returned, so a call that did not ask for the
+D2 scores gets what it always got.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/prob_metrics.html">prob_metrics</a></span><span class="op">(</span><span class="va">mdat</span>, metrics <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
@@ -291,10 +298,6 @@ happens, and is not clipped away.</p>
 </tr>
 </tbody>
 </table>
-<p><code>metrics =</code> is how they are asked for, either by name or
-with <code>"all"</code>. The three metrics above are always returned, so
-a call that did not ask for the D2 scores gets exactly what it always
-got.</p>
 </div>
 <div class="section level2">
 <h2 id="confidence-intervals">Confidence intervals<a class="anchor" aria-label="anchor" href="#confidence-intervals"></a>
@@ -378,26 +381,21 @@ and <code>dtype</code> for the normal or t distribution.</p>
 </h2>
 <p>Use them when a downstream decision consumes the probability itself -
 an expected-cost calculation, a threshold set from a risk budget, a
-model whose output feeds another model. Then calibration matters as much
-as ranking.</p>
-<p>Use ROC and precision-recall curves when the decision is a ranking or
-a cutoff. A well-ranked, badly calibrated model is fine for those, and
-these metrics will tell you it is bad.</p>
-<p>Reporting both is reasonable, and they answer different
-questions.</p>
-</div>
-<div class="section level2">
-<h2 id="also-available-per-cutoff">Also available per cutoff<a class="anchor" aria-label="anchor" href="#also-available-per-cutoff"></a>
-</h2>
-<p><code>sar</code> averages accuracy, the ROC area and one minus the
-RMSE into a single per-cutoff metric. It is on the <a href="metrics-ranking-cost.html">ranking and cost</a> page, and it needs
-probabilities for the same reason these do.</p>
+model whose output feeds another. Then calibration matters as much as
+ranking. Use ROC and precision-recall curves when the decision is a
+ranking or a cutoff: a well-ranked, badly calibrated model is fine for
+those, and these metrics will tell you it is bad. Reporting both is
+reasonable.</p>
+<p><code>sar</code>, on the <a href="metrics-ranking-cost.html">ranking
+and cost</a> page, folds the RMSE into a per-cutoff metric and needs
+probabilities for the same reason.</p>
 </div>
 <div class="section level2">
 <h2 id="next">Next<a class="anchor" aria-label="anchor" href="#next"></a>
 </h2>
 <ul>
-<li><a href="metrics-auc.html">AUC and other curve summaries</a></li>
+<li><a href="metrics-classification-report.html">Classification
+report</a></li>
 <li><a href="metrics-overview.html">Metrics overview</a></li>
 </ul>
 </div>

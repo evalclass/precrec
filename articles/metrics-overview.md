@@ -9,7 +9,8 @@ each family has its own short page.
 library(precrec)
 library(ggplot2)
 
-points <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
+points <- evalmod(
+  scores = P10N10$scores, labels = P10N10$labels,
   mode = "basic"
 )
 ```
@@ -68,7 +69,8 @@ kept, so nothing that worked before changes.
 
 ``` r
 
-extra <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
+extra <- evalmod(
+  scores = P10N10$scores, labels = P10N10$labels,
   mode = "basic", metrics = c("fpr", "lift")
 )
 
@@ -90,8 +92,7 @@ written against `ROCR` keeps working.
 
 ## Not on this page
 
-Three summaries describe a whole curve or a whole set of predictions
-rather than one cutoff, and have their own functions:
+These have their own functions rather than a column in the table above:
 
 - [AUC and other curve
   summaries](https://evalclass.github.io/precrec/articles/metrics-auc.md) -
@@ -105,3 +106,12 @@ rather than one cutoff, and have their own functions:
   [`prob_metrics()`](https://evalclass.github.io/precrec/reference/prob_metrics.md),
   for scores that are genuine probabilities, and the D2 scores that
   rescale its losses against a null model
+- [Classification
+  report](https://evalclass.github.io/precrec/articles/metrics-classification-report.md) -
+  [`classification_report()`](https://evalclass.github.io/precrec/reference/classification_report.md),
+  precision, recall and F-score per class at one operating point you
+  choose
+
+Coming from another package? [Comparison with other
+tools](https://evalclass.github.io/precrec/articles/metrics-other-tools.md)
+maps the names across and shows where the numbers differ.

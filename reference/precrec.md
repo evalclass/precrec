@@ -107,6 +107,22 @@ are probabilities, and
 [`prob_metrics_ci()`](https://evalclass.github.io/precrec/reference/prob_metrics_ci.md)
 returns their confidence intervals over multiple test datasets.
 
+## Uncertainty from one test set
+
+[`auc_boot()`](https://evalclass.github.io/precrec/reference/auc_boot.md)
+resamples a single test set so that
+[`auc_ci()`](https://evalclass.github.io/precrec/reference/auc_ci.md)
+can put a percentile interval around its AUC, and
+[`auc_diff()`](https://evalclass.github.io/precrec/reference/auc_diff.md)
+can compare two models on the same resamples.
+
+## Classification report
+
+[`classification_report()`](https://evalclass.github.io/precrec/reference/classification_report.md)
+reports precision, recall and the F-score of every class at one
+operating point, in the layout `scikit-learn`'s function of that name
+prints.
+
 ## See also
 
 Useful links:

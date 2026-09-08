@@ -11,6 +11,9 @@ auc_ci(curves, alpha = NULL, dtype = NULL)
 
 # S3 method for class 'aucs'
 auc_ci(curves, alpha = 0.05, dtype = "normal")
+
+# S3 method for class 'aucboot'
+auc_ci(curves, alpha = 0.05, dtype = NULL)
 ```
 
 ## Arguments
@@ -80,9 +83,9 @@ sm_auc_cis <- auc_ci(smcurves)
 
 ## Shows the result
 sm_auc_cis
-#>   modnames curvetypes     mean      error lower_bound upper_bound n
-#> 1  good_er        ROC 0.789975 0.02019134   0.7697837   0.8101663 4
-#> 2  good_er        PRC 0.834768 0.02176032   0.8130076   0.8565283 4
+#>   modnames curvetypes      mean      error lower_bound upper_bound n
+#> 1  good_er        ROC 0.7950250 0.02369793   0.7713271   0.8187229 4
+#> 2  good_er        PRC 0.8343834 0.02143124   0.8129522   0.8558146 4
 
 ##################################################
 ### Multiple models & multiple test datasets
@@ -104,14 +107,14 @@ mm_auc_ci <- auc_ci(mmcurves)
 ## Shows the result
 mm_auc_ci
 #>    modnames curvetypes      mean       error lower_bound upper_bound n
-#> 1    random        ROC 0.4785750 0.025405848   0.4531692   0.5039808 4
-#> 2    random        PRC 0.4927332 0.022360158   0.4703731   0.5150934 4
-#> 3   poor_er        ROC 0.7893750 0.043471334   0.7459037   0.8328463 4
-#> 4   poor_er        PRC 0.7458060 0.037821227   0.7079848   0.7836272 4
-#> 5   good_er        ROC 0.7734750 0.041057727   0.7324173   0.8145327 4
-#> 6   good_er        PRC 0.8099094 0.033761476   0.7761479   0.8436708 4
-#> 7     excel        ROC 0.9810500 0.006008337   0.9750417   0.9870583 4
-#> 8     excel        PRC 0.9813123 0.004354320   0.9769579   0.9856666 4
+#> 1    random        ROC 0.4925000 0.043150452   0.4493495   0.5356505 4
+#> 2    random        PRC 0.5105290 0.042359589   0.4681694   0.5528886 4
+#> 3   poor_er        ROC 0.7600750 0.027130623   0.7329444   0.7872056 4
+#> 4   poor_er        PRC 0.7132584 0.050140420   0.6631180   0.7633988 4
+#> 5   good_er        ROC 0.7716000 0.038758835   0.7328412   0.8103588 4
+#> 6   good_er        PRC 0.8094505 0.033099896   0.7763506   0.8425504 4
+#> 7     excel        ROC 0.9839500 0.009145040   0.9748050   0.9930950 4
+#> 8     excel        PRC 0.9844909 0.008032773   0.9764581   0.9925237 4
 #> 9      perf        ROC 1.0000000 0.000000000   1.0000000   1.0000000 4
 #> 10     perf        PRC 1.0000000 0.000000000   1.0000000   1.0000000 4
 ```

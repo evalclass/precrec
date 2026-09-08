@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.21.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,6 +46,7 @@
     <li><a class="dropdown-item" href="../articles/howto-large-datasets.html">Work with large datasets</a></li>
     <li><a class="dropdown-item" href="../articles/howto-results-as-data.html">Get the numbers out</a></li>
     <li><a class="dropdown-item" href="../articles/howto-imbalanced-data.html">Balanced and imbalanced data</a></li>
+    <li><a class="dropdown-item" href="../articles/howto-tidymodels.html">Use precrec with tidymodels</a></li>
   </ul>
 </li>
 <li class="active nav-item dropdown">
@@ -59,6 +60,10 @@
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/metrics-auc.html">AUC and other curve summaries</a></li>
     <li><a class="dropdown-item" href="../articles/metrics-probability.html">Probability-based metrics</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-classification-report.html">Classification report</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-uncertainty.html">Uncertainty from one test set</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/metrics-other-tools.html">Comparison with other tools</a></li>
   </ul>
 </li>
 <li class="nav-item dropdown">
@@ -111,7 +116,8 @@ are in the default set; the last two are asked for by name.</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/evalclass/precrec" class="external-link">precrec</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">points</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span>,</span>
+<span><span class="va">points</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span></span>
+<span>  scores <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span>,</span>
 <span>  mode <span class="op">=</span> <span class="st">"basic"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
@@ -137,18 +143,13 @@ are in the default set; the last two are asked for by name.</p>
 </tbody>
 </table>
 <p>Balanced accuracy is accuracy with both classes weighted equally, so
-the majority class cannot carry it on its own.</p>
+the majority class cannot carry it on its own. <code>fscore</code> is
+the F-beta score and defaults to F1; <code>evalmod(beta = 2)</code>
+counts recall twice as heavily as precision, <code>beta = 0.5</code>
+half as heavily.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">points</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"balanced_accuracy"</span>, <span class="st">"fscore"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="metrics-agreement_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="" width="672"></p>
-<p><code>fscore</code> is the F-beta score and defaults to F1.
-<code>beta</code> weights recall against precision:
-<code>beta = 2</code> counts recall twice as heavily,
-<code>beta = 0.5</code> half as heavily.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">f2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span>,</span>
-<span>  mode <span class="op">=</span> <span class="st">"basic"</span>, beta <span class="op">=</span> <span class="fl">2</span></span>
-<span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="correlation-like-metrics">Correlation-like metrics<a class="anchor" aria-label="anchor" href="#correlation-like-metrics"></a>
@@ -172,15 +173,14 @@ the majority class cannot carry it on its own.</p>
 </tr>
 </tbody>
 </table>
-<p>Matthews correlation coefficient uses all four cells of the table, so
-it is high only when the classifier does well on both classes. Cohen’s
-kappa compares observed agreement against the agreement two raters with
-these margins would reach by chance.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<p>Matthews correlation coefficient uses all four cells, so it is high
+only when the classifier does well on both classes. Cohen’s kappa
+compares observed agreement against what two raters with these margins
+would reach by chance. Both can go negative, meaning worse than chance,
+which is why their plots are drawn on a -1 to 1 axis.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">points</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mcc"</span>, <span class="st">"kappa"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="metrics-agreement_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="672"></p>
-<p>Both can go negative, meaning worse than chance. Their plots are
-drawn on a -1 to 1 axis for that reason.</p>
+<p><img src="metrics-agreement_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="672"></p>
 </div>
 <div class="section level2">
 <h2 id="informedness-and-markedness">Informedness and markedness<a class="anchor" aria-label="anchor" href="#informedness-and-markedness"></a>
@@ -208,9 +208,6 @@ drawn on a -1 to 1 axis for that reason.</p>
 guessing the classifier is over the actual classes; markedness is the
 same idea over the predicted classes. Their geometric mean is the
 MCC.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">points</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"informedness"</span>, <span class="st">"markedness"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="metrics-agreement_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="" width="672"></p>
 </div>
 <div class="section level2">
 <h2 id="skill-scores">Skill scores<a class="anchor" aria-label="anchor" href="#skill-scores"></a>
@@ -239,59 +236,44 @@ MCC.</p>
 </tr>
 </tbody>
 </table>
-<p>These two are not in the default set, so name them in
-<code>metrics =</code>.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">skill</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span>,</span>
+<p>Not in the default set, so name them in <code>metrics =</code>.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">skill</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span></span>
+<span>  scores <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span>,</span>
 <span>  mode <span class="op">=</span> <span class="st">"basic"</span>, metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"roc_dist"</span>, <span class="st">"sedi"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">skill</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"roc_dist"</span>, <span class="st">"sedi"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="metrics-agreement_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="672"></p>
-<p><code>roc_dist</code> is the straight-line distance from the point
-<code>(1 - specificity, sensitivity)</code> to the top-left corner of
-ROC space, where both are 1. It is the only metric on this page that is
-<strong>better when it is smaller</strong>, and the only one whose
-maximum is <code>sqrt(2)</code> rather than 1. Picking the cutoff that
-minimizes it is one of the standard ways of choosing an operating point
-off a ROC curve.</p>
+<p><img src="metrics-agreement_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="672"></p>
+<p><code>roc_dist</code> is the straight-line distance from
+<code>(1 - specificity, sensitivity)</code> to the top-left corner where
+both are 1 - the only metric here that is <strong>better when
+smaller</strong>, and the only one whose maximum is
+<code>sqrt(2)</code>. Minimizing it is a standard way to choose an
+operating point off a ROC curve.</p>
 <p><code>sedi</code> comes from forecast verification, where the event
-being predicted is often rare. It is built so that it does not drift
-towards a fixed value as the positive class gets rarer, which is the
-failure mode that makes several other skill scores useless for rare
-events. It is 0 for a classifier no better than chance and 1 for a
-perfect one.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="fu"><a href="../reference/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">skill</span><span class="op">)</span>, <span class="va">type</span> <span class="op">==</span> <span class="st">"sedi"</span><span class="op">)</span>, <span class="fl">4</span><span class="op">)</span></span>
-<span><span class="co">#&gt;        x         y modname dsid type</span></span>
-<span><span class="co">#&gt; 316 0.00 0.0000000      m1    1 sedi</span></span>
-<span><span class="co">#&gt; 317 0.05 0.8009110      m1    1 sedi</span></span>
-<span><span class="co">#&gt; 318 0.10 0.8572931      m1    1 sedi</span></span>
-<span><span class="co">#&gt; 319 0.15 0.1912334      m1    1 sedi</span></span></code></pre></div>
-<p>Both metrics are undefined at the two ends of the ranking, where
-every prediction is one class: <code>roc_dist</code> is still finite
-there, and the four logarithms <code>sedi</code> needs are clamped away
-from 0 and 1 so that it is too.</p>
+is often rare, and is built not to drift towards a fixed value as the
+positive class gets rarer - the failure mode that makes several other
+skill scores useless for rare events. It is 0 for chance and 1 for
+perfect.</p>
+<p>Both are undefined at the ends of the ranking, where every prediction
+is one class, but stay finite: <code>sedi</code>’s four logarithms are
+clamped away from 0 and 1.</p>
 </div>
 <div class="section level2">
 <h2 id="which-to-report">Which to report<a class="anchor" aria-label="anchor" href="#which-to-report"></a>
 </h2>
 <p>For a single number on imbalanced data, <code>mcc</code> is the
-safest of these - it has no blind spot in any cell of the table.
-<code>fscore</code> ignores the true negatives entirely, which is
-usually deliberate but worth knowing. For choosing an operating point
-rather than scoring one, <code>roc_dist</code> is the more direct
-answer, since minimizing it is the question you are actually asking.</p>
-<p>None of them replaces a curve: each still describes one cutoff, and
-the cutoff is a choice you have to justify. See <a href="metrics-auc.html">AUC and other curve summaries</a>.</p>
-</div>
-<div class="section level2">
-<h2 id="undefined-values">Undefined values<a class="anchor" aria-label="anchor" href="#undefined-values"></a>
-</h2>
-<p><code>mcc</code> is <code>NA</code> where a row or a column of the
-table is empty, and <code>kappa</code> is <code>NA</code> where chance
-agreement is exactly 1. Those points are the very top and bottom of the
-ranking.</p>
+safest here - no blind spot in any cell. <code>fscore</code> ignores the
+true negatives entirely, usually deliberate but worth knowing. For
+<em>choosing</em> an operating point rather than scoring one,
+<code>roc_dist</code> is the more direct answer. None of them replaces a
+curve: each describes one cutoff, and the cutoff is a choice you have to
+justify. See <a href="metrics-auc.html">AUC and other curve
+summaries</a>.</p>
+<p><code>mcc</code> is <code>NA</code> where a row or column of the
+table is empty, and <code>kappa</code> where chance agreement is exactly
+1 - the top and bottom of the ranking.</p>
 </div>
 <div class="section level2">
 <h2 id="next">Next<a class="anchor" aria-label="anchor" href="#next"></a>

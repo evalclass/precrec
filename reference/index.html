@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.21.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,6 +26,7 @@
     <li><a class="dropdown-item" href="../articles/howto-large-datasets.html">Work with large datasets</a></li>
     <li><a class="dropdown-item" href="../articles/howto-results-as-data.html">Get the numbers out</a></li>
     <li><a class="dropdown-item" href="../articles/howto-imbalanced-data.html">Balanced and imbalanced data</a></li>
+    <li><a class="dropdown-item" href="../articles/howto-tidymodels.html">Use precrec with tidymodels</a></li>
   </ul></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-metrics" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Metrics</button>
@@ -37,6 +38,10 @@
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/metrics-auc.html">AUC and other curve summaries</a></li>
     <li><a class="dropdown-item" href="../articles/metrics-probability.html">Probability-based metrics</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-classification-report.html">Classification report</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-uncertainty.html">Uncertainty from one test set</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/metrics-other-tools.html">Comparison with other tools</a></li>
   </ul></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-plots" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Plots</button>
@@ -247,6 +252,20 @@
 
         </dt>
         <dd>Calculate CIs of ROC and precision-recall AUCs</dd>
+
+        <dt>
+
+          <code><a href="auc_boot.html">auc_boot()</a></code>
+
+        </dt>
+        <dd>Bootstrap AUCs from one test set</dd>
+
+        <dt>
+
+          <code><a href="auc_diff.html">auc_diff()</a></code>
+
+        </dt>
+        <dd>Compare bootstrapped AUCs between models</dd>
       </dl></div><div class="section level2">
       <h2 id="precision-recall-break-even-point">Precision-recall break-even point<a class="anchor" aria-label="anchor" href="#precision-recall-break-even-point"></a></h2>
 
@@ -302,6 +321,22 @@
 
         </dt>
         <dd>Calculate CIs of the Brier score and the log loss</dd>
+      </dl></div><div class="section level2">
+      <h2 id="classification-report">Classification report<a class="anchor" aria-label="anchor" href="#classification-report"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="classification_report.html">classification_report()</a></code>
+
+        </dt>
+        <dd>Classification report</dd>
       </dl></div><div class="section level2">
       <h2 id="datasets">Datasets<a class="anchor" aria-label="anchor" href="#datasets"></a></h2>
 

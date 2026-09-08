@@ -23,6 +23,8 @@
   out](https://evalclass.github.io/precrec/articles/howto-results-as-data.md):
 - [Balanced and imbalanced
   data](https://evalclass.github.io/precrec/articles/howto-imbalanced-data.md):
+- [Use precrec with
+  tidymodels](https://evalclass.github.io/precrec/articles/howto-tidymodels.md):
 
 ### Metrics
 
@@ -38,6 +40,12 @@
   summaries](https://evalclass.github.io/precrec/articles/metrics-auc.md):
 - [Probability-based
   metrics](https://evalclass.github.io/precrec/articles/metrics-probability.md):
+- [Classification
+  report](https://evalclass.github.io/precrec/articles/metrics-classification-report.md):
+- [Uncertainty from one test
+  set](https://evalclass.github.io/precrec/articles/metrics-uncertainty.md):
+- [Comparison with other
+  tools](https://evalclass.github.io/precrec/articles/metrics-other-tools.md):
 
 ### Plots
 
