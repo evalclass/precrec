@@ -43,6 +43,25 @@ the left edge is the strictest cutoff and the right edge the most permissive.
 
 This is what makes the panels comparable across datasets of different sizes.
 
+The value plotted is the *normalized rank*. There is one cutoff above every
+instance and one below all of them, so `n` instances give `n + 1` points,
+and the cutoff with `k` instances above it sits at `k / n`.
+
+```{r}
+n <- 5 # five instances, so six cutoffs
+
+(0:n) / n
+```
+
+Counting those points from 1 rather than from 0, the same thing is
+`(rank - 1) / (points - 1)`. Ranks count down from the best score, so the
+highest-scoring instance is rank 1 and sits at the left edge - the opposite
+direction to R's `rank()`, which counts up from the lowest score.
+
+`ties_method` in `evalmod()` sets the rank that tied instances receive, but
+the cutoffs still step one instance at a time, so a run of tied scores
+spreads across consecutive x values rather than sharing one.
+
 ## Scores and labels
 
 Two extra panels show the data behind the metrics rather than a metric: the
