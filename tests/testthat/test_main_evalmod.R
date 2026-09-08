@@ -322,3 +322,108 @@ test_that("a cost must be a single number and cannot be negative", {
     class = "precrec_error_invalid_cost_fp"
   )
 })
+
+em_ties_scores <- function() {
+  # The example from issue #10: a perfect classifier whose scores are the
+  # labels, so every instance is tied with every other of its class
+  set.seed(42)
+  rbinom(100, 1, 0.5)
+}
+
+test_that("'basic_ties' defaults to the split the package has always used", {
+  p <- em_ties_scores()
+  mp1 <- evalmod(scores = p, labels = p, mode = "basic")
+  mp2 <- evalmod(scores = p, labels = p, mode = "basic", basic_ties = "split")
+
+  expect_identical(as.data.frame(mp1), as.data.frame(mp2))
+  expect_equal(attr(mp1, "args")[["basic_ties"]], "split")
+})
+
+test_that("'basic_ties' is recorded on the object", {
+  p <- em_ties_scores()
+  mp <- evalmod(scores = p, labels = p, mode = "basic", basic_ties = "hold")
+
+  expect_equal(attr(mp, "args")[["basic_ties"]], "hold")
+})
+
+test_that("basic_ties = 'hold' gives tied instances one value per metric", {
+  p <- em_ties_scores()
+  df <- as.data.frame(evalmod(
+    scores = p, labels = p, mode = "basic", basic_ties = "hold"
+  ))
+  sn <- df[df$type == "sensitivity", "y"]
+  sp <- df[df$type == "specificity", "y"]
+
+  # Two distinct scores, so two runs: the first covers every cutoff up to the
+  # 55 positives, the second the rest. One value each, plus the empty cutoff
+  expect_equal(sn, c(0, rep(1, 100)))
+  expect_equal(sp, c(rep(1, 56), rep(0, 45)))
+})
+
+test_that("basic_ties = 'hold' leaves the cutoffs and the ends alone", {
+  p <- em_ties_scores()
+  df <- as.data.frame(evalmod(
+    scores = p, labels = p, mode = "basic", basic_ties = "hold"
+  ))
+  sn <- df[df$type == "sensitivity", ]
+
+  expect_equal(nrow(sn), length(p) + 1)
+  expect_equal(sn[["x"]], (0:length(p)) / length(p))
+})
+
+test_that("basic_ties makes no difference when the scores are distinct", {
+  set.seed(3)
+  scores <- runif(60)
+  labels <- rbinom(60, 1, 0.5)
+  mp1 <- evalmod(
+    scores = scores, labels = labels, mode = "basic", metrics = "all"
+  )
+  mp2 <- evalmod(
+    scores = scores, labels = labels, mode = "basic", metrics = "all",
+    basic_ties = "hold"
+  )
+
+  expect_identical(as.data.frame(mp1), as.data.frame(mp2))
+})
+
+test_that("basic_ties = 'hold' leaves every metric defined", {
+  # NPV is undefined wherever nothing is predicted negative, which under
+  # 'hold' is the whole of a tied final run rather than the last cutoff only
+  p <- em_ties_scores()
+  df <- as.data.frame(evalmod(
+    scores = p, labels = p, mode = "basic", metrics = "all",
+    basic_ties = "hold"
+  ))
+
+  expect_false(any(is.nan(df[["y"]])))
+  npv <- df[df$type == "npv", "y"]
+  expect_equal(npv[length(npv)], npv[length(npv) - 1])
+})
+
+test_that("basic_ties reaches the averages over multiple datasets", {
+  set.seed(5)
+  samps <- create_sim_samples(4, 20, 20, "good_er")
+  scores <- rapply(samps[["scores"]], function(s) round(s, 1), how = "replace")
+  mdat <- mmdata(scores, samps[["labels"]],
+    modnames = samps[["modnames"]], dsids = samps[["dsids"]]
+  )
+  df1 <- as.data.frame(evalmod(mdat, mode = "basic"))
+  df2 <- as.data.frame(evalmod(mdat, mode = "basic", basic_ties = "hold"))
+
+  expect_equal(nrow(df1), nrow(df2))
+  expect_false(isTRUE(all.equal(df1[["y"]], df2[["y"]])))
+})
+
+test_that("'basic_ties' must be one of the two treatments", {
+  mdat <- em_metrics_mdat()
+
+  expect_error(evalmod(mdat, mode = "basic", basic_ties = "held"),
+    class = "precrec_error_invalid_basic_ties"
+  )
+  expect_error(evalmod(mdat, mode = "basic", basic_ties = TRUE),
+    class = "precrec_error_invalid_basic_ties"
+  )
+  expect_error(evalmod(mdat, mode = "basic", basic_ties = c("split", "hold")),
+    class = "precrec_error_invalid_basic_ties"
+  )
+})

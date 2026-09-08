@@ -71,15 +71,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // create_confusion_matrices
-Rcpp::List create_confusion_matrices(const Rcpp::IntegerVector& olabs, const Rcpp::NumericVector& ranks, const Rcpp::IntegerVector& rank_idx);
-RcppExport SEXP _precrec_create_confusion_matrices(SEXP olabsSEXP, SEXP ranksSEXP, SEXP rank_idxSEXP) {
+Rcpp::List create_confusion_matrices(const Rcpp::IntegerVector& olabs, const Rcpp::NumericVector& ranks, const Rcpp::IntegerVector& rank_idx, const bool hold_ties);
+RcppExport SEXP _precrec_create_confusion_matrices(SEXP olabsSEXP, SEXP ranksSEXP, SEXP rank_idxSEXP, SEXP hold_tiesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type olabs(olabsSEXP);
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type ranks(ranksSEXP);
     Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type rank_idx(rank_idxSEXP);
-    rcpp_result_gen = Rcpp::wrap(create_confusion_matrices(olabs, ranks, rank_idx));
+    Rcpp::traits::input_parameter< const bool >::type hold_ties(hold_tiesSEXP);
+    rcpp_result_gen = Rcpp::wrap(create_confusion_matrices(olabs, ranks, rank_idx, hold_ties));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -220,7 +221,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_precrec_convert_curve_avg_df", (DL_FUNC) &_precrec_convert_curve_avg_df, 6},
     {"_precrec_format_labels", (DL_FUNC) &_precrec_format_labels, 2},
     {"_precrec_get_score_ranks", (DL_FUNC) &_precrec_get_score_ranks, 3},
-    {"_precrec_create_confusion_matrices", (DL_FUNC) &_precrec_create_confusion_matrices, 3},
+    {"_precrec_create_confusion_matrices", (DL_FUNC) &_precrec_create_confusion_matrices, 4},
     {"_precrec_calc_uauc", (DL_FUNC) &_precrec_calc_uauc, 6},
     {"_precrec_calc_uauc_frank", (DL_FUNC) &_precrec_calc_uauc_frank, 7},
     {"_precrec_calc_basic_metrics", (DL_FUNC) &_precrec_calc_basic_metrics, 8},

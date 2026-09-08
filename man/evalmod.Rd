@@ -24,6 +24,7 @@ evalmod(
   metrics = NULL,
   cost_fp = 1,
   cost_fn = 1,
+  basic_ties = "split",
   ...
 )
 }
@@ -204,6 +205,29 @@ when \code{mode} is set to \code{basic} and \code{metrics} asks for
 
 \item{cost_fn}{A numeric value for the cost of a false negative.}
 
+\item{basic_ties}{A string that specifies what the basic evaluation
+metrics report at the cutoffs inside a run of tied scores.
+\code{basic_ties} is effective only when \code{mode} is set to
+\code{basic}.
+\describe{
+\item{"split"}{Spread the true and false positives of the run
+evenly over its cutoffs (default). This is the
+interpolation the ROC and precision-recall curves
+need, and is what \code{precrec} has always done.}
+\item{"hold"}{Give every cutoff in the run the counts it has once
+the whole run is taken, so tied instances share one
+value of every metric.}
+}
+
+A cutoff inside a tied run splits instances that share a score, so no
+threshold produces it. With \code{"split"} a perfect classifier whose
+scores are all \code{0} or \code{1} reports sensitivity climbing from
+\code{0} to \code{1} across the positives rather than reaching \code{1}
+at once. \code{"hold"} makes each metric a step function that changes
+only where the score does. The two agree whenever the scores are all
+distinct, and \code{"split"} is kept as the default because it is what
+every published \code{precrec} result was computed with.}
+
 \item{...}{These additional arguments are passed to \code{\link[=mmdata]{mmdata()}}
 for data preparation. \code{multiclass = "ovr"} asks for a one-vs-rest
 evaluation of a dataset with more than two classes; see \code{\link[=mmdata]{mmdata()}}.}
@@ -276,6 +300,13 @@ sspoints <- evalmod(
   labels = P10N10$labels
 )
 sspoints
+
+## Let tied scores share one value of every basic metric
+tiedpoints <- evalmod(
+  mode = "basic", scores = round(P10N10$scores, 1),
+  labels = P10N10$labels, basic_ties = "hold"
+)
+tiedpoints
 
 
 ##################################################

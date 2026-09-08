@@ -21,10 +21,13 @@ void calc_tp_fp(const Rcpp::IntegerVector& olabs,
                 const Rcpp::IntegerVector& rank_idx,
                 const unsigned n, unsigned& np, unsigned& nn,
                 std::vector<double>& tp, std::vector<double>& fp,
-                std::vector<double>& sorted_ranks);
+                std::vector<double>& sorted_ranks, const bool hold_ties);
 
 void solve_ties(std::vector<double>& tp, std::vector<double>& fp,
                 unsigned curpos, unsigned ties);
+
+void hold_tied_counts(std::vector<double>& tp, std::vector<double>& fp,
+                      unsigned curpos, unsigned ties);
 
 //
 // Calculate confusion matrices for ranks
@@ -32,7 +35,8 @@ void solve_ties(std::vector<double>& tp, std::vector<double>& fp,
 // [[Rcpp::export]]
 Rcpp::List create_confusion_matrices(const Rcpp::IntegerVector& olabs,
                                      const Rcpp::NumericVector& ranks,
-                                     const Rcpp::IntegerVector& rank_idx) {
+                                     const Rcpp::IntegerVector& rank_idx,
+                                     const bool hold_ties = false) {
   // Variables
   Rcpp::List ret_val;
   std::string errmsg = "";
@@ -48,7 +52,8 @@ Rcpp::List create_confusion_matrices(const Rcpp::IntegerVector& olabs,
   std::vector<double> sorted_ranks(nvec); // Ranks
 
   // Calculate TPs and FPs
-  calc_tp_fp(olabs, ranks, rank_idx, n, np, nn, tp, fp, sorted_ranks);
+  calc_tp_fp(olabs, ranks, rank_idx, n, np, nn, tp, fp, sorted_ranks,
+             hold_ties);
 
   // Calculate TNs and FNs
   for (unsigned i = 0; i < nvec; ++i) {
@@ -75,7 +80,7 @@ void calc_tp_fp(const Rcpp::IntegerVector& olabs,
                 const Rcpp::IntegerVector& rank_idx,
                 const unsigned n, unsigned& np, unsigned& nn,
                 std::vector<double>& tp, std::vector<double>& fp,
-                std::vector<double>& sorted_ranks) {
+                std::vector<double>& sorted_ranks, const bool hold_ties) {
   unsigned ties = 0;
   double prev_rank = 0;
 
@@ -121,7 +126,11 @@ void calc_tp_fp(const Rcpp::IntegerVector& olabs,
     if (ranks_p[idx] == prev_rank) {
       ++ties;
     } else if (ties != 0) {
-      solve_ties(tp, fp, i, ties);
+      if (hold_ties) {
+        hold_tied_counts(tp, fp, i, ties);
+      } else {
+        solve_ties(tp, fp, i, ties);
+      }
       ties = 0;
     }
     prev_rank = ranks_p[idx];
@@ -129,7 +138,11 @@ void calc_tp_fp(const Rcpp::IntegerVector& olabs,
 
   // Solve ties when the lowest scores are tied
   if (ties != 0) {
-    solve_ties(tp, fp, n, ties);
+    if (hold_ties) {
+      hold_tied_counts(tp, fp, n, ties);
+    } else {
+      solve_ties(tp, fp, n, ties);
+    }
   }
 }
 
@@ -141,6 +154,25 @@ void solve_ties(std::vector<double>& tp, std::vector<double>& fp,
   for (unsigned i = 0; i < ties; ++i) {
     tp[curpos-ties+i] = tp[curpos-ties+i-1] + tied_tp;
     fp[curpos-ties+i] = fp[curpos-ties+i-1] + tied_fp;
+  }
+}
+
+// Hold tied scores at the counts that complete the run
+//
+// solve_ties() above spreads the run's TPs and FPs evenly over the cutoffs
+// inside it, which is what the ROC and precision-recall curves need: the
+// straight line between the two ends of a tied run is the correct
+// interpolation there. The basic metrics have no interpolation, so an
+// interior cutoff would report a threshold nobody can apply - it separates
+// instances that share a score. Giving every cutoff in the run the counts it
+// has once the whole run is taken makes the tied instances report one value,
+// and leaves the endpoints, which are real thresholds, exactly where
+// solve_ties() leaves them.
+void hold_tied_counts(std::vector<double>& tp, std::vector<double>& fp,
+                      unsigned curpos, unsigned ties) {
+  for (unsigned i = curpos - ties; i < curpos; ++i) {
+    tp[i] = tp[curpos];
+    fp[i] = fp[curpos];
   }
 }
 
@@ -429,11 +461,24 @@ Rcpp::List calc_basic_metrics(int np,
   // Update the precision value of the highest rank
   prec[0] = prec[1];
   if (extra_metrics) {
-    // The NPV of the lowest rank is undefined in the same way, and the two
-    // markedness values built from the two patched cells follow
-    npv[n - 1] = npv[n - 2];
+    // The NPV of the lowest rank is undefined in the same way, and the
+    // markedness values built from the patched cells follow.
+    //
+    // The undefined tail is one cell long whenever the counts rise by one
+    // per rank, but hold_tied_counts() in create_confusion_matrices() gives
+    // every cutoff of the last tied run the counts of the completed run, and
+    // those cutoffs predict nothing negative either. Walking back to the
+    // last rank that has a negative prediction covers both cases; it stops
+    // at n - 2 when nothing is tied there.
+    unsigned last = n - 1;
+    while (last > 0 && (tns_p[last] + fns_p[last]) == 0) {
+      --last;
+    }
+    for (unsigned i = last + 1; i < n; ++i) {
+      npv[i] = npv[last];
+      mkd[i] = prec[i] + npv[i] - 1;
+    }
     mkd[0] = prec[0] + npv[0] - 1;
-    mkd[n - 1] = prec[n - 1] + npv[n - 1] - 1;
   }
 
   // Return a list with P, N, and basic evaluation measures
