@@ -145,6 +145,36 @@ Two differences between the two packages are asserted rather than tolerated:
   confusion matrices and fails for every measure, the long-standing ones
   included.
 
+## Parity with tidymodels
+
+```sh
+Rscript bench/run_tidymodels_parity.R
+```
+
+`vignettes/articles/howto-tidymodels.Rmd` shows the calls that need
+`tidymodels` without evaluating them, so that the website builds on a machine
+that does not have it. That leaves the page unchecked, which is what this
+script is for: it asserts that the column names the page names are the ones
+`tidymodels` produces, that its recipes run, and that the numbers agree with
+`yardstick` wherever both compute the same thing.
+
+`tidymodels` is deliberately **not** a dependency of this package, not even
+in `Suggests` - it pulls in a large tree and nothing in `precrec` uses it.
+
+```r
+install.packages(c("tidymodels", "workflowsets", "modeldata"))
+```
+
+Two of the page's recipes were wrong until this script ran them, which is the
+argument for having it:
+
+- `collect_predictions()` on a `workflow_set` averages over the folds unless
+  `summarize = FALSE`, and the summarized frame has no `id` column, so the
+  pivot the page showed could not widen on it.
+- `.pred_class` also starts with `.pred_` and is a factor, so selecting the
+  score columns by pattern coerced the matrix to character. The page selects
+  them by level instead.
+
 ## Memory
 
 ```sh
@@ -192,6 +222,7 @@ wrong. The harness pins three properties and exits non-zero if any fails:
 | `run_memory.R` | peak-RSS entry point |
 | `run_correctness.R` | correctness entry point |
 | `run_rocr_parity.R` | cross-check of the basic measures against ROCR |
+| `run_tidymodels_parity.R` | cross-check of the tidymodels how-to page against a real fit |
 | `baseline/` | committed baseline JSON |
 
 ## Datasets

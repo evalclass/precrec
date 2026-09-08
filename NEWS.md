@@ -53,6 +53,11 @@
   column with `precrec`'s default inverts the AUC without a warning, and
   the page shows a case that comes out 1 one way and 0 the other.
 
+  `tidymodels` stays out of the package entirely, `Suggests` included, so
+  the chunks that need it are shown rather than run and the website builds
+  without it. `bench/run_tidymodels_parity.R` checks the page against a real
+  fit instead, and found two of its recipes wrong before it shipped.
+
 # precrec 0.20.0
 
 * Add `classification_report()`, the per-class table of precision, recall
