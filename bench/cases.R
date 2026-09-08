@@ -1,7 +1,7 @@
 # The benchmark cases.
 #
 # Each case names the C++ entry point it is meant to exercise, so that the
-# E4 optimisation work has an obvious before/after target. See
+# E4 optimization work has an obvious before/after target. See
 # .claude/plans/enhancements-2026.md.
 
 # Cases that run over every dataset in the catalogue.
@@ -14,7 +14,7 @@ bench_cases <- function(d) {
   points <- evalmod(mdat, mode = "basic")
 
   list(
-    # get_score_ranks / make_index_pairs
+    # get_score_ranks / order_scores_desc
     mmdata = function() mmdata(d[["scores"]], d[["labels"]]),
 
     # create_roc_curve, create_prc_curve, interpolate_prc

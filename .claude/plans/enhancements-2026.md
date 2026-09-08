@@ -70,7 +70,7 @@ a plain data frame view at the top of the function.
 
 `as.data.frame()` is a base generic with a strong contract. A `data.table`
 *is* a `data.frame`, but printing, `[`-semantics, and copy-on-modify
-behaviour differ, and reverse dependencies / user scripts may rely on base
+behavior differ, and reverse dependencies / user scripts may rely on base
 semantics.
 
 **Recommendation:** internal representation `data.table`, external contract
@@ -90,7 +90,7 @@ unchanged by default:
 
 1. Replace the two `rbind`-in-loop sites (`etc_utils_dataframe.R`,
    `g_auc_ci.R`) with build-list-then-`rbindlist()`. This alone removes the
-   worst quadratic behaviour and the R fallback's performance penalty.
+   worst quadratic behavior and the R fallback's performance penalty.
 2. Convert table constructors stage by stage (mm1 → pl2 → g_) to
    `data.table`; use `setattr()` where attribute copies matter.
 3. C++ boundary: `Rcpp::DataFrame` results get `setDT()` applied in the
@@ -103,7 +103,7 @@ unchanged by default:
 
 ### Risks
 
-- Silent behaviour changes from data.table's reference semantics — audit any
+- Silent behavior changes from data.table's reference semantics — audit any
   site that mutates a table after creation (e.g. `data_info[["nn"]][i] <- ...`
   in `mmdata`).
 - `.validate.*` methods check item/attribute names; class changes on internal
@@ -116,7 +116,7 @@ unchanged by default:
 ### Outcome
 
 Implemented on `feature/Multiclass`. One-vs-rest, classes on the model axis,
-exactly as decided below. Binary behaviour is unchanged: the whole existing
+exactly as decided below. Binary behavior is unchanged: the whole existing
 suite passes untouched, and `mmdata()` reads binary input by the same path it
 always did.
 
@@ -181,7 +181,7 @@ in R rather than by relaxing the guard and letting `create_curves()` run.
   list of score matrices instead. `format_nfold()` is built around one score
   column per model, and widening it is its own change.
 - **Faceting by class.** Classes are models, so the existing multi-model
-  rendering colours them already; a class-aware legend title would be
+  rendering colors them already; a class-aware legend title would be
   cosmetic.
 
 ### Cost
@@ -265,7 +265,7 @@ decompositions — implementable as one extra concatenated dataset).
 
 ### Risks
 
-- Biggest user-facing change in the package's history; keep binary behaviour
+- Biggest user-facing change in the package's history; keep binary behavior
   byte-identical (full snapshot suite must pass untouched).
 - Averaging across datasets × classes interacts with `calc_avg` — v1 should
   average within class across datasets only, and document that.
@@ -345,7 +345,7 @@ decompositions — implementable as one extra concatenated dataset).
    **The original assessment that this was dormant was wrong.** The same
    sentinel appears twice, and only one of the two sites is unreachable:
 
-   - `calc_uauc` (`precrec_plx.cpp`) — genuinely dormant, as analysed:
+   - `calc_uauc` (`precrec_plx.cpp`) — genuinely dormant, as analyzed:
      reachable only via `ustat_method = "sort"`, which `.pl_main_aucroc`
      cannot select, and the default `calc_uauc_frank` path is correct.
    - `make_index_pairs` (`precrec_misc.cpp`) — **on the main pipeline
@@ -380,7 +380,7 @@ decompositions — implementable as one extra concatenated dataset).
 0. **Infrastructure first** — **DONE (2026-08-30).** `bench/`
    (Rbuildignored, `bench/README.md` documents it): seeded datasets over a
    1e4–1e7 size sweep plus a shape sweep (imbalanced, ties, NAs, all three),
-   `bench::mark()` cases labelled with the C++ entry point each exercises,
+   `bench::mark()` cases labeled with the C++ entry point each exercises,
    JSON baselines with a `--compare` mode that flags regressions past 10%
    above a 1 ms noise floor, and `run_correctness.R` covering the
    `use_rcpp = FALSE` fallback, ALTREP inputs, and the ranking invariants.
@@ -463,7 +463,9 @@ decompositions — implementable as one extra concatenated dataset).
    every store. Taking `double* p = v.begin()` once, before the loop,
    recovered it. Anything writing several Rcpp vectors in one loop needs
    that.
-2. **`get_score_ranks`** — **PARTLY DONE.** `sort_indices` passed its
+2. **`get_score_ranks`** — **PARTLY DONE, then superseded by the second
+   round below (2026-09-08), which replaced the comparison sort outright.**
+   `sort_indices` passed its
    comparator as a *function pointer*, which cannot be inlined into
    `std::sort`'s inner loop; it is a function object now. `mmdata` is
    **22–26% faster** across every shape and size. Both comparators order by
@@ -523,6 +525,69 @@ want several runs, is the obvious follow-up.
 - ~~The fix in (1) does not change any public-API result.~~ It does — the
   `make_index_pairs` site is on the `evalmod()` path. See item (1).
 
+### Second round (2026-09-08) — `feature/CppHotPaths`, 0.21.2
+
+Two things the first round left on the table, found by profiling per entry
+point rather than by reading the code.
+
+1. **The `Rcpp::Vector` indexing cost is a bounds check, not a pointer
+   reload.** The first round diagnosed the 13% on `calc_basic_metrics` as the
+   compiler reloading the cached data pointer after every store, and fixed it
+   by taking `begin()` on the *written* vectors. The *read* vectors were left
+   indexed, and they were carrying the same weight for a different reason:
+   `operator[]` → `r_vector_cache::ref` → `check_index`, whose body is a
+   `warning()` call that gcc will not inline in a translation unit this size.
+   Proven three ways — 69 call sites in the installed `.so` against 0 in a
+   lone-TU build, 15 → 0 under `-DRCPP_NO_BOUNDS_CHECK`, and an alternating
+   A/B at 1.85x on identical source. Raw-pointer reads in the four scanning
+   functions measure the same as the global define (1.24x vs 1.25x end to
+   end) while keeping the check everywhere it costs nothing.
+
+2. **The sort is 84% of `get_score_ranks`, so make the comparator go away.**
+   The first round made the comparator inlinable; this one removes it. An LSD
+   radix sort over an order-preserving `double`→`uint64_t` key is 2.3x on
+   distinct scores and 2.4x on tied ones, and reproduces the index tie-break
+   from per-pass stability rather than from a comparison. The plan's original
+   objection to an index sort — chasing a pointer into the score array per
+   comparison — does not apply, because the key travels beside the index.
+
+| stage | 0.21.1 | branch | |
+| --- | --- | --- | --- |
+| `get_score_ranks` | 0.101 | 0.045 | **2.24x** |
+| `calc_basic_metrics` | 0.089 | 0.047 | **1.89x** |
+| `create_prc_curve` | 0.026 | 0.015 | **1.73x** |
+| `create_roc_curve` | 0.022 | 0.014 | **1.57x** |
+| `create_confusion_matrices` | 0.061 | 0.049 | **1.24x** |
+| `evalmod()` | 0.427 | 0.271 | **1.58x** |
+| `evalmod(mode = "basic")` | 0.611 | 0.502 | **1.22x** |
+| `get_score_ranks`, already sorted | 0.029 | 0.036 | **0.81x** |
+
+Medians of three alternating rounds over separate installs at 1e6. Already
+sorted input is the one loss: introsort is unusually good on it, and the
+monotonicity pre-scan recovers most of the gap but not all.
+
+**A bit-level key needs a bit-level review.** `desc_key` keyed on the raw
+bits, so `-0.0` and `+0.0` — equal as numbers, different in the sign bit —
+ranked apart and split a tie the comparator had kept. `round()` on a small
+negative produces `-0.0`, so only the tied datasets tripped it, and only
+`bench/run_correctness.R` caught it (2 of 40, against 40/40 for stock at
+0.21.1). The key normalizes zero now, and
+`test_mm3_1_reformat_data_scores.R` pins both the tie and shift invariance —
+verified to fail 4 assertions on the unfixed build. ±0.0 is the only pair
+`==` treats as equal while the bits differ; NaN is the other bit-level
+oddity and the caller already replaces it with the NA sentinel.
+
+**Still on the table**, measured but not done: the `.Call` boundary coerces
+`fmdat$ranks` (integer against a `NumericVector` signature) and
+`fmdat$labels` (double against an `IntegerVector` signature), 9.6% of
+`create_confusion_matrices`; the pipeline stages still build columns in
+`std::vector` and copy them into R through `wrap`, ~1.16x on
+`calc_basic_metrics` in isolation; `orig_points` is a `std::vector<bool>`
+bitset, slow to write and wrapped element by element; and
+`calc_basic_metrics` computes five columns the curve path never reads,
+which would need the opt-in treatment `extra_metrics` already has because
+`rank` is used by `pevals` and `.add_derived_metrics`.
+
 ---
 
 ## E5. Additional evaluation metrics — **M** (tiered) — **DONE (2026-08-31)**
@@ -537,7 +602,7 @@ Cohen's kappa are calculated in the same C++ loop as the existing measures,
 and `fscore` became F-beta through a new `beta` argument on `evalmod()`
 (default 1, so existing results are byte-identical). NPV needed the mirror of
 the trick precision already used: nothing is predicted negative at the last
-rank, so that cell is undefined and is taken from its neighbour, and the two
+rank, so that cell is undefined and is taken from its neighbor, and the two
 markedness values built from the patched cells are recomputed after the loop.
 
 **The touch list was the work, as predicted — so it got shorter.** Rather
@@ -558,7 +623,7 @@ computes the grid, and shares its column count with the ggplot2 side through
 draws it.
 
 **Tier 2.** `prob_metrics()` returns the Brier score and the log loss per
-model and dataset; `prob_metrics_ci()` summarises them over multiple
+model and dataset; `prob_metrics_ci()` summarizes them over multiple
 datasets. Both take the same input as `evalmod()` — an `mmdata()` object or
 raw scores and labels — because that is where the raw scores live; the curve
 objects do not keep them. Scores outside [0, 1] are rejected with a
@@ -591,7 +656,7 @@ curve pipeline calls `calc_measures()` too and was paying for five measures
 no curve is drawn from. `calc_measures()` and `calc_basic_measures()` grew an
 `extra_measures` flag, and `.pl_main_rocprc()` passes `FALSE`. Isolated at
 1e6: 179 ms for the full table, 86.6 ms for the reduced one. The rocprc
-numbers above are the phase-6 optimisations showing through, not an E5 gain.
+numbers above are the phase-6 optimizations showing through, not an E5 gain.
 
 ### Not done
 

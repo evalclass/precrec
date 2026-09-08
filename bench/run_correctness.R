@@ -4,14 +4,14 @@
 #
 #   Rscript bench/run_correctness.R
 #
-# The E4 optimisations rewrite how the C++ code allocates and fills its
+# The E4 optimizations rewrite how the C++ code allocates and fills its
 # results. This harness pins the properties those rewrites could silently
 # break, so it should be run before and after every one of them:
 #
 #   1. the C++ data-frame builders agree with the pure-R fallback
 #      (`use_rcpp = FALSE` in `.dataframe_common`)
 #   2. ALTREP inputs (compact sequences, deferred coercions) give the same
-#      answers as the materialised vectors they stand for
+#      answers as the materialized vectors they stand for
 #   3. shifting every score by a constant leaves the curves unchanged, and
 #      NAs are ranked as `na_worst` asks - the invariant the DBL_MIN
 #      sentinel bug broke

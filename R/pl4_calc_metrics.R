@@ -114,7 +114,7 @@ calc_metrics <- function(cmats, scores = NULL, labels = NULL, beta = 1,
 
   # The four complements come off the columns rather than off the counts, so
   # that they inherit what those columns already do at the ends: precision
-  # and NPV take their undefined value from a neighbour, and a dataset with
+  # and NPV take their undefined value from a neighbor, and a dataset with
   # no negatives has NA specificity rather than 0/0.
   vals <- list(
     fpr = 1 - pb[["specificity"]],
@@ -453,7 +453,7 @@ calc_metrics <- function(cmats, scores = NULL, labels = NULL, beta = 1,
     }
 
     # NPV mirrors precision: the value of the lowest rank is undefined and is
-    # taken from its neighbour
+    # taken from its neighbor
     .assert_internal(pb[["npv"]][n] == pb[["npv"]][n - 1])
   }
 

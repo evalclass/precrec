@@ -528,7 +528,7 @@ NULL
   # === Validate input arguments ===
   .validate(obj[[curvetype]])
 
-  # === Create line colours ===
+  # === Create line colors ===
   model_type <- attr(obj, "model_type")
 
   if (model_type == "single") {
@@ -568,7 +568,7 @@ NULL
 }
 
 #
-# Make colours for multiple models and multiple datasets
+# Make colors for multiple models and multiple datasets
 #
 .make_multi_colors <- function(obj) {
   uniq_modnames <- attr(obj, "uniq_modnames")

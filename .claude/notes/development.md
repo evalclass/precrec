@@ -108,8 +108,11 @@ README. Two things about it that have bitten:
   what unchanged code says against the same baseline before believing a
   number, and never compare a `--quick` run against a full baseline.
 - **Regenerate `bench/baseline/develop.json` whenever a change alters what
-  the package computes.** A stale baseline reports the documented cost of a
-  new metric as a regression, which looks exactly like a real one.
+  the package computes, or how fast it computes it.** A baseline older than
+  a feature reports that feature's documented cost as a regression, which
+  looks exactly like a real one; a baseline older than an optimization is
+  slow by the size of the win, and the next real regression can hide inside
+  that margin. Check the `meta` block for the version it was taken from.
 
 `bench/run_rocr_parity.R` cross-checks the basic evaluation metrics against
 ROCR, which is the reference implementation for the ones added in 0.16.0.

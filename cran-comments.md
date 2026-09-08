@@ -1,8 +1,8 @@
-## Version 0.21.1
+## Version 0.21.2
 
-An update of the published package `precrec` (0.14.5 -> 0.21.1). 0.15.0,
-0.16.0, 0.16.1, 0.16.2, 0.17.0, 0.18.0, 0.19.0, 0.20.0 and 0.21.0 were
-prepared but not submitted, so this release carries all ten sets of
+An update of the published package `precrec` (0.14.5 -> 0.21.2). 0.15.0,
+0.16.0, 0.16.1, 0.16.2, 0.17.0, 0.18.0, 0.19.0, 0.20.0, 0.21.0 and 0.21.1
+were prepared but not submitted, so this release carries all eleven sets of
 changes.
 
 - Support datasets with more than two classes by one-vs-rest decomposition
@@ -38,6 +38,8 @@ changes.
 - Raise the R dependency to >= 4.1, and modernize the tests and internals
 - Replace the single long vignette with a short one; the rest of the
   documentation moved to the package website, so the tarball did not grow
+- Speed up the C++ hot paths, so `evalmod()` runs about 1.5x faster on a
+  million rows; the results are unchanged, bit for bit
 
 `NEWS.md` has the full list.
 

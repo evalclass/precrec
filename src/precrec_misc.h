@@ -5,20 +5,6 @@
 #include <cfloat>       // DBL_MIN, DBL_MAX
 #include <vector>       // std::vector
 #include <string>       // std::string
-#include <algorithm>    // std::sort, std::stable_sort
-
-//
-// Make pairs for sorting
-//
-void make_index_pairs(std::vector<std::pair<unsigned, double > >& indices,
-                      const Rcpp::NumericVector& scores,
-                      const bool na_worst);
-
-//
-// Sort indices by scores
-//
-void sort_indices(std::vector<std::pair<unsigned, double > >& indices,
-                  const bool desc);
 
 //
 // Shuffle int vector
