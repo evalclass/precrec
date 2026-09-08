@@ -463,7 +463,9 @@ decompositions — implementable as one extra concatenated dataset).
    every store. Taking `double* p = v.begin()` once, before the loop,
    recovered it. Anything writing several Rcpp vectors in one loop needs
    that.
-2. **`get_score_ranks`** — **PARTLY DONE.** `sort_indices` passed its
+2. **`get_score_ranks`** — **PARTLY DONE, then superseded by the second
+   round below (2026-09-08), which replaced the comparison sort outright.**
+   `sort_indices` passed its
    comparator as a *function pointer*, which cannot be inlined into
    `std::sort`'s inner loop; it is a function object now. `mmdata` is
    **22–26% faster** across every shape and size. Both comparators order by
@@ -522,6 +524,69 @@ want several runs, is the obvious follow-up.
   regression, and the "keep unstripped" decision from 0.10.1 still stands.
 - ~~The fix in (1) does not change any public-API result.~~ It does — the
   `make_index_pairs` site is on the `evalmod()` path. See item (1).
+
+### Second round (2026-09-08) — `feature/CppHotPaths`, 0.21.2
+
+Two things the first round left on the table, found by profiling per entry
+point rather than by reading the code.
+
+1. **The `Rcpp::Vector` indexing cost is a bounds check, not a pointer
+   reload.** The first round diagnosed the 13% on `calc_basic_metrics` as the
+   compiler reloading the cached data pointer after every store, and fixed it
+   by taking `begin()` on the *written* vectors. The *read* vectors were left
+   indexed, and they were carrying the same weight for a different reason:
+   `operator[]` → `r_vector_cache::ref` → `check_index`, whose body is a
+   `warning()` call that gcc will not inline in a translation unit this size.
+   Proven three ways — 69 call sites in the installed `.so` against 0 in a
+   lone-TU build, 15 → 0 under `-DRCPP_NO_BOUNDS_CHECK`, and an alternating
+   A/B at 1.85x on identical source. Raw-pointer reads in the four scanning
+   functions measure the same as the global define (1.24x vs 1.25x end to
+   end) while keeping the check everywhere it costs nothing.
+
+2. **The sort is 84% of `get_score_ranks`, so make the comparator go away.**
+   The first round made the comparator inlinable; this one removes it. An LSD
+   radix sort over an order-preserving `double`→`uint64_t` key is 2.3x on
+   distinct scores and 2.4x on tied ones, and reproduces the index tie-break
+   from per-pass stability rather than from a comparison. The plan's original
+   objection to an index sort — chasing a pointer into the score array per
+   comparison — does not apply, because the key travels beside the index.
+
+| stage | 0.21.1 | branch | |
+| --- | --- | --- | --- |
+| `get_score_ranks` | 0.101 | 0.045 | **2.24x** |
+| `calc_basic_metrics` | 0.089 | 0.047 | **1.89x** |
+| `create_prc_curve` | 0.026 | 0.015 | **1.73x** |
+| `create_roc_curve` | 0.022 | 0.014 | **1.57x** |
+| `create_confusion_matrices` | 0.061 | 0.049 | **1.24x** |
+| `evalmod()` | 0.427 | 0.271 | **1.58x** |
+| `evalmod(mode = "basic")` | 0.611 | 0.502 | **1.22x** |
+| `get_score_ranks`, already sorted | 0.029 | 0.036 | **0.81x** |
+
+Medians of three alternating rounds over separate installs at 1e6. Already
+sorted input is the one loss: introsort is unusually good on it, and the
+monotonicity pre-scan recovers most of the gap but not all.
+
+**A bit-level key needs a bit-level review.** `desc_key` keyed on the raw
+bits, so `-0.0` and `+0.0` — equal as numbers, different in the sign bit —
+ranked apart and split a tie the comparator had kept. `round()` on a small
+negative produces `-0.0`, so only the tied datasets tripped it, and only
+`bench/run_correctness.R` caught it (2 of 40, against 40/40 for stock at
+0.21.1). The key normalizes zero now, and
+`test_mm3_1_reformat_data_scores.R` pins both the tie and shift invariance —
+verified to fail 4 assertions on the unfixed build. ±0.0 is the only pair
+`==` treats as equal while the bits differ; NaN is the other bit-level
+oddity and the caller already replaces it with the NA sentinel.
+
+**Still on the table**, measured but not done: the `.Call` boundary coerces
+`fmdat$ranks` (integer against a `NumericVector` signature) and
+`fmdat$labels` (double against an `IntegerVector` signature), 9.6% of
+`create_confusion_matrices`; the pipeline stages still build columns in
+`std::vector` and copy them into R through `wrap`, ~1.16x on
+`calc_basic_metrics` in isolation; `orig_points` is a `std::vector<bool>`
+bitset, slow to write and wrapped element by element; and
+`calc_basic_metrics` computes five columns the curve path never reads,
+which would need the opt-in treatment `extra_metrics` already has because
+`rank` is used by `pevals` and `.add_derived_metrics`.
 
 ---
 

@@ -14,7 +14,7 @@ bench_cases <- function(d) {
   points <- evalmod(mdat, mode = "basic")
 
   list(
-    # get_score_ranks / make_index_pairs
+    # get_score_ranks / order_scores_desc
     mmdata = function() mmdata(d[["scores"]], d[["labels"]]),
 
     # create_roc_curve, create_prc_curve, interpolate_prc
