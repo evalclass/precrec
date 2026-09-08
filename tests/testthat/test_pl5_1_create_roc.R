@@ -463,3 +463,39 @@ test_that("mm test data with x_bins=0, 1", {
     expect_true(all(roc_curve4[["orig_points"]]))
   }
 })
+
+test_that("create_roc stays inside its buffer for large x_bins", {
+  # The interpolated points used to come off a grid snapped to each gap's
+  # own start, so neighbouring gaps disagreed about where the grid lines
+  # were and together emitted more points than the x_bins the buffer is
+  # sized for - a heap overrun from x_bins >= 5000 up. One shared grid
+  # bounds the count by construction; assert the bound directly.
+  set.seed(101)
+  n <- 200
+  scores <- runif(n)
+  labels <- rep(c(0L, 1L), c(n / 2, n / 2))
+
+  for (x_bins in c(5000, 10000, 1e5)) {
+    roc_curve <- create_roc(scores = scores, labels = labels, x_bins = x_bins)
+    expect_lte(length(roc_curve[["x"]]), n + 1 + x_bins)
+    expect_false(any(is.na(roc_curve[["x"]])))
+    expect_false(any(is.na(roc_curve[["y"]])))
+  }
+})
+
+test_that("create_roc interpolates onto one shared grid", {
+  # Every interpolated point must sit on a line of the x_bins grid, and no
+  # line may be used twice - that is what keeps the count within budget.
+  set.seed(102)
+  n <- 40
+  scores <- runif(n)
+  labels <- sample(c(0L, 1L), n, replace = TRUE)
+  x_bins <- 1000
+
+  roc_curve <- create_roc(scores = scores, labels = labels, x_bins = x_bins)
+  interp <- roc_curve[["x"]][!roc_curve[["orig_points"]]]
+  lines <- interp * x_bins
+
+  expect_equal(lines, round(lines))
+  expect_false(any(duplicated(round(lines))))
+})

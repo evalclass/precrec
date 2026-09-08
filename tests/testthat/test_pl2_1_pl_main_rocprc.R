@@ -74,8 +74,10 @@ test_that(".pl_main_rocprc() accepts 'x_bins'", {
   expect_err_msg(err_msg, mdat, 1.5)
   expect_err_msg(err_msg, mdat, 0.001)
 
-  err_msg <- "0 or larger"
+  # x_bins is capped as well as floored, so the range reads as an interval
+  err_msg <- "between 0 and 1e\\+06"
   expect_err_msg(err_msg, mdat, -1)
+  expect_err_msg(err_msg, mdat, 1e6 + 1)
 })
 
 test_that(".pl_main_rocprc() accepts 'interpolate'", {

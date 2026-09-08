@@ -38,8 +38,8 @@
 #' @param ties_method A string for the ties method.
 #'
 #' @param x_bins An integer for the number of supporting points of a
-#'   registered pair. It is ignored for every other pair, which has no
-#'   interpolation to place supporting points on.
+#'   registered pair, `1e6` or smaller. It is ignored for every other pair,
+#'   which has no interpolation to place supporting points on.
 #'
 #' @param interpolate A Boolean value to specify whether or not
 #'   interpolation of a registered pair is performed.

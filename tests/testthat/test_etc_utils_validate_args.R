@@ -96,6 +96,23 @@ test_that(".assert_number() checks the type, wholeness and the range", {
   )
 })
 
+test_that(".validate_x_bins() caps x_bins", {
+  # The ceiling is a resource guard: every stage sized by x_bins allocates a
+  # vector of that length per curve, so an unbounded value dies in the
+  # allocator instead of at the argument.
+  expect_true(.validate_x_bins(1e6))
+  expect_true(.validate_x_bins(1000))
+  expect_true(.validate_x_bins(0, allow_zero = TRUE))
+
+  for (x in c(1e6 + 1, 1e9)) {
+    err <- expect_error(
+      .validate_x_bins(x),
+      class = "precrec_error_invalid_x_bins"
+    )
+    expect_match(conditionMessage(err), "between 1 and 1e\\+06")
+  }
+})
+
 test_that(".assert_number() rejects NA unless allow_na is TRUE", {
   expect_error(
     .assert_number(NA_real_, "dsid"),

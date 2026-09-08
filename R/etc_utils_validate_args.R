@@ -469,6 +469,15 @@
 #
 # Validate x_bins
 #
+# The upper bound is a resource guard rather than a statement about the
+# curve. Every stage sized by `x_bins` - the interpolation buffers, the
+# point reduction and the averaging grid - allocates a vector of that many
+# elements per curve, so a stray `x_bins = 1e9` asks for tens of gigabytes
+# and dies in the allocator rather than at the argument. A million
+# supporting points is already finer than any plot resolves and finer than
+# the data behind it, so the ceiling is well clear of real use.
+.max_x_bins <- 1e6
+
 .validate_x_bins <- function(x_bins, allow_zero = FALSE) {
   if (allow_zero) {
     min_x_bin <- 0
@@ -477,7 +486,9 @@
   }
 
   if (!is.null(x_bins) && all(!is.na(x_bins))) {
-    .assert_number(x_bins, "x_bins", min = min_x_bin, whole = TRUE)
+    .assert_number(x_bins, "x_bins",
+      min = min_x_bin, max = .max_x_bins, whole = TRUE
+    )
   }
 
   invisible(TRUE)

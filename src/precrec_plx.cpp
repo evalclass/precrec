@@ -449,6 +449,7 @@ int interpolate_roc(const Rcpp::NumericVector& sp,
                     const Rcpp::NumericVector& sn,
                     const unsigned idx,
                     const double x_interval,
+                    unsigned long& grid_i,
                     std::vector<double>& fpr,
                     std::vector<double>& tpr,
                     unsigned n);
@@ -481,6 +482,18 @@ Rcpp::List create_roc_curve(const Rcpp::NumericVector& tps,
 
   unsigned n = 0;
 
+  // Index of the next line on the interpolation grid, carried across the
+  // whole scan. Sharing one grid is what keeps the point count bounded:
+  // each line then falls in exactly one gap and is emitted at most once,
+  // so the interpolated points cannot exceed x_bins and the buffer sized
+  // sp.size() + x_bins is always large enough. Snapping a fresh grid from
+  // each gap's own start, as this used to, let neighboring gaps disagree
+  // about where the lines were and emit more points than were budgeted -
+  // it wrote past the end of the vectors for x_bins >= 5000. It also lets
+  // the common gap, which spans no line at all, skip the call on one
+  // comparison instead of opening it with two divisions.
+  unsigned long grid_i = 1;
+
   // Interval must be >0
   if (x_interval < 0) {
     errmsg = "invalid-vecsize-1";
@@ -494,15 +507,26 @@ Rcpp::List create_roc_curve(const Rcpp::NumericVector& tps,
       continue;
     }
 
+    const double cur_fpr = 1 - sp[i];
+
     // Interpolate two points
-    if ((x_interval > 0) && (i > 0)) {
-      n = interpolate_roc(sp, sn, i, x_interval, fpr, tpr, n);
+    if ((x_interval > 0) && (i > 0)
+          && (grid_i * x_interval < cur_fpr)) {
+      n = interpolate_roc(sp, sn, i, x_interval, grid_i, fpr, tpr, n);
     }
 
-    fpr[n] = 1 - sp[i];
+    fpr[n] = cur_fpr;
     tpr[n] = sn[i];
     roc_orig[n] = true;
     ++n;
+
+    // Step the grid past this point, so the next gap starts above it.
+    // Amortised O(1): this advances x_bins times over the whole scan.
+    if (x_interval > 0) {
+      while (grid_i * x_interval <= cur_fpr) {
+        ++grid_i;
+      }
+    }
   }
 
   fpr.resize(n);
@@ -521,32 +545,33 @@ Rcpp::List create_roc_curve(const Rcpp::NumericVector& tps,
 }
 
 // Linearly interpolate two ROC points
+//
+// Walks the shared grid held by the caller and emits every line strictly
+// inside the gap, advancing grid_i as it goes. Each y is taken from the
+// segment directly rather than accumulated, so a long run of gaps cannot
+// drift away from the line the two points define.
 int interpolate_roc(const Rcpp::NumericVector& sp,
                     const Rcpp::NumericVector& sn,
                     const unsigned idx,
                     const double x_interval,
+                    unsigned long& grid_i,
                     std::vector<double>& fpr,
                     std::vector<double>& tpr,
                     unsigned n) {
-  double cur_fpr = 1 - sp[idx];
-  double prev_fpr = 1 - sp[idx-1];
-  double slope = (sn[idx] - sn[idx-1]) / (cur_fpr - prev_fpr);
-  double y_interval = slope * x_interval;
-  double tmp_fpr = x_interval * int(prev_fpr / x_interval);
-  double tmp_tpr = sn[idx-1] + (tmp_fpr - prev_fpr) * slope;
+  const double cur_fpr = 1 - sp[idx];
+  const double prev_fpr = 1 - sp[idx-1];
+  const double slope = (sn[idx] - sn[idx-1]) / (cur_fpr - prev_fpr);
 
-  while (tmp_fpr < 1) {
-    tmp_fpr += x_interval;
-    if (tmp_fpr >= cur_fpr){
-      break;
+  double tmp_fpr = grid_i * x_interval;
+  while (tmp_fpr < cur_fpr) {
+    const double tmp_tpr = sn[idx-1] + (tmp_fpr - prev_fpr) * slope;
+    if ((n == 0) || (fpr[n-1] != tmp_fpr) || (tpr[n-1] != tmp_tpr)) {
+      fpr[n] = tmp_fpr;
+      tpr[n] = tmp_tpr;
+      ++n;
     }
-    tmp_tpr += y_interval;
-    if ((fpr[n-1] == tmp_fpr)  && (tpr[n-1] == tmp_tpr)) {
-      continue;
-    }
-    fpr[n] = tmp_fpr;
-    tpr[n] = tmp_tpr;
-    ++n;
+    ++grid_i;
+    tmp_fpr = grid_i * x_interval;
   }
 
   return n;
@@ -567,6 +592,7 @@ int interpolate_prc(const Rcpp::NumericVector& tps,
                     const Rcpp::NumericVector& pr,
                     const unsigned idx,
                     const double x_interval,
+                    unsigned long& grid_i,
                     std::vector<double>& rec,
                     std::vector<double>& prec,
                     unsigned n);
@@ -599,6 +625,11 @@ Rcpp::List create_prc_curve(const Rcpp::NumericVector& tps,
 
   int n = 0;
 
+  // One shared grid across the scan, as in create_roc_curve() - see the
+  // comment there for why a per-gap grid overruns the buffer. Recall is
+  // monotonic over the scan, so the same reasoning holds unchanged.
+  unsigned long grid_i = 1;
+
   // Interval must be >=0
   if (x_interval < 0) {
     errmsg = "invalid-vecsize-1";
@@ -613,8 +644,10 @@ Rcpp::List create_prc_curve(const Rcpp::NumericVector& tps,
     }
 
     // Interpolate two points
-    if ((x_interval > 0) && (i > 0)) {
-      n = interpolate_prc(tps, fps, sn, pr, i, x_interval, rec, prec, n);
+    if ((x_interval > 0) && (i > 0)
+          && (grid_i * x_interval < sn[i])) {
+      n = interpolate_prc(tps, fps, sn, pr, i, x_interval, grid_i, rec,
+                          prec, n);
     }
 
     rec[n] = sn[i];
@@ -622,6 +655,13 @@ Rcpp::List create_prc_curve(const Rcpp::NumericVector& tps,
     prc_orig[n] = true;
 
     ++n;
+
+    // Step the grid past this point. Amortised O(1) over the scan.
+    if (x_interval > 0) {
+      while (grid_i * x_interval <= sn[i]) {
+        ++grid_i;
+      }
+    }
   }
 
   rec.resize(n);
@@ -640,25 +680,23 @@ Rcpp::List create_prc_curve(const Rcpp::NumericVector& tps,
 }
 
 // Non-linearly interpolate two Precision-Recall points
+//
+// Walks the shared grid held by the caller, as interpolate_roc() does.
 int interpolate_prc(const Rcpp::NumericVector& tps,
                     const Rcpp::NumericVector& fps,
                     const Rcpp::NumericVector& sn,
                     const Rcpp::NumericVector& pr,
                     const unsigned idx,
                     const double x_interval,
+                    unsigned long& grid_i,
                     std::vector<double>& rec,
                     std::vector<double>& prec,
                     unsigned n) {
-  double tmp_rec = x_interval * int(sn[idx-1] / x_interval);
+  double tmp_rec = grid_i * x_interval;
   double tmp_prec;
   double x;
 
-  while (tmp_rec < 1) {
-    tmp_rec += x_interval;
-    if (tmp_rec >= sn[idx]){
-      break;
-    }
-
+  while (tmp_rec < sn[idx]) {
     if (pr[idx] == pr[idx-1]) {
       tmp_prec = pr[idx];
     } else {
@@ -669,13 +707,14 @@ int interpolate_prc(const Rcpp::NumericVector& tps,
                                        / (tps[idx] - tps[idx-1])));
     }
 
-    if ((rec[n-1] == tmp_rec)  && (prec[n-1] == tmp_prec)) {
-      continue;
+    if ((n == 0) || (rec[n-1] != tmp_rec) || (prec[n-1] != tmp_prec)) {
+      rec[n] = tmp_rec;
+      prec[n] = tmp_prec;
+      ++n;
     }
-    rec[n] = tmp_rec;
-    prec[n] = tmp_prec;
 
-    ++n;
+    ++grid_i;
+    tmp_rec = grid_i * x_interval;
   }
 
   return n;

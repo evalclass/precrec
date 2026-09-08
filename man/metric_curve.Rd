@@ -56,8 +56,8 @@ positives.}
 \item{ties_method}{A string for the ties method.}
 
 \item{x_bins}{An integer for the number of supporting points of a
-registered pair. It is ignored for every other pair, which has no
-interpolation to place supporting points on.}
+registered pair, \code{1e6} or smaller. It is ignored for every other pair,
+which has no interpolation to place supporting points on.}
 
 \item{interpolate}{A Boolean value to specify whether or not
 interpolation of a registered pair is performed.}
