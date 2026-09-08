@@ -92,6 +92,7 @@ svg
 sym
 testthat
 tibble
+tidymodels
 TN
 TNR
 TP
