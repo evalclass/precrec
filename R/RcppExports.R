@@ -17,8 +17,8 @@ get_score_ranks <- function(scores, na_worst, ties_method) {
     .Call(`_precrec_get_score_ranks`, scores, na_worst, ties_method)
 }
 
-create_confusion_matrices <- function(olabs, ranks, rank_idx) {
-    .Call(`_precrec_create_confusion_matrices`, olabs, ranks, rank_idx)
+create_confusion_matrices <- function(olabs, ranks, rank_idx, hold_ties = FALSE) {
+    .Call(`_precrec_create_confusion_matrices`, olabs, ranks, rank_idx, hold_ties)
 }
 
 calc_uauc <- function(np, nn, scores, olabs, na_worst, ties_method) {

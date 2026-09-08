@@ -1,9 +1,9 @@
-## Version 0.21.2
+## Version 0.22.0
 
-An update of the published package `precrec` (0.14.5 -> 0.21.2). 0.15.0,
-0.16.0, 0.16.1, 0.16.2, 0.17.0, 0.18.0, 0.19.0, 0.20.0, 0.21.0 and 0.21.1
-were prepared but not submitted, so this release carries all eleven sets of
-changes.
+An update of the published package `precrec` (0.14.5 -> 0.22.0). 0.15.0,
+0.16.0, 0.16.1, 0.16.2, 0.17.0, 0.18.0, 0.19.0, 0.20.0, 0.21.0, 0.21.1 and
+0.21.2 were prepared but not submitted, so this release carries all twelve
+sets of changes.
 
 - Support datasets with more than two classes by one-vs-rest decomposition
 - Add the evaluation metrics `ROCR` provides, opt-in through
@@ -40,6 +40,11 @@ changes.
   documentation moved to the package website, so the tarball did not grow
 - Speed up the C++ hot paths, so `evalmod()` runs about 1.5x faster on a
   million rows; the results are unchanged, bit for bit
+- Let `reduce_points` thin the basic evaluation metrics for plotting, which
+  carry one point per cutoff and so drew a mark per instance
+- Add `evalmod(basic_ties = )` for what the basic metrics report at the
+  cutoffs inside a run of tied scores; the default is the behavior the
+  package has always had
 
 `NEWS.md` has the full list.
 

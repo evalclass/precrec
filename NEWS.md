@@ -1,4 +1,23 @@
-# precrec 0.21.3
+# precrec 0.22.0
+
+* `evalmod(mode = "basic")` takes a new `basic_ties` argument for what the
+  basic metrics report at the cutoffs inside a run of tied scores. Such a
+  cutoff separates instances that share a score, so no threshold produces
+  it. The default `"split"` spreads the true and false positives of the run
+  evenly over its cutoffs, which is what `precrec` has always done and is
+  the interpolation the ROC and precision-recall curves need. `"hold"`
+  gives every cutoff in the run the counts it has once the whole run is
+  taken, so tied instances share one value of every metric and each metric
+  becomes a step function that changes only where the score does.
+
+  A classifier that is exactly right but scores in a single bit reported
+  sensitivity climbing across the positives rather than reaching 1 at once,
+  which is the even spread and not the classifier. `basic_ties = "hold"`
+  is the reading that case wants.
+
+  The two settings agree whenever the scores are all distinct, `"split"` is
+  the default because it is what every published result was computed with,
+  and the curves are not affected either way.
 
 * `reduce_points` now works for `mode = "basic"`. The basic metrics carry one
   point per cutoff, so plotting a large dataset drew a mark per instance: at

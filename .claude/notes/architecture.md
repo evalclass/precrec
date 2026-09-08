@@ -201,3 +201,14 @@ behaviors below are load-bearing — changing them changes published results:
   binning and averaging entirely.
 - Ties are resolved by `ties_method` (`"equiv"`, `"random"`, `"first"`) and
   missing scores by `na_worst`, both applied at ranking time in `mm3`.
+- What the *counts* do inside a run of tied scores is a second, separate
+  question, settled in `calc_tp_fp` (`precrec_plx.cpp`). `solve_ties()`
+  spreads the run's TPs and FPs evenly over its cutoffs - the correct
+  interpolation for the curves, and the only behavior before 0.22.0.
+  `hold_tied_counts()` instead gives every cutoff of the run the counts of
+  the completed run, which is what `evalmod(basic_ties = "hold")` asks for;
+  only `.pl_main_basic` ever sets it, so the curve pipeline cannot reach it.
+  Holding leaves a longer undefined tail than splitting does - a tied final
+  run predicts nothing negative at any of its cutoffs, not just the last -
+  which is why `calc_basic_metrics` fills NPV by walking back to the last
+  rank that has a negative prediction rather than copying one cell.
