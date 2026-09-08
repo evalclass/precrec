@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.21.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.21.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,6 +71,15 @@
       <small>Source: <a href="https://github.com/evalclass/precrec/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.21.2" id="precrec-0212">precrec 0.21.2<a class="anchor" aria-label="anchor" href="#precrec-0212"></a></h2>
+<ul><li>
+<p>Speed up the C++ hot paths. <code><a href="../reference/evalmod.html">evalmod()</a></code> runs about 1.5x faster on a million rows, and <code>evalmod(mode = "basic")</code> about 1.2x. The results are unchanged, bit for bit.</p>
+<p>Two things were costing the time. First, reading a vector through Rcpp’s <code>operator[]</code> goes through a proxy whose bounds check is a call to <code><a href="https://rdrr.io/r/base/warning.html" class="external-link">warning()</a></code>, and in a translation unit the size of <code>precrec_plx.cpp</code> the compiler leaves that call out of line rather than inlining it away - so every element access in the innermost loops carried a call, a compare and a barrier to optimizing the loop around it. The four functions that scan whole vectors take a raw pointer once instead, which is worth 1.8x in <code>calc_basic_metrics()</code>, 1.7x in <code>create_prc_curve()</code>, 1.5x in <code>create_roc_curve()</code> and 1.3x in <code>create_confusion_matrices()</code>.</p>
+<p>Second, ranking the scores was 84% of <code>get_score_ranks()</code> and all of it was the sort. A comparison sort over (index, score) pairs is replaced by a radix sort on an order-preserving key, which is 2.3x faster on distinct scores and 2.4x on heavily tied ones. Scores that arrive already sorted are the one shape it loses on, and a monotonicity scan in front of it hands those to a direct fill rather than to the passes; the scan stops as soon as the scores are neither ascending nor descending, which on unsorted input is within the first few elements. Even so, ranking an already sorted vector is about 0.8x - the comparison sort was unusually good at that one case, and the scan recovers most of the difference but not all of it.</p>
+<p>Ties still rank the way they did. The old comparator broke ties on the input index to keep the permutation from depending on the standard library’s choice of introsort; a radix sort is stable pass by pass, so it produces that same permutation from the algorithm instead.</p>
+</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.21.1" id="precrec-0211">precrec 0.21.1<a class="anchor" aria-label="anchor" href="#precrec-0211"></a></h2>
 <ul><li>

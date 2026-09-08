@@ -1,5 +1,41 @@
 # Changelog
 
+## precrec 0.21.2
+
+- Speed up the C++ hot paths.
+  [`evalmod()`](https://evalclass.github.io/precrec/reference/evalmod.md)
+  runs about 1.5x faster on a million rows, and
+  `evalmod(mode = "basic")` about 1.2x. The results are unchanged, bit
+  for bit.
+
+  Two things were costing the time. First, reading a vector through
+  Rcpp’s `operator[]` goes through a proxy whose bounds check is a call
+  to [`warning()`](https://rdrr.io/r/base/warning.html), and in a
+  translation unit the size of `precrec_plx.cpp` the compiler leaves
+  that call out of line rather than inlining it away - so every element
+  access in the innermost loops carried a call, a compare and a barrier
+  to optimizing the loop around it. The four functions that scan whole
+  vectors take a raw pointer once instead, which is worth 1.8x in
+  `calc_basic_metrics()`, 1.7x in `create_prc_curve()`, 1.5x in
+  `create_roc_curve()` and 1.3x in `create_confusion_matrices()`.
+
+  Second, ranking the scores was 84% of `get_score_ranks()` and all of
+  it was the sort. A comparison sort over (index, score) pairs is
+  replaced by a radix sort on an order-preserving key, which is 2.3x
+  faster on distinct scores and 2.4x on heavily tied ones. Scores that
+  arrive already sorted are the one shape it loses on, and a
+  monotonicity scan in front of it hands those to a direct fill rather
+  than to the passes; the scan stops as soon as the scores are neither
+  ascending nor descending, which on unsorted input is within the first
+  few elements. Even so, ranking an already sorted vector is about
+  0.8x - the comparison sort was unusually good at that one case, and
+  the scan recovers most of the difference but not all of it.
+
+  Ties still rank the way they did. The old comparator broke ties on the
+  input index to keep the permutation from depending on the standard
+  library’s choice of introsort; a radix sort is stable pass by pass, so
+  it produces that same permutation from the algorithm instead.
+
 ## precrec 0.21.1
 
 - Fix a buffer overrun in `create_roc()` and `create_prc()`. Both built
