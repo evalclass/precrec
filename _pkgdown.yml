@@ -81,6 +81,7 @@ articles:
     - "articles/howto-large-datasets"
     - "articles/howto-results-as-data"
     - "articles/howto-imbalanced-data"
+    - "articles/howto-tidymodels"
   - title: Metrics
     navbar: ~
     contents:
@@ -131,6 +132,8 @@ navbar:
         href: articles/howto-results-as-data.html
       - text: Balanced and imbalanced data
         href: articles/howto-imbalanced-data.html
+      - text: Use precrec with tidymodels
+        href: articles/howto-tidymodels.html
     metrics:
       text: Metrics
       menu:

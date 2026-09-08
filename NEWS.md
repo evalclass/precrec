@@ -41,6 +41,18 @@
   high at two percent positives against the interpolated area `auc()`
   returns, and the page computes that rather than claiming it.
 
+* Add a website page on using `precrec` from `tidymodels`. No adapter is
+  needed: `collect_predictions()` returns a fold column, a truth column and
+  one `.pred_<class>` column per class, which is the shape `mmdata()`
+  already takes through `nfold_df`, and factor labels have always been
+  accepted.
+
+  The page leads with the one difference that is silent when it bites.
+  `yardstick` treats the first factor level as the event; `precrec` treats
+  the last as the positive class. Pairing `yardstick`'s default score
+  column with `precrec`'s default inverts the AUC without a warning, and
+  the page shows a case that comes out 1 one way and 0 the other.
+
 # precrec 0.20.0
 
 * Add `classification_report()`, the per-class table of precision, recall

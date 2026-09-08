@@ -1,0 +1,119 @@
+---
+title: "Use precrec with tidymodels"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE, comment = "#>", fig.width = 7, fig.height = 4
+)
+```
+
+`precrec` needs no adapter. `tune::collect_predictions()` returns a fold
+column, a truth column and one `.pred_<class>` column per class, which is the
+shape `mmdata()` already takes through `nfold_df`.
+
+```{r}
+library(precrec)
+```
+
+## Set the positive class
+
+This is the one thing to get right. `yardstick` treats the **first** factor
+level as the event; `precrec` treats the **last** as the positive class. Pair
+`yardstick`'s default score column with `precrec`'s default and the AUC comes
+out inverted, with no warning.
+
+```{r}
+lv <- c("bad", "good")
+truth <- factor(c("bad", "bad", "good", "good", "good"), levels = lv)
+scores <- c(0.1, 0.2, 0.8, 0.9, 0.7)
+
+c(
+  default = auc(evalmod(mmdata(scores, truth)))$aucs[1],
+  first = auc(evalmod(mmdata(scores, truth, posclass = "bad")))$aucs[1]
+)
+```
+
+Feed `.pred_<last level>` and leave `posclass` alone, or feed
+`.pred_<first level>` and name it in `posclass`.
+
+## One model over folds
+
+`collect_predictions()` gives `id` for the fold and `.row` for the instance.
+
+```{r, eval = FALSE}
+preds <- wf |>
+  fit_resamples(folds, control = control_resamples(save_pred = TRUE)) |>
+  collect_predictions()
+```
+
+There is no `tidymodels` on this machine, so the rest of the page runs
+against a frame with the columns `collect_predictions()` returns.
+
+```{r}
+set.seed(1)
+y <- sample(rep(c("good", "bad"), each = 40))
+preds <- data.frame(
+  id = rep(paste0("Fold", 1:4), each = 20), .row = 1:80,
+  .pred_good = ifelse(y == "good", runif(80, 0.35, 1), runif(80, 0, 0.65)),
+  truth = factor(y, levels = c("bad", "good"))
+)
+```
+
+```{r}
+curves <- evalmod(
+  nfold_df = preds, score_cols = ".pred_good",
+  lab_col = "truth", fold_col = "id",
+  modnames = "rf", dsids = 1:4
+)
+
+knitr::kable(auc_ci(curves))
+```
+
+## Several models
+
+`collect_predictions()` stacks models by `wflow_id` or `.config`, so widen
+first and name one score column per model.
+
+```{r, eval = FALSE}
+wide <- preds |>
+  tidyr::pivot_wider(
+    id_cols = c(id, .row, truth),
+    names_from = wflow_id, values_from = .pred_good
+  )
+
+evalmod(
+  nfold_df = as.data.frame(wide), score_cols = c("rec_rf", "rec_glm"),
+  lab_col = "truth", fold_col = "id",
+  modnames = c("rec_rf", "rec_glm"), dsids = 1:4
+)
+```
+
+## More than two classes
+
+Hand the `.pred_` columns over as a matrix. Classes are matched by column
+name, so drop the prefix.
+
+```{r, eval = FALSE}
+sc <- as.matrix(preds[grep("^\\.pred_", names(preds))])
+colnames(sc) <- sub("^\\.pred_", "", colnames(sc))
+
+evalmod(mmdata(sc, preds$truth))
+```
+
+One-vs-rest cannot be combined with `nfold_df`, so pool the folds for a
+multiclass run, or loop over them yourself.
+
+## The report
+
+`.pred_class` is the hard prediction `parsnip` derives at a 0.5 threshold,
+and `classification_report()` takes that threshold directly.
+
+```{r}
+classification_report(mmdata(preds$.pred_good, preds$truth), at = 0.5)
+```
+
+## Next
+
+- [Evaluate cross-validation folds](howto-cross-validation.html)
+- [How precrec compares with other tools](metrics-other-tools.html)
