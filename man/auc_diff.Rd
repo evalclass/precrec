@@ -4,13 +4,19 @@
 \alias{auc_diff}
 \title{Compare bootstrapped AUCs between models}
 \usage{
-auc_diff(x, alpha = 0.05)
+auc_diff(x, alpha = 0.05, alternative = "two.sided")
 }
 \arguments{
 \item{x}{An \code{aucboot} object from \code{\link[=auc_boot]{auc_boot()}}.}
 
 \item{alpha}{The interval covers \code{1 - alpha} of the resampled
 differences, so the default of 0.05 gives a 95\% interval.}
+
+\item{alternative}{The side of zero the alternative hypothesis is on,
+one of \code{"two.sided"}, \code{"greater"} and \code{"less"}. \code{"greater"} tests
+whether the first model of the pair has the larger AUC. It selects the
+tail of both p-values; the interval stays two-sided whatever it is set
+to.}
 }
 \value{
 A data frame with one row per curve type and pair of models:
@@ -21,7 +27,10 @@ A data frame with one row per curve type and pair of models:
 \code{diffs} \tab Observed AUC of the first minus that of the second \cr
 \code{lower_bound}, \code{upper_bound} \tab Percentile interval of the
 resampled differences \cr
-\code{p_values} \tab See below \cr
+\code{p_values} \tab Percentile p-value, see below \cr
+\code{statistic} \tab \code{diffs} over the standard deviation of the
+resampled differences \cr
+\code{p_values_norm} \tab Normal-approximation p-value, see below \cr
 \code{n} \tab Resamples the row is based on \cr
 }
 }
@@ -38,7 +47,7 @@ differences is what the interval describes. Two separate intervals from
 difference is still clearly on one side of zero, because they say nothing
 about how the two models move together.
 }
-\section{The interval and the p-value}{
+\section{The interval and the two p-values}{
 
 
 The interval is the primary result, and is the \code{alpha / 2} and
@@ -49,10 +58,27 @@ other side of zero from the observed one, doubled for a two-sided test,
 and calculated as \code{2 * min(1 + sum(d <= 0), 1 + sum(d >= 0)) / (n + 1)}
 so that it is never exactly zero - a bootstrap of \code{n} resamples cannot
 report a p-value below about \code{2 / n}, and reporting one would be an
-artifact of the resample count rather than evidence. It is a percentile
-p-value, and the distribution is not shifted to sit under the null, so
-read it
-as a companion to the interval rather than as an exact test.
+artifact of the resample count rather than evidence.
+
+\code{p_values_norm} buys that resolution back with an assumption. It reads
+\code{statistic} off the normal distribution, and \code{statistic} divides the
+observed difference by the standard deviation of the resampled ones, so
+the bootstrap spread stands in for a standard error. Nothing is shuffled
+between the models, so the null is never enforced; the distribution is
+the sampling one, centered on the observed difference and reflected to
+sit under zero. It can report a p-value far below \code{2 / n}, which is what
+makes it worth having, and it is at its weakest where the resampled
+differences are skewed rather than normal - few positives, or either
+model near the ceiling of the precision-recall AUC. The small p-values it
+makes available are therefore its least trustworthy numbers.
+
+Read the interval first. The two p-values are companions to it rather
+than exact tests, and when they disagree sharply it is the normal
+approximation to distrust.
+
+\code{statistic} is \code{NA} when the resamples have no spread to divide by, which
+happens when two models are given the same scores, and \code{p_values_norm}
+is \code{NA} with it.
 }
 
 \examples{
@@ -62,7 +88,11 @@ mdat <- mmdata(samps[["scores"]], samps[["labels"]],
   modnames = samps[["modnames"]]
 )
 
-auc_diff(auc_boot(mdat, boot_n = 200, seed = 42))
+booted <- auc_boot(mdat, boot_n = 200, seed = 42)
+auc_diff(booted)
+
+## Is the second model the better one?
+auc_diff(booted, alternative = "less")
 
 }
 \seealso{

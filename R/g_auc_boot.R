@@ -204,6 +204,12 @@ auc_boot <- function(mdat, scores = NULL, labels = NULL, boot_n = 1000,
 #' @param alpha The interval covers `1 - alpha` of the resampled
 #'   differences, so the default of 0.05 gives a 95% interval.
 #'
+#' @param alternative The side of zero the alternative hypothesis is on,
+#'   one of `"two.sided"`, `"greater"` and `"less"`. `"greater"` tests
+#'   whether the first model of the pair has the larger AUC. It selects the
+#'   tail of both p-values; the interval stays two-sided whatever it is set
+#'   to.
+#'
 #' @return A data frame with one row per curve type and pair of models:
 #'
 #'   \tabular{ll}{
@@ -212,11 +218,14 @@ auc_boot <- function(mdat, scores = NULL, labels = NULL, boot_n = 1000,
 #'     `diffs` \tab Observed AUC of the first minus that of the second \cr
 #'     `lower_bound`, `upper_bound` \tab Percentile interval of the
 #'       resampled differences \cr
-#'     `p_values` \tab See below \cr
+#'     `p_values` \tab Percentile p-value, see below \cr
+#'     `statistic` \tab `diffs` over the standard deviation of the
+#'       resampled differences \cr
+#'     `p_values_norm` \tab Normal-approximation p-value, see below \cr
 #'     `n` \tab Resamples the row is based on \cr
 #'   }
 #'
-#' @section The interval and the p-value:
+#' @section The interval and the two p-values:
 #'
 #' The interval is the primary result, and is the `alpha / 2` and
 #' `1 - alpha / 2` quantiles of the resampled differences.
@@ -226,10 +235,27 @@ auc_boot <- function(mdat, scores = NULL, labels = NULL, boot_n = 1000,
 #' and calculated as `2 * min(1 + sum(d <= 0), 1 + sum(d >= 0)) / (n + 1)`
 #' so that it is never exactly zero - a bootstrap of `n` resamples cannot
 #' report a p-value below about `2 / n`, and reporting one would be an
-#' artifact of the resample count rather than evidence. It is a percentile
-#' p-value, and the distribution is not shifted to sit under the null, so
-#' read it
-#' as a companion to the interval rather than as an exact test.
+#' artifact of the resample count rather than evidence.
+#'
+#' `p_values_norm` buys that resolution back with an assumption. It reads
+#' `statistic` off the normal distribution, and `statistic` divides the
+#' observed difference by the standard deviation of the resampled ones, so
+#' the bootstrap spread stands in for a standard error. Nothing is shuffled
+#' between the models, so the null is never enforced; the distribution is
+#' the sampling one, centered on the observed difference and reflected to
+#' sit under zero. It can report a p-value far below `2 / n`, which is what
+#' makes it worth having, and it is at its weakest where the resampled
+#' differences are skewed rather than normal - few positives, or either
+#' model near the ceiling of the precision-recall AUC. The small p-values it
+#' makes available are therefore its least trustworthy numbers.
+#'
+#' Read the interval first. The two p-values are companions to it rather
+#' than exact tests, and when they disagree sharply it is the normal
+#' approximation to distrust.
+#'
+#' `statistic` is `NA` when the resamples have no spread to divide by, which
+#' happens when two models are given the same scores, and `p_values_norm`
+#' is `NA` with it.
 #'
 #' @seealso [auc_boot()] for the resampling and [auc_ci()] for one model at
 #'   a time.
@@ -241,10 +267,14 @@ auc_boot <- function(mdat, scores = NULL, labels = NULL, boot_n = 1000,
 #'   modnames = samps[["modnames"]]
 #' )
 #'
-#' auc_diff(auc_boot(mdat, boot_n = 200, seed = 42))
+#' booted <- auc_boot(mdat, boot_n = 200, seed = 42)
+#' auc_diff(booted)
+#'
+#' ## Is the second model the better one?
+#' auc_diff(booted, alternative = "less")
 #'
 #' @export
-auc_diff <- function(x, alpha = 0.05) {
+auc_diff <- function(x, alpha = 0.05, alternative = "two.sided") {
   # === Validate input arguments ===
   if (!inherits(x, "aucboot")) {
     .stop_invalid_arg(
@@ -253,6 +283,9 @@ auc_diff <- function(x, alpha = 0.05) {
     )
   }
   .assert_number(alpha, "alpha", min = 0, max = 1)
+  .assert_string(
+    alternative, "alternative", c("two.sided", "greater", "less")
+  )
 
   observed <- attr(x, "observed")
   modnames <- unique(x[["modnames"]])
@@ -274,7 +307,8 @@ auc_diff <- function(x, alpha = 0.05) {
     for (i in seq_len(length(modnames) - 1L)) {
       for (j in seq(i + 1L, length(modnames))) {
         parts[[length(parts) + 1L]] <- .boot_diff_row(
-          rows, obs, modnames[i], modnames[j], curvetype, alpha
+          rows, obs, modnames[i], modnames[j], curvetype, alpha,
+          alternative
         )
       }
     }
@@ -287,7 +321,8 @@ auc_diff <- function(x, alpha = 0.05) {
 #
 # One pair of models, one curve type
 #
-.boot_diff_row <- function(rows, obs, mod1, mod2, curvetype, alpha) {
+.boot_diff_row <- function(rows, obs, mod1, mod2, curvetype, alpha,
+                           alternative) {
   # Aligned on the resample, so the subtraction is within a resample
   first <- rows[rows[["modnames"]] == mod1, , drop = FALSE]
   second <- rows[rows[["modnames"]] == mod2, , drop = FALSE]
@@ -298,6 +333,7 @@ auc_diff <- function(x, alpha = 0.05) {
   diffs <- first[["aucs"]] - second[["aucs"]]
   diffs <- diffs[!is.na(diffs)]
   n <- length(diffs)
+  observed <- .boot_observed(obs, mod1) - .boot_observed(obs, mod2)
 
   if (n == 0L) {
     bounds <- c(NA_real_, NA_real_)
@@ -307,20 +343,79 @@ auc_diff <- function(x, alpha = 0.05) {
       diffs, c(alpha / 2, 1 - alpha / 2),
       names = FALSE
     ))
-    p_value <- min(1, 2 * min(
-      1 + sum(diffs <= 0), 1 + sum(diffs >= 0)
-    ) / (n + 1))
+    p_value <- .boot_p_percentile(diffs, alternative)
   }
+  statistic <- .boot_statistic(observed, diffs)
 
   data.table::data.table(
     curvetypes = curvetype,
     modnames1 = mod1,
     modnames2 = mod2,
-    diffs = .boot_observed(obs, mod1) - .boot_observed(obs, mod2),
+    diffs = observed,
     lower_bound = bounds[1],
     upper_bound = bounds[2],
     p_values = p_value,
+    statistic = statistic,
+    p_values_norm = .boot_p_normal(statistic, alternative),
     n = n
+  )
+}
+
+
+#
+# The share of resampled differences on the far side of zero
+#
+# One is added to each count so that the value cannot be exactly zero: `n`
+# resamples support nothing below 1 / (n + 1) on one side, and a smaller
+# number would describe `boot_n` rather than the models.
+#
+.boot_p_percentile <- function(diffs, alternative) {
+  n <- length(diffs)
+  greater <- (1 + sum(diffs <= 0)) / (n + 1)
+  less <- (1 + sum(diffs >= 0)) / (n + 1)
+
+  switch(alternative,
+    greater = greater,
+    less = less,
+    two.sided = min(1, 2 * min(greater, less))
+  )
+}
+
+
+#
+# The observed difference in units of the bootstrap spread
+#
+# The standard deviation of the resampled differences stands in for the
+# standard error. Two models given the same scores produce a run of exact
+# zeros, and there is then no scale to divide by - undefined rather than
+# infinite is the honest answer, and it carries through to the p-value.
+#
+.boot_statistic <- function(observed, diffs) {
+  if (length(diffs) < 2L) {
+    return(NA_real_)
+  }
+
+  spread <- stats::sd(diffs)
+  if (!is.finite(spread) || spread == 0) {
+    return(NA_real_)
+  }
+
+  observed / spread
+}
+
+
+#
+# The statistic read off the normal distribution
+#
+.boot_p_normal <- function(statistic, alternative) {
+  if (is.na(statistic)) {
+    return(NA_real_)
+  }
+
+  switch(alternative,
+    greater = stats::pnorm(-statistic),
+    less = stats::pnorm(statistic),
+    two.sided = 2 * stats::pnorm(-abs(statistic))
   )
 }
 
