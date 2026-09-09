@@ -177,6 +177,38 @@ navbar:
         href: articles/plots-partial-curves.html
       - text: Customizing plots
         href: articles/plots-customizing.html
+    reference:
+      text: Reference
+      menu:
+      - text: All functions
+        href: reference/index.html
+      - text: -------
+      - text: Package
+        href: reference/index.html#package
+      - text: Main
+        href: reference/index.html#main
+      - text: Data preparation
+        href: reference/index.html#data-preparation
+      - text: Visualization
+        href: reference/index.html#visualization
+      - text: Data retrieval
+        href: reference/index.html#data-retrieval
+      - text: -------
+      - text: Partial AUC and partial curve
+        href: reference/index.html#partial-auc-and-partial-curve
+      - text: Confidence interval of AUC scores
+        href: reference/index.html#confidence-interval-of-auc-scores
+      - text: Precision-recall break-even point
+        href: reference/index.html#precision-recall-break-even-point
+      - text: Average precision
+        href: reference/index.html#average-precision
+      - text: Probability-based metrics
+        href: reference/index.html#probability-based-metrics
+      - text: Classification report
+        href: reference/index.html#classification-report
+      - text: -------
+      - text: Datasets
+        href: reference/index.html#datasets
 
 redirects:
   - ["articles/measures-overview.html", "articles/metrics-overview.html"]
