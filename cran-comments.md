@@ -1,9 +1,9 @@
-## Version 0.22.0
+## Version 0.22.1
 
-An update of the published package `precrec` (0.14.5 -> 0.22.0). 0.15.0,
-0.16.0, 0.16.1, 0.16.2, 0.17.0, 0.18.0, 0.19.0, 0.20.0, 0.21.0, 0.21.1 and
-0.21.2 were prepared but not submitted, so this release carries all twelve
-sets of changes.
+An update of the published package `precrec` (0.14.5 -> 0.22.1). 0.15.0,
+0.16.0, 0.16.1, 0.16.2, 0.17.0, 0.18.0, 0.19.0, 0.20.0, 0.21.0, 0.21.1,
+0.21.2 and 0.22.0 were prepared but not submitted, so this release carries
+all thirteen sets of changes.
 
 - Support datasets with more than two classes by one-vs-rest decomposition
 - Add the evaluation metrics `ROCR` provides, opt-in through
@@ -45,6 +45,9 @@ sets of changes.
 - Add `evalmod(basic_ties = )` for what the basic metrics report at the
   cutoffs inside a run of tied scores; the default is the behavior the
   package has always had
+- Add a test statistic and a normal-approximation p-value to `auc_diff()`,
+  together with an `alternative` argument for the tail they are read from;
+  the percentile p-value it has always reported is unchanged
 
 `NEWS.md` has the full list.
 

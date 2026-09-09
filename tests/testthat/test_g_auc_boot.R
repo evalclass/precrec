@@ -165,6 +165,10 @@ test_that("auc_diff() pairs the models on the same resamples", {
   expect_true(all(diffs$lower_bound == 0))
   expect_true(all(diffs$upper_bound == 0))
   expect_true(all(diffs$p_values == 1))
+
+  # No spread to divide by, so the statistic is undefined rather than NaN
+  expect_true(all(is.na(diffs$statistic)))
+  expect_true(all(is.na(diffs$p_values_norm)))
 })
 
 test_that("auc_diff() finds a difference that is really there", {
@@ -182,6 +186,11 @@ test_that("auc_diff() finds a difference that is really there", {
   expect_true(roc$diffs > 0)
   expect_true(roc$lower_bound > 0) # interval clear of zero
   expect_true(roc$p_values < 0.05)
+
+  # The statistic carries the sign of the difference, and the normal
+  # p-value agrees with the interval
+  expect_true(roc$statistic > 0)
+  expect_true(roc$p_values_norm < 0.05)
 })
 
 test_that("auc_diff() reports the columns it documents", {
@@ -195,7 +204,7 @@ test_that("auc_diff() reports the columns it documents", {
     names(diffs),
     c(
       "curvetypes", "modnames1", "modnames2", "diffs", "lower_bound",
-      "upper_bound", "p_values", "n"
+      "upper_bound", "p_values", "statistic", "p_values_norm", "n"
     )
   )
   expect_equal(nrow(diffs), 2) # one pair, two curve types
@@ -244,4 +253,68 @@ test_that("auc_diff() needs two models and an aucboot", {
 
   expect_error(auc_diff(booted), class = "precrec_error_invalid_x")
   expect_error(auc_diff(data.frame(a = 1)), class = "precrec_error_invalid_x")
+})
+
+test_that("the normal p-value resolves below the percentile floor", {
+  # The reason the statistic is worth having: a clear difference bottoms the
+  # percentile p-value out at what the resample count supports, whereas the
+  # normal approximation reads a value off the same resamples
+  set.seed(11)
+  labels <- rep(c(1, 0), each = 200)
+  strong <- c(rnorm(200, 2.5), rnorm(200, 0))
+  weak <- c(rnorm(200, 0.1), rnorm(200, 0))
+
+  mdat <- mmdata(list(strong, weak), list(labels, labels),
+    modnames = c("strong", "weak")
+  )
+  diffs <- auc_diff(auc_boot(mdat, boot_n = 200, seed = 2))
+  floor_value <- 2 / (200 + 1)
+
+  expect_true(all(diffs$p_values == floor_value))
+  expect_true(all(diffs$p_values_norm < floor_value))
+})
+
+test_that("auc_diff() reads the statistic off the tail alternative asks for", {
+  d <- two_normals(150)
+  mdat <- mmdata(list(d$scores, rev(d$scores)), list(d$labels, d$labels),
+    modnames = c("A", "B")
+  )
+  booted <- auc_boot(mdat, boot_n = 200, seed = 4)
+
+  both <- auc_diff(booted)
+  up <- auc_diff(booted, alternative = "greater")
+  down <- auc_diff(booted, alternative = "less")
+
+  # One statistic, three readings of it
+  expect_equal(up$statistic, both$statistic)
+  expect_equal(down$statistic, both$statistic)
+
+  # The two tails of the normal partition the whole of it
+  expect_equal(up$p_values_norm + down$p_values_norm, rep(1, nrow(both)))
+  expect_equal(
+    both$p_values_norm,
+    2 * pmin(up$p_values_norm, down$p_values_norm)
+  )
+  expect_equal(both$p_values, pmin(1, 2 * pmin(up$p_values, down$p_values)))
+
+  # The interval is unaffected by which tail is asked for
+  expect_equal(up$lower_bound, both$lower_bound)
+  expect_equal(down$upper_bound, both$upper_bound)
+})
+
+test_that("auc_diff() refuses an alternative it does not know", {
+  d <- two_normals(100)
+  booted <- auc_boot(
+    mmdata(list(d$scores, rev(d$scores)), list(d$labels, d$labels),
+      modnames = c("A", "B")
+    ),
+    boot_n = 20, seed = 1
+  )
+
+  expect_error(auc_diff(booted, alternative = "twosided"),
+    class = "precrec_error_invalid_alternative"
+  )
+  expect_error(auc_diff(booted, alternative = c("greater", "less")),
+    class = "precrec_error_invalid_alternative"
+  )
 })
