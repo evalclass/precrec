@@ -53,6 +53,10 @@ release carries all fifteen sets of changes.
   every cutoff as one row per cutoff and one column per metric; it
   reshapes results `evalmod(mode = "basic")` already produces and
   calculates nothing new
+- Add `auc_delong()`, DeLong's analytic variance of the ROC AUC, which
+  `auc_ci()` turns into a normal interval and `auc_diff()` into a paired
+  comparison between models; `auc_diff()` becomes an S3 generic to take
+  both it and the existing bootstrap object
 
 `NEWS.md` has the full list.
 
