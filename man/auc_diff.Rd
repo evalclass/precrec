@@ -28,9 +28,10 @@ A data frame with one row per curve type and pair of models:
 \code{lower_bound}, \code{upper_bound} \tab Percentile interval of the
 resampled differences \cr
 \code{p_values} \tab Percentile p-value, see below \cr
-\code{statistic} \tab \code{diffs} over the standard deviation of the
-resampled differences \cr
-\code{p_values_norm} \tab Normal-approximation p-value, see below \cr
+\code{statistic} \tab Wald statistic: \code{diffs} over the standard deviation
+of the resampled differences \cr
+\code{p_values_norm} \tab \code{statistic} read off the standard normal, see
+below \cr
 \code{n} \tab Resamples the row is based on \cr
 }
 }
@@ -60,17 +61,36 @@ so that it is never exactly zero - a bootstrap of \code{n} resamples cannot
 report a p-value below about \code{2 / n}, and reporting one would be an
 artifact of the resample count rather than evidence.
 
-\code{p_values_norm} buys that resolution back with an assumption. It reads
-\code{statistic} off the normal distribution, and \code{statistic} divides the
-observed difference by the standard deviation of the resampled ones, so
-the bootstrap spread stands in for a standard error. Nothing is shuffled
+\code{statistic} is a \strong{Wald statistic}: an estimate over an estimate of its
+standard error. The standard deviation of the resampled differences is
+that standard error - the spread of the bootstrap distribution is what
+the bootstrap has to say about how far the difference moves from sample
+to sample - and \code{p_values_norm} reads the statistic off the standard
+normal.
+
+It is deliberately not a \emph{t} statistic. \code{auc_ci(dtype = "t")} is one,
+because there the spread is taken over a handful of real test sets,
+divided by the square root of how many there were, and \code{n - 1} degrees
+of freedom mean something. Here the spread is taken over resamples and
+divided by nothing: \code{boot_n} is a setting rather than a sample size, and
+a t with \code{boot_n - 1} degrees of freedom would let a p-value shrink by
+resampling harder. Nor is it the bootstrap-\emph{t}, which forms a statistic
+of its own inside every resample and takes its reference distribution
+from those rather than from the normal.
+
+The pair is the test counterpart of the bootstrap \strong{normal} interval,
+\code{diffs} plus and minus \code{z} standard errors, whereas \code{lower_bound} and
+\code{upper_bound} are the \strong{percentile} interval. So \code{p_values_norm} is not
+the dual of the bounds next to it in the same row, which is one of the
+two reasons the p-values can disagree.
+
+The other is what the normal approximation assumes. Nothing is shuffled
 between the models, so the null is never enforced; the distribution is
 the sampling one, centered on the observed difference and reflected to
-sit under zero. It can report a p-value far below \code{2 / n}, which is what
-makes it worth having, and it is at its weakest where the resampled
-differences are skewed rather than normal - few positives, or either
-model near the ceiling of the precision-recall AUC. The small p-values it
-makes available are therefore its least trustworthy numbers.
+sit under zero. It also takes the resampled differences to be roughly
+normal, which is weakest where they are skewed - few positives, or
+either model near the ceiling of the precision-recall AUC. The small
+p-values it makes available are therefore its least trustworthy numbers.
 
 Read the interval first. The two p-values are companions to it rather
 than exact tests, and when they disagree sharply it is the normal

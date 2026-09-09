@@ -89,21 +89,37 @@ The interval is nowhere near zero, and yet `p_values` sits on its floor of
 Getting below 0.001 that way means resampling ten thousand times or more.
 
 `statistic` and `p_values_norm` read a number off the resamples that are
-already there. `statistic` divides the observed difference by the standard
-deviation of the resampled ones, so the bootstrap spread stands in for a
-standard error, and `p_values_norm` is that statistic read off the normal
-distribution - here many orders of magnitude below the floor the percentile
-p-value has run into.
+already there. `statistic` is a Wald statistic - an estimate over an
+estimate of its standard error. The estimate is the observed difference,
+and the standard error is the standard deviation of the resampled
+differences, since the spread of the bootstrap distribution is what the
+bootstrap has to say about how far the difference moves from sample to
+sample. `p_values_norm` reads that off the standard normal, here many
+orders of magnitude below the floor the percentile p-value has run into.
 
-The resolution is bought with an assumption, and it is worth knowing which.
-Nothing is shuffled between the two models, so the null is never enforced:
-the distribution being used is the sampling one, centered on the observed
-difference and reflected to sit under zero. It also takes the resampled
-differences to be roughly normal, which is weakest where they are skewed -
-few positives, or either model near the ceiling of the precision-recall
-AUC. The very small p-values it makes available are therefore its least
-trustworthy numbers, and when the two p-values disagree sharply it is the
-normal approximation to distrust.
+It is not a *t* statistic, and the difference is worth seeing, because
+`auc_ci(dtype = "t")` on cross-validation folds is one. There the spread is
+taken over a handful of real test sets and divided by the square root of
+how many there were, so `n - 1` degrees of freedom mean something. Here the
+spread is taken over resamples and divided by nothing: `boot_n` is a
+setting rather than a sample size, and a t with `boot_n - 1` degrees of
+freedom would be a p-value that shrinks when you resample harder.
+
+The resolution is bought with two assumptions, and it is worth knowing
+which. The first is that the statistic and its p-value are the test
+counterpart of the *normal* interval, the difference plus and minus so many
+standard errors, while `lower_bound` and `upper_bound` are the *percentile*
+interval. `p_values_norm` is therefore not the dual of the bounds next to
+it, and the two need not agree.
+
+The second is normality itself. Nothing is shuffled between the two models,
+so the null is never enforced: the distribution being used is the sampling
+one, centered on the observed difference and reflected to sit under zero.
+It also takes the resampled differences to be roughly normal, which is
+weakest where they are skewed - few positives, or either model near the
+ceiling of the precision-recall AUC. The very small p-values it makes
+available are therefore its least trustworthy numbers, and when the two
+p-values disagree sharply it is the normal approximation to distrust.
 
 `statistic` is `NA` when the resamples have no spread to divide by, which
 is what two models given the same scores produce, and `p_values_norm` is

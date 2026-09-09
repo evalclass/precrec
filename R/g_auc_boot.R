@@ -219,9 +219,10 @@ auc_boot <- function(mdat, scores = NULL, labels = NULL, boot_n = 1000,
 #'     `lower_bound`, `upper_bound` \tab Percentile interval of the
 #'       resampled differences \cr
 #'     `p_values` \tab Percentile p-value, see below \cr
-#'     `statistic` \tab `diffs` over the standard deviation of the
-#'       resampled differences \cr
-#'     `p_values_norm` \tab Normal-approximation p-value, see below \cr
+#'     `statistic` \tab Wald statistic: `diffs` over the standard deviation
+#'       of the resampled differences \cr
+#'     `p_values_norm` \tab `statistic` read off the standard normal, see
+#'       below \cr
 #'     `n` \tab Resamples the row is based on \cr
 #'   }
 #'
@@ -237,17 +238,36 @@ auc_boot <- function(mdat, scores = NULL, labels = NULL, boot_n = 1000,
 #' report a p-value below about `2 / n`, and reporting one would be an
 #' artifact of the resample count rather than evidence.
 #'
-#' `p_values_norm` buys that resolution back with an assumption. It reads
-#' `statistic` off the normal distribution, and `statistic` divides the
-#' observed difference by the standard deviation of the resampled ones, so
-#' the bootstrap spread stands in for a standard error. Nothing is shuffled
+#' `statistic` is a **Wald statistic**: an estimate over an estimate of its
+#' standard error. The standard deviation of the resampled differences is
+#' that standard error - the spread of the bootstrap distribution is what
+#' the bootstrap has to say about how far the difference moves from sample
+#' to sample - and `p_values_norm` reads the statistic off the standard
+#' normal.
+#'
+#' It is deliberately not a *t* statistic. `auc_ci(dtype = "t")` is one,
+#' because there the spread is taken over a handful of real test sets,
+#' divided by the square root of how many there were, and `n - 1` degrees
+#' of freedom mean something. Here the spread is taken over resamples and
+#' divided by nothing: `boot_n` is a setting rather than a sample size, and
+#' a t with `boot_n - 1` degrees of freedom would let a p-value shrink by
+#' resampling harder. Nor is it the bootstrap-*t*, which forms a statistic
+#' of its own inside every resample and takes its reference distribution
+#' from those rather than from the normal.
+#'
+#' The pair is the test counterpart of the bootstrap **normal** interval,
+#' `diffs` plus and minus `z` standard errors, whereas `lower_bound` and
+#' `upper_bound` are the **percentile** interval. So `p_values_norm` is not
+#' the dual of the bounds next to it in the same row, which is one of the
+#' two reasons the p-values can disagree.
+#'
+#' The other is what the normal approximation assumes. Nothing is shuffled
 #' between the models, so the null is never enforced; the distribution is
 #' the sampling one, centered on the observed difference and reflected to
-#' sit under zero. It can report a p-value far below `2 / n`, which is what
-#' makes it worth having, and it is at its weakest where the resampled
-#' differences are skewed rather than normal - few positives, or either
-#' model near the ceiling of the precision-recall AUC. The small p-values it
-#' makes available are therefore its least trustworthy numbers.
+#' sit under zero. It also takes the resampled differences to be roughly
+#' normal, which is weakest where they are skewed - few positives, or
+#' either model near the ceiling of the precision-recall AUC. The small
+#' p-values it makes available are therefore its least trustworthy numbers.
 #'
 #' Read the interval first. The two p-values are companions to it rather
 #' than exact tests, and when they disagree sharply it is the normal
@@ -383,12 +403,19 @@ auc_diff <- function(x, alpha = 0.05, alternative = "two.sided") {
 
 
 #
-# The observed difference in units of the bootstrap spread
+# The Wald statistic of the observed difference
 #
-# The standard deviation of the resampled differences stands in for the
-# standard error. Two models given the same scores produce a run of exact
-# zeros, and there is then no scale to divide by - undefined rather than
-# infinite is the honest answer, and it carries through to the p-value.
+# The standard deviation of the resampled differences is the bootstrap's
+# estimate of the standard error, and is not divided by `sqrt(boot_n)` the
+# way `.calc_ci_stats()` divides by `sqrt(n)`: there `n` counts real test
+# sets, here `boot_n` counts resamples of one. That is also why the
+# statistic is read off the normal rather than off a t - `boot_n` degrees
+# of freedom would be a p-value that shrinks when the caller resamples
+# harder.
+#
+# Two models given the same scores produce a run of exact zeros, and there
+# is then no scale to divide by - undefined rather than infinite is the
+# honest answer, and it carries through to the p-value.
 #
 .boot_statistic <- function(observed, diffs) {
   if (length(diffs) < 2L) {
