@@ -1,3 +1,28 @@
+# precrec 0.22.2
+
+* The two columns `auc_diff()` gained in 0.22.1 are renamed. `statistic`
+  is now `z_values` and `p_values_norm` is now `p_values_wald`, and the
+  documentation calls what they come from a Wald test throughout. Neither
+  column's contents changed.
+
+  `p_values_norm` named the p-value for the distribution it is read off
+  rather than for the test that produced it, which left it inconsistent
+  with `p_values` beside it - named for the percentile method - and
+  readable as "normalized", which it is not. `statistic` said nothing about
+  which distribution it is referred to, and was singular where every other
+  column in the row is plural.
+
+  The reference page and the *Uncertainty from one test set* article now
+  give both formulas outright, `z_values = diffs / sd(d)` and
+  `p_values_wald = 2 * pnorm(-abs(z_values))` against the percentile
+  count, and answer under its own heading why two p-values are reported at
+  all: they fail in opposite ways - the percentile one has a floor at
+  `2 / (n + 1)`, the Wald one has an assumption of normality - and it is
+  whether they agree that tells you which is failing.
+
+  0.22.1 is a day old and was not submitted to CRAN, so the renames are
+  made now rather than carried.
+
 # precrec 0.22.1
 
 * `auc_diff()` reports a test statistic and a second p-value, and takes a

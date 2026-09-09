@@ -15,8 +15,8 @@ differences, so the default of 0.05 gives a 95\% interval.}
 \item{alternative}{The side of zero the alternative hypothesis is on,
 one of \code{"two.sided"}, \code{"greater"} and \code{"less"}. \code{"greater"} tests
 whether the first model of the pair has the larger AUC. It selects the
-tail of both p-values; the interval stays two-sided whatever it is set
-to.}
+tail of both the percentile and the Wald p-value, and leaves
+\code{z_values} alone; the interval stays two-sided whatever it is set to.}
 }
 \value{
 A data frame with one row per curve type and pair of models:
@@ -28,9 +28,8 @@ A data frame with one row per curve type and pair of models:
 \code{lower_bound}, \code{upper_bound} \tab Percentile interval of the
 resampled differences \cr
 \code{p_values} \tab Percentile p-value, see below \cr
-\code{statistic} \tab \code{diffs} over the standard deviation of the
-resampled differences \cr
-\code{p_values_norm} \tab Normal-approximation p-value, see below \cr
+\code{z_values} \tab Wald statistic, \code{diffs / sd(d)}, see below \cr
+\code{p_values_wald} \tab Wald p-value, see below \cr
 \code{n} \tab Resamples the row is based on \cr
 }
 }
@@ -53,31 +52,89 @@ about how the two models move together.
 The interval is the primary result, and is the \code{alpha / 2} and
 \code{1 - alpha / 2} quantiles of the resampled differences.
 
-\code{p_values} is the proportion of resampled differences falling on the
-other side of zero from the observed one, doubled for a two-sided test,
-and calculated as \code{2 * min(1 + sum(d <= 0), 1 + sum(d >= 0)) / (n + 1)}
-so that it is never exactly zero - a bootstrap of \code{n} resamples cannot
-report a p-value below about \code{2 / n}, and reporting one would be an
-artifact of the resample count rather than evidence.
+The two p-values are the two ways of getting one out of a bootstrap, and
+each column is named for the method that produced it. Write \code{d} for the
+vector of \code{n} resampled differences and \code{diffs} for the observed one.
 
-\code{p_values_norm} buys that resolution back with an assumption. It reads
-\code{statistic} off the normal distribution, and \code{statistic} divides the
-observed difference by the standard deviation of the resampled ones, so
-the bootstrap spread stands in for a standard error. Nothing is shuffled
-between the models, so the null is never enforced; the distribution is
-the sampling one, centered on the observed difference and reflected to
-sit under zero. It can report a p-value far below \code{2 / n}, which is what
-makes it worth having, and it is at its weakest where the resampled
-differences are skewed rather than normal - few positives, or either
-model near the ceiling of the precision-recall AUC. The small p-values it
-makes available are therefore its least trustworthy numbers.
+\code{p_values} is the \strong{percentile} p-value - the share of \code{d} on the other
+side of zero from \code{diffs}, doubled for a two-sided test:
 
-Read the interval first. The two p-values are companions to it rather
-than exact tests, and when they disagree sharply it is the normal
-approximation to distrust.
+\if{html}{\out{<div class="sourceCode">}}\preformatted{p_values = 2 * min(1 + sum(d <= 0), 1 + sum(d >= 0)) / (n + 1)
+}\if{html}{\out{</div>}}
 
-\code{statistic} is \code{NA} when the resamples have no spread to divide by, which
-happens when two models are given the same scores, and \code{p_values_norm}
+The added ones keep it away from exactly zero. It cannot go below
+\code{2 / (n + 1)}, so \code{boot_n} sets a floor under it.
+
+\code{z_values} and \code{p_values_wald} are the \strong{Wald} test - an estimate over
+an estimate of its standard error, referred to a standard normal:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{z_values      = diffs / sd(d)
+p_values_wald = 2 * pnorm(-abs(z_values))
+}\if{html}{\out{</div>}}
+
+\code{sd(d)} is the standard error, because the spread of the bootstrap
+distribution is what the bootstrap has to say about how far the
+difference moves from sample to sample. Having a scale underneath it
+rather than a count of resamples, the Wald p-value has no floor.
+
+\code{alternative} replaces the doubled minimum with the matching one-sided
+count, and \code{-abs()} with \code{-} or \code{+}, in the two formulas above.
+}
+
+\section{Why two p-values}{
+
+
+Because they fail in opposite ways, and neither one on its own tells you
+that it is failing.
+
+The percentile p-value assumes nothing about the shape of \code{d}, and pays
+for that with the floor. Once it reaches \code{2 / (n + 1)} it has stopped
+measuring the models and started reporting \code{boot_n}: a difference that is
+merely clear and one that is overwhelming both come out at 0.002 at the
+default thousand resamples, and the number gives no sign of which it is
+looking at.
+
+The Wald p-value has no floor, and pays for that with an assumption. It
+takes \code{d} to be roughly normal, and locates the null by reflecting the
+sampling distribution rather than by enforcing it. Where \code{d} is skewed -
+few positives, or either model near the ceiling of the precision-recall
+AUC - it is confidently wrong, and again the number carries no warning.
+
+Side by side they cover each other. When they agree, the normality the
+Wald test assumes is doing no harm at this sample size and you can quote
+its resolution. When they disagree sharply, \code{d} is not the shape the Wald
+test needs, and the percentile p-value - floor and all - is the one to
+trust. The comparison is the diagnostic; neither column is one on its
+own.
+
+There is a second, exact sense in which they are different answers. A
+Wald test is the counterpart of the bootstrap \strong{normal} interval,
+\code{diffs} plus and minus \code{z} standard errors, while \code{lower_bound} and
+\code{upper_bound} are the \strong{percentile} interval. So \code{p_values_wald} is not
+the dual of the bounds reported beside it, and need not agree with them.
+
+Read the interval first. Both p-values are companions to it rather than
+exact tests.
+}
+
+\section{Not a t statistic}{
+
+
+\code{z_values} divides by a standard error, not by a standard error of a
+mean, and is read off the normal rather than off a t. \code{auc_ci(dtype = "t")} is the genuine t in this package, and the contrast is exact: there
+the spread is taken over a handful of real test sets and divided by the
+square root of how many there were, so \code{n - 1} degrees of freedom mean
+something. Here the spread is taken over resamples and divided by
+nothing - \code{boot_n} is a setting rather than a sample size, and a t on
+\code{boot_n - 1} degrees of freedom would be a p-value that shrinks when the
+caller resamples harder.
+
+Nor is this the bootstrap-\emph{t}, which forms a statistic of its own inside
+every resample and takes its reference distribution from those rather
+than from the normal.
+
+\code{z_values} is \code{NA} when the resamples have no spread to divide by, which
+happens when two models are given the same scores, and \code{p_values_wald}
 is \code{NA} with it.
 }
 

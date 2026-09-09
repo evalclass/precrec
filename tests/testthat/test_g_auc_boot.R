@@ -167,8 +167,8 @@ test_that("auc_diff() pairs the models on the same resamples", {
   expect_true(all(diffs$p_values == 1))
 
   # No spread to divide by, so the statistic is undefined rather than NaN
-  expect_true(all(is.na(diffs$statistic)))
-  expect_true(all(is.na(diffs$p_values_norm)))
+  expect_true(all(is.na(diffs$z_values)))
+  expect_true(all(is.na(diffs$p_values_wald)))
 })
 
 test_that("auc_diff() finds a difference that is really there", {
@@ -189,8 +189,8 @@ test_that("auc_diff() finds a difference that is really there", {
 
   # The statistic carries the sign of the difference, and the normal
   # p-value agrees with the interval
-  expect_true(roc$statistic > 0)
-  expect_true(roc$p_values_norm < 0.05)
+  expect_true(roc$z_values > 0)
+  expect_true(roc$p_values_wald < 0.05)
 })
 
 test_that("auc_diff() reports the columns it documents", {
@@ -204,7 +204,7 @@ test_that("auc_diff() reports the columns it documents", {
     names(diffs),
     c(
       "curvetypes", "modnames1", "modnames2", "diffs", "lower_bound",
-      "upper_bound", "p_values", "statistic", "p_values_norm", "n"
+      "upper_bound", "p_values", "z_values", "p_values_wald", "n"
     )
   )
   expect_equal(nrow(diffs), 2) # one pair, two curve types
@@ -271,7 +271,7 @@ test_that("the normal p-value resolves below the percentile floor", {
   floor_value <- 2 / (200 + 1)
 
   expect_true(all(diffs$p_values == floor_value))
-  expect_true(all(diffs$p_values_norm < floor_value))
+  expect_true(all(diffs$p_values_wald < floor_value))
 })
 
 test_that("auc_diff() reads the statistic off the tail alternative asks for", {
@@ -286,14 +286,14 @@ test_that("auc_diff() reads the statistic off the tail alternative asks for", {
   down <- auc_diff(booted, alternative = "less")
 
   # One statistic, three readings of it
-  expect_equal(up$statistic, both$statistic)
-  expect_equal(down$statistic, both$statistic)
+  expect_equal(up$z_values, both$z_values)
+  expect_equal(down$z_values, both$z_values)
 
   # The two tails of the normal partition the whole of it
-  expect_equal(up$p_values_norm + down$p_values_norm, rep(1, nrow(both)))
+  expect_equal(up$p_values_wald + down$p_values_wald, rep(1, nrow(both)))
   expect_equal(
-    both$p_values_norm,
-    2 * pmin(up$p_values_norm, down$p_values_norm)
+    both$p_values_wald,
+    2 * pmin(up$p_values_wald, down$p_values_wald)
   )
   expect_equal(both$p_values, pmin(1, 2 * pmin(up$p_values, down$p_values)))
 
