@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,6 +71,15 @@
       <small>Source: <a href="https://github.com/evalclass/precrec/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.22.1" id="precrec-0221">precrec 0.22.1<a class="anchor" aria-label="anchor" href="#precrec-0221"></a></h2>
+<ul><li>
+<p><code><a href="../reference/auc_diff.html">auc_diff()</a></code> reports a test statistic and a second p-value, and takes a new <code>alternative</code> argument for the tail they are read from. <code>statistic</code> divides the observed difference in AUC by the standard deviation of the resampled differences, so the bootstrap spread stands in for a standard error, and <code>p_values_norm</code> reads that statistic off the normal distribution.</p>
+<p>The percentile <code>p_values</code> is floored at <code>2 / (n + 1)</code> on purpose, which is 0.002 at the default <code>boot_n = 1000</code>; a difference that is not in any doubt bottoms out there, and reporting <code>p &lt; 0.001</code> from it needs ten thousand resamples or more. The normal approximation reads an unbounded p-value off the resamples that are already there.</p>
+<p>It buys that resolution with an assumption. Nothing is shuffled between the models, so the null is never enforced, and the resampled differences are taken to be roughly normal - weakest where they are skewed, which is few positives or either model near the ceiling of the precision-recall AUC. <code>p_values</code> keeps its meaning, both are reported side by side, and where the two disagree sharply it is the normal one to distrust.</p>
+<p>Requested in <a href="https://github.com/evalclass/precrec/issues/21" class="external-link">#21</a>, which came out of <a href="https://github.com/evalclass/precrec/issues/13" class="external-link">#13</a>.</p>
+</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.22.0" id="precrec-0220">precrec 0.22.0<a class="anchor" aria-label="anchor" href="#precrec-0220"></a></h2>
 <ul><li>

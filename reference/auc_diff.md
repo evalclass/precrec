@@ -8,7 +8,7 @@ difference between their AUCs with a confidence interval around it.
 ## Usage
 
 ``` r
-auc_diff(x, alpha = 0.05)
+auc_diff(x, alpha = 0.05, alternative = "two.sided")
 ```
 
 ## Arguments
@@ -23,6 +23,13 @@ auc_diff(x, alpha = 0.05)
   The interval covers `1 - alpha` of the resampled differences, so the
   default of 0.05 gives a 95% interval.
 
+- alternative:
+
+  The side of zero the alternative hypothesis is on, one of
+  `"two.sided"`, `"greater"` and `"less"`. `"greater"` tests whether the
+  first model of the pair has the larger AUC. It selects the tail of
+  both p-values; the interval stays two-sided whatever it is set to.
+
 ## Value
 
 A data frame with one row per curve type and pair of models:
@@ -33,7 +40,9 @@ A data frame with one row per curve type and pair of models:
 | `modnames1`, `modnames2` | The pair, in the order compared |
 | `diffs` | Observed AUC of the first minus that of the second |
 | `lower_bound`, `upper_bound` | Percentile interval of the resampled differences |
-| `p_values` | See below |
+| `p_values` | Percentile p-value, see below |
+| `statistic` | `diffs` over the standard deviation of the resampled differences |
+| `p_values_norm` | Normal-approximation p-value, see below |
 | `n` | Resamples the row is based on |
 
 ## Details
@@ -47,7 +56,7 @@ cannot be read this way - they can overlap while the difference is still
 clearly on one side of zero, because they say nothing about how the two
 models move together.
 
-## The interval and the p-value
+## The interval and the two p-values
 
 The interval is the primary result, and is the `alpha / 2` and
 `1 - alpha / 2` quantiles of the resampled differences.
@@ -57,9 +66,27 @@ other side of zero from the observed one, doubled for a two-sided test,
 and calculated as `2 * min(1 + sum(d <= 0), 1 + sum(d >= 0)) / (n + 1)`
 so that it is never exactly zero - a bootstrap of `n` resamples cannot
 report a p-value below about `2 / n`, and reporting one would be an
-artifact of the resample count rather than evidence. It is a percentile
-p-value, and the distribution is not shifted to sit under the null, so
-read it as a companion to the interval rather than as an exact test.
+artifact of the resample count rather than evidence.
+
+`p_values_norm` buys that resolution back with an assumption. It reads
+`statistic` off the normal distribution, and `statistic` divides the
+observed difference by the standard deviation of the resampled ones, so
+the bootstrap spread stands in for a standard error. Nothing is shuffled
+between the models, so the null is never enforced; the distribution is
+the sampling one, centered on the observed difference and reflected to
+sit under zero. It can report a p-value far below `2 / n`, which is what
+makes it worth having, and it is at its weakest where the resampled
+differences are skewed rather than normal - few positives, or either
+model near the ceiling of the precision-recall AUC. The small p-values
+it makes available are therefore its least trustworthy numbers.
+
+Read the interval first. The two p-values are companions to it rather
+than exact tests, and when they disagree sharply it is the normal
+approximation to distrust.
+
+`statistic` is `NA` when the resamples have no spread to divide by,
+which happens when two models are given the same scores, and
+`p_values_norm` is `NA` with it.
 
 ## See also
 
@@ -77,5 +104,9 @@ mdat <- mmdata(samps[["scores"]], samps[["labels"]],
   modnames = samps[["modnames"]]
 )
 
-auc_diff(auc_boot(mdat, boot_n = 200, seed = 42))
+booted <- auc_boot(mdat, boot_n = 200, seed = 42)
+auc_diff(booted)
+
+## Is the second model the better one?
+auc_diff(booted, alternative = "less")
 ```
