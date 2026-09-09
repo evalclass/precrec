@@ -11,7 +11,7 @@ with a confidence interval around it."><meta property="og:image" content="https:
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -104,16 +104,15 @@ differences, so the default of 0.05 gives a 95% interval.</p></dd>
 <dd><p>The side of zero the alternative hypothesis is on,
 one of <code>"two.sided"</code>, <code>"greater"</code> and <code>"less"</code>. <code>"greater"</code> tests
 whether the first model of the pair has the larger AUC. It selects the
-tail of both p-values; the interval stays two-sided whatever it is set
-to.</p></dd>
+tail of both the percentile and the Wald p-value, and leaves
+<code>z_values</code> alone; the interval stays two-sided whatever it is set to.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A data frame with one row per curve type and pair of models:</p>
 <table class="table table"><tr><td><code>curvetypes</code></td><td>ROC or PRC</td></tr><tr><td><code>modnames1</code>, <code>modnames2</code></td><td>The pair, in the order compared</td></tr><tr><td><code>diffs</code></td><td>Observed AUC of the first minus that of the second</td></tr><tr><td><code>lower_bound</code>, <code>upper_bound</code></td><td>Percentile interval of the
-resampled differences</td></tr><tr><td><code>p_values</code></td><td>Percentile p-value, see below</td></tr><tr><td><code>statistic</code></td><td><code>diffs</code> over the standard deviation of the
-resampled differences</td></tr><tr><td><code>p_values_norm</code></td><td>Normal-approximation p-value, see below</td></tr><tr><td><code>n</code></td><td>Resamples the row is based on</td></tr></table></div>
+resampled differences</td></tr><tr><td><code>p_values</code></td><td>Percentile p-value, see below</td></tr><tr><td><code>z_values</code></td><td>Wald statistic, <code>diffs / sd(d)</code>, see below</td></tr><tr><td><code>p_values_wald</code></td><td>Wald p-value, see below</td></tr><tr><td><code>n</code></td><td>Resamples the row is based on</td></tr></table></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The comparison is paired: both models are scored on the same resample,
@@ -130,28 +129,75 @@ about how the two models move together.</p>
 
 <p>The interval is the primary result, and is the <code>alpha / 2</code> and
 <code>1 - alpha / 2</code> quantiles of the resampled differences.</p>
-<p><code>p_values</code> is the proportion of resampled differences falling on the
-other side of zero from the observed one, doubled for a two-sided test,
-and calculated as <code>2 * min(1 + sum(d &lt;= 0), 1 + sum(d &gt;= 0)) / (n + 1)</code>
-so that it is never exactly zero - a bootstrap of <code>n</code> resamples cannot
-report a p-value below about <code>2 / n</code>, and reporting one would be an
-artifact of the resample count rather than evidence.</p>
-<p><code>p_values_norm</code> buys that resolution back with an assumption. It reads
-<code>statistic</code> off the normal distribution, and <code>statistic</code> divides the
-observed difference by the standard deviation of the resampled ones, so
-the bootstrap spread stands in for a standard error. Nothing is shuffled
-between the models, so the null is never enforced; the distribution is
-the sampling one, centered on the observed difference and reflected to
-sit under zero. It can report a p-value far below <code>2 / n</code>, which is what
-makes it worth having, and it is at its weakest where the resampled
-differences are skewed rather than normal - few positives, or either
-model near the ceiling of the precision-recall AUC. The small p-values it
-makes available are therefore its least trustworthy numbers.</p>
-<p>Read the interval first. The two p-values are companions to it rather
-than exact tests, and when they disagree sharply it is the normal
-approximation to distrust.</p>
-<p><code>statistic</code> is <code>NA</code> when the resamples have no spread to divide by, which
-happens when two models are given the same scores, and <code>p_values_norm</code>
+<p>The two p-values are the two ways of getting one out of a bootstrap, and
+each column is named for the method that produced it. Write <code>d</code> for the
+vector of <code>n</code> resampled differences and <code>diffs</code> for the observed one.</p>
+<p><code>p_values</code> is the <strong>percentile</strong> p-value - the share of <code>d</code> on the other
+side of zero from <code>diffs</code>, doubled for a two-sided test:</p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>p_values <span class="ot">=</span> <span class="dv">2</span> <span class="sc">*</span> <span class="fu">min</span>(<span class="dv">1</span> <span class="sc">+</span> <span class="fu">sum</span>(d <span class="sc">&lt;=</span> <span class="dv">0</span>), <span class="dv">1</span> <span class="sc">+</span> <span class="fu">sum</span>(d <span class="sc">&gt;=</span> <span class="dv">0</span>)) <span class="sc">/</span> (n <span class="sc">+</span> <span class="dv">1</span>)</span></code></pre><p></p></div>
+<p>The added ones keep it away from exactly zero. It cannot go below
+<code>2 / (n + 1)</code>, so <code>boot_n</code> sets a floor under it.</p>
+<p><code>z_values</code> and <code>p_values_wald</code> are the <strong>Wald</strong> test - an estimate over
+an estimate of its standard error, referred to a standard normal:</p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>z_values      <span class="ot">=</span> diffs <span class="sc">/</span> <span class="fu">sd</span>(d)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>p_values_wald <span class="ot">=</span> <span class="dv">2</span> <span class="sc">*</span> <span class="fu">pnorm</span>(<span class="sc">-</span><span class="fu">abs</span>(z_values))</span></code></pre><p></p></div>
+<p><code>sd(d)</code> is the standard error, because the spread of the bootstrap
+distribution is what the bootstrap has to say about how far the
+difference moves from sample to sample. Having a scale underneath it
+rather than a count of resamples, the Wald p-value has no floor.</p>
+<p><code>alternative</code> replaces the doubled minimum with the matching one-sided
+count, and <code>-abs()</code> with <code>-</code> or <code>+</code>, in the two formulas above.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="why-two-p-values">Why two p-values<a class="anchor" aria-label="anchor" href="#why-two-p-values"></a></h2>
+
+
+
+<p>Because they fail in opposite ways, and neither one on its own tells you
+that it is failing.</p>
+<p>The percentile p-value assumes nothing about the shape of <code>d</code>, and pays
+for that with the floor. Once it reaches <code>2 / (n + 1)</code> it has stopped
+measuring the models and started reporting <code>boot_n</code>: a difference that is
+merely clear and one that is overwhelming both come out at 0.002 at the
+default thousand resamples, and the number gives no sign of which it is
+looking at.</p>
+<p>The Wald p-value has no floor, and pays for that with an assumption. It
+takes <code>d</code> to be roughly normal, and locates the null by reflecting the
+sampling distribution rather than by enforcing it. Where <code>d</code> is skewed -
+few positives, or either model near the ceiling of the precision-recall
+AUC - it is confidently wrong, and again the number carries no warning.</p>
+<p>Side by side they cover each other. When they agree, the normality the
+Wald test assumes is doing no harm at this sample size and you can quote
+its resolution. When they disagree sharply, <code>d</code> is not the shape the Wald
+test needs, and the percentile p-value - floor and all - is the one to
+trust. The comparison is the diagnostic; neither column is one on its
+own.</p>
+<p>There is a second, exact sense in which they are different answers. A
+Wald test is the counterpart of the bootstrap <strong>normal</strong> interval,
+<code>diffs</code> plus and minus <code>z</code> standard errors, while <code>lower_bound</code> and
+<code>upper_bound</code> are the <strong>percentile</strong> interval. So <code>p_values_wald</code> is not
+the dual of the bounds reported beside it, and need not agree with them.</p>
+<p>Read the interval first. Both p-values are companions to it rather than
+exact tests.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="not-a-t-statistic">Not a t statistic<a class="anchor" aria-label="anchor" href="#not-a-t-statistic"></a></h2>
+
+
+
+<p><code>z_values</code> divides by a standard error, not by a standard error of a
+mean, and is read off the normal rather than off a t. <code>auc_ci(dtype = "t")</code> is the genuine t in this package, and the contrast is exact: there
+the spread is taken over a handful of real test sets and divided by the
+square root of how many there were, so <code>n - 1</code> degrees of freedom mean
+something. Here the spread is taken over resamples and divided by
+nothing - <code>boot_n</code> is a setting rather than a sample size, and a t on
+<code>boot_n - 1</code> degrees of freedom would be a p-value that shrinks when the
+caller resamples harder.</p>
+<p>Nor is this the bootstrap-<em>t</em>, which forms a statistic of its own inside
+every resample and takes its reference distribution from those rather
+than from the normal.</p>
+<p><code>z_values</code> is <code>NA</code> when the resamples have no spread to divide by, which
+happens when two models are given the same scores, and <code>p_values_wald</code>
 is <code>NA</code> with it.</p>
     </div>
     <div class="section level2">

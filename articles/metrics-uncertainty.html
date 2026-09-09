@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -236,8 +236,8 @@ answers.</p>
 <th align="right">lower_bound</th>
 <th align="right">upper_bound</th>
 <th align="right">p_values</th>
-<th align="right">statistic</th>
-<th align="right">p_values_norm</th>
+<th align="right">z_values</th>
+<th align="right">p_values_wald</th>
 <th align="right">n</th>
 </tr></thead>
 <tbody>
@@ -273,28 +273,32 @@ intervals from <code><a href="../reference/auc_ci.html">auc_ci()</a></code> and 
 two intervals can overlap while the difference is clearly on one side of
 zero, because separate intervals say nothing about how the two models
 move together.</p>
-<p><code>p_values</code> is the share of resampled differences on the
-far side of zero from the observed one, doubled. It is floored at
-<code>2 / (n + 1)</code>, so 500 resamples cannot report anything below
-0.004 - a smaller number would be an artifact of the resample count
+<p><code>p_values</code> is the <em>percentile</em> p-value. Writing
+<code>d</code> for the resampled differences and <code>n</code> for how
+many there are, it is the share of <code>d</code> on the far side of
+zero from the observed difference, doubled:</p>
+<pre><code><span><span class="va">p_values</span> <span class="op">=</span> <span class="fl">2</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">d</span> <span class="op">&lt;=</span> <span class="fl">0</span><span class="op">)</span>, <span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">d</span> <span class="op">&gt;=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="va">n</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span></span></code></pre>
+<p>The added ones keep it away from exactly zero, which floors it at
+<code>2 / (n + 1)</code>: 500 resamples cannot report anything below
+0.004, and a smaller number would be an artifact of the resample count
 rather than evidence. Read the interval first; the p-value is a
 companion to it, not an exact test.</p>
 </div>
 <div class="section level2">
-<h2 id="the-statistic-and-the-second-p-value">The statistic and the second p-value<a class="anchor" aria-label="anchor" href="#the-statistic-and-the-second-p-value"></a>
+<h2 id="the-wald-test">The Wald test<a class="anchor" aria-label="anchor" href="#the-wald-test"></a>
 </h2>
 <p>That floor is a problem when the result has to be written down as a
 p-value. Take a pair of models that are not close:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">clear</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_sim_samples.html">create_sim_samples</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">100</span>, <span class="fl">100</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"poor_er"</span>, <span class="st">"excel"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">cmdat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mmdata.html">mmdata</a></span><span class="op">(</span><span class="va">clear</span><span class="op">[[</span><span class="st">"scores"</span><span class="op">]</span><span class="op">]</span>, <span class="va">clear</span><span class="op">[[</span><span class="st">"labels"</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>  modnames <span class="op">=</span> <span class="va">clear</span><span class="op">[[</span><span class="st">"modnames"</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">clear_diff</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/auc_diff.html">auc_diff</a></span><span class="op">(</span><span class="fu"><a href="../reference/auc_boot.html">auc_boot</a></span><span class="op">(</span><span class="va">cmdat</span>, boot_n <span class="op">=</span> <span class="fl">500</span>, seed <span class="op">=</span> <span class="fl">42</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co"># The normal p-value is far below what kable's default rounding shows</span></span>
-<span><span class="va">clear_diff</span><span class="op">[[</span><span class="st">"p_values_norm"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span></span>
-<span>  <span class="va">clear_diff</span><span class="op">[[</span><span class="st">"p_values_norm"</span><span class="op">]</span><span class="op">]</span>,</span>
+<span><span class="co"># The Wald p-value is far below what kable's default rounding shows</span></span>
+<span><span class="va">clear_diff</span><span class="op">[[</span><span class="st">"p_values_wald"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span></span>
+<span>  <span class="va">clear_diff</span><span class="op">[[</span><span class="st">"p_values_wald"</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>  digits <span class="op">=</span> <span class="fl">3</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -320,8 +324,8 @@ p-value. Take a pair of models that are not close:</p>
 <th align="right">lower_bound</th>
 <th align="right">upper_bound</th>
 <th align="right">p_values</th>
-<th align="right">statistic</th>
-<th align="left">p_values_norm</th>
+<th align="right">z_values</th>
+<th align="left">p_values_wald</th>
 <th align="right">n</th>
 </tr></thead>
 <tbody>
@@ -355,36 +359,79 @@ p-value. Take a pair of models that are not close:</p>
 on its floor of 0.004, because that is the smallest number 500 resamples
 can support. Getting below 0.001 that way means resampling ten thousand
 times or more.</p>
-<p><code>statistic</code> and <code>p_values_norm</code> read a number
-off the resamples that are already there. <code>statistic</code> divides
-the observed difference by the standard deviation of the resampled ones,
-so the bootstrap spread stands in for a standard error, and
-<code>p_values_norm</code> is that statistic read off the normal
-distribution - here many orders of magnitude below the floor the
-percentile p-value has run into.</p>
-<p>The resolution is bought with an assumption, and it is worth knowing
-which. Nothing is shuffled between the two models, so the null is never
-enforced: the distribution being used is the sampling one, centered on
-the observed difference and reflected to sit under zero. It also takes
-the resampled differences to be roughly normal, which is weakest where
-they are skewed - few positives, or either model near the ceiling of the
-precision-recall AUC. The very small p-values it makes available are
-therefore its least trustworthy numbers, and when the two p-values
-disagree sharply it is the normal approximation to distrust.</p>
-<p><code>statistic</code> is <code>NA</code> when the resamples have no
+<p><code>z_values</code> and <code>p_values_wald</code> are a
+<em>Wald</em> test, read off the resamples that are already there. A
+Wald statistic is an estimate over an estimate of its standard error,
+referred to a standard normal:</p>
+<pre><code><span><span class="va">z_values</span>      <span class="op">=</span> <span class="va">diffs</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
+<span><span class="va">p_values_wald</span> <span class="op">=</span> <span class="fl">2</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">pnorm</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">z_values</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+<p><code>sd(d)</code> is the standard error, because the spread of the
+bootstrap distribution is what the bootstrap has to say about how far
+the difference moves from sample to sample. Having a scale underneath it
+rather than a count of resamples, it has no floor, and lands many orders
+of magnitude below the one the percentile p-value has run into.</p>
+<p><code>z_values</code> is <code>NA</code> when the resamples have no
 spread to divide by, which is what two models given the same scores
-produce, and <code>p_values_norm</code> is <code>NA</code> with it.</p>
+produce, and <code>p_values_wald</code> is <code>NA</code> with it.</p>
+</div>
+<div class="section level2">
+<h2 id="why-two-p-values">Why two p-values<a class="anchor" aria-label="anchor" href="#why-two-p-values"></a>
+</h2>
+<p>Because they fail in opposite ways, and neither one on its own tells
+you that it is failing.</p>
+<p>The percentile p-value assumes nothing about the shape of
+<code>d</code>, and pays for that with the floor. Once it reaches
+<code>2 / (n + 1)</code> it has stopped measuring the models and started
+reporting <code>boot_n</code> - a difference that is merely clear and
+one that is overwhelming both come out at 0.004 in the table above, and
+nothing in the number says which one you are looking at.</p>
+<p>The Wald p-value has no floor, and pays for that with an assumption.
+It takes <code>d</code> to be roughly normal, and locates the null by
+reflecting the sampling distribution rather than by enforcing it:
+nothing is shuffled between the two models. Where <code>d</code> is
+skewed - few positives, or either model near the ceiling of the
+precision-recall AUC - it is confidently wrong, and again the number
+carries no warning.</p>
+<p>Side by side they cover each other. When they agree, the normality
+the Wald test assumes is doing no harm at this sample size, and its
+resolution is yours to quote. When they disagree sharply, <code>d</code>
+is not the shape the Wald test needs, and the percentile p-value - floor
+and all - is the one to trust. The comparison is the diagnostic; neither
+column is one by itself.</p>
+<p>There is also an exact sense in which they answer different
+questions. A Wald test is the counterpart of the <em>normal</em>
+interval, the difference plus and minus so many standard errors, while
+<code>lower_bound</code> and <code>upper_bound</code> are the
+<em>percentile</em> interval. <code>p_values_wald</code> is therefore
+not the dual of the bounds next to it, and need not agree with them.</p>
+</div>
+<div class="section level2">
+<h2 id="not-a-t-statistic">Not a t statistic<a class="anchor" aria-label="anchor" href="#not-a-t-statistic"></a>
+</h2>
+<p><code>z_values</code> divides by a standard error, not by a standard
+error of a mean, and is read off the normal rather than off a t. The
+contrast with <code>auc_ci(dtype = "t")</code> on cross-validation
+folds, which is a genuine t, is exact: there the spread is taken over a
+handful of real test sets and divided by the square root of how many
+there were, so <code>n - 1</code> degrees of freedom mean something.
+Here the spread is taken over resamples and divided by nothing -
+<code>boot_n</code> is a setting rather than a sample size, and a t on
+<code>boot_n - 1</code> degrees of freedom would be a p-value that
+shrinks when you resample harder.</p>
+<p>Nor is it the bootstrap-<em>t</em>, which forms a statistic of its
+own inside every resample and takes its reference distribution from
+those rather than from the normal.</p>
 </div>
 <div class="section level2">
 <h2 id="one-side-or-two">One side or two<a class="anchor" aria-label="anchor" href="#one-side-or-two"></a>
 </h2>
-<p><code>alternative</code> picks the tail both p-values are read from.
-The default <code>"two.sided"</code> asks whether the models differ;
-<code>"greater"</code> asks whether the first of the pair has the larger
-AUC, and <code>"less"</code> whether the second does.
-<code>poor_er</code> is the first of this pair, so <code>"less"</code>
-is the question worth asking about it:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<p><code>alternative</code> picks the tail the percentile and the Wald
+p-value are read from. The default <code>"two.sided"</code> asks whether
+the models differ; <code>"greater"</code> asks whether the first of the
+pair has the larger AUC, and <code>"less"</code> whether the second
+does. <code>poor_er</code> is the first of this pair, so
+<code>"less"</code> is the question worth asking about it:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="../reference/auc_diff.html">auc_diff</a></span><span class="op">(</span><span class="va">booted</span>, alternative <span class="op">=</span> <span class="st">"less"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table style="width:100%;" class="table">
 <colgroup>
@@ -407,8 +454,8 @@ is the question worth asking about it:</p>
 <th align="right">lower_bound</th>
 <th align="right">upper_bound</th>
 <th align="right">p_values</th>
-<th align="right">statistic</th>
-<th align="right">p_values_norm</th>
+<th align="right">z_values</th>
+<th align="right">p_values_wald</th>
 <th align="right">n</th>
 </tr></thead>
 <tbody>

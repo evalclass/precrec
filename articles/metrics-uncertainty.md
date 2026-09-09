@@ -57,7 +57,7 @@ next section a comparison rather than two separate answers.
 knitr::kable(auc_diff(booted))
 ```
 
-| curvetypes | modnames1 | modnames2 | diffs | lower_bound | upper_bound | p_values | statistic | p_values_norm | n |
+| curvetypes | modnames1 | modnames2 | diffs | lower_bound | upper_bound | p_values | z_values | p_values_wald | n |
 |:---|:---|:---|---:|---:|---:|---:|---:|---:|---:|
 | ROC | poor_er | good_er | 0.014800 | -0.062155 | 0.0924050 | 0.6706587 | 0.3702657 | 0.7111846 | 500 |
 | PRC | poor_er | good_er | -0.071351 | -0.154159 | 0.0278979 | 0.2155689 | -1.5169265 | 0.1292852 | 500 |
@@ -70,13 +70,19 @@ and checking whether they overlap: two intervals can overlap while the
 difference is clearly on one side of zero, because separate intervals
 say nothing about how the two models move together.
 
-`p_values` is the share of resampled differences on the far side of zero
-from the observed one, doubled. It is floored at `2 / (n + 1)`, so 500
-resamples cannot report anything below 0.004 - a smaller number would be
-an artifact of the resample count rather than evidence. Read the
-interval first; the p-value is a companion to it, not an exact test.
+`p_values` is the *percentile* p-value. Writing `d` for the resampled
+differences and `n` for how many there are, it is the share of `d` on
+the far side of zero from the observed difference, doubled:
 
-## The statistic and the second p-value
+    p_values = 2 * min(1 + sum(d <= 0), 1 + sum(d >= 0)) / (n + 1)
+
+The added ones keep it away from exactly zero, which floors it at
+`2 / (n + 1)`: 500 resamples cannot report anything below 0.004, and a
+smaller number would be an artifact of the resample count rather than
+evidence. Read the interval first; the p-value is a companion to it, not
+an exact test.
+
+## The Wald test
 
 That floor is a problem when the result has to be written down as a
 p-value. Take a pair of models that are not close:
@@ -89,16 +95,16 @@ cmdat <- mmdata(clear[["scores"]], clear[["labels"]],
 )
 
 clear_diff <- auc_diff(auc_boot(cmdat, boot_n = 500, seed = 42))
-# The normal p-value is far below what kable's default rounding shows
-clear_diff[["p_values_norm"]] <- format(
-  clear_diff[["p_values_norm"]],
+# The Wald p-value is far below what kable's default rounding shows
+clear_diff[["p_values_wald"]] <- format(
+  clear_diff[["p_values_wald"]],
   digits = 3
 )
 
 knitr::kable(clear_diff)
 ```
 
-| curvetypes | modnames1 | modnames2 | diffs | lower_bound | upper_bound | p_values | statistic | p_values_norm | n |
+| curvetypes | modnames1 | modnames2 | diffs | lower_bound | upper_bound | p_values | z_values | p_values_wald | n |
 |:---|:---|:---|---:|---:|---:|---:|---:|:---|---:|
 | ROC | poor_er | excel | -0.2462000 | -0.3168000 | -0.1795725 | 0.003992 | -7.110897 | 1.15e-12 | 500 |
 | PRC | poor_er | excel | -0.2729186 | -0.3449664 | -0.2004622 | 0.003992 | -7.289584 | 3.11e-13 | 500 |
@@ -108,41 +114,86 @@ of 0.004, because that is the smallest number 500 resamples can support.
 Getting below 0.001 that way means resampling ten thousand times or
 more.
 
-`statistic` and `p_values_norm` read a number off the resamples that are
-already there. `statistic` divides the observed difference by the
-standard deviation of the resampled ones, so the bootstrap spread stands
-in for a standard error, and `p_values_norm` is that statistic read off
-the normal distribution - here many orders of magnitude below the floor
-the percentile p-value has run into.
+`z_values` and `p_values_wald` are a *Wald* test, read off the resamples
+that are already there. A Wald statistic is an estimate over an estimate
+of its standard error, referred to a standard normal:
 
-The resolution is bought with an assumption, and it is worth knowing
-which. Nothing is shuffled between the two models, so the null is never
-enforced: the distribution being used is the sampling one, centered on
-the observed difference and reflected to sit under zero. It also takes
-the resampled differences to be roughly normal, which is weakest where
-they are skewed - few positives, or either model near the ceiling of the
-precision-recall AUC. The very small p-values it makes available are
-therefore its least trustworthy numbers, and when the two p-values
-disagree sharply it is the normal approximation to distrust.
+    z_values      = diffs / sd(d)
+    p_values_wald = 2 * pnorm(-abs(z_values))
 
-`statistic` is `NA` when the resamples have no spread to divide by,
-which is what two models given the same scores produce, and
-`p_values_norm` is `NA` with it.
+`sd(d)` is the standard error, because the spread of the bootstrap
+distribution is what the bootstrap has to say about how far the
+difference moves from sample to sample. Having a scale underneath it
+rather than a count of resamples, it has no floor, and lands many orders
+of magnitude below the one the percentile p-value has run into.
+
+`z_values` is `NA` when the resamples have no spread to divide by, which
+is what two models given the same scores produce, and `p_values_wald` is
+`NA` with it.
+
+## Why two p-values
+
+Because they fail in opposite ways, and neither one on its own tells you
+that it is failing.
+
+The percentile p-value assumes nothing about the shape of `d`, and pays
+for that with the floor. Once it reaches `2 / (n + 1)` it has stopped
+measuring the models and started reporting `boot_n` - a difference that
+is merely clear and one that is overwhelming both come out at 0.004 in
+the table above, and nothing in the number says which one you are
+looking at.
+
+The Wald p-value has no floor, and pays for that with an assumption. It
+takes `d` to be roughly normal, and locates the null by reflecting the
+sampling distribution rather than by enforcing it: nothing is shuffled
+between the two models. Where `d` is skewed - few positives, or either
+model near the ceiling of the precision-recall AUC - it is confidently
+wrong, and again the number carries no warning.
+
+Side by side they cover each other. When they agree, the normality the
+Wald test assumes is doing no harm at this sample size, and its
+resolution is yours to quote. When they disagree sharply, `d` is not the
+shape the Wald test needs, and the percentile p-value - floor and all -
+is the one to trust. The comparison is the diagnostic; neither column is
+one by itself.
+
+There is also an exact sense in which they answer different questions. A
+Wald test is the counterpart of the *normal* interval, the difference
+plus and minus so many standard errors, while `lower_bound` and
+`upper_bound` are the *percentile* interval. `p_values_wald` is
+therefore not the dual of the bounds next to it, and need not agree with
+them.
+
+## Not a t statistic
+
+`z_values` divides by a standard error, not by a standard error of a
+mean, and is read off the normal rather than off a t. The contrast with
+`auc_ci(dtype = "t")` on cross-validation folds, which is a genuine t,
+is exact: there the spread is taken over a handful of real test sets and
+divided by the square root of how many there were, so `n - 1` degrees of
+freedom mean something. Here the spread is taken over resamples and
+divided by nothing - `boot_n` is a setting rather than a sample size,
+and a t on `boot_n - 1` degrees of freedom would be a p-value that
+shrinks when you resample harder.
+
+Nor is it the bootstrap-*t*, which forms a statistic of its own inside
+every resample and takes its reference distribution from those rather
+than from the normal.
 
 ## One side or two
 
-`alternative` picks the tail both p-values are read from. The default
-`"two.sided"` asks whether the models differ; `"greater"` asks whether
-the first of the pair has the larger AUC, and `"less"` whether the
-second does. `poor_er` is the first of this pair, so `"less"` is the
-question worth asking about it:
+`alternative` picks the tail the percentile and the Wald p-value are
+read from. The default `"two.sided"` asks whether the models differ;
+`"greater"` asks whether the first of the pair has the larger AUC, and
+`"less"` whether the second does. `poor_er` is the first of this pair,
+so `"less"` is the question worth asking about it:
 
 ``` r
 
 knitr::kable(auc_diff(booted, alternative = "less"))
 ```
 
-| curvetypes | modnames1 | modnames2 | diffs | lower_bound | upper_bound | p_values | statistic | p_values_norm | n |
+| curvetypes | modnames1 | modnames2 | diffs | lower_bound | upper_bound | p_values | z_values | p_values_wald | n |
 |:---|:---|:---|---:|---:|---:|---:|---:|---:|---:|
 | ROC | poor_er | good_er | 0.014800 | -0.062155 | 0.0924050 | 0.6666667 | 0.3702657 | 0.6444077 | 500 |
 | PRC | poor_er | good_er | -0.071351 | -0.154159 | 0.0278979 | 0.1077844 | -1.5169265 | 0.0646426 | 500 |

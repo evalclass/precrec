@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,6 +71,15 @@
       <small>Source: <a href="https://github.com/evalclass/precrec/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.22.2" id="precrec-0222">precrec 0.22.2<a class="anchor" aria-label="anchor" href="#precrec-0222"></a></h2>
+<ul><li>
+<p>The two columns <code><a href="../reference/auc_diff.html">auc_diff()</a></code> gained in 0.22.1 are renamed. <code>statistic</code> is now <code>z_values</code> and <code>p_values_norm</code> is now <code>p_values_wald</code>, and the documentation calls what they come from a Wald test throughout. Neither column’s contents changed.</p>
+<p><code>p_values_norm</code> named the p-value for the distribution it is read off rather than for the test that produced it, which left it inconsistent with <code>p_values</code> beside it - named for the percentile method - and readable as “normalized”, which it is not. <code>statistic</code> said nothing about which distribution it is referred to, and was singular where every other column in the row is plural.</p>
+<p>The reference page and the <em>Uncertainty from one test set</em> article now give both formulas outright, <code>z_values = diffs / sd(d)</code> and <code>p_values_wald = 2 * pnorm(-abs(z_values))</code> against the percentile count, and answer under its own heading why two p-values are reported at all: they fail in opposite ways - the percentile one has a floor at <code>2 / (n + 1)</code>, the Wald one has an assumption of normality - and it is whether they agree that tells you which is failing.</p>
+<p>0.22.1 is a day old and was not submitted to CRAN, so the renames are made now rather than carried.</p>
+</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.22.1" id="precrec-0221">precrec 0.22.1<a class="anchor" aria-label="anchor" href="#precrec-0221"></a></h2>
 <ul><li>
