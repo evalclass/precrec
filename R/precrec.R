@@ -99,7 +99,7 @@
 #' @importFrom graphics matplot plot plot.new polygon
 #' @importFrom methods is
 #' @importFrom rlang sym
-#' @importFrom stats qnorm rbeta rnorm sd qt quantile
+#' @importFrom stats qnorm rbeta rnorm sd qt quantile pnorm
 #' @importFrom data.table frank
 #'
 "_PACKAGE"

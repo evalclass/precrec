@@ -1,3 +1,27 @@
+# precrec 0.22.1
+
+* `auc_diff()` reports a test statistic and a second p-value, and takes a
+  new `alternative` argument for the tail they are read from. `statistic`
+  divides the observed difference in AUC by the standard deviation of the
+  resampled differences, so the bootstrap spread stands in for a standard
+  error, and `p_values_norm` reads that statistic off the normal
+  distribution.
+
+  The percentile `p_values` is floored at `2 / (n + 1)` on purpose, which
+  is 0.002 at the default `boot_n = 1000`; a difference that is not in any
+  doubt bottoms out there, and reporting `p < 0.001` from it needs ten
+  thousand resamples or more. The normal approximation reads an unbounded
+  p-value off the resamples that are already there.
+
+  It buys that resolution with an assumption. Nothing is shuffled between
+  the models, so the null is never enforced, and the resampled differences
+  are taken to be roughly normal - weakest where they are skewed, which is
+  few positives or either model near the ceiling of the precision-recall
+  AUC. `p_values` keeps its meaning, both are reported side by side, and
+  where the two disagree sharply it is the normal one to distrust.
+
+  Requested in #21, which came out of #13.
+
 # precrec 0.22.0
 
 * `evalmod(mode = "basic")` takes a new `basic_ties` argument for what the
