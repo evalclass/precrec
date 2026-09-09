@@ -1,3 +1,28 @@
+# precrec 0.23.0
+
+* New `metric_table()` returns every basic evaluation metric at every
+  cutoff, one row per cutoff and one column per metric - what
+  `pROC::coords()` and the cutoff slots of a `ROCR::performance` object
+  give, and the shape most work downstream of a curve needs: pick an
+  operating point, hand a threshold to production code, tabulate a report,
+  compute a metric `precrec` does not.
+
+  Nothing new is calculated. `evalmod(mode = "basic")` has always kept the
+  score and the label at every cutoff, and `as.data.frame()` has always
+  returned them - as two of the fourteen values of its `type` column,
+  alongside the metrics rather than indexing them. The long form is right
+  for plotting, which is what it was built for, and wrong for the question
+  "what happens if I cut here". `metric_table()` is that same data on its
+  side, through the same converter, so the two cannot drift apart.
+
+  It takes the doors `evalmod()` takes - an `mmdata()` object, or `scores`
+  and `labels` - and also a `mode = "basic"` object that has already been
+  calculated, since reusing one is the point. `rank` counts the instances
+  called positive and `normalized_rank` is that divided by the number of
+  instances, the x axis of the basic metric plots. Rows are per test
+  dataset and nothing is averaged across them, because a cutoff belongs to
+  the dataset it was read off.
+
 # precrec 0.22.2
 
 * The two columns `auc_diff()` gained in 0.22.1 are renamed. `statistic`

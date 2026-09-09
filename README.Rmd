@@ -114,6 +114,7 @@ devtools::install_github("evalclass/precrec")
 | `prob_metrics` | Calculate the Brier score, the RMSE and the log loss |
 | `prob_metrics_ci` | Calculate CIs of the Brier score, the RMSE and the log loss |
 | `metric_curve` | Draw one evaluation metric against another |
+| `metric_table` | Get every evaluation metric at every cutoff |
 | `prbe` | Find the precision-recall break-even point |
 | `average_precision` | Calculate the step estimator of the PRC area |
 | `classification_report` | Report precision, recall and F-score per class at a threshold |
