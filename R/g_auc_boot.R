@@ -55,7 +55,8 @@
 #' about the difference rather than about two independent intervals.
 #'
 #' @seealso [auc_ci()] for the intervals, [auc_diff()] for comparing two
-#'   models, and [auc()] for the point estimates.
+#'   models, [auc_delong()] for an exact standard error of the ROC AUC,
+#'   and [auc()] for the point estimates.
 #'
 #' @examples
 #'
@@ -186,20 +187,25 @@ auc_boot <- function(mdat, scores = NULL, labels = NULL, boot_n = 1000,
 #
 # Compare the AUCs of two models on the same resamples
 #
-#' Compare bootstrapped AUCs between models
+#' Compare AUCs between models
 #'
-#' `auc_diff` takes the resamples of [auc_boot()] and reports, for every
-#' pair of models and every curve type, the difference between their AUCs
-#' with a confidence interval around it.
+#' `auc_diff` reports, for every pair of models, the difference between
+#' their AUCs with a confidence interval around it. It reads either of the
+#' two estimates of uncertainty the package offers for a single test set:
+#' the resamples of [auc_boot()], which cover both curve types, or the
+#' analytic covariance of [auc_delong()], which covers the ROC AUC exactly.
 #'
-#' The comparison is paired: both models are scored on the same resample,
-#' so the difference is calculated within a resample and the spread of those
-#' differences is what the interval describes. Two separate intervals from
-#' [auc_ci()] cannot be read this way - they can overlap while the
-#' difference is still clearly on one side of zero, because they say nothing
-#' about how the two models move together.
+#' The comparison is paired either way. With a bootstrap both models are
+#' scored on the same resample, so the difference is calculated within a
+#' resample and the spread of those differences is what the interval
+#' describes; with DeLong the pairing is carried by the covariance between
+#' the two AUCs. Two separate intervals from [auc_ci()] cannot be read this
+#' way - they can overlap while the difference is still clearly on one side
+#' of zero, because they say nothing about how the two models move
+#' together.
 #'
-#' @param x An `aucboot` object from [auc_boot()].
+#' @param x An `aucboot` object from [auc_boot()] or an `aucdelong` object
+#'   from [auc_delong()].
 #'
 #' @param alpha The interval covers `1 - alpha` of the resampled
 #'   differences, so the default of 0.05 gives a 95% interval.
@@ -207,10 +213,12 @@ auc_boot <- function(mdat, scores = NULL, labels = NULL, boot_n = 1000,
 #' @param alternative The side of zero the alternative hypothesis is on,
 #'   one of `"two.sided"`, `"greater"` and `"less"`. `"greater"` tests
 #'   whether the first model of the pair has the larger AUC. It selects the
-#'   tail of both the percentile and the Wald p-value, and leaves
-#'   `z_values` alone; the interval stays two-sided whatever it is set to.
+#'   tail of every p-value in the result and leaves `z_values` alone; the
+#'   interval stays two-sided whatever it is set to.
 #'
-#' @return A data frame with one row per curve type and pair of models:
+#' @return A data frame with one row per curve type and pair of models.
+#'
+#'   From an `aucboot` object:
 #'
 #'   \tabular{ll}{
 #'     `curvetypes` \tab ROC or PRC \cr
@@ -224,7 +232,49 @@ auc_boot <- function(mdat, scores = NULL, labels = NULL, boot_n = 1000,
 #'     `n` \tab Resamples the row is based on \cr
 #'   }
 #'
+#'   From an `aucdelong` object, where there is one p-value rather than
+#'   two and only the ROC AUC to report:
+#'
+#'   \tabular{ll}{
+#'     `curvetypes` \tab ROC \cr
+#'     `modnames1`, `modnames2` \tab The pair, in the order compared \cr
+#'     `diffs` \tab AUC of the first minus that of the second \cr
+#'     `lower_bound`, `upper_bound` \tab Normal interval of the
+#'       difference, clipped to `[-1, 1]` \cr
+#'     `z_values` \tab `diffs` over its standard error \cr
+#'     `p_values` \tab DeLong's p-value, see below \cr
+#'     `n` \tab Instances in the test set \cr
+#'   }
+#'
+#' @section DeLong's comparison:
+#'
+#' Given an `aucdelong` object the standard error of the difference comes
+#' out of the covariance matrix,
+#'
+#' ```
+#' se = sqrt(var(auc1) + var(auc2) - 2 * cov(auc1, auc2))
+#' z_values = diffs / se
+#' p_values = 2 * pnorm(-abs(z_values))
+#' ```
+#'
+#' and the covariance is what makes it a paired test: two models scored on
+#' the same test set rise and fall together, and dropping the last term
+#' would overstate how uncertain their difference is.
+#'
+#' This is a Wald test too, so `alternative` selects its tail the same way.
+#' What it does not need is `boot_n`: the standard error is exact rather
+#' than resampled, so the p-value has no floor and does not move between
+#' two runs. What it does assume is that the variance is asymptotic - see
+#' [auc_delong()] - and it has nothing to say about the precision-recall
+#' AUC.
+#'
+#' `z_values` is `NA` when two models rank every instance the same way and
+#' there is no standard error to divide by, and `p_values` is `NA` with it.
+#'
 #' @section The interval and the two p-values:
+#'
+#' This section and the two that follow describe an `aucboot` object.
+#'
 #'
 #' The interval is the primary result, and is the `alpha / 2` and
 #' `1 - alpha / 2` quantiles of the resampled differences.
@@ -313,8 +363,8 @@ auc_boot <- function(mdat, scores = NULL, labels = NULL, boot_n = 1000,
 #' happens when two models are given the same scores, and `p_values_wald`
 #' is `NA` with it.
 #'
-#' @seealso [auc_boot()] for the resampling and [auc_ci()] for one model at
-#'   a time.
+#' @seealso [auc_boot()] for the resampling, [auc_delong()] for the
+#'   analytic alternative, and [auc_ci()] for one model at a time.
 #'
 #' @examples
 #'
@@ -329,15 +379,29 @@ auc_boot <- function(mdat, scores = NULL, labels = NULL, boot_n = 1000,
 #' ## Is the second model the better one?
 #' auc_diff(booted, alternative = "less")
 #'
+#' ## The same comparison without resampling, for the ROC AUC
+#' auc_diff(auc_delong(mdat))
+#'
 #' @export
-auc_diff <- function(x, alpha = 0.05, alternative = "two.sided") {
+auc_diff <- function(x, alpha = NULL, alternative = NULL) {
+  UseMethod("auc_diff", x)
+}
+
+#' @export
+auc_diff.default <- function(x, alpha = NULL, alternative = NULL) {
+  .stop_invalid_arg(
+    paste(
+      "{.arg x} must be an {.cls aucboot} object from {.fn auc_boot} or",
+      "an {.cls aucdelong} object from {.fn auc_delong}."
+    ),
+    arg = "x"
+  )
+}
+
+#' @rdname auc_diff
+#' @export
+auc_diff.aucboot <- function(x, alpha = 0.05, alternative = "two.sided") {
   # === Validate input arguments ===
-  if (!inherits(x, "aucboot")) {
-    .stop_invalid_arg(
-      "{.arg x} must be an {.cls aucboot} object from {.fn auc_boot}.",
-      arg = "x"
-    )
-  }
   .assert_number(alpha, "alpha", min = 0, max = 1)
   .assert_string(
     alternative, "alternative", c("two.sided", "greater", "less")
@@ -412,7 +476,7 @@ auc_diff <- function(x, alpha = 0.05, alternative = "two.sided") {
     upper_bound = bounds[2],
     p_values = p_value,
     z_values = z_value,
-    p_values_wald = .boot_p_wald(z_value, alternative),
+    p_values_wald = .wald_p_value(z_value, alternative),
     n = n
   )
 }
@@ -465,21 +529,6 @@ auc_diff <- function(x, alpha = 0.05, alternative = "two.sided") {
   observed / spread
 }
 
-
-#
-# The Wald p-value, `2 * pnorm(-abs(z))` two-sided, one tail otherwise
-#
-.boot_p_wald <- function(z_value, alternative) {
-  if (is.na(z_value)) {
-    return(NA_real_)
-  }
-
-  switch(alternative,
-    greater = stats::pnorm(-z_value),
-    less = stats::pnorm(z_value),
-    two.sided = 2 * stats::pnorm(-abs(z_value))
-  )
-}
 
 
 .boot_observed <- function(obs, modname) {

@@ -1,5 +1,28 @@
 # precrec 0.23.0
 
+* New `auc_delong()` calculates the ROC AUC and its variance analytically,
+  by DeLong's method, rather than by resampling. `auc_ci()` reads a normal
+  interval off it and `auc_diff()` compares models through its covariance
+  matrix, so it is the exact counterpart of `auc_boot()`: same input, same
+  two functions reading the result, no `boot_n`, no seed, nothing that
+  moves between two runs, and no floor under the p-value.
+
+  The ROC AUC is a Mann-Whitney U statistic, so its variance follows from
+  the structural components of that statistic. Those components are read
+  off midranks rather than off all `m * n` comparisons, and off the ranks
+  `precrec` has already assigned, so ties and `NA` scores are handled
+  exactly as they are everywhere else and the AUC reported is the one
+  `auc()` reports.
+
+  There is no precision-recall counterpart, and the result carries ROC rows
+  only. The precision-recall AUC is not a U statistic and the interpolated
+  area is further from being one still, so `auc_boot()` remains the answer
+  there - and remains the safer reading on a small or badly imbalanced test
+  set, since DeLong's variance is an asymptotic one.
+
+  `auc_diff()` is now an S3 generic, dispatching on whichever of the two
+  objects it is given. Existing calls are unaffected.
+
 * New `metric_table()` returns every basic evaluation metric at every
   cutoff, one row per cutoff and one column per metric - what
   `pROC::coords()` and the cutoff slots of a `ROCR::performance` object

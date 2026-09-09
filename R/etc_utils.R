@@ -553,3 +553,22 @@
     prc_base = prc_base
   )
 }
+
+#
+# The Wald p-value, `2 * pnorm(-abs(z))` two-sided, one tail otherwise
+#
+# Shared by the two Wald tests in the package: the one `auc_diff()` reads
+# off a bootstrap standard deviation and the one it reads off DeLong's
+# analytic standard error. Only the standard error underneath them differs.
+#
+.wald_p_value <- function(z_value, alternative) {
+  if (is.na(z_value)) {
+    return(NA_real_)
+  }
+
+  switch(alternative,
+    greater = stats::pnorm(-z_value),
+    less = stats::pnorm(z_value),
+    two.sided = 2 * stats::pnorm(-abs(z_value))
+  )
+}

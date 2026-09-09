@@ -126,6 +126,7 @@ devtools::install_github("evalclass/precrec")
 | `average_precision`     | Calculate the step estimator of the PRC area                  |
 | `classification_report` | Report precision, recall and F-score per class at a threshold |
 | `auc_boot`              | Bootstrap the AUC of a single test set                        |
+| `auc_delong`            | Analytic standard error of the ROC AUC (DeLong)               |
 | `auc_diff`              | Compare the AUCs of two models on the same resamples          |
 
 Ten S3 generics work on the objects `evalmod` and `metric_curve` return.

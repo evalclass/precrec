@@ -41,6 +41,7 @@ reference:
     contents:
     - auc_ci
     - auc_boot
+    - auc_delong
     - auc_diff
   - title: Precision-recall break-even point
     contents:

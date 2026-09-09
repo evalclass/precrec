@@ -78,5 +78,6 @@ auc_diff(booted)
 }
 \seealso{
 \code{\link[=auc_ci]{auc_ci()}} for the intervals, \code{\link[=auc_diff]{auc_diff()}} for comparing two
-models, and \code{\link[=auc]{auc()}} for the point estimates.
+models, \code{\link[=auc_delong]{auc_delong()}} for an exact standard error of the ROC AUC,
+and \code{\link[=auc]{auc()}} for the point estimates.
 }
