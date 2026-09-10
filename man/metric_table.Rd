@@ -4,7 +4,7 @@
 \alias{metric_table}
 \title{Get every evaluation metric at every cutoff}
 \usage{
-metric_table(x, scores = NULL, labels = NULL, metrics = NULL, ...)
+metric_table(x, scores = NULL, labels = NULL, metrics = NULL, at = NULL, ...)
 }
 \arguments{
 \item{x}{An \code{S3} object created by the \code{\link[=mmdata]{mmdata()}} function, or a
@@ -27,6 +27,13 @@ addition to the default set, or the string \code{"all"} for every metric
 unspecified when \code{x} is already a basic-metric object, which carries
 the metrics it was built with.}
 
+\item{at}{A numeric vector of thresholds to report, instead of every
+cutoff. Each one is looked up rather than recalculated: \verb{score >= }
+the threshold calls some number of instances positive, and that count
+is a rank the table already has a row for. Use it to read the metrics
+of a threshold chosen somewhere else - on other data, from a
+requirement, or by hand.}
+
 \item{...}{These additional arguments are passed to \code{\link[=evalmod]{evalmod()}}, and
 through it to \code{\link[=mmdata]{mmdata()}}, when this function builds the basic metrics
 itself. \code{beta}, \code{cost_fp}, \code{cost_fn}, \code{basic_ties}, \code{modnames},
@@ -34,11 +41,14 @@ itself. \code{beta}, \code{cost_fp}, \code{cost_fn}, \code{basic_ties}, \code{mo
 }
 \value{
 The \code{metric_table} function returns a data frame with one row
-per cutoff per model per test dataset, and the following columns.
+per cutoff per model per test dataset - or, when \code{at} is given, one
+row per threshold per model per test dataset - and the following
+columns.
 
 \tabular{ll}{
 \code{modname} \tab Model name \cr
 \code{dsid} \tab Test dataset ID \cr
+\code{at} \tab The threshold asked for, when \code{at} is given \cr
 \code{rank} \tab Number of instances called positive, \code{0} to \code{n} \cr
 \code{normalized_rank} \tab \code{rank / n}, the x axis of the basic
 metric plots \cr
@@ -69,6 +79,30 @@ are defined, and it is kept because it is a real operating point.
 Tied scores share one value of each metric rather than taking a value
 that depends on the order the ties arrived in. \code{basic_ties} of
 \code{\link[=evalmod]{evalmod()}} controls that.
+}
+
+\section{Reading a threshold you already have}{
+
+
+\code{at} answers the question the rest of the table cannot: what are the
+metrics of \emph{this} threshold. A threshold is rarely one of the observed
+scores, so it has no row of its own, but it always names one of the
+cutoffs - \verb{score >= } it calls a certain number of instances positive,
+and that count is a rank. The row returned is that rank's row, so \code{at}
+is what was asked for and \code{score} is the observed cutoff realizing it,
+the smallest score still called positive.
+
+A threshold above every score gives the \code{rank = 0} row, where \code{score}
+is \code{NA} because nothing is called positive. A score of \code{NA} is never a
+positive prediction, matching the \code{na_worst = TRUE} default of the rest
+of the package.
+
+Ranks are per test dataset, so one threshold lands on a different rank
+in each of them. That is the reason to ask by threshold: a threshold is
+what transfers between datasets, and a rank is not. It is what makes a
+cutoff chosen on held-out data measurable on the data it was kept from,
+which the \emph{Choose an operating point} article works through:
+\url{https://evalclass.github.io/precrec/articles/howto-operating-point.html}.
 }
 
 \section{Several test datasets}{
@@ -108,6 +142,17 @@ lifted <- metric_table(
   metrics = c("lift", "jaccard")
 )
 head(lifted[, c("rank", "score", "precision", "lift", "jaccard")])
+
+
+##################################################
+### Read the metrics of thresholds you already have
+###
+
+## 14 is a run of six tied scores, so the rank is the end of the run
+metric_table(
+  scores = P10N10$scores, labels = P10N10$labels,
+  at = c(17, 14, 6)
+)[, c("at", "rank", "score", "sensitivity", "precision")]
 
 
 ##################################################
