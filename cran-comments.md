@@ -1,9 +1,9 @@
-## Version 0.23.0
+## Version 0.23.1
 
-An update of the published package `precrec` (0.14.5 -> 0.23.0). 0.15.0,
+An update of the published package `precrec` (0.14.5 -> 0.23.1). 0.15.0,
 0.16.0, 0.16.1, 0.16.2, 0.17.0, 0.18.0, 0.19.0, 0.20.0, 0.21.0, 0.21.1,
-0.21.2, 0.22.0, 0.22.1 and 0.22.2 were prepared but not submitted, so this
-release carries all fifteen sets of changes.
+0.21.2, 0.22.0, 0.22.1, 0.22.2 and 0.23.0 were prepared but not submitted,
+so this release carries all sixteen sets of changes.
 
 - Support datasets with more than two classes by one-vs-rest decomposition
 - Add the evaluation metrics `ROCR` provides, opt-in through
@@ -60,6 +60,9 @@ release carries all fifteen sets of changes.
   `auc_ci()` turns into a normal interval and `auc_diff()` into a paired
   comparison between models; `auc_diff()` becomes an S3 generic to take
   both it and the existing bootstrap object
+- Document `print()`, whose six methods had no help page because nothing
+  defined the topic they were attached to, and give them the invisible
+  return value an S3 `print` method is expected to have
 
 `NEWS.md` has the full list.
 

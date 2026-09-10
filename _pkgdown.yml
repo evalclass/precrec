@@ -29,6 +29,7 @@ reference:
     - fortify
   - title: Data retrieval
     contents:
+    - print
     - as.data.frame
     - as.data.table
     - metric_table

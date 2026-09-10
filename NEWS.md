@@ -1,3 +1,17 @@
+# precrec 0.23.1
+
+* Document `print()`. The six `print()` methods carried no help page at
+  all: one of them pointed at a `print` topic with `@rdname`, nothing
+  defined that topic, and so `roxygen2` skipped it on every run and
+  `?print.mdat` failed. `R CMD check` did not notice because the methods
+  are registered rather than exported by name. The topic now exists, and
+  says which object each method handles and what it shows.
+
+* `print()` returns its argument invisibly, as an S3 `print` method is
+  expected to. Five of the six returned the value of the last `cat()`
+  call, so `x <- print(curves)` gave `NULL`. What the console shows is
+  unchanged.
+
 # precrec 0.23.0
 
 * Regroup the website. A **Compare and decide** section now collects the
