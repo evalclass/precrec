@@ -167,6 +167,21 @@ metric_table <- function(x, scores = NULL, labels = NULL, metrics = NULL,
         arg = "metrics"
       )
     }
+    dots <- list(...)
+    if (length(dots) > 0L) {
+      named <- names(dots)
+      if (is.null(named) || !nzchar(named[1])) {
+        named <- "..."
+      }
+      .stop_invalid_arg(
+        paste(
+          "{.arg {named[1]}} is passed to {.fn evalmod} when this function",
+          "calculates the metrics itself, and {.arg x} already holds them.",
+          "Pass it to {.fn evalmod} instead, or drop it."
+        ),
+        arg = "x", .envir = environment()
+      )
+    }
     .validate(x)
 
     # `.check_raw_curves()` would catch this further down, but it talks
@@ -195,7 +210,7 @@ metric_table <- function(x, scores = NULL, labels = NULL, metrics = NULL,
         "{.arg x} must contain basic metrics. Curves and the fast AUC do",
         "not keep the scores, so the cutoffs cannot be recovered from",
         "them - call {.fn evalmod} with {.code mode = \"basic\"}, or pass",
-        "the scores and labels to {.fn metric_table} directly."
+        "the scores and labels in directly."
       ),
       arg = "x"
     )

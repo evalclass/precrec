@@ -32,6 +32,7 @@ reference:
     - as.data.frame
     - as.data.table
     - metric_table
+    - best_cutoff
     - auc
     - pauc
   - title: Partial AUC and partial curve

@@ -53,6 +53,9 @@ release carries all fifteen sets of changes.
   every cutoff as one row per cutoff and one column per metric; it
   reshapes results `evalmod(mode = "basic")` already produces and
   calculates nothing new
+- Add `best_cutoff()`, which picks the cutoff that optimizes one metric and
+  returns the row of `metric_table()` at it, with the criteria documented in
+  two groups by whether they know the prevalence
 - Add `auc_delong()`, DeLong's analytic variance of the ROC AUC, which
   `auc_ci()` turns into a normal interval and `auc_diff()` into a paired
   comparison between models; `auc_diff()` becomes an S3 generic to take

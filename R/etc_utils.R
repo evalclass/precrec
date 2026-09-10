@@ -175,8 +175,26 @@
       "unit", "unit", "unit", "unit", "free", "free", "unit", "free",
       "free", "unit", "free", "signed", "unit", "free", "free"
     ),
+    direction = c(
+      NA, NA, "min", "max", "max", "max", "max", "max", "max", "max",
+      "max", "max", "max", "max", "min", "min", "min", "min", NA, NA,
+      "max", "max", "max", "max", "min", "max", "min", "max", "max",
+      "max", "min"
+    ),
     stringsAsFactors = FALSE
   )
+}
+
+#
+# Whether a metric is better when it is larger or when it is smaller
+#
+# `NA` marks the four entries of the table that describe a cutoff rather
+# than score it - the score, the label and the two rates of predictions -
+# for which "best" has no meaning at all.
+#
+.metric_direction <- function(metric) {
+  tab <- .basic_metric_table()
+  tab$direction[match(metric, tab$name)]
 }
 
 #
@@ -200,6 +218,8 @@
     pnr = "predicted_negative_rate",
     rnp = "predicted_negative_rate",
     odds_ratio = "odds",
+    youden = "informedness",
+    youdens_j = "informedness",
     mutual_information = "mi"
   )
 }

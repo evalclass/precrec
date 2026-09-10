@@ -85,6 +85,28 @@ best <- tab[which.max(tab$fscore), ]
 knitr::kable(best[, c("rank", "score", "sensitivity", "precision", "fscore")])
 ```
 
+`best_cutoff()` is that line with the parts that are easy to get wrong done
+for you: which direction the metric is better in, which of several tied
+cutoffs to return, and one row per model per test dataset rather than one
+row overall.
+
+```{r}
+picked <- best_cutoff(
+  scores = P10N10$scores, labels = P10N10$labels,
+  metric = "fscore"
+)
+
+knitr::kable(
+  picked[, c("metric", "value", "rank", "score", "sensitivity", "precision")]
+)
+```
+
+It takes any of the metrics, plus `"youden"` and `"topleft"` for the two
+criteria the cutpoint literature names rather than the metric table does.
+Which one to optimize is a bigger decision than it looks, and the biggest
+one when positives are rare - see
+[Balanced and imbalanced data](howto-imbalanced-data.html).
+
 Metrics beyond the default fourteen come the same way they do from
 `evalmod()`.
 

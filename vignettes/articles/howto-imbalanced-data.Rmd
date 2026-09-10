@@ -63,6 +63,55 @@ proportion of positives: 0.5 above, 0.2 in the imbalanced case. The same
 curve means something different against a different baseline, which is why
 the two plots above cannot be compared by eye alone.
 
+## So does the threshold
+
+Everything above is about reading a curve. The last step of most real work
+is picking a point on it, and the criterion that picks it is subject to the
+same problem.
+
+Twenty-five positives in five hundred, and four of the criteria
+[best_cutoff()](../reference/best_cutoff.html) offers, on the same model:
+
+```{r}
+set.seed(42)
+rare <- create_sim_samples(1, 25, 475, "good_er")
+rdat <- mmdata(rare[["scores"]], rare[["labels"]])
+
+shown <- c(
+  "metric", "rank", "score", "sensitivity", "precision", "fscore", "mcc"
+)
+picks <- lapply(
+  c("youden", "topleft", "fscore", "mcc"),
+  function(criterion) best_cutoff(rdat, metric = criterion)[, shown]
+)
+
+knitr::kable(do.call(rbind, picks), row.names = FALSE, digits = 3)
+```
+
+Four criteria, three different thresholds, and the disagreement is not a
+rounding detail: Youden's J calls 78 of the 500 instances positive and
+`mcc` calls 22. The model is the same one and the data is the same data.
+
+Youden's J and the closest point to the top left corner are both computed
+from sensitivity and specificity, and both of those are conditioned on the
+true class, so neither knows that positives are rare. They are free to buy
+sensitivity with false positives that cost them nothing, and they do -
+precision at the cutoff Youden's J picks is half of what it is at the
+one `mcc` picks. `fscore` and `mcc` are computed from precision as well, so the
+prevalence is in the number they are maximizing.
+
+That does not make `mcc` the right answer either. It buys its precision
+with sensitivity, and whether that trade is the one you want is a question
+about the application, not about the data. What the table settles is
+narrower and more useful: **the criterion is a choice**, and on imbalanced
+data the prevalence-blind ones and the prevalence-aware ones do not land
+anywhere near each other.
+
+One caveat that applies whatever the balance: a threshold chosen on the same
+data the model was evaluated on is optimistic, by however much the criterion
+was free to chase. If the number is going to be quoted, choose it on data
+the model has not seen.
+
 ## Further reading
 
 - [The Precision-Recall Plot Is More Informative than the ROC Plot When
