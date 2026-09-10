@@ -85,6 +85,7 @@ articles:
     - "articles/howto-results-as-data"
     - "articles/howto-imbalanced-data"
     - "articles/howto-tidymodels"
+    - "articles/howto-from-proc-rocr"
   - title: Metrics
     navbar: ~
     contents:
@@ -137,6 +138,8 @@ navbar:
         href: articles/howto-imbalanced-data.html
       - text: Use precrec with tidymodels
         href: articles/howto-tidymodels.html
+      - text: Coming from pROC or ROCR
+        href: articles/howto-from-proc-rocr.html
     metrics:
       text: Metrics
       menu:

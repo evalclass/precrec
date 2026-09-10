@@ -103,7 +103,11 @@ data are imbalanced enough for the table above to matter, or when you want
 one call to give you the curves, the per-cutoff metrics and the areas
 together.
 
+If you have decided and want the call-by-call mapping rather than the
+argument, it is on [Coming from pROC or ROCR](howto-from-proc-rocr.html).
+
 ## Next
 
+- [Coming from pROC or ROCR](howto-from-proc-rocr.html)
 - [Metrics overview](metrics-overview.html)
 - [AUC and other curve summaries](metrics-auc.html)

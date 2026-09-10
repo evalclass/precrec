@@ -105,6 +105,13 @@ is returned - the threshold that calls the fewest instances positive -
 so the result is one row per model per test dataset whatever the data
 does.
 
+Rows that share a \code{score} are an exception, because they are one
+threshold seen several times rather than several cutoffs: \verb{score >= }
+that value calls all of the tied instances positive, so the \code{rank}
+reported is the last of the run and not the first. That is what
+\code{evalmod(basic_ties = "hold")} produces throughout, since it gives every
+cutoff in a run of tied scores the counts of the whole run.
+
 A metric that has no interior optimum is optimized at an end of the
 range, and no warning says so: \code{sensitivity} is largest when everything
 is called positive, and \code{specificity} when nothing is. Those are the
