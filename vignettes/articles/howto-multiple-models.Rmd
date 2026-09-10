@@ -66,5 +66,6 @@ curves2 <- evalmod(
 
 ## Next
 
+- [Uncertainty from one test set](metrics-uncertainty.html)
 - [Average over several test sets](howto-multiple-test-sets.html)
 - [Get the numbers out](howto-results-as-data.html)

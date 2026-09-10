@@ -55,8 +55,11 @@ website](https://evalclass.github.io/precrec/), in short pages:
   – the five-minute tour. Also available offline with
   `vignette("introduction", package = "precrec")`.
 - [How-to](https://evalclass.github.io/precrec/articles/howto-prepare-data.html)
-  – one page per task: several models, several test sets,
+  – one page per task: preparing data, several test sets,
   cross-validation, more than two classes, large datasets.
+- [Compare and
+  decide](https://evalclass.github.io/precrec/articles/howto-operating-point.html)
+  – which model to ship, at which threshold, and how sure you can be.
 - [Metrics](https://evalclass.github.io/precrec/articles/metrics-overview.html)
   – what each available metric means and when it misleads.
 - [Plots](https://evalclass.github.io/precrec/articles/plots-overview.html)

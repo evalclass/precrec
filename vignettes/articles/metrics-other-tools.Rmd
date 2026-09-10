@@ -92,8 +92,9 @@ Venkatraman's test for whole curves, tests at a fixed sensitivity or
 specificity, comparisons between models fitted on *different* datasets, or
 curve smoothing. DeLong's standard error and test are no longer a reason to
 switch - [`auc_delong()`](metrics-uncertainty.html) has them - and neither
-is `coords(x, "best")`, which is `best_cutoff()` here, with the criteria
-split into the ones that know the prevalence and the ones that do not.
+is `coords(x, "best")`, which is
+[`best_cutoff()`](howto-operating-point.html) here, with the criteria split
+into the ones that know the prevalence and the ones that do not.
 Reach for
 `PRROC` if your labels are weighted or soft. Reach for `yardstick` if the surrounding
 code is `tidymodels`, and for `scikit-learn` if it is Python.

@@ -70,7 +70,7 @@ is picking a point on it, and the criterion that picks it is subject to the
 same problem.
 
 Twenty-five positives in five hundred, and four of the criteria
-[best_cutoff()](../reference/best_cutoff.html) offers, on the same model:
+[best_cutoff()](howto-operating-point.html) offers, on the same model:
 
 ```{r}
 set.seed(42)
@@ -124,5 +124,6 @@ the model has not seen.
 
 ## Next
 
+- [Choose an operating point](howto-operating-point.html)
 - [Evaluate more than two classes](howto-multiclass.html)
 - [AUC and other curve summaries](metrics-auc.html)
