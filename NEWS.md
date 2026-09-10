@@ -1,5 +1,29 @@
 # precrec 0.23.0
 
+* New `best_cutoff()` picks the cutoff that optimizes one metric, in the
+  manner of `pROC::coords(x, "best")`. It returns a row of `metric_table()`
+  together with the criterion that chose it, so every other metric is there
+  to be read at the same cutoff, and one row per model per test dataset.
+
+  `metric` takes any of the metrics `evalmod()` calculates, plus `"youden"`
+  and `"topleft"` for the two criteria the cutpoint literature names rather
+  than the metric table does. The direction is a property of the metric and
+  so is not an argument, and a tie is broken toward the cutoff that calls
+  the fewest instances positive.
+
+  The criteria are documented in two groups rather than as six
+  interchangeable options. Youden's J and the closest point to the top left
+  corner are computed from sensitivity and specificity alone, both of which
+  are conditioned on the true class, so neither knows the prevalence and on
+  imbalanced data both can choose a cutoff at a precision no one would
+  deploy. `fscore`, `mcc` and a `cost` weighted by `cost_fp` and `cost_fn`
+  are computed from precision as well. The default is `"youden"` because
+  that is what a caller arriving from another package expects, and the
+  reference page says in the same breath when not to use it.
+
+  `youden` is also accepted as an alias for `informedness` wherever
+  `evalmod(metrics = )` takes metric names.
+
 * New `auc_delong()` calculates the ROC AUC and its variance analytically,
   by DeLong's method, rather than by resampling. `auc_ci()` reads a normal
   interval off it and `auc_diff()` compares models through its covariance
