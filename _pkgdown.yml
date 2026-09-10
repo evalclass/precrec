@@ -31,6 +31,8 @@ reference:
     contents:
     - as.data.frame
     - as.data.table
+    - metric_table
+    - best_cutoff
     - auc
     - pauc
   - title: Partial AUC and partial curve
@@ -40,6 +42,7 @@ reference:
     contents:
     - auc_ci
     - auc_boot
+    - auc_delong
     - auc_diff
   - title: Precision-recall break-even point
     contents:
@@ -74,7 +77,6 @@ articles:
     navbar: ~
     contents:
     - "articles/howto-prepare-data"
-    - "articles/howto-multiple-models"
     - "articles/howto-multiple-test-sets"
     - "articles/howto-cross-validation"
     - "articles/howto-multiclass"
@@ -82,6 +84,14 @@ articles:
     - "articles/howto-results-as-data"
     - "articles/howto-imbalanced-data"
     - "articles/howto-tidymodels"
+    - "articles/howto-from-proc-rocr"
+  - title: Compare and decide
+    navbar: ~
+    contents:
+    - "articles/howto-multiple-models"
+    - "articles/metrics-uncertainty"
+    - "articles/howto-operating-point"
+    - "articles/metrics-classification-report"
   - title: Metrics
     navbar: ~
     contents:
@@ -91,8 +101,6 @@ articles:
     - "articles/metrics-ranking-cost"
     - "articles/metrics-auc"
     - "articles/metrics-probability"
-    - "articles/metrics-classification-report"
-    - "articles/metrics-uncertainty"
     - "articles/metrics-other-tools"
   - title: Plots
     navbar: ~
@@ -107,7 +115,7 @@ articles:
 
 navbar:
   structure:
-    left: [intro, howto, metrics, plots, reference, news]
+    left: [intro, howto, decide, metrics, plots, reference, news]
     right: [search, github]
   components:
     intro:
@@ -118,8 +126,6 @@ navbar:
       menu:
       - text: Prepare your data
         href: articles/howto-prepare-data.html
-      - text: Compare several models
-        href: articles/howto-multiple-models.html
       - text: Average over several test sets
         href: articles/howto-multiple-test-sets.html
       - text: Evaluate cross-validation folds
@@ -134,6 +140,20 @@ navbar:
         href: articles/howto-imbalanced-data.html
       - text: Use precrec with tidymodels
         href: articles/howto-tidymodels.html
+      - text: Coming from pROC or ROCR
+        href: articles/howto-from-proc-rocr.html
+    decide:
+      text: Compare and decide
+      menu:
+      - text: Compare several models
+        href: articles/howto-multiple-models.html
+      - text: Uncertainty from one test set
+        href: articles/metrics-uncertainty.html
+      - text: -------
+      - text: Choose an operating point
+        href: articles/howto-operating-point.html
+      - text: Classification report
+        href: articles/metrics-classification-report.html
     metrics:
       text: Metrics
       menu:
@@ -151,10 +171,6 @@ navbar:
         href: articles/metrics-auc.html
       - text: Probability-based metrics
         href: articles/metrics-probability.html
-      - text: Classification report
-        href: articles/metrics-classification-report.html
-      - text: Uncertainty from one test set
-        href: articles/metrics-uncertainty.html
       - text: -------
       - text: Comparison with other tools
         href: articles/metrics-other-tools.html

@@ -1,3 +1,111 @@
+# precrec 0.23.0
+
+* Regroup the website. A **Compare and decide** section now collects the
+  four pages that answer "which model do I ship, and at what threshold" -
+  comparing several models, uncertainty from one test set, choosing an
+  operating point, and the classification report - which were previously
+  split between *How-to* and *Metrics* on the grounds of what they returned
+  rather than what they were for. *Metrics* is left as what it already
+  effectively was, a catalog of what each number means, and *Plots* is
+  unchanged. No page moved and no URL changed; the grouping is in the menus
+  only.
+
+* Add a website page, *Choose an operating point*, which `best_cutoff()`
+  did not have: it was documented inside *Get the numbers out*, a page about
+  extracting data, and argued about inside *Balanced and imbalanced data*, a
+  page about reading curves. The new page covers the criteria and the two
+  groups they fall into, weighting the two mistakes with `cost_fp` and
+  `cost_fn` - including why equal costs are a strong claim rather than a
+  neutral one when positives are rare - tied scores, the one row per model
+  per test dataset and the spread across them, and the fact that a cutoff
+  chosen on the data it is scored on is optimistic and that nothing here
+  corrects for that.
+
+* Add a website page, *Coming from `pROC` or `ROCR`*, translating the two
+  packages call by call now that `metric_table()` and `best_cutoff()` make
+  the table honest. Every equivalence on it was checked against both
+  packages, including the three places the answers differ: the
+  precision-recall area, which `ROCR` reads off straight lines between raw
+  points; tied scores, which the other two collapse and
+  `evalmod(basic_ties = "hold")` matches; the threshold itself, which
+  `pROC` names by a midpoint and `precrec` by an observed score; and the
+  standardized partial AUC, where `spaucs` is the fraction of the region
+  the curve covered and `pROC` rescales chance to `0.5` instead - with the
+  conversion between them. What has no equivalent is listed rather than
+  left to be discovered.
+
+* New `best_cutoff()` picks the cutoff that optimizes one metric, in the
+  manner of `pROC::coords(x, "best")`. It returns a row of `metric_table()`
+  together with the criterion that chose it, so every other metric is there
+  to be read at the same cutoff, and one row per model per test dataset.
+
+  `metric` takes any of the metrics `evalmod()` calculates, plus `"youden"`
+  and `"topleft"` for the two criteria the cutpoint literature names rather
+  than the metric table does. The direction is a property of the metric and
+  so is not an argument, and a tie is broken toward the cutoff that calls
+  the fewest instances positive - except between rows that share a `score`,
+  which are one threshold seen several times rather than several cutoffs,
+  and report the rank that threshold actually produces.
+
+  The criteria are documented in two groups rather than as six
+  interchangeable options. Youden's J and the closest point to the top left
+  corner are computed from sensitivity and specificity alone, both of which
+  are conditioned on the true class, so neither knows the prevalence and on
+  imbalanced data both can choose a cutoff at a precision no one would
+  deploy. `fscore`, `mcc` and a `cost` weighted by `cost_fp` and `cost_fn`
+  are computed from precision as well. The default is `"youden"` because
+  that is what a caller arriving from another package expects, and the
+  reference page says in the same breath when not to use it.
+
+  `youden` is also accepted as an alias for `informedness` wherever
+  `evalmod(metrics = )` takes metric names.
+
+* New `auc_delong()` calculates the ROC AUC and its variance analytically,
+  by DeLong's method, rather than by resampling. `auc_ci()` reads a normal
+  interval off it and `auc_diff()` compares models through its covariance
+  matrix, so it is the exact counterpart of `auc_boot()`: same input, same
+  two functions reading the result, no `boot_n`, no seed, nothing that
+  moves between two runs, and no floor under the p-value.
+
+  The ROC AUC is a Mann-Whitney U statistic, so its variance follows from
+  the structural components of that statistic. Those components are read
+  off midranks rather than off all `m * n` comparisons, and off the ranks
+  `precrec` has already assigned, so ties and `NA` scores are handled
+  exactly as they are everywhere else and the AUC reported is the one
+  `auc()` reports.
+
+  There is no precision-recall counterpart, and the result carries ROC rows
+  only. The precision-recall AUC is not a U statistic and the interpolated
+  area is further from being one still, so `auc_boot()` remains the answer
+  there - and remains the safer reading on a small or badly imbalanced test
+  set, since DeLong's variance is an asymptotic one.
+
+  `auc_diff()` is now an S3 generic, dispatching on whichever of the two
+  objects it is given. Existing calls are unaffected.
+
+* New `metric_table()` returns every basic evaluation metric at every
+  cutoff, one row per cutoff and one column per metric - what
+  `pROC::coords()` and the cutoff slots of a `ROCR::performance` object
+  give, and the shape most work downstream of a curve needs: pick an
+  operating point, hand a threshold to production code, tabulate a report,
+  compute a metric `precrec` does not.
+
+  Nothing new is calculated. `evalmod(mode = "basic")` has always kept the
+  score and the label at every cutoff, and `as.data.frame()` has always
+  returned them - as two of the fourteen values of its `type` column,
+  alongside the metrics rather than indexing them. The long form is right
+  for plotting, which is what it was built for, and wrong for the question
+  "what happens if I cut here". `metric_table()` is that same data on its
+  side, through the same converter, so the two cannot drift apart.
+
+  It takes the doors `evalmod()` takes - an `mmdata()` object, or `scores`
+  and `labels` - and also a `mode = "basic"` object that has already been
+  calculated, since reusing one is the point. `rank` counts the instances
+  called positive and `normalized_rank` is that divided by the number of
+  instances, the x axis of the basic metric plots. Rows are per test
+  dataset and nothing is averaged across them, because a cutoff belongs to
+  the dataset it was read off.
+
 # precrec 0.22.2
 
 * The two columns `auc_diff()` gained in 0.22.1 are renamed. `statistic`

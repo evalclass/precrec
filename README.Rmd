@@ -52,8 +52,11 @@ website](https://evalclass.github.io/precrec/), in short pages:
   -- the five-minute tour. Also available offline with
   `vignette("introduction", package = "precrec")`.
 - [How-to](https://evalclass.github.io/precrec/articles/howto-prepare-data.html)
-  -- one page per task: several models, several test sets, cross-validation,
+  -- one page per task: preparing data, several test sets, cross-validation,
   more than two classes, large datasets.
+- [Compare and
+  decide](https://evalclass.github.io/precrec/articles/howto-operating-point.html)
+  -- which model to ship, at which threshold, and how sure you can be.
 - [Metrics](https://evalclass.github.io/precrec/articles/metrics-overview.html)
   -- what each available metric means and when it misleads.
 - [Plots](https://evalclass.github.io/precrec/articles/plots-overview.html)
@@ -114,10 +117,13 @@ devtools::install_github("evalclass/precrec")
 | `prob_metrics` | Calculate the Brier score, the RMSE and the log loss |
 | `prob_metrics_ci` | Calculate CIs of the Brier score, the RMSE and the log loss |
 | `metric_curve` | Draw one evaluation metric against another |
+| `metric_table` | Get every evaluation metric at every cutoff |
+| `best_cutoff` | Pick the cutoff that optimizes one evaluation metric |
 | `prbe` | Find the precision-recall break-even point |
 | `average_precision` | Calculate the step estimator of the PRC area |
 | `classification_report` | Report precision, recall and F-score per class at a threshold |
 | `auc_boot` | Bootstrap the AUC of a single test set |
+| `auc_delong` | Analytic standard error of the ROC AUC (DeLong) |
 | `auc_diff` | Compare the AUCs of two models on the same resamples |
 
 Ten S3 generics work on the objects `evalmod` and `metric_curve` return.

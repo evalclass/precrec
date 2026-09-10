@@ -14,6 +14,11 @@
 #'
 #'    See the **Value** section of [evalmod()] for more details.
 #'
+#'   It also accepts the two objects that describe the uncertainty of a
+#'   single test set: an `aucboot` object from [auc_boot()], which gives a
+#'   percentile interval, and an `aucdelong` object from [auc_delong()],
+#'   which gives a normal interval around DeLong's analytic standard error.
+#'
 #' @param alpha A numeric value of the significant level (default: 0.05)
 #'
 #' @param dtype A string to specify the distribution used for CI calculation.
@@ -28,7 +33,7 @@
 #'
 #' @seealso [evalmod()] for generating `S3` objects with
 #'   performance evaluation metrics. [auc()] for retrieving a dataset
-#'   of AUCs.
+#'   of AUCs. [auc_boot()] and [auc_delong()] for a single test set.
 #'
 #' @examples
 #'
@@ -199,4 +204,39 @@ auc_ci.aucboot <- function(curves, alpha = 0.05, dtype = NULL) {
   }
 
   .as_plain_df(.rbind_parts(parts))
+}
+
+#
+# Read a normal interval off DeLong's standard error
+#
+#' @rdname auc_ci
+#' @export
+auc_ci.aucdelong <- function(curves, alpha = 0.05, dtype = NULL) {
+  # === Validate input arguments ===
+  .assert_number(alpha, "alpha", min = 0, max = 1)
+  if (!is.null(dtype)) {
+    .stop_invalid_arg(
+      paste(
+        "{.arg dtype} does not apply to a DeLong interval. The variance",
+        "is an asymptotic one, so the interval that goes with it is the",
+        "normal one and there are no degrees of freedom for a t."
+      ),
+      arg = "dtype"
+    )
+  }
+
+  q <- stats::qnorm(1 - alpha / 2)
+  error <- curves[["error"]]
+
+  # AUCs cannot leave [0, 1], so the interval is clipped to it - the same
+  # clipping `auc_ci.aucs()` does, and for the same reason
+  .as_plain_df(data.table::data.table(
+    modnames = curves[["modnames"]],
+    curvetypes = curves[["curvetypes"]],
+    aucs = curves[["aucs"]],
+    error = error,
+    lower_bound = pmax(0, curves[["aucs"]] - q * error),
+    upper_bound = pmin(1, curves[["aucs"]] + q * error),
+    n = attr(curves, "np") + attr(curves, "nn")
+  ))
 }

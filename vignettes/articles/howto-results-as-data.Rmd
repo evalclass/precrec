@@ -57,12 +57,81 @@ aucs <- auc(curves)
 knitr::kable(subset(aucs, curvetypes == "PRC"))
 ```
 
-## Basic metrics per cutoff
+## Every metric at every cutoff
 
-`mode = "basic"` gives the per-cutoff metrics rather than the curves.
+`metric_table()` returns one row per cutoff and one column per metric. This
+is the table `pROC::coords()` and `ROCR`'s cutoff slots give, and the shape
+most work downstream of a curve needs.
 
 ```{r}
-points <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
+tab <- metric_table(scores = P10N10$scores, labels = P10N10$labels)
+
+head(tab)
+```
+
+A row is the cutoff that calls the top `rank` instances positive, so `score`
+is the score of the instance at that rank and the rule the row stands for is
+`score >= that value`. `normalized_rank` is `rank / n`, the x axis of the
+[basic metric plots](plots-basic-metrics.html). The first row calls nothing
+positive, which is why its `score` and `label` are `NA` while its metrics are
+not.
+
+Because it is a plain data frame, the question that usually follows is
+ordinary R.
+
+```{r}
+best <- tab[which.max(tab$fscore), ]
+
+knitr::kable(best[, c("rank", "score", "sensitivity", "precision", "fscore")])
+```
+
+`best_cutoff()` is that line with the parts that are easy to get wrong done
+for you: which direction the metric is better in, which of several tied
+cutoffs to return, and one row per model per test dataset rather than one
+row overall.
+
+```{r}
+picked <- best_cutoff(
+  scores = P10N10$scores, labels = P10N10$labels,
+  metric = "fscore"
+)
+
+knitr::kable(
+  picked[, c("metric", "value", "rank", "score", "sensitivity", "precision")]
+)
+```
+
+It takes any of the metrics, plus `"youden"` and `"topleft"` for the two
+criteria the cutpoint literature names rather than the metric table does.
+Which one to optimize is a bigger decision than it looks, and the biggest
+one when positives are rare - see
+[Choose an operating point](howto-operating-point.html).
+
+Metrics beyond the default fourteen come the same way they do from
+`evalmod()`.
+
+```{r}
+lifted <- metric_table(
+  scores = P10N10$scores, labels = P10N10$labels,
+  metrics = c("lift", "jaccard")
+)
+
+head(lifted[, c("rank", "score", "precision", "lift", "jaccard")])
+```
+
+With several test datasets there is one block of rows per dataset and
+nothing is averaged across them - a cutoff belongs to the dataset it was
+read off. Build the object with `raw_curves = TRUE` if you pass one in
+rather than letting `metric_table()` build it.
+
+## The same metrics, long
+
+`mode = "basic"` on its own gives the long form, which is what the plots
+use.
+
+```{r}
+points <- evalmod(
+  scores = P10N10$scores, labels = P10N10$labels,
   mode = "basic"
 )
 
@@ -70,7 +139,18 @@ head(as.data.frame(points))
 ```
 
 The `x` column is the normalized rank and `y` the value of the metric named
-in `type`.
+in `type`. It is the same data `metric_table()` returns, on its side. Reach
+for this one to plot and for the table to decide.
+
+An object that has already been calculated can be passed straight in, which
+saves calculating it twice.
+
+```{r}
+identical(
+  metric_table(points),
+  metric_table(scores = P10N10$scores, labels = P10N10$labels)
+)
+```
 
 ## Feeding ggplot2 directly
 
@@ -79,5 +159,6 @@ in `type`.
 
 ## Next
 
+- [Choose an operating point](howto-operating-point.html)
 - [Metrics overview](metrics-overview.html)
 - [Plots overview](plots-overview.html)

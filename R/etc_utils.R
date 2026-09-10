@@ -175,8 +175,26 @@
       "unit", "unit", "unit", "unit", "free", "free", "unit", "free",
       "free", "unit", "free", "signed", "unit", "free", "free"
     ),
+    direction = c(
+      NA, NA, "min", "max", "max", "max", "max", "max", "max", "max",
+      "max", "max", "max", "max", "min", "min", "min", "min", NA, NA,
+      "max", "max", "max", "max", "min", "max", "min", "max", "max",
+      "max", "min"
+    ),
     stringsAsFactors = FALSE
   )
+}
+
+#
+# Whether a metric is better when it is larger or when it is smaller
+#
+# `NA` marks the four entries of the table that describe a cutoff rather
+# than score it - the score, the label and the two rates of predictions -
+# for which "best" has no meaning at all.
+#
+.metric_direction <- function(metric) {
+  tab <- .basic_metric_table()
+  tab$direction[match(metric, tab$name)]
 }
 
 #
@@ -200,6 +218,8 @@
     pnr = "predicted_negative_rate",
     rnp = "predicted_negative_rate",
     odds_ratio = "odds",
+    youden = "informedness",
+    youdens_j = "informedness",
     mutual_information = "mi"
   )
 }
@@ -551,5 +571,24 @@
   list(
     avg_np = avg_np, avg_nn = avg_nn, is_consistant = is_consistant,
     prc_base = prc_base
+  )
+}
+
+#
+# The Wald p-value, `2 * pnorm(-abs(z))` two-sided, one tail otherwise
+#
+# Shared by the two Wald tests in the package: the one `auc_diff()` reads
+# off a bootstrap standard deviation and the one it reads off DeLong's
+# analytic standard error. Only the standard error underneath them differs.
+#
+.wald_p_value <- function(z_value, alternative) {
+  if (is.na(z_value)) {
+    return(NA_real_)
+  }
+
+  switch(alternative,
+    greater = stats::pnorm(-z_value),
+    less = stats::pnorm(z_value),
+    two.sided = 2 * stats::pnorm(-abs(z_value))
   )
 }

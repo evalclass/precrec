@@ -1,9 +1,9 @@
-## Version 0.22.2
+## Version 0.23.0
 
-An update of the published package `precrec` (0.14.5 -> 0.22.2). 0.15.0,
+An update of the published package `precrec` (0.14.5 -> 0.23.0). 0.15.0,
 0.16.0, 0.16.1, 0.16.2, 0.17.0, 0.18.0, 0.19.0, 0.20.0, 0.21.0, 0.21.1,
-0.21.2, 0.22.0 and 0.22.1 were prepared but not submitted, so this release
-carries all fourteen sets of changes.
+0.21.2, 0.22.0, 0.22.1 and 0.22.2 were prepared but not submitted, so this
+release carries all fifteen sets of changes.
 
 - Support datasets with more than two classes by one-vs-rest decomposition
 - Add the evaluation metrics `ROCR` provides, opt-in through
@@ -49,6 +49,17 @@ carries all fourteen sets of changes.
   columns - together with an `alternative` argument for the tail it and the
   percentile p-value are read from; the percentile p-value `auc_diff()` has
   always reported is unchanged
+- Add `metric_table()`, which returns every basic evaluation metric at
+  every cutoff as one row per cutoff and one column per metric; it
+  reshapes results `evalmod(mode = "basic")` already produces and
+  calculates nothing new
+- Add `best_cutoff()`, which picks the cutoff that optimizes one metric and
+  returns the row of `metric_table()` at it, with the criteria documented in
+  two groups by whether they know the prevalence
+- Add `auc_delong()`, DeLong's analytic variance of the ROC AUC, which
+  `auc_ci()` turns into a normal interval and `auc_diff()` into a paired
+  comparison between models; `auc_diff()` becomes an S3 generic to take
+  both it and the existing bootstrap object
 
 `NEWS.md` has the full list.
 
