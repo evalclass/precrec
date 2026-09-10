@@ -24,6 +24,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # pkgdown renders every *.md at the repo root into a page of the site,
+      # skipping only a list hardcoded in pkgdown:::package_mds() - README,
+      # NEWS, LICENSE, the issue templates and cran-comments. There is no
+      # config hook, so CLAUDE.md became a public page at /CLAUDE.html.
+      # Delete it from the checkout instead of deleting the built page:
+      # deploy_to_branch() builds and pushes in one call, so there is no
+      # step between the two to clean up in. Anything else added at the root
+      # with a .md extension will need the same treatment.
+      - name: Keep internal notes off the website
+        run: rm -f CLAUDE.md
+
       - uses: r-lib/actions/setup-tinytex@v2
 
       - uses: r-lib/actions/setup-pandoc@v2
