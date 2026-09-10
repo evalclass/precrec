@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,7 +42,6 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-how-to" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">How-to</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-how-to">
 <li><a class="dropdown-item" href="articles/howto-prepare-data.html">Prepare your data</a></li>
-    <li><a class="dropdown-item" href="articles/howto-multiple-models.html">Compare several models</a></li>
     <li><a class="dropdown-item" href="articles/howto-multiple-test-sets.html">Average over several test sets</a></li>
     <li><a class="dropdown-item" href="articles/howto-cross-validation.html">Evaluate cross-validation folds</a></li>
     <li><a class="dropdown-item" href="articles/howto-multiclass.html">Evaluate more than two classes</a></li>
@@ -50,6 +49,17 @@
     <li><a class="dropdown-item" href="articles/howto-results-as-data.html">Get the numbers out</a></li>
     <li><a class="dropdown-item" href="articles/howto-imbalanced-data.html">Balanced and imbalanced data</a></li>
     <li><a class="dropdown-item" href="articles/howto-tidymodels.html">Use precrec with tidymodels</a></li>
+    <li><a class="dropdown-item" href="articles/howto-from-proc-rocr.html">Coming from pROC or ROCR</a></li>
+  </ul>
+</li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-compare-and-decide" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Compare and decide</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-compare-and-decide">
+<li><a class="dropdown-item" href="articles/howto-multiple-models.html">Compare several models</a></li>
+    <li><a class="dropdown-item" href="articles/metrics-uncertainty.html">Uncertainty from one test set</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="articles/howto-operating-point.html">Choose an operating point</a></li>
+    <li><a class="dropdown-item" href="articles/metrics-classification-report.html">Classification report</a></li>
   </ul>
 </li>
 <li class="nav-item dropdown">
@@ -63,8 +73,6 @@
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="articles/metrics-auc.html">AUC and other curve summaries</a></li>
     <li><a class="dropdown-item" href="articles/metrics-probability.html">Probability-based metrics</a></li>
-    <li><a class="dropdown-item" href="articles/metrics-classification-report.html">Classification report</a></li>
-    <li><a class="dropdown-item" href="articles/metrics-uncertainty.html">Uncertainty from one test set</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="articles/metrics-other-tools.html">Comparison with other tools</a></li>
   </ul>
@@ -154,7 +162,9 @@ ROC and precision-recall curves of the P10N10 test dataset, drawn side by side
 <li>
 <a href="https://evalclass.github.io/precrec/articles/introduction.html">Get started</a> – the five-minute tour. Also available offline with <code><a href="articles/introduction.html">vignette("introduction", package = "precrec")</a></code>.</li>
 <li>
-<a href="https://evalclass.github.io/precrec/articles/howto-prepare-data.html">How-to</a> – one page per task: several models, several test sets, cross-validation, more than two classes, large datasets.</li>
+<a href="https://evalclass.github.io/precrec/articles/howto-prepare-data.html">How-to</a> – one page per task: preparing data, several test sets, cross-validation, more than two classes, large datasets.</li>
+<li>
+<a href="https://evalclass.github.io/precrec/articles/howto-operating-point.html">Compare and decide</a> – which model to ship, at which threshold, and how sure you can be.</li>
 <li>
 <a href="https://evalclass.github.io/precrec/articles/metrics-overview.html">Metrics</a> – what each available metric means and when it misleads.</li>
 <li>
@@ -234,6 +244,14 @@ ROC and precision-recall curves of the P10N10 test dataset, drawn side by side
 <td>Draw one evaluation metric against another</td>
 </tr>
 <tr>
+<td><code>metric_table</code></td>
+<td>Get every evaluation metric at every cutoff</td>
+</tr>
+<tr>
+<td><code>best_cutoff</code></td>
+<td>Pick the cutoff that optimizes one evaluation metric</td>
+</tr>
+<tr>
 <td><code>prbe</code></td>
 <td>Find the precision-recall break-even point</td>
 </tr>
@@ -248,6 +266,10 @@ ROC and precision-recall curves of the P10N10 test dataset, drawn side by side
 <tr>
 <td><code>auc_boot</code></td>
 <td>Bootstrap the AUC of a single test set</td>
+</tr>
+<tr>
+<td><code>auc_delong</code></td>
+<td>Analytic standard error of the ROC AUC (DeLong)</td>
 </tr>
 <tr>
 <td><code>auc_diff</code></td>

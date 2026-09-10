@@ -9,7 +9,7 @@ with different performance levels."><meta property="og:image" content="https://e
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,7 +21,6 @@ with different performance levels."><meta property="og:image" content="https://e
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-how-to" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">How-to</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-how-to"><li><a class="dropdown-item" href="../articles/howto-prepare-data.html">Prepare your data</a></li>
-    <li><a class="dropdown-item" href="../articles/howto-multiple-models.html">Compare several models</a></li>
     <li><a class="dropdown-item" href="../articles/howto-multiple-test-sets.html">Average over several test sets</a></li>
     <li><a class="dropdown-item" href="../articles/howto-cross-validation.html">Evaluate cross-validation folds</a></li>
     <li><a class="dropdown-item" href="../articles/howto-multiclass.html">Evaluate more than two classes</a></li>
@@ -29,6 +28,15 @@ with different performance levels."><meta property="og:image" content="https://e
     <li><a class="dropdown-item" href="../articles/howto-results-as-data.html">Get the numbers out</a></li>
     <li><a class="dropdown-item" href="../articles/howto-imbalanced-data.html">Balanced and imbalanced data</a></li>
     <li><a class="dropdown-item" href="../articles/howto-tidymodels.html">Use precrec with tidymodels</a></li>
+    <li><a class="dropdown-item" href="../articles/howto-from-proc-rocr.html">Coming from pROC or ROCR</a></li>
+  </ul></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-compare-and-decide" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Compare and decide</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-compare-and-decide"><li><a class="dropdown-item" href="../articles/howto-multiple-models.html">Compare several models</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-uncertainty.html">Uncertainty from one test set</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/howto-operating-point.html">Choose an operating point</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-classification-report.html">Classification report</a></li>
   </ul></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-metrics" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Metrics</button>
@@ -40,8 +48,6 @@ with different performance levels."><meta property="og:image" content="https://e
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/metrics-auc.html">AUC and other curve summaries</a></li>
     <li><a class="dropdown-item" href="../articles/metrics-probability.html">Probability-based metrics</a></li>
-    <li><a class="dropdown-item" href="../articles/metrics-classification-report.html">Classification report</a></li>
-    <li><a class="dropdown-item" href="../articles/metrics-uncertainty.html">Uncertainty from one test set</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/metrics-other-tools.html">Comparison with other tools</a></li>
   </ul></li>
@@ -170,7 +176,7 @@ with the following items.</p><ul><li><p>scores: a list of numeric vectors</p></l
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ scores  :List of 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ :List of 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:20] -0.102 -1.393 0.179 -0.904 -0.786 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:20] 0.2985 0.0636 0.4066 -0.2822 1.534 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ labels  : num [1:20] 1 1 1 1 1 1 1 1 1 1 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ modnames: chr "random"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ dsids   : int 1</span>
@@ -187,11 +193,11 @@ with the following items.</p><ul><li><p>scores: a list of numeric vectors</p></l
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ scores  :List of 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ :List of 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:30] 0.00684 1.01706 -2.38566 -0.4368 0.2238 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:30] 0.974 0.971 0.887 0.854 0.735 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:30] 0.995 -0.53 -0.14 -1.954 1.226 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:30] 0.854 0.981 0.79 0.764 0.94 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ :List of 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:30] -0.204 0.453 -0.814 -1.12 0.62 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:30] 0.541 0.958 0.894 0.861 0.89 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:30] 0.75622 1.04398 -0.03706 -0.00101 -0.61282 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:30] 0.897 0.517 0.851 0.636 0.748 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ labels  : num [1:30] 1 1 1 1 1 1 1 1 1 1 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ modnames: chr [1:4] "random" "poor_er" "random" "poor_er"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ dsids   : int [1:4] 1 1 2 2</span>
@@ -208,22 +214,22 @@ with the following items.</p><ul><li><p>scores: a list of numeric vectors</p></l
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ scores  :List of 3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:10] -0.782 -2.273 -0.441 1.434 0.315 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:10] 0.754 0.783 0.817 0.773 0.805 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:10] 0.6451 0.3523 0.9775 0.1324 0.0533 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:10] 3.83 2.15 3.66 4.6 2.65 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:10] 1.48 -0.348 0.167 -0.729 1.345 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:10] 0.363 0.771 0.715 0.662 0.639 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:10] 0.185 0.257 0.396 0.824 0.356 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:10] 2.93 1.79 4.45 3.25 3.76 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:10] 1 1 1 1 1 0 0 0 0 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:10] -1.01 1.798 -0.449 0.533 0.301 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:10] 0.965 0.921 0.824 0.905 0.37 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:10] 0.0189 0.5185 0.4495 0.8216 0.9576 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:10] 3.32 2.65 2.21 2.18 3.37 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:10] 1.269 1.348 -0.174 -0.374 -0.758 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:10] 0.475 0.654 0.491 0.594 0.807 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:10] 0.9517 0.7369 0.0151 0.826 0.9134 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:10] 2.08 1.29 2 2.19 4.56 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:10] 1 1 1 1 1 0 0 0 0 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:10] 2.364 0.904 1.659 -1.155 0.795 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:10] 0.538 0.76 0.914 0.826 0.878 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:10] 0.0208 0.1253 0.2542 0.0158 0.2213 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:10] 2.7 1.84 1.44 3.1 4.33 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:10] -0.9849 1.2172 -1.3595 -0.0165 0.5207 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:10] 0.692 0.804 0.721 0.461 0.713 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:10] 0.0487 0.7394 0.7452 0.6935 0.0906 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:10] 2.29 1.33 2.6 2.04 3.65 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ : num [1:10] 1 1 1 1 1 0 0 0 0 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ labels  : num [1:10] 1 1 1 1 1 0 0 0 0 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ modnames: chr [1:15] "random" "poor_er" "good_er" "excel" ...</span>

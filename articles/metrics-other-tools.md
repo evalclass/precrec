@@ -7,7 +7,7 @@ rather than on an interface.
 | Tool | What it is for | Against `precrec` |
 |----|----|----|
 | `ROCR` (R) | Cutoff metrics and their plots | `precrec` covers its metrics and accepts its names; see below |
-| `pROC` (R) | ROC analysis and inference | Analytic DeLong intervals and `roc.test()`; no precision-recall curves |
+| `pROC` (R) | ROC analysis and inference | More ways to compare two ROC curves, and ROC curve smoothing; no precision-recall curves |
 | `PRROC` (R) | Precision-recall curves | Also integrates them properly, and takes weighted or soft labels, which `precrec` does not |
 | `yardstick` (R) | Metrics inside `tidymodels` | Tibble in, tibble out, and fits `tune` and `workflows`; `precrec` reached name parity in 0.17.0 |
 | `scikit-learn` (Python) | General model evaluation | The reference in Python; [`classification_report()`](https://evalclass.github.io/precrec/reference/classification_report.md) mirrors its report |
@@ -99,21 +99,32 @@ metric table.
 
 ## When to use something else
 
-Reach for `pROC` if you need ROC inference and nothing else: its DeLong
-intervals are analytic where
-[`auc_boot()`](https://evalclass.github.io/precrec/articles/metrics-uncertainty.md)
-resamples, and it has more ways to compare two curves. Reach for `PRROC`
-if your labels are weighted or soft. Reach for `yardstick` if the
-surrounding code is `tidymodels`, and for `scikit-learn` if it is
-Python.
+Reach for `pROC` if you need ROC inference `precrec` does not have:
+Venkatraman’s test for whole curves, tests at a fixed sensitivity or
+specificity, comparisons between models fitted on *different* datasets,
+or curve smoothing. DeLong’s standard error and test are no longer a
+reason to switch -
+[`auc_delong()`](https://evalclass.github.io/precrec/articles/metrics-uncertainty.md)
+has them - and neither is `coords(x, "best")`, which is
+[`best_cutoff()`](https://evalclass.github.io/precrec/articles/howto-operating-point.md)
+here, with the criteria split into the ones that know the prevalence and
+the ones that do not. Reach for `PRROC` if your labels are weighted or
+soft. Reach for `yardstick` if the surrounding code is `tidymodels`, and
+for `scikit-learn` if it is Python.
 
 Reach for `precrec` when the precision-recall curve is the point, when
 the data are imbalanced enough for the table above to matter, or when
 you want one call to give you the curves, the per-cutoff metrics and the
 areas together.
 
+If you have decided and want the call-by-call mapping rather than the
+argument, it is on [Coming from pROC or
+ROCR](https://evalclass.github.io/precrec/articles/howto-from-proc-rocr.md).
+
 ## Next
 
+- [Coming from pROC or
+  ROCR](https://evalclass.github.io/precrec/articles/howto-from-proc-rocr.md)
 - [Metrics
   overview](https://evalclass.github.io/precrec/articles/metrics-overview.md)
 - [AUC and other curve

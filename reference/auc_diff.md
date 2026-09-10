@@ -1,13 +1,23 @@
-# Compare bootstrapped AUCs between models
+# Compare AUCs between models
 
-`auc_diff` takes the resamples of
-[`auc_boot()`](https://evalclass.github.io/precrec/reference/auc_boot.md)
-and reports, for every pair of models and every curve type, the
-difference between their AUCs with a confidence interval around it.
+`auc_diff` reports, for every pair of models, the difference between
+their AUCs with a confidence interval around it. It reads either of the
+two estimates of uncertainty the package offers for a single test set:
+the resamples of
+[`auc_boot()`](https://evalclass.github.io/precrec/reference/auc_boot.md),
+which cover both curve types, or the analytic covariance of
+[`auc_delong()`](https://evalclass.github.io/precrec/reference/auc_delong.md),
+which covers the ROC AUC exactly.
 
 ## Usage
 
 ``` r
+auc_diff(x, alpha = NULL, alternative = NULL)
+
+# S3 method for class 'aucboot'
+auc_diff(x, alpha = 0.05, alternative = "two.sided")
+
+# S3 method for class 'aucdelong'
 auc_diff(x, alpha = 0.05, alternative = "two.sided")
 ```
 
@@ -16,7 +26,9 @@ auc_diff(x, alpha = 0.05, alternative = "two.sided")
 - x:
 
   An `aucboot` object from
-  [`auc_boot()`](https://evalclass.github.io/precrec/reference/auc_boot.md).
+  [`auc_boot()`](https://evalclass.github.io/precrec/reference/auc_boot.md)
+  or an `aucdelong` object from
+  [`auc_delong()`](https://evalclass.github.io/precrec/reference/auc_delong.md).
 
 - alpha:
 
@@ -28,12 +40,14 @@ auc_diff(x, alpha = 0.05, alternative = "two.sided")
   The side of zero the alternative hypothesis is on, one of
   `"two.sided"`, `"greater"` and `"less"`. `"greater"` tests whether the
   first model of the pair has the larger AUC. It selects the tail of
-  both the percentile and the Wald p-value, and leaves `z_values` alone;
-  the interval stays two-sided whatever it is set to.
+  every p-value in the result and leaves `z_values` alone; the interval
+  stays two-sided whatever it is set to.
 
 ## Value
 
-A data frame with one row per curve type and pair of models:
+A data frame with one row per curve type and pair of models.
+
+From an `aucboot` object:
 
 |  |  |
 |----|----|
@@ -46,18 +60,57 @@ A data frame with one row per curve type and pair of models:
 | `p_values_wald` | Wald p-value, see below |
 | `n` | Resamples the row is based on |
 
+From an `aucdelong` object, where there is one p-value rather than two
+and only the ROC AUC to report:
+
+|  |  |
+|----|----|
+| `curvetypes` | ROC |
+| `modnames1`, `modnames2` | The pair, in the order compared |
+| `diffs` | AUC of the first minus that of the second |
+| `lower_bound`, `upper_bound` | Normal interval of the difference, clipped to `[-1, 1]` |
+| `z_values` | `diffs` over its standard error |
+| `p_values` | DeLong's p-value, see below |
+| `n` | Instances in the test set |
+
 ## Details
 
-The comparison is paired: both models are scored on the same resample,
-so the difference is calculated within a resample and the spread of
-those differences is what the interval describes. Two separate intervals
-from
+The comparison is paired either way. With a bootstrap both models are
+scored on the same resample, so the difference is calculated within a
+resample and the spread of those differences is what the interval
+describes; with DeLong the pairing is carried by the covariance between
+the two AUCs. Two separate intervals from
 [`auc_ci()`](https://evalclass.github.io/precrec/reference/auc_ci.md)
 cannot be read this way - they can overlap while the difference is still
 clearly on one side of zero, because they say nothing about how the two
 models move together.
 
+## DeLong's comparison
+
+Given an `aucdelong` object the standard error of the difference comes
+out of the covariance matrix,
+
+    se = sqrt(var(auc1) + var(auc2) - 2 * cov(auc1, auc2))
+    z_values = diffs / se
+    p_values = 2 * pnorm(-abs(z_values))
+
+and the covariance is what makes it a paired test: two models scored on
+the same test set rise and fall together, and dropping the last term
+would overstate how uncertain their difference is.
+
+This is a Wald test too, so `alternative` selects its tail the same way.
+What it does not need is `boot_n`: the standard error is exact rather
+than resampled, so the p-value has no floor and does not move between
+two runs. What it does assume is that the variance is asymptotic - see
+[`auc_delong()`](https://evalclass.github.io/precrec/reference/auc_delong.md) -
+and it has nothing to say about the precision-recall AUC.
+
+`z_values` is `NA` when two models rank every instance the same way and
+there is no standard error to divide by, and `p_values` is `NA` with it.
+
 ## The interval and the two p-values
+
+This section and the two that follow describe an `aucboot` object.
 
 The interval is the primary result, and is the `alpha / 2` and
 `1 - alpha / 2` quantiles of the resampled differences.
@@ -145,7 +198,9 @@ is `NA` with it.
 ## See also
 
 [`auc_boot()`](https://evalclass.github.io/precrec/reference/auc_boot.md)
-for the resampling and
+for the resampling,
+[`auc_delong()`](https://evalclass.github.io/precrec/reference/auc_delong.md)
+for the analytic alternative, and
 [`auc_ci()`](https://evalclass.github.io/precrec/reference/auc_ci.md)
 for one model at a time.
 
@@ -163,4 +218,7 @@ auc_diff(booted)
 
 ## Is the second model the better one?
 auc_diff(booted, alternative = "less")
+
+## The same comparison without resampling, for the ROC AUC
+auc_diff(auc_delong(mdat))
 ```

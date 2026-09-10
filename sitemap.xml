@@ -1,13 +1,14 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://evalclass.github.io/precrec/404.html</loc></url>
-<url><loc>https://evalclass.github.io/precrec/CLAUDE.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/LICENSE-text.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/articles/howto-cross-validation.html</loc></url>
+<url><loc>https://evalclass.github.io/precrec/articles/howto-from-proc-rocr.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/articles/howto-imbalanced-data.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/articles/howto-large-datasets.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/articles/howto-multiclass.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/articles/howto-multiple-models.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/articles/howto-multiple-test-sets.html</loc></url>
+<url><loc>https://evalclass.github.io/precrec/articles/howto-operating-point.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/articles/howto-prepare-data.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/articles/howto-results-as-data.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/articles/howto-tidymodels.html</loc></url>
@@ -44,9 +45,11 @@
 <url><loc>https://evalclass.github.io/precrec/reference/auc.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/reference/auc_boot.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/reference/auc_ci.html</loc></url>
+<url><loc>https://evalclass.github.io/precrec/reference/auc_delong.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/reference/auc_diff.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/reference/autoplot.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/reference/average_precision.html</loc></url>
+<url><loc>https://evalclass.github.io/precrec/reference/best_cutoff.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/reference/classification_report.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/reference/create_sim_samples.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/reference/evalmod.html</loc></url>
@@ -56,6 +59,7 @@
 <url><loc>https://evalclass.github.io/precrec/reference/join_labels.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/reference/join_scores.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/reference/metric_curve.html</loc></url>
+<url><loc>https://evalclass.github.io/precrec/reference/metric_table.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/reference/mmdata.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/reference/part.html</loc></url>
 <url><loc>https://evalclass.github.io/precrec/reference/pauc.html</loc></url>

@@ -14,6 +14,9 @@ auc_ci(curves, alpha = 0.05, dtype = "normal")
 
 # S3 method for class 'aucboot'
 auc_ci(curves, alpha = 0.05, dtype = NULL)
+
+# S3 method for class 'aucdelong'
+auc_ci(curves, alpha = 0.05, dtype = NULL)
 ```
 
 ## Arguments
@@ -33,6 +36,13 @@ auc_ci(curves, alpha = 0.05, dtype = NULL)
   See the **Value** section of
   [`evalmod()`](https://evalclass.github.io/precrec/reference/evalmod.md)
   for more details.
+
+  It also accepts the two objects that describe the uncertainty of a
+  single test set: an `aucboot` object from
+  [`auc_boot()`](https://evalclass.github.io/precrec/reference/auc_boot.md),
+  which gives a percentile interval, and an `aucdelong` object from
+  [`auc_delong()`](https://evalclass.github.io/precrec/reference/auc_delong.md),
+  which gives a normal interval around DeLong's analytic standard error.
 
 - alpha:
 
@@ -59,6 +69,10 @@ The `auc_ci` function returns a dataframe of AUC CIs.
 for generating `S3` objects with performance evaluation metrics.
 [`auc()`](https://evalclass.github.io/precrec/reference/auc.md) for
 retrieving a dataset of AUCs.
+[`auc_boot()`](https://evalclass.github.io/precrec/reference/auc_boot.md)
+and
+[`auc_delong()`](https://evalclass.github.io/precrec/reference/auc_delong.md)
+for a single test set.
 
 ## Examples
 

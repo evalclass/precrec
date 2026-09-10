@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,7 +39,6 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-how-to" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">How-to</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-how-to">
 <li><a class="dropdown-item" href="../articles/howto-prepare-data.html">Prepare your data</a></li>
-    <li><a class="dropdown-item" href="../articles/howto-multiple-models.html">Compare several models</a></li>
     <li><a class="dropdown-item" href="../articles/howto-multiple-test-sets.html">Average over several test sets</a></li>
     <li><a class="dropdown-item" href="../articles/howto-cross-validation.html">Evaluate cross-validation folds</a></li>
     <li><a class="dropdown-item" href="../articles/howto-multiclass.html">Evaluate more than two classes</a></li>
@@ -47,6 +46,17 @@
     <li><a class="dropdown-item" href="../articles/howto-results-as-data.html">Get the numbers out</a></li>
     <li><a class="dropdown-item" href="../articles/howto-imbalanced-data.html">Balanced and imbalanced data</a></li>
     <li><a class="dropdown-item" href="../articles/howto-tidymodels.html">Use precrec with tidymodels</a></li>
+    <li><a class="dropdown-item" href="../articles/howto-from-proc-rocr.html">Coming from pROC or ROCR</a></li>
+  </ul>
+</li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-compare-and-decide" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Compare and decide</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-compare-and-decide">
+<li><a class="dropdown-item" href="../articles/howto-multiple-models.html">Compare several models</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-uncertainty.html">Uncertainty from one test set</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/howto-operating-point.html">Choose an operating point</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-classification-report.html">Classification report</a></li>
   </ul>
 </li>
 <li class="active nav-item dropdown">
@@ -60,8 +70,6 @@
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/metrics-auc.html">AUC and other curve summaries</a></li>
     <li><a class="dropdown-item" href="../articles/metrics-probability.html">Probability-based metrics</a></li>
-    <li><a class="dropdown-item" href="../articles/metrics-classification-report.html">Classification report</a></li>
-    <li><a class="dropdown-item" href="../articles/metrics-uncertainty.html">Uncertainty from one test set</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/metrics-other-tools.html">Comparison with other tools</a></li>
   </ul>
@@ -157,7 +165,7 @@ below</td>
 <td>
 <code>pROC</code> (R)</td>
 <td>ROC analysis and inference</td>
-<td>Analytic DeLong intervals and <code>roc.test()</code>; no
+<td>More ways to compare two ROC curves, and ROC curve smoothing; no
 precision-recall curves</td>
 </tr>
 <tr class="odd">
@@ -293,21 +301,31 @@ than a column of the metric table.</p>
 <div class="section level2">
 <h2 id="when-to-use-something-else">When to use something else<a class="anchor" aria-label="anchor" href="#when-to-use-something-else"></a>
 </h2>
-<p>Reach for <code>pROC</code> if you need ROC inference and nothing
-else: its DeLong intervals are analytic where <a href="metrics-uncertainty.html"><code>auc_boot()</code></a> resamples,
-and it has more ways to compare two curves. Reach for <code>PRROC</code>
-if your labels are weighted or soft. Reach for <code>yardstick</code> if
-the surrounding code is <code>tidymodels</code>, and for
-<code>scikit-learn</code> if it is Python.</p>
+<p>Reach for <code>pROC</code> if you need ROC inference
+<code>precrec</code> does not have: Venkatraman’s test for whole curves,
+tests at a fixed sensitivity or specificity, comparisons between models
+fitted on <em>different</em> datasets, or curve smoothing. DeLong’s
+standard error and test are no longer a reason to switch - <a href="metrics-uncertainty.html"><code>auc_delong()</code></a> has them -
+and neither is <code>coords(x, "best")</code>, which is <a href="howto-operating-point.html"><code>best_cutoff()</code></a> here,
+with the criteria split into the ones that know the prevalence and the
+ones that do not. Reach for <code>PRROC</code> if your labels are
+weighted or soft. Reach for <code>yardstick</code> if the surrounding
+code is <code>tidymodels</code>, and for <code>scikit-learn</code> if it
+is Python.</p>
 <p>Reach for <code>precrec</code> when the precision-recall curve is the
 point, when the data are imbalanced enough for the table above to
 matter, or when you want one call to give you the curves, the per-cutoff
 metrics and the areas together.</p>
+<p>If you have decided and want the call-by-call mapping rather than the
+argument, it is on <a href="howto-from-proc-rocr.html">Coming from pROC
+or ROCR</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="next">Next<a class="anchor" aria-label="anchor" href="#next"></a>
 </h2>
 <ul>
+<li><a href="howto-from-proc-rocr.html">Coming from pROC or
+ROCR</a></li>
 <li><a href="metrics-overview.html">Metrics overview</a></li>
 <li><a href="metrics-auc.html">AUC and other curve summaries</a></li>
 </ul>

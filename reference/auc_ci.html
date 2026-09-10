@@ -11,7 +11,7 @@ are specified."><meta property="og:image" content="https://evalclass.github.io/p
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,7 +23,6 @@ are specified."><meta property="og:image" content="https://evalclass.github.io/p
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-how-to" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">How-to</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-how-to"><li><a class="dropdown-item" href="../articles/howto-prepare-data.html">Prepare your data</a></li>
-    <li><a class="dropdown-item" href="../articles/howto-multiple-models.html">Compare several models</a></li>
     <li><a class="dropdown-item" href="../articles/howto-multiple-test-sets.html">Average over several test sets</a></li>
     <li><a class="dropdown-item" href="../articles/howto-cross-validation.html">Evaluate cross-validation folds</a></li>
     <li><a class="dropdown-item" href="../articles/howto-multiclass.html">Evaluate more than two classes</a></li>
@@ -31,6 +30,15 @@ are specified."><meta property="og:image" content="https://evalclass.github.io/p
     <li><a class="dropdown-item" href="../articles/howto-results-as-data.html">Get the numbers out</a></li>
     <li><a class="dropdown-item" href="../articles/howto-imbalanced-data.html">Balanced and imbalanced data</a></li>
     <li><a class="dropdown-item" href="../articles/howto-tidymodels.html">Use precrec with tidymodels</a></li>
+    <li><a class="dropdown-item" href="../articles/howto-from-proc-rocr.html">Coming from pROC or ROCR</a></li>
+  </ul></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-compare-and-decide" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Compare and decide</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-compare-and-decide"><li><a class="dropdown-item" href="../articles/howto-multiple-models.html">Compare several models</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-uncertainty.html">Uncertainty from one test set</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/howto-operating-point.html">Choose an operating point</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-classification-report.html">Classification report</a></li>
   </ul></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-metrics" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Metrics</button>
@@ -42,8 +50,6 @@ are specified."><meta property="og:image" content="https://evalclass.github.io/p
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/metrics-auc.html">AUC and other curve summaries</a></li>
     <li><a class="dropdown-item" href="../articles/metrics-probability.html">Probability-based metrics</a></li>
-    <li><a class="dropdown-item" href="../articles/metrics-classification-report.html">Classification report</a></li>
-    <li><a class="dropdown-item" href="../articles/metrics-uncertainty.html">Uncertainty from one test set</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/metrics-other-tools.html">Comparison with other tools</a></li>
   </ul></li>
@@ -108,6 +114,9 @@ are specified.</p>
 <span><span class="fu">auc_ci</span><span class="op">(</span><span class="va">curves</span>, alpha <span class="op">=</span> <span class="fl">0.05</span>, dtype <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'aucboot'</span></span>
+<span><span class="fu">auc_ci</span><span class="op">(</span><span class="va">curves</span>, alpha <span class="op">=</span> <span class="fl">0.05</span>, dtype <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'aucdelong'</span></span>
 <span><span class="fu">auc_ci</span><span class="op">(</span><span class="va">curves</span>, alpha <span class="op">=</span> <span class="fl">0.05</span>, dtype <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -117,7 +126,11 @@ are specified.</p>
 
 <dl><dt id="arg-curves">curves<a class="anchor" aria-label="anchor" href="#arg-curves"></a></dt>
 <dd><p>An <code>S3</code> object generated by <code><a href="evalmod.html">evalmod()</a></code>.
-The <code>auc_ci</code> function accepts the following S3 objects.</p><table class="table table"><tr><td><strong><code>S3</code> object</strong></td><td><strong># of models</strong></td><td><strong># of test datasets</strong></td></tr><tr><td>smcurves</td><td>single</td><td>multiple</td></tr><tr><td>mmcurves</td><td>multiple</td><td>multiple</td></tr></table><p>See the <strong>Value</strong> section of <code><a href="evalmod.html">evalmod()</a></code> for more details.</p></dd>
+The <code>auc_ci</code> function accepts the following S3 objects.</p><table class="table table"><tr><td><strong><code>S3</code> object</strong></td><td><strong># of models</strong></td><td><strong># of test datasets</strong></td></tr><tr><td>smcurves</td><td>single</td><td>multiple</td></tr><tr><td>mmcurves</td><td>multiple</td><td>multiple</td></tr></table><p>See the <strong>Value</strong> section of <code><a href="evalmod.html">evalmod()</a></code> for more details.</p>
+<p>It also accepts the two objects that describe the uncertainty of a
+single test set: an <code>aucboot</code> object from <code><a href="auc_boot.html">auc_boot()</a></code>, which gives a
+percentile interval, and an <code>aucdelong</code> object from <code><a href="auc_delong.html">auc_delong()</a></code>,
+which gives a normal interval around DeLong's analytic standard error.</p></dd>
 
 
 <dt id="arg-alpha">alpha<a class="anchor" aria-label="anchor" href="#arg-alpha"></a></dt>
@@ -136,7 +149,7 @@ The <code>auc_ci</code> function accepts the following S3 objects.</p><table cla
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="evalmod.html">evalmod()</a></code> for generating <code>S3</code> objects with
 performance evaluation metrics. <code><a href="auc.html">auc()</a></code> for retrieving a dataset
-of AUCs.</p></div>
+of AUCs. <code><a href="auc_boot.html">auc_boot()</a></code> and <code><a href="auc_delong.html">auc_delong()</a></code> for a single test set.</p></div>
     </div>
 
     <div class="section level2">

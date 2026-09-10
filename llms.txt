@@ -55,8 +55,11 @@ website](https://evalclass.github.io/precrec/), in short pages:
   – the five-minute tour. Also available offline with
   [`vignette("introduction", package = "precrec")`](https://evalclass.github.io/precrec/articles/introduction.md).
 - [How-to](https://evalclass.github.io/precrec/articles/howto-prepare-data.html)
-  – one page per task: several models, several test sets,
+  – one page per task: preparing data, several test sets,
   cross-validation, more than two classes, large datasets.
+- [Compare and
+  decide](https://evalclass.github.io/precrec/articles/howto-operating-point.html)
+  – which model to ship, at which threshold, and how sure you can be.
 - [Metrics](https://evalclass.github.io/precrec/articles/metrics-overview.html)
   – what each available metric means and when it misleads.
 - [Plots](https://evalclass.github.io/precrec/articles/plots-overview.html)
@@ -123,10 +126,13 @@ devtools::install_github("evalclass/precrec")
 | `prob_metrics` | Calculate the Brier score, the RMSE and the log loss |
 | `prob_metrics_ci` | Calculate CIs of the Brier score, the RMSE and the log loss |
 | `metric_curve` | Draw one evaluation metric against another |
+| `metric_table` | Get every evaluation metric at every cutoff |
+| `best_cutoff` | Pick the cutoff that optimizes one evaluation metric |
 | `prbe` | Find the precision-recall break-even point |
 | `average_precision` | Calculate the step estimator of the PRC area |
 | `classification_report` | Report precision, recall and F-score per class at a threshold |
 | `auc_boot` | Bootstrap the AUC of a single test set |
+| `auc_delong` | Analytic standard error of the ROC AUC (DeLong) |
 | `auc_diff` | Compare the AUCs of two models on the same resamples |
 
 Ten S3 generics work on the objects `evalmod` and `metric_curve` return.
@@ -266,6 +272,10 @@ doi:
   [`as.data.table(`*`<mmpoints>`*`)`](https://evalclass.github.io/precrec/reference/as.data.table.md)
   [`as.data.table(`*`<aucroc>`*`)`](https://evalclass.github.io/precrec/reference/as.data.table.md)
   : Convert a curves and points object to a data.table
+- [`metric_table()`](https://evalclass.github.io/precrec/reference/metric_table.md)
+  : Get every evaluation metric at every cutoff
+- [`best_cutoff()`](https://evalclass.github.io/precrec/reference/best_cutoff.md)
+  : Choose an operating point
 - [`auc()`](https://evalclass.github.io/precrec/reference/auc.md) :
   Retrieve a data frame of AUC scores
 - [`pauc()`](https://evalclass.github.io/precrec/reference/pauc.md) :
@@ -282,8 +292,10 @@ doi:
   : Calculate CIs of ROC and precision-recall AUCs
 - [`auc_boot()`](https://evalclass.github.io/precrec/reference/auc_boot.md)
   : Bootstrap AUCs from one test set
+- [`auc_delong()`](https://evalclass.github.io/precrec/reference/auc_delong.md)
+  : DeLong's standard error for the ROC AUC
 - [`auc_diff()`](https://evalclass.github.io/precrec/reference/auc_diff.md)
-  : Compare bootstrapped AUCs between models
+  : Compare AUCs between models
 
 ## Precision-recall break-even point
 
@@ -338,8 +350,6 @@ P10N10, B500, B1000, IB500, IB1000, M2N50F5 and C3N150
 
 - [Prepare your
   data](https://evalclass.github.io/precrec/articles/howto-prepare-data.md):
-- [Compare several
-  models](https://evalclass.github.io/precrec/articles/howto-multiple-models.md):
 - [Average over several test
   sets](https://evalclass.github.io/precrec/articles/howto-multiple-test-sets.md):
 - [Evaluate cross-validation
@@ -354,6 +364,19 @@ P10N10, B500, B1000, IB500, IB1000, M2N50F5 and C3N150
   data](https://evalclass.github.io/precrec/articles/howto-imbalanced-data.md):
 - [Use precrec with
   tidymodels](https://evalclass.github.io/precrec/articles/howto-tidymodels.md):
+- [Coming from pROC or
+  ROCR](https://evalclass.github.io/precrec/articles/howto-from-proc-rocr.md):
+
+### Compare and decide
+
+- [Compare several
+  models](https://evalclass.github.io/precrec/articles/howto-multiple-models.md):
+- [Uncertainty from one test
+  set](https://evalclass.github.io/precrec/articles/metrics-uncertainty.md):
+- [Choose an operating
+  point](https://evalclass.github.io/precrec/articles/howto-operating-point.md):
+- [Classification
+  report](https://evalclass.github.io/precrec/articles/metrics-classification-report.md):
 
 ### Metrics
 
@@ -369,10 +392,6 @@ P10N10, B500, B1000, IB500, IB1000, M2N50F5 and C3N150
   summaries](https://evalclass.github.io/precrec/articles/metrics-auc.md):
 - [Probability-based
   metrics](https://evalclass.github.io/precrec/articles/metrics-probability.md):
-- [Classification
-  report](https://evalclass.github.io/precrec/articles/metrics-classification-report.md):
-- [Uncertainty from one test
-  set](https://evalclass.github.io/precrec/articles/metrics-uncertainty.md):
 - [Comparison with other
   tools](https://evalclass.github.io/precrec/articles/metrics-other-tools.md):
 

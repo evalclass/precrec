@@ -9,8 +9,6 @@
 
 - [Prepare your
   data](https://evalclass.github.io/precrec/articles/howto-prepare-data.md):
-- [Compare several
-  models](https://evalclass.github.io/precrec/articles/howto-multiple-models.md):
 - [Average over several test
   sets](https://evalclass.github.io/precrec/articles/howto-multiple-test-sets.md):
 - [Evaluate cross-validation
@@ -25,6 +23,19 @@
   data](https://evalclass.github.io/precrec/articles/howto-imbalanced-data.md):
 - [Use precrec with
   tidymodels](https://evalclass.github.io/precrec/articles/howto-tidymodels.md):
+- [Coming from pROC or
+  ROCR](https://evalclass.github.io/precrec/articles/howto-from-proc-rocr.md):
+
+### Compare and decide
+
+- [Compare several
+  models](https://evalclass.github.io/precrec/articles/howto-multiple-models.md):
+- [Uncertainty from one test
+  set](https://evalclass.github.io/precrec/articles/metrics-uncertainty.md):
+- [Choose an operating
+  point](https://evalclass.github.io/precrec/articles/howto-operating-point.md):
+- [Classification
+  report](https://evalclass.github.io/precrec/articles/metrics-classification-report.md):
 
 ### Metrics
 
@@ -40,10 +51,6 @@
   summaries](https://evalclass.github.io/precrec/articles/metrics-auc.md):
 - [Probability-based
   metrics](https://evalclass.github.io/precrec/articles/metrics-probability.md):
-- [Classification
-  report](https://evalclass.github.io/precrec/articles/metrics-classification-report.md):
-- [Uncertainty from one test
-  set](https://evalclass.github.io/precrec/articles/metrics-uncertainty.md):
 - [Comparison with other
   tools](https://evalclass.github.io/precrec/articles/metrics-other-tools.md):
 

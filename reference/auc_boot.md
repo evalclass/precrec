@@ -91,7 +91,9 @@ intervals.
 [`auc_ci()`](https://evalclass.github.io/precrec/reference/auc_ci.md)
 for the intervals,
 [`auc_diff()`](https://evalclass.github.io/precrec/reference/auc_diff.md)
-for comparing two models, and
+for comparing two models,
+[`auc_delong()`](https://evalclass.github.io/precrec/reference/auc_delong.md)
+for an exact standard error of the ROC AUC, and
 [`auc()`](https://evalclass.github.io/precrec/reference/auc.md) for the
 point estimates.
 

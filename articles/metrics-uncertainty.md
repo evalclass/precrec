@@ -201,6 +201,93 @@ knitr::kable(auc_diff(booted, alternative = "less"))
 The interval stays two-sided whatever `alternative` is set to, so the
 same bounds are there to read next to a one-sided p-value.
 
+## DeLong, without resampling
+
+The ROC AUC is a Mann-Whitney U statistic - the probability that a
+random positive outranks a random negative - so its variance can be
+written down rather than resampled.
+[`auc_delong()`](https://evalclass.github.io/precrec/reference/auc_delong.md)
+does that.
+
+``` r
+
+delong <- auc_delong(mdat)
+
+knitr::kable(auc_ci(delong))
+```
+
+| modnames | curvetypes |   aucs |     error | lower_bound | upper_bound |   n |
+|:---------|:-----------|-------:|----------:|------------:|------------:|----:|
+| poor_er  | ROC        | 0.8328 | 0.0285145 |   0.7769127 |   0.8886873 | 200 |
+| good_er  | ROC        | 0.8180 | 0.0299393 |   0.7593200 |   0.8766800 | 200 |
+
+No `boot_n`, no seed, and nothing that moves between two runs. Compare
+it with the bootstrap on the same data:
+
+``` r
+
+boot_roc <- subset(auc_ci(booted), curvetypes == "ROC")
+
+knitr::kable(
+  data.frame(
+    modnames = boot_roc[["modnames"]],
+    bootstrap = boot_roc[["error"]],
+    delong = auc_ci(delong)[["error"]]
+  ),
+  digits = 5
+)
+```
+
+| modnames | bootstrap |  delong |
+|:---------|----------:|--------:|
+| poor_er  |   0.02752 | 0.02851 |
+| good_er  |   0.03078 | 0.02994 |
+
+The comparison between two models works the same way, and the pairing is
+carried by the covariance between the two AUCs rather than by resampling
+them together.
+
+``` r
+
+knitr::kable(auc_diff(delong))
+```
+
+| curvetypes | modnames1 | modnames2 | diffs | lower_bound | upper_bound | z_values | p_values | n |
+|:---|:---|:---|---:|---:|---:|---:|---:|---:|
+| ROC | poor_er | good_er | 0.0148 | -0.0632001 | 0.0928001 | 0.3718902 | 0.7099746 | 200 |
+
+Both routes put the difference at 0.083 with a p-value near 0.062. That
+agreement is the useful part: when the exact answer and the resampled
+one land in the same place, the normal approximation is doing no harm at
+this sample size.
+
+### The ROC AUC only
+
+There is no precision-recall counterpart. The precision-recall AUC is
+not a U statistic, and the interpolated area
+[`auc()`](https://evalclass.github.io/precrec/reference/auc.md) reports
+is further from being one still, so
+[`auc_delong()`](https://evalclass.github.io/precrec/reference/auc_delong.md)
+returns ROC rows and nothing else. For the precision-recall AUC - which
+is the reason most people are here -
+[`auc_boot()`](https://evalclass.github.io/precrec/reference/auc_boot.md)
+remains the answer.
+
+### Which to use
+
+Reach for
+[`auc_delong()`](https://evalclass.github.io/precrec/reference/auc_delong.md)
+when the ROC AUC is what is being reported, when the result has to be
+exactly reproducible, or when a reader is expecting “DeLong’s test” by
+name. Reach for
+[`auc_boot()`](https://evalclass.github.io/precrec/reference/auc_boot.md)
+for the precision-recall AUC, and on a small or badly imbalanced test
+set, where the percentile interval assumes less: DeLong’s variance is an
+*asymptotic* one, and the interval built from it is a normal interval,
+so both improve as the test set grows. Running the two and seeing
+whether they agree is a cheap way of finding out whether the sample is
+large enough for the exact one.
+
 ## How many resamples
 
 `boot_n` defaults to 1000. The tails of a 95% interval are estimated
@@ -223,6 +310,8 @@ whatever is unrepresentative about that sample, and cannot tell you so.
 
 ## Next
 
+- [Choose an operating
+  point](https://evalclass.github.io/precrec/articles/howto-operating-point.md)
 - [AUC and other curve
   summaries](https://evalclass.github.io/precrec/articles/metrics-auc.md)
 - [Evaluate cross-validation

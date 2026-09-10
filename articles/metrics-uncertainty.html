@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,7 +39,6 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-how-to" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">How-to</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-how-to">
 <li><a class="dropdown-item" href="../articles/howto-prepare-data.html">Prepare your data</a></li>
-    <li><a class="dropdown-item" href="../articles/howto-multiple-models.html">Compare several models</a></li>
     <li><a class="dropdown-item" href="../articles/howto-multiple-test-sets.html">Average over several test sets</a></li>
     <li><a class="dropdown-item" href="../articles/howto-cross-validation.html">Evaluate cross-validation folds</a></li>
     <li><a class="dropdown-item" href="../articles/howto-multiclass.html">Evaluate more than two classes</a></li>
@@ -47,9 +46,20 @@
     <li><a class="dropdown-item" href="../articles/howto-results-as-data.html">Get the numbers out</a></li>
     <li><a class="dropdown-item" href="../articles/howto-imbalanced-data.html">Balanced and imbalanced data</a></li>
     <li><a class="dropdown-item" href="../articles/howto-tidymodels.html">Use precrec with tidymodels</a></li>
+    <li><a class="dropdown-item" href="../articles/howto-from-proc-rocr.html">Coming from pROC or ROCR</a></li>
   </ul>
 </li>
 <li class="active nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-compare-and-decide" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Compare and decide</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-compare-and-decide">
+<li><a class="dropdown-item" href="../articles/howto-multiple-models.html">Compare several models</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-uncertainty.html">Uncertainty from one test set</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/howto-operating-point.html">Choose an operating point</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-classification-report.html">Classification report</a></li>
+  </ul>
+</li>
+<li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-metrics" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Metrics</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-metrics">
 <li><a class="dropdown-item" href="../articles/metrics-overview.html">Metrics overview</a></li>
@@ -60,8 +70,6 @@
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/metrics-auc.html">AUC and other curve summaries</a></li>
     <li><a class="dropdown-item" href="../articles/metrics-probability.html">Probability-based metrics</a></li>
-    <li><a class="dropdown-item" href="../articles/metrics-classification-report.html">Classification report</a></li>
-    <li><a class="dropdown-item" href="../articles/metrics-uncertainty.html">Uncertainty from one test set</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/metrics-other-tools.html">Comparison with other tools</a></li>
   </ul>
@@ -510,6 +518,157 @@ to, so the same bounds are there to read next to a one-sided
 p-value.</p>
 </div>
 <div class="section level2">
+<h2 id="delong-without-resampling">DeLong, without resampling<a class="anchor" aria-label="anchor" href="#delong-without-resampling"></a>
+</h2>
+<p>The ROC AUC is a Mann-Whitney U statistic - the probability that a
+random positive outranks a random negative - so its variance can be
+written down rather than resampled. <code><a href="../reference/auc_delong.html">auc_delong()</a></code> does
+that.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">delong</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/auc_delong.html">auc_delong</a></span><span class="op">(</span><span class="va">mdat</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="../reference/auc_ci.html">auc_ci</a></span><span class="op">(</span><span class="va">delong</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<colgroup>
+<col width="13%">
+<col width="16%">
+<col width="10%">
+<col width="15%">
+<col width="18%">
+<col width="18%">
+<col width="6%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">modnames</th>
+<th align="left">curvetypes</th>
+<th align="right">aucs</th>
+<th align="right">error</th>
+<th align="right">lower_bound</th>
+<th align="right">upper_bound</th>
+<th align="right">n</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">poor_er</td>
+<td align="left">ROC</td>
+<td align="right">0.8328</td>
+<td align="right">0.0285145</td>
+<td align="right">0.7769127</td>
+<td align="right">0.8886873</td>
+<td align="right">200</td>
+</tr>
+<tr class="even">
+<td align="left">good_er</td>
+<td align="left">ROC</td>
+<td align="right">0.8180</td>
+<td align="right">0.0299393</td>
+<td align="right">0.7593200</td>
+<td align="right">0.8766800</td>
+<td align="right">200</td>
+</tr>
+</tbody>
+</table>
+<p>No <code>boot_n</code>, no seed, and nothing that moves between two
+runs. Compare it with the bootstrap on the same data:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">boot_roc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="fu"><a href="../reference/auc_ci.html">auc_ci</a></span><span class="op">(</span><span class="va">booted</span><span class="op">)</span>, <span class="va">curvetypes</span> <span class="op">==</span> <span class="st">"ROC"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>    modnames <span class="op">=</span> <span class="va">boot_roc</span><span class="op">[[</span><span class="st">"modnames"</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>    bootstrap <span class="op">=</span> <span class="va">boot_roc</span><span class="op">[[</span><span class="st">"error"</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>    delong <span class="op">=</span> <span class="fu"><a href="../reference/auc_ci.html">auc_ci</a></span><span class="op">(</span><span class="va">delong</span><span class="op">)</span><span class="op">[[</span><span class="st">"error"</span><span class="op">]</span><span class="op">]</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fl">5</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">modnames</th>
+<th align="right">bootstrap</th>
+<th align="right">delong</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">poor_er</td>
+<td align="right">0.02752</td>
+<td align="right">0.02851</td>
+</tr>
+<tr class="even">
+<td align="left">good_er</td>
+<td align="right">0.03078</td>
+<td align="right">0.02994</td>
+</tr>
+</tbody>
+</table>
+<p>The comparison between two models works the same way, and the pairing
+is carried by the covariance between the two AUCs rather than by
+resampling them together.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="../reference/auc_diff.html">auc_diff</a></span><span class="op">(</span><span class="va">delong</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<colgroup>
+<col width="12%">
+<col width="11%">
+<col width="11%">
+<col width="8%">
+<col width="13%">
+<col width="13%">
+<col width="11%">
+<col width="11%">
+<col width="4%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">curvetypes</th>
+<th align="left">modnames1</th>
+<th align="left">modnames2</th>
+<th align="right">diffs</th>
+<th align="right">lower_bound</th>
+<th align="right">upper_bound</th>
+<th align="right">z_values</th>
+<th align="right">p_values</th>
+<th align="right">n</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td align="left">ROC</td>
+<td align="left">poor_er</td>
+<td align="left">good_er</td>
+<td align="right">0.0148</td>
+<td align="right">-0.0632001</td>
+<td align="right">0.0928001</td>
+<td align="right">0.3718902</td>
+<td align="right">0.7099746</td>
+<td align="right">200</td>
+</tr></tbody>
+</table>
+<p>Both routes put the difference at 0.083 with a p-value near 0.062.
+That agreement is the useful part: when the exact answer and the
+resampled one land in the same place, the normal approximation is doing
+no harm at this sample size.</p>
+<div class="section level3">
+<h3 id="the-roc-auc-only">The ROC AUC only<a class="anchor" aria-label="anchor" href="#the-roc-auc-only"></a>
+</h3>
+<p>There is no precision-recall counterpart. The precision-recall AUC is
+not a U statistic, and the interpolated area <code><a href="../reference/auc.html">auc()</a></code> reports
+is further from being one still, so <code><a href="../reference/auc_delong.html">auc_delong()</a></code> returns
+ROC rows and nothing else. For the precision-recall AUC - which is the
+reason most people are here - <code><a href="../reference/auc_boot.html">auc_boot()</a></code> remains the
+answer.</p>
+</div>
+<div class="section level3">
+<h3 id="which-to-use">Which to use<a class="anchor" aria-label="anchor" href="#which-to-use"></a>
+</h3>
+<p>Reach for <code><a href="../reference/auc_delong.html">auc_delong()</a></code> when the ROC AUC is what is being
+reported, when the result has to be exactly reproducible, or when a
+reader is expecting “DeLong’s test” by name. Reach for
+<code><a href="../reference/auc_boot.html">auc_boot()</a></code> for the precision-recall AUC, and on a small or
+badly imbalanced test set, where the percentile interval assumes less:
+DeLong’s variance is an <em>asymptotic</em> one, and the interval built
+from it is a normal interval, so both improve as the test set grows.
+Running the two and seeing whether they agree is a cheap way of finding
+out whether the sample is large enough for the exact one.</p>
+</div>
+</div>
+<div class="section level2">
 <h2 id="how-many-resamples">How many resamples<a class="anchor" aria-label="anchor" href="#how-many-resamples"></a>
 </h2>
 <p><code>boot_n</code> defaults to 1000. The tails of a 95% interval are
@@ -534,6 +693,8 @@ so.</p>
 <h2 id="next">Next<a class="anchor" aria-label="anchor" href="#next"></a>
 </h2>
 <ul>
+<li><a href="howto-operating-point.html">Choose an operating
+point</a></li>
 <li><a href="metrics-auc.html">AUC and other curve summaries</a></li>
 <li><a href="howto-cross-validation.html">Evaluate cross-validation
 folds</a></li>

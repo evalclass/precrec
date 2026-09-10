@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,7 +39,6 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-how-to" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">How-to</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-how-to">
 <li><a class="dropdown-item" href="../articles/howto-prepare-data.html">Prepare your data</a></li>
-    <li><a class="dropdown-item" href="../articles/howto-multiple-models.html">Compare several models</a></li>
     <li><a class="dropdown-item" href="../articles/howto-multiple-test-sets.html">Average over several test sets</a></li>
     <li><a class="dropdown-item" href="../articles/howto-cross-validation.html">Evaluate cross-validation folds</a></li>
     <li><a class="dropdown-item" href="../articles/howto-multiclass.html">Evaluate more than two classes</a></li>
@@ -47,6 +46,17 @@
     <li><a class="dropdown-item" href="../articles/howto-results-as-data.html">Get the numbers out</a></li>
     <li><a class="dropdown-item" href="../articles/howto-imbalanced-data.html">Balanced and imbalanced data</a></li>
     <li><a class="dropdown-item" href="../articles/howto-tidymodels.html">Use precrec with tidymodels</a></li>
+    <li><a class="dropdown-item" href="../articles/howto-from-proc-rocr.html">Coming from pROC or ROCR</a></li>
+  </ul>
+</li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-compare-and-decide" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Compare and decide</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-compare-and-decide">
+<li><a class="dropdown-item" href="../articles/howto-multiple-models.html">Compare several models</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-uncertainty.html">Uncertainty from one test set</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/howto-operating-point.html">Choose an operating point</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-classification-report.html">Classification report</a></li>
   </ul>
 </li>
 <li class="nav-item dropdown">
@@ -60,8 +70,6 @@
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/metrics-auc.html">AUC and other curve summaries</a></li>
     <li><a class="dropdown-item" href="../articles/metrics-probability.html">Probability-based metrics</a></li>
-    <li><a class="dropdown-item" href="../articles/metrics-classification-report.html">Classification report</a></li>
-    <li><a class="dropdown-item" href="../articles/metrics-uncertainty.html">Uncertainty from one test set</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/metrics-other-tools.html">Comparison with other tools</a></li>
   </ul>
@@ -185,6 +193,100 @@ same curve means something different against a different baseline, which
 is why the two plots above cannot be compared by eye alone.</p>
 </div>
 <div class="section level2">
+<h2 id="so-does-the-threshold">So does the threshold<a class="anchor" aria-label="anchor" href="#so-does-the-threshold"></a>
+</h2>
+<p>Everything above is about reading a curve. The last step of most real
+work is picking a point on it, and the criterion that picks it is
+subject to the same problem.</p>
+<p>Twenty-five positives in five hundred, and four of the criteria <a href="howto-operating-point.html">best_cutoff()</a> offers, on the same
+model:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
+<span><span class="va">rare</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_sim_samples.html">create_sim_samples</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">25</span>, <span class="fl">475</span>, <span class="st">"good_er"</span><span class="op">)</span></span>
+<span><span class="va">rdat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mmdata.html">mmdata</a></span><span class="op">(</span><span class="va">rare</span><span class="op">[[</span><span class="st">"scores"</span><span class="op">]</span><span class="op">]</span>, <span class="va">rare</span><span class="op">[[</span><span class="st">"labels"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">shown</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  <span class="st">"metric"</span>, <span class="st">"rank"</span>, <span class="st">"score"</span>, <span class="st">"sensitivity"</span>, <span class="st">"precision"</span>, <span class="st">"fscore"</span>, <span class="st">"mcc"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">picks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"youden"</span>, <span class="st">"topleft"</span>, <span class="st">"fscore"</span>, <span class="st">"mcc"</span><span class="op">)</span>,</span>
+<span>  <span class="kw">function</span><span class="op">(</span><span class="va">criterion</span><span class="op">)</span> <span class="fu"><a href="../reference/best_cutoff.html">best_cutoff</a></span><span class="op">(</span><span class="va">rdat</span>, metric <span class="op">=</span> <span class="va">criterion</span><span class="op">)</span><span class="op">[</span>, <span class="va">shown</span><span class="op">]</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">picks</span><span class="op">)</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span>, digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">metric</th>
+<th align="right">rank</th>
+<th align="right">score</th>
+<th align="right">sensitivity</th>
+<th align="right">precision</th>
+<th align="right">fscore</th>
+<th align="right">mcc</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">informedness</td>
+<td align="right">78</td>
+<td align="right">0.386</td>
+<td align="right">0.72</td>
+<td align="right">0.231</td>
+<td align="right">0.350</td>
+<td align="right">0.357</td>
+</tr>
+<tr class="even">
+<td align="left">roc_dist</td>
+<td align="right">103</td>
+<td align="right">0.349</td>
+<td align="right">0.76</td>
+<td align="right">0.184</td>
+<td align="right">0.297</td>
+<td align="right">0.314</td>
+</tr>
+<tr class="odd">
+<td align="left">fscore</td>
+<td align="right">22</td>
+<td align="right">0.612</td>
+<td align="right">0.44</td>
+<td align="right">0.500</td>
+<td align="right">0.468</td>
+<td align="right">0.443</td>
+</tr>
+<tr class="even">
+<td align="left">mcc</td>
+<td align="right">22</td>
+<td align="right">0.612</td>
+<td align="right">0.44</td>
+<td align="right">0.500</td>
+<td align="right">0.468</td>
+<td align="right">0.443</td>
+</tr>
+</tbody>
+</table>
+<p>Four criteria, three different thresholds, and the disagreement is
+not a rounding detail: Youden’s J calls 78 of the 500 instances positive
+and <code>mcc</code> calls 22. The model is the same one and the data is
+the same data.</p>
+<p>Youden’s J and the closest point to the top left corner are both
+computed from sensitivity and specificity, and both of those are
+conditioned on the true class, so neither knows that positives are rare.
+They are free to buy sensitivity with false positives that cost them
+nothing, and they do - precision at the cutoff Youden’s J picks is half
+of what it is at the one <code>mcc</code> picks. <code>fscore</code> and
+<code>mcc</code> are computed from precision as well, so the prevalence
+is in the number they are maximizing.</p>
+<p>That does not make <code>mcc</code> the right answer either. It buys
+its precision with sensitivity, and whether that trade is the one you
+want is a question about the application, not about the data. What the
+table settles is narrower and more useful: <strong>the criterion is a
+choice</strong>, and on imbalanced data the prevalence-blind ones and
+the prevalence-aware ones do not land anywhere near each other.</p>
+<p>One caveat that applies whatever the balance: a threshold chosen on
+the same data the model was evaluated on is optimistic, by however much
+the criterion was free to chase. If the number is going to be quoted,
+choose it on data the model has not seen.</p>
+</div>
+<div class="section level2">
 <h2 id="further-reading">Further reading<a class="anchor" aria-label="anchor" href="#further-reading"></a>
 </h2>
 <ul>
@@ -202,6 +304,8 @@ with imbalanced datasets</a> - a companion site with practical tips</li>
 <h2 id="next">Next<a class="anchor" aria-label="anchor" href="#next"></a>
 </h2>
 <ul>
+<li><a href="howto-operating-point.html">Choose an operating
+point</a></li>
 <li><a href="howto-multiclass.html">Evaluate more than two
 classes</a></li>
 <li><a href="metrics-auc.html">AUC and other curve summaries</a></li>

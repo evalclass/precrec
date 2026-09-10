@@ -84,6 +84,8 @@ curves2 <- evalmod(
 
 ## Next
 
+- [Uncertainty from one test
+  set](https://evalclass.github.io/precrec/articles/metrics-uncertainty.md)
 - [Average over several test
   sets](https://evalclass.github.io/precrec/articles/howto-multiple-test-sets.md)
 - [Get the numbers

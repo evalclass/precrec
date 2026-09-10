@@ -3,11 +3,13 @@ pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   articles/howto-cross-validation: howto-cross-validation.html
+  articles/howto-from-proc-rocr: howto-from-proc-rocr.html
   articles/howto-imbalanced-data: howto-imbalanced-data.html
   articles/howto-large-datasets: howto-large-datasets.html
   articles/howto-multiclass: howto-multiclass.html
   articles/howto-multiple-models: howto-multiple-models.html
   articles/howto-multiple-test-sets: howto-multiple-test-sets.html
+  articles/howto-operating-point: howto-operating-point.html
   articles/howto-prepare-data: howto-prepare-data.html
   articles/howto-results-as-data: howto-results-as-data.html
   articles/howto-tidymodels: howto-tidymodels.html
@@ -28,7 +30,7 @@ articles:
   articles/plots-overview: plots-overview.html
   articles/plots-partial-curves: plots-partial-curves.html
   articles/plots-roc-prc: plots-roc-prc.html
-last_built: 2026-09-09T21:05Z
+last_built: 2026-09-10T22:13Z
 urls:
   reference: https://evalclass.github.io/precrec/reference
   article: https://evalclass.github.io/precrec/articles

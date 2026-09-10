@@ -95,6 +95,10 @@
   [`as.data.table(`*`<mmpoints>`*`)`](https://evalclass.github.io/precrec/reference/as.data.table.md)
   [`as.data.table(`*`<aucroc>`*`)`](https://evalclass.github.io/precrec/reference/as.data.table.md)
   : Convert a curves and points object to a data.table
+- [`metric_table()`](https://evalclass.github.io/precrec/reference/metric_table.md)
+  : Get every evaluation metric at every cutoff
+- [`best_cutoff()`](https://evalclass.github.io/precrec/reference/best_cutoff.md)
+  : Choose an operating point
 - [`auc()`](https://evalclass.github.io/precrec/reference/auc.md) :
   Retrieve a data frame of AUC scores
 - [`pauc()`](https://evalclass.github.io/precrec/reference/pauc.md) :
@@ -111,8 +115,10 @@
   : Calculate CIs of ROC and precision-recall AUCs
 - [`auc_boot()`](https://evalclass.github.io/precrec/reference/auc_boot.md)
   : Bootstrap AUCs from one test set
+- [`auc_delong()`](https://evalclass.github.io/precrec/reference/auc_delong.md)
+  : DeLong's standard error for the ROC AUC
 - [`auc_diff()`](https://evalclass.github.io/precrec/reference/auc_diff.md)
-  : Compare bootstrapped AUCs between models
+  : Compare AUCs between models
 
 ## Precision-recall break-even point
 

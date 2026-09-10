@@ -120,14 +120,17 @@ package.
 ## What it is not
 
 One point on the curves, chosen by you. It cannot tell you whether a
-different threshold would have done better, and a threshold picked by
-looking at the same data it is scored on will flatter the model. For the
-threshold-free view, which is what `precrec` exists for, see [AUC and
-other curve
+different threshold would have done better - that is
+[`best_cutoff()`](https://evalclass.github.io/precrec/articles/howto-operating-point.md) -
+and a threshold picked by looking at the same data it is scored on will
+flatter the model. For the threshold-free view, which is what `precrec`
+exists for, see [AUC and other curve
 summaries](https://evalclass.github.io/precrec/articles/metrics-auc.md).
 
 ## Next
 
+- [Choose an operating
+  point](https://evalclass.github.io/precrec/articles/howto-operating-point.md)
 - [Metrics
   overview](https://evalclass.github.io/precrec/articles/metrics-overview.md)
 - [AUC and other curve

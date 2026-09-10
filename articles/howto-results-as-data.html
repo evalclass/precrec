@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,7 +39,6 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-how-to" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">How-to</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-how-to">
 <li><a class="dropdown-item" href="../articles/howto-prepare-data.html">Prepare your data</a></li>
-    <li><a class="dropdown-item" href="../articles/howto-multiple-models.html">Compare several models</a></li>
     <li><a class="dropdown-item" href="../articles/howto-multiple-test-sets.html">Average over several test sets</a></li>
     <li><a class="dropdown-item" href="../articles/howto-cross-validation.html">Evaluate cross-validation folds</a></li>
     <li><a class="dropdown-item" href="../articles/howto-multiclass.html">Evaluate more than two classes</a></li>
@@ -47,6 +46,17 @@
     <li><a class="dropdown-item" href="../articles/howto-results-as-data.html">Get the numbers out</a></li>
     <li><a class="dropdown-item" href="../articles/howto-imbalanced-data.html">Balanced and imbalanced data</a></li>
     <li><a class="dropdown-item" href="../articles/howto-tidymodels.html">Use precrec with tidymodels</a></li>
+    <li><a class="dropdown-item" href="../articles/howto-from-proc-rocr.html">Coming from pROC or ROCR</a></li>
+  </ul>
+</li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-compare-and-decide" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Compare and decide</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-compare-and-decide">
+<li><a class="dropdown-item" href="../articles/howto-multiple-models.html">Compare several models</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-uncertainty.html">Uncertainty from one test set</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/howto-operating-point.html">Choose an operating point</a></li>
+    <li><a class="dropdown-item" href="../articles/metrics-classification-report.html">Classification report</a></li>
   </ul>
 </li>
 <li class="nav-item dropdown">
@@ -60,8 +70,6 @@
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/metrics-auc.html">AUC and other curve summaries</a></li>
     <li><a class="dropdown-item" href="../articles/metrics-probability.html">Probability-based metrics</a></li>
-    <li><a class="dropdown-item" href="../articles/metrics-classification-report.html">Classification report</a></li>
-    <li><a class="dropdown-item" href="../articles/metrics-uncertainty.html">Uncertainty from one test set</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/metrics-other-tools.html">Comparison with other tools</a></li>
   </ul>
@@ -251,12 +259,135 @@ thing as a <code>data.table</code> when that package is installed.</p>
 </table>
 </div>
 <div class="section level2">
-<h2 id="basic-metrics-per-cutoff">Basic metrics per cutoff<a class="anchor" aria-label="anchor" href="#basic-metrics-per-cutoff"></a>
+<h2 id="every-metric-at-every-cutoff">Every metric at every cutoff<a class="anchor" aria-label="anchor" href="#every-metric-at-every-cutoff"></a>
 </h2>
-<p><code>mode = "basic"</code> gives the per-cutoff metrics rather than
-the curves.</p>
+<p><code><a href="../reference/metric_table.html">metric_table()</a></code> returns one row per cutoff and one column
+per metric. This is the table <code>pROC::coords()</code> and
+<code>ROCR</code>’s cutoff slots give, and the shape most work
+downstream of a curve needs.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">points</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span>,</span>
+<code class="sourceCode R"><span><span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/metric_table.html">metric_table</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   modname dsid rank normalized_rank score label error accuracy specificity</span></span>
+<span><span class="co">#&gt; 1      m1    1    0            0.00    NA    NA  0.50     0.50         1.0</span></span>
+<span><span class="co">#&gt; 2      m1    1    1            0.05    20     1  0.45     0.55         1.0</span></span>
+<span><span class="co">#&gt; 3      m1    1    2            0.10    19     1  0.40     0.60         1.0</span></span>
+<span><span class="co">#&gt; 4      m1    1    3            0.15    18    -1  0.45     0.55         0.9</span></span>
+<span><span class="co">#&gt; 5      m1    1    4            0.20    17     1  0.40     0.60         0.9</span></span>
+<span><span class="co">#&gt; 6      m1    1    5            0.25    16     1  0.35     0.65         0.9</span></span>
+<span><span class="co">#&gt;   sensitivity precision       mcc    fscore balanced_accuracy       npv</span></span>
+<span><span class="co">#&gt; 1         0.0 1.0000000        NA 0.0000000              0.50 0.5000000</span></span>
+<span><span class="co">#&gt; 2         0.1 1.0000000 0.2294157 0.1818182              0.55 0.5263158</span></span>
+<span><span class="co">#&gt; 3         0.2 1.0000000 0.3333333 0.3333333              0.60 0.5555556</span></span>
+<span><span class="co">#&gt; 4         0.2 0.6666667 0.1400280 0.3076923              0.55 0.5294118</span></span>
+<span><span class="co">#&gt; 5         0.3 0.7500000 0.2500000 0.4285714              0.60 0.5625000</span></span>
+<span><span class="co">#&gt; 6         0.4 0.8000000 0.3464102 0.5333333              0.65 0.6000000</span></span>
+<span><span class="co">#&gt;   informedness markedness kappa</span></span>
+<span><span class="co">#&gt; 1          0.0  0.5000000   0.0</span></span>
+<span><span class="co">#&gt; 2          0.1  0.5263158   0.1</span></span>
+<span><span class="co">#&gt; 3          0.2  0.5555556   0.2</span></span>
+<span><span class="co">#&gt; 4          0.1  0.1960784   0.1</span></span>
+<span><span class="co">#&gt; 5          0.2  0.3125000   0.2</span></span>
+<span><span class="co">#&gt; 6          0.3  0.4000000   0.3</span></span></code></pre></div>
+<p>A row is the cutoff that calls the top <code>rank</code> instances
+positive, so <code>score</code> is the score of the instance at that
+rank and the rule the row stands for is
+<code>score &gt;= that value</code>. <code>normalized_rank</code> is
+<code>rank / n</code>, the x axis of the <a href="plots-basic-metrics.html">basic metric plots</a>. The first row
+calls nothing positive, which is why its <code>score</code> and
+<code>label</code> are <code>NA</code> while its metrics are not.</p>
+<p>Because it is a plain data frame, the question that usually follows
+is ordinary R.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">best</span> <span class="op">&lt;-</span> <span class="va">tab</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.min.html" class="external-link">which.max</a></span><span class="op">(</span><span class="va">tab</span><span class="op">$</span><span class="va">fscore</span><span class="op">)</span>, <span class="op">]</span></span>
+<span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">best</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rank"</span>, <span class="st">"score"</span>, <span class="st">"sensitivity"</span>, <span class="st">"precision"</span>, <span class="st">"fscore"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left"></th>
+<th align="right">rank</th>
+<th align="right">score</th>
+<th align="right">sensitivity</th>
+<th align="right">precision</th>
+<th align="right">fscore</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td align="left">16</td>
+<td align="right">15</td>
+<td align="right">6</td>
+<td align="right">0.9</td>
+<td align="right">0.6</td>
+<td align="right">0.72</td>
+</tr></tbody>
+</table>
+<p><code><a href="../reference/best_cutoff.html">best_cutoff()</a></code> is that line with the parts that are easy
+to get wrong done for you: which direction the metric is better in,
+which of several tied cutoffs to return, and one row per model per test
+dataset rather than one row overall.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">picked</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/best_cutoff.html">best_cutoff</a></span><span class="op">(</span></span>
+<span>  scores <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span>,</span>
+<span>  metric <span class="op">=</span> <span class="st">"fscore"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>  <span class="va">picked</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"metric"</span>, <span class="st">"value"</span>, <span class="st">"rank"</span>, <span class="st">"score"</span>, <span class="st">"sensitivity"</span>, <span class="st">"precision"</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">metric</th>
+<th align="right">value</th>
+<th align="right">rank</th>
+<th align="right">score</th>
+<th align="right">sensitivity</th>
+<th align="right">precision</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td align="left">fscore</td>
+<td align="right">0.72</td>
+<td align="right">15</td>
+<td align="right">6</td>
+<td align="right">0.9</td>
+<td align="right">0.6</td>
+</tr></tbody>
+</table>
+<p>It takes any of the metrics, plus <code>"youden"</code> and
+<code>"topleft"</code> for the two criteria the cutpoint literature
+names rather than the metric table does. Which one to optimize is a
+bigger decision than it looks, and the biggest one when positives are
+rare - see <a href="howto-operating-point.html">Choose an operating
+point</a>.</p>
+<p>Metrics beyond the default fourteen come the same way they do from
+<code><a href="../reference/evalmod.html">evalmod()</a></code>.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">lifted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/metric_table.html">metric_table</a></span><span class="op">(</span></span>
+<span>  scores <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span>,</span>
+<span>  metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lift"</span>, <span class="st">"jaccard"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">lifted</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rank"</span>, <span class="st">"score"</span>, <span class="st">"precision"</span>, <span class="st">"lift"</span>, <span class="st">"jaccard"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   rank score precision     lift   jaccard</span></span>
+<span><span class="co">#&gt; 1    0    NA 1.0000000       NA 0.0000000</span></span>
+<span><span class="co">#&gt; 2    1    20 1.0000000 2.000000 0.1000000</span></span>
+<span><span class="co">#&gt; 3    2    19 1.0000000 2.000000 0.2000000</span></span>
+<span><span class="co">#&gt; 4    3    18 0.6666667 1.333333 0.1818182</span></span>
+<span><span class="co">#&gt; 5    4    17 0.7500000 1.500000 0.2727273</span></span>
+<span><span class="co">#&gt; 6    5    16 0.8000000 1.600000 0.3636364</span></span></code></pre></div>
+<p>With several test datasets there is one block of rows per dataset and
+nothing is averaged across them - a cutoff belongs to the dataset it was
+read off. Build the object with <code>raw_curves = TRUE</code> if you
+pass one in rather than letting <code><a href="../reference/metric_table.html">metric_table()</a></code> build
+it.</p>
+</div>
+<div class="section level2">
+<h2 id="the-same-metrics-long">The same metrics, long<a class="anchor" aria-label="anchor" href="#the-same-metrics-long"></a>
+</h2>
+<p><code>mode = "basic"</code> on its own gives the long form, which is
+what the plots use.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">points</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span></span>
+<span>  scores <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span>,</span>
 <span>  mode <span class="op">=</span> <span class="st">"basic"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -269,7 +400,17 @@ the curves.</p>
 <span><span class="co">#&gt; 5 0.20 17      m1    1 score</span></span>
 <span><span class="co">#&gt; 6 0.25 16      m1    1 score</span></span></code></pre></div>
 <p>The <code>x</code> column is the normalized rank and <code>y</code>
-the value of the metric named in <code>type</code>.</p>
+the value of the metric named in <code>type</code>. It is the same data
+<code><a href="../reference/metric_table.html">metric_table()</a></code> returns, on its side. Reach for this one to
+plot and for the table to decide.</p>
+<p>An object that has already been calculated can be passed straight in,
+which saves calculating it twice.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="../reference/metric_table.html">metric_table</a></span><span class="op">(</span><span class="va">points</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="../reference/metric_table.html">metric_table</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="feeding-ggplot2-directly">Feeding ggplot2 directly<a class="anchor" aria-label="anchor" href="#feeding-ggplot2-directly"></a>
@@ -282,6 +423,8 @@ See <a href="plots-customizing.html">customizing plots</a>.</p>
 <h2 id="next">Next<a class="anchor" aria-label="anchor" href="#next"></a>
 </h2>
 <ul>
+<li><a href="howto-operating-point.html">Choose an operating
+point</a></li>
 <li><a href="metrics-overview.html">Metrics overview</a></li>
 <li><a href="plots-overview.html">Plots overview</a></li>
 </ul>
