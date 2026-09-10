@@ -256,5 +256,6 @@ and cannot tell you so.
 
 ## Next
 
+- [Choose an operating point](howto-operating-point.html)
 - [AUC and other curve summaries](metrics-auc.html)
 - [Evaluate cross-validation folds](howto-cross-validation.html)

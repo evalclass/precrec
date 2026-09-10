@@ -88,12 +88,14 @@ matching the `na_worst = TRUE` default of the rest of the package.
 ## What it is not
 
 One point on the curves, chosen by you. It cannot tell you whether a
-different threshold would have done better, and a threshold picked by looking
-at the same data it is scored on will flatter the model. For the
+different threshold would have done better - that is
+[`best_cutoff()`](howto-operating-point.html) - and a threshold picked by
+looking at the same data it is scored on will flatter the model. For the
 threshold-free view, which is what `precrec` exists for, see
 [AUC and other curve summaries](metrics-auc.html).
 
 ## Next
 
+- [Choose an operating point](howto-operating-point.html)
 - [Metrics overview](metrics-overview.html)
 - [AUC and other curve summaries](metrics-auc.html)

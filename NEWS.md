@@ -1,5 +1,26 @@
 # precrec 0.23.0
 
+* Regroup the website. A **Compare and decide** section now collects the
+  four pages that answer "which model do I ship, and at what threshold" -
+  comparing several models, uncertainty from one test set, choosing an
+  operating point, and the classification report - which were previously
+  split between *How-to* and *Metrics* on the grounds of what they returned
+  rather than what they were for. *Metrics* is left as what it already
+  effectively was, a catalog of what each number means, and *Plots* is
+  unchanged. No page moved and no URL changed; the grouping is in the menus
+  only.
+
+* Add a website page, *Choose an operating point*, which `best_cutoff()`
+  did not have: it was documented inside *Get the numbers out*, a page about
+  extracting data, and argued about inside *Balanced and imbalanced data*, a
+  page about reading curves. The new page covers the criteria and the two
+  groups they fall into, weighting the two mistakes with `cost_fp` and
+  `cost_fn` - including why equal costs are a strong claim rather than a
+  neutral one when positives are rare - tied scores, the one row per model
+  per test dataset and the spread across them, and the fact that a cutoff
+  chosen on the data it is scored on is optimistic and that nothing here
+  corrects for that.
+
 * Add a website page, *Coming from `pROC` or `ROCR`*, translating the two
   packages call by call now that `metric_table()` and `best_cutoff()` make
   the table honest. Every equivalence on it was checked against both

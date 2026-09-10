@@ -299,5 +299,7 @@ Honestly, and in the order they are missed:
   and where the numbers differ
 - [Get the numbers out](howto-results-as-data.html) - `metric_table()` and
   the long form
+- [Choose an operating point](howto-operating-point.html) - what
+  `coords(x, "best")` becomes here
 - [Balanced and imbalanced data](howto-imbalanced-data.html) - why the
   cutpoint criterion matters more than it looks
