@@ -1,5 +1,15 @@
 # precrec 0.23.0
 
+* Add a website page, *Coming from `pROC` or `ROCR`*, translating the two
+  packages call by call now that `metric_table()` and `best_cutoff()` make
+  the table honest. Every equivalence on it was checked against both
+  packages, including the three places the answers differ: the
+  precision-recall area, which `ROCR` reads off straight lines between raw
+  points; tied scores, which the other two collapse and
+  `evalmod(basic_ties = "hold")` matches; and the threshold itself, which
+  `pROC` names by a midpoint and `precrec` by an observed score. What has no
+  equivalent is listed rather than left to be discovered.
+
 * New `best_cutoff()` picks the cutoff that optimizes one metric, in the
   manner of `pROC::coords(x, "best")`. It returns a row of `metric_table()`
   together with the criterion that chose it, so every other metric is there
@@ -9,7 +19,9 @@
   and `"topleft"` for the two criteria the cutpoint literature names rather
   than the metric table does. The direction is a property of the metric and
   so is not an argument, and a tie is broken toward the cutoff that calls
-  the fewest instances positive.
+  the fewest instances positive - except between rows that share a `score`,
+  which are one threshold seen several times rather than several cutoffs,
+  and report the rank that threshold actually produces.
 
   The criteria are documented in two groups rather than as six
   interchangeable options. Youden's J and the closest point to the top left

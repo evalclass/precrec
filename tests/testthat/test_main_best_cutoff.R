@@ -307,3 +307,31 @@ test_that("best_cutoff() refuses input it cannot read cutoffs from", {
   )
   expect_error(best_cutoff(averaged), class = "precrec_error_invalid_x")
 })
+
+test_that("the rank reported is the one the score actually produces", {
+  # Rows that share a score are one threshold seen several times. Under
+  # `basic_ties = "hold"` the whole run carries one value of every metric,
+  # so the optimum lands on the first row of it and the rank has to reach
+  # the end of the run to describe the same cutoff its score does.
+  set.seed(3)
+  scores <- round(c(rnorm(40, 1), rnorm(160, 0)), 1)
+  labels <- rep(c(1, 0), c(40, 160))
+  mdat <- mmdata(scores, labels)
+  expect_true(anyDuplicated(scores) > 0) # the fixture is tied
+
+  for (ties in c("split", "hold")) {
+    best <- best_cutoff(mdat, metric = "mcc", basic_ties = ties)
+    expect_equal(best$rank, sum(scores >= best$score), info = ties)
+    expect_equal(
+      best$normalized_rank, best$rank / length(scores),
+      info = ties
+    )
+  }
+
+  # `"hold"` is the tie policy the other packages use, and the cutoff it
+  # picks has the sensitivity and specificity they report for it
+  held <- best_cutoff(mdat, basic_ties = "hold")
+  called <- scores >= held$score
+  expect_equal(held$sensitivity, sum(called & labels == 1) / sum(labels == 1))
+  expect_equal(held$specificity, sum(!called & labels == 0) / sum(labels == 0))
+})

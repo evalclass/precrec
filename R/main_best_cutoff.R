@@ -93,6 +93,13 @@
 #' so the result is one row per model per test dataset whatever the data
 #' does.
 #'
+#' Rows that share a `score` are an exception, because they are one
+#' threshold seen several times rather than several cutoffs: `score >= `
+#' that value calls all of the tied instances positive, so the `rank`
+#' reported is the last of the run and not the first. That is what
+#' `evalmod(basic_ties = "hold")` produces throughout, since it gives every
+#' cutoff in a run of tied scores the counts of the whole run.
+#'
 #' A metric that has no interior optimum is optimized at an end of the
 #' range, and no warning says so: `sensitivity` is largest when everything
 #' is called positive, and `specificity` when nothing is. Those are the
@@ -246,7 +253,8 @@ best_cutoff <- function(x, scores = NULL, labels = NULL, metric = "youden",
     # An NA is not a candidate, so push it to the losing end rather than
     # letting `which.max()` decide what to do with it
     vals[is.na(vals)] <- if (direction == "max") -Inf else Inf
-    rows[if (direction == "max") which.max(vals) else which.min(vals)]
+    at <- if (direction == "max") which.max(vals) else which.min(vals)
+    .best_cutoff_run_end(rows, at, vals, tab[["score"]][rows])
   }, integer(1))
 
   out <- tab[picked, , drop = FALSE]
@@ -269,4 +277,33 @@ best_cutoff <- function(x, scores = NULL, labels = NULL, metric = "youden",
   rownames(out) <- NULL
 
   out
+}
+
+#
+# Walk to the end of a run of rows that all name the same threshold
+#
+# Rows that share a `score` are one cutoff seen several times, and only the
+# last of them has the `rank` that cutoff produces: `score >= ` that value
+# calls all of the tied instances positive, not the first of them. Under
+# `basic_ties = "hold"` a whole run carries one value of every metric, so
+# the optimum lands on the first row of the run and the rank has to be
+# walked forward to match the score beside it.
+#
+# The tie-break between cutoffs that genuinely differ is untouched - those
+# have different scores, and the loop stops at the first of them.
+#
+.best_cutoff_run_end <- function(rows, at, vals, scores) {
+  while (at < length(rows)) {
+    here <- scores[at]
+    there <- scores[at + 1L]
+    if (is.na(here) || is.na(there) || here != there) {
+      break
+    }
+    if (!identical(vals[at], vals[at + 1L])) {
+      break
+    }
+    at <- at + 1L
+  }
+
+  rows[at]
 }
