@@ -63,6 +63,9 @@ so this release carries all sixteen sets of changes.
 - Document `print()`, whose six methods had no help page because nothing
   defined the topic they were attached to, and give them the invisible
   return value an S3 `print` method is expected to have
+- Add `metric_table(at = )`, which reports the metrics of given thresholds
+  rather than of every cutoff, so that a cutoff chosen on one dataset can
+  be scored on another
 
 `NEWS.md` has the full list.
 

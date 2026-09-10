@@ -1,5 +1,29 @@
 # precrec 0.23.1
 
+* New `metric_table(at = )` reports the metrics of thresholds you name,
+  rather than of every cutoff. A threshold is rarely one of the observed
+  scores, so it has no row of its own, but it always names one of the
+  cutoffs: `score >= ` it calls a certain number of instances positive,
+  and that count is a rank the table already holds. The row returned is
+  that rank's row, with `at` carrying the threshold asked for and `score`
+  the observed cutoff realizing it. A threshold above every score gives
+  the `rank = 0` row, and an `NA` score is never a positive prediction,
+  as everywhere else in the package.
+
+  This is what was missing to score a cutoff on data it was not chosen
+  on. `classification_report(at = )` already took an arbitrary threshold
+  but reports only precision, recall and F-score;
+  `metric_table()` had every metric but only at the cutoffs the data
+  happens to contain. *Choose an operating point* now shows the two ends
+  together - `best_cutoff()` on nine folds, `metric_table(at = )` on the
+  tenth - and what it costs not to: on data with five percent positives,
+  `mcc` reads 0.361 when each fold picks its own cutoff and 0.228 when
+  the cutoff is chosen without seeing it, held-out below in-sample in
+  every fold.
+
+  `best_cutoff()` rejects `at` rather than letting it narrow the search
+  it does.
+
 * Document `print()`. The six `print()` methods carried no help page at
   all: one of them pointed at a `print` topic with `@rdname`, nothing
   defined that topic, and so `roxygen2` skipped it on every run and

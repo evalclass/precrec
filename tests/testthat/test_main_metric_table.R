@@ -207,3 +207,121 @@ test_that("metric_table() takes the arguments evalmod takes", {
   )
   expect_false(isTRUE(all.equal(half$fscore, named$fscore)))
 })
+
+test_that("at = picks the row the threshold actually produces", {
+  data(P10N10)
+  scores <- P10N10$scores
+  labels <- P10N10$labels
+  full <- metric_table(scores = scores, labels = labels)
+
+  at <- c(21, 17, 14, 6, 5, 0)
+  tab <- metric_table(scores = scores, labels = labels, at = at)
+
+  expect_equal(nrow(tab), length(at))
+  expect_equal(tab$at, at)
+  # The rank is the number of instances the rule `score >= at` selects
+  expect_equal(tab$rank, vapply(at, function(t) sum(scores >= t), integer(1)))
+  # And the row is the row of that rank, untouched
+  expect_equal(
+    tab[, setdiff(names(tab), "at")],
+    `rownames<-`(full[match(tab$rank, full$rank), ], NULL)
+  )
+})
+
+test_that("at = reports the threshold asked for and the cutoff realizing it", {
+  data(P10N10)
+  tab <- metric_table(
+    scores = P10N10$scores, labels = P10N10$labels,
+    at = c(16.5, 14)
+  )
+
+  # `at` is what was asked for, `score` the smallest score still positive
+  expect_equal(tab$at, c(16.5, 14))
+  expect_equal(tab$score, c(17, 14))
+  expect_true(all(tab$score >= tab$at))
+  # 14 is a run of six tied scores, and the rank is the end of the run
+  expect_equal(tab$rank, c(4L, 12L))
+})
+
+test_that("at = puts its column after the identifiers", {
+  data(P10N10)
+  tab <- metric_table(scores = P10N10$scores, labels = P10N10$labels, at = 14)
+
+  expect_equal(names(tab)[1:6], c(
+    "modname", "dsid", "at", "rank", "normalized_rank", "score"
+  ))
+})
+
+test_that("a threshold above every score is the rank 0 row", {
+  data(P10N10)
+  tab <- metric_table(scores = P10N10$scores, labels = P10N10$labels, at = 999)
+
+  expect_equal(tab$rank, 0L)
+  expect_true(is.na(tab$score))
+  expect_equal(tab$sensitivity, 0)
+  expect_equal(tab$specificity, 1)
+})
+
+test_that("an NA score is never called positive by at =", {
+  scores <- c(9, 8, NA, 6, 3, 2)
+  labels <- c(1, 1, 1, 0, 0, 0)
+
+  tab <- metric_table(scores = scores, labels = labels, at = c(1, 8))
+
+  # Five scorable instances at or above 1, not six
+  expect_equal(tab$rank, c(5L, 2L))
+  expect_equal(tab$sensitivity, c(2 / 3, 2 / 3))
+})
+
+test_that("at = resolves per test dataset, not globally", {
+  scores <- list(c(9, 8, 7, 6), c(4, 3, 2, 1))
+  labels <- list(c(1, 1, 0, 0), c(1, 1, 0, 0))
+  mdat <- mmdata(scores, labels, modnames = c("m", "m"), dsids = c(1, 2))
+
+  tab <- metric_table(mdat, at = 5)
+
+  expect_equal(nrow(tab), 2)
+  expect_equal(as.character(tab$dsid), c("1", "2"))
+  # The same threshold is above all of the second dataset and none of the first
+  expect_equal(tab$rank, c(4L, 0L))
+  expect_equal(tab$at, c(5, 5))
+})
+
+test_that("at = works on an object that is already calculated", {
+  data(P10N10)
+  points <- evalmod(
+    scores = P10N10$scores, labels = P10N10$labels, mode = "basic"
+  )
+
+  expect_equal(
+    metric_table(points, at = 14),
+    metric_table(scores = P10N10$scores, labels = P10N10$labels, at = 14)
+  )
+})
+
+test_that("at = rejects what is not a threshold", {
+  data(P10N10)
+  args <- list(scores = P10N10$scores, labels = P10N10$labels)
+
+  expect_error(
+    do.call(metric_table, c(args, list(at = "14"))),
+    class = "precrec_error_invalid_at"
+  )
+  expect_error(
+    do.call(metric_table, c(args, list(at = numeric(0)))),
+    class = "precrec_error_invalid_at"
+  )
+  expect_error(
+    do.call(metric_table, c(args, list(at = c(14, NA)))),
+    class = "precrec_error_invalid_at"
+  )
+})
+
+test_that("best_cutoff() refuses at = rather than narrowing its search", {
+  data(P10N10)
+
+  expect_error(
+    best_cutoff(scores = P10N10$scores, labels = P10N10$labels, at = 14),
+    class = "precrec_error_invalid_at"
+  )
+})
