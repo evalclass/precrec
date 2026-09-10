@@ -6,9 +6,12 @@
   packages, including the three places the answers differ: the
   precision-recall area, which `ROCR` reads off straight lines between raw
   points; tied scores, which the other two collapse and
-  `evalmod(basic_ties = "hold")` matches; and the threshold itself, which
-  `pROC` names by a midpoint and `precrec` by an observed score. What has no
-  equivalent is listed rather than left to be discovered.
+  `evalmod(basic_ties = "hold")` matches; the threshold itself, which
+  `pROC` names by a midpoint and `precrec` by an observed score; and the
+  standardized partial AUC, where `spaucs` is the fraction of the region
+  the curve covered and `pROC` rescales chance to `0.5` instead - with the
+  conversion between them. What has no equivalent is listed rather than
+  left to be discovered.
 
 * New `best_cutoff()` picks the cutoff that optimizes one metric, in the
   manner of `pROC::coords(x, "best")`. It returns a row of `metric_table()`

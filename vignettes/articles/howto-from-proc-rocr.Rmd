@@ -70,7 +70,8 @@ variable: everything else on this page reads one of them.
 | `coords(r, "best", best.method = "closest.topleft")` | `best_cutoff(mdat, metric = "topleft")` | |
 | `coords(r, "all")` | `metric_table(mdat)` | Same rows, many more columns |
 | `coords(r, t, input = "threshold")` | `classification_report(mdat, at = t)` | |
-| `auc(r, partial.auc = c(1, 0.8), partial.auc.focus = "sp")` | `pauc(part(curves, xlim = c(0, 0.2)))` | Identical |
+| `auc(r, partial.auc = c(1, 0.8), partial.auc.focus = "sp")` | `pauc(part(curves, xlim = c(0, 0.2)))` | Identical, in the `paucs` column |
+| `partial.auc.correct = TRUE` | The `spaucs` column | Both standardize; not the same way - see below |
 | `plot(r)` | `autoplot(curves, "ROC")` | See the axis note below |
 | `multiclass.roc(labels, scores)` | `evalmod()` on more than two classes | [One-vs-rest](howto-multiclass.html) |
 | `levels = `, `direction = ` | `posclass = ` | |
@@ -132,7 +133,7 @@ first, for the cutoff that calls nothing positive, and `precrec` puts `NA`
 there because no instance sits at rank `0`. The metrics on that row are the
 same in both.
 
-## Three things that will look wrong at first
+## Four things that will look wrong at first
 
 ### The precision-recall numbers do not match
 
@@ -205,6 +206,50 @@ the sensitivity and specificity are identical. Only the number written down
 as the threshold differs, and `precrec` uses a value the data actually
 contains so that it can be applied without a rounding decision.
 
+### The standardized partial AUC is standardized differently
+
+Both packages report a partial AUC and a standardized version of it, and
+the two standardized numbers answer different questions.
+
+`precrec` divides the partial area by the area of the box the region
+occupies, so `spaucs` is the fraction of what was available that the curve
+covered. `pROC`, with `partial.auc.correct = TRUE`, applies what the
+literature calls the McClish correction, which rescales the interval
+between chance and perfect onto `0.5` to `1` - so a corrected partial AUC
+reads on the same scale as a full one.
+
+The difference is where chance sits. Over false positive rates up to `0.2`,
+a coin flip covers an area of `0.02`: that is `0.1` of the box, and `0.5`
+after the correction.
+
+```{r}
+region <- 0.2 # false positive rates 0 to 0.2
+areas <- pauc(part(curves, xlim = c(0, region)))
+roc_row <- areas[areas$curvetypes == "ROC", ]
+
+chance <- region^2 / 2
+
+knitr::kable(
+  data.frame(
+    paucs = roc_row$paucs,
+    spaucs = roc_row$spaucs,
+    corrected = 0.5 * (1 + (roc_row$paucs - chance) / (region - chance))
+  ),
+  digits = 5
+)
+```
+
+`paucs` is the number `pROC` gives uncorrected, to the last digit. The last
+column is the conversion, and it is the number `partial.auc.correct = TRUE`
+returns - so a corrected value can be had here without `pROC` installed.
+The formula holds for a ROC region measured from a false positive rate of
+`0`; a region that starts elsewhere needs the area under the diagonal
+across it in place of `region^2 / 2`.
+
+Neither is the right one. `spaucs` is the more direct reading of "how much
+of this corner did the curve fill"; the corrected one is the more
+comparable to a full AUC. Say which you used.
+
 ## The axes
 
 `plot(roc)` puts specificity on the x axis and reverses it, so the curve
@@ -240,8 +285,6 @@ Honestly, and in the order they are missed:
   counterpart; [confidence bands](plots-confidence-bands.html) here come
   from several test sets, and `auc_boot()` covers the single-sample case
   for the area rather than for the curve.
-- **The standardized partial AUC** that `partial.auc.correct = TRUE`
-  rescales to. `pauc()` reports the area itself.
 - **Sample size calculation.** `power.roc.test()` has no counterpart.
 - **`ROCR`'s convex hull, expected-cost curve and calibration error**
   (`"rch"`, `"ecost"`, `"cal"`), each a curve in a space of its own rather
