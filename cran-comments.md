@@ -79,6 +79,11 @@ submitted, so this release carries all seventeen sets of changes.
   `pauc()`, and a `baselines` column on `auc_ci()`, `auc_boot()` and
   `auc_delong()`. A standardized partial ROC area over false positive rates
   up to `0.2` has a chance level of `0.1`, not `0.5`
+- Fix `prbe()`, which reported a break-even point of `0` whenever the
+  top-ranked instance was a negative - the origin of a precision-recall
+  curve, where precision and recall are trivially equal and nothing has
+  been retrieved. At a low proportion of positives that is nearly every
+  dataset. `prbe()` also gained a `baselines` column
 
 `NEWS.md` has the full list.
 

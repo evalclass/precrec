@@ -1,5 +1,24 @@
 # precrec 0.23.2
 
+* `prbe()` reported a break-even point of `0` whenever the top-ranked
+  instance was a negative. A precision-recall curve is anchored at recall
+  `0`, where precision is `0` in that case, so precision and recall were
+  trivially equal at the origin and the crossing search counted it - though
+  nothing has been retrieved there. At a low proportion of positives the
+  top-ranked instance is nearly always a negative: of 150 random rankings of
+  a dataset with 20 positives in 1000, 148 had a negative on top and all 148
+  got the spurious row. It sat in front of the real break-even point, so
+  taking the first row of the result returned `0` instead of the answer.
+
+  A curve that leaves the origin below the diagonal and never catches up now
+  gets the single `NA` row the help page has always promised for a curve
+  that never reaches equal precision and recall.
+
+* `prbe()` gained a `baselines` column, the proportion of positives. At
+  chance the curve is flat at the prevalence, so it meets the diagonal at
+  that recall - a break-even point of `0.2` is chance on data that is 20%
+  positive and five times chance on data that is 4% positive.
+
 * Every table that reports an area now reports what that area is worth by
   chance beside it. `pauc()` gained `baselines` and `sbaselines`, one for
   each of the two scales it standardizes on, and `auc_ci()`, `auc_boot()`

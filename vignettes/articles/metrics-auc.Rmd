@@ -146,6 +146,21 @@ that never does gets a single `NA`. `prbe()` reads the crossing off the
 interpolated curve - finding it by linear interpolation between raw points,
 as some tools do, is the error this package exists to avoid.
 
+`baselines` is where a classifier that ranks at random breaks even. At chance
+the curve is flat at the proportion of positives, so it meets the diagonal at
+that recall: a break-even point of 0.2 is chance on data that is 20% positive
+and five times chance on data that is 4% positive. It is the same reading
+problem the area has, and the same column answers it.
+
+The origin is not a break-even point. A curve is anchored at recall 0, where
+precision is 1 if the top-ranked instance is a positive and 0 if it is a
+negative - and in the second case precision and recall are equal there
+without anything having been retrieved. When positives are rare the
+top-ranked instance is nearly always a negative, so counting the origin would
+put a spurious 0 in front of almost every imbalanced result. A curve that
+leaves the origin below the diagonal and never catches up has no break-even
+point at all, and gets the `NA`.
+
 ## Averaging over classes
 
 For a multiclass evaluation `auc()` adds the macro-average of the per-class
