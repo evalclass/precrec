@@ -2,8 +2,8 @@
 # Calculate basic evaluation metrics from confusion matrices
 #
 calc_metrics <- function(cmats, scores = NULL, labels = NULL, beta = 1,
-                          extra_metrics = TRUE, metrics = NULL,
-                          cost_fp = 1, cost_fn = 1, ...) {
+                         extra_metrics = TRUE, metrics = NULL,
+                         cost_fp = 1, cost_fn = 1, ...) {
   # === Validate input arguments ===
   # Create cmats from scores and labels if cmats is missing
   #
@@ -92,7 +92,7 @@ calc_metrics <- function(cmats, scores = NULL, labels = NULL, beta = 1,
 # `.validate.pevals()` checks that.
 #
 .add_derived_metrics <- function(pb, cmats, metrics, cost_fp = 1,
-                                  cost_fn = 1) {
+                                 cost_fn = 1) {
   # Checked before the table is read, so that the common call - the curve
   # pipelines and every `evalmod()` that does not pass `metrics` - does no
   # work at all here

@@ -23,6 +23,9 @@
   given a `ylim`, both documented in `?pauc`. Off by default, so nothing
   that reads `pauc()` today changes.
 
+* The help page of `pauc()` opened by naming `auc()` as the function it
+  documents, a line copied from `auc()` and never corrected.
+
 # precrec 0.23.1
 
 * `auc()` and `average_precision()` gained a `baselines` column, and the
