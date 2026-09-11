@@ -84,6 +84,11 @@ submitted, so this release carries all seventeen sets of changes.
   curve, where precision and recall are trivially equal and nothing has
   been retrieved. At a low proportion of positives that is nearly every
   dataset. `prbe()` also gained a `baselines` column
+- Fix `best_cutoff()`, which could return the rule that calls nothing
+  positive - a row whose `score` is `NA`, so not an operating point at all.
+  It was optimal for `specificity` always and for `accuracy` once positives
+  were rare, and it tied for `precision` whenever the top-ranked instance
+  was a positive
 
 `NEWS.md` has the full list.
 
