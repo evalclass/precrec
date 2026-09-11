@@ -33,8 +33,14 @@ seeded call does not disturb the stream the caller is drawing from.
 \value{
 An object of class \code{aucboot}: a data frame of one row per model,
 curve type and resample, with the columns \code{modnames}, \code{curvetypes},
-\code{boot_id} and \code{aucs}. The AUCs of the original data are attached as the
-\code{observed} attribute.
+\code{boot_id}, \code{aucs} and \code{baselines}. The AUCs of the original data are
+attached as the \code{observed} attribute, with a \code{baselines} column of
+their own.
+
+\code{baselines} is the same on every resample, because the resampling is
+stratified and so holds the class balance fixed - see below. It is
+carried on the resamples anyway so that an area and what it is worth
+by chance never have to be joined back together by hand.
 }
 \description{
 \code{auc_boot} resamples a single test set and recalculates the areas under

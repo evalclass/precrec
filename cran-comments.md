@@ -74,6 +74,11 @@ submitted, so this release carries all seventeen sets of changes.
 - Add `pauc(corrected = TRUE)`, the McClish-corrected partial AUC of the
   ROC curve in a `cpaucs` column, which `spaucs` was being mistaken for;
   it is what `pROC::auc(partial.auc.correct = TRUE)` reports
+- Report the chance level beside every area the package reports, not only
+  the ones `auc()` covers: `baselines` and `sbaselines` columns on
+  `pauc()`, and a `baselines` column on `auc_ci()`, `auc_boot()` and
+  `auc_delong()`. A standardized partial ROC area over false positive rates
+  up to `0.2` has a chance level of `0.1`, not `0.5`
 
 `NEWS.md` has the full list.
 

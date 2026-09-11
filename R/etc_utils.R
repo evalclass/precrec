@@ -588,12 +588,72 @@
 #
 .curve_baselines <- function(curvetypes, modnames, dsids, info) {
   prevalence <- info[["np"]] / (info[["np"]] + info[["nn"]])
-  names(prevalence) <- paste(info[["modnames"]], info[["dsids"]], sep = "\r")
 
-  base <- unname(prevalence[paste(modnames, dsids, sep = "\r")])
+  if (is.null(dsids)) {
+    # An averaged curve has no single test dataset behind it, so its chance
+    # level is the mean of the prevalences that went into it - the same
+    # averaging the curve itself is, and what a macro-average row does to
+    # the baselines it summarizes.
+    per_model <- tapply(prevalence, info[["modnames"]], mean)
+    base <- unname(per_model[as.character(modnames)])
+  } else {
+    names(prevalence) <- paste(info[["modnames"]], info[["dsids"]], sep = "\r")
+    base <- unname(prevalence[paste(modnames, dsids, sep = "\r")])
+  }
+
   base[curvetypes == "ROC"] <- 0.5
 
   base
+}
+
+#
+# The chance level of each curve type at one class balance
+#
+# `.curve_baselines()` looks the prevalence up per model and per dataset.
+# This is the same two values where there is only one balance to read: the
+# single test set behind `auc_boot()` and `auc_delong()`. The bootstrap is
+# stratified, so every resample holds the same np and nn as the test set it
+# came from and the baseline is the same on all of them.
+#
+.baselines_at <- function(curvetypes, np, nn) {
+  base <- rep(np / (np + nn), length(curvetypes))
+  base[curvetypes == "ROC"] <- 0.5
+
+  base
+}
+
+#
+# What a partial area is worth by chance, on both of the scales `pauc()` uses
+#
+# Over a region of false positive rates `[x1, x2]` a coin flip covers the
+# area under the diagonal across it, `(x2^2 - x1^2) / 2`, which is the
+# familiar `region^2 / 2` only when the region starts at 0. A precision-recall
+# curve is flat at the proportion of positives instead, so chance covers
+# `prevalence * (x2 - x1)`.
+#
+# `spaucs` divides by the area of the region, so the chance level of a
+# standardized partial area is those same two values divided by the width:
+# `(x1 + x2) / 2` for a ROC curve - not `0.5`, which is what a standardized
+# number invites - and the prevalence unchanged for a precision-recall curve.
+#
+# Both are NA when `part()` was given a `ylim` other than `c(0, 1)`. The
+# region is then a box the chance curve may cross, touch or miss entirely,
+# and the area of chance inside it has no settled definition; `cpaucs`
+# declines the same case for the same reason.
+#
+.partial_baselines <- function(curvetypes, modnames, dsids, info, xlim, ylim) {
+  na <- rep(NA_real_, length(curvetypes))
+  if (ylim[1] != 0 || ylim[2] != 1) {
+    return(list(baselines = na, sbaselines = na))
+  }
+
+  # `part()` requires xlim[1] < xlim[2], so the width is never zero
+  width <- xlim[2] - xlim[1]
+
+  base <- .curve_baselines(curvetypes, modnames, dsids, info) * width
+  base[curvetypes == "ROC"] <- (xlim[2]^2 - xlim[1]^2) / 2
+
+  list(baselines = base, sbaselines = base / width)
 }
 
 #

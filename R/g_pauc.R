@@ -30,9 +30,44 @@
 #'     `dsids` \tab Test dataset ID \cr
 #'     `curvetypes` \tab `ROC` or `PRC` \cr
 #'     `paucs` \tab The area under that curve over the region \cr
+#'     `baselines` \tab What that area would be by chance, see below \cr
 #'     `spaucs` \tab That area over the area of the region \cr
+#'     `sbaselines` \tab What `spaucs` would be by chance \cr
 #'     `cpaucs` \tab The McClish correction, with `corrected = TRUE` \cr
 #'   }
+#'
+#'   Each area is followed by what it is worth by chance, because neither of
+#'   them can be read without it. `cpaucs` has no column of its own: the
+#'   correction puts chance at `0.5` by construction, which is the whole
+#'   point of it.
+#'
+#' @section What a partial area is worth by chance:
+#'
+#' Restricting the region changes the chance level, and not by an amount
+#'   anyone guesses correctly. Over false positive rates `[x1, x2]` a coin
+#'   flip covers the area under the diagonal across that span,
+#'   `(x2^2 - x1^2) / 2`. A precision-recall curve is flat at the proportion
+#'   of positives instead, so chance covers `prevalence * (x2 - x1)`.
+#'
+#'   `spaucs` divides by the area of the region, which divides those two by
+#'   the width: chance for a standardized ROC partial area is `(x1 + x2) / 2`
+#'   and **not** `0.5`. Over false positive rates up to `0.2` a coin flip
+#'   covers `0.1` of the region, so a `spaucs` of `0.3` there is three times
+#'   chance and not a failing grade. For a precision-recall curve the
+#'   standardized chance level is the prevalence, unchanged by the region.
+#'
+#'   Both are `NA` when `part()` was given a `ylim` other than `c(0, 1)`.
+#'   The region is then a box the chance curve may cross, touch or miss
+#'   entirely, and the area of chance inside it has no settled definition -
+#'   the case `cpaucs` declines for the same reason.
+#'
+#'   A baseline is what an area is worth by chance in the limit, and the
+#'   estimate from a finite sample scatters around it. Comparing an area to
+#'   its baseline is not a test, and the smaller the region and the fewer
+#'   the positives the less it is worth: over the first tenth of recall with
+#'   twenty positives, a classifier with no signal averages nearly twice its
+#'   baseline. [auc_boot()] puts an interval around the area, which is the
+#'   comparison that means something.
 #'
 #' @section Two ways to standardize a partial area:
 #'
@@ -189,14 +224,31 @@ pauc.aucs <- function(curves, corrected = FALSE) {
   # Return pAUC scores as a plain data frame
   paucs <- .as_plain_df(attr(curves, "paucs"), copy = TRUE)
 
+  xlim <- attr(curves[["rocs"]], "xlim")
+  ylim <- attr(curves[["rocs"]], "ylim")
+
+  bases <- .partial_baselines(
+    paucs[["curvetypes"]], paucs[["modnames"]], paucs[["dsids"]],
+    attr(curves, "data_info"), xlim, ylim
+  )
+  paucs[["baselines"]] <- bases[["baselines"]]
+  paucs[["sbaselines"]] <- bases[["sbaselines"]]
+
   if (corrected) {
     paucs[["cpaucs"]] <- .mcclish_pauc(
-      paucs[["paucs"]], paucs[["curvetypes"]],
-      attr(curves[["rocs"]], "xlim"), attr(curves[["rocs"]], "ylim")
+      paucs[["paucs"]], paucs[["curvetypes"]], xlim, ylim
     )
   }
 
-  paucs
+  # Each area beside what it is worth by chance, so that the two cannot be
+  # read apart. The corrected one carries its own chance level, 0.5, in its
+  # definition and so needs no column.
+  areas <- c("paucs", "baselines", "spaucs", "sbaselines")
+  if (corrected) {
+    areas <- c(areas, "cpaucs")
+  }
+
+  paucs[c(setdiff(names(paucs), areas), areas)]
 }
 
 #

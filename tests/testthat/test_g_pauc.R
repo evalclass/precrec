@@ -150,11 +150,17 @@ test_that("pauc() adds the McClish correction only when it is asked for", {
 
   expect_equal(
     names(pauc(curves)),
-    c("modnames", "dsids", "curvetypes", "paucs", "spaucs")
+    c(
+      "modnames", "dsids", "curvetypes", "paucs", "baselines", "spaucs",
+      "sbaselines"
+    )
   )
   expect_equal(
     names(pauc(curves, corrected = TRUE)),
-    c("modnames", "dsids", "curvetypes", "paucs", "spaucs", "cpaucs")
+    c(
+      "modnames", "dsids", "curvetypes", "paucs", "baselines", "spaucs",
+      "sbaselines", "cpaucs"
+    )
   )
 
   expect_error(
@@ -214,7 +220,10 @@ test_that("pauc(corrected = TRUE) works on averaged curves", {
 
   expect_equal(
     names(paucs),
-    c("modnames", "curvetypes", "paucs", "spaucs", "cpaucs")
+    c(
+      "modnames", "curvetypes", "paucs", "baselines", "spaucs",
+      "sbaselines", "cpaucs"
+    )
   )
 
   roc <- subset(paucs, curvetypes == "ROC")
@@ -223,4 +232,77 @@ test_that("pauc(corrected = TRUE) works on averaged curves", {
     roc[["cpaucs"]],
     0.5 * (1 + (roc[["paucs"]] - chance) / (0.5 - chance))
   )
+})
+
+test_that("pauc() reports what a partial area is worth by chance", {
+  set.seed(1)
+  scores <- c(rnorm(20, 1.2), rnorm(80))
+  labels <- rep(c(1, 0), c(20, 80))
+  curves <- evalmod(scores = scores, labels = labels)
+
+  x1 <- 0.1
+  x2 <- 0.3
+  paucs <- pauc(part(curves, xlim = c(x1, x2)))
+  roc <- paucs[paucs$curvetypes == "ROC", ]
+  prc <- paucs[paucs$curvetypes == "PRC", ]
+
+  # A coin flip covers the area under the diagonal across the region, which
+  # is region^2 / 2 only when the region starts at 0
+  expect_equal(roc$baselines, (x2^2 - x1^2) / 2)
+  expect_equal(roc$sbaselines, (x1 + x2) / 2)
+  expect_false(isTRUE(all.equal(roc$sbaselines, 0.5)))
+
+  # A precision-recall curve is flat at the proportion of positives
+  expect_equal(prc$baselines, 0.2 * (x2 - x1))
+  expect_equal(prc$sbaselines, 0.2)
+
+  # spaucs divides the area by the area of the region, and the baselines
+  # divide the same way
+  expect_equal(paucs$baselines / (x2 - x1), paucs$sbaselines)
+})
+
+test_that("pauc() over the whole curve agrees with auc()", {
+  set.seed(2)
+  scores <- c(rnorm(20, 1.2), rnorm(80))
+  labels <- rep(c(1, 0), c(20, 80))
+  curves <- evalmod(scores = scores, labels = labels)
+
+  paucs <- pauc(part(curves, xlim = c(0, 1)))
+  aucs <- auc(curves)
+
+  expect_equal(paucs$paucs, aucs$aucs)
+  expect_equal(paucs$baselines, aucs$baselines)
+  expect_equal(paucs$sbaselines, aucs$baselines)
+})
+
+test_that("pauc() gives no baseline for a restricted ylim", {
+  set.seed(3)
+  scores <- c(rnorm(20, 1.2), rnorm(80))
+  labels <- rep(c(1, 0), c(20, 80))
+  curves <- evalmod(scores = scores, labels = labels)
+
+  # The region is then a box the chance curve may cross, touch or miss, and
+  # the area of chance inside it has no settled definition - the case
+  # cpaucs declines for the same reason
+  paucs <- pauc(part(curves, xlim = c(0, 0.5), ylim = c(0.1, 1)))
+
+  expect_true(all(is.na(paucs$baselines)))
+  expect_true(all(is.na(paucs$sbaselines)))
+  expect_false(anyNA(paucs$paucs))
+})
+
+test_that("pauc() on averaged curves averages the baseline over datasets", {
+  scores <- list(c(rnorm(10, 1), rnorm(90)), c(rnorm(30, 1), rnorm(70)))
+  labels <- list(rep(c(1, 0), c(10, 90)), rep(c(1, 0), c(30, 70)))
+  curves <- evalmod(
+    mmdata(scores, labels, modnames = c("m1", "m1"), dsids = c(1, 2))
+  )
+
+  paucs <- pauc(part(curves, xlim = c(0, 0.5)))
+  prc <- paucs[paucs$curvetypes == "PRC", ]
+
+  # An averaged curve has no single test dataset behind it, so its chance
+  # level is the mean of the prevalences that went into it
+  expect_false("dsids" %in% names(paucs))
+  expect_equal(prc$sbaselines, mean(c(0.1, 0.3)))
 })

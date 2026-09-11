@@ -169,6 +169,109 @@ Kull's own argument for it - that the precision-recall area is a poorly
 founded summary quite apart from any question of class balance - is worth
 reading on its own terms.
 
+## The baseline is an asymptote
+
+The prevalence is what the area is worth by chance *in the limit*. An area
+measured on a finite sample scatters around its chance level rather than
+sitting on it, and how widely depends on the number of positives - which is
+what imbalance takes away.
+
+Here is a classifier with no signal whatever, scored four hundred times on
+fresh random labels. Twenty positives in a thousand, the same 2% as above.
+The column is the area divided by the baseline `auc()` reports for it, so
+chance is 1.
+
+```{r}
+np <- 20
+nn <- 980
+prevalence <- np / (np + nn)
+
+noise <- t(sapply(seq_len(400), function(i) {
+  set.seed(i)
+  curves <- evalmod(
+    scores = rnorm(np + nn), labels = rep(c(1, 0), c(np, nn))
+  )
+  areas <- auc(curves)
+  top <- pauc(part(curves, xlim = c(0, 0.1)))
+
+  c(
+    whole = areas$aucs[areas$curvetypes == "PRC"],
+    top = top$spaucs[top$curvetypes == "PRC"]
+  ) / prevalence
+}))
+
+knitr::kable(
+  data.frame(
+    region = c("the whole curve", "the first tenth of recall"),
+    mean = colMeans(noise),
+    median = apply(noise, 2, median),
+    over_2x = colMeans(noise > 2)
+  ),
+  row.names = FALSE, digits = 2
+)
+```
+
+A classifier that knows nothing averages 1.15 times its baseline over the
+whole curve, and 1.86 times over the top of the ranking - where it clears
+twice the baseline about one run in five. The median tells you what kind of
+error this is: at 0.89 it sits *below* chance, so the distribution is skewed
+rather than shifted. Most draws land near or under the baseline and a few
+land far above it, and any one dataset is one draw.
+
+Two hundred positives brings the first figure to 1.01 and two thousand
+removes it entirely, so what drives this is the number of positives rather
+than the balance. `average_precision()` shows the same thing, so it is not
+an artifact of the interpolation either. Rare positives cost you twice over:
+few positives to estimate from, and a small baseline with room above it for
+the tail to run into.
+
+None of this makes the baseline the wrong number - it is the right one, and
+the fall from 0.5 to 0.2 above is real. What it means is that dividing an
+area by its baseline is not a test.
+
+## So put an interval on it
+
+`auc_boot()` resamples a single test set, and `auc_ci()` reads an interval
+off the resamples. Both now report the baseline beside the area, so the
+comparison is one table rather than two.
+
+```{r}
+set.seed(57)
+pure_noise <- auc_boot(
+  scores = rnorm(np + nn), labels = rep(c(1, 0), c(np, nn)),
+  boot_n = 500, seed = 1
+)
+
+knitr::kable(
+  auc_ci(pure_noise)[, c(
+    "curvetypes", "aucs", "baselines", "lower_bound", "upper_bound"
+  )],
+  row.names = FALSE, digits = 3
+)
+```
+
+The ROC area lands on 0.5, as it should for a classifier built out of
+`rnorm()`. The precision-recall area is 1.8 times its baseline, which read on
+its own is the sort of number people write down. The interval contains the
+baseline, which is the correct answer.
+
+The interval is well behaved on this case even at twenty positives: over a
+hundred and twenty runs of the simulation above, the 95% bootstrap interval
+covered the baseline 94% of the time and its lower bound cleared the
+baseline 2.5% of the time, which is what a 95% interval is supposed to do.
+The resampling is stratified, so every resample holds the same class balance
+as the test set and the baseline does not move underneath the quantity being
+estimated.
+
+With several test sets, `auc_ci()` does the same job from the variation
+between them, and averages the baseline over the same datasets it averaged
+the area over - a fold need not hold the classes in the proportions the
+whole dataset does.
+
+`pauc()` carries the same two numbers for a restricted region, where they
+are easier still to get wrong: a standardized partial ROC area over false
+positive rates up to 0.2 has a chance level of 0.1, not 0.5.
+
 ## So does the threshold
 
 Everything above is about reading a curve. The last step of most real work

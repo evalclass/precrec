@@ -29,7 +29,22 @@
 #'   | z                | Normal distribution |
 #'   | t                | t-distribution      |
 #'
-#' @return The `auc_ci` function returns a dataframe of AUC CIs.
+#' @return The `auc_ci` function returns a dataframe of AUC CIs, with a
+#'   `baselines` column beside the area giving what that area would be by
+#'   chance - `0.5` for a ROC curve and the proportion of positives for a
+#'   precision-recall curve. See `Reading an area against its baseline` in
+#'   [auc()].
+#'
+#'   Over several test datasets the baseline is averaged over the same
+#'   datasets the mean area is, so a fold that could not be evaluated is
+#'   left out of both. From [auc_boot()] or [auc_delong()] it is the
+#'   balance of the single test set.
+#'
+#'   An interval is the point of this function: the prevalence is what an
+#'   area is worth by chance in the limit, and an area from a finite sample
+#'   scatters around it, so an area sitting above its baseline means little
+#'   on its own. Read the baseline against the interval instead - see
+#'   `The baseline is an asymptote` in [auc()].
 #'
 #' @seealso [evalmod()] for generating `S3` objects with
 #'   performance evaluation metrics. [auc()] for retrieving a dataset
@@ -129,10 +144,21 @@ auc_ci.aucs <- function(curves, alpha = 0.05, dtype = "normal") {
         lower = 0, upper = 1
       )
 
+      # The chance level of the mean, averaged over the same datasets the
+      # mean is, so that a fold which could not be evaluated is left out of
+      # both. The folds of one dataset need not share a prevalence.
+      bases <- .curve_baselines(
+        aucs_subset$curvetypes, aucs_subset$modnames, aucs_subset$dsids,
+        attr(curves, "data_info")
+      )
+      bases <- bases[!is.na(aucs_subset$aucs)]
+      base <- if (length(bases) == 0L) NA_real_ else mean(bases)
+
       ci_parts[[length(ci_parts) + 1L]] <- data.table::data.table(
         modnames = modname,
         curvetypes = curvetype,
         mean = ci[["mean"]],
+        baselines = base,
         error = ci[["error"]],
         lower_bound = ci[["lower_bound"]],
         upper_bound = ci[["upper_bound"]],
@@ -194,6 +220,9 @@ auc_ci.aucboot <- function(curves, alpha = 0.05, dtype = NULL) {
         modnames = modname,
         curvetypes = curvetype,
         aucs = point,
+        baselines = .baselines_at(
+          curvetype, attr(curves, "np"), attr(curves, "nn")
+        ),
         mean = mean(vals),
         error = spread,
         lower_bound = bounds[1],
@@ -234,6 +263,9 @@ auc_ci.aucdelong <- function(curves, alpha = 0.05, dtype = NULL) {
     modnames = curves[["modnames"]],
     curvetypes = curves[["curvetypes"]],
     aucs = curves[["aucs"]],
+    baselines = .baselines_at(
+      curves[["curvetypes"]], attr(curves, "np"), attr(curves, "nn")
+    ),
     error = error,
     lower_bound = pmax(0, curves[["aucs"]] - q * error),
     upper_bound = pmin(1, curves[["aucs"]] + q * error),

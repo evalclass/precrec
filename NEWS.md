@@ -1,5 +1,26 @@
 # precrec 0.23.2
 
+* Every table that reports an area now reports what that area is worth by
+  chance beside it. `pauc()` gained `baselines` and `sbaselines`, one for
+  each of the two scales it standardizes on, and `auc_ci()`, `auc_boot()`
+  and `auc_delong()` gained `baselines`. A partial area is where the chance
+  level is easiest to get wrong: over false positive rates `[x1, x2]` a coin
+  flip covers `(x2^2 - x1^2) / 2`, so a *standardized* partial ROC area up
+  to `0.2` has a chance level of `0.1` and not the `0.5` a standardized
+  number invites. Both are `NA` for a `ylim` other than `c(0, 1)`, which is
+  the case `cpaucs` already declines.
+
+* *Balanced and imbalanced data* gains a section on the fact that a baseline
+  is an asymptote. The prevalence is what a precision-recall area is worth
+  by chance in the limit; an area measured on a finite sample scatters
+  around it, and with twenty positives a classifier with no signal averages
+  1.15 times its baseline over the whole curve and 1.86 times over the first
+  tenth of recall, where it clears twice the baseline about one run in five.
+  The median sits below chance, so the error is a skewed distribution rather
+  than a shifted one. Dividing an area by its baseline is not a test;
+  `auc_boot()` is, and it is well calibrated on the same case. `?auc` and
+  `?pauc` say so too.
+
 * `pauc()` gained a `corrected` argument, which adds a `cpaucs` column: the
   McClish correction of the ROC partial area, which rescales the span
   between chance and perfect onto `0.5` to `1` so that a partial area reads
