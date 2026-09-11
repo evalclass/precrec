@@ -41,7 +41,7 @@ the same thing as a `data.table` when that package is installed.
 | Function | Returns |
 |---|---|
 | `auc()` | Area under each curve, and its baseline |
-| `pauc()` | Partial area, after `part()` |
+| `pauc()` | Partial area, after `part()`, standardized either way |
 | `auc_ci()` | Confidence interval of the area, over several test sets |
 | `prbe()` | Precision-recall break-even point |
 | `prob_metrics()` | Brier score, RMSE and log loss |

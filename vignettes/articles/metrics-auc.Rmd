@@ -88,6 +88,32 @@ different widths compare.
 knitr::kable(pauc(part(curves, xlim = c(0, 0.25))))
 ```
 
+There is a second convention for standardizing a partial area, and both
+are called "the standardized partial AUC". `spaucs` divides by the area of
+the region, so it says what fraction of what was available the curve
+covered. The McClish correction, which `corrected = TRUE` adds as `cpaucs`,
+rescales the span between chance and perfect onto 0.5 to 1 instead, so the
+number reads on the same scale as a full AUC - and over the whole curve it
+is the full AUC.
+
+```{r}
+knitr::kable(
+  subset(
+    pauc(part(curves, xlim = c(0, 0.25)), corrected = TRUE),
+    curvetypes == "ROC"
+  ),
+  row.names = FALSE
+)
+```
+
+Neither is the right one; say which you used. `cpaucs` is what
+`pROC::auc(..., partial.auc.correct = TRUE)` reports, and it is `NA` on the
+precision-recall rows - a precision-recall curve's chance level is the
+proportion of positives, and rescaling by it would make curves at different
+class balances look comparable, which is the thing this package spends
+[a whole page](howto-imbalanced-data.html) arguing they are not. See
+`?pauc`.
+
 Plotting the restricted object draws the partial curve; see
 [partial curves](plots-partial-curves.html).
 

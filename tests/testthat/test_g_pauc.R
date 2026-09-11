@@ -141,3 +141,86 @@ test_that("pauc() returns a plain data frame that does not alias the object", {
   paucs[["paucs"]] <- -1
   expect_equal(pauc(curves)[["paucs"]], before)
 })
+
+test_that("pauc() adds the McClish correction only when it is asked for", {
+  data(P10N10)
+  curves <- part(evalmod(scores = P10N10$scores, labels = P10N10$labels),
+    xlim = c(0, 0.25)
+  )
+
+  expect_equal(
+    names(pauc(curves)),
+    c("modnames", "dsids", "curvetypes", "paucs", "spaucs")
+  )
+  expect_equal(
+    names(pauc(curves, corrected = TRUE)),
+    c("modnames", "dsids", "curvetypes", "paucs", "spaucs", "cpaucs")
+  )
+
+  expect_error(
+    pauc(curves, corrected = "yes"),
+    class = "precrec_error_invalid_corrected"
+  )
+})
+
+test_that("pauc(corrected = TRUE) matches the values pROC reports", {
+  # pROC 1.19.1, auc(partial.auc = , partial.auc.correct = TRUE)
+  set.seed(7)
+  scores <- c(rnorm(60, 1.1), rnorm(140, 0))
+  labels <- rep(c(1, 0), c(60, 140))
+  curves <- evalmod(mmdata(scores, labels))
+
+  roc_row <- function(xlim) {
+    paucs <- pauc(part(curves, xlim = xlim), corrected = TRUE)
+    paucs[paucs[["curvetypes"]] == "ROC", ]
+  }
+
+  expect_equal(roc_row(c(0, 0.2))[["cpaucs"]], 0.7159392, tolerance = 1e-6)
+  # A region that does not start at zero, where the formula quoted for the
+  # zero case gives the wrong answer
+  expect_equal(roc_row(c(0.1, 0.3))[["cpaucs"]], 0.7752976, tolerance = 1e-6)
+  expect_equal(roc_row(c(0.5, 1))[["cpaucs"]], 0.9352381, tolerance = 1e-6)
+
+  # Over the whole curve the correction is the identity
+  whole <- roc_row(c(0, 1))
+  expect_equal(whole[["cpaucs"]], whole[["paucs"]])
+  expect_equal(
+    whole[["cpaucs"]],
+    subset(auc(curves), curvetypes == "ROC")[["aucs"]]
+  )
+})
+
+test_that("pauc(corrected = TRUE) reports nothing where it is undefined", {
+  data(P10N10)
+  curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
+
+  # A precision-recall curve is measured against the class balance, not the
+  # diagonal, so the correction has no counterpart there
+  roc_only <- pauc(part(curves, xlim = c(0, 0.5)), corrected = TRUE)
+  expect_true(is.na(subset(roc_only, curvetypes == "PRC")[["cpaucs"]]))
+  expect_false(is.na(subset(roc_only, curvetypes == "ROC")[["cpaucs"]]))
+
+  # A restricted y range has no settled definition
+  boxed <- pauc(
+    part(curves, xlim = c(0, 0.5), ylim = c(0.5, 1)),
+    corrected = TRUE
+  )
+  expect_true(all(is.na(boxed[["cpaucs"]])))
+})
+
+test_that("pauc(corrected = TRUE) works on averaged curves", {
+  curves <- part(pauc_create_smcurves(FALSE), xlim = c(0, 0.5))
+  paucs <- pauc(curves, corrected = TRUE)
+
+  expect_equal(
+    names(paucs),
+    c("modnames", "curvetypes", "paucs", "spaucs", "cpaucs")
+  )
+
+  roc <- subset(paucs, curvetypes == "ROC")
+  chance <- 0.5^2 / 2
+  expect_equal(
+    roc[["cpaucs"]],
+    0.5 * (1 + (roc[["paucs"]] - chance) / (0.5 - chance))
+  )
+})

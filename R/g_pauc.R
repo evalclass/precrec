@@ -17,11 +17,69 @@
 #'
 #'    See the **Value** section of [evalmod()] for more details.
 #'
-#' @return The `auc` function returns a data frame with pAUC scores.
+#' @param corrected A logical value to add the `cpaucs` column, the McClish
+#'   correction of the ROC partial areas. The default is `FALSE`.
+#'
+#' @return The `pauc` function returns a data frame with one row per curve
+#'   per model per test dataset, and the following columns. An object that
+#'   holds averaged curves only has no `dsids` column, because an averaged
+#'   curve has no single test dataset behind it.
+#'
+#'   \tabular{ll}{
+#'     `modnames` \tab Model name \cr
+#'     `dsids` \tab Test dataset ID \cr
+#'     `curvetypes` \tab `ROC` or `PRC` \cr
+#'     `paucs` \tab The area under that curve over the region \cr
+#'     `spaucs` \tab That area over the area of the region \cr
+#'     `cpaucs` \tab The McClish correction, with `corrected = TRUE` \cr
+#'   }
+#'
+#' @section Two ways to standardize a partial area:
+#'
+#' A partial area is not comparable across regions on its own - a wider
+#'   region holds more area - so it is reported standardized, and there are
+#'   two conventions for doing it. Both are called "the standardized partial
+#'   AUC", and a number carried between tools looks like a disagreement when
+#'   it is a choice of convention.
+#'
+#'   `spaucs` divides the area by the area of the region, so it says what
+#'   fraction of what was available the curve covered. The McClish
+#'   correction instead rescales the span between chance and perfect onto
+#'   `0.5` to `1`, so that a partial area reads on the same scale as a full
+#'   one. Over false positive rates up to `0.2`, a coin flip covers an area
+#'   of `0.02`: that is `0.1` of the region, and `0.5` after the correction.
+#'
+#'   Neither is the right one. `spaucs` is the more direct reading of how
+#'   much of the corner the curve filled; the corrected one is the more
+#'   comparable to a full AUC. Say which you used.
+#'
+#'   `cpaucs` is what `pROC::auc(..., partial.auc.correct = TRUE)` returns,
+#'   to the last digit. The chance area is taken over the region actually
+#'   asked for, `(x2^2 - x1^2) / 2`, and not over a region assumed to start
+#'   at a false positive rate of `0` - the formula usually quoted is the
+#'   special case of that one, and gets a region such as
+#'   `xlim = c(0.1, 0.3)` wrong.
+#'
+#'   The correction is the identity over the whole curve, where chance is
+#'   `0.5` and the region is `1`, so a `cpaucs` from `part(xlim = c(0, 1))`
+#'   is the plain AUC. At the other end it is unstable: over a narrow region
+#'   of high false positive rates, chance and perfect are close together and
+#'   the rescaling divides by the small difference, so a curve a little
+#'   below the diagonal there can produce a large negative number. That is
+#'   the correction behaving as defined, not an error.
+#'
+#'   `cpaucs` is `NA` on every `PRC` row, and on every row when `part()` was
+#'   given a `ylim` other than `c(0, 1)`. A precision-recall curve's chance
+#'   level is the proportion of positives rather than the diagonal, and
+#'   rescaling by it would make curves at different class balances look
+#'   comparable when the point of the precision-recall plot is that they are
+#'   not - see [auc()]. A restricted `ylim` has no counterpart in `pROC` and
+#'   no settled definition, so it reports nothing rather than invent one.
 #'
 #' @seealso [evalmod()] for generating `S3` objects with
 #'   performance evaluation metrics. [part()] for calculation of
-#'   pAUCs. [auc()] for retrieving a dataset of AUCs.
+#'   pAUCs. [auc()] for retrieving a dataset of AUCs, and for the
+#'   baseline a full area is read against.
 #'
 #' @examples
 #'
@@ -100,11 +158,18 @@
 #' ## Shows pAUCs
 #' pauc(mmcurves.part)
 #'
+#' ##################################################
+#' ### The McClish correction
+#' ###
+#'
+#' ## The pAUC rescaled between chance and perfect, as pROC reports it
+#' pauc(sscurves.part, corrected = TRUE)
+#'
 #' @export
-pauc <- function(curves) UseMethod("pauc", curves)
+pauc <- function(curves, corrected = FALSE) UseMethod("pauc", curves)
 
 #' @export
-pauc.default <- function(curves) {
+pauc.default <- function(curves, corrected = FALSE) {
   stop("An object of unknown class is specified")
 }
 
@@ -113,13 +178,60 @@ pauc.default <- function(curves) {
 #
 #' @rdname pauc
 #' @export
-pauc.aucs <- function(curves) {
+pauc.aucs <- function(curves, corrected = FALSE) {
   # Validation
   .validate(curves)
   if (!attr(curves, "partial")) {
     stop("part() should be used first.")
   }
+  .assert_flag(corrected, "corrected")
 
   # Return pAUC scores as a plain data frame
-  .as_plain_df(attr(curves, "paucs"), copy = TRUE)
+  paucs <- .as_plain_df(attr(curves, "paucs"), copy = TRUE)
+
+  if (corrected) {
+    paucs[["cpaucs"]] <- .mcclish_pauc(
+      paucs[["paucs"]], paucs[["curvetypes"]],
+      attr(curves[["rocs"]], "xlim"), attr(curves[["rocs"]], "ylim")
+    )
+  }
+
+  paucs
+}
+
+#
+# The McClish correction of a ROC partial AUC
+#
+# `spaucs` divides the partial area by the area of the region, which says
+# what fraction of what was available the curve covered. This rescales the
+# span between chance and perfect onto 0.5 to 1 instead, so that a partial
+# area reads on the same scale as a full one - and over the whole curve it
+# is the identity, chance being 0.5 and the region 1.
+#
+# The chance area is taken over the region that was actually asked for. The
+# formula usually quoted, `region^2 / 2`, is the special case of a region
+# starting at a false positive rate of 0, and is wrong for any other.
+#
+# Not defined for a precision-recall curve, whose chance level is the class
+# balance rather than the diagonal, nor for a restricted y range, which has
+# no settled definition; both come back NA. See the `corrected` argument of
+# `pauc()`.
+#
+.mcclish_pauc <- function(paucs, curvetypes, xlim, ylim) {
+  cpaucs <- rep(NA_real_, length(paucs))
+
+  if (ylim[1] != 0 || ylim[2] != 1) {
+    return(cpaucs)
+  }
+
+  # What a coin flip covers over this region, and what a perfect classifier
+  # covers over it. `part()` requires xlim[1] < xlim[2] <= 1, so the two are
+  # never equal and the rescaling never divides by zero.
+  chance <- (xlim[2]^2 - xlim[1]^2) / 2
+  perfect <- xlim[2] - xlim[1]
+
+  is_roc <- curvetypes == "ROC"
+  cpaucs[is_roc] <- 0.5 * (1 + (paucs[is_roc] - chance) / (perfect - chance))
+
+  cpaucs
 }
