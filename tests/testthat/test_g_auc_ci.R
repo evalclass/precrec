@@ -103,7 +103,7 @@ test_that("auc_ci for smcurves", {
   cis <- auc_ci(curves)
 
   expect_equal(nrow(cis), 2)
-  expect_equal(ncol(cis), 7)
+  expect_equal(ncol(cis), 8)
   expect_equal(nrow(subset(cis, curvetypes == "PRC")), 1)
   expect_equal(nrow(subset(cis, curvetypes == "ROC")), 1)
 })
@@ -113,7 +113,7 @@ test_that("auc_ci for mmcurves", {
   cis <- auc_ci(curves)
 
   expect_equal(nrow(cis), 4)
-  expect_equal(ncol(cis), 7)
+  expect_equal(ncol(cis), 8)
   expect_equal(nrow(subset(cis, curvetypes == "PRC")), 2)
   expect_equal(nrow(subset(cis, curvetypes == "ROC")), 2)
 })
@@ -419,4 +419,52 @@ test_that("auc_ci() returns a plain data frame", {
 
   ci <- auc_ci(curves)
   expect_identical(class(ci), "data.frame")
+})
+
+test_that("auc_ci() reports the baseline of the mean area", {
+  scores <- list(c(rnorm(20, 1), rnorm(80)), c(rnorm(20, 1), rnorm(80)))
+  labels <- list(rep(c(1, 0), c(20, 80)), rep(c(1, 0), c(20, 80)))
+  curves <- evalmod(
+    mmdata(scores, labels, modnames = c("m1", "m1"), dsids = c(1, 2))
+  )
+
+  cis <- auc_ci(curves)
+
+  expect_equal(cis$baselines[cis$curvetypes == "PRC"], 0.2)
+  expect_equal(cis$baselines[cis$curvetypes == "ROC"], 0.5)
+})
+
+test_that("auc_ci() averages the baseline over the datasets it averaged", {
+  # The folds of one dataset need not hold the classes in the same
+  # proportions, so the baseline of the mean is the mean of the baselines
+  scores <- list(c(rnorm(10, 1), rnorm(90)), c(rnorm(30, 1), rnorm(70)))
+  labels <- list(rep(c(1, 0), c(10, 90)), rep(c(1, 0), c(30, 70)))
+  curves <- evalmod(
+    mmdata(scores, labels, modnames = c("m1", "m1"), dsids = c(1, 2))
+  )
+
+  cis <- auc_ci(curves)
+
+  expect_equal(cis$baselines[cis$curvetypes == "PRC"], mean(c(0.1, 0.3)))
+})
+
+test_that("auc_ci() leaves an unevaluable dataset out of the baseline", {
+  # A fold holding a single class carries NA and is left out of the mean
+  # area, so it has to be left out of the baseline as well
+  scores <- list(
+    c(rnorm(10, 1), rnorm(90)), c(rnorm(30, 1), rnorm(70)), rnorm(100)
+  )
+  labels <- list(
+    rep(c(1, 0), c(10, 90)), rep(c(1, 0), c(30, 70)), rep(0, 100)
+  )
+  curves <- suppressWarnings(evalmod(
+    mmdata(scores, labels, modnames = rep("m1", 3), dsids = 1:3),
+    on_single_class = "na"
+  ))
+
+  cis <- auc_ci(curves)
+  prc <- cis[cis$curvetypes == "PRC", ]
+
+  expect_equal(prc$n, 2L)
+  expect_equal(prc$baselines, mean(c(0.1, 0.3)))
 })

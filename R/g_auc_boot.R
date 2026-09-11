@@ -38,8 +38,14 @@
 #'
 #' @return An object of class `aucboot`: a data frame of one row per model,
 #'   curve type and resample, with the columns `modnames`, `curvetypes`,
-#'   `boot_id` and `aucs`. The AUCs of the original data are attached as the
-#'   `observed` attribute.
+#'   `boot_id`, `aucs` and `baselines`. The AUCs of the original data are
+#'   attached as the `observed` attribute, with a `baselines` column of
+#'   their own.
+#'
+#'   `baselines` is the same on every resample, because the resampling is
+#'   stratified and so holds the class balance fixed - see below. It is
+#'   carried on the resamples anyway so that an area and what it is worth
+#'   by chance never have to be joined back together by hand.
 #'
 #' @section Resampling:
 #'
@@ -100,11 +106,20 @@ auc_boot <- function(mdat, scores = NULL, labels = NULL, boot_n = 1000,
 
   reps <- .boot_aucs(mdat, idx)
 
+  # The resample is stratified, so np and nn are the same on every one of
+  # them as on the test set, and so is the chance level of each curve type
+  reps[["baselines"]] <- .baselines_at(
+    reps[["curvetypes"]], length(pos), length(neg)
+  )
+
   observed <- .as_plain_df(
     attr(evalmod(mdat, calc_avg = FALSE, cb_alpha = NULL), "aucs"),
     copy = TRUE
   )
   observed <- observed[c("modnames", "curvetypes", "aucs")]
+  observed[["baselines"]] <- .baselines_at(
+    observed[["curvetypes"]], length(pos), length(neg)
+  )
 
   structure(reps,
     observed = observed, boot_n = as.integer(boot_n),

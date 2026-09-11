@@ -28,7 +28,8 @@ test_that("auc_boot() returns one row per model, curve type and resample", {
   expect_s3_class(booted, "aucboot")
   expect_s3_class(booted, "data.frame")
   expect_equal(
-    names(booted), c("modnames", "curvetypes", "boot_id", "aucs")
+    names(booted),
+    c("modnames", "curvetypes", "boot_id", "aucs", "baselines")
   )
   expect_equal(nrow(booted), 50 * 2) # ROC and PRC
   expect_equal(sort(unique(booted$boot_id)), 1:50)
@@ -101,8 +102,8 @@ test_that("auc_ci() on a bootstrap gives a percentile interval", {
   expect_equal(
     names(ci),
     c(
-      "modnames", "curvetypes", "aucs", "mean", "error", "lower_bound",
-      "upper_bound", "n"
+      "modnames", "curvetypes", "aucs", "baselines", "mean", "error",
+      "lower_bound", "upper_bound", "n"
     )
   )
   expect_true(all(ci$lower_bound < ci$upper_bound))
@@ -317,4 +318,27 @@ test_that("auc_diff() refuses an alternative it does not know", {
   expect_error(auc_diff(booted, alternative = c("greater", "less")),
     class = "precrec_error_invalid_alternative"
   )
+})
+
+test_that("auc_boot() carries the baseline of the test set it resampled", {
+  set.seed(1)
+  scores <- c(rnorm(20, 1.2), rnorm(80))
+  labels <- rep(c(1, 0), c(20, 80))
+
+  booted <- auc_boot(
+    scores = scores, labels = labels, boot_n = 30, seed = 1
+  )
+
+  # The resampling is stratified, so every resample holds the same class
+  # balance as the test set and the baseline is the same on all of them
+  expect_equal(unique(booted$baselines[booted$curvetypes == "PRC"]), 0.2)
+  expect_equal(unique(booted$baselines[booted$curvetypes == "ROC"]), 0.5)
+
+  observed <- attr(booted, "observed")
+  expect_true("baselines" %in% names(observed))
+  expect_equal(observed$baselines[observed$curvetypes == "PRC"], 0.2)
+
+  ci <- auc_ci(booted)
+  expect_equal(ci$baselines[ci$curvetypes == "PRC"], 0.2)
+  expect_equal(ci$baselines[ci$curvetypes == "ROC"], 0.5)
 })
