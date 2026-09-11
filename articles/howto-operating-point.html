@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -453,19 +453,200 @@ across models the scores are not even on a common scale - so the
 better.</p>
 </div>
 <div class="section level2">
+<h2 id="reading-a-threshold-you-already-have">Reading a threshold you already have<a class="anchor" aria-label="anchor" href="#reading-a-threshold-you-already-have"></a>
+</h2>
+<p>Everything above searches for a cutoff. The opposite question - what
+are the metrics of <em>this</em> cutoff - is
+<code>metric_table(at = )</code>, which takes the thresholds you name
+instead of returning every one of them.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="../reference/metric_table.html">metric_table</a></span><span class="op">(</span><span class="va">mdat</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.5</span>, <span class="fl">0.8</span><span class="op">)</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="st">"at"</span>, <span class="st">"rank"</span>, <span class="st">"score"</span>, <span class="st">"sensitivity"</span>, <span class="st">"specificity"</span>, <span class="st">"precision"</span>, <span class="st">"mcc"</span></span>
+<span>  <span class="op">)</span><span class="op">]</span>,</span>
+<span>  row.names <span class="op">=</span> <span class="cn">FALSE</span>, digits <span class="op">=</span> <span class="fl">3</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="right">at</th>
+<th align="right">rank</th>
+<th align="right">score</th>
+<th align="right">sensitivity</th>
+<th align="right">specificity</th>
+<th align="right">precision</th>
+<th align="right">mcc</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">1.5</td>
+<td align="right">37</td>
+<td align="right">1.512</td>
+<td align="right">0.55</td>
+<td align="right">0.932</td>
+<td align="right">0.297</td>
+<td align="right">0.362</td>
+</tr>
+<tr class="even">
+<td align="right">0.8</td>
+<td align="right">95</td>
+<td align="right">0.803</td>
+<td align="right">0.75</td>
+<td align="right">0.789</td>
+<td align="right">0.158</td>
+<td align="right">0.276</td>
+</tr>
+</tbody>
+</table>
+<p>A threshold is rarely one of the observed scores, so it has no row of
+its own, but it always names one of the cutoffs:
+<code>score &gt;=</code> it calls a certain number of instances
+positive, and that count is a rank the table already holds.
+<code>at</code> is what you asked for, and <code>score</code> is the
+observed cutoff that realizes it - the smallest score still called
+positive.</p>
+<p>A threshold above every score gives the <code>rank = 0</code> row,
+where nothing is called positive, <code>score</code> is <code>NA</code>
+and metrics such as <code>mcc</code> are undefined - worth knowing,
+because on badly imbalanced data a cutoff carried in from elsewhere can
+land there.</p>
+<p>The part that matters next is that the rank is worked out per test
+dataset. One threshold lands on a different rank in each of them, which
+is what makes a threshold, and not a rank, the thing you can carry from
+one dataset to another.</p>
+</div>
+<div class="section level2">
 <h2 id="the-number-you-quote-will-be-optimistic">The number you quote will be optimistic<a class="anchor" aria-label="anchor" href="#the-number-you-quote-will-be-optimistic"></a>
 </h2>
 <p>A threshold chosen on the same data the model is scored on is
 flattered by however much the criterion was free to chase, in exactly
-the way a model selected on its test set is. The fix is the ordinary one
-- choose the cutoff on data the model has not seen, and report the
-metrics at that fixed cutoff on data neither the model nor the cutoff
-has seen.</p>
-<p><code>precrec</code> does not do this for you. Nothing here resamples
-or cross-validates the choice, and <code><a href="../reference/best_cutoff.html">best_cutoff()</a></code> will
-happily hand back the optimum of whatever you give it. With <a href="howto-cross-validation.html">cross-validation folds</a> already in
-hand, choosing on some folds and reporting on the rest is a few lines of
-ordinary R.</p>
+the way a model selected on its own test set is. Carrying the choice to
+data it has not seen is what measures that, and both pieces are now in
+hand: <code><a href="../reference/best_cutoff.html">best_cutoff()</a></code> to choose on some folds,
+<code>metric_table(at = )</code> to score the choice on the fold held
+back.</p>
+<p>Ten folds, fifteen positives in three hundred each:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">9</span><span class="op">)</span></span>
+<span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  scores <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">15</span>, <span class="fl">1.1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">285</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">15</span>, <span class="fl">285</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span>, simplify <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">honest</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">cv</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">rest</span> <span class="op">&lt;-</span> <span class="va">cv</span><span class="op">[</span><span class="op">-</span><span class="va">i</span><span class="op">]</span></span>
+<span></span>
+<span>  <span class="co"># Choose the cutoff on the nine folds this one is not in</span></span>
+<span>  <span class="va">chosen</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/best_cutoff.html">best_cutoff</a></span><span class="op">(</span></span>
+<span>    scores <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">rest</span>, <span class="va">`[[`</span>, <span class="st">"scores"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">rest</span>, <span class="va">`[[`</span>, <span class="st">"labels"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    metric <span class="op">=</span> <span class="st">"mcc"</span></span>
+<span>  <span class="op">)</span><span class="op">$</span><span class="va">score</span></span>
+<span></span>
+<span>  <span class="co"># Score it on the fold that was held back</span></span>
+<span>  <span class="va">held_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/metric_table.html">metric_table</a></span><span class="op">(</span></span>
+<span>    scores <span class="op">=</span> <span class="va">cv</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">cv</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">labels</span>, at <span class="op">=</span> <span class="va">chosen</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># And, for comparison, the best this fold could have done on itself</span></span>
+<span>  <span class="va">in_sample</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/best_cutoff.html">best_cutoff</a></span><span class="op">(</span></span>
+<span>    scores <span class="op">=</span> <span class="va">cv</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">cv</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">labels</span>, metric <span class="op">=</span> <span class="st">"mcc"</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>    fold <span class="op">=</span> <span class="va">i</span>, cutoff <span class="op">=</span> <span class="va">chosen</span>,</span>
+<span>    held_out <span class="op">=</span> <span class="va">held_out</span><span class="op">$</span><span class="va">mcc</span>, in_sample <span class="op">=</span> <span class="va">in_sample</span><span class="op">$</span><span class="va">mcc</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">honest</span><span class="op">)</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span>, digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="right">fold</th>
+<th align="right">cutoff</th>
+<th align="right">held_out</th>
+<th align="right">in_sample</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1.426</td>
+<td align="right">0.177</td>
+<td align="right">0.373</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">1.426</td>
+<td align="right">0.242</td>
+<td align="right">0.404</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">1.779</td>
+<td align="right">0.177</td>
+<td align="right">0.367</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">1.426</td>
+<td align="right">0.164</td>
+<td align="right">0.284</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">1.426</td>
+<td align="right">0.201</td>
+<td align="right">0.298</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="right">1.488</td>
+<td align="right">0.317</td>
+<td align="right">0.429</td>
+</tr>
+<tr class="odd">
+<td align="right">7</td>
+<td align="right">1.779</td>
+<td align="right">0.139</td>
+<td align="right">0.334</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="right">1.426</td>
+<td align="right">0.297</td>
+<td align="right">0.327</td>
+</tr>
+<tr class="odd">
+<td align="right">9</td>
+<td align="right">1.426</td>
+<td align="right">0.292</td>
+<td align="right">0.347</td>
+</tr>
+<tr class="even">
+<td align="right">10</td>
+<td align="right">1.461</td>
+<td align="right">0.271</td>
+<td align="right">0.444</td>
+</tr>
+</tbody>
+</table>
+<p>The held-out value is below the in-sample one in every fold, and not
+by a little: <code>mcc</code> averages 0.361 if each fold is allowed to
+pick its own cutoff, and 0.228 if the cutoff has to be chosen without
+seeing it. The first number is not a worse estimate of the second - it
+is an estimate of something else, namely the best a cutoff could have
+done with hindsight.</p>
+<p>That gap widens as the positives get rarer, for the reason the rest
+of this site is about: with fifteen positives in three hundred, the
+criterion is fitting a handful of instances, and a handful of instances
+is mostly noise.</p>
+<p>The chosen cutoff itself is fairly stable here while the metric it
+achieves is not, which is the usual shape. Quote the held-out column,
+ship one cutoff from the whole dataset, and let the spread across folds
+say how much to trust the number.</p>
+<p><code>precrec</code> does not run this loop for you - it is your
+resampling scheme, and <a href="howto-cross-validation.html">cross-validation folds</a> or a
+single held-out split are equally valid inputs to it. What the package
+provides is the two ends: the choice, and an honest way to score it.</p>
 </div>
 <div class="section level2">
 <h2 id="next">Next<a class="anchor" aria-label="anchor" href="#next"></a>

@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -151,6 +151,7 @@ picking a cutoff.</p>
 <th align="right">dsids</th>
 <th align="left">curvetypes</th>
 <th align="right">aucs</th>
+<th align="right">baselines</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -158,44 +159,100 @@ picking a cutoff.</p>
 <td align="right">1</td>
 <td align="left">ROC</td>
 <td align="right">0.7200000</td>
+<td align="right">0.5</td>
 </tr>
 <tr class="even">
 <td align="left">m1</td>
 <td align="right">1</td>
 <td align="left">PRC</td>
 <td align="right">0.7397716</td>
+<td align="right">0.5</td>
 </tr>
 </tbody>
 </table>
 <table class="table">
-<colgroup>
-<col width="33%">
-<col width="33%">
-<col width="33%">
-</colgroup>
 <thead><tr class="header">
 <th>Curve</th>
 <th>What the area means</th>
-<th>Baseline</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td>ROC</td>
 <td>Probability a random positive outranks a random negative</td>
-<td>0.5</td>
 </tr>
 <tr class="even">
 <td>PRC</td>
 <td>Mean precision across all recall levels</td>
-<td>Proportion of positives</td>
 </tr>
 </tbody>
 </table>
-<p>The ROC baseline is always 0.5. The precision-recall baseline moves
-with the class balance, so a PRC area of 0.4 is poor on balanced data
-and good when positives are 5% of the total. <code>precrec</code>
-computes that area from the properly interpolated curve; tools that join
-raw points with straight lines overestimate it.</p>
+<p><code>precrec</code> computes the PRC area from the properly
+interpolated curve; tools that join raw points with straight lines
+overestimate it.</p>
+<div class="section level2">
+<h2 id="read-the-area-against-its-baseline">Read the area against its baseline<a class="anchor" aria-label="anchor" href="#read-the-area-against-its-baseline"></a>
+</h2>
+<p>The <code>baselines</code> column is what the area would be by
+chance. For a ROC curve that is 0.5 whatever the data, so a ROC AUC can
+be read on its own. For a precision-recall curve it is the proportion of
+positives, so a PRC AUC cannot. This is the same generator at three
+class balances:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">compare</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">np</span>, <span class="va">nn</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span>  <span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">np</span>, <span class="fl">1.2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">nn</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">labels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">np</span>, <span class="va">nn</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">areas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/auc.html">auc</a></span><span class="op">(</span><span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">scores</span>, labels <span class="op">=</span> <span class="va">labels</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>    positives <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%.0f%%"</span>, <span class="fl">100</span> <span class="op">*</span> <span class="va">np</span> <span class="op">/</span> <span class="op">(</span><span class="va">np</span> <span class="op">+</span> <span class="va">nn</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    roc <span class="op">=</span> <span class="va">areas</span><span class="op">$</span><span class="va">aucs</span><span class="op">[</span><span class="va">areas</span><span class="op">$</span><span class="va">curvetypes</span> <span class="op">==</span> <span class="st">"ROC"</span><span class="op">]</span>,</span>
+<span>    prc <span class="op">=</span> <span class="va">areas</span><span class="op">$</span><span class="va">aucs</span><span class="op">[</span><span class="va">areas</span><span class="op">$</span><span class="va">curvetypes</span> <span class="op">==</span> <span class="st">"PRC"</span><span class="op">]</span>,</span>
+<span>    prc_baseline <span class="op">=</span> <span class="va">areas</span><span class="op">$</span><span class="va">baselines</span><span class="op">[</span><span class="va">areas</span><span class="op">$</span><span class="va">curvetypes</span> <span class="op">==</span> <span class="st">"PRC"</span><span class="op">]</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">compare</span><span class="op">(</span><span class="fl">500</span>, <span class="fl">500</span><span class="op">)</span>, <span class="fu">compare</span><span class="op">(</span><span class="fl">100</span>, <span class="fl">900</span><span class="op">)</span>, <span class="fu">compare</span><span class="op">(</span><span class="fl">20</span>, <span class="fl">980</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  row.names <span class="op">=</span> <span class="cn">FALSE</span>, digits <span class="op">=</span> <span class="fl">3</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">positives</th>
+<th align="right">roc</th>
+<th align="right">prc</th>
+<th align="right">prc_baseline</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">50%</td>
+<td align="right">0.807</td>
+<td align="right">0.801</td>
+<td align="right">0.50</td>
+</tr>
+<tr class="even">
+<td align="left">10%</td>
+<td align="right">0.834</td>
+<td align="right">0.367</td>
+<td align="right">0.10</td>
+</tr>
+<tr class="odd">
+<td align="left">2%</td>
+<td align="right">0.850</td>
+<td align="right">0.129</td>
+<td align="right">0.02</td>
+</tr>
+</tbody>
+</table>
+<p>The classifier is about as good in all three rows and the ROC AUC
+says so, holding between 0.81 and 0.85. The PRC AUC falls to 0.129,
+which reads as failure and is in fact six times chance. Quote the two
+numbers together, and see <a href="howto-imbalanced-data.html">Balanced
+and imbalanced data</a> for why the PRC column is the one that
+moved.</p>
+<p>The baseline is taken per model and per test dataset, because a fold
+need not hold the classes in the proportions the whole dataset does.</p>
+</div>
 <div class="section level2">
 <h2 id="average-precision">Average precision<a class="anchor" aria-label="anchor" href="#average-precision"></a>
 </h2>
@@ -204,18 +261,20 @@ adding up the same one: it joins the raw points with horizontal steps
 instead of interpolating, so it reads high wherever the two disagree -
 here by about 0.006. Prefer the interpolated area; this is here because
 other packages report it under this name.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="../reference/average_precision.html">average_precision</a></span><span class="op">(</span><span class="va">curves</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">modnames</th>
 <th align="right">dsids</th>
 <th align="right">aps</th>
+<th align="right">baselines</th>
 </tr></thead>
 <tbody><tr class="odd">
 <td align="left">m1</td>
 <td align="right">1</td>
 <td align="right">0.7454008</td>
+<td align="right">0.5</td>
 </tr></tbody>
 </table>
 </div>
@@ -226,7 +285,7 @@ other packages report it under this name.</p>
 - <code><a href="../reference/part.html">part()</a></code> restricts the range and <code><a href="../reference/pauc.html">pauc()</a></code>
 reports the area over it. <code>spaucs</code> are standardized partial
 AUCs, rescaled to 0 to 1 so ranges of different widths compare.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="../reference/pauc.html">pauc</a></span><span class="op">(</span><span class="fu"><a href="../reference/part.html">part</a></span><span class="op">(</span><span class="va">curves</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.25</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
@@ -262,7 +321,7 @@ AUCs, rescaled to 0 to 1 so ranges of different widths compare.</p>
 the mean area. <code>alpha</code> sets the level, and
 <code>dtype = "t"</code> uses the t distribution, the better choice for
 a small number of folds.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">samps</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_sim_samples.html">create_sim_samples</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">100</span>, <span class="fl">100</span>, <span class="st">"good_er"</span><span class="op">)</span></span>
 <span><span class="va">mdat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mmdata.html">mmdata</a></span><span class="op">(</span><span class="va">samps</span><span class="op">[[</span><span class="st">"scores"</span><span class="op">]</span><span class="op">]</span>, <span class="va">samps</span><span class="op">[[</span><span class="st">"labels"</span><span class="op">]</span><span class="op">]</span>, dsids <span class="op">=</span> <span class="va">samps</span><span class="op">[[</span><span class="st">"dsids"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="va">mcurves</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span><span class="va">mdat</span><span class="op">)</span></span>
@@ -291,19 +350,19 @@ a small number of folds.</p>
 <tr class="odd">
 <td align="left">m1</td>
 <td align="left">ROC</td>
-<td align="right">0.8113400</td>
-<td align="right">0.0204715</td>
-<td align="right">0.7908685</td>
-<td align="right">0.8318115</td>
+<td align="right">0.7955900</td>
+<td align="right">0.0260369</td>
+<td align="right">0.7695531</td>
+<td align="right">0.8216269</td>
 <td align="right">10</td>
 </tr>
 <tr class="even">
 <td align="left">m1</td>
 <td align="left">PRC</td>
-<td align="right">0.8472922</td>
-<td align="right">0.0183101</td>
-<td align="right">0.8289821</td>
-<td align="right">0.8656023</td>
+<td align="right">0.8351332</td>
+<td align="right">0.0272381</td>
+<td align="right">0.8078951</td>
+<td align="right">0.8623712</td>
 <td align="right">10</td>
 </tr>
 </tbody>
@@ -315,7 +374,7 @@ a small number of folds.</p>
 <p>Where precision and recall are equal - the one point on the curve
 where the two are in balance. <code><a href="../reference/prbe.html">prbe()</a></code> reads the individual
 curves, so ask <code><a href="../reference/evalmod.html">evalmod()</a></code> to keep them.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="../reference/prbe.html">prbe</a></span><span class="op">(</span><span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span><span class="va">mdat</span>, raw_curves <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
@@ -327,22 +386,22 @@ curves, so ask <code><a href="../reference/evalmod.html">evalmod()</a></code> to
 <tr class="odd">
 <td align="left">m1</td>
 <td align="right">1</td>
-<td align="right">0.71</td>
+<td align="right">0.73</td>
 </tr>
 <tr class="even">
 <td align="left">m1</td>
 <td align="right">2</td>
-<td align="right">0.70</td>
+<td align="right">0.75</td>
 </tr>
 <tr class="odd">
 <td align="left">m1</td>
-<td align="right">2</td>
-<td align="right">0.70</td>
+<td align="right">3</td>
+<td align="right">0.69</td>
 </tr>
 <tr class="even">
 <td align="left">m1</td>
 <td align="right">3</td>
-<td align="right">0.73</td>
+<td align="right">0.69</td>
 </tr>
 <tr class="odd">
 <td align="left">m1</td>
@@ -352,32 +411,32 @@ curves, so ask <code><a href="../reference/evalmod.html">evalmod()</a></code> to
 <tr class="even">
 <td align="left">m1</td>
 <td align="right">5</td>
-<td align="right">0.74</td>
+<td align="right">0.73</td>
 </tr>
 <tr class="odd">
 <td align="left">m1</td>
 <td align="right">6</td>
-<td align="right">0.76</td>
+<td align="right">0.73</td>
 </tr>
 <tr class="even">
 <td align="left">m1</td>
 <td align="right">7</td>
-<td align="right">0.74</td>
+<td align="right">0.68</td>
 </tr>
 <tr class="odd">
 <td align="left">m1</td>
 <td align="right">8</td>
-<td align="right">0.73</td>
+<td align="right">0.69</td>
 </tr>
 <tr class="even">
 <td align="left">m1</td>
 <td align="right">9</td>
-<td align="right">0.73</td>
+<td align="right">0.76</td>
 </tr>
 <tr class="odd">
 <td align="left">m1</td>
 <td align="right">10</td>
-<td align="right">0.70</td>
+<td align="right">0.74</td>
 </tr>
 </tbody>
 </table>
@@ -395,7 +454,7 @@ of the per-class areas, weighting every class equally.
 <code>macro_weight = "prevalence"</code> weights each by the number of
 observations it has instead, and names those rows
 <code>macro-average-weighted</code> to keep the two apart.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mccurves</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">C3N150</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">C3N150</span><span class="op">$</span><span class="va">labels</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="../reference/auc.html">auc</a></span><span class="op">(</span><span class="va">mccurves</span>, macro_weight <span class="op">=</span> <span class="st">"prevalence"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -405,6 +464,7 @@ observations it has instead, and names those rows
 <th align="right">dsids</th>
 <th align="left">curvetypes</th>
 <th align="right">aucs</th>
+<th align="right">baselines</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -412,48 +472,56 @@ observations it has instead, and names those rows
 <td align="right">1</td>
 <td align="left">ROC</td>
 <td align="right">0.9732000</td>
+<td align="right">0.5000000</td>
 </tr>
 <tr class="even">
 <td align="left">c1</td>
 <td align="right">1</td>
 <td align="left">PRC</td>
 <td align="right">0.9558435</td>
+<td align="right">0.3333333</td>
 </tr>
 <tr class="odd">
 <td align="left">c2</td>
 <td align="right">1</td>
 <td align="left">ROC</td>
 <td align="right">0.7758000</td>
+<td align="right">0.5000000</td>
 </tr>
 <tr class="even">
 <td align="left">c2</td>
 <td align="right">1</td>
 <td align="left">PRC</td>
 <td align="right">0.6550357</td>
+<td align="right">0.3333333</td>
 </tr>
 <tr class="odd">
 <td align="left">c3</td>
 <td align="right">1</td>
 <td align="left">ROC</td>
 <td align="right">0.5336000</td>
+<td align="right">0.5000000</td>
 </tr>
 <tr class="even">
 <td align="left">c3</td>
 <td align="right">1</td>
 <td align="left">PRC</td>
 <td align="right">0.4162555</td>
+<td align="right">0.3333333</td>
 </tr>
 <tr class="odd">
 <td align="left">macro-average-weighted</td>
 <td align="right">1</td>
 <td align="left">ROC</td>
 <td align="right">0.7608667</td>
+<td align="right">0.5000000</td>
 </tr>
 <tr class="even">
 <td align="left">macro-average-weighted</td>
 <td align="right">1</td>
 <td align="left">PRC</td>
 <td align="right">0.6757116</td>
+<td align="right">0.3333333</td>
 </tr>
 </tbody>
 </table>
@@ -461,6 +529,65 @@ observations it has instead, and names those rows
 the average case. Other packages call these <code>roc_aunu</code> and
 <code>roc_aunp</code>. See <a href="howto-multiclass.html">more than two
 classes</a>.</p>
+<p>The baseline is averaged over the classes the same way the areas are,
+with the same weights, so a macro row stays readable. That matters most
+when the classes are the unequal sizes a macro-average is usually
+reached for:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
+<span><span class="va">rare</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"c1"</span>, <span class="st">"c2"</span>, <span class="st">"c3"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">40</span>, <span class="fl">150</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">noise</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">200</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">200</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">200</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">noisy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span><span class="fu"><a href="../reference/mmdata.html">mmdata</a></span><span class="op">(</span><span class="va">noise</span>, <span class="va">rare</span>, multiclass <span class="op">=</span> <span class="st">"ovr"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/auc.html">auc</a></span><span class="op">(</span><span class="va">noisy</span>, macro_weight <span class="op">=</span> <span class="st">"prevalence"</span><span class="op">)</span>,</span>
+<span>    <span class="va">curvetypes</span> <span class="op">==</span> <span class="st">"PRC"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  row.names <span class="op">=</span> <span class="cn">FALSE</span>, digits <span class="op">=</span> <span class="fl">3</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">modnames</th>
+<th align="right">dsids</th>
+<th align="left">curvetypes</th>
+<th align="right">aucs</th>
+<th align="right">baselines</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">c1</td>
+<td align="right">1</td>
+<td align="left">PRC</td>
+<td align="right">0.049</td>
+<td align="right">0.050</td>
+</tr>
+<tr class="even">
+<td align="left">c2</td>
+<td align="right">1</td>
+<td align="left">PRC</td>
+<td align="right">0.206</td>
+<td align="right">0.200</td>
+</tr>
+<tr class="odd">
+<td align="left">c3</td>
+<td align="right">1</td>
+<td align="left">PRC</td>
+<td align="right">0.721</td>
+<td align="right">0.750</td>
+</tr>
+<tr class="even">
+<td align="left">macro-average-weighted</td>
+<td align="right">1</td>
+<td align="left">PRC</td>
+<td align="right">0.584</td>
+<td align="right">0.605</td>
+</tr>
+</tbody>
+</table>
+<p>The scores here are random numbers. The weighted macro-average PRC
+area is 0.584, which would be a respectable result if the baseline were
+not 0.605 sitting beside it.</p>
 </div>
 <div class="section level2">
 <h2 id="the-fast-path">The fast path<a class="anchor" aria-label="anchor" href="#the-fast-path"></a>
@@ -469,7 +596,7 @@ classes</a>.</p>
 computes it from the U statistic of the Mann-Whitney test without
 building the curve. See <a href="howto-large-datasets.html">large
 datasets</a>.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="../reference/as.data.frame.html">as.data.frame</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span>, mode <span class="op">=</span> <span class="st">"aucroc"</span><span class="op">)</span></span>
 <span><span class="op">)</span><span class="op">)</span></span></code></pre></div>

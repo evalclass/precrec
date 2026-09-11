@@ -62,16 +62,16 @@ per-class scores.
 knitr::kable(auc(curves))
 ```
 
-| modnames      | dsids | curvetypes |      aucs |
-|:--------------|------:|:-----------|----------:|
-| c1            |     1 | ROC        | 0.9732000 |
-| c1            |     1 | PRC        | 0.9558435 |
-| c2            |     1 | ROC        | 0.7758000 |
-| c2            |     1 | PRC        | 0.6550357 |
-| c3            |     1 | ROC        | 0.5336000 |
-| c3            |     1 | PRC        | 0.4162555 |
-| macro-average |     1 | ROC        | 0.7608667 |
-| macro-average |     1 | PRC        | 0.6757116 |
+| modnames      | dsids | curvetypes |      aucs | baselines |
+|:--------------|------:|:-----------|----------:|----------:|
+| c1            |     1 | ROC        | 0.9732000 | 0.5000000 |
+| c1            |     1 | PRC        | 0.9558435 | 0.3333333 |
+| c2            |     1 | ROC        | 0.7758000 | 0.5000000 |
+| c2            |     1 | PRC        | 0.6550357 | 0.3333333 |
+| c3            |     1 | ROC        | 0.5336000 | 0.5000000 |
+| c3            |     1 | PRC        | 0.4162555 | 0.3333333 |
+| macro-average |     1 | ROC        | 0.7608667 | 0.5000000 |
+| macro-average |     1 | PRC        | 0.6757116 | 0.3333333 |
 
 `macro = FALSE` leaves the average out and reports the classes alone.
 
@@ -84,16 +84,16 @@ observations counts as much as one with a thousand.
 knitr::kable(auc(curves, macro_weight = "prevalence"))
 ```
 
-| modnames               | dsids | curvetypes |      aucs |
-|:-----------------------|------:|:-----------|----------:|
-| c1                     |     1 | ROC        | 0.9732000 |
-| c1                     |     1 | PRC        | 0.9558435 |
-| c2                     |     1 | ROC        | 0.7758000 |
-| c2                     |     1 | PRC        | 0.6550357 |
-| c3                     |     1 | ROC        | 0.5336000 |
-| c3                     |     1 | PRC        | 0.4162555 |
-| macro-average-weighted |     1 | ROC        | 0.7608667 |
-| macro-average-weighted |     1 | PRC        | 0.6757116 |
+| modnames               | dsids | curvetypes |      aucs | baselines |
+|:-----------------------|------:|:-----------|----------:|----------:|
+| c1                     |     1 | ROC        | 0.9732000 | 0.5000000 |
+| c1                     |     1 | PRC        | 0.9558435 | 0.3333333 |
+| c2                     |     1 | ROC        | 0.7758000 | 0.5000000 |
+| c2                     |     1 | PRC        | 0.6550357 | 0.3333333 |
+| c3                     |     1 | ROC        | 0.5336000 | 0.5000000 |
+| c3                     |     1 | PRC        | 0.4162555 | 0.3333333 |
+| macro-average-weighted |     1 | ROC        | 0.7608667 | 0.5000000 |
+| macro-average-weighted |     1 | PRC        | 0.6757116 | 0.3333333 |
 
 Use the uniform average when every class matters equally - usually the
 case when the rare classes are the interesting ones - and the weighted

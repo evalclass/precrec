@@ -383,9 +383,9 @@ sscurves
 #> 
 #>     === AUCs ===
 #> 
-#>      Model name Dataset ID Curve type       AUC
-#>    1         m1          1        ROC 0.7200000
-#>    2         m1          1        PRC 0.7397716
+#>      Model name Dataset ID Curve type       AUC Baseline
+#>    1         m1          1        ROC 0.7200000      0.5
+#>    2         m1          1        PRC 0.7397716      0.5
 #> 
 #> 
 #>     === Input data ===
@@ -545,17 +545,17 @@ mscurves
 #> 
 #>     === AUCs ===
 #> 
-#>      Model name Dataset ID Curve type       AUC
-#>    1     random          1        ROC 0.5162000
-#>    2     random          1        PRC 0.5066649
-#>    3    poor_er          1        ROC 0.7457000
-#>    4    poor_er          1        PRC 0.6591290
-#>    5    good_er          1        ROC 0.7902000
-#>    6    good_er          1        PRC 0.8330448
-#>    7      excel          1        ROC 0.9875000
-#>    8      excel          1        PRC 0.9892106
-#>    9       perf          1        ROC 1.0000000
-#>   10       perf          1        PRC 1.0000000
+#>      Model name Dataset ID Curve type       AUC Baseline
+#>    1     random          1        ROC 0.5162000      0.5
+#>    2     random          1        PRC 0.5066649      0.5
+#>    3    poor_er          1        ROC 0.7457000      0.5
+#>    4    poor_er          1        PRC 0.6591290      0.5
+#>    5    good_er          1        ROC 0.7902000      0.5
+#>    6    good_er          1        PRC 0.8330448      0.5
+#>    7      excel          1        ROC 0.9875000      0.5
+#>    8      excel          1        PRC 0.9892106      0.5
+#>    9       perf          1        ROC 1.0000000      0.5
+#>   10       perf          1        PRC 1.0000000      0.5
 #> 
 #> 
 #>     === Input data ===
@@ -774,15 +774,15 @@ smcurves
 #> 
 #>     === AUCs ===
 #> 
-#>      Model name Dataset ID Curve type       AUC
-#>    1    good_er          1        ROC 0.8532000
-#>    2    good_er          1        PRC 0.8822592
-#>    3    good_er          2        ROC 0.8381000
-#>    4    good_er          2        PRC 0.8756886
-#>    5    good_er          3        ROC 0.8421000
-#>    6    good_er          3        PRC 0.8761194
-#>    7    good_er          4        ROC 0.8172000
-#>    8    good_er          4        PRC 0.8617359
+#>      Model name Dataset ID Curve type       AUC Baseline
+#>    1    good_er          1        ROC 0.8532000      0.5
+#>    2    good_er          1        PRC 0.8822592      0.5
+#>    3    good_er          2        ROC 0.8381000      0.5
+#>    4    good_er          2        PRC 0.8756886      0.5
+#>    5    good_er          3        ROC 0.8421000      0.5
+#>    6    good_er          3        PRC 0.8761194      0.5
+#>    7    good_er          4        ROC 0.8172000      0.5
+#>    8    good_er          4        PRC 0.8617359      0.5
 #> 
 #> 
 #>     === Input data ===
@@ -969,47 +969,47 @@ mmcurves
 #> 
 #>     === AUCs ===
 #> 
-#>      Model name Dataset ID Curve type       AUC
-#>    1     random          1        ROC 0.5146000
-#>    2     random          1        PRC 0.5237073
-#>    3    poor_er          1        ROC 0.7957000
-#>    4    poor_er          1        PRC 0.7084909
-#>    5    good_er          1        ROC 0.7602000
-#>    6    good_er          1        PRC 0.7903612
-#>    7      excel          1        ROC 0.9920000
-#>    8      excel          1        PRC 0.9916963
-#>    9       perf          1        ROC 1.0000000
-#>   10       perf          1        PRC 1.0000000
-#>   11     random          2        ROC 0.5276000
-#>   12     random          2        PRC 0.5200409
-#>   13    poor_er          2        ROC 0.7875000
-#>   14    poor_er          2        PRC 0.7792567
-#>   15    good_er          2        ROC 0.8350000
-#>   16    good_er          2        PRC 0.8539610
-#>   17      excel          2        ROC 0.9909000
-#>   18      excel          2        PRC 0.9919093
-#>   19       perf          2        ROC 1.0000000
-#>   20       perf          2        PRC 1.0000000
-#>   21     random          3        ROC 0.5498000
-#>   22     random          3        PRC 0.5596541
-#>   23    poor_er          3        ROC 0.8111000
-#>   24    poor_er          3        PRC 0.7788746
-#>   25    good_er          3        ROC 0.7795000
-#>   26    good_er          3        PRC 0.8176583
-#>   27      excel          3        ROC 0.9827000
-#>   28      excel          3        PRC 0.9812225
-#>   29       perf          3        ROC 1.0000000
-#>   30       perf          3        PRC 1.0000000
-#>   31     random          4        ROC 0.4849000
-#>   32     random          4        PRC 0.5042369
-#>   33    poor_er          4        ROC 0.8394000
-#>   34    poor_er          4        PRC 0.7801863
-#>   35    good_er          4        ROC 0.7823000
-#>   36    good_er          4        PRC 0.8188463
-#>   37      excel          4        ROC 0.9911000
-#>   38      excel          4        PRC 0.9912694
-#>   39       perf          4        ROC 1.0000000
-#>   40       perf          4        PRC 1.0000000
+#>      Model name Dataset ID Curve type       AUC Baseline
+#>    1     random          1        ROC 0.5146000      0.5
+#>    2     random          1        PRC 0.5237073      0.5
+#>    3    poor_er          1        ROC 0.7957000      0.5
+#>    4    poor_er          1        PRC 0.7084909      0.5
+#>    5    good_er          1        ROC 0.7602000      0.5
+#>    6    good_er          1        PRC 0.7903612      0.5
+#>    7      excel          1        ROC 0.9920000      0.5
+#>    8      excel          1        PRC 0.9916963      0.5
+#>    9       perf          1        ROC 1.0000000      0.5
+#>   10       perf          1        PRC 1.0000000      0.5
+#>   11     random          2        ROC 0.5276000      0.5
+#>   12     random          2        PRC 0.5200409      0.5
+#>   13    poor_er          2        ROC 0.7875000      0.5
+#>   14    poor_er          2        PRC 0.7792567      0.5
+#>   15    good_er          2        ROC 0.8350000      0.5
+#>   16    good_er          2        PRC 0.8539610      0.5
+#>   17      excel          2        ROC 0.9909000      0.5
+#>   18      excel          2        PRC 0.9919093      0.5
+#>   19       perf          2        ROC 1.0000000      0.5
+#>   20       perf          2        PRC 1.0000000      0.5
+#>   21     random          3        ROC 0.5498000      0.5
+#>   22     random          3        PRC 0.5596541      0.5
+#>   23    poor_er          3        ROC 0.8111000      0.5
+#>   24    poor_er          3        PRC 0.7788746      0.5
+#>   25    good_er          3        ROC 0.7795000      0.5
+#>   26    good_er          3        PRC 0.8176583      0.5
+#>   27      excel          3        ROC 0.9827000      0.5
+#>   28      excel          3        PRC 0.9812225      0.5
+#>   29       perf          3        ROC 1.0000000      0.5
+#>   30       perf          3        PRC 1.0000000      0.5
+#>   31     random          4        ROC 0.4849000      0.5
+#>   32     random          4        PRC 0.5042369      0.5
+#>   33    poor_er          4        ROC 0.8394000      0.5
+#>   34    poor_er          4        PRC 0.7801863      0.5
+#>   35    good_er          4        ROC 0.7823000      0.5
+#>   36    good_er          4        PRC 0.8188463      0.5
+#>   37      excel          4        ROC 0.9911000      0.5
+#>   38      excel          4        PRC 0.9912694      0.5
+#>   39       perf          4        ROC 1.0000000      0.5
+#>   40       perf          4        PRC 1.0000000      0.5
 #> 
 #> 
 #>     === Input data ===
@@ -1711,27 +1711,27 @@ cvcurves
 #> 
 #>     === AUCs ===
 #> 
-#>      Model name Dataset ID Curve type       AUC
-#>    1         m1          1        ROC 1.0000000
-#>    2         m1          1        PRC 1.0000000
-#>    3         m1          2        ROC 0.4166667
-#>    4         m1          2        PRC 0.5164199
-#>    5         m1          3        ROC 0.2000000
-#>    6         m1          3        PRC 0.4891743
-#>    7         m1          4        ROC 0.7916667
-#>    8         m1          4        PRC 0.7728152
-#>    9         m1          5        ROC 0.4400000
-#>   10         m1          5        PRC 0.4266312
-#>   11         m2          1        ROC 0.4000000
-#>   12         m2          1        PRC 0.4247188
-#>   13         m2          2        ROC 0.7083333
-#>   14         m2          2        PRC 0.6568625
-#>   15         m2          3        ROC 0.8400000
-#>   16         m2          3        PRC 0.9057736
-#>   17         m2          4        ROC 0.7916667
-#>   18         m2          4        PRC 0.8527712
-#>   19         m2          5        ROC 0.4000000
-#>   20         m2          5        PRC 0.4247188
+#>      Model name Dataset ID Curve type       AUC Baseline
+#>    1         m1          1        ROC 1.0000000      0.5
+#>    2         m1          1        PRC 1.0000000      0.5
+#>    3         m1          2        ROC 0.4166667      0.5
+#>    4         m1          2        PRC 0.5164199      0.6
+#>    5         m1          3        ROC 0.2000000      0.5
+#>    6         m1          3        PRC 0.4891743      0.5
+#>    7         m1          4        ROC 0.7916667      0.5
+#>    8         m1          4        PRC 0.7728152      0.4
+#>    9         m1          5        ROC 0.4400000      0.5
+#>   10         m1          5        PRC 0.4266312      0.5
+#>   11         m2          1        ROC 0.4000000      0.5
+#>   12         m2          1        PRC 0.4247188      0.5
+#>   13         m2          2        ROC 0.7083333      0.5
+#>   14         m2          2        PRC 0.6568625      0.6
+#>   15         m2          3        ROC 0.8400000      0.5
+#>   16         m2          3        PRC 0.9057736      0.5
+#>   17         m2          4        ROC 0.7916667      0.5
+#>   18         m2          4        PRC 0.8527712      0.4
+#>   19         m2          5        ROC 0.4000000      0.5
+#>   20         m2          5        PRC 0.4247188      0.5
 #> 
 #> 
 #>     === Input data ===
@@ -2102,27 +2102,27 @@ cvcurves2
 #> 
 #>     === AUCs ===
 #> 
-#>      Model name Dataset ID Curve type       AUC
-#>    1         m1          1        ROC 1.0000000
-#>    2         m1          1        PRC 1.0000000
-#>    3         m1          2        ROC 0.4166667
-#>    4         m1          2        PRC 0.5164199
-#>    5         m1          3        ROC 0.2000000
-#>    6         m1          3        PRC 0.4891743
-#>    7         m1          4        ROC 0.7916667
-#>    8         m1          4        PRC 0.7728152
-#>    9         m1          5        ROC 0.4400000
-#>   10         m1          5        PRC 0.4266312
-#>   11         m2          1        ROC 0.4000000
-#>   12         m2          1        PRC 0.4247188
-#>   13         m2          2        ROC 0.7083333
-#>   14         m2          2        PRC 0.6568625
-#>   15         m2          3        ROC 0.8400000
-#>   16         m2          3        PRC 0.9057736
-#>   17         m2          4        ROC 0.7916667
-#>   18         m2          4        PRC 0.8527712
-#>   19         m2          5        ROC 0.4000000
-#>   20         m2          5        PRC 0.4247188
+#>      Model name Dataset ID Curve type       AUC Baseline
+#>    1         m1          1        ROC 1.0000000      0.5
+#>    2         m1          1        PRC 1.0000000      0.5
+#>    3         m1          2        ROC 0.4166667      0.5
+#>    4         m1          2        PRC 0.5164199      0.6
+#>    5         m1          3        ROC 0.2000000      0.5
+#>    6         m1          3        PRC 0.4891743      0.5
+#>    7         m1          4        ROC 0.7916667      0.5
+#>    8         m1          4        PRC 0.7728152      0.4
+#>    9         m1          5        ROC 0.4400000      0.5
+#>   10         m1          5        PRC 0.4266312      0.5
+#>   11         m2          1        ROC 0.4000000      0.5
+#>   12         m2          1        PRC 0.4247188      0.5
+#>   13         m2          2        ROC 0.7083333      0.5
+#>   14         m2          2        PRC 0.6568625      0.6
+#>   15         m2          3        ROC 0.8400000      0.5
+#>   16         m2          3        PRC 0.9057736      0.5
+#>   17         m2          4        ROC 0.7916667      0.5
+#>   18         m2          4        PRC 0.8527712      0.4
+#>   19         m2          5        ROC 0.4000000      0.5
+#>   20         m2          5        PRC 0.4247188      0.5
 #> 
 #> 
 #>     === Input data ===
@@ -2194,16 +2194,16 @@ func_evalmod_aucroc <- function(samp) {
 # Process time
 system.time(res1 <- func_evalmod_rocprc(samp1))
 #>    user  system elapsed 
-#>   0.022   0.002   0.023 
+#>   0.023   0.004   0.027 
 system.time(res2 <- func_evalmod_aucroc(samp1))
 #>    user  system elapsed 
 #>   0.023   0.000   0.014 
 
 # AUCs
 res1
-#>   modnames dsids curvetypes      aucs
-#> 1       m1     1        ROC 0.5017164
-#> 2       m1     1        PRC 0.4997046
+#>   modnames dsids curvetypes      aucs baselines
+#> 1       m1     1        ROC 0.5017164       0.5
+#> 2       m1     1        PRC 0.4997046       0.5
 res2
 #>   modnames dsids      aucs     ustats
 #> 1       m1     1 0.5017164 1254290885
@@ -2222,13 +2222,13 @@ mccurves
 #> 
 #>     === AUCs ===
 #> 
-#>      Model name Dataset ID Curve type       AUC
-#>    1         c1          1        ROC 0.9732000
-#>    2         c1          1        PRC 0.9558435
-#>    3         c2          1        ROC 0.7758000
-#>    4         c2          1        PRC 0.6550357
-#>    5         c3          1        ROC 0.5336000
-#>    6         c3          1        PRC 0.4162555
+#>      Model name Dataset ID Curve type       AUC  Baseline
+#>    1         c1          1        ROC 0.9732000 0.5000000
+#>    2         c1          1        PRC 0.9558435 0.3333333
+#>    3         c2          1        ROC 0.7758000 0.5000000
+#>    4         c2          1        PRC 0.6550357 0.3333333
+#>    5         c3          1        ROC 0.5336000 0.5000000
+#>    6         c3          1        PRC 0.4162555 0.3333333
 #> 
 #> 
 #>     === Input data ===
@@ -2241,13 +2241,13 @@ mccurves
 
 ## Per-class AUCs, plus their macro-average
 auc(mccurves)
-#>        modnames dsids curvetypes      aucs
-#> 1            c1     1        ROC 0.9732000
-#> 2            c1     1        PRC 0.9558435
-#> 3            c2     1        ROC 0.7758000
-#> 4            c2     1        PRC 0.6550357
-#> 5            c3     1        ROC 0.5336000
-#> 6            c3     1        PRC 0.4162555
-#> 7 macro-average     1        ROC 0.7608667
-#> 8 macro-average     1        PRC 0.6757116
+#>        modnames dsids curvetypes      aucs baselines
+#> 1            c1     1        ROC 0.9732000 0.5000000
+#> 2            c1     1        PRC 0.9558435 0.3333333
+#> 3            c2     1        ROC 0.7758000 0.5000000
+#> 4            c2     1        PRC 0.6550357 0.3333333
+#> 5            c3     1        ROC 0.5336000 0.5000000
+#> 6            c3     1        PRC 0.4162555 0.3333333
+#> 7 macro-average     1        ROC 0.7608667 0.5000000
+#> 8 macro-average     1        PRC 0.6757116 0.3333333
 ```

@@ -12,21 +12,63 @@ curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 knitr::kable(auc(curves))
 ```
 
-| modnames | dsids | curvetypes |      aucs |
-|:---------|------:|:-----------|----------:|
-| m1       |     1 | ROC        | 0.7200000 |
-| m1       |     1 | PRC        | 0.7397716 |
+| modnames | dsids | curvetypes |      aucs | baselines |
+|:---------|------:|:-----------|----------:|----------:|
+| m1       |     1 | ROC        | 0.7200000 |       0.5 |
+| m1       |     1 | PRC        | 0.7397716 |       0.5 |
 
-| Curve | What the area means | Baseline |
-|----|----|----|
-| ROC | Probability a random positive outranks a random negative | 0.5 |
-| PRC | Mean precision across all recall levels | Proportion of positives |
+| Curve | What the area means                                      |
+|-------|----------------------------------------------------------|
+| ROC   | Probability a random positive outranks a random negative |
+| PRC   | Mean precision across all recall levels                  |
 
-The ROC baseline is always 0.5. The precision-recall baseline moves with
-the class balance, so a PRC area of 0.4 is poor on balanced data and
-good when positives are 5% of the total. `precrec` computes that area
-from the properly interpolated curve; tools that join raw points with
-straight lines overestimate it.
+`precrec` computes the PRC area from the properly interpolated curve;
+tools that join raw points with straight lines overestimate it.
+
+## Read the area against its baseline
+
+The `baselines` column is what the area would be by chance. For a ROC
+curve that is 0.5 whatever the data, so a ROC AUC can be read on its
+own. For a precision-recall curve it is the proportion of positives, so
+a PRC AUC cannot. This is the same generator at three class balances:
+
+``` r
+
+compare <- function(np, nn) {
+  set.seed(1)
+  scores <- c(rnorm(np, 1.2), rnorm(nn, 0))
+  labels <- rep(c(1, 0), c(np, nn))
+  areas <- auc(evalmod(scores = scores, labels = labels))
+
+  data.frame(
+    positives = sprintf("%.0f%%", 100 * np / (np + nn)),
+    roc = areas$aucs[areas$curvetypes == "ROC"],
+    prc = areas$aucs[areas$curvetypes == "PRC"],
+    prc_baseline = areas$baselines[areas$curvetypes == "PRC"]
+  )
+}
+
+knitr::kable(
+  do.call(rbind, list(compare(500, 500), compare(100, 900), compare(20, 980))),
+  row.names = FALSE, digits = 3
+)
+```
+
+| positives |   roc |   prc | prc_baseline |
+|:----------|------:|------:|-------------:|
+| 50%       | 0.807 | 0.801 |         0.50 |
+| 10%       | 0.834 | 0.367 |         0.10 |
+| 2%        | 0.850 | 0.129 |         0.02 |
+
+The classifier is about as good in all three rows and the ROC AUC says
+so, holding between 0.81 and 0.85. The PRC AUC falls to 0.129, which
+reads as failure and is in fact six times chance. Quote the two numbers
+together, and see [Balanced and imbalanced
+data](https://evalclass.github.io/precrec/articles/howto-imbalanced-data.md)
+for why the PRC column is the one that moved.
+
+The baseline is taken per model and per test dataset, because a fold
+need not hold the classes in the proportions the whole dataset does.
 
 ## Average precision
 
@@ -41,9 +83,9 @@ packages report it under this name.
 knitr::kable(average_precision(curves))
 ```
 
-| modnames | dsids |       aps |
-|:---------|------:|----------:|
-| m1       |     1 | 0.7454008 |
+| modnames | dsids |       aps | baselines |
+|:---------|------:|----------:|----------:|
+| m1       |     1 | 0.7454008 |       0.5 |
 
 ## Partial areas
 
@@ -86,8 +128,8 @@ knitr::kable(auc_ci(mcurves, alpha = 0.01, dtype = "t"))
 
 | modnames | curvetypes |      mean |     error | lower_bound | upper_bound |   n |
 |:---------|:-----------|----------:|----------:|------------:|------------:|----:|
-| m1       | ROC        | 0.8113400 | 0.0204715 |   0.7908685 |   0.8318115 |  10 |
-| m1       | PRC        | 0.8472922 | 0.0183101 |   0.8289821 |   0.8656023 |  10 |
+| m1       | ROC        | 0.7955900 | 0.0260369 |   0.7695531 |   0.8216269 |  10 |
+| m1       | PRC        | 0.8351332 | 0.0272381 |   0.8078951 |   0.8623712 |  10 |
 
 ## Break-even point
 
@@ -105,17 +147,17 @@ knitr::kable(prbe(evalmod(mdat, raw_curves = TRUE)))
 
 | modnames | dsids | prbe |
 |:---------|------:|-----:|
-| m1       |     1 | 0.71 |
-| m1       |     2 | 0.70 |
-| m1       |     2 | 0.70 |
-| m1       |     3 | 0.73 |
+| m1       |     1 | 0.73 |
+| m1       |     2 | 0.75 |
+| m1       |     3 | 0.69 |
+| m1       |     3 | 0.69 |
 | m1       |     4 | 0.77 |
-| m1       |     5 | 0.74 |
-| m1       |     6 | 0.76 |
-| m1       |     7 | 0.74 |
-| m1       |     8 | 0.73 |
-| m1       |     9 | 0.73 |
-| m1       |    10 | 0.70 |
+| m1       |     5 | 0.73 |
+| m1       |     6 | 0.73 |
+| m1       |     7 | 0.68 |
+| m1       |     8 | 0.69 |
+| m1       |     9 | 0.76 |
+| m1       |    10 | 0.74 |
 
 A curve crossing the diagonal more than once gets one row per crossing;
 one that never does gets a single `NA`.
@@ -140,21 +182,53 @@ mccurves <- evalmod(scores = C3N150$scores, labels = C3N150$labels)
 knitr::kable(auc(mccurves, macro_weight = "prevalence"))
 ```
 
-| modnames               | dsids | curvetypes |      aucs |
-|:-----------------------|------:|:-----------|----------:|
-| c1                     |     1 | ROC        | 0.9732000 |
-| c1                     |     1 | PRC        | 0.9558435 |
-| c2                     |     1 | ROC        | 0.7758000 |
-| c2                     |     1 | PRC        | 0.6550357 |
-| c3                     |     1 | ROC        | 0.5336000 |
-| c3                     |     1 | PRC        | 0.4162555 |
-| macro-average-weighted |     1 | ROC        | 0.7608667 |
-| macro-average-weighted |     1 | PRC        | 0.6757116 |
+| modnames               | dsids | curvetypes |      aucs | baselines |
+|:-----------------------|------:|:-----------|----------:|----------:|
+| c1                     |     1 | ROC        | 0.9732000 | 0.5000000 |
+| c1                     |     1 | PRC        | 0.9558435 | 0.3333333 |
+| c2                     |     1 | ROC        | 0.7758000 | 0.5000000 |
+| c2                     |     1 | PRC        | 0.6550357 | 0.3333333 |
+| c3                     |     1 | ROC        | 0.5336000 | 0.5000000 |
+| c3                     |     1 | PRC        | 0.4162555 | 0.3333333 |
+| macro-average-weighted |     1 | ROC        | 0.7608667 | 0.5000000 |
+| macro-average-weighted |     1 | PRC        | 0.6757116 | 0.3333333 |
 
 Uniform if every class matters equally, prevalence if you care about the
 average case. Other packages call these `roc_aunu` and `roc_aunp`. See
 [more than two
 classes](https://evalclass.github.io/precrec/articles/howto-multiclass.md).
+
+The baseline is averaged over the classes the same way the areas are,
+with the same weights, so a macro row stays readable. That matters most
+when the classes are the unequal sizes a macro-average is usually
+reached for:
+
+``` r
+
+set.seed(5)
+rare <- rep(c("c1", "c2", "c3"), c(10, 40, 150))
+noise <- cbind(rnorm(200), rnorm(200), rnorm(200))
+noisy <- evalmod(mmdata(noise, rare, multiclass = "ovr"))
+
+knitr::kable(
+  subset(
+    auc(noisy, macro_weight = "prevalence"),
+    curvetypes == "PRC"
+  ),
+  row.names = FALSE, digits = 3
+)
+```
+
+| modnames               | dsids | curvetypes |  aucs | baselines |
+|:-----------------------|------:|:-----------|------:|----------:|
+| c1                     |     1 | PRC        | 0.049 |     0.050 |
+| c2                     |     1 | PRC        | 0.206 |     0.200 |
+| c3                     |     1 | PRC        | 0.721 |     0.750 |
+| macro-average-weighted |     1 | PRC        | 0.584 |     0.605 |
+
+The scores here are random numbers. The weighted macro-average PRC area
+is 0.584, which would be a respectable result if the baseline were not
+0.605 sitting beside it.
 
 ## The fast path
 

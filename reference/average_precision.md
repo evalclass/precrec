@@ -26,10 +26,17 @@ average_precision(curves)
 ## Value
 
 The `average_precision` function returns a data frame with the columns
-`modnames`, `dsids` and `aps`. Unlike
+`modnames`, `dsids`, `aps` and `baselines`. Unlike
 [`auc()`](https://evalclass.github.io/precrec/reference/auc.md) it has
 one row per model and dataset rather than one per curve, because average
 precision is defined on the precision-recall curve only.
+
+`baselines` is the proportion of positives, which is what average
+precision is worth by chance - see
+`Reading an area against its baseline` in
+[`auc()`](https://evalclass.github.io/precrec/reference/auc.md). It
+moves with the class balance, so an average precision quoted without it
+does not say how good the classifier is.
 
 ## How this differs from the area under the curve
 
@@ -72,12 +79,14 @@ for generating `S3` objects with performance evaluation metrics.
 samps <- create_sim_samples(1, 50, 50, "good_er")
 sscurves <- evalmod(scores = samps[["scores"]], labels = samps[["labels"]])
 average_precision(sscurves)
+#>   modnames dsids       aps baselines
+#> 1       m1     1 0.8406527       0.5
 
 ## The area under the properly interpolated curve, for comparison
 auc(sscurves)
-#>   modnames dsids curvetypes      aucs
-#> 1       m1     1        ROC 0.8216000
-#> 2       m1     1        PRC 0.8387735
+#>   modnames dsids curvetypes      aucs baselines
+#> 1       m1     1        ROC 0.8216000       0.5
+#> 2       m1     1        PRC 0.8387735       0.5
 
 ##################################################
 ### Multiple models & multiple test datasets
@@ -88,4 +97,25 @@ mdat <- mmdata(samps[["scores"]], samps[["labels"]],
 )
 mmcurves <- evalmod(mdat)
 average_precision(mmcurves)
+#>    modnames dsids       aps baselines
+#> 1    random     1 0.5190845       0.5
+#> 2   poor_er     1 0.7118629       0.5
+#> 3   good_er     1 0.8088922       0.5
+#> 4     excel     1 0.9829871       0.5
+#> 5      perf     1 1.0000000       0.5
+#> 6    random     2 0.5538369       0.5
+#> 7   poor_er     2 0.7903907       0.5
+#> 8   good_er     2 0.8726102       0.5
+#> 9     excel     2 0.9756416       0.5
+#> 10     perf     2 1.0000000       0.5
+#> 11   random     3 0.6000141       0.5
+#> 12  poor_er     3 0.7315984       0.5
+#> 13  good_er     3 0.8394689       0.5
+#> 14    excel     3 0.9728387       0.5
+#> 15     perf     3 1.0000000       0.5
+#> 16   random     4 0.5339377       0.5
+#> 17  poor_er     4 0.7260105       0.5
+#> 18  good_er     4 0.7961333       0.5
+#> 19    excel     4 0.9929833       0.5
+#> 20     perf     4 1.0000000       0.5
 ```

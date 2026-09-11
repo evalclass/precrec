@@ -13,7 +13,7 @@ metric_table(), together with the criterion that chose it.'><meta property="og:i
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -181,9 +181,9 @@ pipeline.</p>
 <table class="table table"><tr><td><strong>Prevalence-blind</strong></td><td><code>"youden"</code>, <code>"topleft"</code></td></tr><tr><td><strong>Prevalence-aware</strong></td><td><code>"fscore"</code>, <code>"mcc"</code>, <code>"cost"</code></td></tr></table><p>The default is <code>"youden"</code> because that is what a caller arriving from
 another package expects. On imbalanced data it is the wrong default, and
 <code>"mcc"</code> or a <code>"cost"</code> weighted by what the two mistakes actually cost is
-the better choice. See
-<code>vignette("howto-imbalanced-data", package = "precrec")</code>, which shows the
-two disagreeing on the same dataset.</p>
+the better choice. The <em>Balanced and imbalanced data</em> article shows the
+two disagreeing on the same dataset:
+<a href="https://evalclass.github.io/precrec/articles/howto-imbalanced-data.html">https://evalclass.github.io/precrec/articles/howto-imbalanced-data.html</a>.</p>
     </div>
     <div class="section level2">
     <h2 id="ties-and-what-is-not-here">Ties, and what is not here<a class="anchor" aria-label="anchor" href="#ties-and-what-is-not-here"></a></h2>

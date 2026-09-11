@@ -13,7 +13,7 @@ metric_curve(), which projects one metric against another."><meta property="og:i
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -111,7 +111,7 @@ a <code>ROCR::performance</code> object. It is the table counterpart of
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">metric_table</span><span class="op">(</span><span class="va">x</span>, scores <span class="op">=</span> <span class="cn">NULL</span>, labels <span class="op">=</span> <span class="cn">NULL</span>, metrics <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">metric_table</span><span class="op">(</span><span class="va">x</span>, scores <span class="op">=</span> <span class="cn">NULL</span>, labels <span class="op">=</span> <span class="cn">NULL</span>, metrics <span class="op">=</span> <span class="cn">NULL</span>, at <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -146,6 +146,15 @@ unspecified when <code>x</code> is already a basic-metric object, which carries
 the metrics it was built with.</p></dd>
 
 
+<dt id="arg-at">at<a class="anchor" aria-label="anchor" href="#arg-at"></a></dt>
+<dd><p>A numeric vector of thresholds to report, instead of every
+cutoff. Each one is looked up rather than recalculated: <code>score &gt;= </code>
+the threshold calls some number of instances positive, and that count
+is a rank the table already has a row for. Use it to read the metrics
+of a threshold chosen somewhere else - on other data, from a
+requirement, or by hand.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>These additional arguments are passed to <code><a href="evalmod.html">evalmod()</a></code>, and
 through it to <code><a href="mmdata.html">mmdata()</a></code>, when this function builds the basic metrics
@@ -156,8 +165,10 @@ itself. <code>beta</code>, <code>cost_fp</code>, <code>cost_fn</code>, <code>bas
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>The <code>metric_table</code> function returns a data frame with one row
-per cutoff per model per test dataset, and the following columns.</p>
-<table class="table table"><tr><td><code>modname</code></td><td>Model name</td></tr><tr><td><code>dsid</code></td><td>Test dataset ID</td></tr><tr><td><code>rank</code></td><td>Number of instances called positive, <code>0</code> to <code>n</code></td></tr><tr><td><code>normalized_rank</code></td><td><code>rank / n</code>, the x axis of the basic
+per cutoff per model per test dataset - or, when <code>at</code> is given, one
+row per threshold per model per test dataset - and the following
+columns.</p>
+<table class="table table"><tr><td><code>modname</code></td><td>Model name</td></tr><tr><td><code>dsid</code></td><td>Test dataset ID</td></tr><tr><td><code>at</code></td><td>The threshold asked for, when <code>at</code> is given</td></tr><tr><td><code>rank</code></td><td>Number of instances called positive, <code>0</code> to <code>n</code></td></tr><tr><td><code>normalized_rank</code></td><td><code>rank / n</code>, the x axis of the basic
 metric plots</td></tr><tr><td><code>score</code></td><td>The cutoff itself, see below</td></tr><tr><td><code>label</code></td><td><code>1</code> if the instance at this rank is positive,
 <code>-1</code> if it is negative</td></tr><tr><td>...</td><td>One column per metric, named as <code><a href="evalmod.html">evalmod()</a></code> names them</td></tr></table></div>
     <div class="section level2">
@@ -175,6 +186,29 @@ are defined, and it is kept because it is a real operating point.</p>
 <p>Tied scores share one value of each metric rather than taking a value
 that depends on the order the ties arrived in. <code>basic_ties</code> of
 <code><a href="evalmod.html">evalmod()</a></code> controls that.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="reading-a-threshold-you-already-have">Reading a threshold you already have<a class="anchor" aria-label="anchor" href="#reading-a-threshold-you-already-have"></a></h2>
+
+
+
+<p><code>at</code> answers the question the rest of the table cannot: what are the
+metrics of <em>this</em> threshold. A threshold is rarely one of the observed
+scores, so it has no row of its own, but it always names one of the
+cutoffs - <code>score &gt;= </code> it calls a certain number of instances positive,
+and that count is a rank. The row returned is that rank's row, so <code>at</code>
+is what was asked for and <code>score</code> is the observed cutoff realizing it,
+the smallest score still called positive.</p>
+<p>A threshold above every score gives the <code>rank = 0</code> row, where <code>score</code>
+is <code>NA</code> because nothing is called positive. A score of <code>NA</code> is never a
+positive prediction, matching the <code>na_worst = TRUE</code> default of the rest
+of the package.</p>
+<p>Ranks are per test dataset, so one threshold lands on a different rank
+in each of them. That is the reason to ask by threshold: a threshold is
+what transfers between datasets, and a rank is not. It is what makes a
+cutoff chosen on held-out data measurable on the data it was kept from,
+which the <em>Choose an operating point</em> article works through:
+<a href="https://evalclass.github.io/precrec/articles/howto-operating-point.html">https://evalclass.github.io/precrec/articles/howto-operating-point.html</a>.</p>
     </div>
     <div class="section level2">
     <h2 id="several-test-datasets">Several test datasets<a class="anchor" aria-label="anchor" href="#several-test-datasets"></a></h2>
@@ -252,6 +286,21 @@ long form the plots use.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4    3    18 0.6666667 1.333333 0.1818182</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5    4    17 0.7500000 1.500000 0.2727273</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6    5    16 0.8000000 1.600000 0.3636364</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">##################################################</span></span></span>
+<span class="r-in"><span><span class="co">### Read the metrics of thresholds you already have</span></span></span>
+<span class="r-in"><span><span class="co">###</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## 14 is a run of six tied scores, so the rank is the end of the run</span></span></span>
+<span class="r-in"><span><span class="fu">metric_table</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  scores <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">scores</span>, labels <span class="op">=</span> <span class="va">P10N10</span><span class="op">$</span><span class="va">labels</span>,</span></span>
+<span class="r-in"><span>  at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">17</span>, <span class="fl">14</span>, <span class="fl">6</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"at"</span>, <span class="st">"rank"</span>, <span class="st">"score"</span>, <span class="st">"sensitivity"</span>, <span class="st">"precision"</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   at rank score sensitivity precision</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 17    4    17         0.3 0.7500000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 14   12    14         0.7 0.5833333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  6   15     6         0.9 0.6000000</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">##################################################</span></span></span>

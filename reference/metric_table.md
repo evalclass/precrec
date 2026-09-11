@@ -9,7 +9,7 @@ which projects one metric against another.
 ## Usage
 
 ``` r
-metric_table(x, scores = NULL, labels = NULL, metrics = NULL, ...)
+metric_table(x, scores = NULL, labels = NULL, metrics = NULL, at = NULL, ...)
 ```
 
 ## Arguments
@@ -45,6 +45,15 @@ metric_table(x, scores = NULL, labels = NULL, metrics = NULL, ...)
   takes it. It must be unspecified when `x` is already a basic-metric
   object, which carries the metrics it was built with.
 
+- at:
+
+  A numeric vector of thresholds to report, instead of every cutoff.
+  Each one is looked up rather than recalculated: `score >= ` the
+  threshold calls some number of instances positive, and that count is a
+  rank the table already has a row for. Use it to read the metrics of a
+  threshold chosen somewhere else - on other data, from a requirement,
+  or by hand.
+
 - ...:
 
   These additional arguments are passed to
@@ -58,12 +67,14 @@ metric_table(x, scores = NULL, labels = NULL, metrics = NULL, ...)
 ## Value
 
 The `metric_table` function returns a data frame with one row per cutoff
-per model per test dataset, and the following columns.
+per model per test dataset - or, when `at` is given, one row per
+threshold per model per test dataset - and the following columns.
 
 |  |  |
 |----|----|
 | `modname` | Model name |
 | `dsid` | Test dataset ID |
+| `at` | The threshold asked for, when `at` is given |
 | `rank` | Number of instances called positive, `0` to `n` |
 | `normalized_rank` | `rank / n`, the x axis of the basic metric plots |
 | `score` | The cutoff itself, see below |
@@ -85,6 +96,28 @@ Tied scores share one value of each metric rather than taking a value
 that depends on the order the ties arrived in. `basic_ties` of
 [`evalmod()`](https://evalclass.github.io/precrec/reference/evalmod.md)
 controls that.
+
+## Reading a threshold you already have
+
+`at` answers the question the rest of the table cannot: what are the
+metrics of *this* threshold. A threshold is rarely one of the observed
+scores, so it has no row of its own, but it always names one of the
+cutoffs - `score >= ` it calls a certain number of instances positive,
+and that count is a rank. The row returned is that rank's row, so `at`
+is what was asked for and `score` is the observed cutoff realizing it,
+the smallest score still called positive.
+
+A threshold above every score gives the `rank = 0` row, where `score` is
+`NA` because nothing is called positive. A score of `NA` is never a
+positive prediction, matching the `na_worst = TRUE` default of the rest
+of the package.
+
+Ranks are per test dataset, so one threshold lands on a different rank
+in each of them. That is the reason to ask by threshold: a threshold is
+what transfers between datasets, and a rank is not. It is what makes a
+cutoff chosen on held-out data measurable on the data it was kept from,
+which the *Choose an operating point* article works through:
+<https://evalclass.github.io/precrec/articles/howto-operating-point.html>.
 
 ## Several test datasets
 
@@ -162,6 +195,21 @@ head(lifted[, c("rank", "score", "precision", "lift", "jaccard")])
 #> 4    3    18 0.6666667 1.333333 0.1818182
 #> 5    4    17 0.7500000 1.500000 0.2727273
 #> 6    5    16 0.8000000 1.600000 0.3636364
+
+
+##################################################
+### Read the metrics of thresholds you already have
+###
+
+## 14 is a run of six tied scores, so the rank is the end of the run
+metric_table(
+  scores = P10N10$scores, labels = P10N10$labels,
+  at = c(17, 14, 6)
+)[, c("at", "rank", "score", "sensitivity", "precision")]
+#>   at rank score sensitivity precision
+#> 1 17    4    17         0.3 0.7500000
+#> 2 14   12    14         0.7 0.5833333
+#> 3  6   15     6         0.9 0.6000000
 
 
 ##################################################

@@ -11,7 +11,7 @@ the Curve (AUC) scores of ROC and Precision-Recall curves."><meta property="og:i
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -145,7 +145,29 @@ balanced dataset.</p>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>The <code>auc</code> function returns a data frame with AUC scores.</p>
+    <p>The <code>auc</code> function returns a data frame with one row per curve
+per model per test dataset, and the following columns.</p>
+<table class="table table"><tr><td><code>modnames</code></td><td>Model name</td></tr><tr><td><code>dsids</code></td><td>Test dataset ID</td></tr><tr><td><code>curvetypes</code></td><td><code>ROC</code> or <code>PRC</code></td></tr><tr><td><code>aucs</code></td><td>The area under that curve</td></tr><tr><td><code>baselines</code></td><td>What that area would be by chance, see below</td></tr></table></div>
+    <div class="section level2">
+    <h2 id="reading-an-area-against-its-baseline">Reading an area against its baseline<a class="anchor" aria-label="anchor" href="#reading-an-area-against-its-baseline"></a></h2>
+
+
+
+<p>A ROC curve's chance level is <code>0.5</code> whatever the data, so a ROC AUC can
+be read on its own. A precision-recall curve's chance level is the
+proportion of positives, so a PRC AUC cannot: the same number means
+different things on different data, and the difference is not small.</p>
+<p>The <code>baselines</code> column carries that value, <code>0.5</code> on every <code>ROC</code> row and
+the prevalence on every <code>PRC</code> row, so that the area and what it is
+worth arrive together. On the same generator at three class balances:</p>
+<table class="table table"><tr><td><strong>Positives</strong></td><td><strong>ROC AUC</strong></td><td><strong>PRC AUC</strong></td><td><strong>PRC baseline</strong></td></tr><tr><td>50%</td><td>0.807</td><td>0.801</td><td>0.50</td></tr><tr><td>10%</td><td>0.834</td><td>0.367</td><td>0.10</td></tr><tr><td>2%</td><td>0.850</td><td>0.129</td><td>0.02</td></tr></table><p>The classifier is about as good in all three rows and the ROC AUC says
+so. The PRC AUC falls to <code>0.129</code>, which reads as failure and is in fact
+six times chance. Quote the two numbers together.</p>
+<p>The baseline is looked up per model and per test dataset, because a
+fold need not hold the classes in the proportions the whole dataset
+does. On a <code>macro-average</code> row it is averaged over the classes exactly
+as the AUCs are, with the same weights, so the row is still read
+against the chance level of the mixture that produced it.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -170,9 +192,9 @@ the area under the precision-recall curve.</p></div>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Shows AUCs</span></span></span>
 <span class="r-in"><span><span class="fu">auc</span><span class="op">(</span><span class="va">sscurves</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   modnames dsids curvetypes      aucs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1       m1     1        ROC 0.7200000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2       m1     1        PRC 0.7397716</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   modnames dsids curvetypes      aucs baselines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       m1     1        ROC 0.7200000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       m1     1        PRC 0.7397716       0.5</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">##################################################</span></span></span>
@@ -190,17 +212,17 @@ the area under the precision-recall curve.</p></div>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Shows AUCs</span></span></span>
 <span class="r-in"><span><span class="fu">auc</span><span class="op">(</span><span class="va">mscurves</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    modnames dsids curvetypes      aucs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    random     1        ROC 0.4971000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2    random     1        PRC 0.4992116</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   poor_er     1        ROC 0.8328000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   poor_er     1        PRC 0.7860641</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   good_er     1        ROC 0.8180000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   good_er     1        PRC 0.8574152</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7     excel     1        ROC 0.9780000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8     excel     1        PRC 0.9782574</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9      perf     1        ROC 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10     perf     1        PRC 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    modnames dsids curvetypes      aucs baselines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    random     1        ROC 0.4971000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    random     1        PRC 0.4992116       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   poor_er     1        ROC 0.8328000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   poor_er     1        PRC 0.7860641       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   good_er     1        ROC 0.8180000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   good_er     1        PRC 0.8574152       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7     excel     1        ROC 0.9780000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8     excel     1        PRC 0.9782574       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9      perf     1        ROC 1.0000000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10     perf     1        PRC 1.0000000       0.5</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">##################################################</span></span></span>
@@ -222,26 +244,26 @@ the area under the precision-recall curve.</p></div>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Shows AUCs</span></span></span>
 <span class="r-in"><span><span class="va">sm_aucs</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   modnames dsids curvetypes      aucs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  good_er     1        ROC 0.7865000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  good_er     1        PRC 0.8404735</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  good_er     2        ROC 0.8313000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  good_er     2        PRC 0.8628264</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  good_er     3        ROC 0.8244000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  good_er     3        PRC 0.8578336</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  good_er     4        ROC 0.8204000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  good_er     4        PRC 0.8519919</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   modnames dsids curvetypes      aucs baselines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  good_er     1        ROC 0.7865000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  good_er     1        PRC 0.8404735       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  good_er     2        ROC 0.8313000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  good_er     2        PRC 0.8628264       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  good_er     3        ROC 0.8244000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  good_er     3        PRC 0.8578336       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  good_er     4        ROC 0.8204000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  good_er     4        PRC 0.8519919       0.5</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Get AUCs of Precision-Recall</span></span></span>
 <span class="r-in"><span><span class="va">sm_aucs_prc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">sm_aucs</span>, <span class="va">curvetypes</span> <span class="op">==</span> <span class="st">"PRC"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Shows AUCs</span></span></span>
 <span class="r-in"><span><span class="va">sm_aucs_prc</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   modnames dsids curvetypes      aucs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  good_er     1        PRC 0.8404735</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  good_er     2        PRC 0.8628264</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  good_er     3        PRC 0.8578336</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  good_er     4        PRC 0.8519919</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   modnames dsids curvetypes      aucs baselines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  good_er     1        PRC 0.8404735       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  good_er     2        PRC 0.8628264       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  good_er     3        PRC 0.8578336       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  good_er     4        PRC 0.8519919       0.5</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">##################################################</span></span></span>
 <span class="r-in"><span><span class="co">### Multiple models &amp; multiple test datasets</span></span></span>
@@ -262,74 +284,74 @@ the area under the precision-recall curve.</p></div>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Shows AUCs</span></span></span>
 <span class="r-in"><span><span class="va">mm_aucs</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    modnames dsids curvetypes      aucs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    random     1        ROC 0.4509000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2    random     1        PRC 0.4468330</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   poor_er     1        ROC 0.8299000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   poor_er     1        PRC 0.7817533</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   good_er     1        ROC 0.8285000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   good_er     1        PRC 0.8577692</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7     excel     1        ROC 0.9820000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8     excel     1        PRC 0.9842602</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9      perf     1        ROC 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10     perf     1        PRC 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11   random     2        ROC 0.4974000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12   random     2        PRC 0.5102109</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13  poor_er     2        ROC 0.7718000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14  poor_er     2        PRC 0.7117766</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15  good_er     2        ROC 0.7925000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16  good_er     2        PRC 0.8071713</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17    excel     2        ROC 0.9778000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18    excel     2        PRC 0.9778305</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19     perf     2        ROC 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20     perf     2        PRC 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21   random     3        ROC 0.4797000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22   random     3        PRC 0.5184681</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23  poor_er     3        ROC 0.8219000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24  poor_er     3        PRC 0.7939097</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25  good_er     3        ROC 0.7832000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26  good_er     3        PRC 0.8267456</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27    excel     3        ROC 0.9797000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28    excel     3        PRC 0.9824702</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29     perf     3        ROC 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30     perf     3        PRC 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31   random     4        ROC 0.4924000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32   random     4        PRC 0.4723165</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 33  poor_er     4        ROC 0.7803000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34  poor_er     4        PRC 0.7185701</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35  good_er     4        ROC 0.8343000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36  good_er     4        PRC 0.8609178</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37    excel     4        ROC 0.9891000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38    excel     4        PRC 0.9890191</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 39     perf     4        ROC 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40     perf     4        PRC 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    modnames dsids curvetypes      aucs baselines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    random     1        ROC 0.4509000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    random     1        PRC 0.4468330       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   poor_er     1        ROC 0.8299000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   poor_er     1        PRC 0.7817533       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   good_er     1        ROC 0.8285000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   good_er     1        PRC 0.8577692       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7     excel     1        ROC 0.9820000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8     excel     1        PRC 0.9842602       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9      perf     1        ROC 1.0000000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10     perf     1        PRC 1.0000000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11   random     2        ROC 0.4974000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12   random     2        PRC 0.5102109       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13  poor_er     2        ROC 0.7718000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14  poor_er     2        PRC 0.7117766       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15  good_er     2        ROC 0.7925000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16  good_er     2        PRC 0.8071713       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17    excel     2        ROC 0.9778000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18    excel     2        PRC 0.9778305       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19     perf     2        ROC 1.0000000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20     perf     2        PRC 1.0000000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21   random     3        ROC 0.4797000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22   random     3        PRC 0.5184681       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23  poor_er     3        ROC 0.8219000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24  poor_er     3        PRC 0.7939097       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25  good_er     3        ROC 0.7832000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26  good_er     3        PRC 0.8267456       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27    excel     3        ROC 0.9797000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28    excel     3        PRC 0.9824702       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29     perf     3        ROC 1.0000000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30     perf     3        PRC 1.0000000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31   random     4        ROC 0.4924000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32   random     4        PRC 0.4723165       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33  poor_er     4        ROC 0.7803000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34  poor_er     4        PRC 0.7185701       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35  good_er     4        ROC 0.8343000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36  good_er     4        PRC 0.8609178       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37    excel     4        ROC 0.9891000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38    excel     4        PRC 0.9890191       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39     perf     4        ROC 1.0000000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40     perf     4        PRC 1.0000000       0.5</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Get AUCs of Precision-Recall</span></span></span>
 <span class="r-in"><span><span class="va">mm_aucs_prc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">mm_aucs</span>, <span class="va">curvetypes</span> <span class="op">==</span> <span class="st">"PRC"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Shows AUCs</span></span></span>
 <span class="r-in"><span><span class="va">mm_aucs_prc</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    modnames dsids curvetypes      aucs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2    random     1        PRC 0.4468330</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   poor_er     1        PRC 0.7817533</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   good_er     1        PRC 0.8577692</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8     excel     1        PRC 0.9842602</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10     perf     1        PRC 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12   random     2        PRC 0.5102109</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14  poor_er     2        PRC 0.7117766</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16  good_er     2        PRC 0.8071713</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18    excel     2        PRC 0.9778305</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20     perf     2        PRC 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22   random     3        PRC 0.5184681</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24  poor_er     3        PRC 0.7939097</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26  good_er     3        PRC 0.8267456</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28    excel     3        PRC 0.9824702</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30     perf     3        PRC 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32   random     4        PRC 0.4723165</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34  poor_er     4        PRC 0.7185701</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36  good_er     4        PRC 0.8609178</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38    excel     4        PRC 0.9890191</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40     perf     4        PRC 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    modnames dsids curvetypes      aucs baselines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    random     1        PRC 0.4468330       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   poor_er     1        PRC 0.7817533       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   good_er     1        PRC 0.8577692       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8     excel     1        PRC 0.9842602       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10     perf     1        PRC 1.0000000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12   random     2        PRC 0.5102109       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14  poor_er     2        PRC 0.7117766       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16  good_er     2        PRC 0.8071713       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18    excel     2        PRC 0.9778305       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20     perf     2        PRC 1.0000000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22   random     3        PRC 0.5184681       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24  poor_er     3        PRC 0.7939097       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26  good_er     3        PRC 0.8267456       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28    excel     3        PRC 0.9824702       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30     perf     3        PRC 1.0000000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32   random     4        PRC 0.4723165       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34  poor_er     4        PRC 0.7185701       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36  good_er     4        PRC 0.8609178       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38    excel     4        PRC 0.9890191       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40     perf     4        PRC 1.0000000       0.5</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">##################################################</span></span></span>
@@ -344,37 +366,37 @@ the area under the precision-recall curve.</p></div>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Per-class AUCs, plus their macro-average</span></span></span>
 <span class="r-in"><span><span class="fu">auc</span><span class="op">(</span><span class="va">mccurves</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        modnames dsids curvetypes      aucs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1            c1     1        ROC 0.9732000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2            c1     1        PRC 0.9558435</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3            c2     1        ROC 0.7758000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4            c2     1        PRC 0.6550357</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5            c3     1        ROC 0.5336000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6            c3     1        PRC 0.4162555</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7 macro-average     1        ROC 0.7608667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8 macro-average     1        PRC 0.6757116</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        modnames dsids curvetypes      aucs baselines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1            c1     1        ROC 0.9732000 0.5000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2            c1     1        PRC 0.9558435 0.3333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3            c2     1        ROC 0.7758000 0.5000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4            c2     1        PRC 0.6550357 0.3333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5            c3     1        ROC 0.5336000 0.5000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6            c3     1        PRC 0.4162555 0.3333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7 macro-average     1        ROC 0.7608667 0.5000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8 macro-average     1        PRC 0.6757116 0.3333333</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Per-class AUCs only</span></span></span>
 <span class="r-in"><span><span class="fu">auc</span><span class="op">(</span><span class="va">mccurves</span>, macro <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   modnames dsids curvetypes      aucs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1       c1     1        ROC 0.9732000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2       c1     1        PRC 0.9558435</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3       c2     1        ROC 0.7758000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4       c2     1        PRC 0.6550357</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5       c3     1        ROC 0.5336000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6       c3     1        PRC 0.4162555</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   modnames dsids curvetypes      aucs baselines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       c1     1        ROC 0.9732000 0.5000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       c1     1        PRC 0.9558435 0.3333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3       c2     1        ROC 0.7758000 0.5000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4       c2     1        PRC 0.6550357 0.3333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5       c3     1        ROC 0.5336000 0.5000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6       c3     1        PRC 0.4162555 0.3333333</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Weighted by the class distribution instead</span></span></span>
 <span class="r-in"><span><span class="fu">auc</span><span class="op">(</span><span class="va">mccurves</span>, macro_weight <span class="op">=</span> <span class="st">"prevalence"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                 modnames dsids curvetypes      aucs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                     c1     1        ROC 0.9732000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                     c1     1        PRC 0.9558435</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                     c2     1        ROC 0.7758000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4                     c2     1        PRC 0.6550357</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5                     c3     1        ROC 0.5336000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6                     c3     1        PRC 0.4162555</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7 macro-average-weighted     1        ROC 0.7608667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8 macro-average-weighted     1        PRC 0.6757116</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 modnames dsids curvetypes      aucs baselines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                     c1     1        ROC 0.9732000 0.5000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                     c1     1        PRC 0.9558435 0.3333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                     c2     1        ROC 0.7758000 0.5000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                     c2     1        PRC 0.6550357 0.3333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                     c3     1        ROC 0.5336000 0.5000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                     c3     1        PRC 0.4162555 0.3333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7 macro-average-weighted     1        ROC 0.7608667 0.5000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8 macro-average-weighted     1        PRC 0.6757116 0.3333333</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

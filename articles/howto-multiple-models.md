@@ -39,18 +39,18 @@ autoplot(curves)
 knitr::kable(auc(curves))
 ```
 
-| modnames | dsids | curvetypes |      aucs |
-|:---------|------:|:-----------|----------:|
-| random   |     1 | ROC        | 0.4971000 |
-| random   |     1 | PRC        | 0.4992116 |
-| poor_er  |     1 | ROC        | 0.8328000 |
-| poor_er  |     1 | PRC        | 0.7860641 |
-| good_er  |     1 | ROC        | 0.8180000 |
-| good_er  |     1 | PRC        | 0.8574152 |
-| excel    |     1 | ROC        | 0.9780000 |
-| excel    |     1 | PRC        | 0.9782574 |
-| perf     |     1 | ROC        | 1.0000000 |
-| perf     |     1 | PRC        | 1.0000000 |
+| modnames | dsids | curvetypes |      aucs | baselines |
+|:---------|------:|:-----------|----------:|----------:|
+| random   |     1 | ROC        | 0.4971000 |       0.5 |
+| random   |     1 | PRC        | 0.4992116 |       0.5 |
+| poor_er  |     1 | ROC        | 0.8328000 |       0.5 |
+| poor_er  |     1 | PRC        | 0.7860641 |       0.5 |
+| good_er  |     1 | ROC        | 0.8180000 |       0.5 |
+| good_er  |     1 | PRC        | 0.8574152 |       0.5 |
+| excel    |     1 | ROC        | 0.9780000 |       0.5 |
+| excel    |     1 | PRC        | 0.9782574 |       0.5 |
+| perf     |     1 | ROC        | 1.0000000 |       0.5 |
+| perf     |     1 | PRC        | 1.0000000 |       0.5 |
 
 The gap between the two curve types is the point of the package: ROC
 areas stay high for models the precision-recall areas show to be weak.

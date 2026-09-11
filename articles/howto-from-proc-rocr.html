@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -176,9 +176,9 @@ function reads that result.</p>
 <code class="sourceCode R"><span><span class="va">curves</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span><span class="va">mdat</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/auc.html">auc</a></span><span class="op">(</span><span class="va">curves</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   modnames dsids curvetypes      aucs</span></span>
-<span><span class="co">#&gt; 1       m1     1        ROC 0.8102381</span></span>
-<span><span class="co">#&gt; 2       m1     1        PRC 0.6897919</span></span></code></pre></div>
+<span><span class="co">#&gt;   modnames dsids curvetypes      aucs baselines</span></span>
+<span><span class="co">#&gt; 1       m1     1        ROC 0.8102381       0.5</span></span>
+<span><span class="co">#&gt; 2       m1     1        PRC 0.6897919       0.3</span></span></code></pre></div>
 <p>One call, both curves, and the ROC and precision-recall areas
 together. The practical consequence is that <code>mdat</code> and
 <code>curves</code> are worth keeping in a variable: everything else on

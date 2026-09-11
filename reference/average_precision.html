@@ -15,7 +15,7 @@ cutoff before it."><meta property="og:image" content="https://evalclass.github.i
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -131,9 +131,14 @@ cutoff before it.</p>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>The <code>average_precision</code> function returns a data frame with the
-columns <code>modnames</code>, <code>dsids</code> and <code>aps</code>. Unlike <code><a href="auc.html">auc()</a></code> it has one row
-per model and dataset rather than one per curve, because average
-precision is defined on the precision-recall curve only.</p>
+columns <code>modnames</code>, <code>dsids</code>, <code>aps</code> and <code>baselines</code>. Unlike <code><a href="auc.html">auc()</a></code> it
+has one row per model and dataset rather than one per curve, because
+average precision is defined on the precision-recall curve only.</p>
+<p><code>baselines</code> is the proportion of positives, which is what average
+precision is worth by chance - see
+<code>Reading an area against its baseline</code> in <code><a href="auc.html">auc()</a></code>. It moves with the
+class balance, so an average precision quoted without it does not say
+how good the classifier is.</p>
     </div>
     <div class="section level2">
     <h2 id="how-this-differs-from-the-area-under-the-curve">How this differs from the area under the curve<a class="anchor" aria-label="anchor" href="#how-this-differs-from-the-area-under-the-curve"></a></h2>
@@ -173,12 +178,14 @@ generating <code>S3</code> objects with performance evaluation metrics.</p></div
 <span class="r-in"><span><span class="va">samps</span> <span class="op">&lt;-</span> <span class="fu"><a href="create_sim_samples.html">create_sim_samples</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">50</span>, <span class="fl">50</span>, <span class="st">"good_er"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">sscurves</span> <span class="op">&lt;-</span> <span class="fu"><a href="evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">samps</span><span class="op">[[</span><span class="st">"scores"</span><span class="op">]</span><span class="op">]</span>, labels <span class="op">=</span> <span class="va">samps</span><span class="op">[[</span><span class="st">"labels"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">average_precision</span><span class="op">(</span><span class="va">sscurves</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   modnames dsids       aps baselines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       m1     1 0.8406527       0.5</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## The area under the properly interpolated curve, for comparison</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="auc.html">auc</a></span><span class="op">(</span><span class="va">sscurves</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   modnames dsids curvetypes      aucs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1       m1     1        ROC 0.8216000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2       m1     1        PRC 0.8387735</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   modnames dsids curvetypes      aucs baselines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       m1     1        ROC 0.8216000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       m1     1        PRC 0.8387735       0.5</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">##################################################</span></span></span>
 <span class="r-in"><span><span class="co">### Multiple models &amp; multiple test datasets</span></span></span>
@@ -189,6 +196,27 @@ generating <code>S3</code> objects with performance evaluation metrics.</p></div
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">mmcurves</span> <span class="op">&lt;-</span> <span class="fu"><a href="evalmod.html">evalmod</a></span><span class="op">(</span><span class="va">mdat</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">average_precision</span><span class="op">(</span><span class="va">mmcurves</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    modnames dsids       aps baselines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    random     1 0.5190845       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   poor_er     1 0.7118629       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   good_er     1 0.8088922       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4     excel     1 0.9829871       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5      perf     1 1.0000000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6    random     2 0.5538369       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7   poor_er     2 0.7903907       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8   good_er     2 0.8726102       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9     excel     2 0.9756416       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10     perf     2 1.0000000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11   random     3 0.6000141       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12  poor_er     3 0.7315984       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13  good_er     3 0.8394689       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14    excel     3 0.9728387       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15     perf     3 1.0000000       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16   random     4 0.5339377       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17  poor_er     4 0.7260105       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18  good_er     4 0.7961333       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19    excel     4 0.9929833       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20     perf     4 1.0000000       0.5</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

@@ -57,7 +57,44 @@ auc(curves, macro = TRUE, macro_weight = c("uniform", "prevalence"))
 
 ## Value
 
-The `auc` function returns a data frame with AUC scores.
+The `auc` function returns a data frame with one row per curve per model
+per test dataset, and the following columns.
+
+|              |                                              |
+|--------------|----------------------------------------------|
+| `modnames`   | Model name                                   |
+| `dsids`      | Test dataset ID                              |
+| `curvetypes` | `ROC` or `PRC`                               |
+| `aucs`       | The area under that curve                    |
+| `baselines`  | What that area would be by chance, see below |
+
+## Reading an area against its baseline
+
+A ROC curve's chance level is `0.5` whatever the data, so a ROC AUC can
+be read on its own. A precision-recall curve's chance level is the
+proportion of positives, so a PRC AUC cannot: the same number means
+different things on different data, and the difference is not small.
+
+The `baselines` column carries that value, `0.5` on every `ROC` row and
+the prevalence on every `PRC` row, so that the area and what it is worth
+arrive together. On the same generator at three class balances:
+
+|               |             |             |                  |
+|---------------|-------------|-------------|------------------|
+| **Positives** | **ROC AUC** | **PRC AUC** | **PRC baseline** |
+| 50%           | 0.807       | 0.801       | 0.50             |
+| 10%           | 0.834       | 0.367       | 0.10             |
+| 2%            | 0.850       | 0.129       | 0.02             |
+
+The classifier is about as good in all three rows and the ROC AUC says
+so. The PRC AUC falls to `0.129`, which reads as failure and is in fact
+six times chance. Quote the two numbers together.
+
+The baseline is looked up per model and per test dataset, because a fold
+need not hold the classes in the proportions the whole dataset does. On
+a `macro-average` row it is averaged over the classes exactly as the
+AUCs are, with the same weights, so the row is still read against the
+chance level of the mixture that produced it.
 
 ## See also
 
@@ -84,9 +121,9 @@ sscurves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 
 ## Shows AUCs
 auc(sscurves)
-#>   modnames dsids curvetypes      aucs
-#> 1       m1     1        ROC 0.7200000
-#> 2       m1     1        PRC 0.7397716
+#>   modnames dsids curvetypes      aucs baselines
+#> 1       m1     1        ROC 0.7200000       0.5
+#> 2       m1     1        PRC 0.7397716       0.5
 
 
 ##################################################
@@ -104,17 +141,17 @@ mscurves <- evalmod(mdat)
 
 ## Shows AUCs
 auc(mscurves)
-#>    modnames dsids curvetypes      aucs
-#> 1    random     1        ROC 0.4971000
-#> 2    random     1        PRC 0.4992116
-#> 3   poor_er     1        ROC 0.8328000
-#> 4   poor_er     1        PRC 0.7860641
-#> 5   good_er     1        ROC 0.8180000
-#> 6   good_er     1        PRC 0.8574152
-#> 7     excel     1        ROC 0.9780000
-#> 8     excel     1        PRC 0.9782574
-#> 9      perf     1        ROC 1.0000000
-#> 10     perf     1        PRC 1.0000000
+#>    modnames dsids curvetypes      aucs baselines
+#> 1    random     1        ROC 0.4971000       0.5
+#> 2    random     1        PRC 0.4992116       0.5
+#> 3   poor_er     1        ROC 0.8328000       0.5
+#> 4   poor_er     1        PRC 0.7860641       0.5
+#> 5   good_er     1        ROC 0.8180000       0.5
+#> 6   good_er     1        PRC 0.8574152       0.5
+#> 7     excel     1        ROC 0.9780000       0.5
+#> 8     excel     1        PRC 0.9782574       0.5
+#> 9      perf     1        ROC 1.0000000       0.5
+#> 10     perf     1        PRC 1.0000000       0.5
 
 
 ##################################################
@@ -136,26 +173,26 @@ sm_aucs <- auc(smcurves)
 
 ## Shows AUCs
 sm_aucs
-#>   modnames dsids curvetypes      aucs
-#> 1  good_er     1        ROC 0.7865000
-#> 2  good_er     1        PRC 0.8404735
-#> 3  good_er     2        ROC 0.8313000
-#> 4  good_er     2        PRC 0.8628264
-#> 5  good_er     3        ROC 0.8244000
-#> 6  good_er     3        PRC 0.8578336
-#> 7  good_er     4        ROC 0.8204000
-#> 8  good_er     4        PRC 0.8519919
+#>   modnames dsids curvetypes      aucs baselines
+#> 1  good_er     1        ROC 0.7865000       0.5
+#> 2  good_er     1        PRC 0.8404735       0.5
+#> 3  good_er     2        ROC 0.8313000       0.5
+#> 4  good_er     2        PRC 0.8628264       0.5
+#> 5  good_er     3        ROC 0.8244000       0.5
+#> 6  good_er     3        PRC 0.8578336       0.5
+#> 7  good_er     4        ROC 0.8204000       0.5
+#> 8  good_er     4        PRC 0.8519919       0.5
 
 ## Get AUCs of Precision-Recall
 sm_aucs_prc <- subset(sm_aucs, curvetypes == "PRC")
 
 ## Shows AUCs
 sm_aucs_prc
-#>   modnames dsids curvetypes      aucs
-#> 2  good_er     1        PRC 0.8404735
-#> 4  good_er     2        PRC 0.8628264
-#> 6  good_er     3        PRC 0.8578336
-#> 8  good_er     4        PRC 0.8519919
+#>   modnames dsids curvetypes      aucs baselines
+#> 2  good_er     1        PRC 0.8404735       0.5
+#> 4  good_er     2        PRC 0.8628264       0.5
+#> 6  good_er     3        PRC 0.8578336       0.5
+#> 8  good_er     4        PRC 0.8519919       0.5
 
 ##################################################
 ### Multiple models & multiple test datasets
@@ -176,74 +213,74 @@ mm_aucs <- auc(mmcurves)
 
 ## Shows AUCs
 mm_aucs
-#>    modnames dsids curvetypes      aucs
-#> 1    random     1        ROC 0.4509000
-#> 2    random     1        PRC 0.4468330
-#> 3   poor_er     1        ROC 0.8299000
-#> 4   poor_er     1        PRC 0.7817533
-#> 5   good_er     1        ROC 0.8285000
-#> 6   good_er     1        PRC 0.8577692
-#> 7     excel     1        ROC 0.9820000
-#> 8     excel     1        PRC 0.9842602
-#> 9      perf     1        ROC 1.0000000
-#> 10     perf     1        PRC 1.0000000
-#> 11   random     2        ROC 0.4974000
-#> 12   random     2        PRC 0.5102109
-#> 13  poor_er     2        ROC 0.7718000
-#> 14  poor_er     2        PRC 0.7117766
-#> 15  good_er     2        ROC 0.7925000
-#> 16  good_er     2        PRC 0.8071713
-#> 17    excel     2        ROC 0.9778000
-#> 18    excel     2        PRC 0.9778305
-#> 19     perf     2        ROC 1.0000000
-#> 20     perf     2        PRC 1.0000000
-#> 21   random     3        ROC 0.4797000
-#> 22   random     3        PRC 0.5184681
-#> 23  poor_er     3        ROC 0.8219000
-#> 24  poor_er     3        PRC 0.7939097
-#> 25  good_er     3        ROC 0.7832000
-#> 26  good_er     3        PRC 0.8267456
-#> 27    excel     3        ROC 0.9797000
-#> 28    excel     3        PRC 0.9824702
-#> 29     perf     3        ROC 1.0000000
-#> 30     perf     3        PRC 1.0000000
-#> 31   random     4        ROC 0.4924000
-#> 32   random     4        PRC 0.4723165
-#> 33  poor_er     4        ROC 0.7803000
-#> 34  poor_er     4        PRC 0.7185701
-#> 35  good_er     4        ROC 0.8343000
-#> 36  good_er     4        PRC 0.8609178
-#> 37    excel     4        ROC 0.9891000
-#> 38    excel     4        PRC 0.9890191
-#> 39     perf     4        ROC 1.0000000
-#> 40     perf     4        PRC 1.0000000
+#>    modnames dsids curvetypes      aucs baselines
+#> 1    random     1        ROC 0.4509000       0.5
+#> 2    random     1        PRC 0.4468330       0.5
+#> 3   poor_er     1        ROC 0.8299000       0.5
+#> 4   poor_er     1        PRC 0.7817533       0.5
+#> 5   good_er     1        ROC 0.8285000       0.5
+#> 6   good_er     1        PRC 0.8577692       0.5
+#> 7     excel     1        ROC 0.9820000       0.5
+#> 8     excel     1        PRC 0.9842602       0.5
+#> 9      perf     1        ROC 1.0000000       0.5
+#> 10     perf     1        PRC 1.0000000       0.5
+#> 11   random     2        ROC 0.4974000       0.5
+#> 12   random     2        PRC 0.5102109       0.5
+#> 13  poor_er     2        ROC 0.7718000       0.5
+#> 14  poor_er     2        PRC 0.7117766       0.5
+#> 15  good_er     2        ROC 0.7925000       0.5
+#> 16  good_er     2        PRC 0.8071713       0.5
+#> 17    excel     2        ROC 0.9778000       0.5
+#> 18    excel     2        PRC 0.9778305       0.5
+#> 19     perf     2        ROC 1.0000000       0.5
+#> 20     perf     2        PRC 1.0000000       0.5
+#> 21   random     3        ROC 0.4797000       0.5
+#> 22   random     3        PRC 0.5184681       0.5
+#> 23  poor_er     3        ROC 0.8219000       0.5
+#> 24  poor_er     3        PRC 0.7939097       0.5
+#> 25  good_er     3        ROC 0.7832000       0.5
+#> 26  good_er     3        PRC 0.8267456       0.5
+#> 27    excel     3        ROC 0.9797000       0.5
+#> 28    excel     3        PRC 0.9824702       0.5
+#> 29     perf     3        ROC 1.0000000       0.5
+#> 30     perf     3        PRC 1.0000000       0.5
+#> 31   random     4        ROC 0.4924000       0.5
+#> 32   random     4        PRC 0.4723165       0.5
+#> 33  poor_er     4        ROC 0.7803000       0.5
+#> 34  poor_er     4        PRC 0.7185701       0.5
+#> 35  good_er     4        ROC 0.8343000       0.5
+#> 36  good_er     4        PRC 0.8609178       0.5
+#> 37    excel     4        ROC 0.9891000       0.5
+#> 38    excel     4        PRC 0.9890191       0.5
+#> 39     perf     4        ROC 1.0000000       0.5
+#> 40     perf     4        PRC 1.0000000       0.5
 
 ## Get AUCs of Precision-Recall
 mm_aucs_prc <- subset(mm_aucs, curvetypes == "PRC")
 
 ## Shows AUCs
 mm_aucs_prc
-#>    modnames dsids curvetypes      aucs
-#> 2    random     1        PRC 0.4468330
-#> 4   poor_er     1        PRC 0.7817533
-#> 6   good_er     1        PRC 0.8577692
-#> 8     excel     1        PRC 0.9842602
-#> 10     perf     1        PRC 1.0000000
-#> 12   random     2        PRC 0.5102109
-#> 14  poor_er     2        PRC 0.7117766
-#> 16  good_er     2        PRC 0.8071713
-#> 18    excel     2        PRC 0.9778305
-#> 20     perf     2        PRC 1.0000000
-#> 22   random     3        PRC 0.5184681
-#> 24  poor_er     3        PRC 0.7939097
-#> 26  good_er     3        PRC 0.8267456
-#> 28    excel     3        PRC 0.9824702
-#> 30     perf     3        PRC 1.0000000
-#> 32   random     4        PRC 0.4723165
-#> 34  poor_er     4        PRC 0.7185701
-#> 36  good_er     4        PRC 0.8609178
-#> 38    excel     4        PRC 0.9890191
-#> 40     perf     4        PRC 1.0000000
+#>    modnames dsids curvetypes      aucs baselines
+#> 2    random     1        PRC 0.4468330       0.5
+#> 4   poor_er     1        PRC 0.7817533       0.5
+#> 6   good_er     1        PRC 0.8577692       0.5
+#> 8     excel     1        PRC 0.9842602       0.5
+#> 10     perf     1        PRC 1.0000000       0.5
+#> 12   random     2        PRC 0.5102109       0.5
+#> 14  poor_er     2        PRC 0.7117766       0.5
+#> 16  good_er     2        PRC 0.8071713       0.5
+#> 18    excel     2        PRC 0.9778305       0.5
+#> 20     perf     2        PRC 1.0000000       0.5
+#> 22   random     3        PRC 0.5184681       0.5
+#> 24  poor_er     3        PRC 0.7939097       0.5
+#> 26  good_er     3        PRC 0.8267456       0.5
+#> 28    excel     3        PRC 0.9824702       0.5
+#> 30     perf     3        PRC 1.0000000       0.5
+#> 32   random     4        PRC 0.4723165       0.5
+#> 34  poor_er     4        PRC 0.7185701       0.5
+#> 36  good_er     4        PRC 0.8609178       0.5
+#> 38    excel     4        PRC 0.9890191       0.5
+#> 40     perf     4        PRC 1.0000000       0.5
 
 
 ##################################################
@@ -258,35 +295,35 @@ mccurves <- evalmod(scores = C3N150$scores, labels = C3N150$labels)
 
 ## Per-class AUCs, plus their macro-average
 auc(mccurves)
-#>        modnames dsids curvetypes      aucs
-#> 1            c1     1        ROC 0.9732000
-#> 2            c1     1        PRC 0.9558435
-#> 3            c2     1        ROC 0.7758000
-#> 4            c2     1        PRC 0.6550357
-#> 5            c3     1        ROC 0.5336000
-#> 6            c3     1        PRC 0.4162555
-#> 7 macro-average     1        ROC 0.7608667
-#> 8 macro-average     1        PRC 0.6757116
+#>        modnames dsids curvetypes      aucs baselines
+#> 1            c1     1        ROC 0.9732000 0.5000000
+#> 2            c1     1        PRC 0.9558435 0.3333333
+#> 3            c2     1        ROC 0.7758000 0.5000000
+#> 4            c2     1        PRC 0.6550357 0.3333333
+#> 5            c3     1        ROC 0.5336000 0.5000000
+#> 6            c3     1        PRC 0.4162555 0.3333333
+#> 7 macro-average     1        ROC 0.7608667 0.5000000
+#> 8 macro-average     1        PRC 0.6757116 0.3333333
 
 ## Per-class AUCs only
 auc(mccurves, macro = FALSE)
-#>   modnames dsids curvetypes      aucs
-#> 1       c1     1        ROC 0.9732000
-#> 2       c1     1        PRC 0.9558435
-#> 3       c2     1        ROC 0.7758000
-#> 4       c2     1        PRC 0.6550357
-#> 5       c3     1        ROC 0.5336000
-#> 6       c3     1        PRC 0.4162555
+#>   modnames dsids curvetypes      aucs baselines
+#> 1       c1     1        ROC 0.9732000 0.5000000
+#> 2       c1     1        PRC 0.9558435 0.3333333
+#> 3       c2     1        ROC 0.7758000 0.5000000
+#> 4       c2     1        PRC 0.6550357 0.3333333
+#> 5       c3     1        ROC 0.5336000 0.5000000
+#> 6       c3     1        PRC 0.4162555 0.3333333
 
 ## Weighted by the class distribution instead
 auc(mccurves, macro_weight = "prevalence")
-#>                 modnames dsids curvetypes      aucs
-#> 1                     c1     1        ROC 0.9732000
-#> 2                     c1     1        PRC 0.9558435
-#> 3                     c2     1        ROC 0.7758000
-#> 4                     c2     1        PRC 0.6550357
-#> 5                     c3     1        ROC 0.5336000
-#> 6                     c3     1        PRC 0.4162555
-#> 7 macro-average-weighted     1        ROC 0.7608667
-#> 8 macro-average-weighted     1        PRC 0.6757116
+#>                 modnames dsids curvetypes      aucs baselines
+#> 1                     c1     1        ROC 0.9732000 0.5000000
+#> 2                     c1     1        PRC 0.9558435 0.3333333
+#> 3                     c2     1        ROC 0.7758000 0.5000000
+#> 4                     c2     1        PRC 0.6550357 0.3333333
+#> 5                     c3     1        ROC 0.5336000 0.5000000
+#> 6                     c3     1        PRC 0.4162555 0.3333333
+#> 7 macro-average-weighted     1        ROC 0.7608667 0.5000000
+#> 8 macro-average-weighted     1        PRC 0.6757116 0.3333333
 ```

@@ -12,8 +12,8 @@ curves <- evalmod(scores = P10N10$scores, labels = P10N10$labels)
 
 ## What is in the object
 
-[`print()`](https://rdrr.io/r/base/print.html) summarizes the input and
-the results.
+[`print()`](https://evalclass.github.io/precrec/reference/print.md)
+summarizes the input and the results.
 
 ``` r
 
@@ -21,9 +21,9 @@ curves
 #> 
 #>     === AUCs ===
 #> 
-#>      Model name Dataset ID Curve type       AUC
-#>    1         m1          1        ROC 0.7200000
-#>    2         m1          1        PRC 0.7397716
+#>      Model name Dataset ID Curve type       AUC Baseline
+#>    1         m1          1        ROC 0.7200000      0.5
+#>    2         m1          1        PRC 0.7397716      0.5
 #> 
 #> 
 #>     === Input data ===
@@ -56,7 +56,7 @@ returns the same thing as a `data.table` when that package is installed.
 
 | Function | Returns |
 |----|----|
-| [`auc()`](https://evalclass.github.io/precrec/reference/auc.md) | Area under each curve |
+| [`auc()`](https://evalclass.github.io/precrec/reference/auc.md) | Area under each curve, and its baseline |
 | [`pauc()`](https://evalclass.github.io/precrec/reference/pauc.md) | Partial area, after [`part()`](https://evalclass.github.io/precrec/reference/part.md) |
 | [`auc_ci()`](https://evalclass.github.io/precrec/reference/auc_ci.md) | Confidence interval of the area, over several test sets |
 | [`prbe()`](https://evalclass.github.io/precrec/reference/prbe.md) | Precision-recall break-even point |
@@ -67,10 +67,10 @@ returns the same thing as a `data.table` when that package is installed.
 knitr::kable(auc(curves))
 ```
 
-| modnames | dsids | curvetypes |      aucs |
-|:---------|------:|:-----------|----------:|
-| m1       |     1 | ROC        | 0.7200000 |
-| m1       |     1 | PRC        | 0.7397716 |
+| modnames | dsids | curvetypes |      aucs | baselines |
+|:---------|------:|:-----------|----------:|----------:|
+| m1       |     1 | ROC        | 0.7200000 |       0.5 |
+| m1       |     1 | PRC        | 0.7397716 |       0.5 |
 
 Each returns a plain data frame, so subsetting is ordinary R.
 
@@ -80,9 +80,9 @@ aucs <- auc(curves)
 knitr::kable(subset(aucs, curvetypes == "PRC"))
 ```
 
-|     | modnames | dsids | curvetypes |      aucs |
-|:----|:---------|------:|:-----------|----------:|
-| 2   | m1       |     1 | PRC        | 0.7397716 |
+|     | modnames | dsids | curvetypes |      aucs | baselines |
+|:----|:---------|------:|:-----------|----------:|----------:|
+| 2   | m1       |     1 | PRC        | 0.7397716 |       0.5 |
 
 ## Every metric at every cutoff
 

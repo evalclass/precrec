@@ -60,10 +60,10 @@ the areas under both curves.
 knitr::kable(auc(curves))
 ```
 
-| modnames | dsids | curvetypes |      aucs |
-|:---------|------:|:-----------|----------:|
-| m1       |     1 | ROC        | 0.7200000 |
-| m1       |     1 | PRC        | 0.7397716 |
+| modnames | dsids | curvetypes |      aucs | baselines |
+|:---------|------:|:-----------|----------:|----------:|
+| m1       |     1 | ROC        | 0.7200000 |       0.5 |
+| m1       |     1 | PRC        | 0.7397716 |       0.5 |
 
 [`as.data.frame()`](https://evalclass.github.io/precrec/reference/as.data.frame.md)
 returns the curve points themselves, ready for any other tool.

@@ -47,9 +47,9 @@ performance(p, "auc")
 curves <- evalmod(mdat)
 
 auc(curves)
-#>   modnames dsids curvetypes      aucs
-#> 1       m1     1        ROC 0.8102381
-#> 2       m1     1        PRC 0.6897919
+#>   modnames dsids curvetypes      aucs baselines
+#> 1       m1     1        ROC 0.8102381       0.5
+#> 2       m1     1        PRC 0.6897919       0.3
 ```
 
 One call, both curves, and the ROC and precision-recall areas together.

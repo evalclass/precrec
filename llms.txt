@@ -248,6 +248,13 @@ doi:
 
 ## Data retrieval
 
+- [`print(`*`<mdat>`*`)`](https://evalclass.github.io/precrec/reference/print.md)
+  [`print(`*`<curve_info>`*`)`](https://evalclass.github.io/precrec/reference/print.md)
+  [`print(`*`<beval_info>`*`)`](https://evalclass.github.io/precrec/reference/print.md)
+  [`print(`*`<aucroc>`*`)`](https://evalclass.github.io/precrec/reference/print.md)
+  [`print(`*`<xycurve_info>`*`)`](https://evalclass.github.io/precrec/reference/print.md)
+  [`print(`*`<classification_report>`*`)`](https://evalclass.github.io/precrec/reference/print.md)
+  : Print the summary of a precrec object
 - [`as.data.frame(`*`<sscurves>`*`)`](https://evalclass.github.io/precrec/reference/as.data.frame.md)
   [`as.data.frame(`*`<mscurves>`*`)`](https://evalclass.github.io/precrec/reference/as.data.frame.md)
   [`as.data.frame(`*`<smcurves>`*`)`](https://evalclass.github.io/precrec/reference/as.data.frame.md)

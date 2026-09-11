@@ -218,22 +218,128 @@ column is not obviously the right summary either - across models the
 scores are not even on a common scale - so the `rank`, or the value of
 the criterion, tends to travel better.
 
+## Reading a threshold you already have
+
+Everything above searches for a cutoff. The opposite question - what are
+the metrics of *this* cutoff - is `metric_table(at = )`, which takes the
+thresholds you name instead of returning every one of them.
+
+``` r
+
+knitr::kable(
+  metric_table(mdat, at = c(1.5, 0.8))[, c(
+    "at", "rank", "score", "sensitivity", "specificity", "precision", "mcc"
+  )],
+  row.names = FALSE, digits = 3
+)
+```
+
+|  at | rank | score | sensitivity | specificity | precision |   mcc |
+|----:|-----:|------:|------------:|------------:|----------:|------:|
+| 1.5 |   37 | 1.512 |        0.55 |       0.932 |     0.297 | 0.362 |
+| 0.8 |   95 | 0.803 |        0.75 |       0.789 |     0.158 | 0.276 |
+
+A threshold is rarely one of the observed scores, so it has no row of
+its own, but it always names one of the cutoffs: `score >=` it calls a
+certain number of instances positive, and that count is a rank the table
+already holds. `at` is what you asked for, and `score` is the observed
+cutoff that realizes it - the smallest score still called positive.
+
+A threshold above every score gives the `rank = 0` row, where nothing is
+called positive, `score` is `NA` and metrics such as `mcc` are
+undefined - worth knowing, because on badly imbalanced data a cutoff
+carried in from elsewhere can land there.
+
+The part that matters next is that the rank is worked out per test
+dataset. One threshold lands on a different rank in each of them, which
+is what makes a threshold, and not a rank, the thing you can carry from
+one dataset to another.
+
 ## The number you quote will be optimistic
 
 A threshold chosen on the same data the model is scored on is flattered
 by however much the criterion was free to chase, in exactly the way a
-model selected on its test set is. The fix is the ordinary one - choose
-the cutoff on data the model has not seen, and report the metrics at
-that fixed cutoff on data neither the model nor the cutoff has seen.
-
-`precrec` does not do this for you. Nothing here resamples or
-cross-validates the choice, and
+model selected on its own test set is. Carrying the choice to data it
+has not seen is what measures that, and both pieces are now in hand:
 [`best_cutoff()`](https://evalclass.github.io/precrec/reference/best_cutoff.md)
-will happily hand back the optimum of whatever you give it. With
-[cross-validation
+to choose on some folds, `metric_table(at = )` to score the choice on
+the fold held back.
+
+Ten folds, fifteen positives in three hundred each:
+
+``` r
+
+set.seed(9)
+cv <- replicate(10, list(
+  scores = c(rnorm(15, 1.1), rnorm(285, 0)),
+  labels = rep(c(1, 0), c(15, 285))
+), simplify = FALSE)
+
+honest <- lapply(seq_along(cv), function(i) {
+  rest <- cv[-i]
+
+  # Choose the cutoff on the nine folds this one is not in
+  chosen <- best_cutoff(
+    scores = unlist(lapply(rest, `[[`, "scores")),
+    labels = unlist(lapply(rest, `[[`, "labels")),
+    metric = "mcc"
+  )$score
+
+  # Score it on the fold that was held back
+  held_out <- metric_table(
+    scores = cv[[i]]$scores, labels = cv[[i]]$labels, at = chosen
+  )
+
+  # And, for comparison, the best this fold could have done on itself
+  in_sample <- best_cutoff(
+    scores = cv[[i]]$scores, labels = cv[[i]]$labels, metric = "mcc"
+  )
+
+  data.frame(
+    fold = i, cutoff = chosen,
+    held_out = held_out$mcc, in_sample = in_sample$mcc
+  )
+})
+
+knitr::kable(do.call(rbind, honest), row.names = FALSE, digits = 3)
+```
+
+| fold | cutoff | held_out | in_sample |
+|-----:|-------:|---------:|----------:|
+|    1 |  1.426 |    0.177 |     0.373 |
+|    2 |  1.426 |    0.242 |     0.404 |
+|    3 |  1.779 |    0.177 |     0.367 |
+|    4 |  1.426 |    0.164 |     0.284 |
+|    5 |  1.426 |    0.201 |     0.298 |
+|    6 |  1.488 |    0.317 |     0.429 |
+|    7 |  1.779 |    0.139 |     0.334 |
+|    8 |  1.426 |    0.297 |     0.327 |
+|    9 |  1.426 |    0.292 |     0.347 |
+|   10 |  1.461 |    0.271 |     0.444 |
+
+The held-out value is below the in-sample one in every fold, and not by
+a little: `mcc` averages 0.361 if each fold is allowed to pick its own
+cutoff, and 0.228 if the cutoff has to be chosen without seeing it. The
+first number is not a worse estimate of the second - it is an estimate
+of something else, namely the best a cutoff could have done with
+hindsight.
+
+That gap widens as the positives get rarer, for the reason the rest of
+this site is about: with fifteen positives in three hundred, the
+criterion is fitting a handful of instances, and a handful of instances
+is mostly noise.
+
+The chosen cutoff itself is fairly stable here while the metric it
+achieves is not, which is the usual shape. Quote the held-out column,
+ship one cutoff from the whole dataset, and let the spread across folds
+say how much to trust the number.
+
+`precrec` does not run this loop for you - it is your resampling scheme,
+and [cross-validation
 folds](https://evalclass.github.io/precrec/articles/howto-cross-validation.md)
-already in hand, choosing on some folds and reporting on the rest is a
-few lines of ordinary R.
+or a single held-out split are equally valid inputs to it. What the
+package provides is the two ends: the choice, and an honest way to score
+it.
 
 ## Next
 

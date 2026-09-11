@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -147,15 +147,15 @@ code.</p>
 <div class="section level2">
 <h2 id="what-is-in-the-object">What is in the object<a class="anchor" aria-label="anchor" href="#what-is-in-the-object"></a>
 </h2>
-<p><code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> summarizes the input and the results.</p>
+<p><code><a href="../reference/print.html">print()</a></code> summarizes the input and the results.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">curves</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     === AUCs ===</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;      Model name Dataset ID Curve type       AUC</span></span>
-<span><span class="co">#&gt;    1         m1          1        ROC 0.7200000</span></span>
-<span><span class="co">#&gt;    2         m1          1        PRC 0.7397716</span></span>
+<span><span class="co">#&gt;      Model name Dataset ID Curve type       AUC Baseline</span></span>
+<span><span class="co">#&gt;    1         m1          1        ROC 0.7200000      0.5</span></span>
+<span><span class="co">#&gt;    2         m1          1        PRC 0.7397716      0.5</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     === Input data ===</span></span>
@@ -192,7 +192,7 @@ thing as a <code>data.table</code> when that package is installed.</p>
 <tbody>
 <tr class="odd">
 <td><code><a href="../reference/auc.html">auc()</a></code></td>
-<td>Area under each curve</td>
+<td>Area under each curve, and its baseline</td>
 </tr>
 <tr class="even">
 <td><code><a href="../reference/pauc.html">pauc()</a></code></td>
@@ -221,6 +221,7 @@ thing as a <code>data.table</code> when that package is installed.</p>
 <th align="right">dsids</th>
 <th align="left">curvetypes</th>
 <th align="right">aucs</th>
+<th align="right">baselines</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -228,12 +229,14 @@ thing as a <code>data.table</code> when that package is installed.</p>
 <td align="right">1</td>
 <td align="left">ROC</td>
 <td align="right">0.7200000</td>
+<td align="right">0.5</td>
 </tr>
 <tr class="even">
 <td align="left">m1</td>
 <td align="right">1</td>
 <td align="left">PRC</td>
 <td align="right">0.7397716</td>
+<td align="right">0.5</td>
 </tr>
 </tbody>
 </table>
@@ -248,6 +251,7 @@ thing as a <code>data.table</code> when that package is installed.</p>
 <th align="right">dsids</th>
 <th align="left">curvetypes</th>
 <th align="right">aucs</th>
+<th align="right">baselines</th>
 </tr></thead>
 <tbody><tr class="odd">
 <td align="left">2</td>
@@ -255,6 +259,7 @@ thing as a <code>data.table</code> when that package is installed.</p>
 <td align="right">1</td>
 <td align="left">PRC</td>
 <td align="right">0.7397716</td>
+<td align="right">0.5</td>
 </tr></tbody>
 </table>
 </div>

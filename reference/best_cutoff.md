@@ -108,9 +108,9 @@ pipeline.
 The default is `"youden"` because that is what a caller arriving from
 another package expects. On imbalanced data it is the wrong default, and
 `"mcc"` or a `"cost"` weighted by what the two mistakes actually cost is
-the better choice. See
-`vignette("howto-imbalanced-data", package = "precrec")`, which shows
-the two disagreeing on the same dataset.
+the better choice. The *Balanced and imbalanced data* article shows the
+two disagreeing on the same dataset:
+<https://evalclass.github.io/precrec/articles/howto-imbalanced-data.html>.
 
 ## Ties, and what is not here
 
