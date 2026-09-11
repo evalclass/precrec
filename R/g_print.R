@@ -1,6 +1,111 @@
+#' Print the summary of a precrec object
+#'
+#' The `print` function prints a summary of an `S3` object created by
+#'   [mmdata()], [evalmod()], [metric_curve()] or
+#'   [classification_report()]. It is called for its side effect, and is
+#'   what the console shows when one of those objects is evaluated at the
+#'   prompt.
+#'
+#' @param x An `S3` object created by [mmdata()], [evalmod()],
+#'   [metric_curve()] or [classification_report()]. The `print` function
+#'   takes one of the following `S3` objects.
+#'
+#'   | **`S3` object** | **Created by** |
+#'   |-----------------|----------------|
+#'   | `mdat` | [mmdata()] |
+#'   | `curve_info` | [evalmod()] |
+#'   | `beval_info` | `evalmod(mode = "basic")` |
+#'   | `aucroc` | `evalmod(mode = "aucroc")` |
+#'   | `xycurve_info` | [metric_curve()] |
+#'   | `classification_report` | [classification_report()] |
+#'
+#'   Every object but a `classification_report` includes a summary of the
+#'   input data - the model names, the dataset IDs and the class counts.
+#'   Alongside it, a curve object reports its AUCs beside the baseline each
+#'   one is read against - `0.5` for a ROC curve and the proportion of
+#'   positives for a precision-recall curve, see [auc()] - and its partial
+#'   AUCs as well when it came from [part()]; a basic-metric object reports
+#'   what each metric abbreviation means and a five-number summary of
+#'   every metric; an `aucroc` object reports the AUCs beside the U
+#'   statistics they came from; and a [metric_curve()] object names the
+#'   metric pair and counts the points on it. A `classification_report`
+#'   prints its own table of per-class precision, recall and F-score.
+#'
+#'   The curve and point objects carry a second class naming how many
+#'   models and test datasets they hold, such as `sscurves` or `mmpoints`,
+#'   but all of them print through `curve_info` or `beval_info`. See the
+#'   **Value** section of [evalmod()].
+#'
+#' @param digits The number of digits after the decimal point, between `0`
+#'   and `20`. Used by the `classification_report` method only.
+#'
+#' @param ... Not used by these methods.
+#'
+#' @return The `print` function returns `x` invisibly.
+#'
+#' @seealso [evalmod()] and [mmdata()] for creating the objects,
+#'   [as.data.frame()] for the same results as a data frame, and
+#'   [auc()] for the AUCs alone.
+#'
+#' @examples
+#'
+#' ##################################################
+#' ### Input data
+#' ###
+#'
+#' ## Load a dataset with 10 positives and 10 negatives
+#' data(P10N10)
+#'
+#' mdat <- mmdata(P10N10$scores, P10N10$labels)
+#' mdat
+#'
+#'
+#' ##################################################
+#' ### ROC and Precision-Recall curves
+#' ###
+#'
+#' curves <- evalmod(mdat)
+#' curves
+#'
+#' ## Partial curves also report the partial AUCs
+#' part(curves, xlim = c(0, 0.25))
+#'
+#'
+#' ##################################################
+#' ### Basic evaluation metrics
+#' ###
+#'
+#' points <- evalmod(mdat, mode = "basic")
+#' points
+#'
+#'
+#' ##################################################
+#' ### AUC with the U statistic
+#' ###
+#'
+#' evalmod(mdat, mode = "aucroc")
+#'
+#'
+#' ##################################################
+#' ### One metric against another
+#' ###
+#'
+#' metric_curve(mdat)
+#'
+#'
+#' ##################################################
+#' ### Per-class precision, recall and F-score
+#' ###
+#'
+#' classification_report(mdat, at = 12)
+#'
+#' @name print
+NULL
+
 #
 # Print mdat
 #
+#' @rdname print
 #' @export
 print.mdat <- function(x, ...) {
   # === Validate input arguments ===
@@ -26,11 +131,14 @@ print.mdat <- function(x, ...) {
   print.data.frame(data_info, print.gap = 1)
 
   cat("\n")
+
+  invisible(x)
 }
 
 #
 # Print the summary of ROC and Precision-Recall curves
 #
+#' @rdname print
 #' @export
 print.curve_info <- function(x, ...) {
   # === Validate input arguments ===
@@ -42,8 +150,16 @@ print.curve_info <- function(x, ...) {
   cat("\n")
 
   aucs <- .as_plain_df(attr(x, "aucs"), copy = TRUE)
+  # An area means nothing without the value chance would take, and for a
+  # precision-recall curve that value moves with the class balance
+  aucs[["baselines"]] <- .curve_baselines(
+    aucs[["curvetypes"]], aucs[["modnames"]], aucs[["dsids"]],
+    attr(x, "data_info")
+  )
   rownames(aucs) <- format(rownames(aucs), width = 4, justify = "right")
-  colnames(aucs) <- c("Model name", "Dataset ID", "Curve type", "AUC")
+  colnames(aucs) <- c(
+    "Model name", "Dataset ID", "Curve type", "AUC", "Baseline"
+  )
 
   print.data.frame(aucs, print.gap = 1)
   cat("\n")
@@ -70,6 +186,8 @@ print.curve_info <- function(x, ...) {
   }
 
   print.mdat(x)
+
+  invisible(x)
 }
 
 #
@@ -89,6 +207,7 @@ print.curve_info <- function(x, ...) {
 #
 # Print the summary of basic performance evaluation metrics
 #
+#' @rdname print
 #' @export
 print.beval_info <- function(x, ...) {
   # === Validate input arguments ===
@@ -118,11 +237,14 @@ print.beval_info <- function(x, ...) {
   cat("\n")
 
   print.mdat(x)
+
+  invisible(x)
 }
 
 #
 # Print the summary of AUC(ROC) with U statistic
 #
+#' @rdname print
 #' @export
 print.aucroc <- function(x, ...) {
   # === Validate input arguments ===
@@ -154,11 +276,14 @@ print.aucroc <- function(x, ...) {
 
   print.data.frame(aucs, print.gap = 1)
   cat("\n")
+
+  invisible(x)
 }
 
 #
 # Print the summary of an object of metric_curve()
 #
+#' @rdname print
 #' @export
 print.xycurve_info <- function(x, ...) {
   # === Validate input arguments ===
@@ -194,6 +319,8 @@ print.xycurve_info <- function(x, ...) {
   cat("\n")
 
   print.mdat(x)
+
+  invisible(x)
 }
 
 

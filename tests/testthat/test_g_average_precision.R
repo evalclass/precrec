@@ -19,7 +19,7 @@ test_that("average_precision() returns one row per model and dataset", {
   aps <- average_precision(evalmod(mdat))
 
   expect_s3_class(aps, "data.frame")
-  expect_equal(names(aps), c("modnames", "dsids", "aps"))
+  expect_equal(names(aps), c("modnames", "dsids", "aps", "baselines"))
   expect_equal(nrow(aps), 6)
   expect_equal(
     sort(unique(as.character(aps[["modnames"]]))),
@@ -112,4 +112,18 @@ test_that("the average precision attribute is on the PRC curve only", {
 
   expect_true(is.na(attr(curves[["roc"]], "ap")))
   expect_false(is.na(attr(curves[["prc"]], "ap")))
+})
+
+test_that("average_precision() reports the chance level too", {
+  set.seed(1)
+  scores <- c(rnorm(20, 1.2), rnorm(980, 0))
+  labels <- rep(c(1, 0), c(20, 980))
+  curves <- evalmod(scores = scores, labels = labels)
+
+  aps <- average_precision(curves)
+  expect_equal(aps[["baselines"]], 0.02)
+
+  # The same baseline the interpolated area is read against
+  prc <- subset(auc(curves), curvetypes == "PRC")
+  expect_equal(aps[["baselines"]], prc[["baselines"]])
 })

@@ -92,9 +92,9 @@ pipeline.
 The default is \code{"youden"} because that is what a caller arriving from
 another package expects. On imbalanced data it is the wrong default, and
 \code{"mcc"} or a \code{"cost"} weighted by what the two mistakes actually cost is
-the better choice. See
-\code{vignette("howto-imbalanced-data", package = "precrec")}, which shows the
-two disagreeing on the same dataset.
+the better choice. The \emph{Balanced and imbalanced data} article shows the
+two disagreeing on the same dataset:
+\url{https://evalclass.github.io/precrec/articles/howto-imbalanced-data.html}.
 }
 
 \section{Ties, and what is not here}{

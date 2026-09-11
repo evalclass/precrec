@@ -82,9 +82,9 @@
 #' The default is `"youden"` because that is what a caller arriving from
 #' another package expects. On imbalanced data it is the wrong default, and
 #' `"mcc"` or a `"cost"` weighted by what the two mistakes actually cost is
-#' the better choice. See
-#' `vignette("howto-imbalanced-data", package = "precrec")`, which shows the
-#' two disagreeing on the same dataset.
+#' the better choice. The *Balanced and imbalanced data* article shows the
+#' two disagreeing on the same dataset:
+#' <https://evalclass.github.io/precrec/articles/howto-imbalanced-data.html>.
 #'
 #' @section Ties, and what is not here:
 #'
@@ -208,6 +208,19 @@ best_cutoff <- function(x, scores = NULL, labels = NULL, metric = "youden",
 # chosen cutoff.
 #
 .best_cutoff_table <- function(x, scores, labels, criterion, ...) {
+  # `at` is a formal of `metric_table()`, so it would bind there and
+  # quietly narrow the cutoffs searched rather than being ignored
+  if ("at" %in% names(list(...))) {
+    .stop_invalid_arg(
+      paste(
+        "{.arg at} names the cutoffs to report, and this function chooses",
+        "one instead. Call {.fn metric_table} with {.arg at} to read the",
+        "metrics at given thresholds, or drop it to search every cutoff."
+      ),
+      arg = "at"
+    )
+  }
+
   if (inherits(x, "beval_info")) {
     if (!criterion %in% .get_obj_metrics(x)) {
       .stop_invalid_arg(

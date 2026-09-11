@@ -63,6 +63,25 @@ proportion of positives: 0.5 above, 0.2 in the imbalanced case. The same
 curve means something different against a different baseline, which is why
 the two plots above cannot be compared by eye alone.
 
+The same is true of the area, and there the baseline is easier to forget
+because the plot is not in front of you. `auc()` reports it in the
+`baselines` column:
+
+```{r}
+areas <- rbind(auc(evalmod(bdat)), auc(evalmod(idat)))
+
+knitr::kable(
+  subset(areas, curvetypes == "PRC" & modnames == "good_er" & dsids == 1),
+  row.names = FALSE, digits = 3
+)
+```
+
+The same model on the two datasets above. The area falls, and so does the
+baseline it is read against - from 0.5 to 0.2. How much of the fall is the
+classifier doing worse and how much is the class balance moving underneath
+it is not a question the area answers on its own, which is why the two
+numbers belong together.
+
 ## So does the threshold
 
 Everything above is about reading a curve. The last step of most real work

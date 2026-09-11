@@ -575,6 +575,28 @@
 }
 
 #
+# What each curve type is worth by chance, one value per row
+#
+# A ROC curve's chance level is 0.5 whatever the data. A precision-recall
+# curve's is the proportion of positives, so it moves with every dataset,
+# and that asymmetry is the whole reason the number is reported: an area of
+# 0.1 is poor on balanced data and five times chance at two percent
+# positives, and the area on its own does not say which.
+#
+# Rows are matched on model and dataset together, because a fold need not
+# hold the classes in the proportions the whole dataset does.
+#
+.curve_baselines <- function(curvetypes, modnames, dsids, info) {
+  prevalence <- info[["np"]] / (info[["np"]] + info[["nn"]])
+  names(prevalence) <- paste(info[["modnames"]], info[["dsids"]], sep = "\r")
+
+  base <- unname(prevalence[paste(modnames, dsids, sep = "\r")])
+  base[curvetypes == "ROC"] <- 0.5
+
+  base
+}
+
+#
 # The Wald p-value, `2 * pnorm(-abs(z))` two-sided, one tail otherwise
 #
 # Shared by the two Wald tests in the package: the one `auc_diff()` reads

@@ -154,3 +154,24 @@ test_that("print aucroc", {
   expect_output(print(aucroc), "=== Input data ===")
   expect_output(print(aucroc), "=== AUCs ===")
 })
+
+test_that("print returns its argument invisibly", {
+  mdat <- pr_create_mmdat()
+  objs <- list(
+    mdat = mdat,
+    curves = evalmod(mdat),
+    partial = part(evalmod(mdat), xlim = c(0, 0.5)),
+    points = evalmod(mdat, mode = "basic"),
+    aucroc = evalmod(mdat, mode = "aucroc"),
+    xycurves = metric_curve(mdat),
+    report = classification_report(mdat, at = 4)
+  )
+
+  for (nm in names(objs)) {
+    x <- objs[[nm]]
+    capture.output(res <- withVisible(print(x)))
+
+    expect_false(res[["visible"]], label = nm)
+    expect_identical(res[["value"]], x, label = nm)
+  }
+})
