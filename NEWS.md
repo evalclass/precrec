@@ -1,3 +1,28 @@
+# precrec 0.23.2
+
+* `pauc()` gained a `corrected` argument, which adds a `cpaucs` column: the
+  McClish correction of the ROC partial area, which rescales the span
+  between chance and perfect onto `0.5` to `1` so that a partial area reads
+  on the same scale as a full one. It is what
+  `pROC::auc(..., partial.auc.correct = TRUE)` reports, to the last digit.
+
+  Both this and the `spaucs` the package has always reported are called
+  "the standardized partial AUC", and they are not the same number:
+  `spaucs` is the area over the area of the region, the fraction of what
+  was available that the curve covered. A value moved between two tools
+  looked like a disagreement when it was a choice of convention, and only
+  one of the two conventions could be had here.
+
+  The chance area is taken over the region actually asked for. The formula
+  usually quoted, and the one *Coming from pROC or ROCR* published for
+  readers to apply by hand, is the special case of a region starting at a
+  false positive rate of `0`; it is wrong for a region such as
+  `xlim = c(0.1, 0.3)`, which is exactly where someone would reach for it.
+
+  `cpaucs` is `NA` on the precision-recall rows and whenever `part()` was
+  given a `ylim`, both documented in `?pauc`. Off by default, so nothing
+  that reads `pauc()` today changes.
+
 # precrec 0.23.1
 
 * `auc()` and `average_precision()` gained a `baselines` column, and the

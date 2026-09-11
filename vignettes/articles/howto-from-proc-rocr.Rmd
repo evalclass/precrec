@@ -71,7 +71,7 @@ variable: everything else on this page reads one of them.
 | `coords(r, "all")` | `metric_table(mdat)` | Same rows, many more columns |
 | `coords(r, t, input = "threshold")` | `classification_report(mdat, at = t)` | |
 | `auc(r, partial.auc = c(1, 0.8), partial.auc.focus = "sp")` | `pauc(part(curves, xlim = c(0, 0.2)))` | Identical, in the `paucs` column |
-| `partial.auc.correct = TRUE` | The `spaucs` column | Both standardize; not the same way - see below |
+| `partial.auc.correct = TRUE` | `pauc(..., corrected = TRUE)`, the `cpaucs` column | Identical; the `spaucs` column standardizes differently - see below |
 | `plot(r)` | `autoplot(curves, "ROC")` | See the axis note below |
 | `multiclass.roc(labels, scores)` | `evalmod()` on more than two classes | [One-vs-rest](howto-multiclass.html) |
 | `levels = `, `direction = ` | `posclass = ` | |
@@ -222,33 +222,41 @@ The difference is where chance sits. Over false positive rates up to `0.2`,
 a coin flip covers an area of `0.02`: that is `0.1` of the box, and `0.5`
 after the correction.
 
+`corrected = TRUE` adds the second one as `cpaucs`.
+
 ```{r}
-region <- 0.2 # false positive rates 0 to 0.2
-areas <- pauc(part(curves, xlim = c(0, region)))
-roc_row <- areas[areas$curvetypes == "ROC", ]
+areas <- pauc(part(curves, xlim = c(0, 0.2)), corrected = TRUE)
 
-chance <- region^2 / 2
+knitr::kable(subset(areas, curvetypes == "ROC"), row.names = FALSE, digits = 5)
+```
 
+`paucs` is the number `pROC` gives uncorrected and `cpaucs` the number it
+gives with `partial.auc.correct = TRUE`, both to the last digit.
+
+The correction is often quoted as
+`0.5 * (1 + (pAUC - region^2 / 2) / (region - region^2 / 2))`, which is the
+special case of a region measured from a false positive rate of `0`. A
+region that starts elsewhere needs the area under the diagonal across that
+region, `(x2^2 - x1^2) / 2`, and `cpaucs` uses the region it was actually
+given:
+
+```{r}
 knitr::kable(
-  data.frame(
-    paucs = roc_row$paucs,
-    spaucs = roc_row$spaucs,
-    corrected = 0.5 * (1 + (roc_row$paucs - chance) / (region - chance))
+  subset(
+    pauc(part(curves, xlim = c(0.1, 0.3)), corrected = TRUE),
+    curvetypes == "ROC"
   ),
-  digits = 5
+  row.names = FALSE, digits = 5
 )
 ```
 
-`paucs` is the number `pROC` gives uncorrected, to the last digit. The last
-column is the conversion, and it is the number `partial.auc.correct = TRUE`
-returns - so a corrected value can be had here without `pROC` installed.
-The formula holds for a ROC region measured from a false positive rate of
-`0`; a region that starts elsewhere needs the area under the diagonal
-across it in place of `region^2 / 2`.
+Neither standardization is the right one. `spaucs` is the more direct
+reading of "how much of this corner did the curve fill"; the corrected one
+is the more comparable to a full AUC - over the whole curve it is the plain
+AUC. Say which you used.
 
-Neither is the right one. `spaucs` is the more direct reading of "how much
-of this corner did the curve fill"; the corrected one is the more
-comparable to a full AUC. Say which you used.
+`cpaucs` is `NA` on the precision-recall rows and whenever `part()` was
+given a `ylim`; `?pauc` says why.
 
 ## The axes
 
