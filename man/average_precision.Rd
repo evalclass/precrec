@@ -14,9 +14,15 @@ average_precision(curves)
 }
 \value{
 The \code{average_precision} function returns a data frame with the
-columns \code{modnames}, \code{dsids} and \code{aps}. Unlike \code{\link[=auc]{auc()}} it has one row
-per model and dataset rather than one per curve, because average
-precision is defined on the precision-recall curve only.
+columns \code{modnames}, \code{dsids}, \code{aps} and \code{baselines}. Unlike \code{\link[=auc]{auc()}} it
+has one row per model and dataset rather than one per curve, because
+average precision is defined on the precision-recall curve only.
+
+\code{baselines} is the proportion of positives, which is what average
+precision is worth by chance - see
+\verb{Reading an area against its baseline} in \code{\link[=auc]{auc()}}. It moves with the
+class balance, so an average precision quoted without it does not say
+how good the classifier is.
 }
 \description{
 The \code{average_precision} function returns the average precision of

@@ -38,8 +38,10 @@ takes one of the following \code{S3} objects.\tabular{ll}{
 
 Every object but a \code{classification_report} includes a summary of the
 input data - the model names, the dataset IDs and the class counts.
-Alongside it, a curve object reports its AUCs, and its partial AUCs
-as well when it came from \code{\link[=part]{part()}}; a basic-metric object reports
+Alongside it, a curve object reports its AUCs beside the baseline each
+one is read against - \code{0.5} for a ROC curve and the proportion of
+positives for a precision-recall curve, see \code{\link[=auc]{auc()}} - and its partial
+AUCs as well when it came from \code{\link[=part]{part()}}; a basic-metric object reports
 what each metric abbreviation means and a five-number summary of
 every metric; an \code{aucroc} object reports the AUCs beside the U
 statistics they came from; and a \code{\link[=metric_curve]{metric_curve()}} object names the

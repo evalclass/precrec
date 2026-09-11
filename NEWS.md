@@ -1,5 +1,26 @@
 # precrec 0.23.1
 
+* `auc()` and `average_precision()` gained a `baselines` column, and the
+  summary `print()` shows a `Baseline` beside each AUC. It is what the area
+  would be by chance: `0.5` on every ROC row, and the proportion of
+  positives on every precision-recall row.
+
+  A ROC AUC can be read on its own and a PRC AUC cannot, which is the
+  package's own argument and was the one number the package did not report.
+  On one generator at three class balances the ROC AUC holds between 0.81
+  and 0.85 while the PRC AUC goes 0.801, 0.367, 0.129 - and the last of
+  those, which reads as failure, is six times its baseline of 0.02. The
+  plots have drawn the baseline all along; now the areas carry it too.
+
+  The baseline is taken per model and per test dataset, so a fold that does
+  not hold the classes in the proportions the whole dataset does is read
+  against its own. On a `macro-average` row it is averaged over the classes
+  with the same weights the AUCs were, uniform or by prevalence.
+
+  Code that selects columns of these data frames by name or by `subset()` is
+  unaffected; code that relies on their column *count* or position will see
+  one more.
+
 * New `metric_table(at = )` reports the metrics of thresholds you name,
   rather than of every cutoff. A threshold is rarely one of the observed
   scores, so it has no row of its own, but it always names one of the
