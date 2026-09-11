@@ -33,7 +33,45 @@
 #'   For a ROC evaluation the two are the metrics other packages call
 #'   `roc_aunu` and `roc_aunp` respectively.
 #'
-#' @return The `auc` function returns a data frame with AUC scores.
+#' @return The `auc` function returns a data frame with one row per curve
+#'   per model per test dataset, and the following columns.
+#'
+#'   \tabular{ll}{
+#'     `modnames` \tab Model name \cr
+#'     `dsids` \tab Test dataset ID \cr
+#'     `curvetypes` \tab `ROC` or `PRC` \cr
+#'     `aucs` \tab The area under that curve \cr
+#'     `baselines` \tab What that area would be by chance, see below \cr
+#'   }
+#'
+#' @section Reading an area against its baseline:
+#'
+#' A ROC curve's chance level is `0.5` whatever the data, so a ROC AUC can
+#'   be read on its own. A precision-recall curve's chance level is the
+#'   proportion of positives, so a PRC AUC cannot: the same number means
+#'   different things on different data, and the difference is not small.
+#'
+#'   The `baselines` column carries that value, `0.5` on every `ROC` row and
+#'   the prevalence on every `PRC` row, so that the area and what it is
+#'   worth arrive together. On the same generator at three class balances:
+#'
+#'   \tabular{lrrr}{
+#'     **Positives** \tab **ROC AUC** \tab **PRC AUC** \tab **PRC baseline**
+#'       \cr
+#'     50% \tab 0.807 \tab 0.801 \tab 0.50 \cr
+#'     10% \tab 0.834 \tab 0.367 \tab 0.10 \cr
+#'     2% \tab 0.850 \tab 0.129 \tab 0.02 \cr
+#'   }
+#'
+#'   The classifier is about as good in all three rows and the ROC AUC says
+#'   so. The PRC AUC falls to `0.129`, which reads as failure and is in fact
+#'   six times chance. Quote the two numbers together.
+#'
+#'   The baseline is looked up per model and per test dataset, because a
+#'   fold need not hold the classes in the proportions the whole dataset
+#'   does. On a `macro-average` row it is averaged over the classes exactly
+#'   as the AUCs are, with the same weights, so the row is still read
+#'   against the chance level of the mixture that produced it.
 #'
 #' @seealso [evalmod()] for generating `S3` objects with
 #'   performance evaluation metrics. [pauc()] for retrieving
@@ -171,6 +209,10 @@ auc.aucs <- function(curves, macro = TRUE,
 
   # Return AUC scores as a plain data frame
   aucs <- .as_plain_df(attr(curves, "aucs"), copy = TRUE)
+  aucs[["baselines"]] <- .curve_baselines(
+    aucs[["curvetypes"]], aucs[["modnames"]], aucs[["dsids"]],
+    attr(curves, "data_info")
+  )
   if (!macro || !.is_multiclass(curves)) {
     return(aucs)
   }
@@ -220,6 +262,7 @@ auc.aucs <- function(curves, macro = TRUE,
         sel <- row_models == model & aucs[["dsids"]] == dsid &
           aucs[["curvetypes"]] == curvetype
         vals <- aucs[["aucs"]][sel]
+        bases <- aucs[["baselines"]][sel]
         wts <- row_np[sel]
 
         # A class that could not be evaluated is dropped along with its
@@ -227,21 +270,29 @@ auc.aucs <- function(curves, macro = TRUE,
         # classes that are actually being averaged.
         keep <- !is.na(vals)
         vals <- vals[keep]
+        bases <- bases[keep]
         wts <- wts[keep]
 
+        # The baseline is averaged the same way the AUCs are, so that the
+        # macro row is read against the chance level of the same mixture of
+        # classes that produced it.
         if (length(vals) == 0L) {
           avg <- NA_real_
+          base <- NA_real_
         } else if (weighted && !anyNA(wts) && sum(wts) > 0) {
           avg <- sum(vals * wts) / sum(wts)
+          base <- sum(bases * wts) / sum(wts)
         } else {
           avg <- mean(vals)
+          base <- mean(bases)
         }
 
         parts[[length(parts) + 1L]] <- data.table::data.table(
           modnames = modname,
           dsids = dsid,
           curvetypes = curvetype,
-          aucs = avg
+          aucs = avg,
+          baselines = base
         )
       }
     }

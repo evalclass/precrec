@@ -21,8 +21,10 @@
 #'
 #'   Every object but a `classification_report` includes a summary of the
 #'   input data - the model names, the dataset IDs and the class counts.
-#'   Alongside it, a curve object reports its AUCs, and its partial AUCs
-#'   as well when it came from [part()]; a basic-metric object reports
+#'   Alongside it, a curve object reports its AUCs beside the baseline each
+#'   one is read against - `0.5` for a ROC curve and the proportion of
+#'   positives for a precision-recall curve, see [auc()] - and its partial
+#'   AUCs as well when it came from [part()]; a basic-metric object reports
 #'   what each metric abbreviation means and a five-number summary of
 #'   every metric; an `aucroc` object reports the AUCs beside the U
 #'   statistics they came from; and a [metric_curve()] object names the
@@ -148,8 +150,16 @@ print.curve_info <- function(x, ...) {
   cat("\n")
 
   aucs <- .as_plain_df(attr(x, "aucs"), copy = TRUE)
+  # An area means nothing without the value chance would take, and for a
+  # precision-recall curve that value moves with the class balance
+  aucs[["baselines"]] <- .curve_baselines(
+    aucs[["curvetypes"]], aucs[["modnames"]], aucs[["dsids"]],
+    attr(x, "data_info")
+  )
   rownames(aucs) <- format(rownames(aucs), width = 4, justify = "right")
-  colnames(aucs) <- c("Model name", "Dataset ID", "Curve type", "AUC")
+  colnames(aucs) <- c(
+    "Model name", "Dataset ID", "Curve type", "AUC", "Baseline"
+  )
 
   print.data.frame(aucs, print.gap = 1)
   cat("\n")

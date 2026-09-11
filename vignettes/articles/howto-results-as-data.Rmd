@@ -40,7 +40,7 @@ the same thing as a `data.table` when that package is installed.
 
 | Function | Returns |
 |---|---|
-| `auc()` | Area under each curve |
+| `auc()` | Area under each curve, and its baseline |
 | `pauc()` | Partial area, after `part()` |
 | `auc_ci()` | Confidence interval of the area, over several test sets |
 | `prbe()` | Precision-recall break-even point |

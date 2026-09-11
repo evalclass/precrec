@@ -66,6 +66,10 @@ so this release carries all sixteen sets of changes.
 - Add `metric_table(at = )`, which reports the metrics of given thresholds
   rather than of every cutoff, so that a cutoff chosen on one dataset can
   be scored on another
+- Report the chance level of each area beside it - a `baselines` column on
+  `auc()` and `average_precision()`, and a `Baseline` column in the
+  `print()` summary - because a precision-recall area cannot be read
+  without the proportion of positives, and only the plots showed it
 
 `NEWS.md` has the full list.
 
