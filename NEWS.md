@@ -1,5 +1,29 @@
 # precrec 0.23.2
 
+* `metric_table()` reported a precision on the row that calls nothing
+  positive and an NPV on the row that calls everything positive. Neither
+  has a denominator - precision is `TP / (TP + FP)` and NPV is
+  `TN / (TN + FN)` - and both were filled in from the neighboring row, so
+  they followed the top-ranked or bottom-ranked instance, which is an
+  instance the rule does not predict. A threshold above every score
+  reported `precision = 1` beside `sensitivity = 0`, and `0` instead if the
+  top-ranked instance happened to be a negative.
+
+  Both are now `NA`, with the metrics derived from them: the false
+  discovery rate, the false omission rate, and `markedness` at both ends.
+  `mcc`, `lift`, `odds`, `chisq` and the positive likelihood ratio already
+  reported `NA` on the same rows.
+
+  This matters most for `metric_table(at = )`, whose purpose is scoring a
+  threshold chosen somewhere else: a threshold transferred between datasets
+  lands outside the score range routinely.
+
+  The long form `as.data.frame(evalmod(mode = "basic"))` returns is
+  unchanged, and so are the curves. The inherited precision is what anchors
+  the precision-recall curve at recall `0`, and it is the right value there
+  - `auc()`, `average_precision()` and `prbe()` are unaffected, which the
+  tests now assert.
+
 * `best_cutoff()` could return the rank `0` row of `metric_table()`, the
   rule that calls nothing positive. There is no threshold that predicts
   nothing, so that row's `score` is `NA` and it is not an operating point,

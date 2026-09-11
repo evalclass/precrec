@@ -89,6 +89,11 @@ submitted, so this release carries all seventeen sets of changes.
   It was optimal for `specificity` always and for `accuracy` once positives
   were rare, and it tied for `precision` whenever the top-ranked instance
   was a positive
+- Report `NA` for the precision of the `metric_table()` row that calls
+  nothing positive, and for the NPV of the row that calls everything
+  positive. Neither has a denominator, and both were being filled in from
+  the neighboring row; the curves, which are anchored on those values, are
+  unchanged
 
 `NEWS.md` has the full list.
 

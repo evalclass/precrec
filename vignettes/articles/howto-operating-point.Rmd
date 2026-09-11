@@ -120,9 +120,10 @@ The rule that calls nothing positive is never returned, whatever the metric.
 It is the `rank` 0 row of `metric_table()`, and it has no threshold - there
 is no score you can compare against to predict nothing - so it is not an
 operating point. It is optimal for `specificity` always and for `accuracy`
-once positives are rare, and it ties for `precision` whenever the top-ranked
-instance is a positive, so leaving it in would hand back a `score` of `NA`
-surprisingly often.
+once positives are rare, so leaving it in would hand back a `score` of `NA`
+surprisingly often. That row reports no `precision` either, for the same
+reason in a different column: a rule that makes no positive predictions has
+no `TP + FP` to divide by.
 
 ## Saying what the mistakes cost
 

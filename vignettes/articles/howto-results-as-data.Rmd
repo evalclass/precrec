@@ -73,8 +73,15 @@ A row is the cutoff that calls the top `rank` instances positive, so `score`
 is the score of the instance at that rank and the rule the row stands for is
 `score >= that value`. `normalized_rank` is `rank / n`, the x axis of the
 [basic metric plots](plots-basic-metrics.html). The first row calls nothing
-positive, which is why its `score` and `label` are `NA` while its metrics are
-not.
+positive, which is why its `score` and `label` are `NA`.
+
+Its `precision` is `NA` too, and for a different reason: precision is
+`TP / (TP + FP)`, and a rule that makes no positive predictions has no
+denominator for it. The row that calls everything positive is missing its
+`npv` at the other end, on the same argument. Every other metric on those
+rows is measured - accuracy at rank 0 is the proportion of negatives, which
+is exactly the point of
+[Balanced and imbalanced data](howto-imbalanced-data.html).
 
 Because it is a plain data frame, the question that usually follows is
 ordinary R.
