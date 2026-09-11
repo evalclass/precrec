@@ -1,5 +1,24 @@
 # precrec 0.23.2
 
+* `best_cutoff()` could return the rank `0` row of `metric_table()`, the
+  rule that calls nothing positive. There is no threshold that predicts
+  nothing, so that row's `score` is `NA` and it is not an operating point,
+  which is what the function exists to name. It is no longer a candidate.
+
+  It won outright wherever the empty rule is optimal - `specificity`
+  always, and `accuracy`, `error` and an unweighted `cost` once positives
+  are rare, which at 2% positives was 11 runs in 20 - and it won on the
+  tie-break wherever it merely tied. That last case was not an imbalance
+  problem at all: precision at rank `0` is the limit from above, so it is
+  `1` whenever the top-ranked instance is a positive, and any classifier
+  good enough to rank one first came back with no threshold.
+
+* *Choose an operating point* gains the `accuracy` trap beside the
+  `sensitivity` and `specificity` ones it already covered. On twenty
+  positives in four hundred, predicting nothing is 0.95 accurate and the
+  accuracy-optimal cutoff reaches 0.955 by finding two of the twenty;
+  `mcc` finds eleven.
+
 * `prbe()` reported a break-even point of `0` whenever the top-ranked
   instance was a negative. A precision-recall curve is anchored at recall
   `0`, where precision is `0` in that case, so precision and recall were
