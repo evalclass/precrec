@@ -82,6 +82,93 @@ classifier doing worse and how much is the class balance moving underneath
 it is not a question the area answers on its own, which is why the two
 numbers belong together.
 
+## Why not fold the baseline in?
+
+If the area has to be read against its baseline, the obvious thought is to
+build the baseline into the area and be done with it. On the ROC side there
+is such a thing - the McClish correction, `pauc(corrected = TRUE)`, which
+rescales a partial area between chance and perfect.
+
+For the precision-recall curve the published proposal is
+Precision-Recall-Gain (Flach & Kull 2015). It rescales both axes against the
+baseline `pi`,
+
+```
+precG = 1 - (pi / (1 - pi)) * ((1 - prec) / prec)
+recG  = 1 - (pi / (1 - pi)) * ((1 - rec)  / rec)
+```
+
+so that chance sits at `0` and perfect at `1` whatever the class balance,
+and the area under the resulting curve (AUPRG) is one number with the
+baseline already in it. The argument behind it is a serious one, and it
+depends on the curve being interpolated correctly, which is this package's
+whole business.
+
+It does not do what someone reaching for it wants. Here the same 200
+positives appear in every row and negatives are added underneath them, so
+the classifier and the positive sample never change - only the prevalence
+does.
+
+```{r}
+gain <- function(v, pi) 1 - (pi / (1 - pi)) * ((1 - v) / v)
+
+auprg <- function(scores, labels) {
+  pi <- mean(labels == 1)
+  d <- as.data.frame(evalmod(scores = scores, labels = labels))
+  prc <- d[d$type == "PRC", ]
+  rg <- gain(prc$x, pi)
+  pg <- gain(prc$y, pi)
+  ok <- is.finite(rg) & is.finite(pg)
+  # Integrate precG over recG from 0 to 1
+  grid <- sort(unique(c(0, 1, rg[ok][rg[ok] > 0 & rg[ok] < 1])))
+  v <- approx(rg[ok], pg[ok], xout = grid, rule = 2, ties = "ordered")$y
+  sum(diff(grid) * (head(v, -1) + tail(v, -1)) / 2)
+}
+
+set.seed(11)
+pos <- rnorm(200, 1.2)
+negpool <- rnorm(9800, 0)
+
+row_at <- function(nn) {
+  scores <- c(pos, negpool[seq_len(nn)])
+  labels <- rep(c(1, 0), c(200, nn))
+  areas <- auc(evalmod(scores = scores, labels = labels))
+
+  data.frame(
+    positives = sprintf("%.0f%%", 100 * 200 / (200 + nn)),
+    roc = areas$aucs[areas$curvetypes == "ROC"],
+    prc = areas$aucs[areas$curvetypes == "PRC"],
+    prc_baseline = areas$baselines[areas$curvetypes == "PRC"],
+    auprg = auprg(scores, labels)
+  )
+}
+
+knitr::kable(
+  do.call(rbind, lapply(c(200, 1800, 9800), row_at)),
+  row.names = FALSE, digits = 3
+)
+```
+
+On the AUPRG scale a coin flip scores `0` and a perfect ranking `1`, so
+`0.639` and `0.941` are far apart on it. The ROC area holds within 0.01, as
+it should. The precision-recall area falls, which is the whole point of the
+page. And AUPRG **rises** - three tenths of its range, in the opposite
+direction, on a classifier that did not change.
+
+That is the thing to notice. Folding the baseline in did not remove the
+dependence on prevalence; it reversed it. A number that says a classifier
+got better because its positives got rarer is not more comparable across
+datasets than the one it replaced - it is incomparable in a direction that
+happens to flatter the hard case. The `baselines` column is less clever and
+harder to misread.
+
+So `precrec` reports the area and the baseline as two numbers and leaves
+them that way, and there is no `auprg()` here. The few lines above are all
+it takes if you want it for a curve you have already computed, and Flach &
+Kull's own argument for it - that the precision-recall area is a poorly
+founded summary quite apart from any question of class balance - is worth
+reading on its own terms.
+
 ## So does the threshold
 
 Everything above is about reading a curve. The last step of most real work
@@ -137,6 +224,10 @@ the model has not seen.
   Evaluating Binary Classifiers on Imbalanced
   Datasets](https://doi.org/10.1371/journal.pone.0118432) - the paper behind
   this package
+- [Precision-Recall-Gain Curves: PR Analysis Done
+  Right](https://papers.nips.cc/paper/5867-precision-recall-gain-curves-pr-analysis-done-right)
+  - Flach & Kull's case against the precision-recall area, and the
+  alternative measured above
 - [Classifier evaluation with imbalanced
   datasets](https://classeval.wordpress.com/) - a companion site with
   practical tips
