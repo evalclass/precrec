@@ -26,6 +26,14 @@
 * The help page of `pauc()` opened by naming `auc()` as the function it
   documents, a line copied from `auc()` and never corrected.
 
+* *Balanced and imbalanced data* gains a section on why the baseline is
+  reported beside the area rather than folded into it. Precision-Recall-Gain
+  (Flach & Kull 2015) is the published way of folding it in, and on a
+  classifier held fixed while only the prevalence moves, its area climbs from
+  0.639 to 0.941 - three tenths of its range, in the opposite direction to
+  the precision-recall area, which falls. Normalizing by the baseline does
+  not remove the dependence on prevalence, it reverses it.
+
 # precrec 0.23.1
 
 * `auc()` and `average_precision()` gained a `baselines` column, and the

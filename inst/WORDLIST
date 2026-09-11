@@ -1,6 +1,7 @@
 aes
 auc
 aucroc
+AUPRG
 autoplot
 bioinformatics
 Bioinformatics
@@ -24,6 +25,7 @@ evalmod
 extremal
 favicons
 fdr
+Flach
 FN
 fnr
 FP
@@ -39,6 +41,8 @@ inlining
 introsort
 io
 Jaccard
+Kull
+Kull's
 lintr
 logloss
 Makevars
