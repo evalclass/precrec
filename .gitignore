@@ -13,3 +13,9 @@ bench/.build-mode
 
 # rmarkdown::render("README.Rmd") byproduct
 README.html
+
+# revdepcheck: keep the reports, not the libraries or check output
+revdep/library/
+revdep/checks/
+revdep/data.sqlite
+revdep/*.noindex
