@@ -1,3 +1,22 @@
+# precrec 0.24.0
+
+* New `format_points()` reconstructs per-instance scores and labels from a
+  table of performance values calculated at a set of thresholds - true and
+  false positive rates, or recall and precision - so that a summary table can
+  reach `evalmod()` and `mmdata()` after all. The rows between two thresholds
+  become instances that share a score, and the even spread `precrec` already
+  applies to a tied run is the non-linear interpolation of Davis and Goadrich
+  (2006), so nothing new was needed in the curve code and a complete table
+  round-trips exactly. `np` and `nn` are required: rates do not carry the
+  class totals, and the totals also place the chance-level baseline. The
+  interpolation is exact only across a gap one instance wide, so an area read
+  off a coarse table remains an estimate - `format_points()` says so when it
+  runs, and *Prepare your data* says so at more length. Requested in #6 and
+  #15, and tracked in #32.
+
+* *Prepare your data* replaces its section on what cannot be used as input
+  with one on what a table of summary points can and cannot give you.
+
 # precrec 0.23.3
 
 * *Prepare your data* gains a section on which direction the score runs.

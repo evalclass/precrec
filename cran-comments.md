@@ -1,9 +1,10 @@
-## Version 0.23.3
+## Version 0.24.0
 
-An update of the published package `precrec` (0.14.5 -> 0.23.3). 0.15.0,
+An update of the published package `precrec` (0.14.5 -> 0.24.0). 0.15.0,
 0.16.0, 0.16.1, 0.16.2, 0.17.0, 0.18.0, 0.19.0, 0.20.0, 0.21.0, 0.21.1,
-0.21.2, 0.22.0, 0.22.1, 0.22.2, 0.23.0, 0.23.1 and 0.23.2 were prepared but
-not submitted, so this release carries all eighteen sets of changes.
+0.21.2, 0.22.0, 0.22.1, 0.22.2, 0.23.0, 0.23.1, 0.23.2 and 0.23.3 were
+prepared but not submitted, so this release carries all nineteen sets of
+changes.
 
 - Support datasets with more than two classes by one-vs-rest decomposition
 - Add the evaluation metrics `ROCR` provides, opt-in through
@@ -11,6 +12,9 @@ not submitted, so this release carries all eighteen sets of changes.
   probability-based metrics
 - Add one new dependency, `checkmate`, for the argument checks
 - Add `metric_curve()`, which draws one evaluation metric against another
+- Add `format_points()`, which reconstructs per-instance scores and labels
+  from a table of rates calculated at a set of thresholds, for users who no
+  longer hold the per-instance data
 - Add `prbe()`, the precision-recall break-even point, and
   `average_precision()`, the step estimator of the area under the
   precision-recall curve
