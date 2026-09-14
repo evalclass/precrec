@@ -9,7 +9,7 @@ Authors@R: c(
            comment = c(ORCID = "0000-0002-5021-7721")))
 Description: Accurate calculations and visualization of precision-recall and ROC (Receiver Operator Characteristics)
     curves. Saito and Rehmsmeier (2015) <doi:10.1371/journal.pone.0118432>.
-URL: https://github.com/evalclass/precrec, https://evalclass.github.io/precrec
+URL: https://github.com/evalclass/precrec, https://evalclass.github.io/precrec/
 BugReports: https://github.com/evalclass/precrec/issues
 Depends: R (>= 4.1)
 License: GPL-3
