@@ -201,6 +201,8 @@ doi:
   : Join observed labels of multiple test datasets into a list
 - [`format_nfold()`](https://evalclass.github.io/precrec/reference/format_nfold.md)
   : Create n-fold cross validation dataset from data frame
+- [`format_points()`](https://evalclass.github.io/precrec/reference/format_points.md)
+  : Reconstruct per-instance data from a table of curve points
 - [`create_sim_samples()`](https://evalclass.github.io/precrec/reference/create_sim_samples.md)
   : Create random samples for simulations
 

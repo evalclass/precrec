@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.24.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -264,6 +264,113 @@ this site.</p>
 <code>na_worst = FALSE</code> ranks them first. Tied scores share a rank
 by default (<code>ties_method = "equiv"</code>); <code>"first"</code>
 keeps the input order and <code>"random"</code> shuffles them.</p>
+</div>
+<div class="section level2">
+<h2 id="which-direction-the-score-runs">Which direction the score runs<a class="anchor" aria-label="anchor" href="#which-direction-the-score-runs"></a>
+</h2>
+<p><code>precrec</code> ranks the highest score first, so a score has to
+be larger for instances that are more likely to be positive. Plenty of
+quantities run the other way - a p-value from Fisher’s exact test, a
+distance to a cluster center, an error term - and for those, negate the
+score:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pvals</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.001</span>, <span class="fl">0.02</span>, <span class="fl">0.3</span>, <span class="fl">0.4</span>, <span class="fl">0.8</span>, <span class="fl">0.9</span><span class="op">)</span></span>
+<span><span class="va">obs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="op">-</span><span class="va">pvals</span>, labels <span class="op">=</span> <span class="va">obs</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     === AUCs ===</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      Model name Dataset ID Curve type       AUC Baseline</span></span>
+<span><span class="co">#&gt;    1         m1          1        ROC 0.8888889      0.5</span></span>
+<span><span class="co">#&gt;    2         m1          1        PRC 0.9041060      0.5</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     === Input data ===</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      Model name Dataset ID # of negatives # of positives</span></span>
+<span><span class="co">#&gt;    1         m1          1              3              3</span></span></code></pre></div>
+<p>There is no argument for this. Negation is the whole of it, and it
+changes nothing else: the curves, the areas and the basic metrics all
+read the ranking, and reversing the score reverses the ranking
+exactly.</p>
+<p>The one thing negation does not survive is
+<code><a href="../reference/prob_metrics.html">prob_metrics()</a></code>. The Brier score and the log loss read the
+<em>values</em> of the scores rather than their order, so they need
+genuine probabilities on 0 to 1 - <code>-pvals</code> is rejected.
+Convert rather than negate when you want those: <code>1 - pvals</code>
+ranks the same way and stays in range, though whether it is calibrated
+is a separate question.</p>
+</div>
+<div class="section level2">
+<h2 id="when-all-you-have-is-a-table">When all you have is a table<a class="anchor" aria-label="anchor" href="#when-all-you-have-is-a-table"></a>
+</h2>
+<p>Sometimes the per-instance scores are gone and what survives is a
+table of performance values at a handful of thresholds - true and false
+positive rates, or recall and precision. <code><a href="../reference/format_points.html">format_points()</a></code>
+reconstructs instances that reproduce those points, so the table can
+reach <code><a href="../reference/evalmod.html">evalmod()</a></code> after all.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">roc_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  threshold <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">0.7</span>, <span class="fl">0.5</span>, <span class="fl">0.3</span>, <span class="fl">0.1</span><span class="op">)</span>,</span>
+<span>  tpr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">0.7</span>, <span class="fl">0.9</span>, <span class="fl">1.0</span><span class="op">)</span>,</span>
+<span>  fpr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.02</span>, <span class="fl">0.10</span>, <span class="fl">0.25</span>, <span class="fl">0.55</span>, <span class="fl">1.00</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/format_points.html">format_points</a></span><span class="op">(</span><span class="va">roc_tbl</span>,</span>
+<span>  threshold_col <span class="op">=</span> <span class="st">"threshold"</span>,</span>
+<span>  tpr_col <span class="op">=</span> <span class="st">"tpr"</span>, fpr_col <span class="op">=</span> <span class="st">"fpr"</span>,</span>
+<span>  np <span class="op">=</span> <span class="fl">50</span>, nn <span class="op">=</span> <span class="fl">100</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; Reconstructed 150 instances from 5 points in 1 group.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Between two points the curve assumes a constant class skew. Areas read off it</span></span>
+<span><span class="co">#&gt;   are estimates.</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span><span class="fu"><a href="../reference/mmdata.html">mmdata</a></span><span class="op">(</span><span class="va">pts</span><span class="op">$</span><span class="va">scores</span>, <span class="va">pts</span><span class="op">$</span><span class="va">labels</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     === AUCs ===</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      Model name Dataset ID Curve type       AUC  Baseline</span></span>
+<span><span class="co">#&gt;    1         m1          1        ROC 0.7875000 0.5000000</span></span>
+<span><span class="co">#&gt;    2         m1          1        PRC 0.6595687 0.3333333</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     === Input data ===</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      Model name Dataset ID # of negatives # of positives</span></span>
+<span><span class="co">#&gt;    1         m1          1            100             50</span></span></code></pre></div>
+<p>Pass <code>rec_col</code> and <code>prec_col</code> instead when the
+table holds recall and precision, and <code>mod_col</code> and
+<code>dsid_col</code> when it holds several models or test sets stacked
+in one data frame.</p>
+<p><code>np</code> and <code>nn</code> are not optional. Rates carry no
+totals: a true positive rate of 0.4 is 20 positives out of 50 and 200
+out of 500, and precision and recall fix the ratio of the two classes
+but not their size. The totals are also what places the chance-level
+baseline of the precision-recall curve, which is the line most worth
+having on it.</p>
+<div class="section level3">
+<h3 id="what-the-reconstruction-assumes">What the reconstruction assumes<a class="anchor" aria-label="anchor" href="#what-the-reconstruction-assumes"></a>
+</h3>
+<p>The rows between two thresholds become instances that share a score,
+and <code>precrec</code> spreads the true and false positives of a tied
+run evenly over the cutoffs inside it. That even spread is the
+non-linear interpolation of Davis and Goadrich, so nothing is being
+approximated that <code>precrec</code> would not already do - a table
+with one row per distinct score round-trips exactly, back to the
+original curve and the original area.</p>
+<p>What a coarse table costs is the assumption underneath. The
+interpolation is exact where a gap holds a single instance; over a gap
+of many it takes the positives and negatives inside to alternate at a
+constant rate, and they generally do not. An area read off fifteen
+points is an estimate whose error the table gives no way to bound, in
+either direction. Per-instance scores and labels remain the input to
+prefer wherever they still exist.</p>
+<p>One thing does not survive at all. The reconstructed scores are
+threshold values, so everything that reads the <em>ranking</em> is
+exact, but <code><a href="../reference/prob_metrics.html">prob_metrics()</a></code> reads the values themselves - a
+Brier score taken from reconstructed data means nothing.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="next">Next<a class="anchor" aria-label="anchor" href="#next"></a>

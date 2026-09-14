@@ -129,7 +129,7 @@ Useful links:
 
 - <https://github.com/evalclass/precrec>
 
-- <https://evalclass.github.io/precrec>
+- <https://evalclass.github.io/precrec/>
 
 - Report bugs at <https://github.com/evalclass/precrec/issues>
 
