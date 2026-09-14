@@ -1,3 +1,28 @@
+# precrec 0.23.3
+
+* *Prepare your data* gains a section on which direction the score runs.
+  `precrec` ranks the highest score first, and a quantity that runs the other
+  way - a p-value, a distance, an error term - is handled by negating it.
+  There is no argument for this and there was nothing written down either, so
+  the question had no answer anywhere on the site. The section also notes the
+  one place negation does not carry: `prob_metrics()` reads the values of the
+  scores rather than their order, so it needs a genuine probability. Reported
+  in #14.
+
+* *Prepare your data* gains a section on what cannot be used as input.
+  `precrec` needs the per-instance scores and labels; precision and recall
+  already calculated at a set of thresholds, or a table of true and false
+  positive rates, cannot be used. The precision-recall interpolation is
+  defined between consecutive ranks and needs the counts that a table of
+  summary points has already discarded. The limit was deliberate but
+  undocumented, and two people arrived with such a table four years apart.
+  Reported in #6 and #15.
+
+* Correct the `pROC` argument table in *Coming from `pROC` or `ROCR`*, which
+  paired `direction = ` with `posclass = `. The two do different things:
+  `posclass` names the positive label, which is `pROC`'s `levels`, while
+  `direction` is the negation above.
+
 # precrec 0.23.2
 
 * `metric_table()` reported a precision on the row that calls nothing

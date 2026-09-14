@@ -97,6 +97,47 @@ simdat <- mmdata(samps[["scores"]], samps[["labels"]],
 Tied scores share a rank by default (`ties_method = "equiv"`); `"first"`
 keeps the input order and `"random"` shuffles them.
 
+## Which direction the score runs
+
+`precrec` ranks the highest score first, so a score has to be larger for
+instances that are more likely to be positive. Plenty of quantities run the
+other way - a p-value from Fisher's exact test, a distance to a cluster
+center, an error term - and for those, negate the score:
+
+```{r}
+pvals <- c(0.001, 0.02, 0.3, 0.4, 0.8, 0.9)
+obs <- c(1, 1, 0, 1, 0, 0)
+
+evalmod(scores = -pvals, labels = obs)
+```
+
+There is no argument for this. Negation is the whole of it, and it changes
+nothing else: the curves, the areas and the basic metrics all read the
+ranking, and reversing the score reverses the ranking exactly.
+
+The one thing negation does not survive is `prob_metrics()`. The Brier score
+and the log loss read the *values* of the scores rather than their order, so
+they need genuine probabilities on 0 to 1 - `-pvals` is rejected. Convert
+rather than negate when you want those: `1 - pvals` ranks the same way and
+stays in range, though whether it is calibrated is a separate question.
+
+## What cannot be used as input
+
+`precrec` always needs the per-instance scores and labels. Precision and
+recall already calculated at a handful of thresholds cannot be used, and
+neither can a table of true and false positive rates.
+
+This is a real limit rather than a missing feature. `precrec` draws the
+precision-recall curve by interpolating *between consecutive ranks*, and
+that interpolation needs to know how many positives and negatives lie
+between one point and the next - which is exactly what a table of summary
+points has already discarded. The same ranking is what the areas, the
+confidence bands and the basic metrics are calculated from.
+
+If the summary points are genuinely all you have, they are still a line, and
+`ggplot2` will draw it. What they are not is a `precrec` object, and the
+accuracy `precrec` exists for is not available from them.
+
 ## Next
 
 - [Compare several models](howto-multiple-models.html)
