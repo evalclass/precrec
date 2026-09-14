@@ -1,3 +1,49 @@
+# precrec 0.24.0
+
+* New `format_points()` reconstructs per-instance scores and labels from a
+  table of performance values calculated at a set of thresholds - true and
+  false positive rates, or recall and precision - so that a summary table can
+  reach `evalmod()` and `mmdata()` after all. The rows between two thresholds
+  become instances that share a score, and the even spread `precrec` already
+  applies to a tied run is the non-linear interpolation of Davis and Goadrich
+  (2006), so nothing new was needed in the curve code and a complete table
+  round-trips exactly. `np` and `nn` are required: rates do not carry the
+  class totals, and the totals also place the chance-level baseline. The
+  interpolation is exact only across a gap one instance wide, so an area read
+  off a coarse table remains an estimate - `format_points()` says so when it
+  runs, and *Prepare your data* says so at more length. Requested in #6 and
+  #15, and tracked in #32.
+
+* *Prepare your data* replaces its section on what cannot be used as input
+  with one on what a table of summary points can and cannot give you.
+
+# precrec 0.23.3
+
+* *Prepare your data* gains a section on which direction the score runs.
+  `precrec` ranks the highest score first, and a quantity that runs the other
+  way - a p-value, a distance, an error term - is handled by negating it.
+  There is no argument for this and there was nothing written down either, so
+  the question had no answer anywhere on the site. The section also notes the
+  one place negation does not carry: `prob_metrics()` reads the values of the
+  scores rather than their order, so it needs a genuine probability. Reported
+  in #14.
+
+* *Prepare your data* gains a section on what cannot be used as input.
+  `precrec` needs the per-instance scores and labels; precision and recall
+  already calculated at a set of thresholds, or a table of true and false
+  positive rates, cannot be used. The counts such a table implies are
+  recoverable when the totals are known, so the limit is not arithmetic: it
+  is that the precision-recall interpolation is only correct across a gap one
+  instance wide, and over the coarse gaps a threshold table leaves it
+  reintroduces the very error `precrec` exists to remove. The limit was
+  deliberate but undocumented, and two people arrived with such a table four
+  years apart. Reported in #6 and #15.
+
+* Correct the `pROC` argument table in *Coming from `pROC` or `ROCR`*, which
+  paired `direction = ` with `posclass = `. The two do different things:
+  `posclass` names the positive label, which is `pROC`'s `levels`, while
+  `direction` is the negation above.
+
 # precrec 0.23.2
 
 * `metric_table()` reported a precision on the row that calls nothing

@@ -113,7 +113,7 @@ function of that name prints.
 Useful links:
 \itemize{
   \item \url{https://github.com/evalclass/precrec}
-  \item \url{https://evalclass.github.io/precrec}
+  \item \url{https://evalclass.github.io/precrec/}
   \item Report bugs at \url{https://github.com/evalclass/precrec/issues}
 }
 

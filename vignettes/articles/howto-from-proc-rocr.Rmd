@@ -74,7 +74,8 @@ variable: everything else on this page reads one of them.
 | `partial.auc.correct = TRUE` | `pauc(..., corrected = TRUE)`, the `cpaucs` column | Identical; the `spaucs` column standardizes differently - see below |
 | `plot(r)` | `autoplot(curves, "ROC")` | See the axis note below |
 | `multiclass.roc(labels, scores)` | `evalmod()` on more than two classes | [One-vs-rest](howto-multiclass.html) |
-| `levels = `, `direction = ` | `posclass = ` | |
+| `levels = ` | `posclass = ` | Which label is the positive one |
+| `direction = ` | Negate the scores | See [which direction the score runs](howto-prepare-data.html#which-direction-the-score-runs) |
 
 `roc.test()` is worth spelling out, because it is the reason many people
 have `pROC` loaded at all:
