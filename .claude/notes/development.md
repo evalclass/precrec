@@ -160,7 +160,14 @@ before merging to `develop` instead.
    `devtools::install()` then `lintr::lint_package()`, and
    `rmarkdown::render("README.Rmd")` if anything user-facing changed.
 6. `devtools::check_win_devel()` / `check_win_release()`, and
-   `devtools::revdep_check()` for reverse dependencies.
+   `revdepcheck::revdep_check()` for reverse dependencies - **not**
+   `devtools::revdep_check()`, which no longer exists, and `revdepcheck` is
+   not on CRAN either: `pak::pak("r-lib/revdepcheck")`. It writes `revdep/`,
+   which `^revdep$` in `.Rbuildignore` keeps out of the tarball (revdepcheck
+   does not add that line, and the directory runs to a few hundred MB).
+   Commit `revdep/*.md` and nothing else. Check what it generates: `cran.md`
+   has reported "we failed to check 0 packages" while its own `README.md`
+   listed three, and that file is what goes to CRAN.
 7. `release/<version>` branch, merge to `main` + `develop`, tag `v<version>`.
 8. `devtools::release()` for the CRAN submission.
 
