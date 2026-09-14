@@ -127,16 +127,24 @@ stays in range, though whether it is calibrated is a separate question.
 recall already calculated at a handful of thresholds cannot be used, and
 neither can a table of true and false positive rates.
 
-This is a real limit rather than a missing feature. `precrec` draws the
-precision-recall curve by interpolating *between consecutive ranks*, and
-that interpolation needs to know how many positives and negatives lie
-between one point and the next - which is exactly what a table of summary
-points has already discarded. The same ranking is what the areas, the
-confidence bands and the basic metrics are calculated from.
+The reason is accuracy rather than arithmetic. Counts are recoverable when
+the totals are known - a true positive rate of 0.4 over 50 positives is 20
+true positives - and the counts at the two ends of a gap are all the
+precision-recall interpolation reads. What makes that interpolation correct
+is that the gap is *one instance wide*. Over a gap of many instances the
+same formula assumes the positives and negatives inside it alternate evenly,
+and they generally do not. The curve it draws is then plausible rather than
+true, and the area under it is wrong by an amount nothing in the table
+reveals.
 
-If the summary points are genuinely all you have, they are still a line, and
-`ggplot2` will draw it. What they are not is a `precrec` object, and the
-accuracy `precrec` exists for is not available from them.
+A table of fifteen thresholds is that gap fifteen times over. Reading it as
+a curve reintroduces exactly the interpolation error `precrec` was written
+to remove, so the package declines the input rather than return a number it
+cannot stand behind.
+
+If the summary points are all you have, they are still points and `ggplot2`
+will plot them. Draw them as points rather than joining them up, and treat
+any area read off them as an estimate of unknown sign.
 
 ## Next
 

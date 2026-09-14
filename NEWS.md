@@ -12,11 +12,13 @@
 * *Prepare your data* gains a section on what cannot be used as input.
   `precrec` needs the per-instance scores and labels; precision and recall
   already calculated at a set of thresholds, or a table of true and false
-  positive rates, cannot be used. The precision-recall interpolation is
-  defined between consecutive ranks and needs the counts that a table of
-  summary points has already discarded. The limit was deliberate but
-  undocumented, and two people arrived with such a table four years apart.
-  Reported in #6 and #15.
+  positive rates, cannot be used. The counts such a table implies are
+  recoverable when the totals are known, so the limit is not arithmetic: it
+  is that the precision-recall interpolation is only correct across a gap one
+  instance wide, and over the coarse gaps a threshold table leaves it
+  reintroduces the very error `precrec` exists to remove. The limit was
+  deliberate but undocumented, and two people arrived with such a table four
+  years apart. Reported in #6 and #15.
 
 * Correct the `pROC` argument table in *Coming from `pROC` or `ROCR`*, which
   paired `direction = ` with `posclass = `. The two do different things:
