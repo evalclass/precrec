@@ -70,7 +70,7 @@ ap3_create_mmpoints <- function(raw_curves = FALSE) {
 }
 
 ap3_test_basic_metrics <- function(curves, ptitle, check_def_matrix = FALSE,
-                                    raw_curves = FALSE, ...) {
+                                   raw_curves = FALSE, ...) {
   if (check_def_matrix) {
     p <- ggplot2::autoplot(curves,
       ret_grob = TRUE,

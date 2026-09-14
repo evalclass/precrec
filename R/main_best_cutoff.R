@@ -52,7 +52,7 @@
 #'     `dsid` \tab Test dataset ID \cr
 #'     `metric` \tab The metric that was optimized \cr
 #'     `value` \tab Its value at the chosen cutoff \cr
-#'     `rank` \tab Number of instances called positive, `0` to `n` \cr
+#'     `rank` \tab Number of instances called positive, `1` to `n` \cr
 #'     `normalized_rank` \tab `rank / n` \cr
 #'     `score` \tab The cutoff itself, the rule being `score >= ` it \cr
 #'     `label` \tab `1` if the instance at this rank is positive,
@@ -100,10 +100,23 @@
 #' `evalmod(basic_ties = "hold")` produces throughout, since it gives every
 #' cutoff in a run of tied scores the counts of the whole run.
 #'
-#' A metric that has no interior optimum is optimized at an end of the
+#' The rank `0` row of [metric_table()] - the rule that calls nothing
+#' positive - is not a candidate. There is no threshold that predicts
+#' nothing, so its `score` is `NA` and it is not an operating point, which
+#' is what this function returns. It would otherwise win outright wherever
+#' the empty rule is optimal, and win on the tie-break wherever it merely
+#' ties: precision at rank `0` is the limit from above, so it is `1`
+#' whenever the top-ranked instance is a positive, and any classifier that
+#' ranks one first would come back with no threshold at all.
+#'
+#' A metric that has no interior optimum is still optimized at an end of the
 #' range, and no warning says so: `sensitivity` is largest when everything
-#' is called positive, and `specificity` when nothing is. Those are the
-#' correct answers to the question asked, and rarely the question meant.
+#' is called positive, and `specificity` when as little as possible is.
+#' Those are the correct answers to the question asked, and rarely the
+#' question meant. `accuracy` and `error` have an interior optimum on
+#' balanced data and lose it as positives get rare, which is the same trap
+#' arriving by a different route: at a few percent positives, calling almost
+#' nothing positive is close to the most accurate thing a classifier can do.
 #'
 #' A cutoff chosen on the same data the model is evaluated on is optimistic,
 #' by however much the criterion was free to chase. Choosing it on held-out
@@ -259,6 +272,21 @@ best_cutoff <- function(x, scores = NULL, labels = NULL, metric = "youden",
   groups <- unique(key)
   picked <- vapply(groups, function(g) {
     rows <- which(key == g)
+
+    # The rank 0 row is the rule that calls nothing positive, and there is
+    # no threshold that predicts nothing - its `score` is NA. This function
+    # names an operating point, so that row is not a candidate for one. It
+    # would otherwise win outright wherever the empty rule is optimal, which
+    # `specificity` always is and `accuracy` becomes as positives get rare,
+    # and win on the tie-break wherever it merely ties - `precision` is 1
+    # there whenever the top-ranked instance is a positive, so any classifier
+    # that ranks one first would come back with no threshold at all.
+    rows <- rows[tab[["rank"]][rows] != 0L]
+
+    if (length(rows) == 0L) {
+      return(NA_integer_)
+    }
+
     vals <- values[rows]
     if (all(is.na(vals))) {
       return(NA_integer_)

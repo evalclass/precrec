@@ -88,6 +88,32 @@ different widths compare.
 knitr::kable(pauc(part(curves, xlim = c(0, 0.25))))
 ```
 
+There is a second convention for standardizing a partial area, and both
+are called "the standardized partial AUC". `spaucs` divides by the area of
+the region, so it says what fraction of what was available the curve
+covered. The McClish correction, which `corrected = TRUE` adds as `cpaucs`,
+rescales the span between chance and perfect onto 0.5 to 1 instead, so the
+number reads on the same scale as a full AUC - and over the whole curve it
+is the full AUC.
+
+```{r}
+knitr::kable(
+  subset(
+    pauc(part(curves, xlim = c(0, 0.25)), corrected = TRUE),
+    curvetypes == "ROC"
+  ),
+  row.names = FALSE
+)
+```
+
+Neither is the right one; say which you used. `cpaucs` is what
+`pROC::auc(..., partial.auc.correct = TRUE)` reports, and it is `NA` on the
+precision-recall rows - a precision-recall curve's chance level is the
+proportion of positives, and rescaling by it would make curves at different
+class balances look comparable, which is the thing this package spends
+[a whole page](howto-imbalanced-data.html) arguing they are not. See
+`?pauc`.
+
 Plotting the restricted object draws the partial curve; see
 [partial curves](plots-partial-curves.html).
 
@@ -119,6 +145,21 @@ A curve crossing the diagonal more than once gets one row per crossing; one
 that never does gets a single `NA`. `prbe()` reads the crossing off the
 interpolated curve - finding it by linear interpolation between raw points,
 as some tools do, is the error this package exists to avoid.
+
+`baselines` is where a classifier that ranks at random breaks even. At chance
+the curve is flat at the proportion of positives, so it meets the diagonal at
+that recall: a break-even point of 0.2 is chance on data that is 20% positive
+and five times chance on data that is 4% positive. It is the same reading
+problem the area has, and the same column answers it.
+
+The origin is not a break-even point. A curve is anchored at recall 0, where
+precision is 1 if the top-ranked instance is a positive and 0 if it is a
+negative - and in the second case precision and recall are equal there
+without anything having been retrieved. When positives are rare the
+top-ranked instance is nearly always a negative, so counting the origin would
+put a spurious 0 in front of almost every imbalanced result. A curve that
+leaves the origin below the diagonal and never catches up has no break-even
+point at all, and gets the `NA`.
 
 ## Averaging over classes
 

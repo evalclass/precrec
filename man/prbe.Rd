@@ -14,12 +14,28 @@ prbe(curves)
 }
 \value{
 The \code{prbe} function returns a data frame with the columns
-\code{modnames}, \code{dsids} and \code{prbe}. \code{prbe} is the common
+\code{modnames}, \code{dsids}, \code{prbe} and \code{baselines}. \code{prbe} is the common
 value of precision and recall at the break-even point.
 
 A curve can cross the diagonal more than once, and then the data frame
 holds one row per crossing, ordered by recall. A curve that never
-reaches equal precision and recall gets a single row of \code{NA}.
+reaches equal precision and recall gets a single row of \code{NA}, which at
+a low proportion of positives is a common and correct answer: such a
+curve can leave the origin below the diagonal and never catch up.
+
+\code{baselines} is the proportion of positives, which is where a classifier
+that ranks at random breaks even - at chance the curve is flat at the
+prevalence, so it meets the diagonal at that recall. A break-even point
+of \code{0.2} is chance on data that is 20\% positive and five times chance
+on data that is 4\% positive. See \verb{Reading an area against its baseline}
+in \code{\link[=auc]{auc()}}.
+
+The origin is not reported as a break-even point. A curve is anchored
+at recall \code{0}, where precision is \code{1} if the top-ranked instance is a
+positive and \code{0} if it is a negative; in the second case precision and
+recall are equal there, but nothing has been retrieved and the equality
+is an artifact of where the curve starts rather than a point at which
+the classifier balances the two.
 }
 \description{
 The \code{prbe} function finds the points of a precision-recall curve at

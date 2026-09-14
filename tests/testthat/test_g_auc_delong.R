@@ -124,8 +124,8 @@ test_that("auc_ci() on a DeLong object gives a normal interval", {
   expect_equal(
     names(ci),
     c(
-      "modnames", "curvetypes", "aucs", "error", "lower_bound",
-      "upper_bound", "n"
+      "modnames", "curvetypes", "aucs", "baselines", "error",
+      "lower_bound", "upper_bound", "n"
     )
   )
   expect_equal(ci$n, 200)
@@ -290,4 +290,13 @@ test_that("auc_diff() needs two models and an object it knows", {
   expect_error(auc_diff(delong, alternative = "twosided"),
     class = "precrec_error_invalid_alternative"
   )
+})
+
+test_that("auc_ci() on a DeLong object reports the ROC baseline", {
+  d <- two_normals(200)
+  ci <- auc_ci(auc_delong(scores = d$scores, labels = d$labels))
+
+  # DeLong covers the ROC AUC only, whose chance level is 0.5 whatever the
+  # class balance is
+  expect_equal(ci$baselines, 0.5)
 })

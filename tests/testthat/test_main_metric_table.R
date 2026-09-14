@@ -50,7 +50,11 @@ test_that("a row is the cutoff that calls the top k positive", {
 })
 
 test_that("the table is the long data frame on its side", {
-  # The two must not drift: one C++ converter feeds both
+  # The two must not drift: one C++ converter feeds both. The two end rows
+  # are the deliberate exception - the table blanks the precision and NPV
+  # cells that have no denominator, and the long form keeps the inherited
+  # values because the curve is anchored on them. Everything else is equal
+  # row for row.
   samps <- create_sim_samples(1, 30, 30, c("good_er", "poor_er"))
   mdat <- mmdata(samps[["scores"]], samps[["labels"]],
     modnames = samps[["modnames"]]
@@ -65,8 +69,18 @@ test_that("the table is the long data frame on its side", {
     part <- part[order(part$modname, part$x), ]
     ordered <- tab[order(tab$modname, tab$normalized_rank), ]
 
-    expect_equal(ordered[[metric]], part$y)
+    ends <- ordered$rank == 0L |
+      ordered$rank == ave(ordered$rank, ordered$modname, FUN = max)
+    blanked <- metric == "precision" & ends
+
+    expect_equal(ordered[[metric]][!blanked], part$y[!blanked])
     expect_equal(ordered$normalized_rank, part$x)
+
+    # The exception is exactly the cells the table blanks, and only there
+    if (metric == "precision") {
+      expect_true(all(is.na(ordered[[metric]][ordered$rank == 0L])))
+      expect_false(anyNA(part$y))
+    }
   }
 })
 
@@ -324,4 +338,87 @@ test_that("best_cutoff() refuses at = rather than narrowing its search", {
     best_cutoff(scores = P10N10$scores, labels = P10N10$labels, at = 14),
     class = "precrec_error_invalid_at"
   )
+})
+
+test_that("the end rows report no precision or NPV", {
+  # Precision is TP / (TP + FP) and NPV is TN / (TN + FN), so the row that
+  # calls nothing positive has no denominator for the first and the row
+  # that calls everything positive has none for the second.
+  data(P10N10)
+  tab <- metric_table(
+    scores = P10N10$scores, labels = P10N10$labels,
+    metrics = c(
+      "precision", "npv", "false_discovery_rate",
+      "false_omission_rate", "markedness"
+    )
+  )
+  n <- max(tab$rank)
+
+  for (metric in c("precision", "false_discovery_rate", "markedness")) {
+    expect_true(is.na(tab[[metric]][tab$rank == 0L]))
+  }
+  for (metric in c("npv", "false_omission_rate", "markedness")) {
+    expect_true(is.na(tab[[metric]][tab$rank == n]))
+  }
+
+  # Everywhere else they are measured
+  middle <- tab$rank > 0L & tab$rank < n
+  expect_false(anyNA(tab$precision[middle]))
+  expect_false(anyNA(tab$npv[middle]))
+})
+
+test_that("the blanked cells do not depend on the instance at the end", {
+  # They were filled in from the neighboring row, so precision at rank 0
+  # followed the top-ranked instance - 1 if it was a positive and 0 if it
+  # was a negative, for a rule that predicts nothing either way.
+  base <- c(rnorm(10, 1), rnorm(90))
+  labels <- rep(c(1, 0), c(10, 90))
+
+  picked <- vapply(c(1, 0), function(top) {
+    scores <- base
+    i <- if (top == 1) which(labels == 1)[1] else which(labels == 0)[1]
+    scores[i] <- max(base) + 1
+    tab <- metric_table(scores = scores, labels = labels)
+    tab$precision[tab$rank == 0L]
+  }, numeric(1))
+
+  expect_true(all(is.na(picked)))
+})
+
+test_that("a threshold outside the score range reports no precision", {
+  # The transfer case `at` exists for: a cutoff chosen elsewhere can sit
+  # above every score here, and then it predicts nothing
+  data(P10N10)
+  tab <- metric_table(
+    scores = P10N10$scores, labels = P10N10$labels,
+    at = c(max(P10N10$scores) + 1, min(P10N10$scores) - 1),
+    metrics = c("precision", "npv")
+  )
+
+  expect_equal(tab$rank, c(0L, length(P10N10$scores)))
+  expect_true(is.na(tab$precision[1]))
+  expect_equal(tab$sensitivity[1], 0)
+  expect_true(is.na(tab$npv[2]))
+  expect_equal(tab$sensitivity[2], 1)
+})
+
+test_that("blanking the table leaves the curves alone", {
+  # `create_prc_curve()` reads the same array and is anchored on the
+  # inherited precision, which is what makes the interpolation correct
+  set.seed(7)
+  scores <- c(rnorm(20, 1), rnorm(980))
+  labels <- rep(c(1, 0), c(20, 980))
+  curves <- evalmod(scores = scores, labels = labels, raw_curves = TRUE)
+
+  areas <- auc(curves)
+  prc <- as.data.frame(curves)
+  prc <- prc[prc$type == "PRC", ]
+
+  expect_equal(areas$aucs[areas$curvetypes == "ROC"], 0.82)
+  expect_equal(areas$aucs[areas$curvetypes == "PRC"], 0.2938277359,
+    tolerance = 1e-8
+  )
+  expect_equal(average_precision(curves)$aps, 0.2979068387, tolerance = 1e-8)
+  expect_equal(prbe(curves)$prbe, 0.25)
+  expect_equal(prc$y[1], 1) # the anchor, still the limit from above
 })

@@ -87,6 +87,30 @@ as the AUCs are, with the same weights, so the row is still read
 against the chance level of the mixture that produced it.
 }
 
+\section{The baseline is an asymptote}{
+
+
+The prevalence is what a precision-recall area is worth by chance in the
+limit. An area measured on a finite sample scatters around its chance
+level rather than sitting on it, and the fewer the positives the wider
+it scatters and the further above it the average sits. Dividing the two
+numbers is therefore not a test.
+
+With twenty positives at two percent prevalence, a classifier with no
+signal at all averages \code{1.15} times its baseline over the whole curve
+and \code{1.91} times over the first tenth of recall, where it clears twice
+the baseline \verb{22\%} of the time. Two hundred positives brings the first
+figure to \code{1.01}. What drives it is the number of positives, not the
+balance, and \code{\link[=average_precision]{average_precision()}} shows the same thing, so it is not
+an artifact of the interpolation.
+
+The example above stands: \code{0.129} against a baseline of \code{0.02} is a
+real result. But when the margin is small and the positives are few,
+\code{\link[=auc_boot]{auc_boot()}} puts an interval around the area from a single test set,
+and \code{\link[=auc_ci]{auc_ci()}} does it from several. Both now report the baseline
+beside the interval, which is the comparison worth making.
+}
+
 \examples{
 
 ##################################################
@@ -197,5 +221,7 @@ auc(mccurves, macro_weight = "prevalence")
 \code{\link[=evalmod]{evalmod()}} for generating \code{S3} objects with
 performance evaluation metrics. \code{\link[=pauc]{pauc()}} for retrieving
 a dataset of pAUCs. \code{\link[=average_precision]{average_precision()}} for the step estimator of
-the area under the precision-recall curve.
+the area under the precision-recall curve. \code{\link[=auc_boot]{auc_boot()}} and \code{\link[=auc_ci]{auc_ci()}}
+for an interval around an area, which is what the gap between an area
+and its baseline has to be read against.
 }

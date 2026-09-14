@@ -55,7 +55,7 @@ model per test dataset, and the following columns.
 \code{dsid} \tab Test dataset ID \cr
 \code{metric} \tab The metric that was optimized \cr
 \code{value} \tab Its value at the chosen cutoff \cr
-\code{rank} \tab Number of instances called positive, \code{0} to \code{n} \cr
+\code{rank} \tab Number of instances called positive, \code{1} to \code{n} \cr
 \code{normalized_rank} \tab \code{rank / n} \cr
 \code{score} \tab The cutoff itself, the rule being \verb{score >= } it \cr
 \code{label} \tab \code{1} if the instance at this rank is positive,
@@ -112,10 +112,23 @@ reported is the last of the run and not the first. That is what
 \code{evalmod(basic_ties = "hold")} produces throughout, since it gives every
 cutoff in a run of tied scores the counts of the whole run.
 
-A metric that has no interior optimum is optimized at an end of the
+The rank \code{0} row of \code{\link[=metric_table]{metric_table()}} - the rule that calls nothing
+positive - is not a candidate. There is no threshold that predicts
+nothing, so its \code{score} is \code{NA} and it is not an operating point, which
+is what this function returns. It would otherwise win outright wherever
+the empty rule is optimal, and win on the tie-break wherever it merely
+ties: precision at rank \code{0} is the limit from above, so it is \code{1}
+whenever the top-ranked instance is a positive, and any classifier that
+ranks one first would come back with no threshold at all.
+
+A metric that has no interior optimum is still optimized at an end of the
 range, and no warning says so: \code{sensitivity} is largest when everything
-is called positive, and \code{specificity} when nothing is. Those are the
-correct answers to the question asked, and rarely the question meant.
+is called positive, and \code{specificity} when as little as possible is.
+Those are the correct answers to the question asked, and rarely the
+question meant. \code{accuracy} and \code{error} have an interior optimum on
+balanced data and lose it as positives get rare, which is the same trap
+arriving by a different route: at a few percent positives, calling almost
+nothing positive is close to the most accurate thing a classifier can do.
 
 A cutoff chosen on the same data the model is evaluated on is optimistic,
 by however much the criterion was free to chase. Choosing it on held-out

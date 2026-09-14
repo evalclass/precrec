@@ -124,7 +124,8 @@ test_that("a tie is broken toward the smallest rank", {
 
 test_that("a metric with no interior optimum lands on the end of the range", {
   # Documented rather than warned about: these are the correct answers to
-  # the question asked
+  # the question asked. The end of the range still has to be a cutoff,
+  # though - the rank 0 row has no threshold and is not a candidate.
   d <- p10n10()
   n <- length(d$scores)
 
@@ -137,8 +138,41 @@ test_that("a metric with no interior optimum lands on the end of the range", {
 
   expect_equal(sn$rank, n) # everything called positive
   expect_equal(sn$value, 1)
-  expect_equal(sp$rank, 0L) # nothing called positive
+  expect_equal(sp$rank, 1L) # as few as possible called positive
   expect_equal(sp$value, 1)
+  expect_false(is.na(sp$score))
+})
+
+test_that("best_cutoff() never returns the rule that predicts nothing", {
+  # The rank 0 row of metric_table() has score NA, because there is no
+  # threshold that calls nothing positive. It is optimal for specificity
+  # always, for accuracy once positives are rare, and it ties for precision
+  # whenever the top-ranked instance is a positive.
+  d <- imbalanced()
+
+  for (metric in c(
+    "accuracy", "error", "specificity", "precision", "cost", "fscore",
+    "mcc", "youden", "topleft"
+  )) {
+    picked <- best_cutoff(scores = d$scores, labels = d$labels, metric = metric)
+
+    expect_gt(picked$rank, 0L)
+    expect_false(is.na(picked$score))
+  }
+})
+
+test_that("precision does not lose its tie to the empty rule", {
+  # Precision at rank 0 is the limit from above, so it is 1 when the
+  # top-ranked instance is a positive and ties with the real cutoffs that
+  # follow. The smallest-rank tie-break used to hand back rank 0.
+  scores <- c(10, 9, 8, 7, 6)
+  labels <- c(1, 1, 0, 0, 0)
+
+  picked <- best_cutoff(scores = scores, labels = labels, metric = "precision")
+
+  expect_equal(picked$rank, 1L)
+  expect_equal(picked$value, 1)
+  expect_equal(picked$score, 10)
 })
 
 test_that("the prevalence-blind and prevalence-aware criteria disagree", {

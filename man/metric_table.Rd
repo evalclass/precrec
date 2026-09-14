@@ -73,8 +73,25 @@ stands for is \verb{score >= that value}. The metrics on the row are the
 metrics of that rule.
 
 The first row is \code{rank = 0} - call nothing positive. There is no
-instance at that rank, so \code{score} and \code{label} are \code{NA} while the metrics
-are defined, and it is kept because it is a real operating point.
+instance at that rank, so \code{score} and \code{label} are \code{NA}, and it is kept
+because it is a real operating point.
+
+The two end rows are missing one cell each. Precision is
+\code{TP / (TP + FP)}, so the row that calls nothing positive has no
+denominator for it, and NPV is \code{TN / (TN + FN)}, so the row that calls
+everything positive has none for that. Both are \code{NA}, together with the
+metrics derived from them - the false discovery rate is \code{1 - precision},
+the false omission rate is \code{1 - NPV}, and \code{markedness} is
+\code{precision + NPV - 1}, so it is missing at both ends. Every other metric
+on those rows is measured.
+
+The long form \code{as.data.frame(evalmod(mode = "basic"))} returns carries a
+value in those cells instead, taken from the neighboring row. That is
+what anchors the precision-recall curve at recall \code{0}, and it is the
+right value for a curve - but it is not a measurement of the rule the
+row stands for, and a \code{precision} of \code{1} beside a \code{sensitivity} of \code{0}
+reads as a perfect threshold. Plot from the long form; decide from this
+table.
 
 Tied scores share one value of each metric rather than taking a value
 that depends on the order the ties arrived in. \code{basic_ties} of
@@ -93,7 +110,12 @@ is what was asked for and \code{score} is the observed cutoff realizing it,
 the smallest score still called positive.
 
 A threshold above every score gives the \code{rank = 0} row, where \code{score}
-is \code{NA} because nothing is called positive. A score of \code{NA} is never a
+is \code{NA} because nothing is called positive, and \code{precision} is \code{NA}
+because a rule that makes no positive predictions has none. One below
+every score gives the \code{rank = n} row, with no NPV for the same reason at
+the other end. Neither is an edge case here: a threshold chosen on one
+dataset lands outside the range of another routinely, which is most of
+why it is worth asking what it does there. A score of \code{NA} is never a
 positive prediction, matching the \code{na_worst = TRUE} default of the rest
 of the package.
 

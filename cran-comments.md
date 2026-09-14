@@ -1,9 +1,9 @@
-## Version 0.23.1
+## Version 0.23.2
 
-An update of the published package `precrec` (0.14.5 -> 0.23.1). 0.15.0,
+An update of the published package `precrec` (0.14.5 -> 0.23.2). 0.15.0,
 0.16.0, 0.16.1, 0.16.2, 0.17.0, 0.18.0, 0.19.0, 0.20.0, 0.21.0, 0.21.1,
-0.21.2, 0.22.0, 0.22.1, 0.22.2 and 0.23.0 were prepared but not submitted,
-so this release carries all sixteen sets of changes.
+0.21.2, 0.22.0, 0.22.1, 0.22.2, 0.23.0 and 0.23.1 were prepared but not
+submitted, so this release carries all seventeen sets of changes.
 
 - Support datasets with more than two classes by one-vs-rest decomposition
 - Add the evaluation metrics `ROCR` provides, opt-in through
@@ -70,6 +70,30 @@ so this release carries all sixteen sets of changes.
   `auc()` and `average_precision()`, and a `Baseline` column in the
   `print()` summary - because a precision-recall area cannot be read
   without the proportion of positives, and only the plots showed it
+
+- Add `pauc(corrected = TRUE)`, the McClish-corrected partial AUC of the
+  ROC curve in a `cpaucs` column, which `spaucs` was being mistaken for;
+  it is what `pROC::auc(partial.auc.correct = TRUE)` reports
+- Report the chance level beside every area the package reports, not only
+  the ones `auc()` covers: `baselines` and `sbaselines` columns on
+  `pauc()`, and a `baselines` column on `auc_ci()`, `auc_boot()` and
+  `auc_delong()`. A standardized partial ROC area over false positive rates
+  up to `0.2` has a chance level of `0.1`, not `0.5`
+- Fix `prbe()`, which reported a break-even point of `0` whenever the
+  top-ranked instance was a negative - the origin of a precision-recall
+  curve, where precision and recall are trivially equal and nothing has
+  been retrieved. At a low proportion of positives that is nearly every
+  dataset. `prbe()` also gained a `baselines` column
+- Fix `best_cutoff()`, which could return the rule that calls nothing
+  positive - a row whose `score` is `NA`, so not an operating point at all.
+  It was optimal for `specificity` always and for `accuracy` once positives
+  were rare, and it tied for `precision` whenever the top-ranked instance
+  was a positive
+- Report `NA` for the precision of the `metric_table()` row that calls
+  nothing positive, and for the NPV of the row that calls everything
+  positive. Neither has a denominator, and both were being filled in from
+  the neighboring row; the curves, which are anchored on those values, are
+  unchanged
 
 `NEWS.md` has the full list.
 
