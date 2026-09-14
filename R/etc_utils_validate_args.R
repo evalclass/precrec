@@ -582,7 +582,7 @@
 #
 # Validate a single column reference, either a position or a name
 #
-.validate_col <- function(col, nfold_df, arg) {
+.validate_col <- function(col, nfold_df, arg, df_arg = "nfold_df") {
   if (!.is_number(col) && !.is_string(col)) {
     .stop_invalid_arg(
       paste(
@@ -597,7 +597,7 @@
     if (col > ncol(nfold_df)) {
       .stop_invalid_arg(
         paste(
-          "{.arg {arg}} must index a column of {.arg nfold_df},",
+          "{.arg {arg}} must index a column of {.arg {df_arg}},",
           "which has {ncol(nfold_df)} column{?s}."
         ),
         arg = arg, .envir = environment()
@@ -605,7 +605,7 @@
     }
   } else if (!(col %in% colnames(nfold_df))) {
     .stop_invalid_arg(
-      "{.arg {arg}} must name a column of {.arg nfold_df}.",
+      "{.arg {arg}} must name a column of {.arg {df_arg}}.",
       arg = arg, .envir = environment()
     )
   }

@@ -21,6 +21,7 @@ reference:
     - join_scores
     - join_labels
     - format_nfold
+    - format_points
     - create_sim_samples
   - title: Visualization
     contents:
