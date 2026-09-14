@@ -105,9 +105,49 @@ minimized and the rest are maximized - so `metric = "accuracy"` means
 the cutoff that maximizes accuracy without your having to say so.
 
 Two of them are traps rather than criteria. `sensitivity` is largest
-when everything is called positive and `specificity` when nothing is;
-both are the correct answer to the question asked, and no warning says
-that it was probably not the question meant.
+when everything is called positive and `specificity` when as little as
+possible is; both are the correct answer to the question asked, and no
+warning says that it was probably not the question meant.
+
+`accuracy` is the same trap arriving by a different route, and it is the
+one people reach for first. It has an interior optimum on balanced data
+and loses it as positives get rare, because at a few percent positives
+calling almost nothing positive is close to the most accurate thing a
+classifier can do. On the twenty positives in four hundred used above:
+
+``` r
+
+knitr::kable(
+  do.call(rbind, lapply(c("accuracy", "mcc"), function(m) {
+    best_cutoff(mdat, metric = m)[, c(
+      "metric", "value", "rank", "sensitivity", "precision"
+    )]
+  })),
+  row.names = FALSE, digits = 3
+)
+```
+
+| metric   | value | rank | sensitivity | precision |
+|:---------|------:|-----:|------------:|----------:|
+| accuracy | 0.955 |    2 |        0.10 |     1.000 |
+| mcc      | 0.376 |   35 |        0.55 |     0.314 |
+
+Predicting nothing at all would be 0.95 accurate here. The
+accuracy-optimal cutoff calls two instances positive and reaches 0.955 -
+it buys half a percentage point and finds two of the twenty positives.
+`mcc` takes a cutoff with a third of the precision and finds eleven of
+them, which is the question the caller meant to ask.
+
+The rule that calls nothing positive is never returned, whatever the
+metric. It is the `rank` 0 row of
+[`metric_table()`](https://evalclass.github.io/precrec/reference/metric_table.md),
+and it has no threshold - there is no score you can compare against to
+predict nothing - so it is not an operating point. It is optimal for
+`specificity` always and for `accuracy` once positives are rare, so
+leaving it in would hand back a `score` of `NA` surprisingly often. That
+row reports no `precision` either, for the same reason in a different
+column: a rule that makes no positive predictions has no `TP + FP` to
+divide by.
 
 ## Saying what the mistakes cost
 

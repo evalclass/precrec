@@ -57,7 +57,7 @@ returns the same thing as a `data.table` when that package is installed.
 | Function | Returns |
 |----|----|
 | [`auc()`](https://evalclass.github.io/precrec/reference/auc.md) | Area under each curve, and its baseline |
-| [`pauc()`](https://evalclass.github.io/precrec/reference/pauc.md) | Partial area, after [`part()`](https://evalclass.github.io/precrec/reference/part.md) |
+| [`pauc()`](https://evalclass.github.io/precrec/reference/pauc.md) | Partial area, after [`part()`](https://evalclass.github.io/precrec/reference/part.md), standardized either way |
 | [`auc_ci()`](https://evalclass.github.io/precrec/reference/auc_ci.md) | Confidence interval of the area, over several test sets |
 | [`prbe()`](https://evalclass.github.io/precrec/reference/prbe.md) | Precision-recall break-even point |
 | [`prob_metrics()`](https://evalclass.github.io/precrec/reference/prob_metrics.md) | Brier score, RMSE and log loss |
@@ -104,14 +104,14 @@ head(tab)
 #> 5      m1    1    4            0.20    17     1  0.40     0.60         0.9
 #> 6      m1    1    5            0.25    16     1  0.35     0.65         0.9
 #>   sensitivity precision       mcc    fscore balanced_accuracy       npv
-#> 1         0.0 1.0000000        NA 0.0000000              0.50 0.5000000
+#> 1         0.0        NA        NA 0.0000000              0.50 0.5000000
 #> 2         0.1 1.0000000 0.2294157 0.1818182              0.55 0.5263158
 #> 3         0.2 1.0000000 0.3333333 0.3333333              0.60 0.5555556
 #> 4         0.2 0.6666667 0.1400280 0.3076923              0.55 0.5294118
 #> 5         0.3 0.7500000 0.2500000 0.4285714              0.60 0.5625000
 #> 6         0.4 0.8000000 0.3464102 0.5333333              0.65 0.6000000
 #>   informedness markedness kappa
-#> 1          0.0  0.5000000   0.0
+#> 1          0.0         NA   0.0
 #> 2          0.1  0.5263158   0.1
 #> 3          0.2  0.5555556   0.2
 #> 4          0.1  0.1960784   0.1
@@ -125,7 +125,15 @@ stands for is `score >= that value`. `normalized_rank` is `rank / n`,
 the x axis of the [basic metric
 plots](https://evalclass.github.io/precrec/articles/plots-basic-metrics.md).
 The first row calls nothing positive, which is why its `score` and
-`label` are `NA` while its metrics are not.
+`label` are `NA`.
+
+Its `precision` is `NA` too, and for a different reason: precision is
+`TP / (TP + FP)`, and a rule that makes no positive predictions has no
+denominator for it. The row that calls everything positive is missing
+its `npv` at the other end, on the same argument. Every other metric on
+those rows is measured - accuracy at rank 0 is the proportion of
+negatives, which is exactly the point of [Balanced and imbalanced
+data](https://evalclass.github.io/precrec/articles/howto-imbalanced-data.md).
 
 Because it is a plain data frame, the question that usually follows is
 ordinary R.
@@ -181,7 +189,7 @@ lifted <- metric_table(
 
 head(lifted[, c("rank", "score", "precision", "lift", "jaccard")])
 #>   rank score precision     lift   jaccard
-#> 1    0    NA 1.0000000       NA 0.0000000
+#> 1    0    NA        NA       NA 0.0000000
 #> 2    1    20 1.0000000 2.000000 0.1000000
 #> 3    2    19 1.0000000 2.000000 0.2000000
 #> 4    3    18 0.6666667 1.333333 0.1818182

@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -233,6 +233,262 @@ underneath it is not a question the area answers on its own, which is
 why the two numbers belong together.</p>
 </div>
 <div class="section level2">
+<h2 id="why-not-fold-the-baseline-in">Why not fold the baseline in?<a class="anchor" aria-label="anchor" href="#why-not-fold-the-baseline-in"></a>
+</h2>
+<p>If the area has to be read against its baseline, the obvious thought
+is to build the baseline into the area and be done with it. On the ROC
+side there is such a thing - the McClish correction,
+<code>pauc(corrected = TRUE)</code>, which rescales a partial area
+between chance and perfect.</p>
+<p>For the precision-recall curve the published proposal is
+Precision-Recall-Gain (Flach &amp; Kull 2015). It rescales both axes
+against the baseline <code>pi</code>,</p>
+<pre><code><span><span class="va">precG</span> <span class="op">=</span> <span class="fl">1</span> <span class="op">-</span> <span class="op">(</span><span class="va">pi</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">pi</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span> <span class="op">(</span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">prec</span><span class="op">)</span> <span class="op">/</span> <span class="va">prec</span><span class="op">)</span></span>
+<span><span class="va">recG</span>  <span class="op">=</span> <span class="fl">1</span> <span class="op">-</span> <span class="op">(</span><span class="va">pi</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">pi</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span> <span class="op">(</span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">rec</span><span class="op">)</span>  <span class="op">/</span> <span class="va">rec</span><span class="op">)</span></span></code></pre>
+<p>so that chance sits at <code>0</code> and perfect at <code>1</code>
+whatever the class balance, and the area under the resulting curve
+(AUPRG) is one number with the baseline already in it. The argument
+behind it is a serious one, and it depends on the curve being
+interpolated correctly, which is this package’s whole business.</p>
+<p>It does not do what someone reaching for it wants. Here the same 200
+positives appear in every row and negatives are added underneath them,
+so the classifier and the positive sample never change - only the
+prevalence does.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">gain</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">v</span>, <span class="va">pi</span><span class="op">)</span> <span class="fl">1</span> <span class="op">-</span> <span class="op">(</span><span class="va">pi</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">pi</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span> <span class="op">(</span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">v</span><span class="op">)</span> <span class="op">/</span> <span class="va">v</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">auprg</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">scores</span>, <span class="va">labels</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">pi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">labels</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span></span>
+<span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">scores</span>, labels <span class="op">=</span> <span class="va">labels</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">prc</span> <span class="op">&lt;-</span> <span class="va">d</span><span class="op">[</span><span class="va">d</span><span class="op">$</span><span class="va">type</span> <span class="op">==</span> <span class="st">"PRC"</span>, <span class="op">]</span></span>
+<span>  <span class="va">rg</span> <span class="op">&lt;-</span> <span class="fu">gain</span><span class="op">(</span><span class="va">prc</span><span class="op">$</span><span class="va">x</span>, <span class="va">pi</span><span class="op">)</span></span>
+<span>  <span class="va">pg</span> <span class="op">&lt;-</span> <span class="fu">gain</span><span class="op">(</span><span class="va">prc</span><span class="op">$</span><span class="va">y</span>, <span class="va">pi</span><span class="op">)</span></span>
+<span>  <span class="va">ok</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/is.finite.html" class="external-link">is.finite</a></span><span class="op">(</span><span class="va">rg</span><span class="op">)</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/is.finite.html" class="external-link">is.finite</a></span><span class="op">(</span><span class="va">pg</span><span class="op">)</span></span>
+<span>  <span class="co"># Integrate precG over recG from 0 to 1</span></span>
+<span>  <span class="va">grid</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="va">rg</span><span class="op">[</span><span class="va">ok</span><span class="op">]</span><span class="op">[</span><span class="va">rg</span><span class="op">[</span><span class="va">ok</span><span class="op">]</span> <span class="op">&gt;</span> <span class="fl">0</span> <span class="op">&amp;</span> <span class="va">rg</span><span class="op">[</span><span class="va">ok</span><span class="op">]</span> <span class="op">&lt;</span> <span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">v</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/approxfun.html" class="external-link">approx</a></span><span class="op">(</span><span class="va">rg</span><span class="op">[</span><span class="va">ok</span><span class="op">]</span>, <span class="va">pg</span><span class="op">[</span><span class="va">ok</span><span class="op">]</span>, xout <span class="op">=</span> <span class="va">grid</span>, rule <span class="op">=</span> <span class="fl">2</span>, ties <span class="op">=</span> <span class="st">"ordered"</span><span class="op">)</span><span class="op">$</span><span class="va">y</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="va">grid</span><span class="op">)</span> <span class="op">*</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">v</span>, <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">v</span>, <span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">11</span><span class="op">)</span></span>
+<span><span class="va">pos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fl">1.2</span><span class="op">)</span></span>
+<span><span class="va">negpool</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">9800</span>, <span class="fl">0</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">row_at</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">nn</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">pos</span>, <span class="va">negpool</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">nn</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="va">labels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">200</span>, <span class="va">nn</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">areas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/auc.html">auc</a></span><span class="op">(</span><span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">scores</span>, labels <span class="op">=</span> <span class="va">labels</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>    positives <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%.0f%%"</span>, <span class="fl">100</span> <span class="op">*</span> <span class="fl">200</span> <span class="op">/</span> <span class="op">(</span><span class="fl">200</span> <span class="op">+</span> <span class="va">nn</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    roc <span class="op">=</span> <span class="va">areas</span><span class="op">$</span><span class="va">aucs</span><span class="op">[</span><span class="va">areas</span><span class="op">$</span><span class="va">curvetypes</span> <span class="op">==</span> <span class="st">"ROC"</span><span class="op">]</span>,</span>
+<span>    prc <span class="op">=</span> <span class="va">areas</span><span class="op">$</span><span class="va">aucs</span><span class="op">[</span><span class="va">areas</span><span class="op">$</span><span class="va">curvetypes</span> <span class="op">==</span> <span class="st">"PRC"</span><span class="op">]</span>,</span>
+<span>    prc_baseline <span class="op">=</span> <span class="va">areas</span><span class="op">$</span><span class="va">baselines</span><span class="op">[</span><span class="va">areas</span><span class="op">$</span><span class="va">curvetypes</span> <span class="op">==</span> <span class="st">"PRC"</span><span class="op">]</span>,</span>
+<span>    auprg <span class="op">=</span> <span class="fu">auprg</span><span class="op">(</span><span class="va">scores</span>, <span class="va">labels</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fl">1800</span>, <span class="fl">9800</span><span class="op">)</span>, <span class="va">row_at</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  row.names <span class="op">=</span> <span class="cn">FALSE</span>, digits <span class="op">=</span> <span class="fl">3</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">positives</th>
+<th align="right">roc</th>
+<th align="right">prc</th>
+<th align="right">prc_baseline</th>
+<th align="right">auprg</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">50%</td>
+<td align="right">0.815</td>
+<td align="right">0.810</td>
+<td align="right">0.50</td>
+<td align="right">0.639</td>
+</tr>
+<tr class="even">
+<td align="left">10%</td>
+<td align="right">0.807</td>
+<td align="right">0.351</td>
+<td align="right">0.10</td>
+<td align="right">0.850</td>
+</tr>
+<tr class="odd">
+<td align="left">2%</td>
+<td align="right">0.805</td>
+<td align="right">0.113</td>
+<td align="right">0.02</td>
+<td align="right">0.941</td>
+</tr>
+</tbody>
+</table>
+<p>On the AUPRG scale a coin flip scores <code>0</code> and a perfect
+ranking <code>1</code>, so <code>0.639</code> and <code>0.941</code> are
+far apart on it. The ROC area holds within 0.01, as it should. The
+precision-recall area falls, which is the whole point of the page. And
+AUPRG <strong>rises</strong> - three tenths of its range, in the
+opposite direction, on a classifier that did not change.</p>
+<p>That is the thing to notice. Folding the baseline in did not remove
+the dependence on prevalence; it reversed it. A number that says a
+classifier got better because its positives got rarer is not more
+comparable across datasets than the one it replaced - it is incomparable
+in a direction that happens to flatter the hard case. The
+<code>baselines</code> column is less clever and harder to misread.</p>
+<p>So <code>precrec</code> reports the area and the baseline as two
+numbers and leaves them that way, and there is no <code>auprg()</code>
+here. The few lines above are all it takes if you want it for a curve
+you have already computed, and Flach &amp; Kull’s own argument for it -
+that the precision-recall area is a poorly founded summary quite apart
+from any question of class balance - is worth reading on its own
+terms.</p>
+</div>
+<div class="section level2">
+<h2 id="the-baseline-is-an-asymptote">The baseline is an asymptote<a class="anchor" aria-label="anchor" href="#the-baseline-is-an-asymptote"></a>
+</h2>
+<p>The prevalence is what the area is worth by chance <em>in the
+limit</em>. An area measured on a finite sample scatters around its
+chance level rather than sitting on it, and how widely depends on the
+number of positives - which is what imbalance takes away.</p>
+<p>Here is a classifier with no signal whatever, scored four hundred
+times on fresh random labels. Twenty positives in a thousand, the same
+2% as above. The column is the area divided by the baseline
+<code><a href="../reference/auc.html">auc()</a></code> reports for it, so chance is 1.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">np</span> <span class="op">&lt;-</span> <span class="fl">20</span></span>
+<span><span class="va">nn</span> <span class="op">&lt;-</span> <span class="fl">980</span></span>
+<span><span class="va">prevalence</span> <span class="op">&lt;-</span> <span class="va">np</span> <span class="op">/</span> <span class="op">(</span><span class="va">np</span> <span class="op">+</span> <span class="va">nn</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">noise</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">400</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="va">i</span><span class="op">)</span></span>
+<span>  <span class="va">curves</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalmod.html">evalmod</a></span><span class="op">(</span></span>
+<span>    scores <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">np</span> <span class="op">+</span> <span class="va">nn</span><span class="op">)</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">np</span>, <span class="va">nn</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span>  <span class="va">areas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/auc.html">auc</a></span><span class="op">(</span><span class="va">curves</span><span class="op">)</span></span>
+<span>  <span class="va">top</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pauc.html">pauc</a></span><span class="op">(</span><span class="fu"><a href="../reference/part.html">part</a></span><span class="op">(</span><span class="va">curves</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    whole <span class="op">=</span> <span class="va">areas</span><span class="op">$</span><span class="va">aucs</span><span class="op">[</span><span class="va">areas</span><span class="op">$</span><span class="va">curvetypes</span> <span class="op">==</span> <span class="st">"PRC"</span><span class="op">]</span>,</span>
+<span>    top <span class="op">=</span> <span class="va">top</span><span class="op">$</span><span class="va">spaucs</span><span class="op">[</span><span class="va">top</span><span class="op">$</span><span class="va">curvetypes</span> <span class="op">==</span> <span class="st">"PRC"</span><span class="op">]</span></span>
+<span>  <span class="op">)</span> <span class="op">/</span> <span class="va">prevalence</span></span>
+<span><span class="op">}</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>    region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"the whole curve"</span>, <span class="st">"the first tenth of recall"</span><span class="op">)</span>,</span>
+<span>    mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colMeans</a></span><span class="op">(</span><span class="va">noise</span><span class="op">)</span>,</span>
+<span>    median <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">noise</span>, <span class="fl">2</span>, <span class="va">median</span><span class="op">)</span>,</span>
+<span>    over_2x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colMeans</a></span><span class="op">(</span><span class="va">noise</span> <span class="op">&gt;</span> <span class="fl">2</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  row.names <span class="op">=</span> <span class="cn">FALSE</span>, digits <span class="op">=</span> <span class="fl">2</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">region</th>
+<th align="right">mean</th>
+<th align="right">median</th>
+<th align="right">over_2x</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">the whole curve</td>
+<td align="right">1.15</td>
+<td align="right">1.02</td>
+<td align="right">0.04</td>
+</tr>
+<tr class="even">
+<td align="left">the first tenth of recall</td>
+<td align="right">1.86</td>
+<td align="right">0.89</td>
+<td align="right">0.18</td>
+</tr>
+</tbody>
+</table>
+<p>A classifier that knows nothing averages 1.15 times its baseline over
+the whole curve, and 1.86 times over the top of the ranking - where it
+clears twice the baseline about one run in five. The median tells you
+what kind of error this is: at 0.89 it sits <em>below</em> chance, so
+the distribution is skewed rather than shifted. Most draws land near or
+under the baseline and a few land far above it, and any one dataset is
+one draw.</p>
+<p>Two hundred positives brings the first figure to 1.01 and two
+thousand removes it entirely, so what drives this is the number of
+positives rather than the balance. <code><a href="../reference/average_precision.html">average_precision()</a></code>
+shows the same thing, so it is not an artifact of the interpolation
+either. Rare positives cost you twice over: few positives to estimate
+from, and a small baseline with room above it for the tail to run
+into.</p>
+<p>None of this makes the baseline the wrong number - it is the right
+one, and the fall from 0.5 to 0.2 above is real. What it means is that
+dividing an area by its baseline is not a test.</p>
+</div>
+<div class="section level2">
+<h2 id="so-put-an-interval-on-it">So put an interval on it<a class="anchor" aria-label="anchor" href="#so-put-an-interval-on-it"></a>
+</h2>
+<p><code><a href="../reference/auc_boot.html">auc_boot()</a></code> resamples a single test set, and
+<code><a href="../reference/auc_ci.html">auc_ci()</a></code> reads an interval off the resamples. Both now
+report the baseline beside the area, so the comparison is one table
+rather than two.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">57</span><span class="op">)</span></span>
+<span><span class="va">pure_noise</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/auc_boot.html">auc_boot</a></span><span class="op">(</span></span>
+<span>  scores <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">np</span> <span class="op">+</span> <span class="va">nn</span><span class="op">)</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">np</span>, <span class="va">nn</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  boot_n <span class="op">=</span> <span class="fl">500</span>, seed <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="../reference/auc_ci.html">auc_ci</a></span><span class="op">(</span><span class="va">pure_noise</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="st">"curvetypes"</span>, <span class="st">"aucs"</span>, <span class="st">"baselines"</span>, <span class="st">"lower_bound"</span>, <span class="st">"upper_bound"</span></span>
+<span>  <span class="op">)</span><span class="op">]</span>,</span>
+<span>  row.names <span class="op">=</span> <span class="cn">FALSE</span>, digits <span class="op">=</span> <span class="fl">3</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">curvetypes</th>
+<th align="right">aucs</th>
+<th align="right">baselines</th>
+<th align="right">lower_bound</th>
+<th align="right">upper_bound</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">ROC</td>
+<td align="right">0.496</td>
+<td align="right">0.50</td>
+<td align="right">0.329</td>
+<td align="right">0.667</td>
+</tr>
+<tr class="even">
+<td align="left">PRC</td>
+<td align="right">0.036</td>
+<td align="right">0.02</td>
+<td align="right">0.016</td>
+<td align="right">0.087</td>
+</tr>
+</tbody>
+</table>
+<p>The ROC area lands on 0.5, as it should for a classifier built out of
+<code><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm()</a></code>. The precision-recall area is 1.8 times its
+baseline, which read on its own is the sort of number people write down.
+The interval contains the baseline, which is the correct answer.</p>
+<p>The interval is well behaved on this case even at twenty positives:
+over a hundred and twenty runs of the simulation above, the 95%
+bootstrap interval covered the baseline 94% of the time and its lower
+bound cleared the baseline 2.5% of the time, which is what a 95%
+interval is supposed to do. The resampling is stratified, so every
+resample holds the same class balance as the test set and the baseline
+does not move underneath the quantity being estimated.</p>
+<p>With several test sets, <code><a href="../reference/auc_ci.html">auc_ci()</a></code> does the same job from
+the variation between them, and averages the baseline over the same
+datasets it averaged the area over - a fold need not hold the classes in
+the proportions the whole dataset does.</p>
+<p><code><a href="../reference/pauc.html">pauc()</a></code> carries the same two numbers for a restricted
+region, where they are easier still to get wrong: a standardized partial
+ROC area over false positive rates up to 0.2 has a chance level of 0.1,
+not 0.5.</p>
+</div>
+<div class="section level2">
 <h2 id="so-does-the-threshold">So does the threshold<a class="anchor" aria-label="anchor" href="#so-does-the-threshold"></a>
 </h2>
 <p>Everything above is about reading a curve. The last step of most real
@@ -240,7 +496,7 @@ work is picking a point on it, and the criterion that picks it is
 subject to the same problem.</p>
 <p>Twenty-five positives in five hundred, and four of the criteria <a href="howto-operating-point.html">best_cutoff()</a> offers, on the same
 model:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
 <span><span class="va">rare</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_sim_samples.html">create_sim_samples</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">25</span>, <span class="fl">475</span>, <span class="st">"good_er"</span><span class="op">)</span></span>
 <span><span class="va">rdat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mmdata.html">mmdata</a></span><span class="op">(</span><span class="va">rare</span><span class="op">[[</span><span class="st">"scores"</span><span class="op">]</span><span class="op">]</span>, <span class="va">rare</span><span class="op">[[</span><span class="st">"labels"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
@@ -335,6 +591,14 @@ choose it on data the model has not seen.</p>
 Precision-Recall Plot Is More Informative than the ROC Plot When
 Evaluating Binary Classifiers on Imbalanced Datasets</a> - the paper
 behind this package</li>
+<li>
+<a href="https://papers.nips.cc/paper/5867-precision-recall-gain-curves-pr-analysis-done-right" class="external-link">Precision-Recall-Gain
+Curves: PR Analysis Done Right</a>
+<ul>
+<li>Flach &amp; Kull’s case against the precision-recall area, and the
+alternative measured above</li>
+</ul>
+</li>
 <li>
 <a href="https://classeval.wordpress.com/" class="external-link">Classifier evaluation
 with imbalanced datasets</a> - a companion site with practical tips</li>

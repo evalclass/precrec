@@ -13,7 +13,7 @@ metric_curve(), which projects one metric against another."><meta property="og:i
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -181,8 +181,23 @@ so <code>score</code> is the score of the instance at rank <code>k</code> and th
 stands for is <code>score &gt;= that value</code>. The metrics on the row are the
 metrics of that rule.</p>
 <p>The first row is <code>rank = 0</code> - call nothing positive. There is no
-instance at that rank, so <code>score</code> and <code>label</code> are <code>NA</code> while the metrics
-are defined, and it is kept because it is a real operating point.</p>
+instance at that rank, so <code>score</code> and <code>label</code> are <code>NA</code>, and it is kept
+because it is a real operating point.</p>
+<p>The two end rows are missing one cell each. Precision is
+<code>TP / (TP + FP)</code>, so the row that calls nothing positive has no
+denominator for it, and NPV is <code>TN / (TN + FN)</code>, so the row that calls
+everything positive has none for that. Both are <code>NA</code>, together with the
+metrics derived from them - the false discovery rate is <code>1 - precision</code>,
+the false omission rate is <code>1 - NPV</code>, and <code>markedness</code> is
+<code>precision + NPV - 1</code>, so it is missing at both ends. Every other metric
+on those rows is measured.</p>
+<p>The long form <code>as.data.frame(evalmod(mode = "basic"))</code> returns carries a
+value in those cells instead, taken from the neighboring row. That is
+what anchors the precision-recall curve at recall <code>0</code>, and it is the
+right value for a curve - but it is not a measurement of the rule the
+row stands for, and a <code>precision</code> of <code>1</code> beside a <code>sensitivity</code> of <code>0</code>
+reads as a perfect threshold. Plot from the long form; decide from this
+table.</p>
 <p>Tied scores share one value of each metric rather than taking a value
 that depends on the order the ties arrived in. <code>basic_ties</code> of
 <code><a href="evalmod.html">evalmod()</a></code> controls that.</p>
@@ -200,7 +215,12 @@ and that count is a rank. The row returned is that rank's row, so <code>at</code
 is what was asked for and <code>score</code> is the observed cutoff realizing it,
 the smallest score still called positive.</p>
 <p>A threshold above every score gives the <code>rank = 0</code> row, where <code>score</code>
-is <code>NA</code> because nothing is called positive. A score of <code>NA</code> is never a
+is <code>NA</code> because nothing is called positive, and <code>precision</code> is <code>NA</code>
+because a rule that makes no positive predictions has none. One below
+every score gives the <code>rank = n</code> row, with no NPV for the same reason at
+the other end. Neither is an edge case here: a threshold chosen on one
+dataset lands outside the range of another routinely, which is most of
+why it is worth asking what it does there. A score of <code>NA</code> is never a
 positive prediction, matching the <code>na_worst = TRUE</code> default of the rest
 of the package.</p>
 <p>Ranks are per test dataset, so one threshold lands on a different rank
@@ -250,14 +270,14 @@ long form the plots use.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5      m1    1    4            0.20    17     1  0.40     0.60         0.9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6      m1    1    5            0.25    16     1  0.35     0.65         0.9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   sensitivity precision       mcc    fscore balanced_accuracy       npv</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1         0.0 1.0000000        NA 0.0000000              0.50 0.5000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1         0.0        NA        NA 0.0000000              0.50 0.5000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2         0.1 1.0000000 0.2294157 0.1818182              0.55 0.5263158</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3         0.2 1.0000000 0.3333333 0.3333333              0.60 0.5555556</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4         0.2 0.6666667 0.1400280 0.3076923              0.55 0.5294118</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5         0.3 0.7500000 0.2500000 0.4285714              0.60 0.5625000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6         0.4 0.8000000 0.3464102 0.5333333              0.65 0.6000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   informedness markedness kappa</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1          0.0  0.5000000   0.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          0.0         NA   0.0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2          0.1  0.5263158   0.1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3          0.2  0.5555556   0.2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4          0.1  0.1960784   0.1</span>
@@ -280,7 +300,7 @@ long form the plots use.</p></div>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">lifted</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rank"</span>, <span class="st">"score"</span>, <span class="st">"precision"</span>, <span class="st">"lift"</span>, <span class="st">"jaccard"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   rank score precision     lift   jaccard</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    0    NA 1.0000000       NA 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    0    NA        NA       NA 0.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2    1    20 1.0000000 2.000000 0.1000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3    2    19 1.0000000 2.000000 0.2000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4    3    18 0.6666667 1.333333 0.1818182</span>
@@ -320,14 +340,14 @@ long form the plots use.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5      m1    1    4            0.20    17     1  0.40     0.60         0.9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6      m1    1    5            0.25    16     1  0.35     0.65         0.9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   sensitivity precision       mcc    fscore balanced_accuracy       npv</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1         0.0 1.0000000        NA 0.0000000              0.50 0.5000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1         0.0        NA        NA 0.0000000              0.50 0.5000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2         0.1 1.0000000 0.2294157 0.1818182              0.55 0.5263158</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3         0.2 1.0000000 0.3333333 0.3333333              0.60 0.5555556</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4         0.2 0.6666667 0.1400280 0.3076923              0.55 0.5294118</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5         0.3 0.7500000 0.2500000 0.4285714              0.60 0.5625000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6         0.4 0.8000000 0.3464102 0.5333333              0.65 0.6000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   informedness markedness kappa</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1          0.0  0.5000000   0.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          0.0         NA   0.0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2          0.1  0.5263158   0.1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3          0.2  0.5555556   0.2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4          0.1  0.1960784   0.1</span>

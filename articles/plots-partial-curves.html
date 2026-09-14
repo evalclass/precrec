@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -171,12 +171,23 @@ once.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="../reference/pauc.html">pauc</a></span><span class="op">(</span><span class="va">partial</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
+<colgroup>
+<col width="13%">
+<col width="8%">
+<col width="16%">
+<col width="14%">
+<col width="14%">
+<col width="14%">
+<col width="16%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">modnames</th>
 <th align="right">dsids</th>
 <th align="left">curvetypes</th>
 <th align="right">paucs</th>
+<th align="right">baselines</th>
 <th align="right">spaucs</th>
+<th align="right">sbaselines</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -184,14 +195,18 @@ once.</p>
 <td align="right">1</td>
 <td align="left">ROC</td>
 <td align="right">0.1006250</td>
+<td align="right">0.03125</td>
 <td align="right">0.4025000</td>
+<td align="right">0.125</td>
 </tr>
 <tr class="even">
 <td align="left">m1</td>
 <td align="right">1</td>
 <td align="left">PRC</td>
 <td align="right">0.2345849</td>
+<td align="right">0.12500</td>
 <td align="right">0.9383396</td>
+<td align="right">0.500</td>
 </tr>
 </tbody>
 </table>
@@ -218,12 +233,23 @@ the comparison carries over.</p>
 <span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="../reference/pauc.html">pauc</a></span><span class="op">(</span><span class="va">mpartial</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
+<colgroup>
+<col width="13%">
+<col width="8%">
+<col width="16%">
+<col width="14%">
+<col width="14%">
+<col width="14%">
+<col width="16%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">modnames</th>
 <th align="right">dsids</th>
 <th align="left">curvetypes</th>
 <th align="right">paucs</th>
+<th align="right">baselines</th>
 <th align="right">spaucs</th>
+<th align="right">sbaselines</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -231,70 +257,90 @@ the comparison carries over.</p>
 <td align="right">1</td>
 <td align="left">ROC</td>
 <td align="right">0.0277000</td>
+<td align="right">0.03125</td>
 <td align="right">0.1108000</td>
+<td align="right">0.125</td>
 </tr>
 <tr class="even">
 <td align="left">random</td>
 <td align="right">1</td>
 <td align="left">PRC</td>
 <td align="right">0.1257566</td>
+<td align="right">0.12500</td>
 <td align="right">0.5030262</td>
+<td align="right">0.500</td>
 </tr>
 <tr class="odd">
 <td align="left">poor_er</td>
 <td align="right">1</td>
 <td align="left">ROC</td>
 <td align="right">0.1208000</td>
+<td align="right">0.03125</td>
 <td align="right">0.4832000</td>
+<td align="right">0.125</td>
 </tr>
 <tr class="even">
 <td align="left">poor_er</td>
 <td align="right">1</td>
 <td align="left">PRC</td>
 <td align="right">0.2091682</td>
+<td align="right">0.12500</td>
 <td align="right">0.8366726</td>
+<td align="right">0.500</td>
 </tr>
 <tr class="odd">
 <td align="left">good_er</td>
 <td align="right">1</td>
 <td align="left">ROC</td>
 <td align="right">0.1511000</td>
+<td align="right">0.03125</td>
 <td align="right">0.6044000</td>
+<td align="right">0.125</td>
 </tr>
 <tr class="even">
 <td align="left">good_er</td>
 <td align="right">1</td>
 <td align="left">PRC</td>
 <td align="right">0.2500000</td>
+<td align="right">0.12500</td>
 <td align="right">1.0000000</td>
+<td align="right">0.500</td>
 </tr>
 <tr class="odd">
 <td align="left">excel</td>
 <td align="right">1</td>
 <td align="left">ROC</td>
 <td align="right">0.2284000</td>
+<td align="right">0.03125</td>
 <td align="right">0.9136000</td>
+<td align="right">0.125</td>
 </tr>
 <tr class="even">
 <td align="left">excel</td>
 <td align="right">1</td>
 <td align="left">PRC</td>
 <td align="right">0.2500000</td>
+<td align="right">0.12500</td>
 <td align="right">1.0000000</td>
+<td align="right">0.500</td>
 </tr>
 <tr class="odd">
 <td align="left">perf</td>
 <td align="right">1</td>
 <td align="left">ROC</td>
 <td align="right">0.2500000</td>
+<td align="right">0.03125</td>
 <td align="right">1.0000000</td>
+<td align="right">0.125</td>
 </tr>
 <tr class="even">
 <td align="left">perf</td>
 <td align="right">1</td>
 <td align="left">PRC</td>
 <td align="right">0.2500000</td>
+<td align="right">0.12500</td>
 <td align="right">1.0000000</td>
+<td align="right">0.500</td>
 </tr>
 </tbody>
 </table>

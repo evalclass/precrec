@@ -1,5 +1,160 @@
 # Changelog
 
+## precrec 0.23.2
+
+- [`metric_table()`](https://evalclass.github.io/precrec/reference/metric_table.md)
+  reported a precision on the row that calls nothing positive and an NPV
+  on the row that calls everything positive. Neither has a denominator -
+  precision is `TP / (TP + FP)` and NPV is `TN / (TN + FN)` - and both
+  were filled in from the neighboring row, so they followed the
+  top-ranked or bottom-ranked instance, which is an instance the rule
+  does not predict. A threshold above every score reported
+  `precision = 1` beside `sensitivity = 0`, and `0` instead if the
+  top-ranked instance happened to be a negative.
+
+  Both are now `NA`, with the metrics derived from them: the false
+  discovery rate, the false omission rate, and `markedness` at both
+  ends. `mcc`, `lift`, `odds`, `chisq` and the positive likelihood ratio
+  already reported `NA` on the same rows.
+
+  This matters most for `metric_table(at = )`, whose purpose is scoring
+  a threshold chosen somewhere else: a threshold transferred between
+  datasets lands outside the score range routinely.
+
+  The long form `as.data.frame(evalmod(mode = "basic"))` returns is
+  unchanged, and so are the curves. The inherited precision is what
+  anchors the precision-recall curve at recall `0`, and it is the right
+  value there
+
+  - [`auc()`](https://evalclass.github.io/precrec/reference/auc.md),
+    [`average_precision()`](https://evalclass.github.io/precrec/reference/average_precision.md)
+    and
+    [`prbe()`](https://evalclass.github.io/precrec/reference/prbe.md)
+    are unaffected, which the tests now assert.
+
+- [`best_cutoff()`](https://evalclass.github.io/precrec/reference/best_cutoff.md)
+  could return the rank `0` row of
+  [`metric_table()`](https://evalclass.github.io/precrec/reference/metric_table.md),
+  the rule that calls nothing positive. There is no threshold that
+  predicts nothing, so that row’s `score` is `NA` and it is not an
+  operating point, which is what the function exists to name. It is no
+  longer a candidate.
+
+  It won outright wherever the empty rule is optimal - `specificity`
+  always, and `accuracy`, `error` and an unweighted `cost` once
+  positives are rare, which at 2% positives was 11 runs in 20 - and it
+  won on the tie-break wherever it merely tied. That last case was not
+  an imbalance problem at all: precision at rank `0` is the limit from
+  above, so it is `1` whenever the top-ranked instance is a positive,
+  and any classifier good enough to rank one first came back with no
+  threshold.
+
+- *Choose an operating point* gains the `accuracy` trap beside the
+  `sensitivity` and `specificity` ones it already covered. On twenty
+  positives in four hundred, predicting nothing is 0.95 accurate and the
+  accuracy-optimal cutoff reaches 0.955 by finding two of the twenty;
+  `mcc` finds eleven.
+
+- [`prbe()`](https://evalclass.github.io/precrec/reference/prbe.md)
+  reported a break-even point of `0` whenever the top-ranked instance
+  was a negative. A precision-recall curve is anchored at recall `0`,
+  where precision is `0` in that case, so precision and recall were
+  trivially equal at the origin and the crossing search counted it -
+  though nothing has been retrieved there. At a low proportion of
+  positives the top-ranked instance is nearly always a negative: of 150
+  random rankings of a dataset with 20 positives in 1000, 148 had a
+  negative on top and all 148 got the spurious row. It sat in front of
+  the real break-even point, so taking the first row of the result
+  returned `0` instead of the answer.
+
+  A curve that leaves the origin below the diagonal and never catches up
+  now gets the single `NA` row the help page has always promised for a
+  curve that never reaches equal precision and recall.
+
+- [`prbe()`](https://evalclass.github.io/precrec/reference/prbe.md)
+  gained a `baselines` column, the proportion of positives. At chance
+  the curve is flat at the prevalence, so it meets the diagonal at that
+  recall - a break-even point of `0.2` is chance on data that is 20%
+  positive and five times chance on data that is 4% positive.
+
+- Every table that reports an area now reports what that area is worth
+  by chance beside it.
+  [`pauc()`](https://evalclass.github.io/precrec/reference/pauc.md)
+  gained `baselines` and `sbaselines`, one for each of the two scales it
+  standardizes on, and
+  [`auc_ci()`](https://evalclass.github.io/precrec/reference/auc_ci.md),
+  [`auc_boot()`](https://evalclass.github.io/precrec/reference/auc_boot.md)
+  and
+  [`auc_delong()`](https://evalclass.github.io/precrec/reference/auc_delong.md)
+  gained `baselines`. A partial area is where the chance level is
+  easiest to get wrong: over false positive rates `[x1, x2]` a coin flip
+  covers `(x2^2 - x1^2) / 2`, so a *standardized* partial ROC area up to
+  `0.2` has a chance level of `0.1` and not the `0.5` a standardized
+  number invites. Both are `NA` for a `ylim` other than `c(0, 1)`, which
+  is the case `cpaucs` already declines.
+
+- *Balanced and imbalanced data* gains a section on the fact that a
+  baseline is an asymptote. The prevalence is what a precision-recall
+  area is worth by chance in the limit; an area measured on a finite
+  sample scatters around it, and with twenty positives a classifier with
+  no signal averages 1.15 times its baseline over the whole curve and
+  1.86 times over the first tenth of recall, where it clears twice the
+  baseline about one run in five. The median sits below chance, so the
+  error is a skewed distribution rather than a shifted one. Dividing an
+  area by its baseline is not a test;
+  [`auc_boot()`](https://evalclass.github.io/precrec/reference/auc_boot.md)
+  is, and it is well calibrated on the same case.
+  [`?auc`](https://evalclass.github.io/precrec/reference/auc.md) and
+  [`?pauc`](https://evalclass.github.io/precrec/reference/pauc.md) say
+  so too.
+
+- [`pauc()`](https://evalclass.github.io/precrec/reference/pauc.md)
+  gained a `corrected` argument, which adds a `cpaucs` column: the
+  McClish correction of the ROC partial area, which rescales the span
+  between chance and perfect onto `0.5` to `1` so that a partial area
+  reads on the same scale as a full one. It is what
+  `pROC::auc(..., partial.auc.correct = TRUE)` reports, to the last
+  digit.
+
+  Both this and the `spaucs` the package has always reported are called
+  “the standardized partial AUC”, and they are not the same number:
+  `spaucs` is the area over the area of the region, the fraction of what
+  was available that the curve covered. A value moved between two tools
+  looked like a disagreement when it was a choice of convention, and
+  only one of the two conventions could be had here.
+
+  The chance area is taken over the region actually asked for. The
+  formula usually quoted, and the one *Coming from pROC or ROCR*
+  published for readers to apply by hand, is the special case of a
+  region starting at a false positive rate of `0`; it is wrong for a
+  region such as `xlim = c(0.1, 0.3)`, which is exactly where someone
+  would reach for it.
+
+  `cpaucs` is `NA` on the precision-recall rows and whenever
+  [`part()`](https://evalclass.github.io/precrec/reference/part.md) was
+  given a `ylim`, both documented in
+  [`?pauc`](https://evalclass.github.io/precrec/reference/pauc.md). Off
+  by default, so nothing that reads
+  [`pauc()`](https://evalclass.github.io/precrec/reference/pauc.md)
+  today changes.
+
+- The help page of
+  [`pauc()`](https://evalclass.github.io/precrec/reference/pauc.md)
+  opened by naming
+  [`auc()`](https://evalclass.github.io/precrec/reference/auc.md) as the
+  function it documents, a line copied from
+  [`auc()`](https://evalclass.github.io/precrec/reference/auc.md) and
+  never corrected.
+
+- *Balanced and imbalanced data* gains a section on why the baseline is
+  reported beside the area rather than folded into it.
+  Precision-Recall-Gain (Flach & Kull 2015) is the published way of
+  folding it in, and on a classifier held fixed while only the
+  prevalence moves, its area climbs from 0.639 to 0.941 - three tenths
+  of its range, in the opposite direction to the precision-recall area,
+  which falls. Normalizing by the baseline does not remove the
+  dependence on prevalence, it reverses it.
+
 ## precrec 0.23.1
 
 - [`auc()`](https://evalclass.github.io/precrec/reference/auc.md) and

@@ -90,6 +90,222 @@ is the classifier doing worse and how much is the class balance moving
 underneath it is not a question the area answers on its own, which is
 why the two numbers belong together.
 
+## Why not fold the baseline in?
+
+If the area has to be read against its baseline, the obvious thought is
+to build the baseline into the area and be done with it. On the ROC side
+there is such a thing - the McClish correction,
+`pauc(corrected = TRUE)`, which rescales a partial area between chance
+and perfect.
+
+For the precision-recall curve the published proposal is
+Precision-Recall-Gain (Flach & Kull 2015). It rescales both axes against
+the baseline `pi`,
+
+    precG = 1 - (pi / (1 - pi)) * ((1 - prec) / prec)
+    recG  = 1 - (pi / (1 - pi)) * ((1 - rec)  / rec)
+
+so that chance sits at `0` and perfect at `1` whatever the class
+balance, and the area under the resulting curve (AUPRG) is one number
+with the baseline already in it. The argument behind it is a serious
+one, and it depends on the curve being interpolated correctly, which is
+this package’s whole business.
+
+It does not do what someone reaching for it wants. Here the same 200
+positives appear in every row and negatives are added underneath them,
+so the classifier and the positive sample never change - only the
+prevalence does.
+
+``` r
+
+gain <- function(v, pi) 1 - (pi / (1 - pi)) * ((1 - v) / v)
+
+auprg <- function(scores, labels) {
+  pi <- mean(labels == 1)
+  d <- as.data.frame(evalmod(scores = scores, labels = labels))
+  prc <- d[d$type == "PRC", ]
+  rg <- gain(prc$x, pi)
+  pg <- gain(prc$y, pi)
+  ok <- is.finite(rg) & is.finite(pg)
+  # Integrate precG over recG from 0 to 1
+  grid <- sort(unique(c(0, 1, rg[ok][rg[ok] > 0 & rg[ok] < 1])))
+  v <- approx(rg[ok], pg[ok], xout = grid, rule = 2, ties = "ordered")$y
+  sum(diff(grid) * (head(v, -1) + tail(v, -1)) / 2)
+}
+
+set.seed(11)
+pos <- rnorm(200, 1.2)
+negpool <- rnorm(9800, 0)
+
+row_at <- function(nn) {
+  scores <- c(pos, negpool[seq_len(nn)])
+  labels <- rep(c(1, 0), c(200, nn))
+  areas <- auc(evalmod(scores = scores, labels = labels))
+
+  data.frame(
+    positives = sprintf("%.0f%%", 100 * 200 / (200 + nn)),
+    roc = areas$aucs[areas$curvetypes == "ROC"],
+    prc = areas$aucs[areas$curvetypes == "PRC"],
+    prc_baseline = areas$baselines[areas$curvetypes == "PRC"],
+    auprg = auprg(scores, labels)
+  )
+}
+
+knitr::kable(
+  do.call(rbind, lapply(c(200, 1800, 9800), row_at)),
+  row.names = FALSE, digits = 3
+)
+```
+
+| positives |   roc |   prc | prc_baseline | auprg |
+|:----------|------:|------:|-------------:|------:|
+| 50%       | 0.815 | 0.810 |         0.50 | 0.639 |
+| 10%       | 0.807 | 0.351 |         0.10 | 0.850 |
+| 2%        | 0.805 | 0.113 |         0.02 | 0.941 |
+
+On the AUPRG scale a coin flip scores `0` and a perfect ranking `1`, so
+`0.639` and `0.941` are far apart on it. The ROC area holds within 0.01,
+as it should. The precision-recall area falls, which is the whole point
+of the page. And AUPRG **rises** - three tenths of its range, in the
+opposite direction, on a classifier that did not change.
+
+That is the thing to notice. Folding the baseline in did not remove the
+dependence on prevalence; it reversed it. A number that says a
+classifier got better because its positives got rarer is not more
+comparable across datasets than the one it replaced - it is incomparable
+in a direction that happens to flatter the hard case. The `baselines`
+column is less clever and harder to misread.
+
+So `precrec` reports the area and the baseline as two numbers and leaves
+them that way, and there is no `auprg()` here. The few lines above are
+all it takes if you want it for a curve you have already computed, and
+Flach & Kull’s own argument for it - that the precision-recall area is a
+poorly founded summary quite apart from any question of class balance -
+is worth reading on its own terms.
+
+## The baseline is an asymptote
+
+The prevalence is what the area is worth by chance *in the limit*. An
+area measured on a finite sample scatters around its chance level rather
+than sitting on it, and how widely depends on the number of positives -
+which is what imbalance takes away.
+
+Here is a classifier with no signal whatever, scored four hundred times
+on fresh random labels. Twenty positives in a thousand, the same 2% as
+above. The column is the area divided by the baseline
+[`auc()`](https://evalclass.github.io/precrec/reference/auc.md) reports
+for it, so chance is 1.
+
+``` r
+
+np <- 20
+nn <- 980
+prevalence <- np / (np + nn)
+
+noise <- t(sapply(seq_len(400), function(i) {
+  set.seed(i)
+  curves <- evalmod(
+    scores = rnorm(np + nn), labels = rep(c(1, 0), c(np, nn))
+  )
+  areas <- auc(curves)
+  top <- pauc(part(curves, xlim = c(0, 0.1)))
+
+  c(
+    whole = areas$aucs[areas$curvetypes == "PRC"],
+    top = top$spaucs[top$curvetypes == "PRC"]
+  ) / prevalence
+}))
+
+knitr::kable(
+  data.frame(
+    region = c("the whole curve", "the first tenth of recall"),
+    mean = colMeans(noise),
+    median = apply(noise, 2, median),
+    over_2x = colMeans(noise > 2)
+  ),
+  row.names = FALSE, digits = 2
+)
+```
+
+| region                    | mean | median | over_2x |
+|:--------------------------|-----:|-------:|--------:|
+| the whole curve           | 1.15 |   1.02 |    0.04 |
+| the first tenth of recall | 1.86 |   0.89 |    0.18 |
+
+A classifier that knows nothing averages 1.15 times its baseline over
+the whole curve, and 1.86 times over the top of the ranking - where it
+clears twice the baseline about one run in five. The median tells you
+what kind of error this is: at 0.89 it sits *below* chance, so the
+distribution is skewed rather than shifted. Most draws land near or
+under the baseline and a few land far above it, and any one dataset is
+one draw.
+
+Two hundred positives brings the first figure to 1.01 and two thousand
+removes it entirely, so what drives this is the number of positives
+rather than the balance.
+[`average_precision()`](https://evalclass.github.io/precrec/reference/average_precision.md)
+shows the same thing, so it is not an artifact of the interpolation
+either. Rare positives cost you twice over: few positives to estimate
+from, and a small baseline with room above it for the tail to run into.
+
+None of this makes the baseline the wrong number - it is the right one,
+and the fall from 0.5 to 0.2 above is real. What it means is that
+dividing an area by its baseline is not a test.
+
+## So put an interval on it
+
+[`auc_boot()`](https://evalclass.github.io/precrec/reference/auc_boot.md)
+resamples a single test set, and
+[`auc_ci()`](https://evalclass.github.io/precrec/reference/auc_ci.md)
+reads an interval off the resamples. Both now report the baseline beside
+the area, so the comparison is one table rather than two.
+
+``` r
+
+set.seed(57)
+pure_noise <- auc_boot(
+  scores = rnorm(np + nn), labels = rep(c(1, 0), c(np, nn)),
+  boot_n = 500, seed = 1
+)
+
+knitr::kable(
+  auc_ci(pure_noise)[, c(
+    "curvetypes", "aucs", "baselines", "lower_bound", "upper_bound"
+  )],
+  row.names = FALSE, digits = 3
+)
+```
+
+| curvetypes |  aucs | baselines | lower_bound | upper_bound |
+|:-----------|------:|----------:|------------:|------------:|
+| ROC        | 0.496 |      0.50 |       0.329 |       0.667 |
+| PRC        | 0.036 |      0.02 |       0.016 |       0.087 |
+
+The ROC area lands on 0.5, as it should for a classifier built out of
+[`rnorm()`](https://rdrr.io/r/stats/Normal.html). The precision-recall
+area is 1.8 times its baseline, which read on its own is the sort of
+number people write down. The interval contains the baseline, which is
+the correct answer.
+
+The interval is well behaved on this case even at twenty positives: over
+a hundred and twenty runs of the simulation above, the 95% bootstrap
+interval covered the baseline 94% of the time and its lower bound
+cleared the baseline 2.5% of the time, which is what a 95% interval is
+supposed to do. The resampling is stratified, so every resample holds
+the same class balance as the test set and the baseline does not move
+underneath the quantity being estimated.
+
+With several test sets,
+[`auc_ci()`](https://evalclass.github.io/precrec/reference/auc_ci.md)
+does the same job from the variation between them, and averages the
+baseline over the same datasets it averaged the area over - a fold need
+not hold the classes in the proportions the whole dataset does.
+
+[`pauc()`](https://evalclass.github.io/precrec/reference/pauc.md)
+carries the same two numbers for a restricted region, where they are
+easier still to get wrong: a standardized partial ROC area over false
+positive rates up to 0.2 has a chance level of 0.1, not 0.5.
+
 ## So does the threshold
 
 Everything above is about reading a curve. The last step of most real
@@ -155,6 +371,10 @@ it on data the model has not seen.
   Evaluating Binary Classifiers on Imbalanced
   Datasets](https://doi.org/10.1371/journal.pone.0118432) - the paper
   behind this package
+- [Precision-Recall-Gain Curves: PR Analysis Done
+  Right](https://papers.nips.cc/paper/5867-precision-recall-gain-curves-pr-analysis-done-right)
+  - Flach & Kull’s case against the precision-recall area, and the
+    alternative measured above
 - [Classifier evaluation with imbalanced
   datasets](https://classeval.wordpress.com/) - a companion site with
   practical tips

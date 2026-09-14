@@ -58,9 +58,14 @@ auc_boot(mdat, scores = NULL, labels = NULL, boot_n = 1000, seed = NULL, ...)
 ## Value
 
 An object of class `aucboot`: a data frame of one row per model, curve
-type and resample, with the columns `modnames`, `curvetypes`, `boot_id`
-and `aucs`. The AUCs of the original data are attached as the `observed`
-attribute.
+type and resample, with the columns `modnames`, `curvetypes`, `boot_id`,
+`aucs` and `baselines`. The AUCs of the original data are attached as
+the `observed` attribute, with a `baselines` column of their own.
+
+`baselines` is the same on every resample, because the resampling is
+stratified and so holds the class balance fixed - see below. It is
+carried on the resamples anyway so that an area and what it is worth by
+chance never have to be joined back together by hand.
 
 ## Details
 

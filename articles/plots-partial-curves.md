@@ -49,10 +49,10 @@ returns the area over the restricted range.
 knitr::kable(pauc(partial))
 ```
 
-| modnames | dsids | curvetypes |     paucs |    spaucs |
-|:---------|------:|:-----------|----------:|----------:|
-| m1       |     1 | ROC        | 0.1006250 | 0.4025000 |
-| m1       |     1 | PRC        | 0.2345849 | 0.9383396 |
+| modnames | dsids | curvetypes |     paucs | baselines |    spaucs | sbaselines |
+|:---------|------:|:-----------|----------:|----------:|----------:|-----------:|
+| m1       |     1 | ROC        | 0.1006250 |   0.03125 | 0.4025000 |      0.125 |
+| m1       |     1 | PRC        | 0.2345849 |   0.12500 | 0.9383396 |      0.500 |
 
 `paucs` is the raw area, which is small simply because the range is
 narrow. `spaucs` is the standardized version, rescaled to 0 to 1 so that
@@ -82,18 +82,18 @@ mpartial <- part(evalmod(mdat), xlim = c(0, 0.25))
 knitr::kable(pauc(mpartial))
 ```
 
-| modnames | dsids | curvetypes |     paucs |    spaucs |
-|:---------|------:|:-----------|----------:|----------:|
-| random   |     1 | ROC        | 0.0277000 | 0.1108000 |
-| random   |     1 | PRC        | 0.1257566 | 0.5030262 |
-| poor_er  |     1 | ROC        | 0.1208000 | 0.4832000 |
-| poor_er  |     1 | PRC        | 0.2091682 | 0.8366726 |
-| good_er  |     1 | ROC        | 0.1511000 | 0.6044000 |
-| good_er  |     1 | PRC        | 0.2500000 | 1.0000000 |
-| excel    |     1 | ROC        | 0.2284000 | 0.9136000 |
-| excel    |     1 | PRC        | 0.2500000 | 1.0000000 |
-| perf     |     1 | ROC        | 0.2500000 | 1.0000000 |
-| perf     |     1 | PRC        | 0.2500000 | 1.0000000 |
+| modnames | dsids | curvetypes |     paucs | baselines |    spaucs | sbaselines |
+|:---------|------:|:-----------|----------:|----------:|----------:|-----------:|
+| random   |     1 | ROC        | 0.0277000 |   0.03125 | 0.1108000 |      0.125 |
+| random   |     1 | PRC        | 0.1257566 |   0.12500 | 0.5030262 |      0.500 |
+| poor_er  |     1 | ROC        | 0.1208000 |   0.03125 | 0.4832000 |      0.125 |
+| poor_er  |     1 | PRC        | 0.2091682 |   0.12500 | 0.8366726 |      0.500 |
+| good_er  |     1 | ROC        | 0.1511000 |   0.03125 | 0.6044000 |      0.125 |
+| good_er  |     1 | PRC        | 0.2500000 |   0.12500 | 1.0000000 |      0.500 |
+| excel    |     1 | ROC        | 0.2284000 |   0.03125 | 0.9136000 |      0.125 |
+| excel    |     1 | PRC        | 0.2500000 |   0.12500 | 1.0000000 |      0.500 |
+| perf     |     1 | ROC        | 0.2500000 |   0.03125 | 1.0000000 |      0.125 |
+| perf     |     1 | PRC        | 0.2500000 |   0.12500 | 1.0000000 |      0.500 |
 
 ## Next
 

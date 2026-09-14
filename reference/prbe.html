@@ -13,7 +13,7 @@ break-even point."><meta property="og:image" content="https://evalclass.github.i
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -128,11 +128,25 @@ break-even point.</p>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>The <code>prbe</code> function returns a data frame with the columns
-<code>modnames</code>, <code>dsids</code> and <code>prbe</code>. <code>prbe</code> is the common
+<code>modnames</code>, <code>dsids</code>, <code>prbe</code> and <code>baselines</code>. <code>prbe</code> is the common
 value of precision and recall at the break-even point.</p>
 <p>A curve can cross the diagonal more than once, and then the data frame
 holds one row per crossing, ordered by recall. A curve that never
-reaches equal precision and recall gets a single row of <code>NA</code>.</p>
+reaches equal precision and recall gets a single row of <code>NA</code>, which at
+a low proportion of positives is a common and correct answer: such a
+curve can leave the origin below the diagonal and never catch up.</p>
+<p><code>baselines</code> is the proportion of positives, which is where a classifier
+that ranks at random breaks even - at chance the curve is flat at the
+prevalence, so it meets the diagonal at that recall. A break-even point
+of <code>0.2</code> is chance on data that is 20% positive and five times chance
+on data that is 4% positive. See <code>Reading an area against its baseline</code>
+in <code><a href="auc.html">auc()</a></code>.</p>
+<p>The origin is not reported as a break-even point. A curve is anchored
+at recall <code>0</code>, where precision is <code>1</code> if the top-ranked instance is a
+positive and <code>0</code> if it is a negative; in the second case precision and
+recall are equal there, but nothing has been retrieved and the equality
+is an artifact of where the curve starts rather than a point at which
+the classifier balances the two.</p>
     </div>
     <div class="section level2">
     <h2 id="how-this-differs-from-rocr">How this differs from ROCR<a class="anchor" aria-label="anchor" href="#how-this-differs-from-rocr"></a></h2>
@@ -162,6 +176,9 @@ evaluation metrics. <code><a href="auc.html">auc()</a></code> for the areas unde
 <span class="r-in"><span><span class="va">samps</span> <span class="op">&lt;-</span> <span class="fu"><a href="create_sim_samples.html">create_sim_samples</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">50</span>, <span class="fl">50</span>, <span class="st">"good_er"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">sscurves</span> <span class="op">&lt;-</span> <span class="fu"><a href="evalmod.html">evalmod</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">samps</span><span class="op">[[</span><span class="st">"scores"</span><span class="op">]</span><span class="op">]</span>, labels <span class="op">=</span> <span class="va">samps</span><span class="op">[[</span><span class="st">"labels"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">prbe</span><span class="op">(</span><span class="va">sscurves</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   modnames dsids prbe baselines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       m1     1  0.7       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       m1     1  0.7       0.5</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">##################################################</span></span></span>
 <span class="r-in"><span><span class="co">### Multiple models &amp; multiple test datasets</span></span></span>
@@ -172,6 +189,11 @@ evaluation metrics. <code><a href="auc.html">auc()</a></code> for the areas unde
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">mmcurves</span> <span class="op">&lt;-</span> <span class="fu"><a href="evalmod.html">evalmod</a></span><span class="op">(</span><span class="va">mmdat</span>, raw_curves <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">prbe</span><span class="op">(</span><span class="va">mmcurves</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   modnames dsids prbe baselines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  poor_er     1 0.76       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  good_er     1 0.74       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  poor_er     2 0.74       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  good_er     2 0.68       0.5</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

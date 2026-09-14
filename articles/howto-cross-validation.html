@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -247,20 +247,22 @@ want the lists for something else.</p>
 folds.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="../reference/auc_ci.html">auc_ci</a></span><span class="op">(</span><span class="va">curves</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<table style="width:100%;" class="table">
+<table class="table">
 <colgroup>
-<col width="13%">
-<col width="16%">
+<col width="11%">
 <col width="14%">
-<col width="14%">
-<col width="17%">
-<col width="17%">
-<col width="4%">
+<col width="12%">
+<col width="12%">
+<col width="12%">
+<col width="15%">
+<col width="15%">
+<col width="3%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">modnames</th>
 <th align="left">curvetypes</th>
 <th align="right">mean</th>
+<th align="right">baselines</th>
 <th align="right">error</th>
 <th align="right">lower_bound</th>
 <th align="right">upper_bound</th>
@@ -271,6 +273,7 @@ folds.</p>
 <td align="left">m1</td>
 <td align="left">ROC</td>
 <td align="right">0.5696667</td>
+<td align="right">0.5</td>
 <td align="right">0.2810846</td>
 <td align="right">0.2885820</td>
 <td align="right">0.8507513</td>
@@ -280,6 +283,7 @@ folds.</p>
 <td align="left">m1</td>
 <td align="left">PRC</td>
 <td align="right">0.6410081</td>
+<td align="right">0.5</td>
 <td align="right">0.2105395</td>
 <td align="right">0.4304686</td>
 <td align="right">0.8515476</td>
@@ -289,6 +293,7 @@ folds.</p>
 <td align="left">m2</td>
 <td align="left">ROC</td>
 <td align="right">0.6280000</td>
+<td align="right">0.5</td>
 <td align="right">0.1870468</td>
 <td align="right">0.4409532</td>
 <td align="right">0.8150468</td>
@@ -298,6 +303,7 @@ folds.</p>
 <td align="left">m2</td>
 <td align="left">PRC</td>
 <td align="right">0.6529690</td>
+<td align="right">0.5</td>
 <td align="right">0.1998983</td>
 <td align="right">0.4530706</td>
 <td align="right">0.8528673</td>

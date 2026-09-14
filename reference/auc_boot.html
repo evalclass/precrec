@@ -13,7 +13,7 @@ intervals and auc_diff() into comparisons between models."><meta property="og:im
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -157,8 +157,13 @@ seeded call does not disturb the stream the caller is drawing from.
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>An object of class <code>aucboot</code>: a data frame of one row per model,
 curve type and resample, with the columns <code>modnames</code>, <code>curvetypes</code>,
-<code>boot_id</code> and <code>aucs</code>. The AUCs of the original data are attached as the
-<code>observed</code> attribute.</p>
+<code>boot_id</code>, <code>aucs</code> and <code>baselines</code>. The AUCs of the original data are
+attached as the <code>observed</code> attribute, with a <code>baselines</code> column of
+their own.</p>
+<p><code>baselines</code> is the same on every resample, because the resampling is
+stratified and so holds the class balance fixed - see below. It is
+carried on the resamples anyway so that an area and what it is worth
+by chance never have to be joined back together by hand.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>

@@ -71,7 +71,7 @@ in a variable: everything else on this page reads one of them.
 | `coords(r, "all")` | `metric_table(mdat)` | Same rows, many more columns |
 | `coords(r, t, input = "threshold")` | `classification_report(mdat, at = t)` |  |
 | `auc(r, partial.auc = c(1, 0.8), partial.auc.focus = "sp")` | `pauc(part(curves, xlim = c(0, 0.2)))` | Identical, in the `paucs` column |
-| `partial.auc.correct = TRUE` | The `spaucs` column | Both standardize; not the same way - see below |
+| `partial.auc.correct = TRUE` | `pauc(..., corrected = TRUE)`, the `cpaucs` column | Identical; the `spaucs` column standardizes differently - see below |
 | `plot(r)` | `autoplot(curves, "ROC")` | See the axis note below |
 | `multiclass.roc(labels, scores)` | [`evalmod()`](https://evalclass.github.io/precrec/reference/evalmod.md) on more than two classes | [One-vs-rest](https://evalclass.github.io/precrec/articles/howto-multiclass.md) |
 | `levels =`, `direction =` | `posclass =` |  |
@@ -137,7 +137,7 @@ tab <- metric_table(mdat)
 
 head(tab[, c("rank", "score", "accuracy", "mcc", "precision", "sensitivity")])
 #>   rank    score accuracy       mcc precision sensitivity
-#> 1    0       NA    0.700        NA         1  0.00000000
+#> 1    0       NA    0.700        NA        NA  0.00000000
 #> 2    1 3.816752    0.705 0.1082834         1  0.01666667
 #> 3    2 3.387247    0.710 0.1535221         1  0.03333333
 #> 4    3 3.381452    0.715 0.1885020         1  0.05000000
@@ -263,39 +263,54 @@ The difference is where chance sits. Over false positive rates up to
 `0.2`, a coin flip covers an area of `0.02`: that is `0.1` of the box,
 and `0.5` after the correction.
 
+`corrected = TRUE` adds the second one as `cpaucs`.
+
 ``` r
 
-region <- 0.2 # false positive rates 0 to 0.2
-areas <- pauc(part(curves, xlim = c(0, region)))
-roc_row <- areas[areas$curvetypes == "ROC", ]
+areas <- pauc(part(curves, xlim = c(0, 0.2)), corrected = TRUE)
 
-chance <- region^2 / 2
+knitr::kable(subset(areas, curvetypes == "ROC"), row.names = FALSE, digits = 5)
+```
+
+| modnames | dsids | curvetypes |   paucs | baselines |  spaucs | sbaselines |  cpaucs |
+|:---------|------:|:-----------|--------:|----------:|--------:|-----------:|--------:|
+| m1       |     1 | ROC        | 0.09774 |      0.02 | 0.48869 |        0.1 | 0.71594 |
+
+`paucs` is the number `pROC` gives uncorrected and `cpaucs` the number
+it gives with `partial.auc.correct = TRUE`, both to the last digit.
+
+The correction is often quoted as
+`0.5 * (1 + (pAUC - region^2 / 2) / (region - region^2 / 2))`, which is
+the special case of a region measured from a false positive rate of `0`.
+A region that starts elsewhere needs the area under the diagonal across
+that region, `(x2^2 - x1^2) / 2`, and `cpaucs` uses the region it was
+actually given:
+
+``` r
 
 knitr::kable(
-  data.frame(
-    paucs = roc_row$paucs,
-    spaucs = roc_row$spaucs,
-    corrected = 0.5 * (1 + (roc_row$paucs - chance) / (region - chance))
+  subset(
+    pauc(part(curves, xlim = c(0.1, 0.3)), corrected = TRUE),
+    curvetypes == "ROC"
   ),
-  digits = 5
+  row.names = FALSE, digits = 5
 )
 ```
 
-|   paucs |  spaucs | corrected |
-|--------:|--------:|----------:|
-| 0.09774 | 0.48869 |   0.71594 |
+| modnames | dsids | curvetypes |  paucs | baselines |  spaucs | sbaselines | cpaucs |
+|:---------|------:|:-----------|-------:|----------:|--------:|-----------:|-------:|
+| m1       |     1 | ROC        | 0.1281 |      0.04 | 0.64048 |        0.2 | 0.7753 |
 
-`paucs` is the number `pROC` gives uncorrected, to the last digit. The
-last column is the conversion, and it is the number
-`partial.auc.correct = TRUE` returns - so a corrected value can be had
-here without `pROC` installed. The formula holds for a ROC region
-measured from a false positive rate of `0`; a region that starts
-elsewhere needs the area under the diagonal across it in place of
-`region^2 / 2`.
+Neither standardization is the right one. `spaucs` is the more direct
+reading of “how much of this corner did the curve fill”; the corrected
+one is the more comparable to a full AUC - over the whole curve it is
+the plain AUC. Say which you used.
 
-Neither is the right one. `spaucs` is the more direct reading of “how
-much of this corner did the curve fill”; the corrected one is the more
-comparable to a full AUC. Say which you used.
+`cpaucs` is `NA` on the precision-recall rows and whenever
+[`part()`](https://evalclass.github.io/precrec/reference/part.md) was
+given a `ylim`;
+[`?pauc`](https://evalclass.github.io/precrec/reference/pauc.md) says
+why.
 
 ## The axes
 
@@ -322,7 +337,7 @@ sn_sp <- metric_curve(
 autoplot(sn_sp) + scale_x_reverse()
 ```
 
-![](howto-from-proc-rocr_files/figure-html/unnamed-chunk-10-1.png)
+![](howto-from-proc-rocr_files/figure-html/unnamed-chunk-11-1.png)
 
 ## What has no equivalent
 

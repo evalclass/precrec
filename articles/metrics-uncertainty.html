@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -153,19 +153,21 @@ nothing to vary and <code><a href="../reference/auc_ci.html">auc_ci()</a></code>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="../reference/auc_ci.html">auc_ci</a></span><span class="op">(</span><span class="va">booted</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <colgroup>
+<col width="10%">
+<col width="12%">
 <col width="11%">
-<col width="14%">
-<col width="12%">
-<col width="12%">
-<col width="12%">
-<col width="15%">
-<col width="15%">
-<col width="5%">
+<col width="11%">
+<col width="11%">
+<col width="11%">
+<col width="13%">
+<col width="13%">
+<col width="4%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">modnames</th>
 <th align="left">curvetypes</th>
 <th align="right">aucs</th>
+<th align="right">baselines</th>
 <th align="right">mean</th>
 <th align="right">error</th>
 <th align="right">lower_bound</th>
@@ -177,6 +179,7 @@ nothing to vary and <code><a href="../reference/auc_ci.html">auc_ci()</a></code>
 <td align="left">poor_er</td>
 <td align="left">ROC</td>
 <td align="right">0.8328000</td>
+<td align="right">0.5</td>
 <td align="right">0.8346590</td>
 <td align="right">0.0275162</td>
 <td align="right">0.7797475</td>
@@ -187,6 +190,7 @@ nothing to vary and <code><a href="../reference/auc_ci.html">auc_ci()</a></code>
 <td align="left">poor_er</td>
 <td align="left">PRC</td>
 <td align="right">0.7860641</td>
+<td align="right">0.5</td>
 <td align="right">0.7950443</td>
 <td align="right">0.0419200</td>
 <td align="right">0.7162381</td>
@@ -197,6 +201,7 @@ nothing to vary and <code><a href="../reference/auc_ci.html">auc_ci()</a></code>
 <td align="left">good_er</td>
 <td align="left">ROC</td>
 <td align="right">0.8180000</td>
+<td align="right">0.5</td>
 <td align="right">0.8178362</td>
 <td align="right">0.0307755</td>
 <td align="right">0.7488375</td>
@@ -207,6 +212,7 @@ nothing to vary and <code><a href="../reference/auc_ci.html">auc_ci()</a></code>
 <td align="left">good_er</td>
 <td align="left">PRC</td>
 <td align="right">0.8574152</td>
+<td align="right">0.5</td>
 <td align="right">0.8571980</td>
 <td align="right">0.0243810</td>
 <td align="right">0.8021867</td>
@@ -530,18 +536,20 @@ that.</p>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="../reference/auc_ci.html">auc_ci</a></span><span class="op">(</span><span class="va">delong</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <colgroup>
+<col width="12%">
+<col width="14%">
+<col width="9%">
+<col width="13%">
 <col width="13%">
 <col width="16%">
-<col width="10%">
-<col width="15%">
-<col width="18%">
-<col width="18%">
-<col width="6%">
+<col width="16%">
+<col width="5%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">modnames</th>
 <th align="left">curvetypes</th>
 <th align="right">aucs</th>
+<th align="right">baselines</th>
 <th align="right">error</th>
 <th align="right">lower_bound</th>
 <th align="right">upper_bound</th>
@@ -552,6 +560,7 @@ that.</p>
 <td align="left">poor_er</td>
 <td align="left">ROC</td>
 <td align="right">0.8328</td>
+<td align="right">0.5</td>
 <td align="right">0.0285145</td>
 <td align="right">0.7769127</td>
 <td align="right">0.8886873</td>
@@ -561,6 +570,7 @@ that.</p>
 <td align="left">good_er</td>
 <td align="left">ROC</td>
 <td align="right">0.8180</td>
+<td align="right">0.5</td>
 <td align="right">0.0299393</td>
 <td align="right">0.7593200</td>
 <td align="right">0.8766800</td>

@@ -89,8 +89,25 @@ stands for is `score >= that value`. The metrics on the row are the
 metrics of that rule.
 
 The first row is `rank = 0` - call nothing positive. There is no
-instance at that rank, so `score` and `label` are `NA` while the metrics
-are defined, and it is kept because it is a real operating point.
+instance at that rank, so `score` and `label` are `NA`, and it is kept
+because it is a real operating point.
+
+The two end rows are missing one cell each. Precision is
+`TP / (TP + FP)`, so the row that calls nothing positive has no
+denominator for it, and NPV is `TN / (TN + FN)`, so the row that calls
+everything positive has none for that. Both are `NA`, together with the
+metrics derived from them - the false discovery rate is `1 - precision`,
+the false omission rate is `1 - NPV`, and `markedness` is
+`precision + NPV - 1`, so it is missing at both ends. Every other metric
+on those rows is measured.
+
+The long form `as.data.frame(evalmod(mode = "basic"))` returns carries a
+value in those cells instead, taken from the neighboring row. That is
+what anchors the precision-recall curve at recall `0`, and it is the
+right value for a curve - but it is not a measurement of the rule the
+row stands for, and a `precision` of `1` beside a `sensitivity` of `0`
+reads as a perfect threshold. Plot from the long form; decide from this
+table.
 
 Tied scores share one value of each metric rather than taking a value
 that depends on the order the ties arrived in. `basic_ties` of
@@ -108,7 +125,12 @@ is what was asked for and `score` is the observed cutoff realizing it,
 the smallest score still called positive.
 
 A threshold above every score gives the `rank = 0` row, where `score` is
-`NA` because nothing is called positive. A score of `NA` is never a
+`NA` because nothing is called positive, and `precision` is `NA` because
+a rule that makes no positive predictions has none. One below every
+score gives the `rank = n` row, with no NPV for the same reason at the
+other end. Neither is an edge case here: a threshold chosen on one
+dataset lands outside the range of another routinely, which is most of
+why it is worth asking what it does there. A score of `NA` is never a
 positive prediction, matching the `na_worst = TRUE` default of the rest
 of the package.
 
@@ -159,14 +181,14 @@ head(tab)
 #> 5      m1    1    4            0.20    17     1  0.40     0.60         0.9
 #> 6      m1    1    5            0.25    16     1  0.35     0.65         0.9
 #>   sensitivity precision       mcc    fscore balanced_accuracy       npv
-#> 1         0.0 1.0000000        NA 0.0000000              0.50 0.5000000
+#> 1         0.0        NA        NA 0.0000000              0.50 0.5000000
 #> 2         0.1 1.0000000 0.2294157 0.1818182              0.55 0.5263158
 #> 3         0.2 1.0000000 0.3333333 0.3333333              0.60 0.5555556
 #> 4         0.2 0.6666667 0.1400280 0.3076923              0.55 0.5294118
 #> 5         0.3 0.7500000 0.2500000 0.4285714              0.60 0.5625000
 #> 6         0.4 0.8000000 0.3464102 0.5333333              0.65 0.6000000
 #>   informedness markedness kappa
-#> 1          0.0  0.5000000   0.0
+#> 1          0.0         NA   0.0
 #> 2          0.1  0.5263158   0.1
 #> 3          0.2  0.5555556   0.2
 #> 4          0.1  0.1960784   0.1
@@ -189,7 +211,7 @@ lifted <- metric_table(
 )
 head(lifted[, c("rank", "score", "precision", "lift", "jaccard")])
 #>   rank score precision     lift   jaccard
-#> 1    0    NA 1.0000000       NA 0.0000000
+#> 1    0    NA        NA       NA 0.0000000
 #> 2    1    20 1.0000000 2.000000 0.1000000
 #> 3    2    19 1.0000000 2.000000 0.2000000
 #> 4    3    18 0.6666667 1.333333 0.1818182
@@ -229,14 +251,14 @@ head(metric_table(points))
 #> 5      m1    1    4            0.20    17     1  0.40     0.60         0.9
 #> 6      m1    1    5            0.25    16     1  0.35     0.65         0.9
 #>   sensitivity precision       mcc    fscore balanced_accuracy       npv
-#> 1         0.0 1.0000000        NA 0.0000000              0.50 0.5000000
+#> 1         0.0        NA        NA 0.0000000              0.50 0.5000000
 #> 2         0.1 1.0000000 0.2294157 0.1818182              0.55 0.5263158
 #> 3         0.2 1.0000000 0.3333333 0.3333333              0.60 0.5555556
 #> 4         0.2 0.6666667 0.1400280 0.3076923              0.55 0.5294118
 #> 5         0.3 0.7500000 0.2500000 0.4285714              0.60 0.5625000
 #> 6         0.4 0.8000000 0.3464102 0.5333333              0.65 0.6000000
 #>   informedness markedness kappa
-#> 1          0.0  0.5000000   0.0
+#> 1          0.0         NA   0.0
 #> 2          0.1  0.5263158   0.1
 #> 3          0.2  0.5555556   0.2
 #> 4          0.1  0.1960784   0.1

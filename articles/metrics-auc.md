@@ -101,10 +101,43 @@ rescaled to 0 to 1 so ranges of different widths compare.
 knitr::kable(pauc(part(curves, xlim = c(0, 0.25))))
 ```
 
-| modnames | dsids | curvetypes |     paucs |    spaucs |
-|:---------|------:|:-----------|----------:|----------:|
-| m1       |     1 | ROC        | 0.1006250 | 0.4025000 |
-| m1       |     1 | PRC        | 0.2345849 | 0.9383396 |
+| modnames | dsids | curvetypes |     paucs | baselines |    spaucs | sbaselines |
+|:---------|------:|:-----------|----------:|----------:|----------:|-----------:|
+| m1       |     1 | ROC        | 0.1006250 |   0.03125 | 0.4025000 |      0.125 |
+| m1       |     1 | PRC        | 0.2345849 |   0.12500 | 0.9383396 |      0.500 |
+
+There is a second convention for standardizing a partial area, and both
+are called “the standardized partial AUC”. `spaucs` divides by the area
+of the region, so it says what fraction of what was available the curve
+covered. The McClish correction, which `corrected = TRUE` adds as
+`cpaucs`, rescales the span between chance and perfect onto 0.5 to 1
+instead, so the number reads on the same scale as a full AUC - and over
+the whole curve it is the full AUC.
+
+``` r
+
+knitr::kable(
+  subset(
+    pauc(part(curves, xlim = c(0, 0.25)), corrected = TRUE),
+    curvetypes == "ROC"
+  ),
+  row.names = FALSE
+)
+```
+
+| modnames | dsids | curvetypes |    paucs | baselines | spaucs | sbaselines |    cpaucs |
+|:---------|------:|:-----------|---------:|----------:|-------:|-----------:|----------:|
+| m1       |     1 | ROC        | 0.100625 |   0.03125 | 0.4025 |      0.125 | 0.6585714 |
+
+Neither is the right one; say which you used. `cpaucs` is what
+`pROC::auc(..., partial.auc.correct = TRUE)` reports, and it is `NA` on
+the precision-recall rows - a precision-recall curve’s chance level is
+the proportion of positives, and rescaling by it would make curves at
+different class balances look comparable, which is the thing this
+package spends [a whole
+page](https://evalclass.github.io/precrec/articles/howto-imbalanced-data.md)
+arguing they are not. See
+[`?pauc`](https://evalclass.github.io/precrec/reference/pauc.md).
 
 Plotting the restricted object draws the partial curve; see [partial
 curves](https://evalclass.github.io/precrec/articles/plots-partial-curves.md).
@@ -126,10 +159,10 @@ mcurves <- evalmod(mdat)
 knitr::kable(auc_ci(mcurves, alpha = 0.01, dtype = "t"))
 ```
 
-| modnames | curvetypes |      mean |     error | lower_bound | upper_bound |   n |
-|:---------|:-----------|----------:|----------:|------------:|------------:|----:|
-| m1       | ROC        | 0.7955900 | 0.0260369 |   0.7695531 |   0.8216269 |  10 |
-| m1       | PRC        | 0.8351332 | 0.0272381 |   0.8078951 |   0.8623712 |  10 |
+| modnames | curvetypes |      mean | baselines |     error | lower_bound | upper_bound |   n |
+|:---------|:-----------|----------:|----------:|----------:|------------:|------------:|----:|
+| m1       | ROC        | 0.7955900 |       0.5 | 0.0260369 |   0.7695531 |   0.8216269 |  10 |
+| m1       | PRC        | 0.8351332 |       0.5 | 0.0272381 |   0.8078951 |   0.8623712 |  10 |
 
 ## Break-even point
 
@@ -145,19 +178,19 @@ to keep them.
 knitr::kable(prbe(evalmod(mdat, raw_curves = TRUE)))
 ```
 
-| modnames | dsids | prbe |
-|:---------|------:|-----:|
-| m1       |     1 | 0.73 |
-| m1       |     2 | 0.75 |
-| m1       |     3 | 0.69 |
-| m1       |     3 | 0.69 |
-| m1       |     4 | 0.77 |
-| m1       |     5 | 0.73 |
-| m1       |     6 | 0.73 |
-| m1       |     7 | 0.68 |
-| m1       |     8 | 0.69 |
-| m1       |     9 | 0.76 |
-| m1       |    10 | 0.74 |
+| modnames | dsids | prbe | baselines |
+|:---------|------:|-----:|----------:|
+| m1       |     1 | 0.73 |       0.5 |
+| m1       |     2 | 0.75 |       0.5 |
+| m1       |     3 | 0.69 |       0.5 |
+| m1       |     3 | 0.69 |       0.5 |
+| m1       |     4 | 0.77 |       0.5 |
+| m1       |     5 | 0.73 |       0.5 |
+| m1       |     6 | 0.73 |       0.5 |
+| m1       |     7 | 0.68 |       0.5 |
+| m1       |     8 | 0.69 |       0.5 |
+| m1       |     9 | 0.76 |       0.5 |
+| m1       |    10 | 0.74 |       0.5 |
 
 A curve crossing the diagonal more than once gets one row per crossing;
 one that never does gets a single `NA`.
@@ -165,6 +198,22 @@ one that never does gets a single `NA`.
 the crossing off the interpolated curve - finding it by linear
 interpolation between raw points, as some tools do, is the error this
 package exists to avoid.
+
+`baselines` is where a classifier that ranks at random breaks even. At
+chance the curve is flat at the proportion of positives, so it meets the
+diagonal at that recall: a break-even point of 0.2 is chance on data
+that is 20% positive and five times chance on data that is 4% positive.
+It is the same reading problem the area has, and the same column answers
+it.
+
+The origin is not a break-even point. A curve is anchored at recall 0,
+where precision is 1 if the top-ranked instance is a positive and 0 if
+it is a negative - and in the second case precision and recall are equal
+there without anything having been retrieved. When positives are rare
+the top-ranked instance is nearly always a negative, so counting the
+origin would put a spurious 0 in front of almost every imbalanced
+result. A curve that leaves the origin below the diagonal and never
+catches up has no break-even point at all, and gets the `NA`.
 
 ## Averaging over classes
 

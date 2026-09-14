@@ -79,7 +79,7 @@ per test dataset, and the following columns.
 | `dsid` | Test dataset ID |
 | `metric` | The metric that was optimized |
 | `value` | Its value at the chosen cutoff |
-| `rank` | Number of instances called positive, `0` to `n` |
+| `rank` | Number of instances called positive, `1` to `n` |
 | `normalized_rank` | `rank / n` |
 | `score` | The cutoff itself, the rule being `score >= ` it |
 | `label` | `1` if the instance at this rank is positive, `-1` if it is negative |
@@ -126,10 +126,26 @@ reported is the last of the run and not the first. That is what
 `evalmod(basic_ties = "hold")` produces throughout, since it gives every
 cutoff in a run of tied scores the counts of the whole run.
 
-A metric that has no interior optimum is optimized at an end of the
-range, and no warning says so: `sensitivity` is largest when everything
-is called positive, and `specificity` when nothing is. Those are the
-correct answers to the question asked, and rarely the question meant.
+The rank `0` row of
+[`metric_table()`](https://evalclass.github.io/precrec/reference/metric_table.md) -
+the rule that calls nothing positive - is not a candidate. There is no
+threshold that predicts nothing, so its `score` is `NA` and it is not an
+operating point, which is what this function returns. It would otherwise
+win outright wherever the empty rule is optimal, and win on the
+tie-break wherever it merely ties: precision at rank `0` is the limit
+from above, so it is `1` whenever the top-ranked instance is a positive,
+and any classifier that ranks one first would come back with no
+threshold at all.
+
+A metric that has no interior optimum is still optimized at an end of
+the range, and no warning says so: `sensitivity` is largest when
+everything is called positive, and `specificity` when as little as
+possible is. Those are the correct answers to the question asked, and
+rarely the question meant. `accuracy` and `error` have an interior
+optimum on balanced data and lose it as positives get rare, which is the
+same trap arriving by a different route: at a few percent positives,
+calling almost nothing positive is close to the most accurate thing a
+classifier can do.
 
 A cutoff chosen on the same data the model is evaluated on is
 optimistic, by however much the criterion was free to chase. Choosing it
@@ -187,9 +203,9 @@ best_cutoff(
 #>   modname dsid metric value rank normalized_rank score label error accuracy
 #> 1      m1    1   cost   0.5   20               1     5    -1   0.5      0.5
 #>   specificity sensitivity precision mcc    fscore balanced_accuracy npv
-#> 1           0           1       0.5  NA 0.6666667               0.5 0.8
+#> 1           0           1       0.5  NA 0.6666667               0.5  NA
 #>   informedness markedness kappa cost
-#> 1            0        0.3     0  0.5
+#> 1            0         NA     0  0.5
 
 
 ##################################################

@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -257,8 +257,11 @@ this page reads one of them.</p>
 </tr>
 <tr class="even">
 <td><code>partial.auc.correct = TRUE</code></td>
-<td>The <code>spaucs</code> column</td>
-<td>Both standardize; not the same way - see below</td>
+<td>
+<code>pauc(..., corrected = TRUE)</code>, the <code>cpaucs</code>
+column</td>
+<td>Identical; the <code>spaucs</code> column standardizes differently -
+see below</td>
 </tr>
 <tr class="odd">
 <td><code>plot(r)</code></td>
@@ -436,7 +439,7 @@ because <code>ROCR</code> returns one metric per
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">tab</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rank"</span>, <span class="st">"score"</span>, <span class="st">"accuracy"</span>, <span class="st">"mcc"</span>, <span class="st">"precision"</span>, <span class="st">"sensitivity"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   rank    score accuracy       mcc precision sensitivity</span></span>
-<span><span class="co">#&gt; 1    0       NA    0.700        NA         1  0.00000000</span></span>
+<span><span class="co">#&gt; 1    0       NA    0.700        NA        NA  0.00000000</span></span>
 <span><span class="co">#&gt; 2    1 3.816752    0.705 0.1082834         1  0.01666667</span></span>
 <span><span class="co">#&gt; 3    2 3.387247    0.710 0.1535221         1  0.03333333</span></span>
 <span><span class="co">#&gt; 4    3 3.381452    0.715 0.1885020         1  0.05000000</span></span>
@@ -615,43 +618,100 @@ partial AUC reads on the same scale as a full one.</p>
 <code>0.2</code>, a coin flip covers an area of <code>0.02</code>: that
 is <code>0.1</code> of the box, and <code>0.5</code> after the
 correction.</p>
+<p><code>corrected = TRUE</code> adds the second one as
+<code>cpaucs</code>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">region</span> <span class="op">&lt;-</span> <span class="fl">0.2</span> <span class="co"># false positive rates 0 to 0.2</span></span>
-<span><span class="va">areas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pauc.html">pauc</a></span><span class="op">(</span><span class="fu"><a href="../reference/part.html">part</a></span><span class="op">(</span><span class="va">curves</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">region</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">roc_row</span> <span class="op">&lt;-</span> <span class="va">areas</span><span class="op">[</span><span class="va">areas</span><span class="op">$</span><span class="va">curvetypes</span> <span class="op">==</span> <span class="st">"ROC"</span>, <span class="op">]</span></span>
+<code class="sourceCode R"><span><span class="va">areas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pauc.html">pauc</a></span><span class="op">(</span><span class="fu"><a href="../reference/part.html">part</a></span><span class="op">(</span><span class="va">curves</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.2</span><span class="op">)</span><span class="op">)</span>, corrected <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">chance</span> <span class="op">&lt;-</span> <span class="va">region</span><span class="op">^</span><span class="fl">2</span> <span class="op">/</span> <span class="fl">2</span></span>
-<span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>    paucs <span class="op">=</span> <span class="va">roc_row</span><span class="op">$</span><span class="va">paucs</span>,</span>
-<span>    spaucs <span class="op">=</span> <span class="va">roc_row</span><span class="op">$</span><span class="va">spaucs</span>,</span>
-<span>    corrected <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="op">(</span><span class="va">roc_row</span><span class="op">$</span><span class="va">paucs</span> <span class="op">-</span> <span class="va">chance</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="va">region</span> <span class="op">-</span> <span class="va">chance</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  digits <span class="op">=</span> <span class="fl">5</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<table class="table">
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">areas</span>, <span class="va">curvetypes</span> <span class="op">==</span> <span class="st">"ROC"</span><span class="op">)</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span>, digits <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
+<table style="width:100%;" class="table">
+<colgroup>
+<col width="12%">
+<col width="8%">
+<col width="15%">
+<col width="11%">
+<col width="14%">
+<col width="11%">
+<col width="15%">
+<col width="11%">
+</colgroup>
 <thead><tr class="header">
+<th align="left">modnames</th>
+<th align="right">dsids</th>
+<th align="left">curvetypes</th>
 <th align="right">paucs</th>
+<th align="right">baselines</th>
 <th align="right">spaucs</th>
-<th align="right">corrected</th>
+<th align="right">sbaselines</th>
+<th align="right">cpaucs</th>
 </tr></thead>
 <tbody><tr class="odd">
+<td align="left">m1</td>
+<td align="right">1</td>
+<td align="left">ROC</td>
 <td align="right">0.09774</td>
+<td align="right">0.02</td>
 <td align="right">0.48869</td>
+<td align="right">0.1</td>
 <td align="right">0.71594</td>
 </tr></tbody>
 </table>
-<p><code>paucs</code> is the number <code>pROC</code> gives uncorrected,
-to the last digit. The last column is the conversion, and it is the
-number <code>partial.auc.correct = TRUE</code> returns - so a corrected
-value can be had here without <code>pROC</code> installed. The formula
-holds for a ROC region measured from a false positive rate of
-<code>0</code>; a region that starts elsewhere needs the area under the
-diagonal across it in place of <code>region^2 / 2</code>.</p>
-<p>Neither is the right one. <code>spaucs</code> is the more direct
-reading of “how much of this corner did the curve fill”; the corrected
-one is the more comparable to a full AUC. Say which you used.</p>
+<p><code>paucs</code> is the number <code>pROC</code> gives uncorrected
+and <code>cpaucs</code> the number it gives with
+<code>partial.auc.correct = TRUE</code>, both to the last digit.</p>
+<p>The correction is often quoted as
+<code>0.5 * (1 + (pAUC - region^2 / 2) / (region - region^2 / 2))</code>,
+which is the special case of a region measured from a false positive
+rate of <code>0</code>. A region that starts elsewhere needs the area
+under the diagonal across that region, <code>(x2^2 - x1^2) / 2</code>,
+and <code>cpaucs</code> uses the region it was actually given:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/pauc.html">pauc</a></span><span class="op">(</span><span class="fu"><a href="../reference/part.html">part</a></span><span class="op">(</span><span class="va">curves</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.3</span><span class="op">)</span><span class="op">)</span>, corrected <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    <span class="va">curvetypes</span> <span class="op">==</span> <span class="st">"ROC"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  row.names <span class="op">=</span> <span class="cn">FALSE</span>, digits <span class="op">=</span> <span class="fl">5</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<colgroup>
+<col width="13%">
+<col width="8%">
+<col width="15%">
+<col width="10%">
+<col width="14%">
+<col width="11%">
+<col width="15%">
+<col width="10%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">modnames</th>
+<th align="right">dsids</th>
+<th align="left">curvetypes</th>
+<th align="right">paucs</th>
+<th align="right">baselines</th>
+<th align="right">spaucs</th>
+<th align="right">sbaselines</th>
+<th align="right">cpaucs</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td align="left">m1</td>
+<td align="right">1</td>
+<td align="left">ROC</td>
+<td align="right">0.1281</td>
+<td align="right">0.04</td>
+<td align="right">0.64048</td>
+<td align="right">0.2</td>
+<td align="right">0.7753</td>
+</tr></tbody>
+</table>
+<p>Neither standardization is the right one. <code>spaucs</code> is the
+more direct reading of “how much of this corner did the curve fill”; the
+corrected one is the more comparable to a full AUC - over the whole
+curve it is the plain AUC. Say which you used.</p>
+<p><code>cpaucs</code> is <code>NA</code> on the precision-recall rows
+and whenever <code><a href="../reference/part.html">part()</a></code> was given a <code>ylim</code>;
+<code><a href="../reference/pauc.html">?pauc</a></code> says why.</p>
 </div>
 </div>
 <div class="section level2">
@@ -664,7 +724,7 @@ is the orientation the precision-recall plot beside it uses.</p>
 <p>Same curve, same area, different tick labels - and if the other one
 is what your readers expect, <code><a href="../reference/metric_curve.html">metric_curve()</a></code> will draw
 it:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">sn_sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/metric_curve.html">metric_curve</a></span><span class="op">(</span></span>
@@ -673,7 +733,7 @@ it:</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">sn_sp</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_reverse</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="howto-from-proc-rocr_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="672"></p>
+<p><img src="howto-from-proc-rocr_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="" width="672"></p>
 </div>
 <div class="section level2">
 <h2 id="what-has-no-equivalent">What has no equivalent<a class="anchor" aria-label="anchor" href="#what-has-no-equivalent"></a>

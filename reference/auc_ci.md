@@ -61,7 +61,26 @@ auc_ci(curves, alpha = 0.05, dtype = NULL)
 
 ## Value
 
-The `auc_ci` function returns a dataframe of AUC CIs.
+The `auc_ci` function returns a dataframe of AUC CIs, with a `baselines`
+column beside the area giving what that area would be by chance - `0.5`
+for a ROC curve and the proportion of positives for a precision-recall
+curve. See `Reading an area against its baseline` in
+[`auc()`](https://evalclass.github.io/precrec/reference/auc.md).
+
+Over several test datasets the baseline is averaged over the same
+datasets the mean area is, so a fold that could not be evaluated is left
+out of both. From
+[`auc_boot()`](https://evalclass.github.io/precrec/reference/auc_boot.md)
+or
+[`auc_delong()`](https://evalclass.github.io/precrec/reference/auc_delong.md)
+it is the balance of the single test set.
+
+An interval is the point of this function: the prevalence is what an
+area is worth by chance in the limit, and an area from a finite sample
+scatters around it, so an area sitting above its baseline means little
+on its own. Read the baseline against the interval instead - see
+`The baseline is an asymptote` in
+[`auc()`](https://evalclass.github.io/precrec/reference/auc.md).
 
 ## See also
 
@@ -97,9 +116,9 @@ sm_auc_cis <- auc_ci(smcurves)
 
 ## Shows the result
 sm_auc_cis
-#>   modnames curvetypes      mean      error lower_bound upper_bound n
-#> 1  good_er        ROC 0.7950250 0.02369793   0.7713271   0.8187229 4
-#> 2  good_er        PRC 0.8343834 0.02143124   0.8129522   0.8558146 4
+#>   modnames curvetypes      mean baselines      error lower_bound upper_bound n
+#> 1  good_er        ROC 0.7950250       0.5 0.02369793   0.7713271   0.8187229 4
+#> 2  good_er        PRC 0.8343834       0.5 0.02143124   0.8129522   0.8558146 4
 
 ##################################################
 ### Multiple models & multiple test datasets
@@ -120,15 +139,26 @@ mm_auc_ci <- auc_ci(mmcurves)
 
 ## Shows the result
 mm_auc_ci
-#>    modnames curvetypes      mean       error lower_bound upper_bound n
-#> 1    random        ROC 0.4925000 0.043150452   0.4493495   0.5356505 4
-#> 2    random        PRC 0.5105290 0.042359589   0.4681694   0.5528886 4
-#> 3   poor_er        ROC 0.7600750 0.027130623   0.7329444   0.7872056 4
-#> 4   poor_er        PRC 0.7132584 0.050140420   0.6631180   0.7633988 4
-#> 5   good_er        ROC 0.7716000 0.038758835   0.7328412   0.8103588 4
-#> 6   good_er        PRC 0.8094505 0.033099896   0.7763506   0.8425504 4
-#> 7     excel        ROC 0.9839500 0.009145040   0.9748050   0.9930950 4
-#> 8     excel        PRC 0.9844909 0.008032773   0.9764581   0.9925237 4
-#> 9      perf        ROC 1.0000000 0.000000000   1.0000000   1.0000000 4
-#> 10     perf        PRC 1.0000000 0.000000000   1.0000000   1.0000000 4
+#>    modnames curvetypes      mean baselines       error lower_bound upper_bound
+#> 1    random        ROC 0.4925000       0.5 0.043150452   0.4493495   0.5356505
+#> 2    random        PRC 0.5105290       0.5 0.042359589   0.4681694   0.5528886
+#> 3   poor_er        ROC 0.7600750       0.5 0.027130623   0.7329444   0.7872056
+#> 4   poor_er        PRC 0.7132584       0.5 0.050140420   0.6631180   0.7633988
+#> 5   good_er        ROC 0.7716000       0.5 0.038758835   0.7328412   0.8103588
+#> 6   good_er        PRC 0.8094505       0.5 0.033099896   0.7763506   0.8425504
+#> 7     excel        ROC 0.9839500       0.5 0.009145040   0.9748050   0.9930950
+#> 8     excel        PRC 0.9844909       0.5 0.008032773   0.9764581   0.9925237
+#> 9      perf        ROC 1.0000000       0.5 0.000000000   1.0000000   1.0000000
+#> 10     perf        PRC 1.0000000       0.5 0.000000000   1.0000000   1.0000000
+#>    n
+#> 1  4
+#> 2  4
+#> 3  4
+#> 4  4
+#> 5  4
+#> 6  4
+#> 7  4
+#> 8  4
+#> 9  4
+#> 10 4
 ```

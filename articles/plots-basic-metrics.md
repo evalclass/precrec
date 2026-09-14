@@ -9,7 +9,8 @@ sits.
 library(precrec)
 library(ggplot2)
 
-points <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
+points <- evalmod(
+  scores = P10N10$scores, labels = P10N10$labels,
   mode = "basic"
 )
 ```
@@ -147,7 +148,8 @@ then plotted the same way.
 
 ``` r
 
-extra <- evalmod(scores = P10N10$scores, labels = P10N10$labels,
+extra <- evalmod(
+  scores = P10N10$scores, labels = P10N10$labels,
   mode = "basic", metrics = c("fpr", "lift")
 )
 

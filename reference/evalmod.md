@@ -2194,10 +2194,10 @@ func_evalmod_aucroc <- function(samp) {
 # Process time
 system.time(res1 <- func_evalmod_rocprc(samp1))
 #>    user  system elapsed 
-#>   0.023   0.004   0.027 
+#>   0.022   0.002   0.024 
 system.time(res2 <- func_evalmod_aucroc(samp1))
 #>    user  system elapsed 
-#>   0.023   0.000   0.014 
+#>   0.025   0.000   0.015 
 
 # AUCs
 res1

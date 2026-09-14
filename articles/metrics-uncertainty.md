@@ -20,12 +20,12 @@ booted <- auc_boot(mdat, boot_n = 500, seed = 42)
 knitr::kable(auc_ci(booted))
 ```
 
-| modnames | curvetypes |      aucs |      mean |     error | lower_bound | upper_bound |   n |
-|:---------|:-----------|----------:|----------:|----------:|------------:|------------:|----:|
-| poor_er  | ROC        | 0.8328000 | 0.8346590 | 0.0275162 |   0.7797475 |   0.8856250 | 500 |
-| poor_er  | PRC        | 0.7860641 | 0.7950443 | 0.0419200 |   0.7162381 |   0.8786786 | 500 |
-| good_er  | ROC        | 0.8180000 | 0.8178362 | 0.0307755 |   0.7488375 |   0.8709150 | 500 |
-| good_er  | PRC        | 0.8574152 | 0.8571980 | 0.0243810 |   0.8021867 |   0.8986942 | 500 |
+| modnames | curvetypes | aucs | baselines | mean | error | lower_bound | upper_bound | n |
+|:---|:---|---:|---:|---:|---:|---:|---:|---:|
+| poor_er | ROC | 0.8328000 | 0.5 | 0.8346590 | 0.0275162 | 0.7797475 | 0.8856250 | 500 |
+| poor_er | PRC | 0.7860641 | 0.5 | 0.7950443 | 0.0419200 | 0.7162381 | 0.8786786 | 500 |
+| good_er | ROC | 0.8180000 | 0.5 | 0.8178362 | 0.0307755 | 0.7488375 | 0.8709150 | 500 |
+| good_er | PRC | 0.8574152 | 0.5 | 0.8571980 | 0.0243810 | 0.8021867 | 0.8986942 | 500 |
 
 `aucs` is the AUC of the original data and `mean` the average over the
 resamples; the gap between them is the bootstrap’s estimate of bias. The
@@ -216,10 +216,10 @@ delong <- auc_delong(mdat)
 knitr::kable(auc_ci(delong))
 ```
 
-| modnames | curvetypes |   aucs |     error | lower_bound | upper_bound |   n |
-|:---------|:-----------|-------:|----------:|------------:|------------:|----:|
-| poor_er  | ROC        | 0.8328 | 0.0285145 |   0.7769127 |   0.8886873 | 200 |
-| good_er  | ROC        | 0.8180 | 0.0299393 |   0.7593200 |   0.8766800 | 200 |
+| modnames | curvetypes |   aucs | baselines |     error | lower_bound | upper_bound |   n |
+|:---------|:-----------|-------:|----------:|----------:|------------:|------------:|----:|
+| poor_er  | ROC        | 0.8328 |       0.5 | 0.0285145 |   0.7769127 |   0.8886873 | 200 |
+| good_er  | ROC        | 0.8180 |       0.5 | 0.0299393 |   0.7593200 |   0.8766800 | 200 |
 
 No `boot_n`, no seed, and nothing that moves between two runs. Compare
 it with the bootstrap on the same data:

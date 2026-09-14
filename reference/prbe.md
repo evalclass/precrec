@@ -25,12 +25,28 @@ prbe(curves)
 ## Value
 
 The `prbe` function returns a data frame with the columns `modnames`,
-`dsids` and `prbe`. `prbe` is the common value of precision and recall
-at the break-even point.
+`dsids`, `prbe` and `baselines`. `prbe` is the common value of precision
+and recall at the break-even point.
 
 A curve can cross the diagonal more than once, and then the data frame
 holds one row per crossing, ordered by recall. A curve that never
-reaches equal precision and recall gets a single row of `NA`.
+reaches equal precision and recall gets a single row of `NA`, which at a
+low proportion of positives is a common and correct answer: such a curve
+can leave the origin below the diagonal and never catch up.
+
+`baselines` is the proportion of positives, which is where a classifier
+that ranks at random breaks even - at chance the curve is flat at the
+prevalence, so it meets the diagonal at that recall. A break-even point
+of `0.2` is chance on data that is 20% positive and five times chance on
+data that is 4% positive. See `Reading an area against its baseline` in
+[`auc()`](https://evalclass.github.io/precrec/reference/auc.md).
+
+The origin is not reported as a break-even point. A curve is anchored at
+recall `0`, where precision is `1` if the top-ranked instance is a
+positive and `0` if it is a negative; in the second case precision and
+recall are equal there, but nothing has been retrieved and the equality
+is an artifact of where the curve starts rather than a point at which
+the classifier balances the two.
 
 ## How this differs from ROCR
 
@@ -60,6 +76,9 @@ areas under the curves.
 samps <- create_sim_samples(1, 50, 50, "good_er")
 sscurves <- evalmod(scores = samps[["scores"]], labels = samps[["labels"]])
 prbe(sscurves)
+#>   modnames dsids prbe baselines
+#> 1       m1     1  0.7       0.5
+#> 2       m1     1  0.7       0.5
 
 ##################################################
 ### Multiple models & multiple test datasets
@@ -70,4 +89,9 @@ mmdat <- mmdata(samps2[["scores"]], samps2[["labels"]],
 )
 mmcurves <- evalmod(mmdat, raw_curves = TRUE)
 prbe(mmcurves)
+#>   modnames dsids prbe baselines
+#> 1  poor_er     1 0.76       0.5
+#> 2  good_er     1 0.74       0.5
+#> 3  poor_er     2 0.74       0.5
+#> 4  good_er     2 0.68       0.5
 ```

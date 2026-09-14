@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">precrec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -196,8 +196,8 @@ thing as a <code>data.table</code> when that package is installed.</p>
 </tr>
 <tr class="even">
 <td><code><a href="../reference/pauc.html">pauc()</a></code></td>
-<td>Partial area, after <code><a href="../reference/part.html">part()</a></code>
-</td>
+<td>Partial area, after <code><a href="../reference/part.html">part()</a></code>, standardized either
+way</td>
 </tr>
 <tr class="odd">
 <td><code><a href="../reference/auc_ci.html">auc_ci()</a></code></td>
@@ -282,14 +282,14 @@ downstream of a curve needs.</p>
 <span><span class="co">#&gt; 5      m1    1    4            0.20    17     1  0.40     0.60         0.9</span></span>
 <span><span class="co">#&gt; 6      m1    1    5            0.25    16     1  0.35     0.65         0.9</span></span>
 <span><span class="co">#&gt;   sensitivity precision       mcc    fscore balanced_accuracy       npv</span></span>
-<span><span class="co">#&gt; 1         0.0 1.0000000        NA 0.0000000              0.50 0.5000000</span></span>
+<span><span class="co">#&gt; 1         0.0        NA        NA 0.0000000              0.50 0.5000000</span></span>
 <span><span class="co">#&gt; 2         0.1 1.0000000 0.2294157 0.1818182              0.55 0.5263158</span></span>
 <span><span class="co">#&gt; 3         0.2 1.0000000 0.3333333 0.3333333              0.60 0.5555556</span></span>
 <span><span class="co">#&gt; 4         0.2 0.6666667 0.1400280 0.3076923              0.55 0.5294118</span></span>
 <span><span class="co">#&gt; 5         0.3 0.7500000 0.2500000 0.4285714              0.60 0.5625000</span></span>
 <span><span class="co">#&gt; 6         0.4 0.8000000 0.3464102 0.5333333              0.65 0.6000000</span></span>
 <span><span class="co">#&gt;   informedness markedness kappa</span></span>
-<span><span class="co">#&gt; 1          0.0  0.5000000   0.0</span></span>
+<span><span class="co">#&gt; 1          0.0         NA   0.0</span></span>
 <span><span class="co">#&gt; 2          0.1  0.5263158   0.1</span></span>
 <span><span class="co">#&gt; 3          0.2  0.5555556   0.2</span></span>
 <span><span class="co">#&gt; 4          0.1  0.1960784   0.1</span></span>
@@ -301,7 +301,15 @@ rank and the rule the row stands for is
 <code>score &gt;= that value</code>. <code>normalized_rank</code> is
 <code>rank / n</code>, the x axis of the <a href="plots-basic-metrics.html">basic metric plots</a>. The first row
 calls nothing positive, which is why its <code>score</code> and
-<code>label</code> are <code>NA</code> while its metrics are not.</p>
+<code>label</code> are <code>NA</code>.</p>
+<p>Its <code>precision</code> is <code>NA</code> too, and for a
+different reason: precision is <code>TP / (TP + FP)</code>, and a rule
+that makes no positive predictions has no denominator for it. The row
+that calls everything positive is missing its <code>npv</code> at the
+other end, on the same argument. Every other metric on those rows is
+measured - accuracy at rank 0 is the proportion of negatives, which is
+exactly the point of <a href="howto-imbalanced-data.html">Balanced and
+imbalanced data</a>.</p>
 <p>Because it is a plain data frame, the question that usually follows
 is ordinary R.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -373,7 +381,7 @@ point</a>.</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">lifted</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rank"</span>, <span class="st">"score"</span>, <span class="st">"precision"</span>, <span class="st">"lift"</span>, <span class="st">"jaccard"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   rank score precision     lift   jaccard</span></span>
-<span><span class="co">#&gt; 1    0    NA 1.0000000       NA 0.0000000</span></span>
+<span><span class="co">#&gt; 1    0    NA        NA       NA 0.0000000</span></span>
 <span><span class="co">#&gt; 2    1    20 1.0000000 2.000000 0.1000000</span></span>
 <span><span class="co">#&gt; 3    2    19 1.0000000 2.000000 0.2000000</span></span>
 <span><span class="co">#&gt; 4    3    18 0.6666667 1.333333 0.1818182</span></span>
