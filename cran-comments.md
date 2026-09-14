@@ -21,3 +21,12 @@ the full list.
 ## R CMD check results
 
 0 errors | 0 warnings | 0 notes
+
+## Reverse dependencies
+
+We checked 9 reverse dependencies (5 from CRAN + 4 from Bioconductor),
+comparing R CMD check results across the CRAN and development versions of this
+package. We saw 0 new problems. 3 packages (`aggreCAT`, `explainer`,
+`inferCSN`) failed before installation, because their own dependencies could
+not be installed in the check library; neither the failures nor their causes
+involve this package.
